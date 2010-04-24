@@ -1,0 +1,31 @@
+***** Code Completion *****
+1. Completions for static members (e.g. "String.<ctrl+space>").
+2. End file with unterminated doc. comment - get this:
+     java.io.IOException: Expected identifier, found: [TokenImpl: type=16777235; lexeme="/"; line=2; col=1; offs=29; invalid=false]
+5. Make "prefix" go more than "1 level deep" when getting completions at caret
+   position.
+
+
+
+***** rjc (parsing) *****
+BUGS:
+----
+1. enums aren't supported at all yet.  Good starting point:
+  C:\java\32\jdk1.6.0_16\src\java\util\concurrent\TimeUnit.java:
+		>>> Variable -- int excessNanos (line 52)
+		java.io.IOException: ';' expected, found '[TokenImpl: type=8388609; lexeme="("; line=52; col=23; offs=2123; invalid=false]
+			at org.fife.rjc.lexer.Scanner.yylexNonNull(Scanner.java:518)
+			at org.fife.rjc.lexer.Scanner.yylexNonNull(Scanner.java:490)
+			at org.fife.rjc.parser.ASTFactory._getBlock(ASTFactory.java:156)
+			at org.fife.rjc.parser.ASTFactory._getBlock(ASTFactory.java:101)
+			at org.fife.rjc.parser.ASTFactory._getBlock(ASTFactory.java:72)
+			at org.fife.rjc.parser.ASTFactory._getEnumBody(ASTFactory.java:401)
+			at org.fife.rjc.parser.ASTFactory._getEnumDeclaration(ASTFactory.java:430)
+			at org.fife.rjc.parser.ASTFactory._getClassOrInterfaceDeclaration(ASTFactory.java:253)
+			at org.fife.rjc.parser.ASTFactory._getTypeDeclaration(ASTFactory.java:1123)
+			at org.fife.rjc.parser.ASTFactory.getCompilationUnit(ASTFactory.java:379)
+			at org.fife.rjc.parser.Main.main(Main.java:80)
+
+
+TODO:
+-----

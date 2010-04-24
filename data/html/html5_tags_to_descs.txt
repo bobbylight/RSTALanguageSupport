@@ -1,0 +1,122 @@
+Skip these first lines!
+Tab-delimited, copied from http://www.w3schools.com/tags/html5.asp on 10/7/2009
+Mapping of tag name to short desc, then if it's supported in HTML 4 and/or 5
+
+a 	Defines a hyperlink 	4 	5
+abbr 	Defines an abbreviation 	4 	5
+acronym 	Not supported. Defines an acronym 	4 	 
+address 	Defines an address element 	4 	5
+applet 	Not supported. Defines an applet 	4 	 
+area 	Defines an area inside an image map 	4 	5
+article 	Defines an article 	  	5
+aside 	Defines content aside from the page content 	  	5
+audio 	Defines sound content 	  	5
+b 	Defines bold text 	4 	5
+base 	Defines a base URL for all the links in a page 	4 	5
+basefont 	Not supported. Use CSS instead 	4 	 
+bdo 	Defines the direction of text display 	4 	5
+big 	Not supported. Defines big text 	4 	 
+blockquote 	Defines a long quotation 	4 	5
+body 	Defines the body element 	4 	5
+br 	Inserts a single line break 	4 	5
+button 	Defines a push button 	4 	5
+canvas 	Defines graphics 	  	5
+caption 	Defines a table caption 	4 	5
+center 	Not supported. Defines centered text 	4 	 
+cite 	Defines a citation 	4 	5
+code 	Defines computer code text 	4 	5
+col 	Defines attributes for table columns  	4 	5
+colgroup 	Defines groups of table columns 	4 	5
+command 	Defines a command button 	  	5
+datagrid 	Defines data in a tree-list 	  	5
+datalist 	Defines a dropdown list 	  	5
+datatemplate 	Defines a data template 	  	5
+dd 	Defines a definition description 	4 	5
+del 	Defines deleted text 	4 	5
+details 	Defines details of an element 	  	5
+dialog 	Defines a dialog (conversation) 	  	5
+dir 	Not supported. Defines a directory list 	4 	 
+div 	Defines a section in a document 	4 	5
+dfn 	Defines a definition term 	4 	5
+dl 	Defines a definition list 	4 	5
+dt 	Defines a definition term 	4 	5
+em 	Defines emphasized text  	4 	5
+embed 	Defines external interactive content or plugin 	  	5
+eventsource 	Defines a target for events sent by a server 	  	5
+fieldset 	Defines a fieldset 	4 	5
+figure 	Defines a group of media content, and their caption 	  	5
+font 	Deprecated. Defines text font, size, and color 	4 	 
+footer 	Defines a footer for a section or page 	  	5
+form 	Defines a form  	4 	5
+frame 	Not supported. Defines a sub window (a frame) 	4 	 
+frameset 	Not supported. Defines a set of frames 	4 	 
+h1		Defines header 1	4	5
+h2		Defines header 2	4	5
+h3		Defines header 3	4	5
+h4		Defines header 4	4	5
+h5		Defines header 5	4	5
+h6		Defines header 6	4	5
+head 	Defines information about the document 	4 	5
+header 	Defines a header for a section or page 	  	5
+hr 	Defines a horizontal rule 	4 	5
+html 	Defines an html document 	4 	5
+i 	Defines italic text 	4 	5
+iframe 	Defines an inline sub window (frame) 	4 	5
+img 	Defines an image 	4 	5
+input 	Defines an input field 	4 	5
+ins 	Defines inserted text 	4 	5
+isindex 	Not supported. Defines a single-line input field 	4 	 
+kbd 	Defines keyboard text 	4 	5
+label 	Defines a label for a form control 	4 	5
+legend 	Defines a title in a fieldset 	4 	5
+li 	Defines a list item 	4 	5
+link 	Defines a resource reference 	4 	5
+mark 	Defines marked text 	  	5
+map 	Defines an image map  	4 	5
+menu 	Defines a menu list 	4 	5
+meta 	Defines meta information 	4 	5
+meter 	Defines measurement within a predefined range 	  	5
+nav 	Defines navigation links 	  	5
+nest 	Defines a nestingpoint in a datatemplate 	  	5
+noframes 	Not supported. Defines a noframe section 	4 	 
+noscript 	Defines a noscript section 	4 	5
+object 	Defines an embedded object 	4 	5
+ol 	Defines an ordered list 	4 	5
+optgroup 	Defines an option group 	4 	5
+option 	Defines an option in a drop-down list 	4 	5
+output 	Defines some types of output 	  	5
+p 	Defines a paragraph 	4 	5
+param 	Defines a parameter for an object 	4 	5
+pre 	Defines preformatted text 	4 	5
+progress 	Defines progress of a task of any kind 	  	5
+q 	Defines a short quotation 	4 	5
+rule 	Defines the rules for updating a template 	  	5
+s 	Not supported. Defines strikethrough text 	4 	 
+samp 	Defines sample computer code 	4 	5
+script 	Defines a script 	4 	5
+section 	Defines a section 	  	5
+select 	Defines a selectable list 	4 	5
+small 	Defines small text 	4 	5
+source 	Defines media resources 	  	5
+span 	Defines a section in a document 	4 	5
+strike 	Not supported. Defines strikethrough text 	4 	 
+strong 	Defines strong text 	4 	5
+style 	Defines a style definition 	4 	5
+sub 	Defines subscripted text 	4 	5
+sup 	Defines superscripted text 	4 	5
+table 	Defines a table 	4 	5
+tbody 	Defines a table body 	4 	5
+td 	Defines a table cell 	4 	5
+textarea 	Defines a text area 	4 	5
+tfoot 	Defines a table footer 	4 	5
+th 	Defines a table header 	4 	5
+thead 	Defines a table header 	4 	5
+time 	Defines a date/time 	  	5
+title 	Defines the document title 	4 	5
+tr 	Defines a table row 	4 	5
+tt 	Not supported. Defines teletype text 	4 	 
+u 	Not supported. Defines underlined text 	4 	 
+ul 	Defines an unordered list 	4 	5
+var 	Defines a variable 	4 	5
+video 	Defines a video 	  	5
+xmp 	Not supported. Defines preformatted text 	4 	 
