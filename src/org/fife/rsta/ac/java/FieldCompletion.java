@@ -1,0 +1,160 @@
+/*
+ * 03/21/2010
+ *
+ * Copyright (C) 2010 Robert Futrell
+ * robert_futrell at users.sourceforge.net
+ * http://fifesoft.com/rsyntaxtextarea
+ *
+ * This code is licensed under the LGPL.  See the "license.txt" file included
+ * with this project.
+ */
+package org.fife.rsta.ac.java;
+
+import java.awt.Graphics;
+import javax.swing.Icon;
+
+import org.fife.rsta.ac.java.classreader.FieldInfo;
+import org.fife.rsta.ac.java.rjc.ast.Field;
+import org.fife.ui.autocomplete.CompletionProvider;
+
+
+/**
+ * A completion for a Java field.  This completion gets its information from
+ * one of two sources:
+ * 
+ * <ul>
+ *    <li>A {@link FieldInfo} instance, which is loaded by parsing a class
+ *        file.  This is used when this completion represents a field found
+ *        in a compiled library.</li>
+ *    <li>A {@link Field} instance, which is created when parsing a Java
+ *        source file.  This is used when the completion represents a field
+ *        found in uncompiled source, such as the source in an
+ *        <tt>RSyntaxTextArea</tt>, or in a loose file on disk.</li>
+ * </ul>
+ *
+ * @author Robert Futrell
+ * @version 1.0
+ */
+class FieldCompletion extends AbstractJavaSourceCompletion
+						implements MemberCompletion {
+
+	private Data data;
+
+
+	public FieldCompletion(CompletionProvider provider, Field field,
+							String typeName) {
+		super(provider, field.getName());
+		this.data = new FieldData(field);
+	}
+
+
+	public FieldCompletion(CompletionProvider provider, FieldInfo info,
+							String typeName) {
+		super(provider, info.getName());
+		this.data = new FieldInfoData(info, (SourceCompletionProvider)provider);
+	}
+
+
+	private FieldCompletion(CompletionProvider provider, String text) {
+		super(provider, text);
+	}
+
+
+	public boolean equals(Object obj) {
+		return (obj instanceof FieldCompletion) &&
+			((FieldCompletion)obj).getSignature().equals(getSignature());
+	}
+
+
+	public static FieldCompletion createLengthCompletion(
+							CompletionProvider provider, final String type) {
+		FieldCompletion fc = new FieldCompletion(provider, type);
+		fc.data = new Data() {
+
+			public String getIcon() {
+				return IconFactory.METHOD_PUBLIC_ICON;
+			}
+
+			public String getSignature() {
+				return "length";
+			}
+
+			public String getSummary() {
+				return null;
+			}
+
+			public String getType() {
+				return type;
+			}
+
+			public boolean isDeprecated() {
+				return false;
+			}
+
+			public boolean isAbstract() {
+				return false;
+			}
+
+			public boolean isFinal() {
+				return false;
+			}
+
+			public boolean isStatic() {
+				return false;
+			}
+			
+		};
+		return fc;
+	}
+
+
+	public String getDefinedIn() {
+		return getType();
+	}
+
+
+	public Icon getIcon() {
+		return IconFactory.get().getIcon(data);
+	}
+
+
+	public String getSignature() {
+		return data.getSignature();
+	}
+
+
+	public String getSummary() {
+
+		String summary = data.getSummary(); // Could be just the method name
+
+		// If it's the Javadoc for the method...
+		if (summary!=null && summary.startsWith("/**")) {
+			summary = org.fife.rsta.ac.java.Util.docCommentToHtml(summary);
+		}
+
+		return summary;
+
+	}
+
+
+	public String getType() {
+		return data.getType();
+	}
+
+
+	public int hashCode() {
+		return getSignature().hashCode();
+	}
+
+
+	public boolean isDeprecated() {
+		return data.isDeprecated();
+	}
+
+
+	public void rendererText(Graphics g, int x, int y, boolean selected) {
+		MethodCompletion.rendererText(this, g, x, y, selected);
+	}
+
+
+}
