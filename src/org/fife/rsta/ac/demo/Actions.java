@@ -16,6 +16,9 @@ import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 
 
 /**
@@ -101,6 +104,33 @@ interface Actions {
 			}
 		}
 
+	}
+
+
+	/**
+	 * Changes the look and feel of the demo application.
+	 */
+	static class LookAndFeelAction extends AbstractAction {
+
+		private LookAndFeelInfo info;
+		private DemoRootPane demo;
+
+		public LookAndFeelAction(DemoRootPane demo, LookAndFeelInfo info) {
+			putValue(NAME, info.getName());
+			this.demo = demo;
+			this.info = info;
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			try {
+				UIManager.setLookAndFeel(info.getClassName());
+				SwingUtilities.updateComponentTreeUI(demo);
+			} catch (RuntimeException re) {
+				throw re; // FindBugs
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
 	}
 
 

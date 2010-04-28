@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import javax.swing.*;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.event.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -119,6 +120,14 @@ class DemoRootPane extends JRootPane implements HyperlinkListener,
 		addItem(new StyleAction(this, "PHP",  "PhpExample.txt",   SYNTAX_STYLE_PHP), bg, menu);
 		addItem(new StyleAction(this, "sh",   "ShellExample.txt", SYNTAX_STYLE_UNIX_SHELL), bg, menu);
 		menu.getItem(0).setSelected(true);
+		mb.add(menu);
+
+		menu = new JMenu("LookAndFeel");
+		bg = new ButtonGroup();
+		LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
+		for (int i=0; i<infos.length; i++) {
+			addItem(new LookAndFeelAction(this, infos[i]), bg, menu);
+		}
 		mb.add(menu);
 
 		menu = new JMenu("Help");
