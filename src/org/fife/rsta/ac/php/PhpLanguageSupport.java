@@ -11,6 +11,7 @@
 package org.fife.rsta.ac.php;
 
 import org.fife.rsta.ac.AbstractLanguageSupport;
+import org.fife.rsta.ac.html.HtmlCellRenderer;
 import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
@@ -49,7 +50,7 @@ public class PhpLanguageSupport extends AbstractLanguageSupport {
 
 		PhpCompletionProvider provider = getProvider();
 		AutoCompletion ac = new AutoCompletion(provider);
-		//ac.setListCellRenderer(new CCellRenderer());
+		ac.setListCellRenderer(new HtmlCellRenderer());
 		ac.setShowDescWindow(true);
 		ac.setParameterAssistanceEnabled(true);
 		ac.install(textArea);

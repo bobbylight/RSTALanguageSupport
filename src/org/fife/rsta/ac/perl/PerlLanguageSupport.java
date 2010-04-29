@@ -13,6 +13,7 @@ package org.fife.rsta.ac.perl;
 import org.fife.rsta.ac.AbstractLanguageSupport;
 import org.fife.rsta.ac.perl.PerlCompletionProvider;
 import org.fife.ui.autocomplete.AutoCompletion;
+import org.fife.ui.autocomplete.CompletionCellRenderer;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 
@@ -61,7 +62,9 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 
 		PerlCompletionProvider provider = getProvider();
 		AutoCompletion ac = new AutoCompletion(provider);
-		//ac.setListCellRenderer(new CCellRenderer());
+		CompletionCellRenderer ccr = new CompletionCellRenderer();
+		ccr.setShowTypes(false);
+		ac.setListCellRenderer(ccr);
 		ac.setShowDescWindow(true);
 		ac.setParameterAssistanceEnabled(true);
 		ac.install(textArea);

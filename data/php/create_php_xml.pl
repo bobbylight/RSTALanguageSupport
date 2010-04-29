@@ -25,7 +25,7 @@ print OUT <<EOT;
 <?xml version=\"1.0\" encoding=\"UTF-8\" ?>
 
 <!--
-   c.xml - API specification for PHP.
+   php.xml - API specification for PHP.
            Used by RSyntaxTextArea to provide code completion.
 
    Author:         Robert Futrell
@@ -34,7 +34,7 @@ print OUT <<EOT;
    This file was generated from: $infile
    on date: $datestamp
 -->
-<api language="C">
+<api language="PHP">
 
 	<environment paramStartChar="(" paramEndChar=")" paramSeparator=", " terminal=";"/>
 

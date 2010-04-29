@@ -44,7 +44,7 @@ public class HtmlLanguageSupport extends AbstractLanguageSupport {
 
 		HtmlCompletionProvider provider = getProvider();
 		AutoCompletion ac = new AutoCompletion(provider);
-		//ac.setListCellRenderer(new CCellRenderer());
+		ac.setListCellRenderer(new HtmlCellRenderer());
 		ac.setShowDescWindow(true);
 		ac.setParameterAssistanceEnabled(false);
 		ac.install(textArea);

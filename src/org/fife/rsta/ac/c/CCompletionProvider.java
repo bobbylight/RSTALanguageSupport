@@ -50,9 +50,9 @@ public class CCompletionProvider extends LanguageAwareCompletionProvider {
 	protected void addShorthandCompletions(DefaultCompletionProvider codeCP) {
 		codeCP.addCompletion(new ShorthandCompletion(codeCP, "main",
 								"int main(int argc, char **argv)"));
-//for (int i=0; i<5000; i++) {
-//	codeCP.addCompletion(new BasicCompletion(codeCP, "Number" + i));
-//}
+for (int i=0; i<5000; i++) {
+	codeCP.addCompletion(new BasicCompletion(codeCP, "Number" + i));
+}
 	}
 
 

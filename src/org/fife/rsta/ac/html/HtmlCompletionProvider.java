@@ -21,7 +21,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
 import javax.swing.text.JTextComponent;
 
-import org.fife.ui.autocomplete.AbstractCompletion;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
 import org.fife.ui.autocomplete.MarkupTagCompletion;
@@ -80,17 +79,7 @@ public class HtmlCompletionProvider extends DefaultCompletionProvider {
 			tagToAttrs.put(tag, attrs);
 			for (int j=0; j<c.getAttributeCount(); j++) {
 				final Parameter param = c.getAttribute(j);
-				AbstractCompletion attrCompletion = new AbstractCompletion(c.getProvider()) {
-					
-					public String getSummary() {
-						return param.getDescription();
-					}
-					
-					public String getReplacementText() {
-						return param.getName();
-					}
-				};
-				attrs.add(attrCompletion);
+				attrs.add(new AttributeCompletion(this, param));
 			}
 		}
 

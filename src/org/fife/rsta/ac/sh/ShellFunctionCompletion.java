@@ -47,6 +47,21 @@ public class ShellFunctionCompletion extends FunctionCompletion {
 	 */
 	public String getSummary() {
 
+		// TODO: Option - get from system man, or static help
+		String summary = getSummaryFromManPage();
+
+		return summary;
+
+	}
+
+
+	/**
+	 * Gets a summary of this function from the local system's man pages.
+	 *
+	 * @return The summary.
+	 */
+	private String getSummaryFromManPage() {
+
 		Process p = null;
 
 		String[] cmd = { "/usr/bin/man", getName() };
@@ -72,18 +87,18 @@ public class ShellFunctionCompletion extends FunctionCompletion {
 			ie.printStackTrace();
 		}
 
-		String output = outputCollector.getOutput();
+		StringBuffer output = outputCollector.getOutput();
 		//return output.length()==0 ? null : output;
 		if (output!=null && output.length()>0) {
 			output = manToHtml(output);
-			return output;
 		}
-		return null;
+
+		return output==null ? null : output.toString();
 
 	}
 
 
-	private static final String manToHtml(String text) {
+	private static final StringBuffer manToHtml(CharSequence text) {
 //		text = text.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 		Pattern p = Pattern.compile("(?:_\\010.)+|(?:(.)\\010\\1)+");//"(?:.\\010.)+");
 		Matcher m = p.matcher(text);
@@ -107,9 +122,8 @@ public class ShellFunctionCompletion extends FunctionCompletion {
 			}
 		}
 		m.appendTail(sb);
-		text = sb.toString();
-		//System.out.println(text);
-		return text;
+		//System.out.println(sb.toString());
+		return sb;
 	}
 
 	// Matcher.quoteReplacement() in 1.5.
@@ -139,8 +153,8 @@ public class ShellFunctionCompletion extends FunctionCompletion {
 			sb = new StringBuffer();
 		}
 
-		public String getOutput() {
-			return sb.toString();
+		public StringBuffer getOutput() {
+			return sb;
 		}
 
 		public void run() {
