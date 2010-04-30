@@ -33,6 +33,14 @@ class MethodData implements Data {
 	}
 
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getDefinedIn() {
+		return method.getParentTypeDeclaration().getTypeString();
+	}
+
+
 	public String getIcon() {
 
 		String key = null;

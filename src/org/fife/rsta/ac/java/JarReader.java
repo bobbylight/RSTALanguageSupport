@@ -154,6 +154,27 @@ System.out.println("Appending: " + pkgNames[j]);
 	}
 
 
+	public boolean containsPackage(String pkgName) {
+
+		String[] items = pkgName.split("\\.");
+
+		TreeMap m = packageMap;
+		for (int i=0; i<items.length; i++) {
+			// "value" can be a ClassFile "too early" here if className
+			// is a nested class.
+			// TODO: Handle nested classes better
+			Object value = m.get(items[i]);
+			if (!(value instanceof TreeMap)) {
+				return false;
+			}
+			m = (TreeMap)value;
+		}
+
+		return true;
+
+	}
+
+
 	private ClassFile createClassFile(String entryName) throws IOException {
 		JarFile jar = new JarFile(info.getJarFile());
 		try {

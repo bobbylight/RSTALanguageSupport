@@ -45,6 +45,14 @@ class FieldInfoData implements Data {
 	/**
 	 * {@inheritDoc}
 	 */
+	public String getDefinedIn() {
+		return info.getClassFile().getClassName(false);
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public String getIcon() {
 
 		String key = null;

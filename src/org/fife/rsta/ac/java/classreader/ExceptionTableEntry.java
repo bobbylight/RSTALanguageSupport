@@ -17,7 +17,10 @@ import org.fife.rsta.ac.java.classreader.constantpool.ConstantClassInfo;
 
 
 /**
- * An entry in the exception table of a {@link Code} attribute.
+ * An entry in the exception table of a {@link Code} attribute.  This denotes
+ * either a <tt>catch</tt> or <tt>finally</tt> block (the section of code it
+ * covers, the type of <tt>Throwable</tt> it handles, and the location of the
+ * exception handler code).
  *
  * @author Robert Futrell
  * @version 1.0
@@ -72,6 +75,20 @@ public class ExceptionTableEntry {
 	 */
 	public ExceptionTableEntry(ClassFile cf) {
 		this.cf = cf;
+	}
+
+
+	/**
+	 * Returns the name of the <tt>Throwable</tt> type caught and handled
+	 * by this exception handler.
+	 *
+	 * @param fullyQualified Whether the name should be fully qualified.
+	 * @return The name of the <tt>Throwable</tt> type, or <code>null</code>
+	 *         if this entry denotes a <tt>finally</tt> block.
+	 */
+	public String getCaughtThrowableType(boolean fullyQualified) {
+		return catchType==0 ? null :
+				cf.getClassNameFromConstantPool(catchType, fullyQualified);
 	}
 
 

@@ -20,7 +20,7 @@ import org.fife.rsta.ac.java.rjc.lexer.Token;
 
 
 // TODO: Implement me correctly
-public class Method extends AbstractASTNode implements Member {
+public class Method extends AbstractMember {
 
 	private Modifiers modifiers;
 	private Type type;

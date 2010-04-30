@@ -16,7 +16,7 @@ import org.fife.rsta.ac.java.rjc.lexer.Scanner;
 import org.fife.rsta.ac.java.rjc.lexer.Token;
 
 
-public class Field extends AbstractASTNode implements Member {
+public class Field extends AbstractMember {
 
 	private Modifiers modifiers;
 	private Type type;

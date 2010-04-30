@@ -38,10 +38,16 @@ public interface Member extends ASTNode {
 	public String getName();
 
 
+	public TypeDeclaration getParentTypeDeclaration();
+
+
 	public Type getType();
 
 
 	public boolean isDeprecated();
+
+
+	public void setParentTypeDeclaration(TypeDeclaration dec);
 
 
 }

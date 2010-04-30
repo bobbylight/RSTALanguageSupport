@@ -71,6 +71,10 @@ class FieldCompletion extends AbstractJavaSourceCompletion
 		FieldCompletion fc = new FieldCompletion(provider, type);
 		fc.data = new Data() {
 
+			public String getDefinedIn() {
+				return type + "[]";
+			}
+
 			public String getIcon() {
 				return IconFactory.METHOD_PUBLIC_ICON;
 			}
@@ -109,7 +113,7 @@ class FieldCompletion extends AbstractJavaSourceCompletion
 
 
 	public String getDefinedIn() {
-		return getType();
+		return data.getDefinedIn();
 	}
 
 

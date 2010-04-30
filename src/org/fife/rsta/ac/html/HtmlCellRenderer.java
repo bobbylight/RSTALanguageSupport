@@ -10,10 +10,7 @@
  */
 package org.fife.rsta.ac.html;
 
-import java.awt.Component;
-import java.awt.Graphics;
 import java.io.File;
-import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import javax.swing.Icon;
@@ -22,6 +19,7 @@ import javax.swing.JList;
 
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionCellRenderer;
+import org.fife.ui.autocomplete.EmptyIcon;
 import org.fife.ui.autocomplete.FunctionCompletion;
 import org.fife.ui.autocomplete.MarkupTagCompletion;
 import org.fife.ui.autocomplete.VariableCompletion;
@@ -118,35 +116,6 @@ public class HtmlCellRenderer extends CompletionCellRenderer {
 		super.prepareForVariableCompletion(list, vc, index, selected,
 										hasFocus);
 		setIcon(emptyIcon);
-	}
-
-
-	/**
-	 * An standard icon that doesn't paint anything.  This can be used to take
-	 * up an icon's space when no icon is specified.
-	 *
-	 * @author Robert Futrell
-	 * @version 1.0
-	 */
-	private static class EmptyIcon implements Icon, Serializable {
-
-		private int size;
-
-		public EmptyIcon(int size) {
-			this.size = size;
-		}
-
-		public int getIconHeight() {
-			return size;
-		}
-
-		public int getIconWidth() {
-			return size;
-		}
-
-		public void paintIcon(Component c, Graphics g, int x, int y) {
-		}
-		
 	}
 
 

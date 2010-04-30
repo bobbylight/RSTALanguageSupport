@@ -200,7 +200,7 @@ public class ClassFile implements AccessFlags {
 	 *        qualified.
 	 * @return The fully-qualified class or interface name.
 	 */
-	private String getClassNameFromConstantPool(int cpIndex,
+	protected String getClassNameFromConstantPool(int cpIndex,
 												boolean fullyQualified) {
 
 		ConstantPoolInfo cpi = getConstantPoolInfo(cpIndex);

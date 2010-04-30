@@ -27,6 +27,8 @@ import org.fife.ui.autocomplete.ShorthandCompletion;
 class JavaShorthandCompletion extends ShorthandCompletion implements
 		JavaSourceCompletion {
 
+	private static final Color SHORTHAND_COLOR	= new Color(0, 127, 174);
+
 
 	/**
 	 * Constructor.
@@ -72,9 +74,8 @@ class JavaShorthandCompletion extends ShorthandCompletion implements
 //			return getInputText();
 //		}
 //		return getInputText() + " - " + shortDesc;
-		Color old = g.getColor();
 		if (!selected) {
-			g.setColor(new Color(0, 127, 174));//114, 157, 219));
+			g.setColor(SHORTHAND_COLOR);
 		}
 		String temp = getInputText() + " - ";
 		g.drawString(temp, x, y);

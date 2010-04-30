@@ -120,12 +120,14 @@ public class JavaCellRenderer extends DefaultListCellRenderer {
 		// We never paint "selection" around the icon, to imitate Eclipse
 		g.setColor(usingAltBG ? altBG : list.getBackground());
 		int iconW = 18;
-		g.fillRect(0, 0, iconW, getHeight());
+		int h = getHeight();
+		g.fillRect(0, 0, iconW, h);
 		if (getIcon()!=null) {
-			getIcon().paintIcon(this, g, 0, 0);
+			int y = (h - getIcon().getIconHeight())/2;
+			getIcon().paintIcon(this, g, 0, y);
 		}
 		g.setColor(getBackground());
-		g.fillRect(iconW,0, getWidth()-iconW,getHeight());
+		g.fillRect(iconW,0, getWidth()-iconW,h);
 
 		if (jsc!=null) {
 			int x = getX() + iconW + 2;

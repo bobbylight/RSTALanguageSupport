@@ -21,6 +21,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.fife.rsta.ac.java.classreader.ClassFile;
+import org.fife.rsta.ac.java.rjc.ast.ImportDeclaration;
 import org.fife.ui.autocomplete.CompletionProvider;
 
 
@@ -128,6 +129,76 @@ public class JarManager {
 		}
 
 		return null;
+
+	}
+
+
+	/**
+	 * Returns a list of all classes/interfaces/enums with a given (unqualified)
+	 * name.  There may be several, since the name is unqualified.
+	 *
+	 * @param name The unqualified name of a type declaration.
+	 * @param importDeclarations The imports of the compilation unit, if any.
+	 * @return A list of type declarations with the given name, or
+	 *         <code>null</code> if there are none.
+	 */
+	public List getClassesWithUnqualifiedName(String name,
+												List importDeclarations) {
+
+		// Might be more than one class/interface/enum with the same name.
+		List result = null;
+
+		// Loop through all of our imports.
+		for (int i=0; i<importDeclarations.size(); i++) {
+
+			ImportDeclaration idec = (ImportDeclaration)importDeclarations.get(i);
+
+			// Static imports are for fields/methods, not classes
+			if (!idec.isStatic()) {
+
+				// Wildcard => See if package contains a class with this name
+				if (idec.isWildcard()) {
+
+					String name2 = idec.getName();
+					String[] items = Util.splitOnChar(name2, '.');
+					items[items.length-1] = name; // Replaces "*"
+
+					for (int j=0; j<jars.size(); j++) {
+						JarReader jar = (JarReader)jars.get(j);
+						ClassFile entry = jar.getClassEntry(items);
+						if (entry!=null) {
+							if (result==null) {
+								result = new ArrayList(1); // Usually small
+							}
+							result.add(entry);
+						}
+					}
+
+				}
+
+				// Not wildcard => fully-qualified class/interface name
+				else {
+					String name2 = idec.getName();
+					String unqualifiedName2 = name2.substring(name2.lastIndexOf('.')+1);
+					if (unqualifiedName2.equals(name)) {
+						ClassFile entry = getClassEntry(name2);
+						if (entry!=null) { // Should always be true
+							if (result==null) {
+								result = new ArrayList(1); // Usually small
+							}
+							result.add(entry);
+						}
+						else {
+							System.err.println("ERROR: Class not found! - " + name2);
+						}
+					}
+				}
+
+			}
+
+		}
+
+		return result;
 
 	}
 

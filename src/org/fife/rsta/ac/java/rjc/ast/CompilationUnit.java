@@ -147,6 +147,19 @@ public class CompilationUnit extends AbstractASTNode
 	}
 
 
+	/**
+	 * Returns the import declarations of this compilation unit.  This is a
+	 * copy of the list of imports, but the actual individual
+	 * {@link ImportDeclaration}s are not copies, so modifying them will modify
+	 * this compilation unit!
+	 *
+	 * @return A list or imports, or an empty list if there are none.
+	 */
+	public List getImports() {
+		return new ArrayList(imports);
+	}
+
+
 	public Iterator getImportIterator() {
 		return imports.iterator();
 	}

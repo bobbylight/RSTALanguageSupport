@@ -72,6 +72,14 @@ interface MemberCompletion extends JavaSourceCompletion {
 	public static interface Data extends IconData {
 
 		/**
+		 * Returns the name of the parent type declaration that this member is
+		 * defined in.
+		 *
+		 * @return The type declaration this member is defined in.
+		 */
+		public String getDefinedIn();
+
+		/**
 		 * Returns the icon to use when rendering this member's completion.
 		 *
 		 * @return The icon to use.

@@ -91,6 +91,39 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	}
 
 
+	private void addCompletionsForStaticMembers(Set set,
+						CompilationUnit cu, ClassFile cf, String pkg) {
+
+		// Check us first, so if we override anything, we get the "newest"
+		// version.
+		int methodCount = cf.getMethodCount();
+		for (int i=0; i<methodCount; i++) {
+			MethodInfo info = cf.getMethodInfo(i);
+			if (isAccessible(info, pkg) && info.isStatic()) {
+				MethodCompletion mc = new MethodCompletion(
+											this, info, cf.getClassName(true));
+				set.add(mc);
+			}
+		}
+
+		int fieldCount = cf.getFieldCount();
+		for (int i=0; i<fieldCount; i++) {
+			FieldInfo info = cf.getFieldInfo(i);
+			if (isAccessible(info, pkg) && info.isStatic()) {
+				FieldCompletion fc = new FieldCompletion(this, info,
+											cf.getClassName(true));
+				set.add(fc);
+			}
+		}
+
+		ClassFile superClass = getClassFileFor(cu, pkg, cf.getSuperClassName(true));
+		if (superClass!=null) {
+			addCompletionsForStaticMembers(set, cu, superClass, pkg);
+		}
+
+	}
+
+
 	/**
 	 * Adds completions for accessible methods and fields of super classes.
 	 * This is only called when the caret is inside of a class.
@@ -592,6 +625,7 @@ public File getSourceLocForClass(String className) {
 		}
 
 		String pkg = cu.getPackageName();
+		boolean matched = false;
 
 		for (Iterator j=td.getMemberIterator(); j.hasNext(); ) {
 
@@ -619,6 +653,7 @@ public File getSourceLocForClass(String className) {
 							addCompletionsForExtendedClass(retVal, cu, cf, pkg);
 						}
 					}
+					matched = true;
 					break;
 				}
 
@@ -652,6 +687,22 @@ public File getSourceLocForClass(String className) {
 				}
 			}
 
+			matched |= found;
+
+		}
+
+		// Could be a class name, in which case we'll need to add completions
+		// for static fields and methods.
+		if (!matched) {
+			List imports = cu.getImports();
+			List matches = jarManager.getClassesWithUnqualifiedName(
+															prefix, imports);
+			if (matches!=null) {
+				for (int i=0; i<matches.size(); i++) {
+					ClassFile cf = (ClassFile)matches.get(i);
+					addCompletionsForStaticMembers(retVal, cu, cf, pkg);
+				}
+			}
 		}
 
 	}

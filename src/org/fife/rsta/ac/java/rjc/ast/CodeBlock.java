@@ -29,7 +29,7 @@ import org.fife.rsta.ac.java.rjc.lexer.Offset;
  * @author Robert Futrell
  * @version 1.0
  */
-public class CodeBlock extends AbstractASTNode implements Member {
+public class CodeBlock extends AbstractMember {
 
 	/**
 	 * The name of all <code>CodeBlock</code>s.

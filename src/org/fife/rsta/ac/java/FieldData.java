@@ -35,6 +35,14 @@ class FieldData implements Data {
 	/**
 	 * {@inheritDoc}
 	 */
+	public String getDefinedIn() {
+		return field.getParentTypeDeclaration().getTypeString();
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public String getIcon() {
 
 		String key = null;

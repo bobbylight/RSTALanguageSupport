@@ -11,7 +11,6 @@
 package org.fife.rsta.ac.java;
 
 import java.awt.Graphics;
-
 import javax.swing.Icon;
 
 import org.fife.rsta.ac.java.rjc.ast.LocalVariable;
@@ -31,12 +30,18 @@ class LocalVariableCompletion extends AbstractJavaSourceCompletion {
 
 	public boolean equals(Object obj) {
 		return (obj instanceof LocalVariableCompletion) &&
-			((LocalVariableCompletion)obj).getReplacementText().equals(getReplacementText());
+			((LocalVariableCompletion)obj).getReplacementText().
+												equals(getReplacementText());
 	}
 
 
 	public Icon getIcon() {
 		return IconFactory.get().getIcon(IconFactory.LOCAL_VARIABLE_ICON);
+	}
+
+
+	public int hashCode() {
+		return getReplacementText().hashCode(); // Match equals()
 	}
 
 
