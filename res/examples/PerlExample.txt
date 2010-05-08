@@ -3,6 +3,8 @@ use strict;
 
 print "Hello world!\n";
 
+my @aaa, @aab, @aac, @abc, @aad;
+
 # Simple regular expression recognition
 my $name = "Fred";
 my $text = "A complicated regex example from $name";

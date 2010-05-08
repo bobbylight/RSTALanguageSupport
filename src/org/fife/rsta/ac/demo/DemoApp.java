@@ -35,9 +35,9 @@ public class DemoApp extends JFrame {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				try {
-//					UIManager.setLookAndFeel(UIManager.
-//											getSystemLookAndFeelClassName());
-UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+					UIManager.setLookAndFeel(UIManager.
+											getSystemLookAndFeelClassName());
+//UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
 				} catch (Exception e) {
 					e.printStackTrace(); // Never happens
 				}

@@ -9,6 +9,23 @@ use strict;
 use Cwd qw(abs_path);
 use File::Basename;
 
+
+sub fixDesc {
+
+	my $temp = $_[0];
+
+	$temp =~ s/^\s+//;		# Leading whitespace
+	$temp =~ s/\n[\n]?$//;	# Final (one or two) newlines
+	$temp =~ s!([^>])\n!$1<br>\n!g;	# Newlines (for lines not ending in a tag)
+
+	if ($temp =~ m/[\<\>\&]/) {
+		$temp = "<![CDATA[" . $temp . "]]>";
+	}
+	return $temp;
+
+}
+
+
 my $this_script = abs_path($0);
 my $dir = dirname($this_script);
 my $infile = "$dir/c.txt";
@@ -190,20 +207,3 @@ print OUT <<EOT;
 
 </api>
 EOT
-
-
-sub fixDesc() {
-
-	my $temp = $_[0];
-
-	$temp =~ s/^\s+//;		# Leading whitespace
-	$temp =~ s/\n[\n]?$//;	# Final (one or two) newlines
-	$temp =~ s!([^>])\n!$1<br>\n!g;	# Newlines (for lines not ending in a tag)
-
-	if ($temp =~ m/[\<\>\&]/) {
-		$temp = "<![CDATA[" . $temp . "]]>";
-	}
-	return $temp;
-
-}
-

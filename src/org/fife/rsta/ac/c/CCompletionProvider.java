@@ -62,30 +62,13 @@ public class CCompletionProvider extends LanguageAwareCompletionProvider {
 	 * @return The provider.
 	 * @see #createCommentCompletionProvider()
 	 * @see #createStringCompletionProvider()
+	 * @see #loadCodeCompletionsFromXml(DefaultCompletionProvider)
+	 * @see #addShorthandCompletions(DefaultCompletionProvider)
 	 */
 	protected CompletionProvider createCodeCompletionProvider() {
-
-		// Add completions for the C standard library.
 		DefaultCompletionProvider cp = new DefaultCompletionProvider();
-
-		// First try loading resource (running from demo jar), then try
-		// accessing file (debugging in Eclipse).
-		ClassLoader cl = getClass().getClassLoader();
-		InputStream in = cl.getResourceAsStream(getXmlResource());
-		try {
-			if (in!=null) {
-				cp.loadFromXML(in);
-				in.close();
-			}
-			else {
-				cp.loadFromXML(new File(getXmlResource()));
-			}
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
-
+		loadCodeCompletionsFromXml(cp);
 		addShorthandCompletions(cp);
-
 		return cp;
 
 	}
@@ -132,6 +115,32 @@ public class CCompletionProvider extends LanguageAwareCompletionProvider {
 	 */
 	protected String getXmlResource() {
 		return "data/c.xml";
+	}
+
+
+	/**
+	 * Called from {@link #createCodeCompletionProvider()} to actually load
+	 * the completions from XML.  Subclasses that override that method will
+	 * want to call this one.
+	 *
+	 * @param cp The code completion provider.
+	 */
+	protected void loadCodeCompletionsFromXml(DefaultCompletionProvider cp) {
+		// First try loading resource (running from demo jar), then try
+		// accessing file (debugging in Eclipse).
+		ClassLoader cl = getClass().getClassLoader();
+		InputStream in = cl.getResourceAsStream(getXmlResource());
+		try {
+			if (in!=null) {
+				cp.loadFromXML(in);
+				in.close();
+			}
+			else {
+				cp.loadFromXML(new File(getXmlResource()));
+			}
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 	}
 
 

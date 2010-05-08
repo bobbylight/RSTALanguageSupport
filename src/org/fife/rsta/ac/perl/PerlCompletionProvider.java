@@ -10,13 +10,17 @@
  */
 package org.fife.rsta.ac.perl;
 
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 
 import org.fife.rsta.ac.c.CCompletionProvider;
+import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
 import org.fife.ui.autocomplete.VariableCompletion;
@@ -58,6 +62,18 @@ public class PerlCompletionProvider extends CCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
+	protected CompletionProvider createCodeCompletionProvider() {
+		DefaultCompletionProvider cp = new PerlCodeCompletionProvider();
+		loadCodeCompletionsFromXml(cp);
+		addShorthandCompletions(cp);
+		return cp;
+
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
 	protected CompletionProvider createStringCompletionProvider() {
 		DefaultCompletionProvider cp = new DefaultCompletionProvider();
 		return cp;
@@ -71,9 +87,10 @@ public class PerlCompletionProvider extends CCompletionProvider {
 
 		List completions = super.getCompletionsImpl(comp);
 
-		Set varCompletions = getVariableCompletions(comp);
+		SortedSet varCompletions = getVariableCompletions(comp);
 		if (varCompletions!=null) {
 			completions.addAll(varCompletions);
+			Collections.sort(completions);
 		}
 
 		return completions;
@@ -129,7 +146,7 @@ System.out.println("Returning: " + (getUseParensWithFunctions() ? super.getParam
 	 * @return The completions for variables, or <code>null</code> if there
 	 *         were none.
 	 */
-	private Set getVariableCompletions(JTextComponent comp) {
+	private SortedSet getVariableCompletions(JTextComponent comp) {
 
 		RSyntaxTextArea textArea = (RSyntaxTextArea)comp;
 		int dot = textArea.getCaretPosition();
@@ -141,27 +158,67 @@ System.out.println("Returning: " + (getUseParensWithFunctions() ? super.getParam
 			return null;
 		}
 		RSyntaxDocument doc = (RSyntaxDocument)comp.getDocument();
-		Set varCompletions = null;
+		SortedSet varCompletions = null;
+
+		String text = getDefaultCompletionProvider().getAlreadyEnteredText(comp);
+		char firstChar = text.length()==0 ? 0 : text.charAt(0);
+		if (firstChar!='$' && firstChar!='@' && firstChar!='%') {
+			System.out.println("DEBUG: No use matching variables, exiting");
+			return null;
+		}
 
 		for (int i=0; i<=lastLine; i++) {
 			Token t = doc.getTokenListForLine(i);
-			while (t!=null && t.offset<dot && t.isPaintable()) {
+			while (t!=null && (t.offset+t.textCount)<dot && t.isPaintable()) {
 				if (t.type==Token.VARIABLE) {
-					if (varCompletions==null) {
-						varCompletions = new TreeSet();
-					}
 					String name = t.getLexeme();
-					VariableCompletion vc = new VariableCompletion(this,
+					char ch = name.charAt(0);
+					if (firstChar<=ch) { // '$' comes before '@'/'%' in ascii
+						if (varCompletions==null) { // Lazy creation
+							varCompletions = new TreeSet(new CaseInsensitiveComparator());
+						}
+						if (firstChar<ch) { // Use first char they entered
+							name = firstChar + name.substring(1);
+						}
+						VariableCompletion vc = new VariableCompletion(this,
 																name, null);
-					varCompletions.add(vc);
+						varCompletions.add(vc);
+					}
 				}
 				t = t.getNextToken();
 			}
 		}
 
+		// Get only those that match what's typed
+		if (varCompletions!=null) {
+			varCompletions = varCompletions.subSet(text, text+'{');
+		}
+
 		return varCompletions;
 
 	}
+
+private CaseInsensitiveComparator comparator = new CaseInsensitiveComparator();
+	/**
+	 * A comparator that compares the input text of a {@link Completion}
+	 * against a String lexicographically, ignoring case.
+	 *
+	 * @author Robert Futrell
+	 * @version 1.0
+	 */
+	private static class CaseInsensitiveComparator implements Comparator,
+														Serializable {
+
+		public int compare(Object o1, Object o2) {
+			String s1 = o1 instanceof String ? (String)o1 :
+							((Completion)o1).getInputText();
+			String s2 = o2 instanceof String ? (String)o2 :
+							((Completion)o2).getInputText();
+			return String.CASE_INSENSITIVE_ORDER.compare(s1, s2);
+		}
+
+	}
+
 
 
 	/**
