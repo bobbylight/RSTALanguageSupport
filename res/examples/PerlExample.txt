@@ -3,7 +3,7 @@ use strict;
 
 print "Hello world!\n";
 
-my @aaa, @aab, @aac, @abc, @aad;
+my @aaa, @aab, @aac, @abc, @aad, $aascalar, %aahash;
 
 # Simple regular expression recognition
 my $name = "Fred";

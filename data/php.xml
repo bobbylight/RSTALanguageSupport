@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!--
-   c.xml - API specification for PHP.
+   php.xml - API specification for PHP.
            Used by RSyntaxTextArea to provide code completion.
 
    Author:         Robert Futrell
    Version:        0.1
 
-   This file was generated from: C:\dev2\rsta\RSTALanguageSupport\data\php/php.txt
-   on date: 2010-02-02 16:30:04
+   This file was generated from: C:/dev/rsta/RSTALanguageSupport/data/php/php.txt
+   on date: 2010-05-09 11:48:57
 
 -->
-<api language="C">
+<api language="PHP">
 
 	<environment paramStartChar="(" paramEndChar=")" paramSeparator=", " terminal=";"/>
 

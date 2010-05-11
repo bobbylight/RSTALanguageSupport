@@ -175,7 +175,7 @@ System.out.println("Returning: " + (getUseParensWithFunctions() ? super.getParam
 					char ch = name.charAt(0);
 					if (firstChar<=ch) { // '$' comes before '@'/'%' in ascii
 						if (varCompletions==null) { // Lazy creation
-							varCompletions = new TreeSet(new CaseInsensitiveComparator());
+							varCompletions = new TreeSet(comparator);
 						}
 						if (firstChar<ch) { // Use first char they entered
 							name = firstChar + name.substring(1);

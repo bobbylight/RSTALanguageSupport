@@ -10,6 +10,8 @@
  */
 package org.fife.rsta.ac.perl;
 
+import java.io.File;
+
 import org.fife.rsta.ac.AbstractLanguageSupport;
 import org.fife.rsta.ac.perl.PerlCompletionProvider;
 import org.fife.ui.autocomplete.AutoCompletion;
@@ -29,6 +31,22 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 	 * The completion provider.  This is shared amongst all Perl text areas.
 	 */
 	private PerlCompletionProvider provider;
+
+	/**
+	 * The root directory of the Perl install.
+	 */
+	private static File perlInstallLocation;
+
+
+	/**
+	 * Returns the location at which Perl is installed.
+	 *
+	 * @return The location at which Perl is installed.
+	 * @see #setPerlInstallLocation(File)
+	 */
+	public static File getPerlInstallLocation() {
+		return perlInstallLocation;
+	}
 
 
 	/**
@@ -71,6 +89,17 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 		textArea.putClientProperty(PROPERTY_AUTO_COMPLETION, ac);
 		textArea.setToolTipSupplier(provider);
 
+	}
+
+
+	/**
+	 * Sets the location at which Perl is installed.
+	 *
+	 * @param loc The location at which Perl is installed.
+	 * @see #getPerlInstallLocation()
+	 */
+	public static void setPerlInstallLocation(File loc) {
+		perlInstallLocation = loc;
 	}
 
 

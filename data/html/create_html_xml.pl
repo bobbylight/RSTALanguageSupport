@@ -83,7 +83,7 @@ my %attrsToType;
 open(INFILE, "html_401_attrs.txt") || die("Cannot open INFILE: $!\n");
 
 # Skip first 6 lines
-my $line = <INFILE>;
+$line = <INFILE>;
 $line = <INFILE>;
 $line = <INFILE>;
 $line = <INFILE>;
@@ -118,7 +118,7 @@ foreach my $key (sort(keys(%tagToDesc))) {
 
 	if (defined($tagsToAttributes{$key})) {
 		my @attrs = @{$tagsToAttributes{$key}};
-		if (defined(@attrs)) {
+		if (@attrs) {
 			print OUT "\t\t<params>\n";
 			foreach my $attr (sort(@attrs)) {
 				print OUT "\t\t\t<param name=\"$attr\" type=\"$attrsToType{$attr}\">\n";

@@ -47,8 +47,14 @@ public class ShellFunctionCompletion extends FunctionCompletion {
 	 */
 	public String getSummary() {
 
-		// TODO: Option - get from system man, or static help
-		String summary = getSummaryFromManPage();
+		String summary = null;
+		if (ShellCompletionProvider.getUseLocalManPages()) {
+			summary = getSummaryFromManPage();
+		}
+		//else { // Don't use else - fallback for if man isn't found
+		if (summary==null) {
+			summary = super.getSummary();
+		}
 
 		return summary;
 
@@ -67,7 +73,6 @@ public class ShellFunctionCompletion extends FunctionCompletion {
 		String[] cmd = { "/usr/bin/man", getName() };
 		try {
 			p = Runtime.getRuntime().exec(cmd);
-//System.out.println("Running - " + cmd[0]);
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 			return null;

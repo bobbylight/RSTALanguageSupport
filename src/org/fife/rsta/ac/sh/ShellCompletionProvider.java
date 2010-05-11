@@ -10,6 +10,8 @@
  */
 package org.fife.rsta.ac.sh;
 
+import java.io.File;
+
 import org.fife.rsta.ac.c.CCompletionProvider;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
@@ -22,6 +24,11 @@ import org.fife.ui.autocomplete.DefaultCompletionProvider;
  * @version 1.0
  */
 public class ShellCompletionProvider extends CCompletionProvider {
+
+	/**
+	 * Whether local man pages should be used for function descriptions.
+	 */
+	private static boolean useLocalManPages;
 
 
 	/**
@@ -58,10 +65,44 @@ public class ShellCompletionProvider extends CCompletionProvider {
 
 
 	/**
+	 * Returns whether the local system's man pages should be used for
+	 * descriptions of functions.  If this returns <tt>false</tt>, or man
+	 * cannot be found (e.g. if this is Windows), a shorter description will
+	 * be used instead.
+	 *
+	 * @return Whether to use the local man pages in function descriptions.
+	 * @see #setUseLocalManPages(boolean)
+	 */
+	public static boolean getUseLocalManPages() {
+		return useLocalManPages;
+	}
+
+
+	/**
 	 * {@inheritDoc}
 	 */
 	protected String getXmlResource() {
 		return "data/sh.xml";
+	}
+
+
+	/**
+	 * Sets whether the local system's man pages should be used for
+	 * descriptions of functions.  If this is set to <tt>false</tt>, or man
+	 * cannot be found (e.g. if this is Windows), a shorter description will
+	 * be used instead.
+	 *
+	 * @param use Whether to use the local man pages in function descriptions.
+	 * @see #getUseLocalManPages()
+	 */
+	public static void setUseLocalManPages(boolean use) {
+		useLocalManPages = use;
+	}
+
+
+
+	static {
+		useLocalManPages = File.separatorChar=='/';
 	}
 
 

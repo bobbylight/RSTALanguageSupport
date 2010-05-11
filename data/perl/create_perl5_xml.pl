@@ -10,6 +10,23 @@ use strict;
 use Cwd qw(abs_path);
 use File::Basename;
 
+
+sub fixDesc {
+
+	my $temp = $_[0];
+
+	$temp =~ s/^\s+//;		# Leading whitespace
+	$temp =~ s/\n[\n]?$//;	# Final (one or two) newlines
+	$temp =~ s!([^>])\n!$1<br>\n!g;	# Newlines (for lines not ending in a tag)
+
+	if ($temp =~ m/[\<\>\&]/) {
+		$temp = "<![CDATA[" . $temp . "]]>";
+	}
+	return $temp;
+
+}
+
+
 my $start = time();
 
 my $this_script = abs_path($0);
@@ -126,21 +143,3 @@ EOT
 
 my $time = time() - $start;
 print "XML generated in $time seconds.\n";
-
-
-
-sub fixDesc() {
-
-	my $temp = $_[0];
-
-	$temp =~ s/^\s+//;		# Leading whitespace
-	$temp =~ s/\n[\n]?$//;	# Final (one or two) newlines
-	$temp =~ s!([^>])\n!$1<br>\n!g;	# Newlines (for lines not ending in a tag)
-
-	if ($temp =~ m/[\<\>\&]/) {
-		$temp = "<![CDATA[" . $temp . "]]>";
-	}
-	return $temp;
-
-}
-

@@ -12,6 +12,7 @@ package org.fife.rsta.ac.sh;
 
 import org.fife.rsta.ac.AbstractLanguageSupport;
 import org.fife.ui.autocomplete.AutoCompletion;
+import org.fife.ui.autocomplete.CompletionCellRenderer;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 
@@ -49,7 +50,7 @@ public class ShellLanguageSupport extends AbstractLanguageSupport {
 
 		ShellCompletionProvider provider = getProvider();
 		AutoCompletion ac = new AutoCompletion(provider);
-		//ac.setListCellRenderer(new CCellRenderer());
+		ac.setListCellRenderer(new CompletionCellRenderer());
 		ac.setShowDescWindow(true);
 		ac.setParameterAssistanceEnabled(false);
 		ac.install(textArea);

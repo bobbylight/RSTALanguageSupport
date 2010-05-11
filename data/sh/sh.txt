@@ -1,0 +1,909 @@
+a2p
+Creates a Perl script from an awk script.
+
+ac
+Prints statistics about users&#39; connect time.
+
+alias
+Create a name for another command or long command string.
+
+ar
+Maintain portable archive or library.
+
+arch
+Display the architecture of the current host.
+
+arp
+Manipulate the system ARP cache.
+
+as
+An assembler.
+
+at
+Command scheduler.
+
+awk
+Awk script processing program.
+
+basename
+Deletes any specified prefix from a string.
+
+bash
+Command Bourne interpreter
+
+bc
+Calculator.
+
+bdiff
+Compare large files.
+
+bfs
+Editor for large files.
+
+bg
+Continues a program running in the background.
+
+biff
+Enable / disable incoming mail notifications.
+
+break
+Break out of while, for, foreach, or until loop.
+
+bs
+Battleship game.
+
+bye
+Alias often used for the exit command.
+
+cal
+Calendar
+
+calendar
+Display appointments and reminders.
+
+cancel
+Cancels a print job.
+
+cat
+View and/or modify a file.
+
+cc
+C compiler.
+
+cd
+Change directory.
+
+chdir
+Change directory.
+
+checkeq
+Language processors to assist in describing equations.
+
+checknr
+Check nroff and troff files for any errors.
+
+chfn
+Modify your own information or if super user or root modify another users information.
+
+chgrp
+Change a groups access to a file or directory.
+
+chkey
+Change the secure RPC key pair.
+
+chmod
+Change the permission of a file.
+
+chown
+Change the ownership of a file.
+
+chsh
+Change login shell.
+
+cksum
+Display and calculate a CRC for files.
+
+clear
+Clears screen.
+
+cls
+Alias often used to clear a screen.
+
+cmp
+Compare files.
+
+col
+Reverse line-feeds filter.
+
+comm
+Compare files and select or reject lines that are common.
+
+compress
+Compress files on a computer.
+
+continue
+Break out of while, for, foreach, or until loop.
+
+copy
+Copy files.
+
+cp
+Copy files.
+
+cpio
+Creates archived CPIO files.
+
+crontab
+Create and list files that you wish to run on a regular schedule.
+
+csh
+Execute the C shell command interpreter
+
+csplit
+Split files based on context.
+
+ctags
+Create a tag file for use with <a href="uex.htm">ex</a> and <a href="uvi.htm">vi</a>.
+
+cu
+Calls or connects to another Unix system, terminal or non-Unix system.
+
+curl
+Transfer a URL.
+
+cut
+Cut out selected fields of each line of a file.
+
+date
+Tells you the date and time in Unix.
+
+dc
+An arbitrary precision arithmetic package.
+
+df
+Display the available disk space for each mount.
+
+deroff
+Removes <a href="unroff.htm">nroff</a>/<a href="utroff.htm">troff</a>, <a href="utbl.htm">tbl</a>, and <a href="ueqn.htm">eqn</a> constructs.
+
+dhclient
+Dynamic Host Configuration Protocol Client.
+
+diff
+Displays two files and prints the lines that are different.
+
+dig
+DNS lookup utility.
+
+dircmp
+Lists the different files when comparing directories.
+
+dirname
+Deliver portions of path names.
+
+dmesg
+Print or control the kernel ring buffer.
+
+dos2unix
+Converts text files between DOS and Unix formats.
+
+dpost
+Translates files created by <a href="utroff.htm">troff</a> into PostScript.
+
+du
+Tells you how much space a file occupies.
+
+echo
+Displays text after echo to the terminal.
+
+ed
+Line oriented file editor.
+
+edit
+Text editor.
+
+egrep
+Search a file for a pattern using full regular expressions.
+
+elm
+Program command used to send and receive e-mail.
+
+emacs
+Text editor.
+
+enable
+Enables / Disables LP printers.
+
+env
+Displays environment variables.
+
+eqn
+Language processors to assist in describing equations.
+
+ex
+Line-editor mode of the <a href="uvi.htm">vi</a> text editor.
+
+exit
+Exit from a program, shell or log you out of a Unix network.
+
+expand
+Expand copies of file s.
+
+expr
+Evaluate arguments as an expression.
+
+fc
+The FC utility lists or edits and re-executes, commands previously entered to an interactive sh.
+
+fg
+Continues a stopped job by running it in the foreground
+
+fgrep
+Search a file for a fixed-character string.
+
+file
+Tells you if the object you are looking at is a file or if it is a directory.
+
+find
+Finds one or more files assuming that you know their approximate filenames.
+
+findsmb
+List info about machines that respond to SMB name queries on a subnet.
+
+finger
+Lists information about the user.
+
+fmt
+Simple text formatters.
+
+fold
+Filter for folding lines.
+
+for
+Shell built-in functions to repeatedly execute action(s) for a selected number of times.
+
+foreach
+Shell built-in functions to repeatedly execute action(s) for a selected number of times.
+
+fromdos
+Converts text files between DOS and Unix formats.
+
+fsck
+Check and repair a Linux file system.
+
+ftp
+Enables ftp access to another terminal.
+
+getfacl
+Display discretionary file information.
+
+gprof
+The gprof utility produces an execution profile of a program.
+
+grep
+Finds text within a file.
+
+groupadd
+Creates a new group account.
+
+groupdel
+Enables a super user or root to remove a group.
+
+groupmod
+Enables a super user or root to modify a group.
+
+gunzip
+Expand compressed files.
+
+gview
+A programmers text editor.
+
+gvim
+A programmers text editor.
+
+gzip
+Compress files.
+
+halt
+Stop the computer.
+
+hash
+Remove internal hash table.
+
+hashstat
+Display the hash stats.
+
+head
+Displays the first ten lines of a file, unless otherwise stated.
+
+help
+If computer has online help documentation installed this command will display it.
+
+history
+Display the history of commands typed.
+
+host
+DNS lookup utility.
+
+hostid
+Prints the numeric identifier for the current host.
+
+hostname
+Set or print name of current host system.
+
+id
+Shows you the numeric user and group ID on BSD.
+
+ifconfig
+Sets up network interfaces.&nbsp; 
+
+ifdown
+take a network interface down
+
+ifup
+bring a network interface up
+
+isalist
+Display the native instruction sets executable on this platform.
+
+jobs
+List the jobs currently running in the background.
+
+join
+Joins command forms together.
+
+keylogin
+Decrypt the user&#39;s secret key.
+
+kill
+Cancels a job.
+
+ksh
+Korn shell command interpreter.
+
+ld
+Link-editor for object files.
+
+ldd
+List dynamic dependencies of executable files or shared objects.
+
+less
+Opposite of the more command.
+
+lex
+Generate programs for lexical tasks.
+
+link
+Calls the link function to create a link to a file.
+
+ln
+Creates a link to a file.
+
+lo
+Allows you to exit from a program, shell or log you out of a Unix network.
+
+locate
+List files in databases that match a pattern. 
+
+login
+Signs into a new system. 
+
+logname
+Returns users login name.
+
+logout
+Logs out of a system. 
+
+lp
+Prints a file on <a href="systemv.htm">System V</a> systems. 
+
+lpadmin
+Configure the LP print service.
+
+lpc
+Line printer control program.
+
+lpq
+Lists the status of all the available printers.
+
+lpr
+Submits print requests.
+
+lprm
+Removes print requests from the print queue. 
+
+lpstat
+Lists status of the <a href="ulp.htm">LP</a> print services.
+
+ls
+Lists the contents of a directory.
+
+mach
+Display the processor type of the current host.
+
+mail
+One of the ways that allows you to read/send E-Mail.
+
+mailcompat
+Provide <a href="solaris.htm">SunOS</a> 4.x compatibility for the Solaris mailbox format.
+
+mailx
+Mail interactive message processing system.
+
+make
+Executes a list of shell commands associated with each target.
+
+man
+Display a manual of a command.
+
+mesg
+Control if non-root users can send text messages to you.
+
+mii-tool
+View, manipulate media-independent interface status.
+
+mkdir
+Create a directory.
+
+mkfs
+Build a Linux file system, usually a hard disk partition.
+
+more
+Displays text one screen at a time.
+
+mount
+Disconnects a file systems and remote resources.
+
+mt
+Magnetic tape control. 
+
+mv
+Renames a file or moves it from one directory to another directory. 
+
+nc
+TCP/IP swiss army knife.
+
+neqn
+Language processors to assist in describing equations.
+
+netstat
+Shows network status.
+
+newalias
+Install new elm aliases for user and/or system.
+
+newform
+Change the format of a text file.
+
+newgrp
+Log into a new group.
+
+nice
+Invokes a command with an altered scheduling priority.
+
+niscat
+Display NIS+ tables and objects.
+
+nischmod
+Change access rights on a NIS+ object.
+
+nischown
+Change the owner of a NIS+ object.
+
+nischttl
+Change the time to live value of a NIS+ object.
+
+nisdefaults
+Display NIS+ default values.
+
+nisgrep
+Utilities for searching NIS+ tables.
+
+nismatch
+Utilities for searching NIS+ tables.
+
+nispasswd
+Change NIS+ password information.
+
+nistbladm
+NIS+ table administration command.
+
+nmap
+Network exploration tool and security / port scanner.
+
+nohup
+Runs a command even if the session is disconnected or the user logs out.
+
+nroff
+Formats documents for display or line-printer.
+
+nslookup
+Queries a name server for a host or domain lookup.
+
+on
+Execute a command on a remote system, but with the local environment.
+
+onintr
+Shell built-in functions to respond to (hardware) signals.
+
+optisa
+Determine which variant instruction set is optimal to use.
+
+pack
+Shrinks file into a compressed file.
+
+pagesize
+Display the size of a page of memory in bytes, as returned by getpagesize.
+
+passwd
+Allows you to change your password.
+
+paste
+Merge corresponding or subsequent lines of files.
+
+pax
+Read / write and writes lists of the members of archive files and copy directory hierarchies.
+
+pcat
+Compresses file.
+
+perl
+Perl is a programming language optimized for scanning arbitrary text files, extracting information from those text files.
+
+pg
+Files perusal filters for CRTs.
+
+pgrep
+Examine the active processes on the system and reports the process IDs of the processes
+
+pico
+Simple and very easy to use text editor in the style of the Pine Composer.
+
+pine
+Command line program for Internet News and Email.
+
+ping
+Sends ICMP ECHO_REQUEST packets to network hosts.
+
+pkill
+Examine the active processes on the system and reports the process IDs of the processes
+
+poweroff
+Stop the computer.
+
+pr
+Formats a file to make it look better when printed.
+
+priocntl
+Display&#39;s or set scheduling parameters of specified process(es)
+
+printf
+Write formatted output.
+
+ps
+Reports the process status.
+
+pvs
+Display the internal version information of dynamic objects within an ELF file.
+
+pwd
+Print the current working directory.
+
+quit
+Allows you to exit from a program, shell or log you out of a Unix network.
+
+rcp
+Copies files from one computer to another computer.
+
+reboot
+Stop the computer.
+
+red
+Line oriented file editor.
+
+rehash
+Recomputes the internal hash table of the contents of directories listed in the path.
+
+remsh
+Runs a command on another computer.
+
+repeat
+Shell built-in functions to repeatedly execute action(s) for a selected number of times.
+
+rgview
+A programmers text editor.
+
+rgvim
+A programmers text editor.
+
+rlogin
+Establish a remote connection from your terminal to a remote machine.
+
+rm
+Deletes a file without confirmation (by default).
+
+rmail
+One of the ways that allows you to read/send E-Mail.
+
+rmdir
+Deletes a directory.
+
+rn
+Reads newsgroups.
+
+route
+Show / manipulate the IP routing table.
+
+rpcinfo
+Report RPC information.
+
+rsh
+Runs a command on another computer.
+
+rsync
+Faster, flexible replacement for <a href="urcp.htm">rcp</a>.
+
+rview
+A programmers text editor.
+
+rvim
+A programmers text editor.
+
+s2p
+Convert a sed script into a Perl script.
+
+sag
+Graphically displays the system activity data stored in a binary data file by a previous <a href="usar.htm">sar</a> run.
+
+sar
+Displays the activity for the CPU.
+
+script
+Records everything printed on your screen.
+
+sdiff
+Compares two files, side-by-side.
+
+sed
+Allows you to use pre-recorded commands to make changes to text.
+
+sendmail
+Sends mail over the Internet.
+
+set
+Set the value of an environment variable.
+
+setenv
+Set the value of an environment variable.
+
+setfacl
+Modify the Access Control List (ACL) for a file or files.
+
+settime
+Change file access and modification time.
+
+sftp
+Secure file transfer program.
+
+sh
+Runs or processes jobs through the Bourne <a href="../jargon/s/shell.htm">shell</a>.
+
+shred
+Delete a file securely, first overwriting it to hide its contents.
+
+shutdown
+Turn off the computer immediately or at a specified time.
+
+sleep
+Waits a x amount of seconds.
+
+slogin
+OpenSSH <a href="../jargon/s/ssh.htm">SSH</a> client (remote login program).
+
+smbclient
+An ftp-like client to access SMB/CIFS resources on servers.
+
+sort
+Sorts the lines in a text file.
+
+spell
+Looks through a text file and reports any words that it finds in the text file that are not in the dictionary.
+
+split
+Split a file into pieces.
+
+stat
+Display file or filesystem status.
+
+stop
+Control process execution.
+
+strip
+Discard symbols from object files.
+
+stty
+Sets options for your terminal.
+
+su
+Become <a href="../jargon/r/root.htm">super user</a> or another user.
+
+sysinfo
+Get and set system information strings.
+
+sysklogd
+Linux system logging utilities.
+
+tabs
+Set tabs on a terminal.
+
+tail
+Delivers the last part of the file.
+
+talk
+Talk with other logged in users.
+
+tac
+Concatenate and print files in reverse.
+
+tar
+Create tape archives and add or extract files.
+
+tbl
+Preprocessor for formatting tables for <a href="unroff.htm">nroff</a> or <a href="utroff.htm">troff</a>.
+
+tcopy
+Copy a magnetic tape.
+
+tcpdump
+Dump traffic on a network.
+
+tee
+Read from an input and write to a standard output or file.
+
+telnet
+Uses the <a href="../jargon/t/telnet.htm">telnet</a> protocol to connect to another remote computer.
+
+time
+Used to time a simple command.
+
+timex
+The timex command times a command; reports process data and system activity.
+
+todos
+Converts text files between DOS and Unix formats.
+
+top
+Display Linux <a href="../jargon/t/task.htm">tasks</a>.
+
+touch
+Change file access and modification time.
+
+tput
+Initialize a terminal or query terminfo database.
+
+tr
+Translate characters.
+
+traceroute
+Print the route packets take to network host.
+
+troff
+Typeset or format documents.
+
+ul
+Reads the named filenames or terminal and does underlining.
+
+umask
+Get or set the file mode creation mask.
+
+unalias
+Remove an alias.
+
+unhash
+Remove internal hash table.
+
+uname
+Print name of current system.
+
+uncompress
+Uncompressed compressed files.
+
+uniq
+Report or filter out repeated lines in a file.
+
+unmount
+Crates a file systems and remote resources.
+
+unpack
+Expands a compressed file.
+
+untar
+Create tape archives and add or extract files.
+
+until
+Execute a set of actions while/until conditions are evaluated TRUE.
+
+useradd
+Create a new user or updates default new user information.
+
+userdel
+Remove a users account.
+
+usermod
+Modify a users account.
+
+vacation
+Reply to mail automatically.
+
+vedit
+Screen-oriented (visual) display editor based on <a href="uex.htm">ex</a>.
+
+vgrind
+Grind <a href="unice.htm">nice</a> program listings
+
+vi
+Screen-oriented (visual) display editor based on <a href="uex.htm">ex</a>.
+
+vim
+A programmers text editor.
+
+view
+A programmers text editor.
+
+w
+Show who is logged on and what they are doing.
+
+wait
+Await process completion.
+
+wc
+Displays a count of lines, words, and characters in a file
+
+whereis
+Locate a binary, source, and manual page files for a command.
+
+while
+Repetitively execute a set of actions while/until conditions are evaluated TRUE.
+
+which
+Locate a command.
+
+who
+Displays who is on the system.
+
+whois
+Internet user name directory service.
+
+write
+Send a message to another user.
+
+X
+Execute the X windows system.
+
+xfd
+Display all the characters in an X font.
+
+xlsfonts
+Server font list displayer for <a href="ux.htm">X</a>.
+
+xset
+User preference utility for X.
+
+xterm
+Terminal emulator for <a href="ux.htm">X</a>.
+
+xrdb
+X server resource database utility.
+
+yacc
+Short for yet another compiler-compiler, yacc is a compiler.
+
+yes
+Repeatedly output a line with all specified STRING(s), or &#39;y&#39;.
+
+yppasswd
+Changes network password in the NIS database.
+
+zcat
+Compress files.
+
