@@ -13,6 +13,7 @@ package org.fife.rsta.ac.perl;
 import java.io.File;
 
 import org.fife.rsta.ac.AbstractLanguageSupport;
+import org.fife.rsta.ac.IOUtil;
 import org.fife.rsta.ac.perl.PerlCompletionProvider;
 import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.autocomplete.CompletionCellRenderer;
@@ -36,6 +37,35 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 	 * The root directory of the Perl install.
 	 */
 	private static File perlInstallLocation;
+
+
+	/**
+	 * Determine the Perl install on the user's PATH, if any.
+	 */
+	static {
+
+		String path = IOUtil.getEnvSafely("PATH");
+
+		if (path!=null) {
+
+			String perlLoc = "perl";
+			if (File.separatorChar=='\\') {
+				perlLoc += ".exe";
+			}
+
+			String[] dirs = path.split(File.pathSeparator);
+			for (int i=0; i<dirs.length; i++) {
+				File temp = new File(dirs[i], perlLoc);
+				System.out.println(temp.getAbsolutePath());
+				if (temp.isFile()) {
+					perlInstallLocation = new File(dirs[i]).getParentFile();
+					break;
+				}
+			}
+
+		}
+
+	}
 
 
 	/**
@@ -88,7 +118,9 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 		ac.install(textArea);
 		textArea.putClientProperty(PROPERTY_AUTO_COMPLETION, ac);
 		textArea.setToolTipSupplier(provider);
-
+PerlParser parser = new PerlParser();
+textArea.addParser(parser);
+textArea.putClientProperty("perlParser", parser);
 	}
 
 
@@ -118,9 +150,16 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 	 * {@inheritDoc}
 	 */
 	public void uninstall(RSyntaxTextArea textArea) {
+
 		AutoCompletion ac = (AutoCompletion)textArea.
 								getClientProperty(PROPERTY_AUTO_COMPLETION);
 		ac.uninstall();
+
+		PerlParser parser = (PerlParser)textArea.getClientProperty("perlParser");
+		if (parser!=null) {
+			textArea.removeParser(parser);
+		}
+
 	}
 
 

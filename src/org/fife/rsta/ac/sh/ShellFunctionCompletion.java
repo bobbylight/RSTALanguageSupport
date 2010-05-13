@@ -10,12 +10,11 @@
  */
 package org.fife.rsta.ac.sh;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.fife.rsta.ac.OutputCollector;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.FunctionCompletion;
 
@@ -79,23 +78,24 @@ public class ShellFunctionCompletion extends FunctionCompletion {
 		}
 
 		// TODO: Launch waitFor() in a thread and interrupt after set time
-		BufferedReader r = new BufferedReader(new InputStreamReader(
-													p.getInputStream()));
-		OutputCollector outputCollector = new OutputCollector(r);
-		Thread t = new Thread(outputCollector);
+		OutputCollector stdout = new OutputCollector(p.getInputStream());
+		Thread t = new Thread(stdout);
 		t.start();
+		int rc = 0;
 		try {
-			int rc = p.waitFor();
+			rc = p.waitFor();
 			t.join();
-			System.out.println(rc);
+			//System.out.println(rc);
 		} catch (InterruptedException ie) {
 			ie.printStackTrace();
 		}
 
-		StringBuffer output = outputCollector.getOutput();
-		//return output.length()==0 ? null : output;
-		if (output!=null && output.length()>0) {
-			output = manToHtml(output);
+		StringBuffer output = null;
+		if (rc==0) {
+			output = stdout.getOutput();
+			if (output!=null && output.length()>0) {
+				output = manToHtml(output);
+			}
 		}
 
 		return output==null ? null : output.toString();
@@ -145,35 +145,6 @@ public class ShellFunctionCompletion extends FunctionCompletion {
 			text = sb.toString();
 		}
 		return text;
-	}
-
-
-	private static class OutputCollector implements Runnable {
-
-		private BufferedReader r;
-		private StringBuffer sb;
-
-		public OutputCollector(BufferedReader r) {
-			this.r = r;
-			sb = new StringBuffer();
-		}
-
-		public StringBuffer getOutput() {
-			return sb;
-		}
-
-		public void run() {
-			String line = null;
-			try {
-				while ((line=r.readLine())!=null) {
-					sb.append(line).append('\n');
-					//System.out.println(line);
-				}
-			} catch (IOException ioe) {
-				ioe.printStackTrace();
-			}
-		}
-
 	}
 
 

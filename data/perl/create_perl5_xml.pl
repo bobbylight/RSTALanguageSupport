@@ -58,6 +58,11 @@ print OUT <<EOT;
 
 <environment paramStartChar="(" paramEndChar=")" paramSeparator=", " terminal=";"/>
 
+<completionTypes>
+	<functionCompletionType type="org.fife.rsta.ac.perl.PerlFunctionCompletion"/>
+</completionTypes>
+
+
 <keywords>
 
 

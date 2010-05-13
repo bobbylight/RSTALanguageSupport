@@ -53,7 +53,7 @@ print OUT <<EOT;
 -->
 <api language="sh">
 
-	<environment paramStartChar="\\0" paramEndChar="\\0" paramSeparator=" " terminal=""/>
+	<environment paramStartChar="" paramEndChar="" paramSeparator=" " terminal=""/>
 
 	<completionTypes>
 		<functionCompletionType type="org.fife.rsta.ac.sh.ShellFunctionCompletion"/>

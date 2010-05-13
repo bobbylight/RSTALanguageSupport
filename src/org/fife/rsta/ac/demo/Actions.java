@@ -14,7 +14,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -39,16 +38,14 @@ interface Actions {
 
 		public AboutAction(DemoRootPane demo) {
 			this.demo = demo;
-			putValue(NAME, "About RSyntaxTextArea...");
+			putValue(NAME, "About RSTALanguageSupport...");
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			JOptionPane.showMessageDialog(demo,
-					"<html><b>RSyntaxTextArea</b> - A Swing syntax highlighting text component" +
-					"<br>Version 1.4" +
-					"<br>Licensed under the LGPL",
-					"About RSyntaxTextArea",
-					JOptionPane.INFORMATION_MESSAGE);
+			AboutDialog ad = new AboutDialog((DemoApp)SwingUtilities.
+					getWindowAncestor(demo));
+			ad.setLocationRelativeTo(demo);
+			ad.setVisible(true);
 		}
 
 	}

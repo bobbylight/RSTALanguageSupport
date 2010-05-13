@@ -7,13 +7,13 @@
    Author:         Robert Futrell
    Version:        0.1
 
-   This file was generated from: C:/dev/rsta/RSTALanguageSupport/data/sh/sh.txt
-   on date: 2010-05-09 11:31:59
+   This file was generated from: C:\dev2\rsta\RSTALanguageSupport\data\sh/sh.txt
+   on date: 2010-05-10 15:33:51
 
 -->
 <api language="sh">
 
-	<environment paramStartChar="\0" paramEndChar="\0" paramSeparator=" " terminal=""/>
+	<environment paramStartChar="" paramEndChar="" paramSeparator=" " terminal=""/>
 
 	<completionTypes>
 		<functionCompletionType type="org.fife.rsta.ac.sh.ShellFunctionCompletion"/>

@@ -11,7 +11,6 @@
 package org.fife.rsta.ac.java;
 
 import java.io.DataInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -44,17 +43,10 @@ class JarReader {
 	/**
 	 * Constructor.
 	 *
-	 * @param info The jar file to read from.  If this is <code>null</code>,
-	 *        then this instance will try to read from the current JVM's main
-	 *        JRE jar (rt.jar, or classes.jar on OS X).  If the main JRE jar is
-	 *        found, an attempt will also be made to locate its associated
-	 *        source jar or zip file. 
+	 * @param info The jar file to read from.  This cannot be <code>null</code>.
 	 * @throws IOException If an IO error occurs reading from the jar file.
 	 */
 	public JarReader(JarInfo info) throws IOException {
-		if (info==null) {
-			info = getMainJREJarInfo();
-		}
 		this.info = info;
 		packageMap = new TreeMap(String.CASE_INSENSITIVE_ORDER);
 		loadCompletions();
@@ -309,44 +301,6 @@ System.out.println("Appending: " + pkgNames[j]);
 	 */
 	public JarInfo getJarInfo() {
 		return (JarInfo)info.clone();
-	}
-
-
-	private JarInfo getMainJREJarInfo() {
-
-		JarInfo info = null;
-		String javaHome = System.getProperty("java.home");
-
-		File mainJar = new File(javaHome, "lib/rt.jar"); // Sun JRE's
-		File sourceZip = null;
-
-		if (mainJar.isFile()) { // Sun JRE's
-			sourceZip = new File(javaHome, "src.zip");
-			if (!sourceZip.isFile()) {
-				// Might be a JRE inside a JDK
-				sourceZip = new File(javaHome, "../src.zip");
-			}
-		}
-
-		else { // Might be OS X
-			mainJar = new File(javaHome, "../Classes/classes.jar");
-			// ${java.home}/src.jar is the common location on OS X.
-			sourceZip = new File(javaHome, "src.jar");
-		}
-
-		if (mainJar.isFile()) {
-			info = new JarInfo(mainJar);
-			if (sourceZip.isFile()) { // Make sure our last guess actually exists
-				info.setSourceLocation(sourceZip);
-			}
-		}
-		else {
-			System.err.println("[ERROR]: Cannot locate JRE jar");
-			mainJar = null;
-		}
-
-		return info;
-
 	}
 
 
