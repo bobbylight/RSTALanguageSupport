@@ -163,19 +163,15 @@ public class JarManager {
 				// Wildcard => See if package contains a class with this name
 				if (idec.isWildcard()) {
 
-					String name2 = idec.getName();
-					String[] items = Util.splitOnChar(name2, '.');
-					items[items.length-1] = name; // Replaces "*"
-
-					for (int j=0; j<jars.size(); j++) {
-						JarReader jar = (JarReader)jars.get(j);
-						ClassFile entry = jar.getClassEntry(items);
-						if (entry!=null) {
-							if (result==null) {
-								result = new ArrayList(1); // Usually small
-							}
-							result.add(entry);
+					String qualified = idec.getName();
+					qualified = qualified.substring(0, qualified.indexOf('*'));
+					qualified += name;
+					ClassFile entry = getClassEntry(qualified);
+					if (entry!=null) {
+						if (result==null) {
+							result = new ArrayList(1); // Usually small
 						}
+						result.add(entry);
 					}
 
 				}
@@ -200,6 +196,16 @@ public class JarManager {
 
 			}
 
+		}
+
+		// Also check java.lang
+		String qualified = "java.lang." + name;
+		ClassFile entry = getClassEntry(qualified);
+		if (entry!=null) {
+			if (result==null) {
+				result = new ArrayList(1); // Usually small
+			}
+			result.add(entry);
 		}
 
 		return result;
