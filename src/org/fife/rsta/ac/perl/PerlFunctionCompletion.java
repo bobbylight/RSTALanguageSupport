@@ -15,20 +15,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
 import javax.swing.UIManager;
 
 import org.fife.ui.autocomplete.CompletionProvider;
-/*
- * 05/10/2010
- *
- * Copyright (C) 2010 Robert Futrell
- * robert_futrell at users.sourceforge.net
- * http://fifesoft.com/rsyntaxtextarea
- *
- * This code is licensed under the LGPL.  See the "license.txt" file included
- * with this project.
- */
 import org.fife.ui.autocomplete.FunctionCompletion;
 
 
@@ -61,7 +50,7 @@ public class PerlFunctionCompletion extends FunctionCompletion {
 
 		String summary = null;
 		File installLoc = PerlLanguageSupport.getPerlInstallLocation();
-		if (installLoc!=null) {
+		if (installLoc!=null && PerlLanguageSupport.getUseSystemPerldoc()) {
 			summary = getSummaryFromPerldoc(installLoc);
 		}
 		//else { // Don't use else - fallback for if perldoc isn't found

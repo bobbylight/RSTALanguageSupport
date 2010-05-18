@@ -12,6 +12,7 @@ package org.fife.rsta.ac.java;
 
 import org.fife.rsta.ac.java.MemberCompletion.Data;
 import org.fife.rsta.ac.java.rjc.ast.Field;
+import org.fife.rsta.ac.java.rjc.ast.TypeDeclaration;
 import org.fife.rsta.ac.java.rjc.lang.Modifiers;
 
 
@@ -36,7 +37,15 @@ class FieldData implements Data {
 	 * {@inheritDoc}
 	 */
 	public String getDefinedIn() {
-		return field.getParentTypeDeclaration().getTypeString();
+		// NOTE: This check isn't really necessary, but is here just in case
+		// there's a bug in the parsing code.
+		TypeDeclaration td = field.getParentTypeDeclaration();
+		if (td==null) {
+			new Exception("No parent type declaration for: " + getSignature()).
+							printStackTrace();
+			return "";
+		}
+		return field.getParentTypeDeclaration().getName();
 	}
 
 

@@ -673,6 +673,8 @@ OUTER:
 			bracketPairCount = tempScanner.skipBracketPairs();
 			type.incrementBracketPairCount(bracketPairCount);
 			Field field = new Field(s, modList, type, fieldNameToken);
+			field.setDeprecated(checkDeprecated());
+			field.setDocComment(s.getLastDocComment());
 			log(field.toString());
 			iDec.addMember(field);
 			// TODO: Parse and grab the "value" after the '=' sign.
@@ -712,6 +714,8 @@ OUTER:
 			}
 			Method m = new Method(s, modList, type, methodNameToken, formalParams,
 									thrownTypeNames);
+			m.setDeprecated(checkDeprecated());
+			m.setDocComment(s.getLastDocComment());
 			iDec.addMember(m);
 		}
 		else if (blockDecl) {

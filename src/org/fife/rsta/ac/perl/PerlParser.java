@@ -70,6 +70,17 @@ public class PerlParser extends AbstractParser {
 		long start = System.currentTimeMillis();
 		try {
 
+			// Bail early if install location is misconfigured.
+			File dir = PerlLanguageSupport.getPerlInstallLocation();
+			if (dir==null) {
+				return result;
+			}
+			String exe = File.separatorChar=='\\' ? "bin/perl.exe" : "bin/perl";
+			File perl = new File(dir, exe);
+			if (!perl.isFile()) {
+				return result;
+			}
+
 			File tempFile = File.createTempFile("perlParser", ".tmp");
 			BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(tempFile));
 			try {
@@ -80,7 +91,6 @@ public class PerlParser extends AbstractParser {
 			}
 			out.close();
 
-			File perl = new File(PerlLanguageSupport.getPerlInstallLocation(), "bin/perl.exe");
 			String[] cmd = { perl.getAbsolutePath(), "-cw", tempFile.getAbsolutePath() };
 			Process p = Runtime.getRuntime().exec(cmd);
 			Element root = doc.getDefaultRootElement();

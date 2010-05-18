@@ -38,6 +38,13 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 	 */
 	private static File perlInstallLocation;
 
+	/**
+	 * Whether to use the system "perldoc" command for function descriptions.
+	 * This parameter is ignored if {@link #perlInstallLocation} is
+	 * <code>false</code>.
+	 */
+	private static boolean useSystemPerldoc;
+
 
 	/**
 	 * Determine the Perl install on the user's PATH, if any.
@@ -104,6 +111,24 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 
 
 	/**
+	 * Returns whether to use the system "perldoc" command when getting
+	 * descriptions of Perl functions.  If this is <code>false</code>, then
+	 * a built-in snapshot of Perl 5.10 descriptions will be used.  This will
+	 * perform better, but may be out of date if your version of Perl is newer.
+	 * <p>
+	 *
+	 * Note that this parameter is ignored if {@link #getPerlInstallLocation()}
+	 * returns <code>null</code>.
+	 *
+	 * @return Whether to use the system "perldoc" command.
+	 * @see #setUseSystemPerldoc(boolean)
+	 */
+	public static boolean getUseSystemPerldoc() {
+		return useSystemPerldoc;
+	}
+
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public void install(RSyntaxTextArea textArea) {
@@ -143,6 +168,24 @@ textArea.putClientProperty("perlParser", parser);
 	 */
 	public void setUseParensWithFunctions(boolean use) {
 		getProvider().setUseParensWithFunctions(use);
+	}
+
+
+	/**
+	 * Sets whether to use the system "perldoc" command when getting
+	 * descriptions of Perl functions.  If this is <code>false</code>, then
+	 * a built-in snapshot of Perl 5.10 descriptions will be used.  This will
+	 * perform better, but may be out of date if your version of Perl is newer.
+	 * <p>
+	 *
+	 * Note that this parameter is ignored if {@link #getPerlInstallLocation()}
+	 * returns <code>null</code>.
+	 *
+	 * @param use Whether to use the system "perldoc" command.
+	 * @see #getUseSystemPerldoc()
+	 */
+	public static void setUseSystemPerldoc(boolean use) {
+		useSystemPerldoc = use;
 	}
 
 

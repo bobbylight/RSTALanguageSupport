@@ -45,6 +45,7 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 
 
 	public void addMember(Member member) {
+		member.setParentTypeDeclaration(this);
 		memberList.add(member);
 	}
 
