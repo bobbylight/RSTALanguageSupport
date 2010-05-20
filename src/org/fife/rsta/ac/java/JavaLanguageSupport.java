@@ -51,6 +51,8 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 	public JavaLanguageSupport() {
 		parserToInfoMap = new HashMap();
 		jarManager = new JarManager();
+		setParameterAssistanceEnabled(true);
+		setShowDescWindow(true);
 	}
 
 
@@ -104,8 +106,9 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		JavaCompletionProvider p = new JavaCompletionProvider(jarManager);
 		AutoCompletion ac = new JavaAutoCompletion(p, textArea);
 		ac.setListCellRenderer(new JavaCellRenderer());
-		ac.setShowDescWindow(true);
-		ac.setParameterAssistanceEnabled(true);
+		ac.setAutoCompleteEnabled(isAutoCompleteEnabled());
+		ac.setParameterAssistanceEnabled(isParameterAssistanceEnabled());
+		ac.setShowDescWindow(getShowDescWindow());
 		ac.install(textArea);
 		textArea.putClientProperty(PROPERTY_AUTO_COMPLETION, ac);
 		textArea.setToolTipSupplier(p);
@@ -116,6 +119,8 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 
 		Info info = new Info(textArea, p, parser);
 		parserToInfoMap.put(parser, info);
+
+		addAutoCompletion(ac);
 
 	}
 
@@ -139,7 +144,8 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		textArea.removeParser(parser);
 		textArea.putClientProperty(PROPERTY_JAVA_PARSER, null);
 
-		
+		removeAutoCompletion(ac);
+
 	}
 
 

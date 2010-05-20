@@ -31,6 +31,15 @@ public class ShellLanguageSupport extends AbstractLanguageSupport {
 
 
 	/**
+	 * Constructor.
+	 */
+	public ShellLanguageSupport() {
+		setParameterAssistanceEnabled(false);
+		setShowDescWindow(true);
+	}
+
+
+	/**
 	 * Lazily creates the shared completion provider instance for sh scripts.
 	 *
 	 * @return The completion provider.
@@ -51,11 +60,14 @@ public class ShellLanguageSupport extends AbstractLanguageSupport {
 		ShellCompletionProvider provider = getProvider();
 		AutoCompletion ac = new AutoCompletion(provider);
 		ac.setListCellRenderer(new CompletionCellRenderer());
-		ac.setShowDescWindow(true);
-		ac.setParameterAssistanceEnabled(false);
+		ac.setAutoCompleteEnabled(isAutoCompleteEnabled());
+		ac.setParameterAssistanceEnabled(isParameterAssistanceEnabled());
+		ac.setShowDescWindow(getShowDescWindow());
 		ac.install(textArea);
 		textArea.putClientProperty(PROPERTY_AUTO_COMPLETION, ac);
 		textArea.setToolTipSupplier(provider);
+
+		addAutoCompletion(ac);
 
 	}
 
@@ -67,6 +79,7 @@ public class ShellLanguageSupport extends AbstractLanguageSupport {
 		AutoCompletion ac = (AutoCompletion)textArea.
 								getClientProperty(PROPERTY_AUTO_COMPLETION);
 		ac.uninstall();
+		removeAutoCompletion(ac);
 	}
 
 

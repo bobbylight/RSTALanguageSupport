@@ -76,6 +76,15 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 
 
 	/**
+	 * Constructor.
+	 */
+	public PerlLanguageSupport() {
+		setParameterAssistanceEnabled(true);
+		setShowDescWindow(true);
+	}
+
+
+	/**
 	 * Returns the location at which Perl is installed.
 	 *
 	 * @return The location at which Perl is installed.
@@ -138,14 +147,18 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 		CompletionCellRenderer ccr = new CompletionCellRenderer();
 		ccr.setShowTypes(false);
 		ac.setListCellRenderer(ccr);
-		ac.setShowDescWindow(true);
-		ac.setParameterAssistanceEnabled(true);
+		ac.setAutoCompleteEnabled(isAutoCompleteEnabled());
+		ac.setParameterAssistanceEnabled(isParameterAssistanceEnabled());
+		ac.setShowDescWindow(getShowDescWindow());
 		ac.install(textArea);
 		textArea.putClientProperty(PROPERTY_AUTO_COMPLETION, ac);
 		textArea.setToolTipSupplier(provider);
 PerlParser parser = new PerlParser();
 textArea.addParser(parser);
 textArea.putClientProperty("perlParser", parser);
+
+		addAutoCompletion(ac);
+
 	}
 
 
@@ -202,6 +215,8 @@ textArea.putClientProperty("perlParser", parser);
 		if (parser!=null) {
 			textArea.removeParser(parser);
 		}
+
+		removeAutoCompletion(ac);
 
 	}
 

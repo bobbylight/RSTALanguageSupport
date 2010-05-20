@@ -31,6 +31,15 @@ public class PhpLanguageSupport extends AbstractLanguageSupport {
 
 
 	/**
+	 * Constructor.
+	 */
+	public PhpLanguageSupport() {
+		setParameterAssistanceEnabled(true);
+		setShowDescWindow(true);
+	}
+
+
+	/**
 	 * Lazily creates the shared completion provider instance for PHP.
 	 *
 	 * @return The completion provider.
@@ -51,12 +60,14 @@ public class PhpLanguageSupport extends AbstractLanguageSupport {
 		PhpCompletionProvider provider = getProvider();
 		AutoCompletion ac = new AutoCompletion(provider);
 		ac.setListCellRenderer(new HtmlCellRenderer());
-		ac.setShowDescWindow(true);
-		ac.setParameterAssistanceEnabled(true);
+		ac.setAutoCompleteEnabled(isAutoCompleteEnabled());
+		ac.setParameterAssistanceEnabled(isParameterAssistanceEnabled());
+		ac.setShowDescWindow(getShowDescWindow());
 		ac.install(textArea);
 		textArea.putClientProperty(PROPERTY_AUTO_COMPLETION, ac);
 		textArea.setToolTipSupplier(null);
 
+		addAutoCompletion(ac);
 	}
 
 
@@ -67,6 +78,7 @@ public class PhpLanguageSupport extends AbstractLanguageSupport {
 		AutoCompletion ac = (AutoCompletion)textArea.
 								getClientProperty(PROPERTY_AUTO_COMPLETION);
 		ac.uninstall();
+		removeAutoCompletion(ac);
 	}
 
 

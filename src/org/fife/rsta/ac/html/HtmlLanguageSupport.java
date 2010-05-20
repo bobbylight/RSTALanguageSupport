@@ -29,6 +29,15 @@ public class HtmlLanguageSupport extends AbstractLanguageSupport {
 	private HtmlCompletionProvider provider;
 
 
+	/**
+	 * Constructor.
+	 */
+	public HtmlLanguageSupport() {
+		setParameterAssistanceEnabled(false);
+		setShowDescWindow(true);
+	}
+
+
 	private HtmlCompletionProvider getProvider() {
 		if (provider==null) {
 			provider = new HtmlCompletionProvider();
@@ -45,11 +54,14 @@ public class HtmlLanguageSupport extends AbstractLanguageSupport {
 		HtmlCompletionProvider provider = getProvider();
 		AutoCompletion ac = new AutoCompletion(provider);
 		ac.setListCellRenderer(new HtmlCellRenderer());
-		ac.setShowDescWindow(true);
-		ac.setParameterAssistanceEnabled(false);
+		ac.setAutoCompleteEnabled(isAutoCompleteEnabled());
+		ac.setParameterAssistanceEnabled(isParameterAssistanceEnabled());
+		ac.setShowDescWindow(getShowDescWindow());
 		ac.install(textArea);
 		textArea.putClientProperty(PROPERTY_AUTO_COMPLETION, ac);
 		textArea.setToolTipSupplier(null);
+
+		addAutoCompletion(ac);
 
 	}
 
@@ -61,6 +73,7 @@ public class HtmlLanguageSupport extends AbstractLanguageSupport {
 		AutoCompletion ac = (AutoCompletion)textArea.
 								getClientProperty(PROPERTY_AUTO_COMPLETION);
 		ac.uninstall();
+		removeAutoCompletion(ac);
 	}
 
 

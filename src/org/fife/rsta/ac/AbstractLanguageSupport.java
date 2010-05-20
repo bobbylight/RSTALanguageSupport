@@ -10,8 +10,12 @@
  */
 package org.fife.rsta.ac;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.ListCellRenderer;
+
+import org.fife.ui.autocomplete.AutoCompletion;
 
 
 /**
@@ -21,6 +25,30 @@ import javax.swing.ListCellRenderer;
  * @version 1.0
  */
 public abstract class AbstractLanguageSupport implements LanguageSupport {
+
+	/**
+	 * List of installed {@link AutoCompletion} instances.  This should be
+	 * maintained by subclasses by adding to, and removing from, it in their
+	 * {@link #install(org.fife.ui.rsyntaxtextarea.RSyntaxTextArea)} and
+	 * {@link #uninstall(org.fife.ui.rsyntaxtextarea.RSyntaxTextArea)} methods.
+	 */
+	private List autoCompletions;
+
+	/**
+	 * Whether auto-completion is enabled for this language.
+	 */
+	private boolean autoCompleteEnabled;
+
+	/**
+	 * Whether parameter assistance should be enabled for this language.
+	 */
+	private boolean parameterAssistanceEnabled;
+
+	/**
+	 * Whether the description window is displayed when the completion list
+	 * window is displayed.
+	 */
+	private boolean showDescWindow;
 
 	/**
 	 * The default renderer for the completion list.
@@ -33,6 +61,22 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	 */
 	protected AbstractLanguageSupport() {
 		setDefaultCompletionCellRenderer(null); // Force default
+		autoCompletions = new ArrayList(1); // Usually small
+		autoCompleteEnabled = true;
+	}
+
+
+	/**
+	 * Registers an auto-completion instance.  This should be called by
+	 * subclasses in their
+	 * {@link #install(org.fife.ui.rsyntaxtextarea.RSyntaxTextArea)} methods
+	 * so that this language support can update all of them at once.
+	 *
+	 * @param ac The auto completion instance.
+	 * @see #removeAutoCompletion(AutoCompletion)
+	 */
+	protected void addAutoCompletion(AutoCompletion ac) {
+		autoCompletions.add(ac);
 	}
 
 
@@ -59,11 +103,90 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	public boolean getShowDescWindow() {
+		return showDescWindow;
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean isAutoCompleteEnabled() {
+		return autoCompleteEnabled;
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean isParameterAssistanceEnabled() {
+		return parameterAssistanceEnabled;
+	}
+
+
+	/**
+	 * Unregisters an auto-completion instance.  This should be called by
+	 * subclasses in their
+	 * {@link #uninstall(org.fife.ui.rsyntaxtextarea.RSyntaxTextArea)} methods.
+	 *
+	 * @param ac The auto completion instance.
+	 * @see #addAutoCompletion(AutoCompletion)
+	 */
+	protected void removeAutoCompletion(AutoCompletion ac) {
+		autoCompletions.remove(ac);
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void setAutoCompleteEnabled(boolean enabled) {
+		if (enabled!=autoCompleteEnabled) {
+			autoCompleteEnabled = enabled;
+			for (int i=0; i<autoCompletions.size(); i++) {
+				AutoCompletion ac = (AutoCompletion)autoCompletions.get(i);;
+				ac.setAutoCompleteEnabled(enabled);
+			}
+		}
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public void setDefaultCompletionCellRenderer(ListCellRenderer r) {
 		if (r==null) {
 			r = createDefaultCompletionCellRenderer();
 		}
 		renderer = r;
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void setParameterAssistanceEnabled(boolean enabled) {
+		if (enabled!=parameterAssistanceEnabled) {
+			parameterAssistanceEnabled = enabled;
+			for (int i=0; i<autoCompletions.size(); i++) {
+				AutoCompletion ac = (AutoCompletion)autoCompletions.get(i);;
+				ac.setParameterAssistanceEnabled(enabled);
+			}
+		}
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void setShowDescWindow(boolean show) {
+		if (show!=showDescWindow) {
+			showDescWindow = show;
+			for (int i=0; i<autoCompletions.size(); i++) {
+				AutoCompletion ac = (AutoCompletion)autoCompletions.get(i);;
+				ac.setShowDescWindow(show);
+			}
+		}
 	}
 
 

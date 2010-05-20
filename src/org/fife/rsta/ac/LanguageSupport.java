@@ -42,12 +42,56 @@ public interface LanguageSupport {
 
 
 	/**
+	 * REturns whether the description window is also shown when the
+	 * completion list is displayed, for editors of this language.
+	 *
+	 * @return Whether the description window is shown.
+	 * @see #setShowDescWindow(boolean)
+	 */
+	public boolean getShowDescWindow();
+
+
+	/**
+	 * Returns whether auto-completion is enabled for this language.  If
+	 * this value is <code>false</code>, then <code>ctrl+space</code> will
+	 * do nothing.
+	 *
+	 * @return Whether auto-completion is enabled.
+	 * @see #setAutoCompleteEnabled(boolean)
+	 */
+	public boolean isAutoCompleteEnabled();
+
+
+	/**
 	 * Installs this support.
 	 *
 	 * @param textArea The text area to install onto.
 	 * @see #uninstall(RSyntaxTextArea)
 	 */
 	public void install(RSyntaxTextArea textArea);
+
+
+	/**
+	 * Returns whether parameter assistance is enabled for editors of this
+	 * language.  Note that some language do not support parameter assistance
+	 * at all; in those cases, this parameter does nothing.
+	 *
+	 * @return Whether parameter assistance is enabled for editors of this
+	 *         language.
+	 * @see #setParameterAssistanceEnabled(boolean)
+	 */
+	public boolean isParameterAssistanceEnabled();
+
+
+	/**
+	 * Toggles whether auto-completion is enabled for this language.  If
+	 * this is set to <code>false</code>, then <code>ctrl+space</code> will
+	 * do nothing.
+	 *
+	 * @param enabled Whether auto-completion should be enabled.
+	 * @see #isAutoCompleteEnabled()
+	 */
+	public void setAutoCompleteEnabled(boolean enabled);
 
 
 	/**
@@ -60,6 +104,26 @@ public interface LanguageSupport {
 	 * @see #getDefaultCompletionCellRenderer()
 	 */
 	public void setDefaultCompletionCellRenderer(ListCellRenderer r);
+
+
+	/**
+	 * Toggles whether parameter assistance is enabled for editors of this
+	 * language.
+	 *
+	 * @param enabled Whether parameter assistance is enabled.
+	 * @see #isParameterAssistanceEnabled()
+	 */
+	public void setParameterAssistanceEnabled(boolean enabled);
+
+
+	/**
+	 * Toggles whether the description window should also be shown when the
+	 * completion list is displayed, for editors of this language.
+	 *
+	 * @param show Whether to show the description window.
+	 * @see #getShowDescWindow()
+	 */
+	public void setShowDescWindow(boolean show);
 
 
 	/**

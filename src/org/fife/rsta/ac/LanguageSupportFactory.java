@@ -15,12 +15,6 @@ import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.fife.rsta.ac.c.CLanguageSupport;
-import org.fife.rsta.ac.html.HtmlLanguageSupport;
-import org.fife.rsta.ac.java.JavaLanguageSupport;
-import org.fife.rsta.ac.perl.PerlLanguageSupport;
-import org.fife.rsta.ac.php.PhpLanguageSupport;
-import org.fife.rsta.ac.sh.ShellLanguageSupport;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
@@ -39,7 +33,9 @@ public class LanguageSupportFactory implements PropertyChangeListener {
 										new LanguageSupportFactory();
 
 	/**
-	 * Maps syntax styles to supports.
+	 * Maps syntax styles to supports.  We cheat and initially map styles to
+	 * class-names-for-supports, and lazily create the actual
+	 * <code>LanguageSupports</code> when necessary.
 	 */
 	private Map styleToSupport;
 
@@ -66,18 +62,20 @@ public class LanguageSupportFactory implements PropertyChangeListener {
 
 		styleToSupport = new HashMap();
 
+		String prefix = "org.fife.rsta.ac.";
+
 		styleToSupport.put(SyntaxConstants.SYNTAX_STYLE_C,
-				new CLanguageSupport());
+				prefix + "c.CLanguageSupport");
 		styleToSupport.put(SyntaxConstants.SYNTAX_STYLE_HTML,
-				new HtmlLanguageSupport());
+				prefix + "html.HtmlLanguageSupport");
 		styleToSupport.put(SyntaxConstants.SYNTAX_STYLE_JAVA,
-				new JavaLanguageSupport());
+				prefix + "java.JavaLanguageSupport");
 		styleToSupport.put(SyntaxConstants.SYNTAX_STYLE_PERL,
-				new PerlLanguageSupport());
+				prefix + "perl.PerlLanguageSupport");
 		styleToSupport.put(SyntaxConstants.SYNTAX_STYLE_PHP,
-				new PhpLanguageSupport());
+				prefix + "php.PhpLanguageSupport");
 		styleToSupport.put(SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL,
-				new ShellLanguageSupport());
+				prefix +"sh.ShellLanguageSupport");
 
 	}
 
@@ -101,7 +99,26 @@ public class LanguageSupportFactory implements PropertyChangeListener {
 	 *         for the language specified.
 	 */
 	public LanguageSupport getSupportFor(String style) {
-		return (LanguageSupport)styleToSupport.get(style);
+
+		LanguageSupport support = null;
+
+		Object obj = styleToSupport.get(style);
+		if (obj instanceof String) {
+			try {
+				Class clazz = Class.forName((String)obj);
+				support = (LanguageSupport)clazz.newInstance();
+			} catch (RuntimeException re) { // FindBugs
+				throw re;
+			} catch (Exception e) {
+				// Fall through with support==null, so we don't try again
+				e.printStackTrace();
+			}
+			styleToSupport.put(style, support);
+			return support;
+		}
+
+		return (LanguageSupport)obj;
+
 	}
 
 
@@ -113,7 +130,7 @@ public class LanguageSupportFactory implements PropertyChangeListener {
 	 */
 	private void installSupport(RSyntaxTextArea textArea) {
 		String style = textArea.getSyntaxEditingStyle();
-		LanguageSupport support = (LanguageSupport)styleToSupport.get(style);
+		LanguageSupport support = getSupportFor(style);
 		if (support!=null) {
 			support.install(textArea);
 		}

@@ -32,6 +32,15 @@ public class CLanguageSupport extends AbstractLanguageSupport {
 
 
 	/**
+	 * Constructor.
+	 */
+	public CLanguageSupport() {
+		setParameterAssistanceEnabled(true);
+		setShowDescWindow(true);
+	}
+
+
+	/**
 	 * {@inheritDoc}
 	 */
 	protected ListCellRenderer createDefaultCompletionCellRenderer() {
@@ -57,11 +66,14 @@ public class CLanguageSupport extends AbstractLanguageSupport {
 		CCompletionProvider provider = getProvider();
 		AutoCompletion ac = new AutoCompletion(provider);
 		ac.setListCellRenderer(getDefaultCompletionCellRenderer());
-		ac.setShowDescWindow(true);
-		ac.setParameterAssistanceEnabled(true);
+		ac.setAutoCompleteEnabled(isAutoCompleteEnabled());
+		ac.setParameterAssistanceEnabled(isParameterAssistanceEnabled());
+		ac.setShowDescWindow(getShowDescWindow());
 		ac.install(textArea);
 		textArea.putClientProperty(PROPERTY_AUTO_COMPLETION, ac);
 		textArea.setToolTipSupplier(provider);
+
+		addAutoCompletion(ac);
 
 	}
 
@@ -73,6 +85,7 @@ public class CLanguageSupport extends AbstractLanguageSupport {
 		AutoCompletion ac = (AutoCompletion)textArea.
 								getClientProperty(PROPERTY_AUTO_COMPLETION);
 		ac.uninstall();
+		removeAutoCompletion(ac);
 	}
 
 
