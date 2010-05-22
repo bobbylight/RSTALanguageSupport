@@ -68,7 +68,7 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 			String[] dirs = path.split(File.pathSeparator);
 			for (int i=0; i<dirs.length; i++) {
 				File temp = new File(dirs[i], perlLoc);
-				System.out.println(temp.getAbsolutePath());
+				//System.out.println(temp.getAbsolutePath());
 				if (temp.isFile()) {
 					perlInstallLocation = new File(dirs[i]).getParentFile();
 					break;
@@ -174,6 +174,17 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 
 
 	/**
+	 * Returns whether warnings are enabled when checking syntax.
+	 *
+	 * @return Whether warnings are enabled.
+	 * @see #setWarningsEnabled(boolean)
+	 */
+	public boolean getWarningsEnabled() {
+		return getParser().getWarningsEnabled();
+	}
+
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public void install(RSyntaxTextArea textArea) {
@@ -210,8 +221,18 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 	 * @see #setParsingEnabled(boolean)
 	 */
 	public boolean isParsingEnabled() {
-System.out.println("DEBUG: isParsingEnabled() returning: " + getParser().isEnabled());
 		return getParser().isEnabled();
+	}
+
+
+	/**
+	 * Returns whether taint mode is enabled when checking syntax.
+	 *
+	 * @return Whether taint mode is enabled.
+	 * @see #setTaintModeEnabled(boolean)
+	 */
+	public boolean isTaintModeEnabled() {
+		return getParser().isTaintModeEnabled();
 	}
 
 
@@ -223,8 +244,29 @@ System.out.println("DEBUG: isParsingEnabled() returning: " + getParser().isEnabl
 	 * @see #isParsingEnabled()
 	 */
 	public void setParsingEnabled(boolean enabled) {
-System.out.println("DEBUG: setParsingEnabled(" + enabled + ")");
 		getParser().setEnabled(enabled);
+	}
+
+
+	/**
+	 * Toggles whether taint mode is enabled when checking syntax.
+	 *
+	 * @param enabled Whether taint mode should be enabled.
+	 * @see #isTaintModeEnabled()
+	 */
+	public void setTaintModeEnabled(boolean enabled) {
+		getParser().setTaintModeEnabled(enabled);
+	}
+
+
+	/**
+	 * Toggles whether warnings are returned when checking syntax.
+	 *
+	 * @param enabled Whether warnings are enabled.
+	 * @see #getWarningsEnabled()
+	 */
+	public void setWarningsEnabled(boolean enabled) {
+		getParser().setWarningsEnabled(enabled);
 	}
 
 

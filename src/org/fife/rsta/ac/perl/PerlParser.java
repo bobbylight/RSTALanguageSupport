@@ -40,12 +40,37 @@ public class PerlParser extends AbstractParser {
 
 	private DefaultParseResult result;
 
+	private boolean taintModeEnabled;
+	private boolean warningsEnabled;
+
 
 	/**
 	 * Constructor.
 	 */
 	public PerlParser() {
 		result = new DefaultParseResult(this);
+	}
+
+
+	/**
+	 * Returns whether warnings are enabled when checking syntax.
+	 *
+	 * @return Whether warnings are enabled.
+	 * @see #setWarningsEnabled(boolean)
+	 */
+	public boolean getWarningsEnabled() {
+		return warningsEnabled;
+	}
+
+
+	/**
+	 * Returns whether taint mode is enabled when checking syntax.
+	 *
+	 * @return Whether taint mode is enabled.
+	 * @see #setTaintModeEnabled(boolean)
+	 */
+	public boolean isTaintModeEnabled() {
+		return taintModeEnabled;
 	}
 
 
@@ -83,7 +108,15 @@ public class PerlParser extends AbstractParser {
 			}
 			out.close();
 
-			String[] cmd = { perl.getAbsolutePath(), "-cw", tempFile.getAbsolutePath() };
+			String opts = "-c";
+			if (getWarningsEnabled()) {
+				opts += "w";
+			}
+			if (isTaintModeEnabled()) {
+				opts += "t";
+			}
+
+			String[] cmd = { perl.getAbsolutePath(), opts, tempFile.getAbsolutePath() };
 			Process p = Runtime.getRuntime().exec(cmd);
 			Element root = doc.getDefaultRootElement();
 			OutputCollector stdout = new OutputCollector(p.getInputStream(),
@@ -122,5 +155,28 @@ public class PerlParser extends AbstractParser {
 		return result;
 
 	}
+
+
+	/**
+	 * Toggles whether taint mode is enabled when checking syntax.
+	 *
+	 * @param enabled Whether taint mode should be enabled.
+	 * @see #isTaintModeEnabled()
+	 */
+	public void setTaintModeEnabled(boolean enabled) {
+		taintModeEnabled = enabled;
+	}
+
+
+	/**
+	 * Toggles whether warnings are returned when checking syntax.
+	 *
+	 * @param enabled Whether warnings are enabled.
+	 * @see #getWarningsEnabled()
+	 */
+	public void setWarningsEnabled(boolean enabled) {
+		warningsEnabled = enabled;
+	}
+
 
 }
