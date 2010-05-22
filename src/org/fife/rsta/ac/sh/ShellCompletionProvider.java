@@ -52,7 +52,7 @@ public class ShellCompletionProvider extends CCompletionProvider {
 	 * {@inheritDoc}
 	 */
 	public char getParameterListEnd() {
-		return '\0';
+		return 0;
 	}
 
 
@@ -60,7 +60,7 @@ public class ShellCompletionProvider extends CCompletionProvider {
 	 * {@inheritDoc}
 	 */
 	public char getParameterListStart() {
-		return '\0';
+		return 0;
 	}
 
 

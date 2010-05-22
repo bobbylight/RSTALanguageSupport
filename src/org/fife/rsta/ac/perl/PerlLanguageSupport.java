@@ -34,6 +34,11 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 	private PerlCompletionProvider provider;
 
 	/**
+	 * The parser.  This is shared amongst all Perl text areas.
+	 */
+	private PerlParser parser;
+
+	/**
 	 * The root directory of the Perl install.
 	 */
 	private static File perlInstallLocation;
@@ -96,6 +101,37 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 
 
 	/**
+	 * Returns the shared parser, lazily creating it if necessary.
+	 *
+	 * @return The parser.
+	 */
+	private PerlParser getParser() {
+		if (parser==null) {
+			parser = new PerlParser();
+		}
+		return parser;
+	}
+
+
+	/**
+	 * Returns the Perl parser running on a text area with this Java language
+	 * support installed.
+	 *
+	 * @param textArea The text area.
+	 * @return The Perl parser.  This will be <code>null</code> if the text
+	 *         area does not have this <tt>PerlLanguageSupport</tt> installed.
+	 */
+	public PerlParser getParser(RSyntaxTextArea textArea) {
+		// Could be a parser for another language.
+		Object parser = textArea.getClientProperty(PROPERTY_LANGUAGE_PARSER);
+		if (parser instanceof PerlParser) {
+			return (PerlParser)parser;
+		}
+		return null;
+	}
+
+
+	/**
 	 * Lazily creates the shared completion provider instance for Perl.
 	 *
 	 * @return The completion provider.
@@ -151,14 +187,44 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 		ac.setParameterAssistanceEnabled(isParameterAssistanceEnabled());
 		ac.setShowDescWindow(getShowDescWindow());
 		ac.install(textArea);
-		textArea.putClientProperty(PROPERTY_AUTO_COMPLETION, ac);
+		installImpl(textArea, ac);
+
 		textArea.setToolTipSupplier(provider);
-PerlParser parser = new PerlParser();
-textArea.addParser(parser);
-textArea.putClientProperty("perlParser", parser);
 
-		addAutoCompletion(ac);
+		PerlParser parser = getParser();
+		textArea.addParser(parser);
+		textArea.putClientProperty(PROPERTY_LANGUAGE_PARSER, parser);
 
+	}
+
+
+	/**
+	 * Returns whether text areas with this language support installed are
+	 * parsed for syntax errors.<p>
+	 * 
+	 * Note that if {@link #getPerlInstallLocation()}
+	 * returns <code>null</code> or an invalid value, parsing will not occur
+	 * even if this value is <code>true</code>.
+	 *
+	 * @return Whether parsing is enabled.
+	 * @see #setParsingEnabled(boolean)
+	 */
+	public boolean isParsingEnabled() {
+System.out.println("DEBUG: isParsingEnabled() returning: " + getParser().isEnabled());
+		return getParser().isEnabled();
+	}
+
+
+	/**
+	 * Toggles whether text areas with this language support installed are
+	 * parsed for syntax errors.
+	 *
+	 * @param enabled Whether parsing should be enabled.
+	 * @see #isParsingEnabled()
+	 */
+	public void setParsingEnabled(boolean enabled) {
+System.out.println("DEBUG: setParsingEnabled(" + enabled + ")");
+		getParser().setEnabled(enabled);
 	}
 
 
@@ -207,16 +273,12 @@ textArea.putClientProperty("perlParser", parser);
 	 */
 	public void uninstall(RSyntaxTextArea textArea) {
 
-		AutoCompletion ac = (AutoCompletion)textArea.
-								getClientProperty(PROPERTY_AUTO_COMPLETION);
-		ac.uninstall();
+		uninstallImpl(textArea);
 
-		PerlParser parser = (PerlParser)textArea.getClientProperty("perlParser");
+		PerlParser parser = getParser(textArea);
 		if (parser!=null) {
 			textArea.removeParser(parser);
 		}
-
-		removeAutoCompletion(ac);
 
 	}
 

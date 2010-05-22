@@ -63,7 +63,7 @@ public class PerlCompletionProvider extends CCompletionProvider {
 	 * {@inheritDoc}
 	 */
 	protected CompletionProvider createCodeCompletionProvider() {
-		DefaultCompletionProvider cp = new PerlCodeCompletionProvider();
+		DefaultCompletionProvider cp = new PerlCodeCompletionProvider(this);
 		loadCodeCompletionsFromXml(cp);
 		addShorthandCompletions(cp);
 		return cp;
@@ -99,7 +99,7 @@ public class PerlCompletionProvider extends CCompletionProvider {
 
 
 	/**
-	 * Overridden to return the null char (meaning "no start character") if the
+	 * Overridden to return the null char (meaning "no end character") if the
 	 * user doesn't want to use parens around their functions.
 	 *
 	 * @return The end character for parameters list, or the null char if
@@ -107,8 +107,7 @@ public class PerlCompletionProvider extends CCompletionProvider {
 	 * @see #getUseParensWithFunctions()
 	 */
 	public char getParameterListEnd() {
-System.out.println("Returning: " + (getUseParensWithFunctions() ? super.getParameterListEnd() : '\0'));
-		return getUseParensWithFunctions() ? super.getParameterListEnd() : '\0';
+		return getUseParensWithFunctions() ? ')' : 0;
 	}
 
 
@@ -121,7 +120,7 @@ System.out.println("Returning: " + (getUseParensWithFunctions() ? super.getParam
 	 * @see #getUseParensWithFunctions()
 	 */
 	public char getParameterListStart() {
-		return getUseParensWithFunctions() ? super.getParameterListEnd() : '\0';
+		return getUseParensWithFunctions() ? '(' : ' ';
 	}
 
 

@@ -64,10 +64,9 @@ public class ShellLanguageSupport extends AbstractLanguageSupport {
 		ac.setParameterAssistanceEnabled(isParameterAssistanceEnabled());
 		ac.setShowDescWindow(getShowDescWindow());
 		ac.install(textArea);
-		textArea.putClientProperty(PROPERTY_AUTO_COMPLETION, ac);
-		textArea.setToolTipSupplier(provider);
+		installImpl(textArea, ac);
 
-		addAutoCompletion(ac);
+		textArea.setToolTipSupplier(provider);
 
 	}
 
@@ -76,10 +75,7 @@ public class ShellLanguageSupport extends AbstractLanguageSupport {
 	 * {@inheritDoc}
 	 */
 	public void uninstall(RSyntaxTextArea textArea) {
-		AutoCompletion ac = (AutoCompletion)textArea.
-								getClientProperty(PROPERTY_AUTO_COMPLETION);
-		ac.uninstall();
-		removeAutoCompletion(ac);
+		uninstallImpl(textArea);
 	}
 
 

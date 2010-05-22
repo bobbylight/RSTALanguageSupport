@@ -49,14 +49,6 @@ public class PerlParser extends AbstractParser {
 	}
 
 
-//	public int getOffset(RSyntaxDocument doc, ParserNotice notice) {
-//		Element root = doc.getDefaultRootElement();
-//		Element elem = root.getElement(notice.getLine());
-//		int offs = elem.getStartOffset() + notice.getColumn();
-//		return offs>=elem.getEndOffset() ? -1 : offs;
-//	}
-
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -102,16 +94,16 @@ public class PerlParser extends AbstractParser {
 										p.getErrorStream(), this, result, root);
 			Thread t2 = new Thread(stderr);
 			t2.start();
-			int rc = 0;
+			//int rc = 0;
 			try {
 				t2.join(10000);
 				t.join(10000);
 				if (t.isAlive()) {
 					t.interrupt();
-					rc = -1;
+					//rc = -1;
 				}
 				else {
-					rc = p.waitFor();
+					/*rc = */p.waitFor();
 				}
 				//System.out.println(rc);
 			} catch (InterruptedException ie) {
@@ -120,13 +112,13 @@ public class PerlParser extends AbstractParser {
 
 			long time = System.currentTimeMillis() - start;
 			result.setParseTime(time);
-System.out.println(time + "ms");
+			//System.out.println(time + "ms");
 
 		} catch (IOException ioe) {
 			result.setError(ioe);
 			ioe.printStackTrace();
 		}
-System.out.println("--- " + result.getNotices().size());
+
 		return result;
 
 	}

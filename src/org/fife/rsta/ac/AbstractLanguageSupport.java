@@ -10,12 +10,15 @@
  */
 package org.fife.rsta.ac;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.ListCellRenderer;
 
 import org.fife.ui.autocomplete.AutoCompletion;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 
 /**
@@ -27,12 +30,13 @@ import org.fife.ui.autocomplete.AutoCompletion;
 public abstract class AbstractLanguageSupport implements LanguageSupport {
 
 	/**
-	 * List of installed {@link AutoCompletion} instances.  This should be
-	 * maintained by subclasses by adding to, and removing from, it in their
+	 * Map of all text areas using this language support to their installed
+	 * {@link AutoCompletion} instances.  This should be maintained by
+	 * subclasses by adding to, and removing from, it in their
 	 * {@link #install(org.fife.ui.rsyntaxtextarea.RSyntaxTextArea)} and
 	 * {@link #uninstall(org.fife.ui.rsyntaxtextarea.RSyntaxTextArea)} methods.
 	 */
-	private List autoCompletions;
+	private Map textAreaToAutoCompletion;
 
 	/**
 	 * Whether auto-completion is enabled for this language.
@@ -61,22 +65,8 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	 */
 	protected AbstractLanguageSupport() {
 		setDefaultCompletionCellRenderer(null); // Force default
-		autoCompletions = new ArrayList(1); // Usually small
+		textAreaToAutoCompletion = new HashMap();
 		autoCompleteEnabled = true;
-	}
-
-
-	/**
-	 * Registers an auto-completion instance.  This should be called by
-	 * subclasses in their
-	 * {@link #install(org.fife.ui.rsyntaxtextarea.RSyntaxTextArea)} methods
-	 * so that this language support can update all of them at once.
-	 *
-	 * @param ac The auto completion instance.
-	 * @see #removeAutoCompletion(AutoCompletion)
-	 */
-	protected void addAutoCompletion(AutoCompletion ac) {
-		autoCompletions.add(ac);
 	}
 
 
@@ -89,6 +79,18 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	 */
 	protected ListCellRenderer createDefaultCompletionCellRenderer() {
 		return new DefaultListCellRenderer();
+	}
+
+
+	/**
+	 * Returns the auto completion instance used by a text area.
+	 *
+	 * @param textArea The text area.
+	 * @return The auto completion instance, or <code>null</code> if none
+	 *         is installed on the text area.
+	 */
+	protected AutoCompletion getAutoCompletionFor(RSyntaxTextArea textArea) {
+		return (AutoCompletion)textAreaToAutoCompletion.get(textArea);
 	}
 
 
@@ -109,6 +111,31 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 
 
 	/**
+	 * Returns the text areas with this language support currently installed.
+	 *
+	 * @return The text areas.
+	 */
+	protected Set getTextAreas() {
+		return textAreaToAutoCompletion.keySet();
+	}
+
+
+	/**
+	 * Registers an auto-completion instance.  This should be called by
+	 * subclasses in their
+	 * {@link #install(org.fife.ui.rsyntaxtextarea.RSyntaxTextArea)} methods
+	 * so that this language support can update all of them at once.
+	 *
+	 * @param textArea The text area that just installed the auto completion.
+	 * @param ac The auto completion instance.
+	 * @see #uninstallImpl(RSyntaxTextArea)
+	 */
+	protected void installImpl(RSyntaxTextArea textArea, AutoCompletion ac) {
+		textAreaToAutoCompletion.put(textArea, ac);
+	}
+
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public boolean isAutoCompleteEnabled() {
@@ -125,26 +152,14 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 
 
 	/**
-	 * Unregisters an auto-completion instance.  This should be called by
-	 * subclasses in their
-	 * {@link #uninstall(org.fife.ui.rsyntaxtextarea.RSyntaxTextArea)} methods.
-	 *
-	 * @param ac The auto completion instance.
-	 * @see #addAutoCompletion(AutoCompletion)
-	 */
-	protected void removeAutoCompletion(AutoCompletion ac) {
-		autoCompletions.remove(ac);
-	}
-
-
-	/**
 	 * {@inheritDoc}
 	 */
 	public void setAutoCompleteEnabled(boolean enabled) {
 		if (enabled!=autoCompleteEnabled) {
 			autoCompleteEnabled = enabled;
-			for (int i=0; i<autoCompletions.size(); i++) {
-				AutoCompletion ac = (AutoCompletion)autoCompletions.get(i);;
+			Iterator i=textAreaToAutoCompletion.values().iterator();
+			while (i.hasNext()) {
+				AutoCompletion ac = (AutoCompletion)i.next();
 				ac.setAutoCompleteEnabled(enabled);
 			}
 		}
@@ -168,8 +183,9 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	public void setParameterAssistanceEnabled(boolean enabled) {
 		if (enabled!=parameterAssistanceEnabled) {
 			parameterAssistanceEnabled = enabled;
-			for (int i=0; i<autoCompletions.size(); i++) {
-				AutoCompletion ac = (AutoCompletion)autoCompletions.get(i);;
+			Iterator i=textAreaToAutoCompletion.values().iterator();
+			while (i.hasNext()) {
+				AutoCompletion ac = (AutoCompletion)i.next();
 				ac.setParameterAssistanceEnabled(enabled);
 			}
 		}
@@ -182,11 +198,30 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	public void setShowDescWindow(boolean show) {
 		if (show!=showDescWindow) {
 			showDescWindow = show;
-			for (int i=0; i<autoCompletions.size(); i++) {
-				AutoCompletion ac = (AutoCompletion)autoCompletions.get(i);;
+			Iterator i=textAreaToAutoCompletion.values().iterator();
+			while (i.hasNext()) {
+				AutoCompletion ac = (AutoCompletion)i.next();
 				ac.setShowDescWindow(show);
 			}
 		}
+	}
+
+
+	/**
+	 * Unregisters an textArea.  This should be called by subclasses in their
+	 * {@link #uninstall(org.fife.ui.rsyntaxtextarea.RSyntaxTextArea)} methods.
+	 * This method will also call the <code>uninstall</code> method on the
+	 * <code>AutoComplete</code>.
+	 *
+	 * @param textArea The text area.
+	 * @see #installImpl(RSyntaxTextArea, AutoCompletion)
+	 */
+	protected void uninstallImpl(RSyntaxTextArea textArea) {
+		AutoCompletion ac = getAutoCompletionFor(textArea);
+		if (ac!=null) {
+			ac.uninstall();
+		}
+		textAreaToAutoCompletion.remove(textArea);
 	}
 
 

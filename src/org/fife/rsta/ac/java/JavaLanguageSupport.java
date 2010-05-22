@@ -41,9 +41,6 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 	 */
 	private JarManager jarManager;
 
-	private static final String PROPERTY_JAVA_PARSER =
-						"org.fife.rsta.ac.java.JavaLanguageSupport.JavaParser";
-
 
 	/**
 	 * Constructor.
@@ -67,8 +64,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 	 */
 	public JavaCompletionProvider getCompletionProvider(
 											RSyntaxTextArea textArea) {
-		AutoCompletion ac = (AutoCompletion)textArea.
-								getClientProperty(PROPERTY_AUTO_COMPLETION);
+		AutoCompletion ac = getAutoCompletionFor(textArea);
 		return (JavaCompletionProvider)ac.getCompletionProvider();
 	}
 
@@ -94,7 +90,12 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 	 *         area does not have this <tt>JavaLanguageSupport</tt> installed.
 	 */
 	public JavaParser getParser(RSyntaxTextArea textArea) {
-		return (JavaParser)textArea.getClientProperty(PROPERTY_JAVA_PARSER);
+		// Could be a parser for another language.
+		Object parser = textArea.getClientProperty(PROPERTY_LANGUAGE_PARSER);
+		if (parser instanceof JavaParser) {
+			return (JavaParser)parser;
+		}
+		return null;
 	}
 
 
@@ -110,17 +111,16 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		ac.setParameterAssistanceEnabled(isParameterAssistanceEnabled());
 		ac.setShowDescWindow(getShowDescWindow());
 		ac.install(textArea);
-		textArea.putClientProperty(PROPERTY_AUTO_COMPLETION, ac);
+		installImpl(textArea, ac);
+
 		textArea.setToolTipSupplier(p);
 
 		JavaParser parser = new JavaParser(textArea);
-		textArea.putClientProperty(PROPERTY_JAVA_PARSER, parser);
+		textArea.putClientProperty(PROPERTY_LANGUAGE_PARSER, parser);
 		textArea.addParser(parser);
 
 		Info info = new Info(textArea, p, parser);
 		parserToInfoMap.put(parser, info);
-
-		addAutoCompletion(ac);
 
 	}
 
@@ -130,10 +130,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 	 */
 	public void uninstall(RSyntaxTextArea textArea) {
 
-		AutoCompletion ac = (AutoCompletion)textArea.
-								getClientProperty(PROPERTY_AUTO_COMPLETION);
-		ac.uninstall();
-		textArea.putClientProperty(PROPERTY_AUTO_COMPLETION, null);
+		uninstallImpl(textArea);
 
 		JavaParser parser = getParser(textArea);
 		Info info = (Info)parserToInfoMap.remove(parser);
@@ -142,9 +139,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 				JavaParser.PROPERTY_COMPILATION_UNIT, info);
 		}
 		textArea.removeParser(parser);
-		textArea.putClientProperty(PROPERTY_JAVA_PARSER, null);
-
-		removeAutoCompletion(ac);
+		textArea.putClientProperty(PROPERTY_LANGUAGE_PARSER, null);
 
 	}
 

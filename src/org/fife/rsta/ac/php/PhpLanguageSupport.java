@@ -64,10 +64,10 @@ public class PhpLanguageSupport extends AbstractLanguageSupport {
 		ac.setParameterAssistanceEnabled(isParameterAssistanceEnabled());
 		ac.setShowDescWindow(getShowDescWindow());
 		ac.install(textArea);
-		textArea.putClientProperty(PROPERTY_AUTO_COMPLETION, ac);
+		installImpl(textArea, ac);
+
 		textArea.setToolTipSupplier(null);
 
-		addAutoCompletion(ac);
 	}
 
 
@@ -75,10 +75,7 @@ public class PhpLanguageSupport extends AbstractLanguageSupport {
 	 * {@inheritDoc}
 	 */
 	public void uninstall(RSyntaxTextArea textArea) {
-		AutoCompletion ac = (AutoCompletion)textArea.
-								getClientProperty(PROPERTY_AUTO_COMPLETION);
-		ac.uninstall();
-		removeAutoCompletion(ac);
+		uninstallImpl(textArea);
 	}
 
 

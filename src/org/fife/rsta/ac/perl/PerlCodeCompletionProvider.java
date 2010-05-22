@@ -21,6 +21,23 @@ import org.fife.ui.autocomplete.DefaultCompletionProvider;
  */
 class PerlCodeCompletionProvider extends DefaultCompletionProvider {
 
+	private PerlCompletionProvider parent;
+
+
+	public PerlCodeCompletionProvider(PerlCompletionProvider parent) {
+		this.parent = parent;
+	}
+
+
+	public char getParameterListEnd() {
+		return parent.getParameterListEnd();
+	}
+
+
+	public char getParameterListStart() {
+		return parent.getParameterListStart();
+	}
+
 
 	/**
 	 * {@inheritDoc}

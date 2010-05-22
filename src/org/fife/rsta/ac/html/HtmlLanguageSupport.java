@@ -58,10 +58,9 @@ public class HtmlLanguageSupport extends AbstractLanguageSupport {
 		ac.setParameterAssistanceEnabled(isParameterAssistanceEnabled());
 		ac.setShowDescWindow(getShowDescWindow());
 		ac.install(textArea);
-		textArea.putClientProperty(PROPERTY_AUTO_COMPLETION, ac);
-		textArea.setToolTipSupplier(null);
+		installImpl(textArea, ac);
 
-		addAutoCompletion(ac);
+		textArea.setToolTipSupplier(null);
 
 	}
 
@@ -70,10 +69,7 @@ public class HtmlLanguageSupport extends AbstractLanguageSupport {
 	 * {@inheritDoc}
 	 */
 	public void uninstall(RSyntaxTextArea textArea) {
-		AutoCompletion ac = (AutoCompletion)textArea.
-								getClientProperty(PROPERTY_AUTO_COMPLETION);
-		ac.uninstall();
-		removeAutoCompletion(ac);
+		uninstallImpl(textArea);
 	}
 
 
