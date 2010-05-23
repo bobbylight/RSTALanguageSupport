@@ -95,6 +95,69 @@ public class JarInfo implements Comparable, Cloneable {
 
 
 	/**
+	 * Returns information on the "main" jar for a JRE.  This will be
+	 * <tt>rt.jar</tt> everywhere except OS X, where it will be
+	 * <tt>classes.jar</tt>.  The associated source zip/jar file is also
+	 * checked for.
+	 *
+	 * @return The information, or <code>null</code> if there is not a JRE in
+	 *         the specified directory.
+	 * @see #getMainJREJarInfo()
+	 */
+	public static JarInfo getJREJarInfo(File jreHome) {
+
+		JarInfo info = null;
+
+		File mainJar = new File(jreHome, "lib/rt.jar"); // Sun JRE's
+		File sourceZip = null;
+
+		if (mainJar.isFile()) { // Sun JRE's
+			sourceZip = new File(jreHome, "src.zip");
+			if (!sourceZip.isFile()) {
+				// Might be a JRE inside a JDK
+				sourceZip = new File(jreHome, "../src.zip");
+			}
+		}
+
+		else { // Might be OS X
+			mainJar = new File(jreHome, "../Classes/classes.jar");
+			// ${java.home}/src.jar is the common location on OS X.
+			sourceZip = new File(jreHome, "src.jar");
+		}
+
+		if (mainJar.isFile()) {
+			info = new JarInfo(mainJar);
+			if (sourceZip.isFile()) { // Make sure our last guess actually exists
+				info.setSourceLocation(sourceZip);
+			}
+		}
+		else {
+			System.err.println("[ERROR]: Cannot locate JRE jar in " +
+								jreHome.getAbsolutePath());
+			mainJar = null;
+		}
+
+		return info;
+
+	}
+
+
+	/**
+	 * Returns information on the JRE running this application.  This will be
+	 * <tt>rt.jar</tt> everywhere except OS X, where it will be
+	 * <tt>classes.jar</tt>.  The associated source zip/jar file is also
+	 * checked for.
+	 *
+	 * @return The information, or <code>null</code> if an error occurs.
+	 * @see #getJREJarInfo(File)
+	 */
+	public static JarInfo getMainJREJarInfo() {
+		String javaHome = System.getProperty("java.home");
+		return getJREJarInfo(new File(javaHome));
+	}
+
+
+	/**
 	 * Returns the source location for the jar file.
 	 *
 	 * @return The source location (an archive or directory), or

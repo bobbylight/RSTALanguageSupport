@@ -32,7 +32,7 @@ class TypeDeclarationTreeNode extends JavaTreeNode {
 	public TypeDeclarationTreeNode(TypeDeclaration typeDec) {
 
 		super(typeDec);
-System.out.println("... " + typeDec);
+		//System.out.println("... " + typeDec);
 		String iconName = null;
 
 		if (typeDec instanceof NormalClassDeclaration) {
@@ -95,7 +95,7 @@ System.out.println("... " + typeDec);
 
 	public String getText(boolean selected) {
 		TypeDeclaration typeDec = (TypeDeclaration)getUserObject();
-System.out.println("... " + typeDec);
+		//System.out.println("... " + typeDec);
 		return typeDec!=null ? typeDec.getName() : null;
 	}
 

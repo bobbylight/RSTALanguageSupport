@@ -136,7 +136,7 @@ private String getSummaryFromSourceZip(File zip) throws IOException {
 	ZipFile zipFile = new ZipFile(zip);
 	String entryName = cf.getClassName(true).replaceAll("\\.", "/");
 	entryName += ".java";
-	System.out.println("DEBUG: entry name: " + entryName);
+	//System.out.println("DEBUG: entry name: " + entryName);
 	ZipEntry entry = zipFile.getEntry(entryName);
 
 	if (entry!=null) {

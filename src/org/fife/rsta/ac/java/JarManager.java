@@ -98,7 +98,7 @@ public class JarManager {
 		}
 
 		if (info==null) {
-			info = getMainJREJarInfo();
+			info = JarInfo.getMainJREJarInfo();
 		}
 
 		// If it isn't on the build path, add it now.
@@ -250,53 +250,6 @@ public class JarManager {
 			jarList.add(reader.getJarInfo().clone());
 		}
 		return jarList;
-	}
-
-
-	/**
-	 * Returns information on the "main" jar for the JRE on the user's PATH.
-	 * This will be <tt>rt.jar</tt> everywhere except OS X, where it will be
-	 * <tt>classes.jar</tt>.  The associated source zip/jar file is also
-	 * checked for.
-	 *
-	 * @return The information, or <code>null</code> if there is no JRE on
-	 *         the class path.
-	 */
-	public static JarInfo getMainJREJarInfo() {
-
-		JarInfo info = null;
-		String javaHome = System.getProperty("java.home");
-
-		File mainJar = new File(javaHome, "lib/rt.jar"); // Sun JRE's
-		File sourceZip = null;
-
-		if (mainJar.isFile()) { // Sun JRE's
-			sourceZip = new File(javaHome, "src.zip");
-			if (!sourceZip.isFile()) {
-				// Might be a JRE inside a JDK
-				sourceZip = new File(javaHome, "../src.zip");
-			}
-		}
-
-		else { // Might be OS X
-			mainJar = new File(javaHome, "../Classes/classes.jar");
-			// ${java.home}/src.jar is the common location on OS X.
-			sourceZip = new File(javaHome, "src.jar");
-		}
-
-		if (mainJar.isFile()) {
-			info = new JarInfo(mainJar);
-			if (sourceZip.isFile()) { // Make sure our last guess actually exists
-				info.setSourceLocation(sourceZip);
-			}
-		}
-		else {
-			System.err.println("[ERROR]: Cannot locate JRE jar");
-			mainJar = null;
-		}
-
-		return info;
-
 	}
 
 

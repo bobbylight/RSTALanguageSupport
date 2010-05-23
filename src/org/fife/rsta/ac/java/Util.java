@@ -198,8 +198,8 @@ class Util {
 
 		if (m.find() && m.start() == 0) {
 
-System.out.println("Match!!! - '" + m.group(0));
-System.out.println("... linkContent == '" + linkContent + "'");
+//System.out.println("Match!!! - '" + m.group(0));
+//System.out.println("... linkContent == '" + linkContent + "'");
 			String match = m.group(0); // Prevents recalculation
 			String link = match;
 			// TODO: If this starts with '#', "link" must be prepended with
@@ -423,7 +423,7 @@ System.out.println("... linkContent == '" + linkContent + "'");
 
 		String entryName = cf.getClassName(true).replaceAll("\\.", "/");
 		entryName += ".java";
-		System.out.println("DEBUG: entry name: " + entryName);
+		//System.out.println("DEBUG: entry name: " + entryName);
 		File file = new File(dir, entryName);
 		if (!file.isFile()) {
 			// Be nice and check for "src/" subdirectory
@@ -467,7 +467,7 @@ System.out.println("... linkContent == '" + linkContent + "'");
 
 			String entryName = cf.getClassName(true).replaceAll("\\.", "/");
 			entryName += ".java";
-			System.out.println("DEBUG: entry name: " + entryName);
+			//System.out.println("DEBUG: entry name: " + entryName);
 			ZipEntry entry = zipFile.getEntry(entryName);
 			if (entry == null) {
 				// Seen in some src.jar files, for example OS X's src.jar

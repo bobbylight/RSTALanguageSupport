@@ -35,7 +35,6 @@ import javax.swing.border.AbstractBorder;
 import javax.swing.border.Border;
 
 import org.fife.rsta.ac.java.JarInfo;
-import org.fife.rsta.ac.java.JarManager;
 import org.fife.rsta.ac.perl.PerlLanguageSupport;
 
 
@@ -98,7 +97,7 @@ public class AboutDialog extends JDialog {
 								getPerlInstallLocation().getAbsolutePath());
 		JLabel javaLabel = new JLabel("Java home:");
 		String jre = null;
-		JarInfo info = JarManager.getMainJREJarInfo();
+		JarInfo info = JarInfo.getMainJREJarInfo();
 		if (info!=null) { // Should always be true
 			jre = info.getJarFile().getParentFile().getParentFile().getAbsolutePath();
 		}
