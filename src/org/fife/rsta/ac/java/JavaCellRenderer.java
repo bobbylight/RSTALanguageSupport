@@ -36,17 +36,13 @@ public class JavaCellRenderer extends DefaultListCellRenderer {
 
 	private JList list;
 	private boolean selected;
+	private boolean evenRow;
 	private JavaSourceCompletion jsc;
-
-	/**
-	 * Whether we're painting this row using the alternate background color.
-	 */
-	private boolean usingAltBG;
 
 	/**
 	 * The alternating background color, or <code>null</code> for none.
 	 */
-	private Color altBG = new java.awt.Color(240,240,240);
+	private static Color altBG;
 
 	/**
 	 * This is used instead of jsc for "incomplete" stuff, like classes,
@@ -63,7 +59,7 @@ public class JavaCellRenderer extends DefaultListCellRenderer {
 	 *         alternating colors are not used.
 	 * @see #setAlternateBackground(Color)
 	 */
-	public Color getAlternateBackground() {
+	public static Color getAlternateBackground() {
 		return altBG;
 	}
 
@@ -97,12 +93,9 @@ public class JavaCellRenderer extends DefaultListCellRenderer {
 			setIcon(null); // TODO: emptyIcon
 		}
 
-		if (altBG!=null && !selected && (index&1)==0) {
-			usingAltBG = true;
+		evenRow = (index&1) == 0;
+		if (altBG!=null && evenRow && !selected) {
 			setBackground(altBG);
-		}
-		else {
-			usingAltBG = false;
 		}
 
 		return this;
@@ -116,18 +109,23 @@ public class JavaCellRenderer extends DefaultListCellRenderer {
 //			setText(null); // Stop "Foobar" from being painted
 //		}
 
-		//super.paintComponent(g);
 		// We never paint "selection" around the icon, to imitate Eclipse
-		g.setColor(usingAltBG ? altBG : list.getBackground());
-		int iconW = 18;
+		final int iconW = 18;
 		int h = getHeight();
-		g.fillRect(0, 0, iconW, h);
+		if (!selected) {
+			g.setColor(getBackground());
+			g.fillRect(0,0, getWidth(),h);
+		}
+		else {
+			g.setColor(altBG!=null && evenRow ? altBG : list.getBackground());
+			g.fillRect(0,0, iconW,h);
+			g.setColor(getBackground()); // Selection color
+			g.fillRect(iconW, 0, getWidth()-iconW, h);
+		}
 		if (getIcon()!=null) {
 			int y = (h - getIcon().getIconHeight())/2;
 			getIcon().paintIcon(this, g, 0, y);
 		}
-		g.setColor(getBackground());
-		g.fillRect(iconW,0, getWidth()-iconW,h);
 
 		if (jsc!=null) {
 			int x = getX() + iconW + 2;
@@ -153,8 +151,8 @@ public class JavaCellRenderer extends DefaultListCellRenderer {
 	 *        background colors.
 	 * @see #getAlternateBackground()
 	 */
-	public void setAlternateBackground(Color altBG) {
-		this.altBG = altBG;
+	public static void setAlternateBackground(Color altBG) {
+		JavaCellRenderer.altBG = altBG;
 	}
 
 

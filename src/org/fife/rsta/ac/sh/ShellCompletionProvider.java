@@ -10,8 +10,6 @@
  */
 package org.fife.rsta.ac.sh;
 
-import java.io.File;
-
 import org.fife.rsta.ac.c.CCompletionProvider;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
@@ -29,6 +27,13 @@ public class ShellCompletionProvider extends CCompletionProvider {
 	 * Whether local man pages should be used for function descriptions.
 	 */
 	private static boolean useLocalManPages;
+
+
+	/**
+	 * Constructor.
+	 */
+	public ShellCompletionProvider() {
+	}
 
 
 	/**
@@ -97,12 +102,6 @@ public class ShellCompletionProvider extends CCompletionProvider {
 	 */
 	public static void setUseLocalManPages(boolean use) {
 		useLocalManPages = use;
-	}
-
-
-
-	static {
-		useLocalManPages = File.separatorChar=='/';
 	}
 
 

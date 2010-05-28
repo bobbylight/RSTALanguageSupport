@@ -320,7 +320,8 @@ public File getSourceLocForClass(String className) {
 	 */
 	public boolean removeJar(File jar) {
 		for (Iterator i=jars.iterator(); i.hasNext(); ) {
-			JarInfo info = (JarInfo)i.next();
+			JarReader reader = (JarReader)i.next();
+			JarInfo info = reader.getJarInfo();
 			File jar2 = info.getJarFile();
 			if (jar.equals(jar2)) {
 				i.remove();

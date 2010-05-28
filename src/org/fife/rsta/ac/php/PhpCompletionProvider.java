@@ -61,8 +61,17 @@ public class PhpCompletionProvider extends HtmlCompletionProvider {
 
 	public PhpCompletionProvider() {
 
+		// NOTE: If multiple instances of this provider are created, this
+		// rather hefty XML file will be loaded each time.  Better to share
+		// this CompletionProvider amongst all PHP editors (which is what
+		// PhpLanguageSupport does).
+		ClassLoader cl = getClass().getClassLoader();
+		InputStream in = cl.getResourceAsStream("data/php.xml");
 		try {
-			loadPhpCompletionsFromXML(new java.io.FileInputStream("data/php.xml"));
+			if (in==null) { // Ghetto temporary workaround
+				in = new java.io.FileInputStream("data/php.xml");
+			}
+			loadPhpCompletionsFromXML(in);
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
