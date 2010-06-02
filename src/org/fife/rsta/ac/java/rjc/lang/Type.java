@@ -66,6 +66,51 @@ public class Type {
 	}
 
 
+	/**
+	 * Returns the name of this type.
+	 *
+	 * @param fullyQualified Whether the returned value should be
+	 *        fully qualified.
+	 * @return The name of this type.
+	 */
+	public String getName(boolean fullyQualified) {
+
+		StringBuffer sb = new StringBuffer();
+
+		int count = identifiers.size();
+		int start = fullyQualified ? 0 : count-1;
+		for (int i=start; i<count; i++) {
+			sb.append(identifiers.get(i).toString());
+			if (typeArguments.get(i)!=null) {
+				List typeArgs = (List)typeArguments.get(i);
+				int typeArgCount = typeArgs.size();
+				if (typeArgCount>0) {
+					sb.append('<');
+					for (int j=0; j<typeArgCount; j++) {
+						TypeArgument typeArg = (TypeArgument)typeArgs.get(j);
+						//if (typeA)
+						sb.append(typeArg.toString());
+						if (j<typeArgCount-1) {
+							sb.append(", ");
+						}
+					}
+					sb.append('>');
+				}
+			}
+			if (i<count-1) {
+				sb.append('.');
+			}
+		}
+
+		for (int i=0; i<bracketPairCount; i++) {
+			sb.append("[]");
+		}
+
+		return sb.toString();
+
+	}
+
+
 	public void incrementBracketPairCount(int count) {
 		bracketPairCount += count;
 	}
@@ -106,40 +151,15 @@ public class Type {
 	}
 
 
+	/**
+	 * Returns a string representation of this type.  The type name will be
+	 * fully qualified.
+	 *
+	 * @return A string representation of this type.
+	 * @see #getName(boolean)
+	 */
 	public String toString() {
-
-		StringBuffer sb = new StringBuffer();
-
-		int count = identifiers.size();
-		for (int i=0; i<count; i++) {
-			sb.append(identifiers.get(i).toString());
-			if (typeArguments.get(i)!=null) {
-				List typeArgs = (List)typeArguments.get(i);
-				int typeArgCount = typeArgs.size();
-				if (typeArgCount>0) {
-					sb.append('<');
-					for (int j=0; j<typeArgCount; j++) {
-						TypeArgument typeArg = (TypeArgument)typeArgs.get(j);
-						//if (typeA)
-						sb.append(typeArg.toString());
-						if (j<typeArgCount-1) {
-							sb.append(", ");
-						}
-					}
-					sb.append('>');
-				}
-			}
-			if (i<count-1) {
-				sb.append('.');
-			}
-		}
-
-		for (int i=0; i<bracketPairCount; i++) {
-			sb.append("[]");
-		}
-
-		return sb.toString();
-
+		return getName(true);
 	}
 
 

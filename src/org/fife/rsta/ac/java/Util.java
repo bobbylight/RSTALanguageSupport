@@ -19,7 +19,6 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
@@ -70,8 +69,6 @@ class Util {
 
 	/**
 	 * Private constructor to prevent instantiation.
-	 this is
-	 * * * crazy
 	 */
 	private Util() {
 	}
@@ -84,101 +81,170 @@ class Util {
 		StringBuffer returns = null;
 		StringBuffer throwsItems = null;
 		StringBuffer see = null;
+		StringBuffer since = null;
+		StringBuffer author = null;
+		StringBuffer unknowns = null;
 		boolean inParams = false, inThrows = false,
-				inReturns = false, inSeeAlso = false;;
+				inReturns = false, inSeeAlso = false,
+				inSince = false, inAuthor = false,
+				inUnknowns = false;
 
-		StringTokenizer st = new StringTokenizer(tail.toString(), " \t\r\n\f", true);
+		String[] st = tail.toString().split("[ \t\r\n\f]+");
 		String token = null;
 
-		while (st.hasMoreTokens() && (token=st.nextToken())!=null) {
-			if (token.equals("@param") && st.hasMoreTokens()) {
-				token = st.nextToken(); // Whitespace
-				if (!st.hasMoreTokens()) {
-					break;
-				}
-				token = st.nextToken(); // Actual parameter.
+		int i = 0;
+		while (i<st.length && (token=st[i++])!=null) {
+			if ("@param".equals(token) && i<st.length) {
+				token = st[i++]; // Actual parameter
 				if (params==null) {
-					params = new StringBuffer("<b>Parameters:</b>");
+					params = new StringBuffer("<b>Parameters:</b><p class='indented'>");
 				}
-				params.append("<br>&nbsp;&nbsp;&nbsp;");
+				else {
+					params.append("<br>");
+				}
 				params.append("<b>").append(token).append("</b> ");
 				inSeeAlso=false;
 				inParams = true;
 				inReturns = false;
 				inThrows = false;
+				inSince = false;
+				inAuthor = false;
+				inUnknowns = false;
 			}
-			else if (token.equals("@return") && st.hasMoreTokens()) {
-				token = st.nextToken();
+			else if ("@return".equals(token) && i<st.length) {
 				if (returns==null) {
-					returns = new StringBuffer("<b>Returns:</b>");
+					returns = new StringBuffer("<b>Returns:</b><p class='indented'>");
 				}
-				returns.append("<br>&nbsp;&nbsp;&nbsp;");
-				returns.append(token);
 				inSeeAlso=false;
 				inReturns = true;
 				inParams = false;
 				inThrows = false;
+				inSince = false;
+				inAuthor = false;
+				inUnknowns = false;
 			}
-			else if (token.equals("@see") && st.hasMoreTokens()) {
-				token = st.nextToken();
+			else if ("@see".equals(token) && i<st.length) {
 				if (see==null) {
-					see = new StringBuffer("<b>See Also:</b>");
+					see = new StringBuffer("<b>See Also:</b><p class='indented'>");
 				}
-				see.append("<br>&nbsp;&nbsp;&nbsp;");
-				see.append(token);
+				else {
+					see.append("<br>");
+				}
 				inSeeAlso = true;
 				inReturns = false;
 				inParams = false;
 				inThrows = false;
+				inSince = false;
+				inAuthor = false;
+				inUnknowns = false;
 			}
-			else if (token.equals("@throws") && st.hasMoreTokens()) {
-				token = st.nextToken(); // Whitespace
-				if (!st.hasMoreTokens()) {
-					break;
-				}
-				token = st.nextToken(); // Actual throwable.
+			else if (("@throws".equals(token)) ||
+					("@exception".equals(token)) && i<st.length) {
+				token = st[i++]; // Actual throwable
 				if (throwsItems==null) {
-					throwsItems = new StringBuffer("<b>Throws:</b>");
+					throwsItems = new StringBuffer("<b>Throws:</b><p class='indented'>");
 				}
-				throwsItems.append("<br>&nbsp;&nbsp;&nbsp;");
+				else {
+					throwsItems.append("<br>");
+				}
 				throwsItems.append("<b>").append(token).append("</b> ");
 				inSeeAlso = false;
 				inParams = false;
 				inReturns = false;
 				inThrows = true;
+				inSince = false;
+				inAuthor = false;
+				inUnknowns = false;
+			}
+			else if ("@since".equals(token) && i<st.length) {
+				if (since==null) {
+					since = new StringBuffer("<b>Since:</b><p class='indented'>");
+				}
+				inSeeAlso=false;
+				inReturns = false;
+				inParams = false;
+				inThrows = false;
+				inSince = true;
+				inAuthor = false;
+				inUnknowns = false;
+			}
+			else if ("@author".equals(token) && i<st.length) {
+				if (author==null) {
+					author = new StringBuffer("<b>Author:</b><p class='indented'>");
+				}
+				else {
+					author.append("<br>");
+				}
+				inSeeAlso=false;
+				inReturns = false;
+				inParams = false;
+				inThrows = false;
+				inSince = false;
+				inAuthor = true;
+				inUnknowns = false;
 			}
 			else if (token.startsWith("@") && token.length()>1) {
+				if (unknowns==null) {
+					unknowns = new StringBuffer();
+				}
+				else {
+					unknowns.append("</p>");
+				}
+				unknowns.append("<b>").append(token).append("</b><p class='indented'>");
 				// Stop everything; unknown/unsupported tag
 				inSeeAlso = false;
 				inParams = false;
 				inReturns = false;
 				inThrows = false;
+				inSince = false;
+				inAuthor = false;
+				inUnknowns = true;
 			}
 			else if (inParams) {
-				params.append(token);
+				params.append(token).append(' ');
 			}
 			else if (inReturns) {
-				returns.append(token);
+				returns.append(token).append(' ');
 			}
 			else if (inSeeAlso) {
-				see.append(token);
+				see.append(token).append(' ');
 			}
 			else if (inThrows) {
-				throwsItems.append(token);
+				throwsItems.append(token).append(' ');
+			}
+			else if (inSince) {
+				since.append(token).append(' ');
+			}
+			else if (inAuthor) {
+				author.append(token).append(' ');
+			}
+			else if (inUnknowns) {
+				unknowns.append(token).append(' ');
 			}
 		}
 
+		sb.append("<p>");
+
 		if (params!=null) {
-			sb.append("<p>").append(params);
+			sb.append(params).append("</p>");
 		}
 		if (returns!=null) {
-			sb.append("<p>").append(returns);
+			sb.append(returns).append("</p>");
 		}
 		if (throwsItems!=null) {
-			sb.append("<p>").append(throwsItems);
+			sb.append(throwsItems).append("</p>");
 		}
 		if (see!=null) {
-			sb.append("<p>").append(see);
+			sb.append(see).append("</p>");
+		}
+		if (author!=null) {
+			sb.append(author).append("</p>");
+		}
+		if (since!=null) {
+			sb.append(since).append("</p>");
+		}
+		if (unknowns!=null) {
+			sb.append(unknowns).append("</p>");
 		}
 
 	}
@@ -263,7 +329,8 @@ class Util {
 		Matcher m = DOC_COMMENT_LINE_HEADER.matcher(dc);
 		dc = m.replaceAll("\n");
 
-		StringBuffer html = new StringBuffer("<html>");
+		StringBuffer html = new StringBuffer(
+			"<html><style> .indented { margin-top: 0px; padding-left: 30pt; } </style><body>");
 		StringBuffer tailBuf = null;
 
 		BufferedReader r = new BufferedReader(new StringReader(dc));
@@ -272,6 +339,7 @@ class Util {
 
 			// Handle the first line (guaranteed to be at least 1 line).
 			String line = r.readLine().substring(3);
+			line = possiblyStripDocCommentTail(line);
 			int offs = 0;
 			while (offs<line.length() && Character.isWhitespace(line.charAt(offs))) {
 				offs++;
@@ -282,6 +350,7 @@ class Util {
 
 			// Read all subsequent lines.
 			while ((line=r.readLine())!=null) {
+				line = possiblyStripDocCommentTail(line);
 				if (tailBuf!=null) {
 					tailBuf.append(line).append(' ');
 				}
@@ -310,6 +379,11 @@ class Util {
 
 
 	private static final StringBuffer fixDocComment(StringBuffer text) {
+
+		// Nothing to do.
+		if (text.indexOf("{@")==-1) {
+			return text;
+		}
 
 		// TODO: In Java 5, replace "sb.substring(sb2.substring(...))"
 		// calls with "sb.append(sb2, offs, len)".
@@ -536,6 +610,22 @@ class Util {
 	 */
 	public static final boolean isFullyQualified(String str) {
 		return str.indexOf('.')>-1;
+	}
+
+
+	/**
+	 * Removes the tail end of a documentation comment from a string, if it
+	 * exists.
+	 *
+	 * @param str The string.
+	 * @return The string, possibly with the documentation comment tail
+	 *         removed.
+	 */
+	private static final String possiblyStripDocCommentTail(String str) {
+		if (str.endsWith("*/")) {
+			str = str.substring(0, str.length()-2);
+		}
+		return str;
 	}
 
 

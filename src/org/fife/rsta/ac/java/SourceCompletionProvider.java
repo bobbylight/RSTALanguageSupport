@@ -360,6 +360,10 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	 */
 	public void clearJars() {
 		jarManager.clearJars();
+		// The memory used by the completions can be quite large, so go ahead
+		// and clear out the completions list so no-longer-needed ones are
+		// eligible for GC.
+		clear();
 	}
 
 
@@ -817,9 +821,17 @@ public File getSourceLocForClass(String className) {
 	 *         if the jar was not on the build path.
 	 * @see #addJar(JarInfo)
 	 * @see #getJars()
+	 * @see #clearJars()
 	 */
 	public boolean removeJar(File jar) {
-		return jarManager.removeJar(jar);
+		boolean removed = jarManager.removeJar(jar);
+		// The memory used by the completions can be quite large, so go ahead
+		// and clear out the completions list so no-longer-needed ones are
+		// eligible for GC.
+		if (removed) {
+			clear();
+		}
+		return removed;
 	}
 
 

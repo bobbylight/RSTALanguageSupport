@@ -270,10 +270,10 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 			StringBuffer sb = new StringBuffer(getName());
 
 			sb.append('(');
-			String[] params = getParameterTypes();
-			for (int i=0; i<params.length; i++) {
-				sb.append(params[i]);
-				if (i<params.length-1) {
+			int paramCount = getParameterCount();
+			for (int i=0; i<paramCount; i++) {
+				sb.append(getParameterType(i, false));
+				if (i<paramCount-1) {
 					sb.append(", ");
 				}
 			}
@@ -293,6 +293,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 *
 	 * @return The number of parameters this method takes.
 	 * @see #getParameterTypes()
+	 * @see #getParameterType(int, boolean)
 	 */
 	public int getParameterCount() {
 		if (paramTypes==null) {
@@ -303,12 +304,40 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 
 
 	/**
+	 * Returns a string representing the type of a parameter to this method.
+	 *
+	 * @param index The index of the parameter.
+	 * @param fullyQualified Whether the returned type should be fully
+	 *        qualified.  Note that if fully qualified information is not
+	 *        available for the parameters to this method, this parameter will
+	 *        be ignored (but I'm not sure that ever happens).
+	 * @return The type of the parameter.
+	 * @see #getParameterCount()
+	 * @see #getParameterTypes()
+	 */
+	public String getParameterType(int index, boolean fullyQualified) {
+		if (paramTypes==null) {
+			paramTypes = createParamTypes();
+		}
+		String type = paramTypes[index];
+		if (!fullyQualified) {
+			int dot = type.lastIndexOf('.');
+			if (dot>-1) {
+				type = type.substring(dot+1);
+			}
+		}
+		return type;
+	}
+
+
+	/**
 	 * Returns an array if strings representing the types of all parameters
 	 * to this method.  If this method takes no parameters, a zero-length
 	 * array is returned.
 	 *
-	 * @return The array.
+	 * @return The array.  These types will likely be fully qualified.
 	 * @see #getParameterCount()
+	 * @see #getParameterType(int, boolean)
 	 */
 	public String[] getParameterTypes() {
 		if (paramTypes==null) {

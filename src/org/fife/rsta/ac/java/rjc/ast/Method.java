@@ -76,7 +76,11 @@ public class Method extends AbstractMember {
 		sb.append('(');
 		int count = getParameterCount();
 		for (int i=0; i<count; i++) {
-			sb.append(getParameter(i).toString());
+			//sb.append(getParameter(i).toString());
+			FormalParameter fp = getParameter(i);
+			sb.append(fp.getType().getName(false));
+			sb.append(' ');
+			sb.append(fp.getName());
 			if (i<count-1) {
 				sb.append(", ");
 			}

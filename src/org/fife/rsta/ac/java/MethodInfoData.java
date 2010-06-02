@@ -161,8 +161,8 @@ class MethodInfoData implements Data {
 							if (m2.getParameterCount()==info.getParameterCount()) {
 								if (contenders==null) {
 									contenders = new ArrayList(1); // Usually just 1
-									contenders.add(m2);
 								}
+								contenders.add(m2);
 							}
 						}
 					}
@@ -182,14 +182,14 @@ class MethodInfoData implements Data {
 						// we're looking for by checking each of its
 						// parameters' types and making sure they're correct.
 						else {
-							String[] types = info.getParameterTypes();
 							for (int j=0; j<contenders.size(); j++) {
 								boolean match = true;
 								Method meth = (Method)contenders.get(j);
 								for (int p=0; p<info.getParameterCount(); p++) {
+									String type1 = info.getParameterType(p, false);
 									FormalParameter fp = meth.getParameter(p);
 									String type2 = fp.getType().toString();
-									if (!types[p].equals(type2)) {
+									if (!type1.equals(type2)) {
 										match = false;
 										break;
 									}
