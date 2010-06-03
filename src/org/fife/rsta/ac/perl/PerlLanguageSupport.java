@@ -39,13 +39,18 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 	private PerlParser parser;
 
 	/**
-	 * The root directory of the Perl install.
+	 * The Perl install location currently being used.
 	 */
-	private static File perlInstallLocation;
+	private static File perlInstallLoc;
+
+	/**
+	 * The root directory of the default Perl install.
+	 */
+	private static File DEFAULT_PERL_INSTALL_LOC;
 
 	/**
 	 * Whether to use the system "perldoc" command for function descriptions.
-	 * This parameter is ignored if {@link #perlInstallLocation} is
+	 * This parameter is ignored if {@link #DEFAULT_PERL_INSTALL_LOC} is
 	 * <code>false</code>.
 	 */
 	private static boolean useSystemPerldoc;
@@ -70,10 +75,12 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 				File temp = new File(dirs[i], perlLoc);
 				//System.out.println(temp.getAbsolutePath());
 				if (temp.isFile()) {
-					perlInstallLocation = new File(dirs[i]).getParentFile();
+					DEFAULT_PERL_INSTALL_LOC= new File(dirs[i]).getParentFile();
 					break;
 				}
 			}
+
+			perlInstallLoc = DEFAULT_PERL_INSTALL_LOC;
 
 		}
 
@@ -90,13 +97,26 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 
 
 	/**
-	 * Returns the location at which Perl is installed.
+	 * Returns the location of the first Perl install located on the user's
+	 * PATH.
 	 *
-	 * @return The location at which Perl is installed.
+	 * @return The "default" location at which Perl is installed.
+	 * @see #getPerlInstallLocation()
+	 */
+	public static File getDefaultPerlInstallLocation() {
+		return DEFAULT_PERL_INSTALL_LOC;
+	}
+
+
+	/**
+	 * Returns the Perl install that is being used for syntax checking.
+	 *
+	 * @return The location at which Perl is installed, or <code>null</code>
+	 *         if none is currently selected.
 	 * @see #setPerlInstallLocation(File)
 	 */
 	public static File getPerlInstallLocation() {
-		return perlInstallLocation;
+		return perlInstallLoc;
 	}
 
 
@@ -249,6 +269,18 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 
 
 	/**
+	 * Sets the Perl install to use for syntax checking, perldoc, etc.
+	 *
+	 * @param loc The root directory of the Perl installation, or
+	 *        <code>null</code> for none.
+	 * @see #getPerlInstallLocation()
+	 */
+	public static void setPerlInstallLocation(File loc) {
+		perlInstallLoc = loc;
+	}
+
+
+	/**
 	 * Toggles whether taint mode is enabled when checking syntax.
 	 *
 	 * @param enabled Whether taint mode should be enabled.
@@ -267,17 +299,6 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 	 */
 	public void setWarningsEnabled(boolean enabled) {
 		getParser().setWarningsEnabled(enabled);
-	}
-
-
-	/**
-	 * Sets the location at which Perl is installed.
-	 *
-	 * @param loc The location at which Perl is installed.
-	 * @see #getPerlInstallLocation()
-	 */
-	public static void setPerlInstallLocation(File loc) {
-		perlInstallLocation = loc;
 	}
 
 

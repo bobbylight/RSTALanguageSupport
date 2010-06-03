@@ -20,6 +20,7 @@ import java.awt.Insets;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -93,13 +94,15 @@ public class AboutDialog extends JDialog {
 		SpringLayout sl = new SpringLayout();
 		JPanel temp = new JPanel(sl);
 		JLabel perlLabel = new JLabel("Perl install location:");
-		JTextField perlField = createTextField(PerlLanguageSupport.
-								getPerlInstallLocation().getAbsolutePath());
+		File loc = PerlLanguageSupport.getDefaultPerlInstallLocation();
+		String text = loc==null ? null : loc.getAbsolutePath();
+		JTextField perlField = createTextField(text);
 		JLabel javaLabel = new JLabel("Java home:");
 		String jre = null;
 		JarInfo info = JarInfo.getMainJREJarInfo();
 		if (info!=null) { // Should always be true
-			jre = info.getJarFile().getParentFile().getParentFile().getAbsolutePath();
+			jre = info.getJarFile().getParentFile().getParentFile().
+													getAbsolutePath();
 		}
 		JTextField javaField = createTextField(jre);
 
