@@ -64,7 +64,7 @@ class Util {
 	 * </ul>
 	 */
 	static final Pattern LINK_TAG_MEMBER_PATTERN =
-						Pattern.compile("(?:\\w+\\.)*(?:\\w+)?(?:#\\w+(?:\\([^\\)]*\\))?)?");
+						Pattern.compile("(?:\\w+\\.)*(?:\\w+)?(?:\\#\\w+(?:\\([^\\)]*\\))?)?");
 
 
 	/**
@@ -302,7 +302,13 @@ class Util {
 
 			// No "better" text for link found - just use match.
 			if (text==null) {
-				text = linkContent.substring(match.length());
+				text = linkContent;//.substring(match.length());
+			}
+
+			// Replace the '#' sign, if any.
+			int hash = text.indexOf('#');
+			if (hash>-1) {
+				text = text.substring(0, hash) + "." + text.substring(hash+1);
 			}
 
 			appendTo.append(link).append("'>").append(text);

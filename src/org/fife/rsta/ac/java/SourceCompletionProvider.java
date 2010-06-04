@@ -395,10 +395,10 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 		loadImportCompletions(set, text, cu);
 
 		// Add completions for fully-qualified stuff (e.g. "com.sun.jav")
-		long startTime = System.currentTimeMillis();
+		//long startTime = System.currentTimeMillis();
 		jarManager.addCompletions(this, text, set);
-		long time = System.currentTimeMillis() - startTime;
-		System.out.println("jar completions loaded in: " + time);
+		//long time = System.currentTimeMillis() - startTime;
+		//System.out.println("jar completions loaded in: " + time);
 
 		// Loop through all types declared in this source, and provide
 		// completions depending on in what type, method, etc. the caret is in.
@@ -507,7 +507,7 @@ public File getSourceLocForClass(String className) {
 
 		// Get completions for all fields and methods of all type declarations.
 
-		long startTime = System.currentTimeMillis();
+		//long startTime = System.currentTimeMillis();
 		int caret = comp.getCaretPosition();
 		//List temp = new ArrayList();
 		int start, end;
@@ -589,8 +589,8 @@ public File getSourceLocForClass(String className) {
 
 		}
 
-		long time = System.currentTimeMillis() - startTime;
-		System.out.println("methods/fields/localvars loaded in: " + time);
+		//long time = System.currentTimeMillis() - startTime;
+		//System.out.println("methods/fields/localvars loaded in: " + time);
 
 	}
 
@@ -794,7 +794,7 @@ public File getSourceLocForClass(String className) {
 			return;
 		}
 
-		long startTime = System.currentTimeMillis();
+		//long startTime = System.currentTimeMillis();
 
 		String pkgName = cu.getPackageName();
 		loadCompletionsForImport(set, JAVA_LANG_PACKAGE, pkgName);
@@ -807,8 +807,8 @@ public File getSourceLocForClass(String className) {
 		}
 //		Collections.sort(completions);
 
-		long time = System.currentTimeMillis() - startTime;
-		System.out.println("imports loaded in: " + time);
+		//long time = System.currentTimeMillis() - startTime;
+		//System.out.println("imports loaded in: " + time);
 
 	}
 
