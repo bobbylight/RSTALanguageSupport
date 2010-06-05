@@ -515,6 +515,7 @@ class Util {
 			try {
 				Scanner s = new Scanner(r);
 				cu = new ASTFactory().getCompilationUnit(entryName, s);
+				//System.out.println("DEBUG: cu: " + cu);
 			} finally {
 				r.close();
 			}

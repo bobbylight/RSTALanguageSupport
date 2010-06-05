@@ -10,7 +10,10 @@
  */
 package org.fife.rsta.ac.java;
 
+import java.io.BufferedInputStream;
 import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -168,6 +171,37 @@ System.out.println("Appending: " + pkgNames[j]);
 
 
 	private ClassFile createClassFile(String entryName) throws IOException {
+		File binLoc = info.getJarFile();
+		if (binLoc.isFile()) {
+			return createClassFileJar(entryName);
+		}
+		else if (binLoc.isDirectory()) {
+			return createClassFileDirectory(entryName);
+		}
+		return null;
+	}
+
+
+	private ClassFile createClassFileDirectory(String entryName)
+														throws IOException {
+
+		File file = new File(info.getJarFile(), entryName);
+		if (!file.isFile()) {
+			System.err.println("ERROR: Invalid class file: " +
+											file.getAbsolutePath());
+			return null;
+		}
+
+		DataInputStream in = new DataInputStream(
+					new BufferedInputStream(new FileInputStream(file)));
+		ClassFile cf = new ClassFile(in);
+		in.close();
+		return cf;
+
+	}
+
+
+	private ClassFile createClassFileJar(String entryName) throws IOException {
 		JarFile jar = new JarFile(info.getJarFile());
 		try {
 			JarEntry entry = (JarEntry)jar.getEntry(entryName);
@@ -326,12 +360,83 @@ System.out.println("Appending: " + pkgNames[j]);
 	}
 
 
+	private void loadCompletions() throws IOException {
+		File binLoc = info.getJarFile();
+		// Check explicitly for directory and file.  If the specified
+		// location does not exist, we don't want to give an error, just
+		// do nothing.
+		if (binLoc.isDirectory()) {
+			loadCompletionsDirectory();
+		}
+		else if (binLoc.isFile()) {
+			loadCompletionsJarFile();
+		}
+	}
+
+
+	/**
+	 * Loads all classes, enums, and interfaces from a directory of class
+	 * files.
+	 *
+	 * @throws IOException If an IO error occurs.
+	 */
+	private void loadCompletionsDirectory() throws IOException {
+		File root = info.getJarFile();
+		loadCompletionsDirectoryImpl(root, null);
+	}
+
+
+	/**
+	 * Does the dirty-work of finding all class files in a directory tree.
+	 *
+	 * @param dir The directory to scan.
+	 * @param pkg The package name scanned so far, in the form
+	 *        "<code>com/company/pkgname</code>"...
+	 * @throws IOException If an IO error occurs.
+	 */
+	private void loadCompletionsDirectoryImpl(File dir, String pkg)
+											throws IOException {
+
+		File[] children = dir.listFiles();
+		TreeMap m = null;
+
+		for (int i=0; i<children.length; i++) {
+			File child = children[i];
+			if (child.isFile() && child.getName().endsWith(".class")) {
+				if (pkg!=null) { // will be null the first time through
+					if (m==null) { // Lazily drill down to pkg map node
+						m = packageMap;
+						String[] items = Util.splitOnChar(pkg, '/');
+						for (int j=0; j<items.length; j++) {
+							TreeMap submap = (TreeMap)m.get(items[j]);
+							if (submap==null) {
+								submap = new TreeMap();
+								m.put(items[j], submap);
+							}
+							m = submap;
+						}
+					}
+				}
+				String className = child.getName().
+								substring(0, child.getName().length()-6);
+				m.put(className, null);
+			}
+			else if (child.isDirectory()) {
+				String subpkg = pkg==null ? child.getName() :
+										(pkg + "/" + child.getName());
+				loadCompletionsDirectoryImpl(child, subpkg);
+			}
+		}
+
+	}
+
+
 	/**
 	 * Loads all classes, interfaces, and enums from the jar.
 	 *
 	 * @throws IOException If an IO error occurs.
 	 */
-	private void loadCompletions() throws IOException {
+	private void loadCompletionsJarFile() throws IOException {
 
 		JarFile jar = new JarFile(info.getJarFile());
 

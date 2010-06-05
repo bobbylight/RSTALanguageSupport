@@ -11,6 +11,7 @@
 package org.fife.rsta.ac.sh;
 
 import java.io.File;
+import javax.swing.ListCellRenderer;
 
 import org.fife.rsta.ac.AbstractLanguageSupport;
 import org.fife.ui.autocomplete.AutoCompletion;
@@ -48,6 +49,14 @@ public class ShellLanguageSupport extends AbstractLanguageSupport {
 
 
 	/**
+	 * {@inheritDoc}
+	 */
+	protected ListCellRenderer createDefaultCompletionCellRenderer() {
+		return new CompletionCellRenderer();
+	}
+
+
+	/**
 	 * Lazily creates the shared completion provider instance for sh scripts.
 	 *
 	 * @return The completion provider.
@@ -81,11 +90,7 @@ public class ShellLanguageSupport extends AbstractLanguageSupport {
 	public void install(RSyntaxTextArea textArea) {
 
 		ShellCompletionProvider provider = getProvider();
-		AutoCompletion ac = new AutoCompletion(provider);
-		ac.setListCellRenderer(new CompletionCellRenderer());
-		ac.setAutoCompleteEnabled(isAutoCompleteEnabled());
-		ac.setParameterAssistanceEnabled(isParameterAssistanceEnabled());
-		ac.setShowDescWindow(getShowDescWindow());
+		AutoCompletion ac = createAutoCompletion(provider);
 		ac.install(textArea);
 		installImpl(textArea, ac);
 

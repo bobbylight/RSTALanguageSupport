@@ -13,21 +13,13 @@ package org.fife.rsta.ac.java;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Iterator;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-
 import javax.swing.Icon;
 
 import org.fife.rsta.ac.java.classreader.AccessFlags;
 import org.fife.rsta.ac.java.classreader.ClassFile;
 import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
 import org.fife.rsta.ac.java.rjc.ast.TypeDeclaration;
-import org.fife.rsta.ac.java.rjc.lexer.Scanner;
-import org.fife.rsta.ac.java.rjc.parser.ASTFactory;
 import org.fife.ui.autocomplete.CompletionProvider;
 
 
@@ -114,11 +106,19 @@ class ClassCompletion extends AbstractJavaSourceCompletion {
 
 		if (loc!=null) {
 
-			if (loc.isFile() && loc.getName().endsWith(".zip")) {
-				try {
-					return getSummaryFromSourceZip(loc);
-				} catch (IOException ioe) {
-					ioe.printStackTrace();
+			CompilationUnit cu = Util.getCompilationUnitFromDisk(loc, cf);
+			if (cu!=null) {
+				for (Iterator i=cu.getTypeDeclarationIterator(); i.hasNext(); ) {
+					TypeDeclaration td = (TypeDeclaration)i.next();
+					String typeName = td.getName();
+					// Avoid inner classes, etc.
+					if (typeName.equals(cf.getClassName(false))) {
+						String summary = td.getDocComment();
+						// Be cautious - might be no doc comment (or a bug?)
+						if (summary!=null && summary.startsWith("/**")) {
+							return Util.docCommentToHtml(summary);
+						}
+					}
 				}
 			}
 
@@ -128,41 +128,6 @@ class ClassCompletion extends AbstractJavaSourceCompletion {
 		return cf.getClassName(true);
 
 	}
-
-private String getSummaryFromSourceZip(File zip) throws IOException {
-
-	String summary = null;
-
-	ZipFile zipFile = new ZipFile(zip);
-	String entryName = cf.getClassName(true).replaceAll("\\.", "/");
-	entryName += ".java";
-	//System.out.println("DEBUG: entry name: " + entryName);
-	ZipEntry entry = zipFile.getEntry(entryName);
-
-	if (entry!=null) {
-		InputStream in = zipFile.getInputStream(entry);
-		Scanner s = new Scanner(new InputStreamReader(in));
-		CompilationUnit cu = new ASTFactory().getCompilationUnit(entryName, s);
-		for (Iterator i=cu.getTypeDeclarationIterator(); i.hasNext(); ) {
-			TypeDeclaration td = (TypeDeclaration)i.next();
-			String typeName = td.getName();
-			// Avoid inner classes, etc.
-			if (typeName.equals(cf.getClassName(false))) {
-				summary = td.getDocComment();
-				// Be cautious - might be no doc comment (or a bug?)
-				if (summary!=null && summary.startsWith("/**")) {
-					summary = Util.docCommentToHtml(summary);
-					break;
-				}
-			}
-		}
-	}
-
-	zipFile.close(); // Closes input streams from getInputStream()
-
-	return summary;
-
-}
 
 
 	public String getToolTipText() {

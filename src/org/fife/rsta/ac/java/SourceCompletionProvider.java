@@ -88,6 +88,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 		}
 		this.jarManager = jarManager;
 		setParameterizedCompletionParams('(', ", ", ')');
+		setAutoActivationRules(false, "."); // Default - only activate after '.'
 	}
 
 

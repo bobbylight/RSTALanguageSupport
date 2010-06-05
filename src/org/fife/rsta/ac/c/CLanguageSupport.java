@@ -44,9 +44,7 @@ public class CLanguageSupport extends AbstractLanguageSupport {
 	 * {@inheritDoc}
 	 */
 	protected ListCellRenderer createDefaultCompletionCellRenderer() {
-		CCellRenderer r = new CCellRenderer();
-		//r.setAlternateBackground(null);
-		return r;
+		return new CCellRenderer();
 	}
 
 
@@ -64,11 +62,7 @@ public class CLanguageSupport extends AbstractLanguageSupport {
 	public void install(RSyntaxTextArea textArea) {
 
 		CCompletionProvider provider = getProvider();
-		AutoCompletion ac = new AutoCompletion(provider);
-		ac.setListCellRenderer(getDefaultCompletionCellRenderer());
-		ac.setAutoCompleteEnabled(isAutoCompleteEnabled());
-		ac.setParameterAssistanceEnabled(isParameterAssistanceEnabled());
-		ac.setShowDescWindow(getShowDescWindow());
+		AutoCompletion ac = createAutoCompletion(provider);
 		ac.install(textArea);
 		installImpl(textArea, ac);
 

@@ -10,6 +10,8 @@
  */
 package org.fife.rsta.ac.html;
 
+import javax.swing.ListCellRenderer;
+
 import org.fife.rsta.ac.AbstractLanguageSupport;
 import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -33,8 +35,17 @@ public class HtmlLanguageSupport extends AbstractLanguageSupport {
 	 * Constructor.
 	 */
 	public HtmlLanguageSupport() {
+		setAutoActivationEnabled(true);
 		setParameterAssistanceEnabled(false);
 		setShowDescWindow(true);
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	protected ListCellRenderer createDefaultCompletionCellRenderer() {
+		return new HtmlCellRenderer();
 	}
 
 
@@ -52,11 +63,7 @@ public class HtmlLanguageSupport extends AbstractLanguageSupport {
 	public void install(RSyntaxTextArea textArea) {
 
 		HtmlCompletionProvider provider = getProvider();
-		AutoCompletion ac = new AutoCompletion(provider);
-		ac.setListCellRenderer(new HtmlCellRenderer());
-		ac.setAutoCompleteEnabled(isAutoCompleteEnabled());
-		ac.setParameterAssistanceEnabled(isParameterAssistanceEnabled());
-		ac.setShowDescWindow(getShowDescWindow());
+		AutoCompletion ac = createAutoCompletion(provider);
 		ac.install(textArea);
 		installImpl(textArea, ac);
 

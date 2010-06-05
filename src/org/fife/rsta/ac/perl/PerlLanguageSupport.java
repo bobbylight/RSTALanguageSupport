@@ -11,6 +11,7 @@
 package org.fife.rsta.ac.perl;
 
 import java.io.File;
+import javax.swing.ListCellRenderer;
 
 import org.fife.rsta.ac.AbstractLanguageSupport;
 import org.fife.rsta.ac.IOUtil;
@@ -93,6 +94,16 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 	public PerlLanguageSupport() {
 		setParameterAssistanceEnabled(true);
 		setShowDescWindow(true);
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	protected ListCellRenderer createDefaultCompletionCellRenderer() {
+		CompletionCellRenderer ccr = new CompletionCellRenderer();
+		ccr.setShowTypes(false);
+		return ccr;
 	}
 
 
@@ -210,13 +221,7 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 	public void install(RSyntaxTextArea textArea) {
 
 		PerlCompletionProvider provider = getProvider();
-		AutoCompletion ac = new AutoCompletion(provider);
-		CompletionCellRenderer ccr = new CompletionCellRenderer();
-		ccr.setShowTypes(false);
-		ac.setListCellRenderer(ccr);
-		ac.setAutoCompleteEnabled(isAutoCompleteEnabled());
-		ac.setParameterAssistanceEnabled(isParameterAssistanceEnabled());
-		ac.setShowDescWindow(getShowDescWindow());
+		AutoCompletion ac = createAutoCompletion(provider);
 		ac.install(textArea);
 		installImpl(textArea, ac);
 

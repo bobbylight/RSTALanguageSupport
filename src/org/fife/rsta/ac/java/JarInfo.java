@@ -184,7 +184,7 @@ public class JarInfo implements Comparable, Cloneable {
 	 * @see #getJarFile()
 	 */
 	public void setJarFile(File jarFile) {
-		if (jarFile==null || !jarFile.isFile()) {
+		if (jarFile==null || !jarFile.exists()) {
 			String name = jarFile==null ? "null" : jarFile.getAbsolutePath();
 			throw new IllegalArgumentException("Jar does not exist: " + name);
 		}

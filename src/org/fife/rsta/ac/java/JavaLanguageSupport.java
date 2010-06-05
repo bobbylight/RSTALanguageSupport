@@ -48,6 +48,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 	public JavaLanguageSupport() {
 		parserToInfoMap = new HashMap();
 		jarManager = new JarManager();
+		setAutoActivationEnabled(true);
 		setParameterAssistanceEnabled(true);
 		setShowDescWindow(true);
 	}
@@ -105,9 +106,12 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 	public void install(RSyntaxTextArea textArea) {
 
 		JavaCompletionProvider p = new JavaCompletionProvider(jarManager);
+		// Can't use createAutoCompletion(), as Java's is "special."
 		AutoCompletion ac = new JavaAutoCompletion(p, textArea);
 		ac.setListCellRenderer(new JavaCellRenderer());
 		ac.setAutoCompleteEnabled(isAutoCompleteEnabled());
+		ac.setAutoActivationEnabled(isAutoActivationEnabled());
+		ac.setAutoActivationDelay(getAutoActivationDelay());
 		ac.setParameterAssistanceEnabled(isParameterAssistanceEnabled());
 		ac.setShowDescWindow(getShowDescWindow());
 		ac.install(textArea);

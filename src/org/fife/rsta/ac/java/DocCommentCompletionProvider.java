@@ -68,6 +68,8 @@ class DocCommentCompletionProvider extends DefaultCompletionProvider {
 		addCompletion(new JavaShorthandCompletion(this, "true", "<code>true</code>", "<code>true</code>"));
 		addCompletion(new JavaShorthandCompletion(this, "false", "<code>false</code>", "<code>false</code>"));
 
+		setAutoActivationRules(false, "@");
+
 	}
 
 

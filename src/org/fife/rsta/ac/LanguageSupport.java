@@ -40,6 +40,18 @@ public interface LanguageSupport {
 
 
 	/**
+	 * Returns the delay between when the user types a character and when the
+	 * code completion popup should automatically appear (if applicable).
+	 * This parameter is only honored if {@link #isAutoActivationEnabled()}
+	 * returns <code>true</code>.
+	 * 
+	 * @return The delay, in milliseconds.
+	 * @see #setAutoActivationDelay(int)
+	 */
+	public int getAutoActivationDelay();
+
+
+	/**
 	 * Returns the default list cell renderer to install for all text areas
 	 * with this language support installed.
 	 *
@@ -57,6 +69,20 @@ public interface LanguageSupport {
 	 * @see #setShowDescWindow(boolean)
 	 */
 	public boolean getShowDescWindow();
+
+
+	/**
+	 * Returns whether auto-activation is enabled (that is, whether the
+	 * completion popup will automatically appear after a delay when the user
+	 * types an appropriate character).  Note that this parameter will be
+	 * ignored if auto-completion is disabled.
+	 *
+	 * @return Whether auto-activation is enabled.
+	 * @see #setAutoActivationEnabled(boolean)
+	 * @see #getAutoActivationDelay()
+	 * @see #isAutoCompleteEnabled()
+	 */
+	public boolean isAutoActivationEnabled();
 
 
 	/**
@@ -89,6 +115,29 @@ public interface LanguageSupport {
 	 * @see #setParameterAssistanceEnabled(boolean)
 	 */
 	public boolean isParameterAssistanceEnabled();
+
+
+	/**
+	 * Sets the delay between when the user types a character and when the
+	 * code completion popup should automatically appear (if applicable).
+	 * This parameter is only honored if {@link #isAutoActivationEnabled()}
+	 * returns <code>true</code>.
+	 *
+	 * @param ms The delay, in milliseconds.  This should be greater than zero.
+	 * @see #getAutoActivationDelay()
+	 */
+	public void setAutoActivationDelay(int ms);
+
+
+	/**
+	 * Toggles whether auto-activation is enabled.  Note that auto-activation
+	 * also depends on auto-completion itself being enabled.
+	 *
+	 * @param enabled Whether auto-activation is enabled.
+	 * @see #isAutoActivationEnabled()
+	 * @see #setAutoActivationDelay(int)
+	 */
+	public void setAutoActivationEnabled(boolean enabled);
 
 
 	/**

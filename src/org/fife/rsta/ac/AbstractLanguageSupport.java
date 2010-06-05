@@ -18,6 +18,7 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.ListCellRenderer;
 
 import org.fife.ui.autocomplete.AutoCompletion;
+import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 
@@ -44,6 +45,20 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	private boolean autoCompleteEnabled;
 
 	/**
+	 * Whether auto-activation for completion choices is enabled for this
+	 * language.  Note that this parameter only matters if
+	 * {@link #autoCompleteEnabled} is <code>true</code>.
+	 */
+	private boolean autoActivationEnabled;
+
+	/**
+	 * The delay for auto-activation, in milliseconds.  This parameter is only
+	 * honored if both {@link #autoCompleteEnabled} and
+	 * {@link #autoActivationEnabled} are <code>true</code>.
+	 */
+	private int autoActivationDelay;
+
+	/**
 	 * Whether parameter assistance should be enabled for this language.
 	 */
 	private boolean parameterAssistanceEnabled;
@@ -67,6 +82,27 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 		setDefaultCompletionCellRenderer(null); // Force default
 		textAreaToAutoCompletion = new HashMap();
 		autoCompleteEnabled = true;
+		autoActivationEnabled = false;
+		autoActivationDelay = 300;
+	}
+
+
+	/**
+	 * Creates an auto-completion instance pre-configured and usable by
+	 * most <code>LanguageSupport</code>s.
+	 *
+	 * @param p The completion provider.
+	 * @return The auto-completion instance.
+	 */
+	protected AutoCompletion createAutoCompletion(CompletionProvider p) {
+		AutoCompletion ac = new AutoCompletion(p);
+		ac.setListCellRenderer(getDefaultCompletionCellRenderer());
+		ac.setAutoCompleteEnabled(isAutoCompleteEnabled());
+		ac.setAutoActivationEnabled(isAutoActivationEnabled());
+		ac.setAutoActivationDelay(getAutoActivationDelay());
+		ac.setParameterAssistanceEnabled(isParameterAssistanceEnabled());
+		ac.setShowDescWindow(getShowDescWindow());
+		return ac;
 	}
 
 
@@ -79,6 +115,14 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	 */
 	protected ListCellRenderer createDefaultCompletionCellRenderer() {
 		return new DefaultListCellRenderer();
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public int getAutoActivationDelay() {
+		return autoActivationDelay;
 	}
 
 
@@ -138,6 +182,14 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	public boolean isAutoActivationEnabled() {
+		return autoActivationEnabled;
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean isAutoCompleteEnabled() {
 		return autoCompleteEnabled;
 	}
@@ -148,6 +200,37 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	 */
 	public boolean isParameterAssistanceEnabled() {
 		return parameterAssistanceEnabled;
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void setAutoActivationDelay(int ms) {
+		ms = Math.max(0, ms);
+		if (ms!=autoActivationDelay) {
+			autoActivationDelay = ms;
+			Iterator i=textAreaToAutoCompletion.values().iterator();
+			while (i.hasNext()) {
+				AutoCompletion ac = (AutoCompletion)i.next();
+				ac.setAutoActivationDelay(autoActivationDelay);
+			}
+		}
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void setAutoActivationEnabled(boolean enabled) {
+		if (enabled!=autoActivationEnabled) {
+			autoActivationEnabled = enabled;
+			Iterator i=textAreaToAutoCompletion.values().iterator();
+			while (i.hasNext()) {
+				AutoCompletion ac = (AutoCompletion)i.next();
+				ac.setAutoActivationEnabled(enabled);
+			}
+		}
 	}
 
 

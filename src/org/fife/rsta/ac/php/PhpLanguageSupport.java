@@ -10,6 +10,8 @@
  */
 package org.fife.rsta.ac.php;
 
+import javax.swing.ListCellRenderer;
+
 import org.fife.rsta.ac.AbstractLanguageSupport;
 import org.fife.rsta.ac.html.HtmlCellRenderer;
 import org.fife.ui.autocomplete.AutoCompletion;
@@ -40,6 +42,14 @@ public class PhpLanguageSupport extends AbstractLanguageSupport {
 
 
 	/**
+	 * {@inheritDoc}
+	 */
+	protected ListCellRenderer createDefaultCompletionCellRenderer() {
+		return new HtmlCellRenderer();
+	}
+
+
+	/**
 	 * Lazily creates the shared completion provider instance for PHP.
 	 *
 	 * @return The completion provider.
@@ -58,11 +68,7 @@ public class PhpLanguageSupport extends AbstractLanguageSupport {
 	public void install(RSyntaxTextArea textArea) {
 
 		PhpCompletionProvider provider = getProvider();
-		AutoCompletion ac = new AutoCompletion(provider);
-		ac.setListCellRenderer(new HtmlCellRenderer());
-		ac.setAutoCompleteEnabled(isAutoCompleteEnabled());
-		ac.setParameterAssistanceEnabled(isParameterAssistanceEnabled());
-		ac.setShowDescWindow(getShowDescWindow());
+		AutoCompletion ac = createAutoCompletion(provider);
 		ac.install(textArea);
 		installImpl(textArea, ac);
 

@@ -83,6 +83,8 @@ public class HtmlCompletionProvider extends DefaultCompletionProvider {
 			}
 		}
 
+		setAutoActivationRules(false, "<");
+
 	}
 
 
@@ -365,6 +367,37 @@ public class HtmlCompletionProvider extends DefaultCompletionProvider {
 
 		return inside==1;
 
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean isAutoActivateOkay(JTextComponent tc) {
+
+		boolean okay = super.isAutoActivateOkay(tc);
+
+		if (okay) {
+
+			RSyntaxTextArea textArea = (RSyntaxTextArea)tc;
+			int dot = textArea.getCaretPosition();
+
+			try {
+
+				int line = textArea.getLineOfOffset(dot);
+				Token list = textArea.getTokenListForLine(line);
+
+				if (list!=null) { // Always true?
+					return !insideMarkupTag(textArea, list, line, dot);
+				}
+
+			} catch (BadLocationException ble) {
+				ble.printStackTrace();
+			}
+
+		}
+
+		return okay;
 	}
 
 
