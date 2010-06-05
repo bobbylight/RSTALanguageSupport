@@ -36,6 +36,7 @@ public class PhpLanguageSupport extends AbstractLanguageSupport {
 	 * Constructor.
 	 */
 	public PhpLanguageSupport() {
+		setAutoActivationEnabled(true);
 		setParameterAssistanceEnabled(true);
 		setShowDescWindow(true);
 	}

@@ -742,7 +742,7 @@ public File getSourceLocForClass(String className) {
 			CodeBlock child = block.getChildBlock(i);
 			if (child.containsOffset(offs)) {
 				loadCompletionsForCaretPositionQualifiedCodeBlock(cu, retVal,
-						td, block, prefix, offs);
+						td, child, prefix, offs);
 				break; // All other blocks are past this one
 			}
 			else if (child.getNameEndOffset()<=offs) {

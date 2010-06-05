@@ -237,4 +237,12 @@ public class PhpCompletionProvider extends HtmlCompletionProvider {
 	}
 
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean isAutoActivateOkay(JTextComponent tc) {
+		return inPhpBlock(tc) ? false : super.isAutoActivateOkay(tc);
+	}
+
+
 }
