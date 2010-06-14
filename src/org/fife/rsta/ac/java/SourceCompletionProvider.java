@@ -512,7 +512,6 @@ public File getSourceLocForClass(String className) {
 		int caret = comp.getCaretPosition();
 		//List temp = new ArrayList();
 		int start, end;
-		String pkg = cu.getPackageName();
 
 		int lastDot = alreadyEntered.lastIndexOf('.');
 		boolean qualified = lastDot>-1;
@@ -523,65 +522,10 @@ public File getSourceLocForClass(String className) {
 			TypeDeclaration td = (TypeDeclaration)i.next();
 			start = td.getBodyStartOffset();
 			end = td.getBodyEndOffset();
-			Method currentMethod = null;
 
 			if (caret>start && caret<=end) {
-
-				// Get completions for this class's methods, fields and local
-				// vars.  Do this before checking super classes so that, if
-				// we overrode anything, we get the "newest" version.
-				String typeName = td.getName();
-				for (Iterator j=td.getMemberIterator(); j.hasNext(); ) {
-					Member m = (Member)j.next();
-					if (m instanceof Method) {
-						Method method = (Method)m;
-						if (prefix==null || THIS.equals(prefix)) {
-							retVal.add(new MethodCompletion(this, method, typeName));
-						}
-						if (caret>=method.getBodyStartOffset() && caret<method.getBodyEndOffset()) {
-							currentMethod = method;
-							// Don't add completions for local vars if there is
-							// a prefix, even "this".
-							if (prefix==null) {
-								addLocalVarCompletions(retVal, method, caret);
-							}
-						}
-					}
-					else if (m instanceof Field) {
-						if (prefix==null || THIS.equals(prefix)) {
-							Field field = (Field)m;
-							retVal.add(new FieldCompletion(this, field, typeName));
-						}
-					}
-				}
-
-				// Completions for superclass methods.
-				// TODO: Implement me better
-				if (prefix==null || THIS.equals(prefix)) {
-					if (td instanceof NormalClassDeclaration) {
-						NormalClassDeclaration ncd = (NormalClassDeclaration)td;
-						Type extended = ncd.getExtendedType();
-						if (extended!=null) { // e.g., not java.lang.Object
-							String superClassName = extended.toString();
-							ClassFile cf = getClassFileFor(cu, pkg, superClassName);
-							if (cf!=null) {
-								addCompletionsForExtendedClass(retVal, cu, cf, pkg);
-							}
-							else {
-								System.out.println("[DEBUG]: Couldn't find ClassFile for: " + superClassName);
-							}
-						}
-					}
-				}
-
-				// Completions for methods of fields, return values of methods,
-				// static fields/methods, etc.
-				if (prefix!=null && !THIS.equals(prefix)) {
-					loadCompletionsForCaretPositionQualified(cu,
-							alreadyEntered, retVal,
-							td, currentMethod, prefix, caret);
-				}
-
+				loadCompletionsForCaretPosition(cu, comp, alreadyEntered,
+									retVal, td, prefix, caret);
 			}
 
 			else if (caret<start) {
@@ -592,6 +536,99 @@ public File getSourceLocForClass(String className) {
 
 		//long time = System.currentTimeMillis() - startTime;
 		//System.out.println("methods/fields/localvars loaded in: " + time);
+
+	}
+
+
+	/**
+	 * Loads completions based on the current caret location in the source.
+	 * This method is called when the caret is found to be in a specific type
+	 * declaration.  This method checks if the caret is in a child type
+	 * declaration first, then adds completions for itself next.
+	 * 
+	 * <ul>
+	 *   <li>If the caret is anywhere in a class, the names of all methods and
+	 *       fields in the class are loaded.  Methods and fields in super
+	 *       classes are also loaded.  TODO: Get super methods/fields added
+	 *       correctly by access!
+	 *   <li>If the caret is in a field, local variables currently accessible
+	 *       are loaded.
+	 * </ul>
+	 *
+	 * @param cu
+	 * @param comp
+	 * @param alreadyEntered
+	 * @param retVal
+	 */
+	private void loadCompletionsForCaretPosition(CompilationUnit cu,
+			JTextComponent comp, String alreadyEntered, Set retVal,
+			TypeDeclaration td, String prefix, int caret) {
+
+		// Do any child types first, so if any vars, etc. have duplicate names,
+		// we pick up the one "closest" to us first.
+		for (int i=0; i<td.getChildTypeCount(); i++) {
+			TypeDeclaration childType = td.getChildType(i);
+			loadCompletionsForCaretPosition(cu, comp, alreadyEntered, retVal,
+					childType, prefix, caret);
+		}
+
+		Method currentMethod = null;
+
+		// Get completions for this class's methods, fields and local
+		// vars.  Do this before checking super classes so that, if
+		// we overrode anything, we get the "newest" version.
+		String pkg = cu.getPackageName();
+		String typeName = td.getName();
+		for (Iterator j=td.getMemberIterator(); j.hasNext(); ) {
+			Member m = (Member)j.next();
+			if (m instanceof Method) {
+				Method method = (Method)m;
+				if (prefix==null || THIS.equals(prefix)) {
+					retVal.add(new MethodCompletion(this, method, typeName));
+				}
+				if (caret>=method.getBodyStartOffset() && caret<method.getBodyEndOffset()) {
+					currentMethod = method;
+					// Don't add completions for local vars if there is
+					// a prefix, even "this".
+					if (prefix==null) {
+						addLocalVarCompletions(retVal, method, caret);
+					}
+				}
+			}
+			else if (m instanceof Field) {
+				if (prefix==null || THIS.equals(prefix)) {
+					Field field = (Field)m;
+					retVal.add(new FieldCompletion(this, field, typeName));
+				}
+			}
+		}
+
+		// Completions for superclass methods.
+		// TODO: Implement me better
+		if (prefix==null || THIS.equals(prefix)) {
+			if (td instanceof NormalClassDeclaration) {
+				NormalClassDeclaration ncd = (NormalClassDeclaration)td;
+				Type extended = ncd.getExtendedType();
+				if (extended!=null) { // e.g., not java.lang.Object
+					String superClassName = extended.toString();
+					ClassFile cf = getClassFileFor(cu, pkg, superClassName);
+					if (cf!=null) {
+						addCompletionsForExtendedClass(retVal, cu, cf, pkg);
+					}
+					else {
+						System.out.println("[DEBUG]: Couldn't find ClassFile for: " + superClassName);
+					}
+				}
+			}
+		}
+
+		// Completions for methods of fields, return values of methods,
+		// static fields/methods, etc.
+		if (prefix!=null && !THIS.equals(prefix)) {
+			loadCompletionsForCaretPositionQualified(cu,
+					alreadyEntered, retVal,
+					td, currentMethod, prefix, caret);
+		}
 
 	}
 

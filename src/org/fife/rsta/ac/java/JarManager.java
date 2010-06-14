@@ -39,12 +39,19 @@ public class JarManager {
 	 */
 	private List jars;
 
+	/**
+	 * Whether to check datestamps on jars/directories when completion
+	 * information is requested.
+	 */
+	private static boolean checkModified;
+
 
 	/**
 	 * Constructor.
 	 */
 	public JarManager() {
 		jars = new ArrayList();
+		setCheckModifiedDatestamps(true);
 	}
 
 
@@ -117,6 +124,26 @@ public class JarManager {
 	 */
 	public void clearJars() {
 		jars.clear();
+	}
+
+
+	/**
+	 * Returns whether the "last modified" time stamp on jars and class
+	 * directories should be checked whenever completions are requested, and
+	 * if the jar/directory has been modified since the last time, reload any
+	 * cached class file data.  This allows for code completion to update
+	 * whenever dependencies are rebuilt, but has the side effect of increased
+	 * file I/O.  By default this option is enabled; if you somehow find the
+	 * file I/O to be a bottleneck (perhaps accessing jars over a slow NFS
+	 * mount), you can disable this option.
+	 *
+	 * @param check Whether to check if any jars/directories have been
+	 *        modified since the last access, and clear any cached completion
+	 *        information if so.
+	 * @see #setCheckModifiedDatestamps(boolean)
+	 */
+	public static boolean getCheckModifiedDatestamps() {
+		return checkModified;
 	}
 
 
@@ -329,6 +356,26 @@ public File getSourceLocForClass(String className) {
 			}
 		}
 		return false;
+	}
+
+
+	/**
+	 * Sets whether the "last modified" time stamp on jars and class
+	 * directories should be checked whenever completions are requested, and
+	 * if the jar/directory has been modified since the last time, reload any
+	 * cached class file data.  This allows for code completion to update
+	 * whenever dependencies are rebuilt, but has the side effect of increased
+	 * file I/O.  By default this option is enabled; if you somehow find the
+	 * file I/O to be a bottleneck (perhaps accessing jars over a slow NFS
+	 * mount), you can disable this option.
+	 *
+	 * @param check Whether to check if any jars/directories have been
+	 *        modified since the last access, and clear any cached completion
+	 *        information if so.
+	 * @see #getCheckModifiedDatestamps()
+	 */
+	public static void setCheckModifiedDatestamps(boolean check) {
+		checkModified = check;
 	}
 
 

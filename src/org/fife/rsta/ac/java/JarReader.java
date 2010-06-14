@@ -41,6 +41,7 @@ class JarReader {
 
 	private JarInfo info;
 	private TreeMap packageMap;
+	private long lastModified;
 
 
 	/**
@@ -66,6 +67,8 @@ class JarReader {
 	 */
 	public void addCompletions(CompletionProvider provider, String[] pkgNames,
 								Set addTo) {
+
+		checkLastModified();
 
 		TreeMap map = packageMap;
 		for (int i=0; i<pkgNames.length-1; i++) {
@@ -114,7 +117,6 @@ class JarReader {
 					StringBuffer sb = new StringBuffer();
 					for (int j=0; j<pkgNames.length-1; j++) {
 						sb.append(pkgNames[j]).append('.');
-System.out.println("Appending: " + pkgNames[j]);
 					}
 					sb.append(obj.toString());
 					String text = sb.toString();//obj.toString();
@@ -124,6 +126,52 @@ System.out.println("Appending: " + pkgNames[j]);
 			}
 
 		}
+
+	}
+
+
+	/**
+	 * Checks whether the jar or class file directory has been modified since
+	 * the last use of this reader.  If it has, then any cached
+	 * <code>ClassFile</code>s are cleared, in case any classes have been
+	 * updated.
+	 */
+	private void checkLastModified() {
+
+		long newLastModified = info.getJarFile().lastModified();
+		if (newLastModified!=0 && newLastModified!=lastModified) {
+			int count = 0;
+			count = clearClassFiles(packageMap);
+			System.out.println("DEBUG: Cleared " + count + " cached ClassFiles");
+			lastModified = newLastModified;
+		}
+
+	}
+
+
+	/**
+	 * Removes all <code>ClassFile</code>s from a map.
+	 *
+	 * @param map The map.
+	 * @return The number of class file entries removed.
+	 */
+	private int clearClassFiles(Map map) {
+
+		int clearedCount = 0;
+
+		for (Iterator i=map.entrySet().iterator(); i.hasNext(); ) {
+			Map.Entry entry = (Map.Entry)i.next();
+			Object value = entry.getValue();
+			if (value instanceof ClassFile) {
+				entry.setValue(null);
+				clearedCount++;
+			}
+			else if (value instanceof Map) {
+				clearedCount += clearClassFiles((Map)value);
+			}
+		}
+
+		return clearedCount;
 
 	}
 
@@ -383,6 +431,7 @@ System.out.println("Appending: " + pkgNames[j]);
 	private void loadCompletionsDirectory() throws IOException {
 		File root = info.getJarFile();
 		loadCompletionsDirectoryImpl(root, null);
+		lastModified = root.lastModified();
 	}
 
 
@@ -466,6 +515,8 @@ System.out.println("Appending: " + pkgNames[j]);
 		} finally {
 			jar.close();
 		}
+
+		lastModified = info.getJarFile().lastModified();
 
 	}
 
