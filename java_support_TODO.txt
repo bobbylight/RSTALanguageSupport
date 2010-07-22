@@ -1,8 +1,5 @@
 ***** Code Completion *****
-1. Completions for static members (e.g. "String.<ctrl+space>").
-2. End file with unterminated doc. comment - get this:
-     java.io.IOException: Expected identifier, found: [TokenImpl: type=16777235; lexeme="/"; line=2; col=1; offs=29; invalid=false]
-5. Make "prefix" go more than "1 level deep" when getting completions at caret
+1. Make "prefix" go more than "1 level deep" when getting completions at caret
    position.
 
 

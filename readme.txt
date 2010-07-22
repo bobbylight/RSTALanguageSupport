@@ -1,7 +1,7 @@
 RSTALanguageSupport Readme
 --------------------------
-Version 0.5
-24apr2010
+Version 0.6
+22jul2010
 
 ----------------------------------------
 Contents
@@ -67,7 +67,10 @@ Languages with support include:
    - Parameter assistance for PHP functions.
 
 6. Unix Shell
-   - Pretty broken at the moment.
+   - Possibly broken at the moment.  Should attempt to use the local man pages
+     for descriptions of standard shell commands if the local host is *nix,
+     otherwise (on Windows) it defaults to short, generic descriptions.
+     Whether local man pages are used is configurable.
 
 
 ----------------------------------------
