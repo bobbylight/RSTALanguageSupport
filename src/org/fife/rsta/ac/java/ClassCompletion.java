@@ -149,15 +149,18 @@ class ClassCompletion extends AbstractJavaSourceCompletion {
 		g.drawString(s, x, y);
 		x += g.getFontMetrics().stringWidth(s);
 
-		Color origColor = g.getColor();
-		if (!selected) {
-			g.setColor(Color.GRAY);
-		}
 		String pkgName = cf.getClassName(true);
-		pkgName = pkgName.substring(0, pkgName.lastIndexOf('.'));
-		g.drawString(pkgName, x, y);
-		if (!selected) {
-			g.setColor(origColor);
+		int lastIndexOf = pkgName.lastIndexOf('.');
+		if (lastIndexOf != -1) { // Class may not be in a package
+			pkgName = pkgName.substring(0, lastIndexOf);
+			Color origColor = g.getColor();
+			if (!selected) {
+				g.setColor(Color.GRAY);
+			}
+			g.drawString(pkgName, x, y);
+			if (!selected) {
+				g.setColor(origColor);
+			}
 		}
 
 	}
