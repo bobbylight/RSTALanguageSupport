@@ -176,6 +176,18 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 
 
 	/**
+	 * Returns the value to use for <code>PERL5LIB</code> when parsing Perl
+	 * code.
+	 *
+	 * @return The value, or <code>null</code> to use the system default.
+	 * @see #setPerl5LibOverride(String)
+	 */
+	public String getPerl5LibOverride() {
+		return getParser().getPerl5LibOverride();
+	}
+
+
+	/**
 	 * Returns whether parens are inserted when auto-completing functions.
 	 *
 	 * @return Whether parens are inserted.
@@ -270,6 +282,19 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 	 */
 	public void setParsingEnabled(boolean enabled) {
 		getParser().setEnabled(enabled);
+	}
+
+
+	/**
+	 * Sets the value to use for <code>PERL5LIB</code> when parsing Perl
+	 * code.
+	 *
+	 * @param override The value, or <code>null</code> to use the system
+	 *        default.
+	 * @see #getPerl5LibOverride()
+	 */
+	public void setPerl5LibOverride(String override) {
+		getParser().setPerl5LibOverride(override);
 	}
 
 

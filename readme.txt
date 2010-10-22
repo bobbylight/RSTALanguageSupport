@@ -1,7 +1,7 @@
 RSTALanguageSupport Readme
 --------------------------
 Version 0.6
-22jul2010
+21oct2010
 
 ----------------------------------------
 Contents
@@ -59,6 +59,7 @@ Languages with support include:
 4. Perl
    - Auto-completion for built-in function names.
    - Parameter assistance for those built-in functions.
+   - Can specify/override PERL5LIB when syntax checking.
 
 5. PHP
    - Auto-completion for HTML 5 tags and attributes.  This is inherited

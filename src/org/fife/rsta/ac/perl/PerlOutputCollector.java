@@ -22,8 +22,7 @@ import org.fife.ui.rsyntaxtextarea.parser.DefaultParserNotice;
 
 
 /**
- * A class that eats the stdout or stderr of a running <tt>Process</tt> to
- * prevent deadlock.
+ * Listens to stderr from Perl to determine syntax errors in code.
  *
  * @author Robert Futrell
  * @version 1.0

@@ -18,6 +18,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.Element;
 
+import org.fife.rsta.ac.IOUtil;
 import org.fife.rsta.ac.OutputCollector;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.parser.AbstractParser;
@@ -28,13 +29,10 @@ import org.fife.ui.rsyntaxtextarea.parser.ParseResult;
 /**
  * Parses Perl code in an <tt>RSyntaxTextArea</tt>.<p>
  * 
- * This parser cannot be shared amongst multiple instances of
- * <tt>RSyntaxTextArea</tt>.<p>
- *
  * Please keep in mind that this class is a work-in-progress!
  * 
  * @author Robert Futrell
- * @version 0.5
+ * @version 0.6
  */
 public class PerlParser extends AbstractParser {
 
@@ -43,12 +41,61 @@ public class PerlParser extends AbstractParser {
 	private boolean taintModeEnabled;
 	private boolean warningsEnabled;
 
+	/**
+	 * The user's requested value for <code>PERL5LIB</code> when parsing Perl
+	 * code, or <code>null</code> to use the default.
+	 */
+	private String perl5LibOverride;
+
+	/**
+	 * The environment to use when launching Perl to parse code, in the format
+	 * expected by <code>Runtime.exec()</code>.  This may be <code>null</code>.
+	 */
+	private String[] perlEnvironment;
+
+	/**
+	 * The maximum amount of time to wait for Perl to finish compiling a
+	 * source file.
+	 */
+	private static final int MAX_COMPILE_MILLIS = 10000;
+
 
 	/**
 	 * Constructor.
 	 */
 	public PerlParser() {
 		result = new DefaultParseResult(this);
+	}
+
+
+	/**
+	 * Creates the array of environment variables to use when running Perl to
+	 * syntax check code, based on the user's requested <code>PERL5LIB</code>.
+	 */
+	private void createPerlEnvironment() {
+
+		// Default to using the same environment as parent process
+		perlEnvironment = null;
+
+		// See if they specified a special value for PERL5LIB
+		String perl5Lib = getPerl5LibOverride();
+		if (perl5Lib!=null) {
+			String[] toAdd = { "PERL5LIB", perl5Lib };
+			perlEnvironment = IOUtil.getEnvironmentSafely(toAdd);
+		}
+
+	}
+
+
+	/**
+	 * Returns the value to use for <code>PERL5LIB</code> when parsing Perl
+	 * code.
+	 *
+	 * @return The value, or <code>null</code> to use the system default.
+	 * @see #setPerl5LibOverride(String)
+	 */
+	public String getPerl5LibOverride() {
+		return perl5LibOverride;
 	}
 
 
@@ -99,7 +146,8 @@ public class PerlParser extends AbstractParser {
 			}
 
 			File tempFile = File.createTempFile("perlParser", ".tmp");
-			BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(tempFile));
+			BufferedOutputStream out = new BufferedOutputStream(
+											new FileOutputStream(tempFile));
 			try {
 				new DefaultEditorKit().write(out, doc, 0, doc.getLength());
 			} catch (BadLocationException ble) {
@@ -116,8 +164,9 @@ public class PerlParser extends AbstractParser {
 				opts += "t";
 			}
 
+			String[] envp = perlEnvironment;
 			String[] cmd = { perl.getAbsolutePath(), opts, tempFile.getAbsolutePath() };
-			Process p = Runtime.getRuntime().exec(cmd);
+			Process p = Runtime.getRuntime().exec(cmd, envp);
 			Element root = doc.getDefaultRootElement();
 			OutputCollector stdout = new OutputCollector(p.getInputStream(),
 														false);
@@ -129,8 +178,8 @@ public class PerlParser extends AbstractParser {
 			t2.start();
 			//int rc = 0;
 			try {
-				t2.join(10000);
-				t.join(10000);
+				t2.join(MAX_COMPILE_MILLIS);
+				t.join(MAX_COMPILE_MILLIS);
 				if (t.isAlive()) {
 					t.interrupt();
 					//rc = -1;
@@ -154,6 +203,20 @@ public class PerlParser extends AbstractParser {
 
 		return result;
 
+	}
+
+
+	/**
+	 * Sets the value to use for <code>PERL5LIB</code> when parsing Perl
+	 * code.
+	 *
+	 * @param override The value, or <code>null</code> to use the system
+	 *        default.
+	 * @see #getPerl5LibOverride()
+	 */
+	public void setPerl5LibOverride(String override) {
+		perl5LibOverride = override;
+		createPerlEnvironment(); // Refresh our cached environment map.
 	}
 
 
