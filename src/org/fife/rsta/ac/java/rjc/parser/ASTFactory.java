@@ -148,15 +148,20 @@ case KEYWORD_FOR:
 	// TODO: Get local var (e.g. "int i", "Iterator i", etc.)
 	// Fall through
 case KEYWORD_WHILE:
-	while (s.yyPeekCheckType()!=SEPARATOR_LPAREN) {
+	int nextType = s.yyPeekCheckType();
+	while (nextType!=-1 && nextType!=SEPARATOR_LPAREN) {
 		t = s.yylex(); // Grab the (unexpected) token
-		if (t!=null) {
+		if (t!=null) { // Should always be true
 			ParserNotice pn = new ParserNotice(t, "Unexpected token");
 			cu.addParserNotice(pn);
 		}
+		nextType = s.yyPeekCheckType();
 	}
-	s.eatParenPairs();
-	if (s.yyPeekCheckType()==SEPARATOR_LBRACE) {
+	if (nextType==SEPARATOR_LPAREN) {
+		s.eatParenPairs();
+	}
+	nextType = s.yyPeekCheckType();
+	if (nextType==SEPARATOR_LBRACE) {
 		child = _getBlock(cu, s, isStatic, depth+1);
 		block.add(child);
 		atStatementStart = true;
@@ -205,7 +210,7 @@ case KEYWORD_WHILE:
 								String name = t.getLexeme();
 								LocalVariable lVar = new LocalVariable(s, isFinal, varType, offs, name);
 								block.addLocalVariable(lVar);
-								int nextType = s.yyPeekCheckType();
+								nextType = s.yyPeekCheckType();
 								// A "valid" nextType would be '=', ',' or ';'.
 								// If it's a comma, loop to read the next local var.
 								// Otherwise, whether or not it's valid, eat until
