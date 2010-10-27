@@ -203,7 +203,7 @@ case KEYWORD_WHILE:
 						if (s.yyPeekCheckType()==IDENTIFIER) {
 							while ((t=s.yylexNonNull(IDENTIFIER, "Variable name expected (type==" + varType.toString() + ")"))!=null) {
 								int arrayDepth = s.skipBracketPairs();
-								varType.setBracketPairCount(arrayDepth);
+								varType.incrementBracketPairCount(arrayDepth);
 								String varDec = varType.toString() + " " + t.getLexeme();
 								log(">>> Variable -- " + varDec + " (line " + t.getLine() + ")");
 								int offs = t.getOffset();

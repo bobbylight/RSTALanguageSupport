@@ -72,7 +72,7 @@ class FieldCompletion extends AbstractJavaSourceCompletion
 		fc.data = new Data() {
 
 			public String getDefinedIn() {
-				return type + "[]";
+				return type;
 			}
 
 			public String getIcon() {
@@ -88,7 +88,7 @@ class FieldCompletion extends AbstractJavaSourceCompletion
 			}
 
 			public String getType() {
-				return type;
+				return "int";
 			}
 
 			public boolean isDeprecated() {
