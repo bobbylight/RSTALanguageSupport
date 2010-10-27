@@ -417,6 +417,14 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 		if (start<0) {
 			start = -(start+1);
 		}
+		else {
+			// There might be multiple entries with the same input text.
+			while (start>0 &&
+					comparator.compare(completions.get(start-1), text)==0) {
+				start--;
+			}
+		}
+
 		int end = Collections.binarySearch(completions, text+'{', comparator);
 		end = -(end+1);
 
