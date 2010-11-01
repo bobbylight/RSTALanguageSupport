@@ -52,6 +52,12 @@ public class Scanner {
 	 */
 	private Document doc;
 
+	/**
+	 * The most recently lexed token, or <code>null</code> if EOS was
+	 * reached.
+	 */
+	private Token mostRecentToken;
+
 
 	/**
 	 * Constructor.  This scanner will return no tokens unless some are pushed
@@ -188,6 +194,16 @@ private void pushOntoStack(Token t) {
 	 */
 	public int getLine() {
 		return s.getLine();
+	}
+
+
+	/**
+	 * Returns the most recently-lexed token.
+	 *
+	 * @return The token, or <code>null</code> if EOS was reached.
+	 */
+	public Token getMostRecentToken() {
+		return mostRecentToken;
 	}
 
 
@@ -494,6 +510,7 @@ private int currentResetStartOffset;
 		if (currentResetTokenStack!=null) {
 			currentResetTokenStack.push(t);
 		}
+		mostRecentToken = t;
 		return t;
 
 	}
@@ -673,6 +690,58 @@ private int currentResetStartOffset;
 		Token t = yyPeek();
 		if (t==null) {
 			throw new IOException(error);
+		}
+		return t;
+	}
+
+
+	/**
+	 * Returns the next token, but does not take it off of the stream.  This
+	 * is useful for lookahead.
+	 *
+	 * @param type The type the token must be.
+	 * @return The next token.
+	 * @throws IOException If an IO error occurs, or if EOS is reached, or
+	 *         if the token is not of the specified type.
+	 */
+	public Token yyPeekNonNull(int type, String error) throws IOException {
+		return yyPeekNonNull(type, -1, error);
+	}
+
+
+	/**
+	 * Returns the next token, but does not take it off of the stream.  This
+	 * is useful for lookahead.
+	 *
+	 * @param type The type the token must be.
+	 * @return The next token.
+	 * @throws IOException If an IO error occurs, or if EOS is reached, or
+	 *         if the token is not of the specified type.
+	 */
+	public Token yyPeekNonNull(int type1, int type2, String error)
+												throws IOException {
+		return yyPeekNonNull(type1, type2, -1, error);
+	}
+
+
+	/**
+	 * Returns the next token, but does not take it off of the stream.  This
+	 * is useful for lookahead.
+	 *
+	 * @param type The type the token must be.
+	 * @return The next token.
+	 * @throws IOException If an IO error occurs, or if EOS is reached, or
+	 *         if the token is not of the specified type.
+	 */
+	public Token yyPeekNonNull(int type1, int type2, int type3, String error)
+												throws IOException {
+		Token t = yyPeek();
+		if (t==null) {
+			throw new IOException(error);
+		}
+		if (t.getType()!=type1 && (type2==-1 || t.getType()!=type2) &&
+				(type3==-1 || t.getType()!=type3)) {
+			throw new IOException(error + ", found '" + t);
 		}
 		return t;
 	}

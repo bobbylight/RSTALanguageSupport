@@ -327,7 +327,9 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 				addLocalVarCompletions(set, child, offs);
 				break; // All other blocks are past this one
 			}
-			else if (child.getNameEndOffset()<=offs) {
+			// If we've reached a block that's past the offset we're
+			// searching for...
+			else if (child.getNameStartOffset()>offs) {
 				break;
 			}
 		}
@@ -790,7 +792,9 @@ public File getSourceLocForClass(String className) {
 						td, child, prefix, offs);
 				break; // All other blocks are past this one
 			}
-			else if (child.getNameEndOffset()<=offs) {
+			// If we've reached a block that's past the offset we're
+			// searching for...
+			else if (child.getNameStartOffset()>offs) {
 				break;
 			}
 		}

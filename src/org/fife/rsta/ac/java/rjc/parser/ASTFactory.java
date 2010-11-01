@@ -144,6 +144,33 @@ OUTER:
 					block.setDeclarationEndOffset(s.createOffset(t.getOffset()));
 					break OUTER;
 
+				case KEYWORD_TRY:
+					s.yyPeekNonNull(SEPARATOR_LBRACE, "'{' expected");
+					CodeBlock tryBlock = _getBlock(cu, s, isStatic, depth+1);
+					block.add(tryBlock);
+					while (s.yyPeekCheckType()==KEYWORD_CATCH &&
+							s.yyPeekCheckType(2)==SEPARATOR_LPAREN) {
+						s.yylex(); // catch
+						s.yylex(); // lparen
+						isFinal = false;
+						Token temp = s.yyPeekNonNull(IDENTIFIER, KEYWORD_FINAL, "Throwable type expected");
+						if (temp.getType()==KEYWORD_FINAL) {
+							isFinal = true;
+							s.yylex();
+						}
+						s.yyPeekNonNull(IDENTIFIER, "Variable declarator expected");
+						Type exType = _getType(cu, s);
+						Token var = s.yylexNonNull(IDENTIFIER, "Variable declarator expected");
+						s.yylexNonNull(SEPARATOR_RPAREN, "')' expected");
+						s.yyPeekNonNull(SEPARATOR_LBRACE, "'{' expected");
+						CodeBlock catchBlock = _getBlock(cu, s, false, depth);
+						int offs = var.getOffset(); // Not actually in block!
+						LocalVariable localVar = new LocalVariable(s, isFinal, exType, offs, var.getLexeme());
+						catchBlock.addLocalVariable(localVar);
+						block.add(catchBlock);
+					}
+					break;
+
 case KEYWORD_FOR:
 	// TODO: Get local var (e.g. "int i", "Iterator i", etc.)
 	// Fall through
@@ -466,7 +493,15 @@ try {
 	if (!(ioe instanceof EOFException)) { // Not just "end of file"
 		ioe.printStackTrace();
 	}
-	cu.addParserNotice(new ParserNotice(0,0,5, ioe.getMessage()));
+	ParserNotice notice = null;
+	Token lastTokenLexed = scanner.getMostRecentToken();
+	if (lastTokenLexed==null) {
+		notice = new ParserNotice(0,0,5, ioe.getMessage());
+	}
+	else {
+		notice = new ParserNotice(lastTokenLexed, ioe.getMessage());
+	}
+	cu.addParserNotice(notice);
 //throw ioe; // Un-comment me to get the AnnotationTypeDeclaration error count in "Main" test
 }
 
