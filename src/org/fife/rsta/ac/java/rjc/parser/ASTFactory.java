@@ -424,46 +424,56 @@ try {
 		}
 
 		// Go through any import statements.
+OUTER:
 		while (t != null && t.getType() == KEYWORD_IMPORT) {
 
 			boolean isStatic = false;
 			StringBuffer buf = new StringBuffer();
-			t = scanner.yylex();
+			t = scanner.yylexNonNull("Incomplete import statement");
 			Token temp = null;
 			int offs = 0;
 
 			if (t.getType() == KEYWORD_STATIC) {
 				isStatic = true;
-				t = scanner.yylex();
+				t = scanner.yylexNonNull("Incomplete import statement");
 			}
 
 			if (!t.isIdentifier()) {
-				throw new IOException("Expected identifier, found: " + t);
+				cu.addParserNotice(t, "Expected identifier, found: \"" +
+									t.getLexeme() + "\"");
+				scanner.eatThroughNextSkippingBlocks(SEPARATOR_SEMICOLON);
+				// We expect "t" to be the semicolon below
+				t = scanner.getMostRecentToken();
 			}
 			else {
 				offs = t.getOffset();
 				buf.append(t.getLexeme());
-				temp = scanner.yylex();
-				while (temp.getType() == SEPARATOR_DOT) {
-					temp = scanner.yylex();
+				temp = scanner.yylexNonNull(SEPARATOR_DOT, SEPARATOR_SEMICOLON,
+											"'.' or ';' expected");
+				while (temp.getType()==SEPARATOR_DOT) {
+					temp = scanner.yylexNonNull(IDENTIFIER, OPERATOR_TIMES,
+												"Identifier or '*' expected");
 					if (temp.isIdentifier()) {
 						buf.append('.').append(temp.getLexeme());
 					}
-					else if (temp.getLexeme().equals("*")) {
+					else {//if (temp.getLexeme().equals("*")) {
 						buf.append(".*");
-						temp = scanner.yylex();
+						temp = scanner.yylex(); // We're bailing, so scan here
 						break;
 					}
-					else {
-						throw new IOException("Error in end of import");
+					temp = scanner.yylexNonNull(KEYWORD_IMPORT, SEPARATOR_DOT,
+									SEPARATOR_SEMICOLON, "'.' or ';' expected");
+					if (temp.getType()==KEYWORD_IMPORT) {
+						cu.addParserNotice(temp, "';' expected");
+						t = temp;
+						continue OUTER;
 					}
-					temp = scanner.yylex();
 				}
 				t = temp;
 			}
 
-			if (t.getType() != SEPARATOR_SEMICOLON) {
-				throw new IOException("Semicolon expected");
+			if (temp==null || t.getType()!=SEPARATOR_SEMICOLON) {
+				throw new IOException("Semicolon expected, found " + t);
 			}
 
 			ImportDeclaration id = new ImportDeclaration(scanner, offs,
@@ -870,7 +880,8 @@ OUTER:
 					type = _getType(cu, tempScanner); // Method (not a constructor)
 				}
 			}
-			Token methodNameToken = tempScanner.yylexNonNull(IDENTIFIER, "Identifier (method name) expected");
+			Token methodNameToken = tempScanner.yylexNonNull(IDENTIFIER,
+									"Identifier (method name) expected");
 			while (true) {
 				t = s.yylexNonNull("Unexpected end of input");
 				if (t.getType()==SEPARATOR_RPAREN) {

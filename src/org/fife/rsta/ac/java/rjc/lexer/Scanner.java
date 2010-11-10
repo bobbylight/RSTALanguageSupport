@@ -510,7 +510,9 @@ private int currentResetStartOffset;
 		if (currentResetTokenStack!=null) {
 			currentResetTokenStack.push(t);
 		}
-		mostRecentToken = t;
+		if (t!=null) { // Don't let EOS corrupt most recent token
+			mostRecentToken = t;
+		}
 		return t;
 
 	}
@@ -596,7 +598,7 @@ private int currentResetStartOffset;
 		}
 		if (t.getType()!=type1 && (type2==-1 || t.getType()!=type2) &&
 				(type3==-1 || t.getType()!=type3)) {
-			throw new IOException(error + ", found '" + t);
+			throw new IOException(error + ", found '" + t.getLexeme() + "'");
 		}
 		return t;
 	}
@@ -741,7 +743,7 @@ private int currentResetStartOffset;
 		}
 		if (t.getType()!=type1 && (type2==-1 || t.getType()!=type2) &&
 				(type3==-1 || t.getType()!=type3)) {
-			throw new IOException(error + ", found '" + t);
+			throw new IOException(error + ", found '" + t.getLexeme() + "'");
 		}
 		return t;
 	}
