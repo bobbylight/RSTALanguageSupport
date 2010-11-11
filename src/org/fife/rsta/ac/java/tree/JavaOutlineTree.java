@@ -13,9 +13,14 @@ package org.fife.rsta.ac.java.tree;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Iterator;
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
 import javax.swing.JTree;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 
 import org.fife.rsta.ac.LanguageSupport;
@@ -23,6 +28,7 @@ import org.fife.rsta.ac.LanguageSupportFactory;
 import org.fife.rsta.ac.java.IconFactory;
 import org.fife.rsta.ac.java.JavaLanguageSupport;
 import org.fife.rsta.ac.java.JavaParser;
+import org.fife.rsta.ac.java.rjc.ast.ASTNode;
 import org.fife.rsta.ac.java.rjc.ast.CodeBlock;
 import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
 import org.fife.rsta.ac.java.rjc.ast.Field;
@@ -47,27 +53,7 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
  * <tt>RSyntaxTextArea</tt> with {@link JavaLanguageSupport} installed by
  * calling {@link #listenTo(RSyntaxTextArea)}.  Note that, if you have an
  * application with multiple RSTA editors, you would want to call this method
- * each time a new editor is focused.<p>
- *
- * You can also add a "jump-to" feature to the tree by adding a
- * <tt>TreeSelectionListener</tt> with the following implementation:
- * 
- * <pre>
- * public void valueChanged(TreeSelectionEvent e) {
- *    TreePath path = e.getNewLeadSelectionPath();
- *    if (path!=null) {
- *       DefaultMutableTreeNode node =
- *          (DefaultMutableTreeNode)path.getLastPathComponent();
- *       Object obj = node.getUserObject();
- *       if (obj instanceof ASTNode) {
- *          ASTNode astNode = (ASTNode)obj;
- *          int start = astNode.getNameStartOffset();
- *          int end = astNode.getNameEndOffset();
- *          textArea.select(start, end);
- *       }
- *    }
- * }
- * </pre>
+ * each time a new editor is focused.
  * 
  * @author Robert Futrell
  * @version 1.0
@@ -84,12 +70,13 @@ public class JavaOutlineTree extends /*org.fife.ui.ToolTipTree */JTree {
 	 * Constructor.
 	 */
 	public JavaOutlineTree() {
-		setBorder(javax.swing.BorderFactory.createEmptyBorder(0,8,0,8));
+		setBorder(BorderFactory.createEmptyBorder(0,8,0,8));
 		setRootVisible(false);
 		setCellRenderer(new AstTreeCellRenderer());
 		model = new DefaultTreeModel(new DefaultMutableTreeNode("Nothing"));
 		setModel(model);
 		listener = new Listener();
+		addTreeSelectionListener(listener);
 	}
 
 
@@ -160,6 +147,9 @@ public class JavaOutlineTree extends /*org.fife.ui.ToolTipTree */JTree {
 		if (parser!=null) { // Should always be true
 			parser.addPropertyChangeListener(
 					JavaParser.PROPERTY_COMPILATION_UNIT, listener);
+			// Populate with any already-existing CompilationUnit
+			CompilationUnit cu = parser.getCompilationUnit();
+			update(cu);
 		}
 		else {
 			update((CompilationUnit)null); // Clear the tree
@@ -268,6 +258,7 @@ public class JavaOutlineTree extends /*org.fife.ui.ToolTipTree */JTree {
 	 *
 	 * @param textArea The text area.  This should have been registered with
 	 *        the {@link LanguageSupportFactory}, and be editing Java.
+	 * @see #uninstall()
 	 */
 	public void listenTo(RSyntaxTextArea textArea) {
 
@@ -291,6 +282,11 @@ public class JavaOutlineTree extends /*org.fife.ui.ToolTipTree */JTree {
 	}
 
 
+	/**
+	 * Makes this outline tree stop listening to its current text area.
+	 *
+	 * @see #listenTo(RSyntaxTextArea)
+	 */
 	public void uninstall() {
 
 		if (parser!=null) {
@@ -309,11 +305,29 @@ public class JavaOutlineTree extends /*org.fife.ui.ToolTipTree */JTree {
 
 
 	/**
-	 * Listens for events this tree is interested in (events in the associated
-	 * editor, for example).
+	 * Overridden to also update the UI of the child cell renderer.
 	 */
-	private class Listener implements PropertyChangeListener {
+	public void updateUI() {
+		super.updateUI();
+		// Might not be so the first time through
+		TreeCellRenderer renderer = getCellRenderer();
+		if (renderer instanceof JComponent) {
+			((JComponent)renderer).updateUI();
+		}
+	}
 
+
+	/**
+	 * Listens for events this tree is interested in (events in the associated
+	 * editor, for example), as well as events in this tree.
+	 */
+	private class Listener implements PropertyChangeListener,
+							TreeSelectionListener {
+
+		/**
+		 * Called whenever the text area's syntax style changes, as well as
+		 * when it is re-parsed.
+		 */
 		public void propertyChange(PropertyChangeEvent e) {
 
 			String name = e.getPropertyName();
@@ -328,6 +342,25 @@ public class JavaOutlineTree extends /*org.fife.ui.ToolTipTree */JTree {
 				update(cu);
 			}
 
+		}
+
+		/**
+		 * Selects the corresponding element in the text editor when a user
+		 * clicks on a node in this tree.
+		 */
+		public void valueChanged(TreeSelectionEvent e) {
+			TreePath path = e.getNewLeadSelectionPath();
+			if (path != null) {
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode)path.
+												getLastPathComponent();
+				Object obj = node.getUserObject();
+				if (obj instanceof ASTNode) {
+					ASTNode astNode = (ASTNode)obj;
+					int start = astNode.getNameStartOffset();
+					int end = astNode.getNameEndOffset();
+					textArea.select(start, end);
+				}
+			}
 		}
 
 	}

@@ -102,6 +102,18 @@ public class JavaParser extends AbstractParser {
 	}
 
 
+	/**
+	 * Returns the compilation unit from the last time the text area was
+	 * parsed.
+	 *
+	 * @return The compilation unit, or <code>null</code> if it hasn't yet
+	 *         been parsed or an unexpected error occurred while parsing.
+	 */
+	public CompilationUnit getCompilationUnit() {
+		return cu;
+	}
+
+
 	public int getOffset(RSyntaxDocument doc, ParserNotice notice) {
 		Element root = doc.getDefaultRootElement();
 		Element elem = root.getElement(notice.getLine());

@@ -13,6 +13,9 @@ package org.fife.rsta.ac.java;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.util.Map;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 
@@ -105,6 +108,23 @@ public class JavaCellRenderer extends DefaultListCellRenderer {
 
 	protected void paintComponent(Graphics g) {
 
+		// Set up rendering hints to look as close to native as possible
+		Graphics2D g2d = (Graphics2D)g;
+		Object old = null;
+
+		// First, try to use the rendering hint set that is "native".
+		Map hints = (Map)getToolkit().getDesktopProperty("awt.font.desktophints");
+		if (hints!=null) {
+			old = g2d.getRenderingHints();
+			g2d.addRenderingHints(hints);
+		}
+		// If a "native" set isn't found, just turn on standard text AA.
+		else {
+			old = g2d.getRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING);
+			g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+								RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		}
+
 //		if (jsc!=null) {
 //			setText(null); // Stop "Foobar" from being painted
 //		}
@@ -138,6 +158,14 @@ public class JavaCellRenderer extends DefaultListCellRenderer {
 			g.setColor(selected ? list.getSelectionForeground() :
 									list.getForeground());
 			g.drawString(bc.toString(), x, g.getFontMetrics().getHeight());
+		}
+
+		// Restore rendering hints appropriately.
+		if (hints!=null) {
+			g2d.addRenderingHints((Map)old);
+		}
+		else {
+			g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, old);
 		}
 
 	}
