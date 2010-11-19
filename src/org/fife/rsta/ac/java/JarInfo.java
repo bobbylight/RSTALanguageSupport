@@ -211,9 +211,13 @@ public class JarInfo implements Comparable, Cloneable {
 	 * @return A string representation of this object.
 	 */
 	public String toString() {
+		String sourceLoc = null;
+		if (sourceLocation!=null) {
+			sourceLoc = sourceLocation.getAbsolutePath();
+		}
 		return "[JarInfo: " +
 			"jar=" + getJarFile().getAbsolutePath() +
-			"; source=" + getSourceLocation().getAbsolutePath() +
+			"; source=" + sourceLoc +
 			"]";
 	}
 

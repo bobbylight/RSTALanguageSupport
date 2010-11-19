@@ -25,9 +25,20 @@ import org.fife.rsta.ac.java.rjc.lexer.*;
  */
 public class Main {
 
+	/**
+	 * If this system property is set to "<code>true</code>",
+	 * output will not be written to stdout for each file.
+	 */
+	public static final String PROPERTY_NO_OUTPUT = "no.output";
+
+	private static final boolean LOG = !"true".equals(
+							System.getProperty(PROPERTY_NO_OUTPUT));
+
 
 	private static void log(Object text) {
-		System.out.println(text);
+		if (LOG) {
+			System.out.println(text);
+		}
 	}
 
 
