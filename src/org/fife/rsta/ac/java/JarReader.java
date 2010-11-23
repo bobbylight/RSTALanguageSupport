@@ -257,7 +257,8 @@ class JarReader {
 				System.err.println("ERROR: Invalid entry: " + entryName);
 				return null;
 			}
-			DataInputStream in = new DataInputStream(jar.getInputStream(entry));
+			DataInputStream in = new DataInputStream(
+					new BufferedInputStream(jar.getInputStream(entry)));
 			ClassFile cf = new ClassFile(in);
 			in.close();
 			return cf;
