@@ -63,11 +63,14 @@ public class JarManager {
 	 * @param addTo The list to add completion choices to.
 	 */
 	public void addCompletions(CompletionProvider p, String text, Set addTo) {
+
+		// Add any completions matching the text for each jar we know about
 		String[] pkgNames = Util.splitOnChar(text, '.');
 		for (int i=0; i<jars.size(); i++) {
 			JarReader jar = (JarReader)jars.get(i);
 			jar.addCompletions(p, pkgNames, addTo);
 		}
+
 	}
 
 

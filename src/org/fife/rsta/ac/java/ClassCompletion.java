@@ -40,9 +40,41 @@ class ClassCompletion extends AbstractJavaSourceCompletion {
 	}
 
 
+	/*
+	 * Fixed error when comparing classes of the same name, which did not allow
+	 * classes with same name but different packages.
+	 * Thanks to Guilherme Joao Frantz and Jonatas Schuler for the patch!
+	 */
+	public int compareTo(Object o) {
+		if (o == this) {
+			return 0;
+		}
+		// Check for classes with same name, but in different packages
+		else if(o.toString().equals(toString())) {
+			if (o instanceof ClassCompletion) {
+				ClassCompletion c2 = (ClassCompletion) o;
+				return getClassName(true).compareTo(c2.getClassName(true));
+			}
+		}
+		return super.compareTo(o);
+	}
+
+
 	public boolean equals(Object obj) {
 		return (obj instanceof ClassCompletion) &&
 			((ClassCompletion)obj).getReplacementText().equals(getReplacementText());
+	}
+
+
+	/**
+	 * Returns the name of the class represented by this completion.
+	 *
+	 * @param fullyQualified Whether the returned name should be fully
+	 *        qualified.
+	 * @return The class name.
+	 */
+	public String getClassName(boolean fullyQualified){
+		return cf.getClassName(fullyQualified);
 	}
 
 

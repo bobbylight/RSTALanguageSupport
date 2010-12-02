@@ -642,7 +642,8 @@ class Util {
 	 *
 	 * @param str The string to split.
 	 * @param ch The char to split on.
-	 * @return The string, split on '<tt>/</tt>'.
+	 * @return The string, split on the character (e.g. '<tt>/</tt>' or
+	 *         '<tt>.</tt>').
 	 */
 	public static String[] splitOnChar(String str, int ch) {
 		List list = new ArrayList(3);
