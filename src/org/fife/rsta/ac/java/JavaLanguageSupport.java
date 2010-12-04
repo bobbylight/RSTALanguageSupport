@@ -232,15 +232,6 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 
 		}
 
-		protected int refreshPopupWindow() {
-			// Force the parser to re-parse
-			JavaParser parser = getParser(textArea);
-			RSyntaxDocument doc = (RSyntaxDocument)textArea.getDocument();
-			String style = textArea.getSyntaxEditingStyle();
-			parser.parse(doc, style);
-			return super.refreshPopupWindow();
-		}
-
 		/**
 		 * Overridden to allow for prepending to the replacement text.  This
 		 * allows us to insert fully qualified class names. instead of
@@ -259,134 +250,188 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 			return text;
 		}
 
-		protected void insertCompletion(Completion c) {
+		/**
+		 * Determines whether the class name being completed has been imported,
+		 * and if it hasn't, adds an import statement for it.  Alternatively,
+		 * if the class hasn't been imported, but a class with the same
+		 * (unqualified) name HAS been imported, this method sets things up
+		 * so the fully-qualified version of this class's name is inserted.<p>
+		 * 
+		 * Thanks to Guilherme Joao Frantz and Jonatas Schuler for helping
+		 * with the patch!
+		 *
+		 * @param c The completion being inserted.
+		 * @return Whether an import was added.
+		 */
+		private boolean possiblyAddImport(ClassCompletion cc) {
 
-			// If we're inserting a class name, we might also need to
-			// add an import statement for the class.
-			if (c instanceof ClassCompletion) {
+			String text = getCurrentLineText();
 
-				String text = getCurrentLineText();
+			// Make sure we're not currently typing an import statement.
+			if (!text.startsWith("import ")) {
 
-				// Make sure we're not currently typing an import statement.
-				if (!text.startsWith("import ")) {
+				JavaCompletionProvider provider = (JavaCompletionProvider)
+													getCompletionProvider();
+				CompilationUnit cu = provider.getCompilationUnit();
+				int offset = 0;
+				boolean alreadyImported = false;
 
-					JavaCompletionProvider provider = (JavaCompletionProvider)
-														getCompletionProvider();
-					CompilationUnit cu = provider.getCompilationUnit();
-					int offset = 0;
-					boolean alreadyImported = false;
-					ClassCompletion classCompletion = (ClassCompletion)c;
+				// Try to bail early, if possible.
+				if (cu==null) { // Can never happen, right?
+					return false;
+				}
+				if ("java.lang".equals(cc.getPackageName())) {
+					// Package java.lang is "imported" by default.
+					return false;
+				}
 
-					// Try to bail early, if possible.
-					if (cu==null) { // Can never happen, right?
-						super.insertCompletion(c);
-						return;
+				String className = cc.getClassName(false);
+				String fqClassName = cc.getClassName(true);
+
+				// Loop through all import statements.
+				for (Iterator i=cu.getImportIterator(); i.hasNext(); ) {
+
+					ImportDeclaration id = (ImportDeclaration)i.next();
+					offset = id.getNameEndOffset() + 1;
+
+					// Pulling in static methods, etc. from a class - skip
+					if (id.isStatic()) {
+						continue;
 					}
-					if ("java.lang".equals(classCompletion.getPackageName())) {
-						// Package java.lang is "imported" by default.
-						super.insertCompletion(c);
-						return;
-					}
 
-					String className = classCompletion.getClassName(false);
-					String fqClassName = classCompletion.getClassName(true);
-
-					// Loop through all import statements.
-					for (Iterator i=cu.getImportIterator(); i.hasNext(); ) {
-
-						ImportDeclaration id = (ImportDeclaration)i.next();
-						offset = id.getNameEndOffset() + 1;
-
-						// Pulling in static methods, etc. from a class - skip
-						if (id.isStatic()) {
-							continue;
+					// Importing all classes in the package...
+					else if (id.isWildcard()) {
+						String imported = id.getName();
+						int dot = imported.lastIndexOf('.');
+						String importedPkg = imported.substring(0, dot);
+						dot = fqClassName.lastIndexOf('.');
+						String classPkg = fqClassName.substring(0, dot);
+						if (importedPkg.equals(classPkg)) {
+							alreadyImported = true;
+							break;
 						}
+					}
 
-						// Importing all classes in the package...
-						else if (id.isWildcard()) {
-							String imported = id.getName();
-							int dot = imported.lastIndexOf('.');
-							String importedPkg = imported.substring(0, dot);
-							dot = fqClassName.lastIndexOf('.');
-							String classPkg = fqClassName.substring(0, dot);
-							if (importedPkg.equals(classPkg)) {
+					// Importing a single class from a package...
+					else {
+
+						String fullyImportedClassName = id.getName();
+						int dot = fullyImportedClassName.lastIndexOf('.');
+						String importedClassName = fullyImportedClassName.
+													substring(dot + 1);
+
+						// If they explicitly imported a class with the
+						// same name, but it's in a different package, then
+						// the user is required to fully-qualify the class
+						// in their code (if unqualified, it would be
+						// assumed to be of the type of the qualified
+						// class).
+						if (className.equals(importedClassName)) {
+							offset = -1; // Means "must fully qualify"
+							if (fqClassName.equals(fullyImportedClassName)){
 								alreadyImported = true;
 								break;
 							}
-							else {
-								System.out.println("Not the same: " + importedPkg + ", " + classPkg);
-							}
-						}
-
-						// Importing a single class from a package...
-						else {
-
-							String fullyImportedClassName = id.getName();
-							int dot = fullyImportedClassName.lastIndexOf('.');
-							String importedClassName = fullyImportedClassName.
-														substring(dot + 1);
-
-							// If they explicitly imported a class with the
-							// same name, but it's in a different package, then
-							// the user is required to fully-qualify the class
-							// in their code (if unqualified, it would be
-							// assumed to be of the type of the qualified
-							// class).
-							if (className.equals(importedClassName)) {
-								offset = -1; // Means "must fully qualify"
-								if (fqClassName.equals(fullyImportedClassName)){
-									alreadyImported = true;
-									break;
-								}
-							}
-
-						}
-
-					}
-
-					// If the class wasn't imported, we'll need to add an
-					// import statement!
-					if (!alreadyImported) {
-
-						// If there are no previous imports, add the import
-						// statement after the package line (if any).
-						// TODO: Divine a better place for the import statement.
-						if (offset == 0) {
-							Package pkg = cu.getPackage();
-							offset = pkg!=null ? pkg.getNameEndOffset()+1 : 0;
-						}
-
-						// We read through all imports, but didn't find our class.
-						// Add a new import statement after the last one.
-						if (offset > -1) {
-							//System.out.println(classCompletion.getAlreadyEntered(textArea));
-							String importToAdd = (offset > 0 ? "\nimport " : "import ") + fqClassName + ";";
-							textArea.insert(importToAdd, offset);
-							//textArea.setCaretPosition(caretPosition + importToAdd.length());
-						}
-
-						// Otherwise, either the class was imported, or a class
-						// with the same name was explicitly imported.
-						else {
-							// Another class with the same name was imported.
-							// We must insert the fully-qualified class name
-							// so the compiler resolves the correct class.
-							int dot = fqClassName.lastIndexOf('.');
-							if (dot>-1) {
-								String pkg = fqClassName.substring(0, dot+1);
-								replacementTextPrefix = pkg;
-							}
-							//System.out.println("JavaLanguageSupport.JavaAutoCompletion.insertCompletion()");
 						}
 
 					}
 
 				}
 
+				// If the class wasn't imported, we'll need to add an
+				// import statement!
+				if (!alreadyImported) {
+
+					StringBuffer importToAdd = new StringBuffer();
+
+					// If there are no previous imports, add the import
+					// statement after the package line (if any).
+					if (offset == 0) {
+						Package pkg = cu.getPackage();
+						if (pkg!=null) {
+							offset = pkg.getNameEndOffset() + 1;
+							// Keep an empty line between package and imports.
+							importToAdd.append('\n');
+						}
+					}
+
+					// We read through all imports, but didn't find our class.
+					// Add a new import statement after the last one.
+					if (offset > -1) {
+						//System.out.println(classCompletion.getAlreadyEntered(textArea));
+						if (offset>0) {
+							importToAdd.append("\nimport ").append(fqClassName).append(';');
+						}
+						else {
+							importToAdd.append("import ").append(fqClassName).append(";\n");
+						}
+						// TODO: Determine whether the imports are alphabetical,
+						// and if so, add the new one alphabetically.
+						textArea.insert(importToAdd.toString(), offset);
+						return true;
+					}
+
+					// Otherwise, either the class was imported, or a class
+					// with the same name was explicitly imported.
+					else {
+						// Another class with the same name was imported.
+						// We must insert the fully-qualified class name
+						// so the compiler resolves the correct class.
+						int dot = fqClassName.lastIndexOf('.');
+						if (dot>-1) {
+							String pkg = fqClassName.substring(0, dot+1);
+							replacementTextPrefix = pkg;
+						}
+						//System.out.println("JavaLanguageSupport.JavaAutoCompletion.insertCompletion()");
+					}
+
+				}
+
 			}
 
-			super.insertCompletion(c);
+			return false;
 
+		}
+
+		/**
+		 * Overridden to handle special cases, because sometimes Java code
+		 * completions will edit more in the source file than just the text
+		 * at the current caret position.
+		 */
+		protected void insertCompletion(Completion c) {
+
+			// We special-case class completions because they may add import
+			// statements to the top of our source file.  Note that we won't
+			// always *need* to make it an atomic edit; it's only needed when
+			// an import is actually added.  However, if we call
+			// possiblyAddImport() first, then super.insertCompletion(), doing
+			// an undo places the caret at the removed import's offset, which
+			// is unintuitive for the user (they expect the caret to be at the
+			// offset in the code they are editing).  So, we just always wrap
+			// it into an atomic edit.
+			if (c instanceof ClassCompletion) {
+				textArea.beginAtomicEdit();
+				try {
+					super.insertCompletion(c);
+					/*atomicEditRequired=*/possiblyAddImport((ClassCompletion)c);
+				} finally {
+					textArea.endAtomicEdit();
+				}
+			}
+
+			else {
+				super.insertCompletion(c);
+			}
+
+		}
+
+		protected int refreshPopupWindow() {
+			// Force the parser to re-parse
+			JavaParser parser = getParser(textArea);
+			RSyntaxDocument doc = (RSyntaxDocument)textArea.getDocument();
+			String style = textArea.getSyntaxEditingStyle();
+			parser.parse(doc, style);
+			return super.refreshPopupWindow();
 		}
 
 	}

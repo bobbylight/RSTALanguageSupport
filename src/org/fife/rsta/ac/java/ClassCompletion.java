@@ -24,7 +24,7 @@ import org.fife.ui.autocomplete.CompletionProvider;
 
 
 /**
- * Completion for a Java class or interface.
+ * Completion for a Java class, interface or enum.
  *
  * @author Robert Futrell
  * @version 1.0
