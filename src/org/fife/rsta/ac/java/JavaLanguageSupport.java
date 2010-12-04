@@ -13,11 +13,18 @@ package org.fife.rsta.ac.java;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.Element;
 
 import org.fife.rsta.ac.AbstractLanguageSupport;
 import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
+import org.fife.rsta.ac.java.rjc.ast.ImportDeclaration;
+import org.fife.rsta.ac.java.rjc.ast.Package;
 import org.fife.ui.autocomplete.AutoCompletion;
+import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
@@ -197,11 +204,32 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 	private class JavaAutoCompletion extends AutoCompletion {
 
 		private RSyntaxTextArea textArea;
+		private String replacementTextPrefix;
 
 		public JavaAutoCompletion(JavaCompletionProvider provider,
 									RSyntaxTextArea textArea) {
 			super(provider);
 			this.textArea = textArea;
+		}
+
+		private String getCurrentLineText() {
+
+			int caretPosition = textArea.getCaretPosition();
+			Element root = textArea.getDocument().getDefaultRootElement();
+			int line= root.getElementIndex(caretPosition);
+			Element elem = root.getElement(line);
+			int endOffset = elem.getEndOffset();
+			int lineStart = elem.getStartOffset();
+
+			String text = "";
+			try {
+				text = textArea.getText(lineStart, endOffset-lineStart).trim();
+			} catch (BadLocationException e) {
+				e.printStackTrace();
+			}
+
+			return text;
+
 		}
 
 		protected int refreshPopupWindow() {
@@ -211,6 +239,154 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 			String style = textArea.getSyntaxEditingStyle();
 			parser.parse(doc, style);
 			return super.refreshPopupWindow();
+		}
+
+		/**
+		 * Overridden to allow for prepending to the replacement text.  This
+		 * allows us to insert fully qualified class names. instead of
+		 * unqualified ones, if necessary (i.e. if the user tries to
+		 * auto-complete <code>javax.swing.text.Document</code>, but they've
+		 * explicitly imported <code>org.w3c.dom.Document</code> - we need to
+		 * insert the fully qualified name in that case).
+		 */
+		protected String getReplacementText(Completion c, Document doc,
+											int start, int len) {
+			String text = super.getReplacementText(c, doc, start, len);
+			if (replacementTextPrefix!=null) {
+				text = replacementTextPrefix + text;
+				replacementTextPrefix = null;
+			}
+			return text;
+		}
+
+		protected void insertCompletion(Completion c) {
+
+			// If we're inserting a class name, we might also need to
+			// add an import statement for the class.
+			if (c instanceof ClassCompletion) {
+
+				String text = getCurrentLineText();
+
+				// Make sure we're not currently typing an import statement.
+				if (!text.startsWith("import ")) {
+
+					JavaCompletionProvider provider = (JavaCompletionProvider)
+														getCompletionProvider();
+					CompilationUnit cu = provider.getCompilationUnit();
+					int offset = 0;
+					boolean alreadyImported = false;
+					ClassCompletion classCompletion = (ClassCompletion)c;
+
+					// Try to bail early, if possible.
+					if (cu==null) { // Can never happen, right?
+						super.insertCompletion(c);
+						return;
+					}
+					if ("java.lang".equals(classCompletion.getPackageName())) {
+						// Package java.lang is "imported" by default.
+						super.insertCompletion(c);
+						return;
+					}
+
+					String className = classCompletion.getClassName(false);
+					String fqClassName = classCompletion.getClassName(true);
+
+					// Loop through all import statements.
+					for (Iterator i=cu.getImportIterator(); i.hasNext(); ) {
+
+						ImportDeclaration id = (ImportDeclaration)i.next();
+						offset = id.getNameEndOffset() + 1;
+
+						// Pulling in static methods, etc. from a class - skip
+						if (id.isStatic()) {
+							continue;
+						}
+
+						// Importing all classes in the package...
+						else if (id.isWildcard()) {
+							String imported = id.getName();
+							int dot = imported.lastIndexOf('.');
+							String importedPkg = imported.substring(0, dot);
+							dot = fqClassName.lastIndexOf('.');
+							String classPkg = fqClassName.substring(0, dot);
+							if (importedPkg.equals(classPkg)) {
+								alreadyImported = true;
+								break;
+							}
+							else {
+								System.out.println("Not the same: " + importedPkg + ", " + classPkg);
+							}
+						}
+
+						// Importing a single class from a package...
+						else {
+
+							String fullyImportedClassName = id.getName();
+							int dot = fullyImportedClassName.lastIndexOf('.');
+							String importedClassName = fullyImportedClassName.
+														substring(dot + 1);
+
+							// If they explicitly imported a class with the
+							// same name, but it's in a different package, then
+							// the user is required to fully-qualify the class
+							// in their code (if unqualified, it would be
+							// assumed to be of the type of the qualified
+							// class).
+							if (className.equals(importedClassName)) {
+								offset = -1; // Means "must fully qualify"
+								if (fqClassName.equals(fullyImportedClassName)){
+									alreadyImported = true;
+									break;
+								}
+							}
+
+						}
+
+					}
+
+					// If the class wasn't imported, we'll need to add an
+					// import statement!
+					if (!alreadyImported) {
+
+						// If there are no previous imports, add the import
+						// statement after the package line (if any).
+						// TODO: Divine a better place for the import statement.
+						if (offset == 0) {
+							Package pkg = cu.getPackage();
+							offset = pkg!=null ? pkg.getNameEndOffset()+1 : 0;
+						}
+
+						// We read through all imports, but didn't find our class.
+						// Add a new import statement after the last one.
+						if (offset > -1) {
+							//System.out.println(classCompletion.getAlreadyEntered(textArea));
+							String importToAdd = (offset > 0 ? "\nimport " : "import ") + fqClassName + ";";
+							textArea.insert(importToAdd, offset);
+							//textArea.setCaretPosition(caretPosition + importToAdd.length());
+						}
+
+						// Otherwise, either the class was imported, or a class
+						// with the same name was explicitly imported.
+						else {
+							// Another class with the same name was imported.
+							// We must insert the fully-qualified class name
+							// so the compiler resolves the correct class.
+							int dot = fqClassName.lastIndexOf('.');
+							if (dot>-1) {
+								String pkg = fqClassName.substring(0, dot+1);
+								replacementTextPrefix = pkg;
+							}
+							//System.out.println("JavaLanguageSupport.JavaAutoCompletion.insertCompletion()");
+						}
+
+					}
+
+				}
+
+			}
+
+			super.insertCompletion(c);
+
 		}
 
 	}

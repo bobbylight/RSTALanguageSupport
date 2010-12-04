@@ -63,12 +63,50 @@ public class JarManager {
 	 * @param addTo The list to add completion choices to.
 	 */
 	public void addCompletions(CompletionProvider p, String text, Set addTo) {
-
+/*
+ * The commented-out code below is probably replaced by the rest of the code
+ * in this method...
+TODO: Verify me!!!
+ * 
 		// Add any completions matching the text for each jar we know about
 		String[] pkgNames = Util.splitOnChar(text, '.');
 		for (int i=0; i<jars.size(); i++) {
 			JarReader jar = (JarReader)jars.get(i);
 			jar.addCompletions(p, pkgNames, addTo);
+		}
+*/
+		if (text.length()==0) {
+			return;
+		}
+
+		// If what they've typed is qualified, add qualified completions.
+		if (text.indexOf('.')>-1) {
+			String[] pkgNames = Util.splitOnChar(text, '.');
+			for (int i=0; i<jars.size(); i++) {
+				JarReader jar = (JarReader)jars.get(i);
+				jar.addCompletions(p, pkgNames, addTo);
+			}
+		}
+
+		// If they are (possibly) typing an unqualified class name, see if
+		// what they're typing matches any classes in any of jar jars, and if
+		// so, add completions for them too.  This allows the user to get
+		// completions for classes not in their import statements.
+		// Thanks to Guilherme Joao Frantz and Jonatas Schuler for the patch!
+		else {//if (text.indexOf('.')==-1) {
+			String lowerCaseText = text.toLowerCase();
+			for (int i=0; i<jars.size(); i++) {
+				JarReader jar = (JarReader) jars.get(i);
+				List classFiles = jar.getClassesWithNamesStartingWith(lowerCaseText);
+				if (classFiles!=null) {
+					for (Iterator j=classFiles.iterator(); j.hasNext(); ) {
+						ClassFile cf = (ClassFile)j.next();
+						if (org.fife.rsta.ac.java.classreader.Util.isPublic(cf.getAccessFlags())) {
+							addTo.add(new ClassCompletion(p, cf));
+						}
+					}
+				}
+			}
 		}
 
 	}

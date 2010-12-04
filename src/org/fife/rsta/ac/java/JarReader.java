@@ -15,6 +15,7 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -39,8 +40,27 @@ import org.fife.ui.autocomplete.CompletionProvider;
  */
 class JarReader {
 
+	/**
+	 * Information about the jar or directory we're reading classes from.
+	 */
 	private JarInfo info;
+
+	/**
+	 * This is essentially a tree model of all classes in the jar or
+	 * directory.  It's a recursive mapping of <code>String</code>s to either
+	 * <code>Map</code>s or {@link ClassFile}s (which are lazily created and
+	 * may be <code>null</code>).  At each level of the nested map, the string
+	 * key is a package name iff its corresponding value is a <code>Map</code>.
+	 * Examine that <code>Map</code>'s contents to explore the contents of
+	 * that package.  If the corresponding value is a <code>ClassFile</code>,
+	 * then the string key's value is the name of that class.  Finally, if
+	 * the corresponding value is <code>null</code>, then the string key's
+	 * value is the name of a class, but its contents have not yet been
+	 * loaded for use by the code completion library (<code>ClassFile</code>s
+	 * are lazily loaded to conserve memory).
+	 */
 	private TreeMap packageMap;
+
 	private long lastModified;
 
 
@@ -61,8 +81,9 @@ class JarReader {
 	 * Gets the completions in this jar that match a given string.
 	 *
 	 * @param provider The parent completion provider.
-	 * @param text The text to match.  This should be (the start of) a
-	 *        fully-qualified class, interface, or enum name.
+	 * @param The text to match, split into tokens around the '<code>.</code>'
+	 *        character.  This should be (the start of) a fully-qualified
+	 *        class, interface, or enum name.
 	 * @param addTo The list to add completion choices to.
 	 */
 	public void addCompletions(CompletionProvider provider, String[] pkgNames,
@@ -374,6 +395,83 @@ class JarReader {
 
 
 	/**
+	 * Looks through all classes in this jar or directory, trying to find any
+	 * whose unqualified names start with a given prefix.
+	 *
+	 * @param prefix The prefix of the class names.  Case is ignored on this
+	 *        parameter.
+	 * @return A list of {@link ClassFile}s representing classes in this
+	 *         jar or directory whose unqualified names start with the prefix.
+	 *         This will never be <code>null</code>, but may of course be
+	 *         empty.
+	 */
+	public List getClassesWithNamesStartingWith(String prefix) {
+		List res = new ArrayList();
+		String currentPkg = ""; // Don't use null; we're appending to it
+		getClassesWithNamesStartingWithImpl(prefix, packageMap, currentPkg,
+												res);
+		return res;
+	}
+
+
+	/**
+	 * Method used to recursively scan our package map for classes whose names
+	 * start with a given prefix, ignoring case.
+	 *
+	 * @param prefix The prefix that the unqualified class names must match
+	 *        (ignoring case). 
+	 * @param map A piece of our package map.
+	 * @param currentPkg The package that <code>map</code> belongs to (i.e.
+	 *        all levels of packages scanned before this one), separated by
+	 *        '<code>/</code>'.
+	 * @param addTo The list to add any matching <code>ClassFile</code>s to.
+	 */
+	private void getClassesWithNamesStartingWithImpl(String prefix, Map map,
+											String currentPkg, List addTo) {
+
+		final int prefixLen = prefix.length();
+
+		// Loop through the map's entries, which are String keys mapping to
+		// one of a Map (if the key is a package name), a ClassFile (if the
+		// key is a class name), or null (if the key is a class name, but the
+		// corresponding ClassFile has not been loaded yet).
+		for (Iterator i=map.entrySet().iterator(); i.hasNext(); ) {
+
+			Map.Entry entry = (Map.Entry)i.next();
+			String key = (String)entry.getKey();
+			Object value = entry.getValue();
+
+			if (value instanceof Map) {
+				getClassesWithNamesStartingWithImpl(prefix, (Map)value,
+										currentPkg + key + "/", addTo);
+			}
+			else { // value is either a ClassFile or null
+				// If value is null, we only lazily create the ClassFile if
+				// necessary (i.e. if the class name does match what they've
+				// typed).
+				String className = key;
+				if (className.regionMatches(true, 0, prefix, 0, prefixLen)) {
+					if (value==null) {
+						String fqClassName = currentPkg + className + ".class";
+						try {
+							value = createClassFile(fqClassName);
+							entry.setValue(value); // Update the map
+						} catch (IOException ioe) {
+							ioe.printStackTrace();
+						}
+					}
+					if (value!=null) { // possibly null if IOException above
+						addTo.add(/*(ClassFile)*/value);
+					}
+				}
+			}
+
+		}
+
+	}
+
+
+	/**
 	 * Returns the physical file on disk.<p>
 	 *
 	 * Modifying the returned object will <em>not</em> have any effect on
@@ -509,7 +607,7 @@ class JarReader {
 						m = submap;
 					}
 					String className = items[items.length-1];
-					m.put(className, null);
+					m.put(className, null); // Lazily set value to ClassFile later
 				}
 			}
 

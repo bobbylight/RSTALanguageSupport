@@ -36,7 +36,7 @@ import org.fife.rsta.ac.java.rjc.parser.ASTFactory;
  * @author Robert Futrell
  * @version 1.0
  */
-class Util {
+public class Util {
 
 	/**
 	 * Optional header for doc comment lines (except the first line) that
@@ -501,7 +501,8 @@ class Util {
 
 		CompilationUnit cu = null;
 
-		String entryName = cf.getClassName(true).replaceAll("\\.", "/");
+		String entryName = cf.getClassName(true);
+		entryName = replaceChar(entryName, '.', '/');
 		entryName += ".java";
 		//System.out.println("DEBUG: entry name: " + entryName);
 		File file = new File(dir, entryName);
@@ -637,15 +638,47 @@ class Util {
 
 
 	/**
+	 * Does a fast replacement of all instances of one char with another.
+	 *
+	 * @param str The string to do the replacements in.
+	 * @param oldCh The character to look for.
+	 * @param newCh The character to replace with.
+	 * @return The string, possibly with the char replaced.
+	 */
+	public static final String replaceChar(String str, char oldCh, char newCh) {
+		String fixed = str; // In case oldCh isn't found
+		int offs = str.indexOf(oldCh);
+		if (offs>-1) {
+			StringBuffer sb = new StringBuffer(str.substring(0, offs++));
+			// NOTE: Don't declare oldCh/newCh as ints, as it'll break the
+			// StringBuffer.append() call below!
+			sb.append(newCh);
+			int nextOffs = 0;
+			while ((nextOffs = str.indexOf(oldCh, offs))>-1) {
+				sb.append(str.substring(offs, nextOffs));
+				sb.append(newCh);
+				offs = nextOffs + 1;
+			}
+			fixed = sb.append(str.substring(offs)).toString();
+		}
+		return fixed;
+	}
+
+
+	/**
 	 * A faster way to split on a single char than String#split(), since
 	 * we'll be doing this in a tight loop possibly thousands of times (rt.jar).
+	 * This is also fundamentally different than {@link String#split(String)}),
+	 * in the case where <code>str</code> ends with <code>ch</code> - this
+	 * method will return an empty item at the end of the returned array, while
+	 * String#split() will not.
 	 *
 	 * @param str The string to split.
 	 * @param ch The char to split on.
 	 * @return The string, split on the character (e.g. '<tt>/</tt>' or
 	 *         '<tt>.</tt>').
 	 */
-	public static String[] splitOnChar(String str, int ch) {
+	public static final String[] splitOnChar(String str, int ch) {
 		List list = new ArrayList(3);
 		int pos = 0;
 		int old = 0;

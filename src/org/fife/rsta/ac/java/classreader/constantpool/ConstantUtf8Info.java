@@ -118,8 +118,7 @@ try {
 		if (!quoted) {
 			return representedString;
 		}
-		String temp = "\"" + representedString.replaceAll("\"", "\\\"") +
-					"\"";
+		String temp = "\"" + representedString.replaceAll("\"", "\\\"") + "\"";
 		return temp;
 	}
 

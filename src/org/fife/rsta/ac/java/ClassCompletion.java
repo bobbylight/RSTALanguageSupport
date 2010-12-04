@@ -72,6 +72,7 @@ class ClassCompletion extends AbstractJavaSourceCompletion {
 	 * @param fullyQualified Whether the returned name should be fully
 	 *        qualified.
 	 * @return The class name.
+	 * @see #getPackageName()
 	 */
 	public String getClassName(boolean fullyQualified){
 		return cf.getClassName(fullyQualified);
@@ -128,6 +129,17 @@ class ClassCompletion extends AbstractJavaSourceCompletion {
 
 		return fact.getIcon(key);
 
+	}
+
+
+	/**
+	 * Returns the package this class or interface is in.
+	 *
+	 * @return The package, or <code>null</code> if it is not in a package.
+	 * @see #getClassName(boolean)
+	 */
+	public String getPackageName() {
+		return cf.getPackageName();
 	}
 
 

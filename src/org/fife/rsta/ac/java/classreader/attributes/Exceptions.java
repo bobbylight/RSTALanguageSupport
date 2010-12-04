@@ -59,7 +59,7 @@ public class Exceptions extends AttributeInfo {
 		ConstantClassInfo cci = (ConstantClassInfo)cpi;
 		int nameIndex = cci.getNameIndex();
 		String name = cf.getUtf8ValueFromConstantPool(nameIndex);
-		name = name.replaceAll("/", ".");
+		name = org.fife.rsta.ac.java.Util.replaceChar(name, '/', '.');
 		return name;
 	}
 

@@ -120,31 +120,6 @@ public class ClassFile implements AccessFlags {
 
 
 	/**
-	 * Does a fast replace of '<code>$</code>' characters to
-	 * '<code>.</code>' characters.
-	 *
-	 * @param input The input string (a class name from a jar).
-	 * @return The (possibly fixed) class name.
-	 */
-	private static String fix(String input) {
-		String fixed = input;
-		int dollar = input.indexOf('$');
-		if (dollar>-1) {
-			StringBuffer sb = new StringBuffer(input.substring(0, dollar++));
-			sb.append('.');
-			int dollar2 = 0;
-			while ((dollar2 = input.indexOf('$', dollar))>-1) {
-				sb.append(input.substring(dollar, dollar2));
-				sb.append('.');
-				dollar = dollar2 + 1;
-			}
-			fixed = sb.append(input.substring(dollar)).toString();
-		}
-		return fixed;
-	}
-
-
-	/**
 	 * Returns the access flags for this class or interface.
 	 *
 	 * @return The access flags, as a bit field.
@@ -211,12 +186,13 @@ public class ClassFile implements AccessFlags {
 			ConstantUtf8Info cui = (ConstantUtf8Info)getConstantPoolInfo(index);
 			String className = cui.getRepresentedString(false);
 			if (fullyQualified) {
-				className = className.replaceAll("/", ".");
+				className = org.fife.rsta.ac.java.Util.replaceChar(
+											className, '/', '.');
 			}
 			else {
 				className = className.substring(className.lastIndexOf('/')+1);
 			}
-			return fix(className);
+			return org.fife.rsta.ac.java.Util.replaceChar(className, '$', '.');
 		}
 
 		// cpi is never null
