@@ -156,6 +156,24 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 
 
 	/**
+	 * Information about an import statement to add and where it should be
+	 * added.  This is used internally when a class completion is inserted,
+	 * and it needs an import statement added to the source.
+	 */
+	private static class ImportToAddInfo {
+
+		public int offs;
+		public String text;
+
+		public ImportToAddInfo(int offset, String text) {
+			this.offs = offset;
+			this.text = text;
+		}
+
+	}
+
+
+	/**
 	 * Manages information about the parsing/auto-completion for a single text
 	 * area.  Unlike many simpler language supports,
 	 * <tt>JavaLanguageSupport</tt> cannot share any information amongst
@@ -252,10 +270,11 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 
 		/**
 		 * Determines whether the class name being completed has been imported,
-		 * and if it hasn't, adds an import statement for it.  Alternatively,
-		 * if the class hasn't been imported, but a class with the same
-		 * (unqualified) name HAS been imported, this method sets things up
-		 * so the fully-qualified version of this class's name is inserted.<p>
+		 * and if it hasn't, returns the import statement that should be added
+		 * for it.  Alternatively, if the class hasn't been imported, but a
+		 * class with the same (unqualified) name HAS been imported, this
+		 * method sets things up so the fully-qualified version of this class's
+		 * name is inserted.<p>
 		 * 
 		 * Thanks to Guilherme Joao Frantz and Jonatas Schuler for helping
 		 * with the patch!
@@ -263,7 +282,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		 * @param c The completion being inserted.
 		 * @return Whether an import was added.
 		 */
-		private boolean possiblyAddImport(ClassCompletion cc) {
+		private ImportToAddInfo getShouldAddImport(ClassCompletion cc) {
 
 			String text = getCurrentLineText();
 
@@ -278,11 +297,11 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 
 				// Try to bail early, if possible.
 				if (cu==null) { // Can never happen, right?
-					return false;
+					return null;
 				}
 				if ("java.lang".equals(cc.getPackageName())) {
 					// Package java.lang is "imported" by default.
-					return false;
+					return null;
 				}
 
 				String className = cc.getClassName(false);
@@ -328,10 +347,10 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 						// class).
 						if (className.equals(importedClassName)) {
 							offset = -1; // Means "must fully qualify"
-							if (fqClassName.equals(fullyImportedClassName)){
+							if (fqClassName.equals(fullyImportedClassName)) {
 								alreadyImported = true;
-								break;
 							}
+							break;
 						}
 
 					}
@@ -367,8 +386,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 						}
 						// TODO: Determine whether the imports are alphabetical,
 						// and if so, add the new one alphabetically.
-						textArea.insert(importToAdd.toString(), offset);
-						return true;
+						return new ImportToAddInfo(offset, importToAdd.toString());
 					}
 
 					// Otherwise, either the class was imported, or a class
@@ -382,14 +400,13 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 							String pkg = fqClassName.substring(0, dot+1);
 							replacementTextPrefix = pkg;
 						}
-						//System.out.println("JavaLanguageSupport.JavaAutoCompletion.insertCompletion()");
 					}
 
 				}
 
 			}
 
-			return false;
+			return null;
 
 		}
 
@@ -400,27 +417,29 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		 */
 		protected void insertCompletion(Completion c) {
 
+			ImportToAddInfo importInfo = null;
+
 			// We special-case class completions because they may add import
-			// statements to the top of our source file.  Note that we won't
-			// always *need* to make it an atomic edit; it's only needed when
-			// an import is actually added.  However, if we call
-			// possiblyAddImport() first, then super.insertCompletion(), doing
-			// an undo places the caret at the removed import's offset, which
-			// is unintuitive for the user (they expect the caret to be at the
-			// offset in the code they are editing).  So, we just always wrap
-			// it into an atomic edit.
+			// statements to the top of our source file.  We don't add the
+			// (possible) new import statement until after the completion is
+			// inserted; that way, when we treat it as an atomic undo/redo,
+			// when the user undoes the completion, the caret stays in the
+			// code instead of jumping to the import.
 			if (c instanceof ClassCompletion) {
-				textArea.beginAtomicEdit();
-				try {
-					super.insertCompletion(c);
-					/*atomicEditRequired=*/possiblyAddImport((ClassCompletion)c);
-				} finally {
-					textArea.endAtomicEdit();
+				importInfo = getShouldAddImport((ClassCompletion)c);
+				if (importInfo!=null) {
+					textArea.beginAtomicEdit();
 				}
 			}
 
-			else {
+			try {
 				super.insertCompletion(c);
+				if (importInfo!=null) {
+					textArea.insert(importInfo.text, importInfo.offs);
+				}
+			} finally {
+				// Be safe and always pair beginAtomicEdit() and endAtomicEdit()
+				textArea.endAtomicEdit();
 			}
 
 		}
