@@ -50,7 +50,7 @@ class ClassCompletion extends AbstractJavaSourceCompletion {
 			return 0;
 		}
 		// Check for classes with same name, but in different packages
-		else if(o.toString().equals(toString())) {
+		else if(o.toString().equalsIgnoreCase(toString())) {
 			if (o instanceof ClassCompletion) {
 				ClassCompletion c2 = (ClassCompletion) o;
 				return getClassName(true).compareTo(c2.getClassName(true));
