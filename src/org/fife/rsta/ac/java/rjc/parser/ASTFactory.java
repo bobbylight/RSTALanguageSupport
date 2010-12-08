@@ -68,18 +68,24 @@ public class ASTFactory implements TokenTypes {
 
 	/**
 	 * Checks whether a local variable's name collides with a local variable
-	 * defined earlier.
+	 * defined earlier.  Note that this method assumes that it is called
+	 * immediately whenever a variable is parsed, thus any other variables
+	 * declared in a code block were declared before the one being checked.
 	 *
 	 * @param cu The compilation unit.
 	 * @param lVar The just-scanned local variable.
 	 * @param block The code block the variable is in.
+	 * @param m The method the (possibly nested) code block <code>block</code>
+	 *        is in, or <code>null</code> for none.
 	 */
 	private void checkForDuplicateLocalVarNames(CompilationUnit cu,
-											Token lVar, CodeBlock block) {
+							Token lVar, CodeBlock block, Method m) {
 
 		String name = lVar.getLexeme();
 		boolean found = false;
 
+		// See if a local variable defined previously in this block has the
+		// same name.
 		for (int i=0; i<block.getLocalVarCount(); i++) {
 			LocalVariable otherLocal = block.getLocalVar(i);
 			if (name.equals(otherLocal.getName())) {
@@ -89,8 +95,27 @@ public class ASTFactory implements TokenTypes {
 			}
 		}
 
-		if (!found && block.getParent()!=null) {
-			checkForDuplicateLocalVarNames(cu, lVar, block.getParent());
+		// If not...
+		if (!found) {
+
+			// If this was a nested code block, check previously-defined
+			// variables in the parent block.
+			if (block.getParent()!=null) {
+				checkForDuplicateLocalVarNames(cu, lVar, block.getParent(), m);
+			}
+
+			// If this was the highest-level code block, if we're in the body
+			// of a method, check the method's parameters.
+			else if (m!=null) {
+				for (int i=0; i<m.getParameterCount(); i++) {
+					FormalParameter param = m.getParameter(i);
+					if (name.equals(param.getName())) {
+						cu.addParserNotice(lVar, "Duplicate local variable: " + name);
+						break;
+					}
+				}
+			}
+
 		}
 
 	}
@@ -126,16 +151,25 @@ public class ASTFactory implements TokenTypes {
 	}
 
 
-	private CodeBlock _getBlock(CompilationUnit cu, CodeBlock parent, Scanner s,
-								boolean isStatic) throws IOException {
-		return _getBlock(cu, parent, s, isStatic, 1);
+	private CodeBlock _getBlock(CompilationUnit cu, CodeBlock parent, Method m,
+							Scanner s, boolean isStatic) throws IOException {
+		return _getBlock(cu, parent, m, s, isStatic, 1);
 	}
 
 
 	/**
 	 * Parses a block of code.  This should not be called.
+	 *
+	 * @param parent The parent code block, or <code>null</code> if none (i.e.
+	 *        this is the body of a method, a static initializer block, etc.).
+	 * @param m The method containing this block, or <code>null</code> if this
+	 *        block is not part of a method.
+	 * @param s The scanner.
+	 * @param isStatic Whether this is a static code block.
+	 * @param depth The nested depth of this code block.
 	 */
-	private CodeBlock _getBlock(CompilationUnit cu, CodeBlock parent, Scanner s,
+	private CodeBlock _getBlock(CompilationUnit cu, CodeBlock parent,
+			Method m, Scanner s,
 			boolean isStatic, int depth) throws IOException {
 
 		log("Entering _getBlock() (" + depth + ")");
@@ -166,7 +200,7 @@ OUTER:
 
 				case SEPARATOR_LBRACE:
 					s.yyPushback(t);
-					CodeBlock child = _getBlock(cu, block, s, isStatic, depth+1);
+					CodeBlock child = _getBlock(cu, block, m, s, isStatic, depth+1);
 					block.add(child);
 					atStatementStart = true;
 					break;
@@ -177,7 +211,7 @@ OUTER:
 
 				case KEYWORD_TRY:
 					s.yyPeekNonNull(SEPARATOR_LBRACE, "'{' expected");
-					CodeBlock tryBlock = _getBlock(cu, block, s, isStatic, depth+1);
+					CodeBlock tryBlock = _getBlock(cu, block, m, s, isStatic, depth+1);
 					block.add(tryBlock);
 					while (s.yyPeekCheckType()==KEYWORD_CATCH &&
 							s.yyPeekCheckType(2)==SEPARATOR_LPAREN) {
@@ -194,10 +228,10 @@ OUTER:
 						Token var = s.yylexNonNull(IDENTIFIER, "Variable declarator expected");
 						s.yylexNonNull(SEPARATOR_RPAREN, "')' expected");
 						s.yyPeekNonNull(SEPARATOR_LBRACE, "'{' expected");
-						CodeBlock catchBlock = _getBlock(cu, block, s, false, depth);
+						CodeBlock catchBlock = _getBlock(cu, block, m, s, false, depth);
 						int offs = var.getOffset(); // Not actually in block!
 						LocalVariable localVar = new LocalVariable(s, isFinal, exType, offs, var.getLexeme());
-						checkForDuplicateLocalVarNames(cu, var, block);
+						checkForDuplicateLocalVarNames(cu, var, block, m);
 						catchBlock.addLocalVariable(localVar);
 						block.add(catchBlock);
 					}
@@ -221,7 +255,7 @@ case KEYWORD_WHILE:
 	}
 	nextType = s.yyPeekCheckType();
 	if (nextType==SEPARATOR_LBRACE) {
-		child = _getBlock(cu, block, s, isStatic, depth+1);
+		child = _getBlock(cu, block, m, s, isStatic, depth+1);
 		block.add(child);
 		atStatementStart = true;
 	}
@@ -268,7 +302,7 @@ case KEYWORD_WHILE:
 								int offs = t.getOffset();
 								String name = t.getLexeme();
 								LocalVariable lVar = new LocalVariable(s, isFinal, varType, offs, name);
-								checkForDuplicateLocalVarNames(cu, t, block);
+								checkForDuplicateLocalVarNames(cu, t, block, m);
 								block.addLocalVariable(lVar);
 								nextType = s.yyPeekCheckType();
 								// A "valid" nextType would be '=', ',' or ';'.
@@ -319,7 +353,7 @@ case KEYWORD_WHILE:
 				case KEYWORD_STATIC:
 					Token t2 = s.yyPeekNonNull("'{' or modifier expected");
 					if (t2.getType() == SEPARATOR_LBRACE) {
-						CodeBlock block = _getBlock(cu, null, s, true);
+						CodeBlock block = _getBlock(cu, null, null, s, true);
 						classDec.addMember(block);
 						break;
 					}
@@ -332,7 +366,7 @@ case KEYWORD_WHILE:
 
 				case SEPARATOR_LBRACE:
 					s.yyPushback(t);
-					CodeBlock block = _getBlock(cu, null, s, false);
+					CodeBlock block = _getBlock(cu, null, null, s, false);
 					classDec.addMember(block);
 					break;
 
@@ -556,7 +590,7 @@ return cu;
 	private EnumBody _getEnumBody(CompilationUnit cu, Scanner s,
 						EnumDeclaration enumDec) throws IOException {
 		// TODO: Implement me
-		CodeBlock block = _getBlock(cu, null, s, false);
+		CodeBlock block = _getBlock(cu, null, null, s, false);
 		enumDec.setBodyEndOffset(s.createOffset(block.getNameEndOffset()));
 		return null;
 	}
@@ -667,7 +701,7 @@ return cu;
 				case SEPARATOR_LBRACE:
 					s.yyPushback(t);
 					// TODO: What is this?
-					_getBlock(cu, null, s, false);
+					_getBlock(cu, null, null, s, false);
 					break;
 
 				default:
@@ -811,7 +845,7 @@ OUTER:
 				for (int i=tokenList.size()-1; i>=0; i--) {
 					s.yyPushback((Token)tokenList.get(i));
 				}
-				CodeBlock block = _getBlock(cu, null, s, false);
+				CodeBlock block = _getBlock(cu, null, null, s, false);
 				iDec.addMember(block);
 			}
 			else { // inner class, enum, or interface (?)
@@ -941,7 +975,7 @@ OUTER:
 			}
 			else if (t.getType() == SEPARATOR_LBRACE) {
 				s.yyPushback(t);
-				block = _getBlock(cu, null, s, false);
+				block = _getBlock(cu, null, m, s, false);
 			}
 			else {
 				throw new IOException("'{' or ';' expected");
@@ -956,7 +990,7 @@ OUTER:
 				for (int i=tokenList.size()-1; i>=0; i--) {
 					s.yyPushback((Token)tokenList.get(i));
 				}
-				CodeBlock block = _getBlock(cu, null, s, false);
+				CodeBlock block = _getBlock(cu, null, null, s, false);
 				classDec.addMember(block);
 			}
 			else { // inner class, enum, or interface (?)

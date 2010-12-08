@@ -111,6 +111,10 @@ public class Type {
 	}
 
 
+	/*
+	 * MethodDeclaratorRest allows bracket pairs after its FormalParameters,
+	 * which increment the array depth of the return type.
+	 */
 	public void incrementBracketPairCount(int count) {
 		bracketPairCount += count;
 	}
@@ -142,10 +146,6 @@ public class Type {
 	}
 
 
-	/*
-	 * MethodDeclaratorRest allows bracket pairs after its FormalParameters,
-	 * which increment the array depth of the return type.
-	 */
 	public void setBracketPairCount(int count) {
 		bracketPairCount = count;
 	}
