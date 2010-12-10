@@ -192,6 +192,11 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 
 		else if (!type.isBasicType()) {
 			String typeStr = type.toString();
+			// Remove type parameters.
+			int lt = typeStr.indexOf('<');
+			if (lt>-1) {
+				typeStr = typeStr.substring(0, lt);
+			}
 			ClassFile cf = getClassFileFor(cu, pkg, typeStr);
 			if (cf!=null) {
 				addCompletionsForExtendedClass(retVal, cu, cf, pkg);
