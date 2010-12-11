@@ -83,13 +83,51 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	}
 
 
+	public Member getMember(int index) {
+		return (Member)memberList.get(index);
+	}
+
+
 	public int getMemberCount() {
 		return memberList.size();
 	}
 
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Iterator getMemberIterator() {
 		return memberList.iterator();
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public Iterator getMethodIterator() {
+		List methods = new ArrayList();
+		for (Iterator i=getMemberIterator(); i.hasNext(); ) {
+			Member member = (Member)i.next();
+			if (member instanceof Method) {
+				methods.add(member);
+			}
+		}
+		return methods.iterator();
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public List getMethodsByName(String name) {
+		List methods = new ArrayList();
+		for (Iterator i=getMemberIterator(); i.hasNext(); ) {
+			Member member = (Member)i.next();
+			if (member instanceof Method && name.equals(member.getName())) {
+				methods.add(member);
+			}
+		}
+		return methods;
 	}
 
 

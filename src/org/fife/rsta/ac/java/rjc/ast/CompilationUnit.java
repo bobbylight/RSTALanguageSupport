@@ -202,6 +202,11 @@ public class CompilationUnit extends AbstractASTNode
 	}
 
 
+	public TypeDeclaration getTypeDeclaration(int index) {
+		return (TypeDeclaration)typeDeclarations.get(index);
+	}
+
+
 	public int getTypeDeclarationCount() {
 		return typeDeclarations.size();
 	}
