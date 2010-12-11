@@ -113,6 +113,13 @@ interface MemberCompletion extends JavaSourceCompletion {
 		public String getType();
 
 		/**
+		 * Returns whether this member is a constructor.
+		 *
+		 * @return Whether this member is a constructor.
+		 */
+		public boolean isConstructor();
+
+		/**
 		 * Returns whether this member is deprecated.
 		 *
 		 * @return Whether this member is deprecated.

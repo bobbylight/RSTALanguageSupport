@@ -216,6 +216,9 @@ class MethodInfoData implements Data {
 	}
 
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public String getType() {
 		return info.getReturnTypeString();
 	}
@@ -226,6 +229,17 @@ class MethodInfoData implements Data {
 	}
 
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean isConstructor() {
+		return info.isConstructor();
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public boolean isDeprecated() {
 		return info.isDeprecated();
 	}

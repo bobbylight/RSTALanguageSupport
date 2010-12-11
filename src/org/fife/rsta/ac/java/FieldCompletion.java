@@ -40,11 +40,18 @@ class FieldCompletion extends AbstractJavaSourceCompletion
 
 	private Data data;
 
+	/**
+	 * The relevance of fields.  This allows fields to be "higher" in
+	 * the completion list than other types.
+	 */
+	private static final int RELEVANCE		= 3;
+
 
 	public FieldCompletion(CompletionProvider provider, Field field,
 							String typeName) {
 		super(provider, field.getName());
 		this.data = new FieldData(field);
+		setRelevance(RELEVANCE);
 	}
 
 
@@ -89,6 +96,10 @@ class FieldCompletion extends AbstractJavaSourceCompletion
 
 			public String getType() {
 				return "int";
+			}
+
+			public boolean isConstructor() {
+				return false;
 			}
 
 			public boolean isDeprecated() {

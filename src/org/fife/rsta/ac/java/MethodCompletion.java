@@ -49,6 +49,13 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 	 */
 	private Data data;
 
+	/**
+	 * The relevance of methods.  This allows methods to be "higher" in
+	 * the completion list than other types.
+	 */
+	private static final int NON_CONSTRUCTOR_RELEVANCE		= 2;
+
+
 
 	/**
 	 * Creates a completion for a method discovered when parsing a Java
@@ -65,6 +72,7 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 		super(provider, m.getName(), m.getType()==null ? "void" : m.getType().toString());
 		setDefinedIn(typeName);
 		this.data = new MethodData(m);
+		setRelevanceAppropriately();
 
 		int count = m.getParameterCount();
 		List params = new ArrayList(count);
@@ -93,6 +101,7 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 		super(provider, info.getName(), info.getReturnTypeString());
 		setDefinedIn(typeName);
 		this.data = new MethodInfoData(info, (SourceCompletionProvider)provider);
+		setRelevanceAppropriately();
 
 		String[] paramTypes = info.getParameterTypes();
 		List params = new ArrayList(paramTypes.length);
@@ -160,6 +169,17 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 	 */
 	public void rendererText(Graphics g, int x, int y, boolean selected) {
 		rendererText(this, g, x, y, selected);
+	}
+
+
+	/**
+	 * Sets the relevance of this constructor based on its properties.
+	 */
+	private void setRelevanceAppropriately() {
+		// Only change relevance from the default if this isn't a constructor.
+		if (!data.isConstructor()) {
+			setRelevance(NON_CONSTRUCTOR_RELEVANCE);
+		}
 	}
 
 

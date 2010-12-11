@@ -98,6 +98,11 @@ class MethodData implements Data {
 	}
 
 
+	public boolean isConstructor() {
+		return method.isConstructor();
+	}
+
+
 	public boolean isDeprecated() {
 		return method.isDeprecated();
 	}

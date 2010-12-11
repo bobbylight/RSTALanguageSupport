@@ -20,11 +20,18 @@ class LocalVariableCompletion extends AbstractJavaSourceCompletion {
 
 	private LocalVariable localVar;
 
+	/**
+	 * The relevance of local variables.  This allows local variables to be
+	 * "higher" in the completion list than other types.
+	 */
+	private static final int RELEVANCE		= 3;
+
 
 	public LocalVariableCompletion(CompletionProvider provider,
 									LocalVariable localVar) {
-			super(provider, localVar.getName());
-			this.localVar = localVar;
+		super(provider, localVar.getName());
+		this.localVar = localVar;
+		setRelevance(RELEVANCE);
 	}
 
 

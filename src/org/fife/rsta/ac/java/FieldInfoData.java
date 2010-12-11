@@ -180,6 +180,16 @@ class FieldInfoData implements Data {
 
 
 	/**
+	 * Always returns <code>false</code>, fields cannot be constructors.
+	 *
+	 * @return <code>false</code> always.
+	 */
+	public boolean isConstructor() {
+		return false;
+	}
+
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public boolean isDeprecated() {
