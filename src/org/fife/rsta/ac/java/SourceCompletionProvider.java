@@ -112,8 +112,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 		for (int i=0; i<fieldCount; i++) {
 			FieldInfo info = cf.getFieldInfo(i);
 			if (isAccessible(info, pkg) && info.isStatic()) {
-				FieldCompletion fc = new FieldCompletion(this, info,
-											cf.getClassName(true));
+				FieldCompletion fc = new FieldCompletion(this, info);
 				set.add(fc);
 			}
 		}
@@ -156,7 +155,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 		for (int i=0; i<fieldCount; i++) {
 			FieldInfo info = cf.getFieldInfo(i);
 			if (isAccessible(info, pkg)) {
-				FieldCompletion fc = new FieldCompletion(this, info, cf.getClassName(true));
+				FieldCompletion fc = new FieldCompletion(this, info);
 				set.add(fc);
 			}
 		}
@@ -614,7 +613,7 @@ public File getSourceLocForClass(String className) {
 			else if (m instanceof Field) {
 				if (prefix==null || THIS.equals(prefix)) {
 					Field field = (Field)m;
-					retVal.add(new FieldCompletion(this, field, typeName));
+					retVal.add(new FieldCompletion(this, field));
 				}
 			}
 		}

@@ -1,6 +1,8 @@
 public class ExampleCode {
 
    private String strField;
+   protected int aaa;
+   protected int abb;
 
    public ExampleCode(int value) {
       this.value = value;

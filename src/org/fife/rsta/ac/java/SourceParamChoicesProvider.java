@@ -16,7 +16,11 @@ import javax.swing.text.JTextComponent;
 import org.fife.rsta.ac.LanguageSupport;
 import org.fife.rsta.ac.LanguageSupportFactory;
 import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
+//import org.fife.rsta.ac.java.rjc.ast.Field;
+//import org.fife.rsta.ac.java.rjc.ast.LocalVariable;
+//import org.fife.rsta.ac.java.rjc.ast.Method;
 import org.fife.rsta.ac.java.rjc.ast.TypeDeclaration;
+//import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.ParameterChoicesProvider;
 import org.fife.ui.autocomplete.ParameterizedCompletion;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -66,6 +70,23 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 		}
 
 		List list = typeDec.getAccessibleMembersOfType(param.getType(), dot);
+/*
+CompletionProvider provider = jls.getCompletionProvider((RSyntaxTextArea)tc);
+for (int i=0; i<list.size(); i++) {
+	Object obj = list.get(i);
+	if (obj instanceof LocalVariable) {
+		list.set(i, new LocalVariableCompletion(provider, (LocalVariable)obj));
+	}
+	else if (obj instanceof Field) {
+		list.set(i, new FieldCompletion(provider, (Field)obj));
+	}
+	else if (obj instanceof Method) {
+		// TODO: ???
+		String typeName = ((Method)obj).getParentTypeDeclaration().getName();
+		list.set(i, new MethodCompletion(provider, (Method)obj, typeName));
+	}
+}
+*/
 		return list;
 
 	}

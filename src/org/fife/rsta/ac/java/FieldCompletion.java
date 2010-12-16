@@ -47,16 +47,14 @@ class FieldCompletion extends AbstractJavaSourceCompletion
 	private static final int RELEVANCE		= 3;
 
 
-	public FieldCompletion(CompletionProvider provider, Field field,
-							String typeName) {
+	public FieldCompletion(CompletionProvider provider, Field field) {
 		super(provider, field.getName());
 		this.data = new FieldData(field);
 		setRelevance(RELEVANCE);
 	}
 
 
-	public FieldCompletion(CompletionProvider provider, FieldInfo info,
-							String typeName) {
+	public FieldCompletion(CompletionProvider provider, FieldInfo info) {
 		super(provider, info.getName());
 		this.data = new FieldInfoData(info, (SourceCompletionProvider)provider);
 	}
