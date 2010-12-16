@@ -91,6 +91,33 @@ public class CompilationUnit extends AbstractASTNode
 
 
 	/**
+	 * Returns the deepest-nested type declaration that contains a given
+	 * offset.
+	 *
+	 * @param offs The offset.
+	 * @return The deepest-nested type declaration containing the offset, or
+	 *         <code>null</code> if the offset is outside of any type
+	 *         declaration (such as in the import statements, etc.).
+	 * @see #getTypeDeclarationAtOffset(int)
+	 */
+	public TypeDeclaration getDeepestTypeDeclarationAtOffset(int offs) {
+
+		TypeDeclaration td = getTypeDeclarationAtOffset(offs);
+
+		if (td!=null) {
+			TypeDeclaration next = td.getChildTypeAtOffset(offs);
+			while (next!=null) {
+				td = next;
+				next = td.getChildTypeAtOffset(offs);
+			}
+		}
+
+		return td;
+
+	}
+
+
+	/**
 	 * TODO: Return range for more instances than just class methods.
 	 * Also handle child TypeDeclarations.
 	 *
@@ -204,6 +231,32 @@ public class CompilationUnit extends AbstractASTNode
 
 	public TypeDeclaration getTypeDeclaration(int index) {
 		return (TypeDeclaration)typeDeclarations.get(index);
+	}
+
+
+	/**
+	 * Returns the type declaration in this file that contains the specified
+	 * offset.
+	 *
+	 * @param offs The offset.
+	 * @return The type declaration, or <code>null</code> if the offset is
+	 *         outside of any type declaration.
+	 * @see #getDeepestTypeDeclarationAtOffset(int)
+	 */
+	public TypeDeclaration getTypeDeclarationAtOffset(int offs) {
+
+		TypeDeclaration typeDec = null;
+
+		for (Iterator i=getTypeDeclarationIterator(); i.hasNext(); ) {
+			TypeDeclaration td = (TypeDeclaration)i.next();
+			if (td.getBodyContainsOffset(offs)) {
+				typeDec = td;
+				break;
+			}
+		}
+
+		return typeDec;
+
 	}
 
 

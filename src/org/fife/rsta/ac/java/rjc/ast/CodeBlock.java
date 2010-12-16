@@ -82,6 +82,29 @@ public class CodeBlock extends AbstractMember {
 	}
 
 
+	/**
+	 * Returns the deepest code block nested under this one (or this one
+	 * itself) containing a given offset.
+	 *
+	 * @param offs The offset to look for.
+	 * @return The deepest-nested code block containing the offset, or
+	 *         <code>null</code> if this code block and none of its children
+	 *         contain the offset.
+	 */
+	public CodeBlock getDeepestCodeBlockContaining(int offs) {
+		if (!containsOffset(offs)) {
+			return null;
+		}
+		for (int i=0; i<getChildBlockCount(); i++) {
+			CodeBlock child = getChildBlock(i);
+			if (child.containsOffset(offs)) {
+				return child.getDeepestCodeBlockContaining(offs);
+			}
+		}
+		return this;
+	}
+
+
 	public String getDocComment() {
 		// TODO: Can static blocks have doc comments?
 		return null;
@@ -95,6 +118,39 @@ public class CodeBlock extends AbstractMember {
 
 	public int getLocalVarCount() {
 		return localVars==null ? 0 : localVars.size();
+	}
+
+
+	/**
+	 * Returns all local variables declared before a given offset, both in
+	 * this code block and in all parent blocks.
+	 *
+	 * @param offs The offset.
+	 * @return The {@link LocalVariable}s, or an empty list of none were
+	 *         declared before the offset.
+	 */
+	public List getLocalVarsBefore(int offs) {
+
+		List vars = new ArrayList();
+
+		if (localVars!=null) {
+			for (int i=0; i<getLocalVarCount(); i++) {
+				LocalVariable localVar = getLocalVar(i);
+				if (localVar.getNameStartOffset()<offs) {
+					vars.add(localVar);
+				}
+				else {
+					break;
+				}
+			}
+		}
+
+		if (parent!=null) {
+			vars.addAll(parent.getLocalVarsBefore(offs));
+		}
+
+		return vars;
+
 	}
 
 

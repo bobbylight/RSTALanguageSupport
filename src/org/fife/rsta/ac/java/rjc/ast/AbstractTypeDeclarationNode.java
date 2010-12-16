@@ -58,6 +58,11 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	}
 
 
+	public boolean getBodyContainsOffset(int offs) {
+		return offs>=getBodyStartOffset() && offs<getBodyEndOffset();
+	}
+
+
 	public int getBodyEndOffset() {
 		return bodyEndOffs!=null ? bodyEndOffs.getOffset() : Integer.MAX_VALUE;
 	}
@@ -73,6 +78,26 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	}
 
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public TypeDeclaration getChildTypeAtOffset(int offs) {
+
+		TypeDeclaration typeDec = null;
+
+		for (int i=0; i<getChildTypeCount(); i++) {
+			TypeDeclaration td = getChildType(i);
+			if (td.getBodyContainsOffset(offs)) {
+				typeDec = td;
+				break;
+			}
+		}
+
+		return typeDec;
+
+	}
+
+
 	public int getChildTypeCount() {
 		return childTypes==null ? 0 : childTypes.size();
 	}
@@ -80,6 +105,21 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 
 	public String getDocComment() {
 		return docComment;
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public Iterator getFieldIterator() {
+		List fields = new ArrayList();
+		for (Iterator i=getMemberIterator(); i.hasNext(); ) {
+			Member member = (Member)i.next();
+			if (member instanceof Field) {
+				fields.add(member);
+			}
+		}
+		return fields.iterator();
 	}
 
 

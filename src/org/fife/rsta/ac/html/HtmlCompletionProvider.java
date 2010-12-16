@@ -25,6 +25,7 @@ import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
 import org.fife.ui.autocomplete.MarkupTagCompletion;
 import org.fife.ui.autocomplete.ParameterizedCompletion.Parameter;
+import org.fife.ui.autocomplete.Util;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
@@ -274,7 +275,7 @@ public class HtmlCompletionProvider extends DefaultCompletionProvider {
 
 			while (index<completions.size()) {
 				Completion c = (Completion)completions.get(index);
-				if (startsWithIgnoreCase(c.getInputText(), text)) {
+				if (Util.startsWithIgnoreCase(c.getInputText(), text)) {
 					retVal.add(c);
 					index++;
 				}

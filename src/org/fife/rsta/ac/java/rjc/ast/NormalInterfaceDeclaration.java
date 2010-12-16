@@ -45,6 +45,15 @@ public class NormalInterfaceDeclaration extends AbstractTypeDeclarationNode {
 	}
 
 
+	/**
+	 * Always returns <code>null</code>, since interfaces cannot contain
+	 * actual code.
+	 */
+	public List getAccessibleMembersOfType(String type, int offs) {
+		return null;
+	}
+
+
 	public int getExtendedCount() {
 		return extendedList.size();
 	}

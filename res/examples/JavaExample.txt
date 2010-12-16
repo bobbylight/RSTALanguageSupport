@@ -1,5 +1,7 @@
 public class ExampleCode {
 
+   private String strField;
+
    public ExampleCode(int value) {
       this.value = value;
    }
@@ -25,4 +27,8 @@ public class ExampleCode {
       return "Hello world!";
    }
 
-   
+   public void setValues(String val1, int val2) {
+      strField = val1;
+   }
+
+}   

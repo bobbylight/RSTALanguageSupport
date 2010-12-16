@@ -51,8 +51,8 @@ public class Method extends AbstractMember {
 	}
 
 
-	public String getDocComment() {
-		return docComment;
+	public boolean getBodyContainsOffset(int offs) {
+		return offs>=getBodyStartOffset() && offs<getBodyEndOffset();
 	}
 
 
@@ -63,6 +63,11 @@ public class Method extends AbstractMember {
 
 	public int getBodyStartOffset() {
 		return getNameStartOffset();
+	}
+
+
+	public String getDocComment() {
+		return docComment;
 	}
 
 

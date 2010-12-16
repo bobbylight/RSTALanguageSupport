@@ -25,6 +25,7 @@ import javax.xml.parsers.SAXParserFactory;
 import org.fife.rsta.ac.html.HtmlCompletionProvider;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionXMLParser;
+import org.fife.ui.autocomplete.Util;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.Token;
@@ -163,7 +164,7 @@ public class PhpCompletionProvider extends HtmlCompletionProvider {
 
 				while (index<phpCompletions.size()) {
 					Completion c = (Completion)phpCompletions.get(index);
-					if (startsWithIgnoreCase(c.getInputText(), text)) {
+					if (Util.startsWithIgnoreCase(c.getInputText(), text)) {
 						list.add(c);
 						index++;
 					}
