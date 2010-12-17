@@ -120,6 +120,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		ac.setAutoActivationEnabled(isAutoActivationEnabled());
 		ac.setAutoActivationDelay(getAutoActivationDelay());
 		ac.setParameterAssistanceEnabled(isParameterAssistanceEnabled());
+		ac.setParamChoicesRenderer(new JavaParamListCellRenderer());
 		ac.setShowDescWindow(getShowDescWindow());
 		ac.install(textArea);
 		installImpl(textArea, ac);

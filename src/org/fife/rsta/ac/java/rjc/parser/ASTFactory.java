@@ -602,6 +602,7 @@ return cu;
 		Token t = s.yylexNonNull(IDENTIFIER, "Identifier expected");
 		String enumName = t.getLexeme();
 		EnumDeclaration enumDec = new EnumDeclaration(s,t.getOffset(),enumName);
+		enumDec.setPackage(cu.getPackage());
 		addTo.addTypeDeclaration(enumDec);
 
 		t = s.yylexNonNull("implements or '{' expected");
@@ -1067,6 +1068,7 @@ OUTER:
 
 		NormalClassDeclaration classDec = new NormalClassDeclaration(s,
 													t.getOffset(), className);
+		classDec.setPackage(cu.getPackage());
 		addTo.addTypeDeclaration(classDec);
 
 		t = s.yylexNonNull("TypeParameters, extends, implements or '{' expected");
@@ -1121,6 +1123,7 @@ OUTER:
 
 		NormalInterfaceDeclaration iDec = new NormalInterfaceDeclaration(
 													s, t.getOffset(), iName);
+		iDec.setPackage(cu.getPackage());
 		addTo.addTypeDeclaration(iDec);
 
 		t = s.yylexNonNull("TypeParameters, extends or '{' expected");

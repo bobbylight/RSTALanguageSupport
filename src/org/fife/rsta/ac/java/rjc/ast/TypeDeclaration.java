@@ -19,18 +19,6 @@ import org.fife.rsta.ac.java.rjc.lang.Modifiers;
 public interface TypeDeclaration extends ASTNode, TypeDeclarationContainer {
 
 
-	/**
-	 * Returns a list of all fields, local variables, and getters (taking
-	 * no parameters for simplicity)  in this class, interface or enum, at
-	 * the given offset in its source.
-	 *
-	 * @param type The type the members must be assignable from.
-	 * @param offs The offset into this type's source.
-	 * @return A list of matching members, or <code>null</code> for none.
-	 */
-	public List getAccessibleMembersOfType(String type, int offs);
-
-
 	public boolean getBodyContainsOffset(int offs);
 
 
@@ -108,6 +96,14 @@ public interface TypeDeclaration extends ASTNode, TypeDeclarationContainer {
 
 
 	public String getName();
+
+
+	/**
+	 * Returns the package this type is in.
+	 *
+	 * @return The package, or <code>null</code> if it's in the default package.
+	 */
+	public Package getPackage();
 
 
 	public String getTypeString();

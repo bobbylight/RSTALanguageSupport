@@ -21,6 +21,7 @@ import org.fife.rsta.ac.java.rjc.lexer.Offset;
 public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 												implements TypeDeclaration {
 
+	private Package pkg;
 	private Modifiers modifiers;
 	private List childTypes;
 	private Offset bodyStartOffs;
@@ -176,6 +177,14 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	}
 
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public Package getPackage() {
+		return pkg;
+	}
+
+
 	private void init() {
 		memberList = new ArrayList();
 	}
@@ -208,6 +217,18 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 
 	public void setModifiers(Modifiers modifiers) {
 		this.modifiers = modifiers;
+	}
+
+
+	/**
+	 * Sets the package this type is in.
+	 *
+	 * @param pkg The package, or <code>null</code> if this is in the
+	 *        default package.
+	 * @see #getPackage()
+	 */
+	public void setPackage(Package pkg) {
+		this.pkg = pkg;
 	}
 
 
