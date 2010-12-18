@@ -21,6 +21,7 @@ import javax.swing.text.JTextComponent;
 import org.fife.rsta.ac.java.classreader.MethodInfo;
 import org.fife.rsta.ac.java.rjc.ast.FormalParameter;
 import org.fife.rsta.ac.java.rjc.ast.Method;
+import org.fife.rsta.ac.java.rjc.lang.Type;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.FunctionCompletion;
 import org.fife.ui.autocomplete.ParameterizedCompletion;
@@ -78,7 +79,7 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 		List params = new ArrayList(count);
 		for (int i=0; i<count; i++) {
 			FormalParameter param = m.getParameter(i);
-			String type = param.getType().toString();
+			Type type = param.getType();
 			String name = param.getName();
 			params.add(new ParameterizedCompletion.Parameter(type, name));
 		}

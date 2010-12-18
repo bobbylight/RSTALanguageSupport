@@ -24,7 +24,7 @@ class LocalVariableCompletion extends AbstractJavaSourceCompletion {
 	 * The relevance of local variables.  This allows local variables to be
 	 * "higher" in the completion list than other types.
 	 */
-	private static final int RELEVANCE		= 3;
+	private static final int RELEVANCE		= 4;
 
 
 	public LocalVariableCompletion(CompletionProvider provider,

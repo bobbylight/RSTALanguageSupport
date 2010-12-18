@@ -12,8 +12,6 @@ package org.fife.rsta.ac.java;
 
 import java.awt.Component;
 import java.awt.Dimension;
-
-import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 
 import org.fife.ui.autocomplete.Completion;
@@ -25,12 +23,26 @@ import org.fife.ui.autocomplete.Completion;
  * @author Robert Futrell
  * @version 1.0
  */
-class JavaParamListCellRenderer extends DefaultListCellRenderer {
+class JavaParamListCellRenderer extends JavaCellRenderer {
 
 
+	public JavaParamListCellRenderer() {
+		// Param completions don't display type info, etc., because all
+		// completions for a single parameter have the same type (or subclass
+		// that type).
+		setSimpleText(true);
+	}
+
+
+	/**
+	 * Returns the preferred size of a particular cell.  Note that the parent
+	 * class {@link JavaCellRenderer} doesn't override this method, because
+	 * it doesn't use the cells to dictate the preferred size of the list, due
+	 * to the large number of completions it shows at a time.
+	 */
 	public Dimension getPreferredSize() {
 		Dimension d = super.getPreferredSize();
-		d.width += 32;
+		d.width += 32; // Looks better when less scrunched.
 		return d;
 	}
 

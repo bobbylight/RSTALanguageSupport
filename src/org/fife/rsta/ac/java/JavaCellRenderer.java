@@ -19,7 +19,6 @@ import java.util.Map;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 
-import org.fife.ui.autocomplete.BasicCompletion;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionCellRenderer;
 
@@ -52,7 +51,13 @@ public class JavaCellRenderer extends DefaultListCellRenderer {
 	 * interfaces, etc. read from jars (don't yet read the class in, for
 	 * example).
 	 */
-	private BasicCompletion bc;
+	private Completion nonJavaCompletion;
+
+	/**
+	 * Whether to not display extra info (type, etc.)in completion text, just
+	 * the completion's name.  The default is <code>false</code>.
+	 */
+	private boolean simpleText;
 
 
 	/**
@@ -87,12 +92,12 @@ public class JavaCellRenderer extends DefaultListCellRenderer {
 
 		if (value instanceof JavaSourceCompletion) {
 			jsc = (JavaSourceCompletion)value;
-			bc = null;
+			nonJavaCompletion = null;
 			setIcon(jsc.getIcon());
 		}
 		else {
 			jsc = null;
-			bc = (BasicCompletion)value;
+			nonJavaCompletion = (Completion)value;
 			setIcon(null); // TODO: emptyIcon
 		}
 
@@ -147,17 +152,17 @@ public class JavaCellRenderer extends DefaultListCellRenderer {
 			getIcon().paintIcon(this, g, 0, y);
 		}
 
-		if (jsc!=null) {
-			int x = getX() + iconW + 2;
-			g.setColor(selected ? list.getSelectionForeground() :
-									list.getForeground());
+		int x = getX() + iconW + 2;
+		g.setColor(selected ? list.getSelectionForeground() :
+								list.getForeground());
+		if (jsc!=null && !simpleText) {
 			jsc.rendererText(g, x, g.getFontMetrics().getHeight(), selected);
 		}
-		else if (bc!=null) {
-			int x = getX() + iconW + 2;
-			g.setColor(selected ? list.getSelectionForeground() :
-									list.getForeground());
-			g.drawString(bc.toString(), x, g.getFontMetrics().getHeight());
+		else {
+			Completion c = jsc!=null ? (Completion)jsc : nonJavaCompletion;
+			if (c!=null) {
+				g.drawString(c.toString(), x, g.getFontMetrics().getHeight());
+			}
 		}
 
 		// Restore rendering hints appropriately.
@@ -181,6 +186,17 @@ public class JavaCellRenderer extends DefaultListCellRenderer {
 	 */
 	public static void setAlternateBackground(Color altBG) {
 		JavaCellRenderer.altBG = altBG;
+	}
+
+
+	/**
+	 * Sets whether to display "simple" text about the completion - just the
+	 * name, no type information, etc.  The default value is <code>false</code>.
+	 *
+	 * @param simple Whether to display "simple" text about the completion.
+	 */
+	public void setSimpleText(boolean simple) {
+		simpleText = simple;
 	}
 
 

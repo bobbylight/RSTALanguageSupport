@@ -10,9 +10,12 @@
  */
 package org.fife.rsta.ac.java;
 
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.swing.Icon;
 import javax.swing.text.JTextComponent;
 
 import org.fife.rsta.ac.LanguageSupport;
@@ -29,7 +32,9 @@ import org.fife.rsta.ac.java.rjc.ast.NormalInterfaceDeclaration;
 import org.fife.rsta.ac.java.rjc.ast.Package;
 import org.fife.rsta.ac.java.rjc.ast.TypeDeclaration;
 import org.fife.rsta.ac.java.rjc.lang.Type;
+import org.fife.ui.autocomplete.BasicCompletion;
 import org.fife.ui.autocomplete.CompletionProvider;
+import org.fife.ui.autocomplete.EmptyIcon;
 import org.fife.ui.autocomplete.ParameterChoicesProvider;
 import org.fife.ui.autocomplete.ParameterizedCompletion;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -224,9 +229,37 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 			// TODO: Implement me.
 		}
 
+		// Add defaults for common types - "0" for primitive numeric types,
+		// "null" for Objects, etc.
+		Object typeObj = param.getTypeObject();
+		// TODO: Not all Parameters have typeObj set to a Type yet!  Make me so
+		if (typeObj instanceof Type) {
+			Type type = (Type)typeObj;
+			if (type.isBasicType()) {
+				if (isPrimitiveNumericType(type)) {
+					list.add(new SimpleCompletion(provider, "0"));
+				}
+				else { // is a "boolean" type
+					list.add(new SimpleCompletion(provider, "false"));
+					list.add(new SimpleCompletion(provider, "true"));
+				}
+			}
+			else {
+				list.add(new SimpleCompletion(provider, "null"));
+			}
+		}
+		
 		// And we're done!
 		return list;
 
+	}
+
+
+	private boolean isPrimitiveNumericType(Type type) {
+		String str = type.getName(true);
+		return "byte".equals(str) || "float".equals(str) ||
+				"double".equals(str) || "int".equals(str) ||
+				"short".equals(str) || "long".equals(str);
 	}
 
 
@@ -271,6 +304,32 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 		}
 
 		return typeName2.equalsIgnoreCase(typeName);
+
+	}
+
+
+	/**
+	 * A very simple, low-relevance parameter choice completion.  This is
+	 * never used as a general-purpose completion in Java code, as it cannot
+	 * render itself.
+	 */
+	private static class SimpleCompletion extends BasicCompletion
+								implements JavaSourceCompletion {
+
+		private Icon ICON = new EmptyIcon(16);
+
+		public SimpleCompletion(CompletionProvider provider, String text) {
+			super(provider, text);
+			setRelevance(-1);
+		}
+
+		public Icon getIcon() {
+			return ICON;
+		}
+
+		public void rendererText(Graphics g, int x, int y, boolean selected) {
+			// Never called
+		}
 
 	}
 
