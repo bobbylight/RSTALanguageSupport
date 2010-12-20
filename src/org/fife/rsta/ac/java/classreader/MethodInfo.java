@@ -304,6 +304,25 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 
 
 	/**
+	 * If debugging was enabled during compilation, this method returns the
+	 * name of the given parameter to this method.  Otherwise, <code>null</code>
+	 * is returned.
+	 *
+	 * @param index The index of the parameter.
+	 * @return The name of the parameter, or <code>null</code>.
+	 */
+	public String getParameterName(int index) {
+		if (index>=0 && index<getParameterCount()) {
+			Code code = getCodeAttribute();
+			if (code!=null) {
+				return code.getParameterName(index);
+			}
+		}
+		return null;
+	}
+
+
+	/**
 	 * Returns a string representing the type of a parameter to this method.
 	 *
 	 * @param index The index of the parameter.

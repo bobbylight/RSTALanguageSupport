@@ -66,9 +66,18 @@ public class Code extends AttributeInfo {
 	private ExceptionTableEntry[] exceptionTable;
 
 	/**
+	 * The names of parameters to the parent method, if debugging was enabled
+	 * during compilation.
+	 * @see #LOCAL_VARIABLE_TABLE
+	 */
+	private String[] paramNames;
+
+	/**
 	 * Attributes of this <code>Code</code> attribute.
 	 */
 	private AttributeInfo[] attributes;
+
+	private static final String LOCAL_VARIABLE_TABLE	= "LocalVariableTable";
 
 
 	/**
@@ -139,6 +148,19 @@ public class Code extends AttributeInfo {
 
 
 	/**
+	 * If debugging was enabled during compilation, this method returns the
+	 * name of the given parameter to this method.  Otherwise, <code>null</code>
+	 * is returned.
+	 *
+	 * @param index The index of the parameter.
+	 * @return The name of the parameter, or <code>null</code>.
+	 */
+	public String getParameterName(int index) {
+		return paramNames==null ? null : paramNames[index];
+	}
+
+
+	/**
 	 * Reads a <code>Code</code> attribute from an input stream.
 	 *
 	 * @param mi The parent method.
@@ -194,8 +216,49 @@ public class Code extends AttributeInfo {
 
 		String attrName = cf.getUtf8ValueFromConstantPool(attributeNameIndex);
 
-		ai = AttributeInfo.readUnsupportedAttribute(cf, in, attrName,
+		// Describes a local variable during execution of this code.  We only
+		// use it to grab the names of method parameters.
+		if (LOCAL_VARIABLE_TABLE.equals(attrName)) {
+
+			// If this attribute is defined, then this class was compiled with
+			// debugging enabled!  We can grab the names of the method
+			// parameters, to make code completion a little nicer.  Note that
+			// we only grab the names of parameters, not all local variables,
+			// for speed and space.
+
+			int paramCount = mi.getParameterCount();
+			paramNames = new String[paramCount];
+			boolean isStatic = mi.isStatic();
+
+			int localVariableTableLength = in.readUnsignedShort();
+			for (int i=0; i<localVariableTableLength; i++) {
+
+				/*int startPC = */in.readUnsignedShort();
+				/*int length = */in.readUnsignedShort();
+				int nameIndex = in.readUnsignedShort();
+				/*int descriptorIndex = */in.readUnsignedShort();
+
+				// Non-static methods have implicit "this" variable passed in,
+				// so we must avoid that
+				int index = in.readUnsignedShort();
+				int adjustedIndex = isStatic ? index : index-1;
+
+				if (adjustedIndex>=0 && adjustedIndex<paramNames.length) {
+					String name = cf.getUtf8ValueFromConstantPool(nameIndex);
+					//System.out.println("!!! " + getClassFile().
+					//	getClassName(false) + "." + getMethodInfo().
+					//	getNameAndParameters() + " - " + index + ": " + name);
+					paramNames[adjustedIndex] = name;
+				}
+
+			}
+
+		}
+
+		else {
+			ai = AttributeInfo.readUnsupportedAttribute(cf, in, attrName,
 														attributeLength);
+		}
 
 		return ai;
 

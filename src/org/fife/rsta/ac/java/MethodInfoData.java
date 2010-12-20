@@ -102,7 +102,7 @@ class MethodInfoData implements Data {
 
 	public String getSummary() {
 
-		ClassFile cf = info.getClassFile();;
+		ClassFile cf = info.getClassFile();
 		File loc = provider.getSourceLocForClass(cf.getClassName(true));
 		String summary = null;
 

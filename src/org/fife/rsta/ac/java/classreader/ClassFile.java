@@ -432,6 +432,7 @@ public class ClassFile implements AccessFlags {
 			for (int i = 0; i < attributeLength; i++) {
 				info[i] = in.readUnsignedByte();
 			}
+			System.out.println("Unsupported class attribute: "+  attrName);
 			ai = new UnsupportedAttribute(this, attrName, info);
 		}
 
