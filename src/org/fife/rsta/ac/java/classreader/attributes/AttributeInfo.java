@@ -63,4 +63,20 @@ public abstract class AttributeInfo {
 	}
 
 
+	/**
+	 * Fully skips a given number of bytes in an input stream.
+	 *
+	 * @param in The input stream.
+	 * @param count The number of bytes to skip.
+	 * @throws IOException If an IO error occurs.
+	 */
+	protected static void skipBytes(DataInputStream in, int count)
+												throws IOException {
+		int skipped = 0;
+		while (skipped<count) {
+			skipped += in.skipBytes(count-skipped);
+		}
+	}
+
+
 }

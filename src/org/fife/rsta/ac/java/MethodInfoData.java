@@ -95,45 +95,19 @@ class MethodInfoData implements Data {
 	}
 
 
-	public String getSignature() {
-		return info.getNameAndParameters();
-	}
-
-
-	public String getSummary() {
-
-		ClassFile cf = info.getClassFile();
-		File loc = provider.getSourceLocForClass(cf.getClassName(true));
-		String summary = null;
-
-		// First, try to parse the Javadoc for this method from the attached
-		// source.
-		if (loc!=null) {
-			summary = getSummaryFromSourceLoc(loc, cf);
-		}
-
-		// Default to the method signature.
-		if (summary==null) {
-			summary = info.getSignature();
-		}
-		return summary;
-
-	}
-
-
 	/**
 	 * Scours the source in a location (zip file, directory), looking for a
 	 * particular class's source.  If it is found, it is parsed, and the
-	 * Javadoc for this method (if any) is returned.
+	 * {@link Method} for this method (if any) is returned.
 	 *
 	 * @param loc The zip file, jar file, or directory to look in.
 	 * @param cf The {@link ClassFile} representing the class of this method.
-	 * @return The summary, or <code>null</code> if the method has no javadoc,
-	 *         the class's source was not found, or an IO error occurred.
+	 * @return The method, or <code>null</code> if it cannot be found, or an
+	 *         IO error occurred.
 	 */
-	private String getSummaryFromSourceLoc(File loc, ClassFile cf) {
+	private Method getMethodFromSourceLoc(File loc, ClassFile cf) {
 
-		String summary = null;
+		Method res = null;
 		CompilationUnit cu = org.fife.rsta.ac.java.Util.
 									getCompilationUnitFromDisk(loc, cf);
 
@@ -173,8 +147,7 @@ class MethodInfoData implements Data {
 						// Common case - only 1 overload with the desired
 						// number of parameters => it must be our method.
 						if (contenders.size()==1) {
-							Method meth = (Method)contenders.get(0);
-							summary = meth.getDocComment();
+							res = (Method)contenders.get(0);
 						}
 
 						// More than 1 overload with the same number of
@@ -184,10 +157,10 @@ class MethodInfoData implements Data {
 						else {
 							for (int j=0; j<contenders.size(); j++) {
 								boolean match = true;
-								Method meth = (Method)contenders.get(j);
+								Method method = (Method)contenders.get(j);
 								for (int p=0; p<info.getParameterCount(); p++) {
 									String type1 = info.getParameterType(p, false);
-									FormalParameter fp = meth.getParameter(p);
+									FormalParameter fp = method.getParameter(p);
 									String type2 = fp.getType().toString();
 									if (!type1.equals(type2)) {
 										match = false;
@@ -195,7 +168,7 @@ class MethodInfoData implements Data {
 									}
 								}
 								if (match) {
-									summary = meth.getDocComment();
+									res = method;
 									break;
 								}
 							}
@@ -211,8 +184,50 @@ class MethodInfoData implements Data {
 
 		} // if (cu!=null)
 
+		return res;
+
+	}
+
+
+	public String getSignature() {
+		return info.getNameAndParameters();
+	}
+
+
+	public String getSummary() {
+
+		ClassFile cf = info.getClassFile();
+		File loc = provider.getSourceLocForClass(cf.getClassName(true));
+		String summary = null;
+
+		// First, try to parse the Javadoc for this method from the attached
+		// source.
+		if (loc!=null) {
+			summary = getSummaryFromSourceLoc(loc, cf);
+		}
+
+		// Default to the method signature.
+		if (summary==null) {
+			summary = info.getSignature();
+		}
 		return summary;
 
+	}
+
+
+	/**
+	 * Scours the source in a location (zip file, directory), looking for a
+	 * particular class's source.  If it is found, it is parsed, and the
+	 * Javadoc for this method (if any) is returned.
+	 *
+	 * @param loc The zip file, jar file, or directory to look in.
+	 * @param cf The {@link ClassFile} representing the class of this method.
+	 * @return The summary, or <code>null</code> if the method has no javadoc,
+	 *         the class's source was not found, or an IO error occurred.
+	 */
+	private String getSummaryFromSourceLoc(File loc, ClassFile cf) {
+		Method method = getMethodFromSourceLoc(loc, cf);
+		return method!=null ? method.getDocComment() : null;
 	}
 
 

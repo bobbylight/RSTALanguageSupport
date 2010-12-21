@@ -53,11 +53,16 @@ public class Code extends AttributeInfo {
 	 */
 	private int maxLocals;
 
+//	/**
+//	 * The actual bytes of JVM code that implement the method.  This must have
+//	 * length greater than zero.
+//	 */
+//	private int[] code;
+
 	/**
-	 * The actual bytes of JVM code that implement the method.  This must have
-	 * length greater than zero.
+	 * The size of the method's code, in bytes.
 	 */
-	private int[] code;
+	private int codeLength;
 
 	/**
 	 * The exception handlers in the <code>code</code> array.  The order of
@@ -91,15 +96,15 @@ public class Code extends AttributeInfo {
 	}
 
 
-	/**
-	 * Returns the code byte at the specified offset.
-	 *
-	 * @param offset The offset.
-	 * @return The byte.
-	 */
-	public int getByte(int offset) {
-		return code[offset];
-	}
+//	/**
+//	 * Returns the code byte at the specified offset.
+//	 *
+//	 * @param offset The offset.
+//	 * @return The byte.
+//	 */
+//	public int getByte(int offset) {
+//		return code[offset];
+//	}
 
 
 	/**
@@ -108,7 +113,7 @@ public class Code extends AttributeInfo {
 	 * @return The length of the code array.
 	 */
 	public int getCodeLength() {
-		return code.length;
+		return codeLength;//code.length;
 	}
 
 
@@ -173,10 +178,12 @@ public class Code extends AttributeInfo {
 		Code code = new Code(mi);
 		code.maxStack = in.readUnsignedShort();
 		code.maxLocals = in.readUnsignedShort();
-		code.code = new int[in.readInt()];
-		for (int i=0; i<code.code.length; i++) {
-			code.code[i] = in.readUnsignedByte();
-		}
+//		code.code = new int[in.readInt()];
+//		for (int i=0; i<code.code.length; i++) {
+//			code.code[i] = in.readUnsignedByte();
+//		}
+code.codeLength = in.readInt();
+skipBytes(in, code.codeLength);
 		int exceptionTableLength = in.readUnsignedShort();
 		if (exceptionTableLength>0) {
 			code.exceptionTable = new ExceptionTableEntry[exceptionTableLength];
