@@ -72,6 +72,7 @@
 				source="${java-level}" target="${java-level}">
 
 			<include name="org/fife/rsta/ac/*"/>
+			<include name="org/fife/rsta/ac/common/*"/>
 
 			<include if="c"    name="org/fife/rsta/ac/c/**"/>
 			<include if="html" name="org/fife/rsta/ac/html/**"/>

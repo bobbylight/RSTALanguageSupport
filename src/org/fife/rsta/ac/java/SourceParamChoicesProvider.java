@@ -225,7 +225,7 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 		}
 
 		// Check for any public/protected fields/getters in enclosing type.
-		if (!typeDec.getModifiers().isStatic()) {
+		if (typeDec.getModifiers()==null || !typeDec.getModifiers().isStatic()){
 			// TODO: Implement me.
 		}
 

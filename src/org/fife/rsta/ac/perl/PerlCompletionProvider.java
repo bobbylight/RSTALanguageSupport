@@ -16,15 +16,16 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 
 import org.fife.rsta.ac.c.CCompletionProvider;
+import org.fife.rsta.ac.common.CodeBlock;
+import org.fife.rsta.ac.common.TokenScanner;
+import org.fife.rsta.ac.common.VariableDeclaration;
+import org.fife.ui.autocomplete.BasicCompletion;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
-import org.fife.ui.autocomplete.VariableCompletion;
-import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.Token;
 
@@ -35,9 +36,9 @@ import org.fife.ui.rsyntaxtextarea.Token;
  * <ul>
  *    <li>Auto-completion for standard Perl 5.10 functions (read from an
  *        XML file).</li>
- *    <li>Crude auto-completion for variables.  Any variables declared or used
- *        up to the caret position are offered, regardless of whether or not
- *        they are in scope.</li>
+ *    <li>Crude auto-completion for variables.  Only variables in scope at the
+ *        current caret position are suggested, but there may still be issues
+ *        with variable types, etc.</li>
  * </ul>
  *
  * To toggle whether parameter assistance wraps your parameters in parens,
@@ -56,6 +57,21 @@ public class PerlCompletionProvider extends CCompletionProvider {
 	 */
 	protected void addShorthandCompletions(DefaultCompletionProvider codeCP) {
 		// Add nothing for now.
+	}
+
+
+	/**
+	 * Creates an "AST" for Perl code, representing code blocks and variables
+	 * inside of those blocks.
+	 *
+	 * @param textArea The text area.
+	 * @return A "code block" representing the entire Perl source file.
+	 */
+	private CodeBlock createAst(RSyntaxTextArea textArea) {
+		CodeBlock ast = new CodeBlock(0);
+		TokenScanner scanner = new TokenScanner(textArea);
+		parseCodeBlock(scanner, ast);
+		return ast;
 	}
 
 
@@ -149,15 +165,7 @@ public class PerlCompletionProvider extends CCompletionProvider {
 
 		RSyntaxTextArea textArea = (RSyntaxTextArea)comp;
 		int dot = textArea.getCaretPosition();
-		int lastLine = 0;
-		try {
-			lastLine = textArea.getLineOfOffset(dot);
-		} catch (BadLocationException ble) { // Never happens
-			ble.printStackTrace();
-			return null;
-		}
-		RSyntaxDocument doc = (RSyntaxDocument)comp.getDocument();
-		SortedSet varCompletions = null;
+		SortedSet varCompletions = new TreeSet(comparator);
 
 		String text = getDefaultCompletionProvider().getAlreadyEnteredText(comp);
 		char firstChar = text.length()==0 ? 0 : text.charAt(0);
@@ -166,27 +174,10 @@ public class PerlCompletionProvider extends CCompletionProvider {
 			return null;
 		}
 
-		for (int i=0; i<=lastLine; i++) {
-			Token t = doc.getTokenListForLine(i);
-			while (t!=null && (t.offset+t.textCount)<dot && t.isPaintable()) {
-				if (t.type==Token.VARIABLE) {
-					String name = t.getLexeme();
-					char ch = name.charAt(0);
-					if (firstChar<=ch) { // '$' comes before '@'/'%' in ascii
-						if (varCompletions==null) { // Lazy creation
-							varCompletions = new TreeSet(comparator);
-						}
-						if (firstChar<ch) { // Use first char they entered
-							name = firstChar + name.substring(1);
-						}
-						VariableCompletion vc = new VariableCompletion(this,
-																name, null);
-						varCompletions.add(vc);
-					}
-				}
-				t = t.getNextToken();
-			}
-		}
+		// Go through all code blocks in scope and look for variables
+		// declared before the caret.
+		CodeBlock block = createAst(textArea);
+		recursivelyAddLocalVars(varCompletions, block, dot, firstChar);
 
 		// Get only those that match what's typed
 		if (varCompletions!=null) {
@@ -227,6 +218,80 @@ private CaseInsensitiveComparator comparator = new CaseInsensitiveComparator();
 		return "data/perl5.xml";
 	}
 
+
+	/**
+	 * Recursively adds code blocks, remembering variables in them.
+	 *
+	 * @param scanner
+	 * @param block
+	 */
+	private void parseCodeBlock(TokenScanner scanner, CodeBlock block) {
+		Token t = scanner.next();
+		while (t != null) {
+			if (t.isRightCurly()) {
+				block.setEndOffset(t.textOffset);
+				return;
+			}
+			else if (t.isLeftCurly()) {
+				CodeBlock child = block.addChildCodeBlock(t.textOffset);
+				parseCodeBlock(scanner, child);
+			}
+			else if (t.type==Token.VARIABLE) {
+				VariableDeclaration varDec = new VariableDeclaration(
+						t.getLexeme(), t.textOffset);
+				block.addVariable(varDec);
+			}
+			t = scanner.next();
+		}
+	}
+
+
+	/**
+	 * Recursively adds any local variables defined before the given caret
+	 * offset, and in the given code block (and any nested children the caret
+	 * is in).
+	 *
+	 * @param completions The list to add to.
+	 * @param block The code block to search through.
+	 * @param dot The caret position.
+	 */
+	private void recursivelyAddLocalVars(SortedSet completions, CodeBlock block,
+									int dot, int firstChar) {
+
+		if (!block.contains(dot)) {
+			return;
+		}
+
+		// Add local variables declared in this code block
+		for (int i = 0; i < block.getVariableDeclarationCount(); i++) {
+			VariableDeclaration dec = block.getVariableDeclaration(i);
+			int decOffs = dec.getOffset();
+			if (decOffs < dot) {
+				String name = dec.getName();
+				char ch = name.charAt(0);
+				if (firstChar<=ch) { // '$' comes before '@'/'%' in ascii
+					if (firstChar<ch) { // Use first char they entered
+						name = firstChar + name.substring(1);
+					}
+					BasicCompletion c = new BasicCompletion(this, name);
+					completions.add(c);
+				}
+			}
+			else { // A variable declared past the caret -> nothing more to add
+				break;
+			}
+		}
+
+		// Add any local variables declared in a child code block
+		for (int i = 0; i < block.getChildCodeBlockCount(); i++) {
+			CodeBlock child = block.getChildCodeBlock(i);
+			if (child.contains(dot)) {
+				recursivelyAddLocalVars(completions, child, dot, firstChar);
+				return; // No other child blocks can contain the dot
+			}
+		}
+
+	}
 
 	/**
 	 * Sets whether the user wants to use parens around parameters to

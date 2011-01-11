@@ -1,7 +1,7 @@
 RSTALanguageSupport Readme
 --------------------------
-Version 0.6
-21oct2010
+Version 0.6.5
+11jan2011
 
 ----------------------------------------
 Contents
@@ -39,35 +39,44 @@ Languages with support include:
    - Auto-completion for the C standard library.
    - Parameter assistance for the C standard library.
 
-2. HTML
+2. Groovy
+   - Broken and not very useful at the moment.  Shouldn't be used.
+
+3. HTML
    - Auto-completion for HTML 5.  Suggested attributes are appropriate for the
      current tag.
    - Tag/attribute descriptions are extremely lacking at the moment, assistance
      filling them out would be more than welcome.
 
-3. Java
+4. Java
    - Parser included can parse the JDK6u16 source perfectly (except ...TODO...),
      but has very poor error recovery, so generally only provides a single
-     error message per file.  Also doesn't validate method bodies, only class
-     structure.
+     error message per file.  It also doesn't validate method bodies; it is
+     designed to only validate class structure, and extract names and types of
+     members and local variables (i.e. it only does the stuff useful for code
+     completion).
    - Auto-completion, driven from information from the Parser above.  This is
      advanced completion and currently offers suggestions from:
         - Imported classes
         - Methods and fields
         - Local variables (when in a method body)
 
-4. Perl
+5. Perl
+   - Error checking (squiggle underlining) via using "perl -c ..." on the local
+     system.  You can toggle taint mode, etc.
    - Auto-completion for built-in function names.
    - Parameter assistance for those built-in functions.
+   - Auto-completion for variable names (suggests only variables that are in
+     scope at the current caret position).
    - Can specify/override PERL5LIB when syntax checking.
 
-5. PHP
+6. PHP
    - Auto-completion for HTML 5 tags and attributes.  This is inherited
      directly from the HTML support, so improvements there will show up here.
    - Auto-completion for PHP functions.
    - Parameter assistance for PHP functions.
 
-6. Unix Shell
+7. Unix Shell
    - Possibly broken at the moment.  Should attempt to use the local man pages
      for descriptions of standard shell commands if the local host is *nix,
      otherwise (on Windows) it defaults to short, generic descriptions.
@@ -86,6 +95,7 @@ properly.
          org/fife/rsta/ac/              Any classes common to all languages
          org/fife/rsta/ac/c             Code completion for C
          org/fife/rsta/ac/demo          Demo app/applet code
+         org/fife/rsta/ac/groovy        Code completion for Groovy
          org/fife/rsta/ac/html          Code completion for HTML
          org/fife/rsta/ac/java/**       Code completion for Java
          org/fife/rsta/ac/perl          Code completion for Perl
@@ -122,12 +132,13 @@ library with support for only some of the languages, simply remove the property
 definitions for languages you don't want.  For example, with the current set of
 supported languages, the properties look like this:
 
-   <property name="c"                value="true"/>
-   <property name="html"             value="true"/>
-   <property name="java"             value="true"/>
-   <property name="perl"             value="true"/>
-   <property name="php"              value="true"/>
-   <property name="sh"               value="true"/>
+   <property name="c"              value="true"/>
+   <property name="groovy"         value="true"/>
+   <property name="html"           value="true"/>
+   <property name="java"           value="true"/>
+   <property name="perl"           value="true"/>
+   <property name="php"            value="true"/>
+   <property name="sh"             value="true"/>
 
 Removing the "java" property line will cause the jar to be built without the
 Java-related code completion classes.
