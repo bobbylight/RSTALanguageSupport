@@ -107,12 +107,7 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 		String[] paramTypes = info.getParameterTypes();
 		List params = new ArrayList(paramTypes.length);
 		for (int i=0; i<paramTypes.length; i++) {
-			String name = info.getParameterName(i);
-			if (name==null) {
-				// Variable debugging wasn't enabled during compilation
-				name = paramTypes[i].substring(paramTypes[i].lastIndexOf('.')+1);
-				name = Character.toLowerCase(name.charAt(0)) + name.substring(1);
-			}
+			String name = ((MethodInfoData)data).getParameterName(i);
 			String type = paramTypes[i].substring(paramTypes[i].lastIndexOf('.')+1);
 			params.add(new ParameterizedCompletion.Parameter(type, name));
 		}

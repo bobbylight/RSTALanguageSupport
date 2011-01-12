@@ -66,6 +66,18 @@ public class Util {
 	static final Pattern LINK_TAG_MEMBER_PATTERN =
 						Pattern.compile("(?:\\w+\\.)*(?:\\w+)?(?:\\#\\w+(?:\\([^\\)]*\\))?)?");
 
+	/**
+	 * A cache of the last {@link CompilationUnit} read from some attached
+	 * source on disk.  This is cached because, in some scenarios, the method
+	 * {@link #getCompilationUnitFromDisk(File, ClassFile)} will be called for
+	 *  the same class many times in a row (such as to get method parameter
+	 *  info for all methods in a single class).
+	 */
+	private static CompilationUnit lastCUFromDisk;
+
+	private static File lastCUFileParam;
+	private static ClassFile lastCUClassFileParam;
+
 
 	/**
 	 * Private constructor to prevent instantiation.
@@ -457,8 +469,16 @@ public class Util {
 	 *         or an IO error occurs.
 	 */
 	public static CompilationUnit getCompilationUnitFromDisk(File loc,
-			ClassFile cf) {
+															ClassFile cf) {
 
+		// Cached value?
+		if (loc==lastCUFileParam && cf==lastCUClassFileParam) {
+			//System.out.println("Returning cached CompilationUnit");
+			return lastCUFromDisk;
+		}
+
+		lastCUFileParam = loc;
+		lastCUClassFileParam = cf;
 		CompilationUnit cu = null;
 
 		if (loc.isFile()) {
@@ -480,6 +500,7 @@ public class Util {
 			}
 		}
 
+		lastCUFromDisk = cu;
 		return cu;
 
 	}

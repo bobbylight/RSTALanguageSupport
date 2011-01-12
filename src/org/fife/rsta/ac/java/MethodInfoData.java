@@ -45,6 +45,11 @@ class MethodInfoData implements Data {
 	 */
 	private MethodInfo info;
 
+	/**
+	 * Cached method parameter names.
+	 */
+	private List paramNames;
+
 
 	/**
 	 * Constructor.
@@ -189,8 +194,101 @@ class MethodInfoData implements Data {
 	}
 
 
+	/**
+	 * Returns the name of the specified parameter to this method, or
+	 * <code>null</code> if it cannot be determined.
+	 *
+	 * @param index The index of the parameter.
+	 * @return The name of the parameter, or <code>null</code>.
+	 */
+	public String getParameterName(int index) {
+
+		// First, check whether the debugging attribute was enabled at
+		// compilation, and the parameter name is embedded in the class file.
+		// This method takes priority because it *likely* matches a name
+		// specified in Javadoc, and is much faster for us to fetch (it's
+		// already parsed).
+		String name = info.getParameterName(index);
+
+		// Otherwise...
+		if (name==null) {
+
+			// Next, check the attached source, if any (lazily parsed).
+			if (paramNames==null) {
+
+				paramNames = new ArrayList(1);
+				int offs = 0;
+				String rawSummary = getSummary();
+
+				// If there's attached source with Javadoc for this method...
+				if (rawSummary!=null && rawSummary.startsWith("/**")) {
+
+					int nextParam = 0;
+					int summaryLen = rawSummary.length();
+
+					while ((nextParam=rawSummary.indexOf("@param", offs))>-1) {
+						int temp = nextParam + "@param".length() + 1;
+						while (temp<summaryLen &&
+								Character.isWhitespace(rawSummary.charAt(temp))) {
+							temp++;
+						}
+						if (temp<summaryLen) {
+							int start = temp;
+							int end = start + 1;
+							while (end<summaryLen &&
+									Character.isJavaIdentifierPart(rawSummary.charAt(end))) {
+								end++;
+							}
+							paramNames.add(rawSummary.substring(start, end));
+							offs = end;
+						}
+						else {
+							break;
+						}
+					}
+
+				}
+
+			}
+
+			if (index<paramNames.size()) {
+				name = (String)paramNames.get(index);
+			}
+
+		}
+
+		// Use a default name.
+		if (name==null) {
+			name = "arg" + index;
+		}
+
+		return name;
+
+	}
+
+
 	public String getSignature() {
-		return info.getNameAndParameters();
+
+		// Don't call MethodInfo's implementation, as it is unaware of param
+		// names.
+		//return info.getNameAndParameters();
+
+		StringBuffer sb = new StringBuffer(info.getName());
+
+		sb.append('(');
+		int paramCount = info.getParameterCount();
+		for (int i=0; i<paramCount; i++) {
+			sb.append(info.getParameterType(i, false));
+			sb.append(' ');
+			sb.append(getParameterName(i));
+			if (i<paramCount-1) {
+				sb.append(", ");
+			}
+		}
+		sb.append(')');
+
+		return sb.toString();
+
 	}
 
 
