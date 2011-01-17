@@ -91,5 +91,19 @@ public interface AccessFlags {
 	 */
 	public static final int ACC_STRICT			= 0x0800;
 
+	/**
+	 * Declared <code>synthetic</codeL; not present in the source code.
+	 */
+	public static final int ACC_SYNTHETIC		= 0x1000;
+
+	/**
+	 * Declared as an annotation type.
+	 */
+	public static final int ACC_ANNOTATION		= 0x2000;
+
+	/**
+	 * Declared as an enum type.
+	 */
+	public static final int ACC_ENUM			= 0x4000;
 
 }

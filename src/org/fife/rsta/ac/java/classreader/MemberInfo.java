@@ -99,6 +99,14 @@ public abstract class MemberInfo {
 
 
 	/**
+	 * Returns the descriptor of this member.
+	 *
+	 * @return The descriptor of this member.
+	 */
+	public abstract String getDescriptor();
+
+
+	/**
 	 * Returns whether this member is final.
 	 *
 	 * @return Whether this member is final.

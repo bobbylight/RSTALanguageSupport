@@ -108,7 +108,32 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	}
 
 
+	/**
+	 * Creates and returns an array of types of all parameters of this
+	 * method.
+	 *
+	 * @return The array of parameter types.
+	 * @see #createParamTypesFromDescriptor()
+	 * @see #createParamTypesFromTypeSignature()
+	 */
 	private String[] createParamTypes() {
+		String[] types = createParamTypesFromTypeSignature();
+		if (types==null) {
+			types = createParamTypesFromDescriptor();
+		}
+		return types;
+	}
+
+
+	/**
+	 * Creates an array of types of each parameter by looking at the method's
+	 * descriptor field.  This technique should work with Java 1.0+, but won't
+	 * pick up on generic types added in Java 5.
+	 *
+	 * @return The parameter types.
+	 * @see #createParamTypesFromTypeSignature()
+	 */
+	private String[] createParamTypesFromDescriptor() {
 
 		String descriptor = getDescriptor();
 		int rparen = descriptor.indexOf(')');
@@ -198,6 +223,22 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 
 
 	/**
+	 * Creates an array of types of each parameter by looking at the method's
+	 * <code>Signature</code> attribute.  This attribute was introduced in
+	 * Java 5, and is the only way to detect generic parameters.
+	 *
+	 * @return The parameter types.
+	 * @see #createParamTypesFromDescriptor()
+	 */
+	private String[] createParamTypesFromTypeSignature() {
+
+		// TODO: Implement me.
+		return null;
+
+	}
+
+
+	/**
 	 * Returns the specified attribute.
 	 *
 	 * @param index The index of the attribute.
@@ -236,9 +277,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 
 
 	/**
-	 * Returns the field descriptor of this method.
-	 *
-	 * @return The field descriptor of this method.
+	 * {@inheritDoc}
 	 */
 	public String getDescriptor() {
 		return cf.getUtf8ValueFromConstantPool(descriptorIndex);
@@ -367,17 +406,34 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 
 
 	/**
-	 * Returns the return type of this method, as determined by a snippet
-	 * of the method descriptor.
+	 * Returns the return type of this method.
 	 *
 	 * @return The return type of this method.
+	 */
+	public String getReturnTypeString() {
+		String type = getReturnTypeStringFromTypeSignature();
+		if (type==null) {
+			type = getReturnTypeStringFromDescriptor();
+		}
+		return type;
+	}
+
+
+	/**
+	 * Returns the return type of this method, as determined by a snippet
+	 * of the method descriptor.  This should work with all class files
+	 * created in Java 1.0+, but won't discover the generic types added in
+	 * Java 5.
+	 *
+	 * @return The return type of this method.
+	 * @see #getReturnTypeStringFromTypeSignature()
 	 */
 	/*
 	 * TODO: This is identical to FieldInfo.getTypeString(), except for the
 	 * 'V' case.  It is also very similar to #getParameterTypes().  Try
 	 * to refactor common code from these methods.
 	 */
-	public String getReturnTypeString() {
+	private String getReturnTypeStringFromDescriptor() {
 
 		if (returnType==null) {
 
@@ -443,6 +499,25 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 
 		return returnType;
 
+	}
+
+
+	/**
+	 * Returns the return type of this method, as determined by the
+	 * <code>Signature</code> attribute that was added in Java 5.  This allows
+	 * us to check for generic types.
+	 *
+	 * @return The return type of this method.
+	 * @see #getReturnTypeStringFromDescriptor()
+	 */
+	/*
+	 * TODO: This is identical to FieldInfo.getTypeString(), except for the
+	 * 'V' case.  It is also very similar to #getParameterTypes().  Try
+	 * to refactor common code from these methods.
+	 */
+	private String getReturnTypeStringFromTypeSignature() {
+		// TODO: Implement me
+		return null;
 	}
 
 
@@ -586,18 +661,21 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 			ai = e;
 		}
 
-//		else if ("Signature".equals(attrName)) {
-//			//System.err.println(">>> " + attributeLength);
-//			int u4 = in.readUnsignedShort();
-//			String sig = cf.getUtf8ValueFromConstantPool(u4);
-//			System.err.println(">>> >>> " + sig);
-//		}
+		else if ("Signature".equals(attrName)) {
+			//System.err.println(">>> " + attributeLength);
+			int u4 = in.readUnsignedShort();
+			String sig = cf.getUtf8ValueFromConstantPool(u4);
+			System.out.println("... ... " + getClassFile().getClassName(false) + " - " + sig + ", " + getDescriptor());
+		}
 
 		// TODO: Handle other Attribute types.
 
 		// Attributes common to all members, or unhandled attributes.
 		else {
 			ai = super.readAttribute(in, attrName, attributeLength);
+//			if (ai!=null) { // "Deprecated" attribute returns null
+//				System.out.println("-------------- " + ai.getName());
+//			}
 		}
 
 		return ai;

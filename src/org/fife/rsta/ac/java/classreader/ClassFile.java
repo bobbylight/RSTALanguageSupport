@@ -11,6 +11,7 @@
 package org.fife.rsta.ac.java.classreader;
 
 import java.io.*;
+import java.util.List;
 
 import org.fife.rsta.ac.java.classreader.attributes.*;
 import org.fife.rsta.ac.java.classreader.constantpool.*;
@@ -84,6 +85,12 @@ public class ClassFile implements AccessFlags {
 	 */
 	private AttributeInfo[] attributes;
 
+	/**
+	 * Parameter types, such as "String" in <code>List&lt;String&gt;</code>.
+	 */
+	private List paramTypes;
+
+	public static final String SIGNATURE			= "Signature";
 	public static final String SOURCE_FILE			= "SourceFile";
 
 	/**
@@ -386,7 +393,7 @@ public class ClassFile implements AccessFlags {
 		readMethods(in);
 
 		// No need for us to read attributes (code, etc.).
-		//readAttributes(in);
+		readAttributes(in);
 
 	}
 
@@ -418,11 +425,20 @@ public class ClassFile implements AccessFlags {
 		int attributeLength = in.readInt();
 
 		String attrName = getUtf8ValueFromConstantPool(attributeNameIndex);
+		debugPrint("Found class attribute: " + attrName);
 
 		if (SOURCE_FILE.equals(attrName)) { // 4.7.7
 			int sourceFileIndex = in.readUnsignedShort();
 			SourceFile sf = new SourceFile(this, sourceFileIndex);
 			ai = sf;
+		}
+
+		else if (SIGNATURE.equals(attrName)) { // 4.8.8
+			int signatureIndex = in.readUnsignedShort();
+			String sig = getUtf8ValueFromConstantPool(signatureIndex);
+			System.out.println("... Signature: " + sig);
+			ai = new Signature(this, sig);
+			paramTypes = ((Signature)ai).getParamTypes();
 		}
 
 		// TODO: Handle other Attribute types.
@@ -432,7 +448,7 @@ public class ClassFile implements AccessFlags {
 			for (int i = 0; i < attributeLength; i++) {
 				info[i] = in.readUnsignedByte();
 			}
-			System.out.println("Unsupported class attribute: "+  attrName);
+			//System.out.println("Unsupported class attribute: "+  attrName);
 			ai = new UnsupportedAttribute(this, attrName, info);
 		}
 
