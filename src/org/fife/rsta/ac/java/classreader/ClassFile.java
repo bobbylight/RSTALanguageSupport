@@ -438,7 +438,7 @@ public class ClassFile implements AccessFlags {
 			String sig = getUtf8ValueFromConstantPool(signatureIndex);
 			System.out.println("... Signature: " + sig);
 			ai = new Signature(this, sig);
-			paramTypes = ((Signature)ai).getParamTypes();
+			paramTypes = ((Signature)ai).getClassParamTypes();
 		}
 
 		// TODO: Handle other Attribute types.

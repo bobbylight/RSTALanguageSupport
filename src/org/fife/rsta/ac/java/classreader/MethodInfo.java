@@ -69,6 +69,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 
 	public static final String CODE					= "Code";
 	public static final String EXCEPTIONS			= "Exceptions";
+	public static final String SIGNATURE			= "Signature";
 
 
 	/**
@@ -232,8 +233,14 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 */
 	private String[] createParamTypesFromTypeSignature() {
 
-		// TODO: Implement me.
-		return null;
+		String[] params = null;
+/*
+		if (typeSig!=null) {
+
+			// TODO
+		}
+*/
+		return params;
 
 	}
 
@@ -510,14 +517,26 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 * @return The return type of this method.
 	 * @see #getReturnTypeStringFromDescriptor()
 	 */
-	/*
-	 * TODO: This is identical to FieldInfo.getTypeString(), except for the
-	 * 'V' case.  It is also very similar to #getParameterTypes().  Try
-	 * to refactor common code from these methods.
-	 */
 	private String getReturnTypeStringFromTypeSignature() {
-		// TODO: Implement me
-		return null;
+// TODO
+return null;
+/*
+		Signature sigAttr = null;
+		for (int i=0; i<attributes.size(); i++) {
+			if (attributes.get(i) instanceof Signature) {
+				sigAttr = (Signature)attributes.get(i);
+				break;
+			}
+		}
+
+		String sig = null;
+
+		if (sigAttr!=null) {
+			sig = sigAttr.getMethodReturnType();
+		}
+
+		return sig;
+*/
 	}
 
 
@@ -661,11 +680,12 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 			ai = e;
 		}
 
-		else if ("Signature".equals(attrName)) {
+		else if (SIGNATURE.equals(attrName)) {
 			//System.err.println(">>> " + attributeLength);
 			int u4 = in.readUnsignedShort();
-			String sig = cf.getUtf8ValueFromConstantPool(u4);
-			System.out.println("... ... " + getClassFile().getClassName(false) + " - " + sig + ", " + getDescriptor());
+			String typeSig = cf.getUtf8ValueFromConstantPool(u4);
+			System.out.println("... ... " + getClassFile().getClassName(false) + "." + getName() + " - " + typeSig + ", " + getDescriptor());
+			ai = new Signature(cf, typeSig);
 		}
 
 		// TODO: Handle other Attribute types.

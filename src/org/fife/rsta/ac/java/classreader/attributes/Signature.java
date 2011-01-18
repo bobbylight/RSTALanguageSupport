@@ -35,7 +35,7 @@ public class Signature extends AttributeInfo {
 	}
 
 
-	public List getParamTypes() {
+	public List getClassParamTypes() {
 
 		List types = null;
 		
@@ -86,6 +86,31 @@ public class Signature extends AttributeInfo {
 		}
 
 		return types;
+
+	}
+
+
+	public String getMethodReturnType() {
+
+		String sig = null;
+
+		if (signature!=null) {
+
+			// TODO: Handle "<...>"
+			if (signature.charAt(0)=='(') {
+				int rparen = signature.indexOf(')', 1);
+				if (rparen>-1 && rparen<signature.length()-3) { // Should always be true
+					if (signature.charAt(rparen+1)=='T' &&
+							signature.charAt(rparen+3)==';') {
+						String typeChar = signature.substring(rparen+2, rparen+3);
+						return typeChar;
+					}
+				}
+			}
+
+		}
+
+		return sig;
 
 	}
 
