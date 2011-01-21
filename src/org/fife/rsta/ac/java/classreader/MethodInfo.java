@@ -42,13 +42,28 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	private int descriptorIndex; // u2
 
 	/**
-	 * Attributes of this method.
+	 * The <code>Signature</code> attribute, or <code>null</code> if there
+	 * isn't one for this method.
+	 */
+	private Signature signatureAttr;
+
+	/**
+	 * The <code>Code</code> attribute, or <code>null</code> if this method
+	 * is abstract or native.
+	 */
+	private Code codeAttr;
+
+	/**
+	 * All attributes of this method that aren't explicitly covered by the
+	 * private members {@link #signatureAttr} and {@link #codeAttr}.
 	 */
 	private List attributes;
 
 	/**
-	 * The type of all parameters to this method.  If this method takes no
-	 * parameters, this will be a zero-length array.
+	 * The type of all parameters to this method.  Note that this cache will
+	 * be short-lived, as classes that take type parameters will pass their
+	 * type arguments down to individual <code>MethodInfo</code>s when doing
+	 * completions, to ensure types are as correct as possible. 
 	 */
 	private String[] paramTypes;
 
@@ -91,7 +106,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 *
 	 * @param info Information about the attribute.
 	 */
-	public void addAttribute(AttributeInfo info) {
+	private void addAttribute(AttributeInfo info) {
 		attributes.add(info);
 	}
 
@@ -110,8 +125,28 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 
 
 	/**
+	 * Called internally by {@link ClassFile} whenever its
+	 * {@link ClassFile#setTypeParamsToTypeArgs(Map)} method is called.  This
+	 * clears this method's local cache of parameter/return types.  They'll be
+	 * lazily recomputed the next time they are needed.  This allows this
+	 * <code>MethodInfo</code> to be used for code completion for instances
+	 * of the same class initialized with different type arguments.<p>
+	 * 
+	 * Note that if this method does not have parameterized arguments or
+	 * return type, calling this method won't affect its behavior.
+	 */
+	void clearParamTypeInfo() {
+		paramTypes = null;
+		returnType = null;
+	}
+
+
+	/**
 	 * Creates and returns an array of types of all parameters of this
-	 * method.
+	 * method.  If this method takes any generic type arguments, these
+	 * types are grabbed from the parent <code>ClassFile</code> instance,
+	 * whose type argument values should have been initialized via
+	 * {@link ClassFile#setTypeParamsToTypeArgs(Map)}.
 	 *
 	 * @return The array of parameter types.
 	 * @see #createParamTypesFromDescriptor()
@@ -225,8 +260,10 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 
 	/**
 	 * Creates an array of types of each parameter by looking at the method's
-	 * <code>Signature</code> attribute.  This attribute was introduced in
-	 * Java 5, and is the only way to detect generic parameters.
+	 * <code>Signature</code> attribute, and querying the parent
+	 * <code>ClassFile</code> instance for any type argument values.  This
+	 * attribute was introduced in Java 5, and is the only way to detect
+	 * generic parameters.
 	 *
 	 * @return The parameter types.
 	 * @see #createParamTypesFromDescriptor()
@@ -234,12 +271,15 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	private String[] createParamTypesFromTypeSignature() {
 
 		String[] params = null;
-/*
-		if (typeSig!=null) {
 
-			// TODO
+		if (signatureAttr!=null) {
+			List paramTypes = signatureAttr.getMethodParamTypes(this, cf);
+			if (paramTypes!=null) {
+				params = new String[paramTypes.size()];
+				params = (String[])paramTypes.toArray(params);
+			}
 		}
-*/
+
 		return params;
 
 	}
@@ -263,23 +303,6 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 */
 	public int getAttributeCount() {
 		return attributes.size();
-	}
-
-
-	/**
-	 * Returns the {@link Code} attribute for this method.
-	 *
-	 * @return The <code>Code</code> attribute.  This may be <code>null</code>
-	 *         if this method is abstract or native.
-	 */
-	public Code getCodeAttribute() {
-		for (int i=0; i<getAttributeCount(); i++) {
-			AttributeInfo ai = getAttribute(i);
-			if (ai instanceof Code) {
-				return (Code)ai;
-			}
-		}
-		return null;
 	}
 
 
@@ -359,9 +382,8 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 */
 	public String getParameterName(int index) {
 		if (index>=0 && index<getParameterCount()) {
-			Code code = getCodeAttribute();
-			if (code!=null) {
-				return code.getParameterName(index);
+			if (codeAttr!=null) {
+				return codeAttr.getParameterName(index);
 			}
 		}
 		return null;
@@ -411,18 +433,19 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 		return (String[])paramTypes.clone();
 	}
 
-
 	/**
 	 * Returns the return type of this method.
 	 *
 	 * @return The return type of this method.
 	 */
 	public String getReturnTypeString() {
-		String type = getReturnTypeStringFromTypeSignature();
-		if (type==null) {
-			type = getReturnTypeStringFromDescriptor();
+		if (returnType==null) {
+			returnType = getReturnTypeStringFromTypeSignature();
+			if (returnType==null) {
+				returnType = getReturnTypeStringFromDescriptor();
+			}
 		}
-		return type;
+		return returnType;
 	}
 
 
@@ -442,69 +465,63 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 */
 	private String getReturnTypeStringFromDescriptor() {
 
-		if (returnType==null) {
+		String descriptor = getDescriptor();
+		int rparen = descriptor.indexOf(')');
+		descriptor = descriptor.substring(rparen+1); // return type desc.
+		StringBuffer sb = new StringBuffer();
 
-			String descriptor = getDescriptor();
-			int rparen = descriptor.indexOf(')');
-			descriptor = descriptor.substring(rparen+1); // return type desc.
-			StringBuffer sb = new StringBuffer();
+		int braceCount = descriptor.lastIndexOf('[') + 1;
 
-			int braceCount = descriptor.lastIndexOf('[') + 1;
+		switch (descriptor.charAt(braceCount)) {
 
-			switch (descriptor.charAt(braceCount)) {
+			// BaseType
+			case 'B':
+				sb.append("byte");
+				break;
+			case 'C':
+				sb.append("char");
+				break;
+			case 'D':
+				sb.append("double");
+				break;
+			case 'F':
+				sb.append("float");
+				break;
+			case 'I':
+				sb.append("int");
+				break;
+			case 'J':
+				sb.append("long");
+				break;
+			case 'S':
+				sb.append("short");
+				break;
+			case 'Z':
+				sb.append("boolean");
+				break;
+			case 'V':
+				sb.append("void");
+				break;
 
-				// BaseType
-				case 'B':
-					sb.append("byte");
-					break;
-				case 'C':
-					sb.append("char");
-					break;
-				case 'D':
-					sb.append("double");
-					break;
-				case 'F':
-					sb.append("float");
-					break;
-				case 'I':
-					sb.append("int");
-					break;
-				case 'J':
-					sb.append("long");
-					break;
-				case 'S':
-					sb.append("short");
-					break;
-				case 'Z':
-					sb.append("boolean");
-					break;
-				case 'V':
-					sb.append("void");
-					break;
+			// ObjectType
+			case 'L':
+				String clazz = descriptor.substring(1, descriptor.length()-1);
+				clazz = org.fife.rsta.ac.java.Util.replaceChar(clazz, '/', '.');
+				sb.append(clazz);
+				break;
 
-				// ObjectType
-				case 'L':
-					String clazz = descriptor.substring(1, descriptor.length()-1);
-					clazz = org.fife.rsta.ac.java.Util.replaceChar(clazz, '/', '.');
-					sb.append(clazz);
-					break;
-
-				// Invalid field descriptor
-				default:
-					sb.append("UNSUPPORTED_TYPE_").append(descriptor);
-					break;
-
-			}
-
-			for (int i=0; i<braceCount; i++) {
-				sb.append("[]");
-			}
-
-			returnType = sb.toString();
+			// Invalid field descriptor
+			default:
+				sb.append("UNSUPPORTED_TYPE_").append(descriptor);
+				break;
 
 		}
 
-		return returnType;
+		for (int i=0; i<braceCount; i++) {
+			sb.append("[]");
+		}
+
+		return sb.toString();
 
 	}
 
@@ -518,25 +535,13 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 * @see #getReturnTypeStringFromDescriptor()
 	 */
 	private String getReturnTypeStringFromTypeSignature() {
-// TODO
-return null;
-/*
-		Signature sigAttr = null;
-		for (int i=0; i<attributes.size(); i++) {
-			if (attributes.get(i) instanceof Signature) {
-				sigAttr = (Signature)attributes.get(i);
-				break;
-			}
+		String retType = null;
+		if (signatureAttr!=null) {
+			retType = signatureAttr.getMethodReturnType(this, cf);
 		}
 
-		String sig = null;
+		return retType;
 
-		if (sigAttr!=null) {
-			sig = sigAttr.getMethodReturnType();
-		}
-
-		return sig;
-*/
 	}
 
 
@@ -641,7 +646,15 @@ return null;
 		int attrCount = in.readUnsignedShort();
 		for (int j=0; j<attrCount; j++) {
 			AttributeInfo ai = mi.readAttribute(in);
-			mi.addAttribute(ai);
+			if (ai instanceof Signature) {
+				mi.signatureAttr = (Signature)ai;
+			}
+			else if (ai instanceof Code) {
+				mi.codeAttr = (Code)ai;
+			}
+			else {
+				mi.addAttribute(ai);
+			}
 		}
 		return mi;
 	}
@@ -684,7 +697,7 @@ return null;
 			//System.err.println(">>> " + attributeLength);
 			int u4 = in.readUnsignedShort();
 			String typeSig = cf.getUtf8ValueFromConstantPool(u4);
-			System.out.println("... ... " + getClassFile().getClassName(false) + "." + getName() + " - " + typeSig + ", " + getDescriptor());
+			//System.out.println("... " + getClassFile().getClassName(false) + "." + getName() + " - " + typeSig + ", " + getDescriptor());
 			ai = new Signature(cf, typeSig);
 		}
 

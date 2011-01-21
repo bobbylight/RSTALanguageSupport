@@ -10,12 +10,15 @@
  */
 package org.fife.rsta.ac.java;
 
+import java.awt.Cursor;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import javax.swing.text.JTextComponent;
@@ -35,6 +38,8 @@ import org.fife.rsta.ac.java.rjc.ast.Method;
 import org.fife.rsta.ac.java.rjc.ast.NormalClassDeclaration;
 import org.fife.rsta.ac.java.rjc.ast.TypeDeclaration;
 import org.fife.rsta.ac.java.rjc.lang.Type;
+import org.fife.rsta.ac.java.rjc.lang.TypeArgument;
+import org.fife.rsta.ac.java.rjc.lang.TypeParameter;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
 
 
@@ -131,12 +136,22 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	 * TODO: Handle accessibility correctly!
 	 *
 	 * @param set
-	 * @param pkg The package of the source being parsed.
+	 * @param cu The compilation unit.
 	 * @param cf A class in the chain of classes that a type being parsed
 	 *        inherits from.
+	 * @param pkg The package of the source being parsed.
+	 * @param typeParamMap A mapping of type parameters to type arguments
+	 *        for the object whose fields/methods/etc. are currently being
+	 *        code-completed.
 	 */
 	private void addCompletionsForExtendedClass(Set set,
-						CompilationUnit cu, ClassFile cf, String pkg) {
+						CompilationUnit cu, ClassFile cf, String pkg,
+						Map typeParamMap) {
+
+		// Reset this class's type-arguments-to-type-parameters map, so that
+		// when methods and fields need to know type arguments, they can query
+		// for them.
+		cf.setTypeParamsToTypeArgs(typeParamMap);
 
 		// Check us first, so if we override anything, we get the "newest"
 		// version.
@@ -160,9 +175,19 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 			}
 		}
 
+		// Add completions for any non-overridden super-class methods.
 		ClassFile superClass = getClassFileFor(cu, pkg, cf.getSuperClassName(true));
 		if (superClass!=null) {
-			addCompletionsForExtendedClass(set, cu, superClass, pkg);
+			addCompletionsForExtendedClass(set, cu, superClass, pkg, typeParamMap);
+		}
+
+		// Add completions for any interface methods, in case this class is
+		// abstract and hasn't implemented some of them yet.
+		// TODO: Do this only if "top-level" class is declared abstract
+		for (int i=0; i<cf.getImplementedInterfaceCount(); i++) {
+			String inter = cf.getImplementedInterfaceName(i, true);
+			cf = getClassFileFor(cu, pkg, inter);
+			addCompletionsForExtendedClass(set, cu, cf, pkg, typeParamMap);
 		}
 
 	}
@@ -184,7 +209,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 
 		if (type.isArray()) {
 			ClassFile cf = getClassFileFor(cu, pkg, "java.lang.Object");
-			addCompletionsForExtendedClass(retVal, cu, cf, pkg);
+			addCompletionsForExtendedClass(retVal, cu, cf, pkg, null);
 			FieldCompletion fc = FieldCompletion.
 				createLengthCompletion(this, type.toString());
 			retVal.add(fc);
@@ -199,7 +224,8 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 			}
 			ClassFile cf = getClassFileFor(cu, pkg, typeStr);
 			if (cf!=null) {
-				addCompletionsForExtendedClass(retVal, cu, cf, pkg);
+				Map typeParamMap = createTypeParamMap(type, cf);
+				addCompletionsForExtendedClass(retVal, cu, cf, pkg, typeParamMap);
 			}
 		}
 
@@ -376,11 +402,42 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 
 
 	/**
+	 * Creates and returns a mapping of type parameters to type arguments.
+	 *
+	 * @param type The type of a variable/field/etc. whose fields/methods/etc.
+	 *        are being code completed, as declared in the source.  This
+	 *        includes type arguments.
+	 * @param cf The <code>ClassFile</code> representing the actual type of
+	 *        the variable/field/etc. being code completed
+	 * @return A mapping of type parameter names to type arguments (both
+	 *         Strings).
+	 */
+	private Map createTypeParamMap(Type type, ClassFile cf) {
+		Map typeParamMap = null;
+		List typeArgs = type.getTypeArguments(type.getIdentifierCount()-1);
+		if (typeArgs!=null) {
+			typeParamMap = new HashMap();
+			List paramTypes = cf.getParamTypes();
+			// Should be the same size!  Otherwise, the source code has
+			// too many/too few type arguments listed for this type.
+			int min = Math.min(paramTypes==null ? 0 : paramTypes.size(),
+									typeArgs.size());
+			for (int i=0; i<min; i++) {
+				TypeArgument typeArg = (TypeArgument)typeArgs.get(i);
+				typeParamMap.put(paramTypes.get(i), typeArg.toString());
+			}
+		}
+		return typeParamMap;
+	}
+
+
+	/**
 	 * {@inheritDoc}
 	 */
 	protected List getCompletionsImpl(JTextComponent comp) {
 
-		comp.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+		comp.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
 		try {
 
 		completions.clear();
@@ -438,7 +495,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 		return completions.subList(start, end);
 
 		} finally {
-			comp.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.TEXT_CURSOR));
+			comp.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 		}
 
 	}
@@ -589,6 +646,20 @@ public File getSourceLocForClass(String className) {
 
 		Method currentMethod = null;
 
+		Map typeParamMap = new HashMap();
+		if (td instanceof NormalClassDeclaration) {
+			NormalClassDeclaration ncd = (NormalClassDeclaration)td;
+			List typeParams = ncd.getTypeParameters();
+			if (typeParams!=null) {
+				for (int i=0; i<typeParams.size(); i++) {
+					TypeParameter typeParam = (TypeParameter)typeParams.get(i);
+					String typeVar = typeParam.getName();
+					// For non-qualified completions, use type var name.
+					typeParamMap.put(typeVar, typeVar);
+				}
+			}
+		}
+
 		// Get completions for this class's methods, fields and local
 		// vars.  Do this before checking super classes so that, if
 		// we overrode anything, we get the "newest" version.
@@ -628,7 +699,7 @@ public File getSourceLocForClass(String className) {
 					String superClassName = extended.toString();
 					ClassFile cf = getClassFileFor(cu, pkg, superClassName);
 					if (cf!=null) {
-						addCompletionsForExtendedClass(retVal, cu, cf, pkg);
+						addCompletionsForExtendedClass(retVal, cu, cf, pkg, null);
 					}
 					else {
 						System.out.println("[DEBUG]: Couldn't find ClassFile for: " + superClassName);
@@ -698,7 +769,7 @@ public File getSourceLocForClass(String className) {
 					Type type = field.getType();
 					if (type.isArray()) {
 						ClassFile cf = getClassFileFor(cu, pkg, "java.lang.Object");
-						addCompletionsForExtendedClass(retVal, cu, cf, pkg);
+						addCompletionsForExtendedClass(retVal, cu, cf, pkg, null);
 						FieldCompletion fc = FieldCompletion.
 							createLengthCompletion(this, type.toString());
 						retVal.add(fc);
@@ -706,8 +777,17 @@ public File getSourceLocForClass(String className) {
 					else if (!type.isBasicType()) {
 						String typeStr = type.toString();
 						ClassFile cf = getClassFileFor(cu, pkg, typeStr);
+						// Add completions for extended class type chain
 						if (cf!=null) {
-							addCompletionsForExtendedClass(retVal, cu, cf, pkg);
+							Map typeParamMap = createTypeParamMap(type, cf);
+							addCompletionsForExtendedClass(retVal, cu, cf, pkg, typeParamMap);
+						}
+						// Add completions for all implemented interfaces
+						// TODO: Only do this if type is abstract!
+						for (int i=0; i<cf.getImplementedInterfaceCount(); i++) {
+							String inter = cf.getImplementedInterfaceName(i, true);
+							cf = getClassFileFor(cu, pkg, inter);
+							System.out.println(cf);
 						}
 					}
 					matched = true;

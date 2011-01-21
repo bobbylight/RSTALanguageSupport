@@ -66,6 +66,11 @@ public class Type {
 	}
 
 
+	public int getIdentifierCount() {
+		return identifiers.size();
+	}
+
+
 	/**
 	 * Returns the name of this type.
 	 *
@@ -108,6 +113,11 @@ public class Type {
 
 		return sb.toString();
 
+	}
+
+
+	public List getTypeArguments(int index) {
+		return (List)typeArguments.get(index);
 	}
 
 

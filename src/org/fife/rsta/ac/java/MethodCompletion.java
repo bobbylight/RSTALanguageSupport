@@ -22,6 +22,7 @@ import org.fife.rsta.ac.java.classreader.MethodInfo;
 import org.fife.rsta.ac.java.rjc.ast.FormalParameter;
 import org.fife.rsta.ac.java.rjc.ast.Method;
 import org.fife.rsta.ac.java.rjc.lang.Type;
+import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.FunctionCompletion;
 import org.fife.ui.autocomplete.ParameterizedCompletion;
@@ -49,6 +50,11 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 	 * The data source for our completion attributes.
 	 */
 	private Data data;
+
+	/**
+	 * Used to compare this method completion with another.
+	 */
+	private String compareString;
 
 	/**
 	 * The relevance of methods.  This allows methods to be "higher" in
@@ -116,9 +122,46 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 	}
 
 
+	/**
+	 * Overridden to compare methods by their comparison strings.
+	 *
+	 * @param o A <code>Completion</code> to compare to.
+	 * @return The sort order.
+	 */
+	public int compareTo(Object o) {
+
+		int rc = -1;
+
+		if (o==this) {
+			rc = 0;
+		}
+
+		else if (o instanceof MethodCompletion) {
+			rc = getCompareString().compareTo(
+					((MethodCompletion)o).getCompareString());
+		}
+
+		else if (o instanceof Completion) {
+			Completion c2 = (Completion)o;
+			rc = toString().compareToIgnoreCase(c2.toString());
+			if (rc==0) { // Same text value
+				String clazz1 = getClass().getName();
+				clazz1 = clazz1.substring(clazz1.lastIndexOf('.'));
+				String clazz2 = c2.getClass().getName();
+				clazz2 = clazz2.substring(clazz2.lastIndexOf('.'));
+				rc = clazz1.compareTo(clazz2);
+			}
+		}
+
+		return rc;
+
+	}
+
+
 	public boolean equals(Object obj) {
 		return (obj instanceof MethodCompletion) &&
-			((MethodCompletion)obj).getSignature().equals(getSignature());
+			//((MethodCompletion)obj).getSignature().equals(getSignature());
+		((MethodCompletion)obj).getCompareString().equals(getCompareString());
 	}
 
 
@@ -129,6 +172,45 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 			temp = temp.substring(lastDot+1);
 		}
 		return temp;
+	}
+
+
+	/**
+	 * Returns a string used to compare this method completion to another.
+	 *
+	 * @return The comparison string.
+	 */
+	private String getCompareString() {
+
+		/*
+		 * This string compares the following parts of methods in this order,
+		 * to optimize sort order in completion lists.
+		 *
+		 * 1. First, by name
+		 * 2. Next, by number of parameters.
+		 * 3. Finally, by parameter type.
+		 */
+
+		if (compareString==null) {
+			StringBuffer sb = new StringBuffer(getName());
+			// NOTE: This will fail if a method has > 99 parameters (!)
+			int paramCount = getParamCount();
+			if (paramCount<10) {
+				sb.append('0');
+			}
+			sb.append(paramCount);
+			for (int i=0; i<paramCount; i++) {
+				String type = getParam(i).getType();
+				sb.append(type);
+				if (i<paramCount-1) { 
+					sb.append(',');
+				}
+			}
+			compareString = sb.toString();
+		}
+
+		return compareString;
+
 	}
 
 
@@ -156,7 +238,7 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 
 
 	public int hashCode() {
-		return getSignature().hashCode();
+		return getCompareString().hashCode();
 	}
 
 
@@ -181,14 +263,6 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 		if (!data.isConstructor()) {
 			setRelevance(NON_CONSTRUCTOR_RELEVANCE);
 		}
-	}
-
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public String toString() {
-		return getSignature();
 	}
 
 
@@ -238,6 +312,14 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 			g.setColor(origColor);
 		}
 
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String toString() {
+		return getSignature();
 	}
 
 

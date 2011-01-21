@@ -12,6 +12,7 @@ package org.fife.rsta.ac.java.classreader;
 
 import java.io.*;
 import java.util.List;
+import java.util.Map;
 
 import org.fife.rsta.ac.java.classreader.attributes.*;
 import org.fife.rsta.ac.java.classreader.constantpool.*;
@@ -90,6 +91,15 @@ public class ClassFile implements AccessFlags {
 	 */
 	private List paramTypes;
 
+	/**
+	 * A mapping of type parameters to type arguments.  This is set via
+	 * {@link #setTypeParamsToTypeArgs(Map)} during code completion of members of an
+	 * instance variable whose type is represented by this class file.  This
+	 * <code>ClassFile</code> doesn't use this field itself; rather, it's there
+	 * for consumers (such as the Java code completion API) to use. 
+	 */
+	private Map typeMap;
+
 	public static final String SIGNATURE			= "Signature";
 	public static final String SOURCE_FILE			= "SourceFile";
 
@@ -101,16 +111,13 @@ public class ClassFile implements AccessFlags {
 
 
 	public ClassFile(File classFile) throws IOException {
-
 		DataInputStream in = new DataInputStream(new BufferedInputStream(
 				new FileInputStream(classFile)));
-
 		try {
 			init(in);
 		} finally {
 			in.close();
 		}
-
 	}
 
 
@@ -325,6 +332,11 @@ public class ClassFile implements AccessFlags {
 	}
 
 
+	public List getParamTypes() {
+		return paramTypes;
+	}
+
+
 	/**
 	 * Returns the fully-qualified name of the superclass of this class or
 	 * interface.
@@ -343,6 +355,27 @@ public class ClassFile implements AccessFlags {
 			return null;
 		}
 		return getClassNameFromConstantPool(superClass, fullyQualified);
+	}
+
+
+	/**
+	 * Returns the currently set type argument for the specified type parameter.
+	 *
+	 * @param typeParam The type parameter.
+	 * @return The type argument, or "<code>Object</code>" if no type
+	 *         parameters have been set.  This is because, if the user types,
+	 *         say, "<code>java.util.List list;</code>" in Java 5+, the
+	 *         type defaults to <code>Object</code>.  The code completion API
+	 *         may set the type argument mapping to <code>null</code> if no
+	 *         type arguments are scanned, thus we need to return
+	 *         <code>Object</code> in this case.
+	 * @see #setTypeParamsToTypeArgs(Map)
+	 */
+	public String getTypeArgument(String typeParam) {
+		// If no type arguments are specified for a class that's supposed to
+		// have them (according to calling code), return "Object", as Java
+		// assumes this.
+		return typeMap==null ? "Object" : (String)typeMap.get(typeParam);
 	}
 
 
@@ -380,8 +413,6 @@ public class ClassFile implements AccessFlags {
 	 * @throws IOException If an error occurs reading the class file.
 	 */
 	private void init(DataInputStream in) throws IOException {
-
-		// Get some basic stuff out of the way.
 		readHeader(in);
 		readVersion(in);
 		readConstantPoolInfos(in);
@@ -391,10 +422,7 @@ public class ClassFile implements AccessFlags {
 		readInterfaces(in);
 		readFields(in);
 		readMethods(in);
-
-		// No need for us to read attributes (code, etc.).
 		readAttributes(in);
-
 	}
 
 
@@ -436,12 +464,12 @@ public class ClassFile implements AccessFlags {
 		else if (SIGNATURE.equals(attrName)) { // 4.8.8
 			int signatureIndex = in.readUnsignedShort();
 			String sig = getUtf8ValueFromConstantPool(signatureIndex);
-			System.out.println("... Signature: " + sig);
+			//System.out.println("... Signature: " + sig);
 			ai = new Signature(this, sig);
 			paramTypes = ((Signature)ai).getClassParamTypes();
 		}
 
-		// TODO: Handle other Attribute types.
+		// TODO: Handle other useful Attribute types, if any.
 
 		else { // An unknown/unsupported attribute.
 			int[] info = new int[attributeLength];
@@ -592,6 +620,25 @@ public class ClassFile implements AccessFlags {
 		minorVersion = in.readUnsignedShort();
 		majorVersion = in.readUnsignedShort();
 		debugPrint("Class file version: " + getVersionString());
+	}
+
+
+	/**
+	 * Sets a mapping of type parameters of this class to type arguments for
+	 * a particular instance of this class.  Note that <code>ClassFile</code>
+	 * does not directly use this field; it is there for code completion API's
+	 * to use to extract the necessary types of arguments, return values, etc.,
+	 * of methods (see the {@link MethodInfo} class).
+	 *
+	 * @param typeMap A mapping of type parameters to type arguments (both
+	 *        <code>String</code>s).
+	 * @see #getTypeArgument(String)
+	 */
+	public void setTypeParamsToTypeArgs(Map typeMap) {
+		this.typeMap = typeMap;
+		for (int i=0; i<getMethodCount(); i++) {
+			getMethodInfo(i).clearParamTypeInfo();
+		}
 	}
 
 
