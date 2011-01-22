@@ -180,7 +180,7 @@ public class PerlCompletionProvider extends CCompletionProvider {
 		recursivelyAddLocalVars(varCompletions, block, dot, firstChar);
 
 		// Get only those that match what's typed
-		if (varCompletions!=null) {
+		if (varCompletions.size()>0) {
 			varCompletions = varCompletions.subSet(text, text+'{');
 		}
 
