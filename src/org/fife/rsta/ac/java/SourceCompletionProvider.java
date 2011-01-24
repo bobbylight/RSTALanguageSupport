@@ -781,13 +781,13 @@ public File getSourceLocForClass(String className) {
 						if (cf!=null) {
 							Map typeParamMap = createTypeParamMap(type, cf);
 							addCompletionsForExtendedClass(retVal, cu, cf, pkg, typeParamMap);
-						}
-						// Add completions for all implemented interfaces
-						// TODO: Only do this if type is abstract!
-						for (int i=0; i<cf.getImplementedInterfaceCount(); i++) {
-							String inter = cf.getImplementedInterfaceName(i, true);
-							cf = getClassFileFor(cu, pkg, inter);
-							System.out.println(cf);
+							// Add completions for all implemented interfaces
+							// TODO: Only do this if type is abstract!
+							for (int i=0; i<cf.getImplementedInterfaceCount(); i++) {
+								String inter = cf.getImplementedInterfaceName(i, true);
+								cf = getClassFileFor(cu, pkg, inter);
+								System.out.println(cf);
+							}
 						}
 					}
 					matched = true;
