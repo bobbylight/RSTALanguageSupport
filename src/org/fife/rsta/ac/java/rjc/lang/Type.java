@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
 /**
  * A type.
  *
@@ -76,9 +75,26 @@ public class Type {
 	 *
 	 * @param fullyQualified Whether the returned value should be
 	 *        fully qualified.
-	 * @return The name of this type.
+	 * @return The name of this type.  This will include type arguments,
+	 *         if any.
+	 * @see #getName(boolean, boolean)
 	 */
 	public String getName(boolean fullyQualified) {
+		return getName(fullyQualified, true);
+	}
+
+
+	/**
+	 * Returns the name of this type.
+	 *
+	 * @param fullyQualified Whether the returned value should be
+	 *        fully qualified.
+	 * @param addTypeArgs Whether type arguments should be at the end of
+	 *        the returned string, if any.
+	 * @return The name of this type.
+	 * @see #getName(boolean)
+	 */
+	public String getName(boolean fullyQualified, boolean addTypeArgs) {
 
 		StringBuffer sb = new StringBuffer();
 
@@ -86,7 +102,7 @@ public class Type {
 		int start = fullyQualified ? 0 : count-1;
 		for (int i=start; i<count; i++) {
 			sb.append(identifiers.get(i).toString());
-			if (typeArguments.get(i)!=null) {
+			if (addTypeArgs && typeArguments.get(i)!=null) {
 				List typeArgs = (List)typeArguments.get(i);
 				int typeArgCount = typeArgs.size();
 				if (typeArgCount>0) {

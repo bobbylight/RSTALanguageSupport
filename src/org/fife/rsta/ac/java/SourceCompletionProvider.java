@@ -216,12 +216,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 		}
 
 		else if (!type.isBasicType()) {
-			String typeStr = type.toString();
-			// Remove type parameters.
-			int lt = typeStr.indexOf('<');
-			if (lt>-1) {
-				typeStr = typeStr.substring(0, lt);
-			}
+			String typeStr = type.getName(true, false);
 			ClassFile cf = getClassFileFor(cu, pkg, typeStr);
 			if (cf!=null) {
 				Map typeParamMap = createTypeParamMap(type, cf);
@@ -775,7 +770,7 @@ public File getSourceLocForClass(String className) {
 						retVal.add(fc);
 					}
 					else if (!type.isBasicType()) {
-						String typeStr = type.toString();
+						String typeStr = type.getName(true, false);
 						ClassFile cf = getClassFileFor(cu, pkg, typeStr);
 						// Add completions for extended class type chain
 						if (cf!=null) {
