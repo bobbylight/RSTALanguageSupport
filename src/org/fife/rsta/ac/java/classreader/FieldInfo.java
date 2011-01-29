@@ -187,7 +187,8 @@ public class FieldInfo extends MemberInfo {
 			case 'L':
 				String clazz = descriptor.substring(braceCount+1,
 													descriptor.length()-1);
-				clazz = org.fife.rsta.ac.java.Util.replaceChar(clazz, '/', '.');
+				//clazz = org.fife.rsta.ac.java.Util.replaceChar(clazz, '/', '.');
+				clazz = clazz.substring(clazz.lastIndexOf('/')+1);
 				sb.append(clazz);
 				break;
 

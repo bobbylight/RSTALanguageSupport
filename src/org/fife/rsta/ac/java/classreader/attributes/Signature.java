@@ -310,7 +310,8 @@ public class Signature extends AttributeInfo {
 					else {
 						// Set "type" to class name, without type params
 						type = str.substring(pos+1, lt); 
-						type = org.fife.rsta.ac.java.Util.replaceChar(type, '/', '.');
+						//type = org.fife.rsta.ac.java.Util.replaceChar(type, '/', '.');
+						type = type.substring(type.lastIndexOf('/')+1);
 						// Get type parameters
 						String paramDescriptors = str.substring(lt+1, offs-1);
 						ParamDescriptorResult res2 = new ParamDescriptorResult();
@@ -335,7 +336,8 @@ public class Signature extends AttributeInfo {
 				}
 				else {
 					String clazz = str.substring(pos + 1, semicolon);
-					clazz = org.fife.rsta.ac.java.Util.replaceChar(clazz, '/', '.');
+					//clazz = org.fife.rsta.ac.java.Util.replaceChar(clazz, '/', '.');
+					clazz = clazz.substring(clazz.lastIndexOf('/')+1);
 					type = clazz;
 					pos += semicolon + 1;
 				}
