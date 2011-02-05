@@ -274,6 +274,7 @@ case KEYWORD_WHILE:
 // parsed and discarded).
 				case KEYWORD_FINAL:
 					isFinal = true;
+					t = s.yylexNonNull("Unexpected end of file");
 					// Fall through
 
 				default:
