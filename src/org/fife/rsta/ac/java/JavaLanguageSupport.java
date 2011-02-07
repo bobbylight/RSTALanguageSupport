@@ -10,11 +10,17 @@
  */
 package org.fife.rsta.ac.java;
 
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import javax.swing.Timer;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.Element;
@@ -47,6 +53,12 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 	 * or <code>null</code> if each one should have a unique jar manager.
 	 */
 	private JarManager jarManager;
+
+	/**
+	 * Client property installed on text areas that points to a listener.
+	 */
+	private static final String PROPERTY_LISTENER =
+		"org.fife.rsta.ac.java.JavaLanguageSupport.Listener";
 
 
 	/**
@@ -127,6 +139,9 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 
 		textArea.setToolTipSupplier(p);
 
+		Listener listener = new Listener(textArea);
+		textArea.putClientProperty(PROPERTY_LISTENER, listener);
+
 		JavaParser parser = new JavaParser(textArea);
 		textArea.putClientProperty(PROPERTY_LANGUAGE_PARSER, parser);
 		textArea.addParser(parser);
@@ -152,6 +167,12 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		}
 		textArea.removeParser(parser);
 		textArea.putClientProperty(PROPERTY_LANGUAGE_PARSER, null);
+
+		Object listener = textArea.getClientProperty(PROPERTY_LISTENER);
+		if (listener instanceof Listener) { // Should always be true
+			((Listener)listener).uninstall();
+			textArea.putClientProperty(PROPERTY_LISTENER, null);
+		}
 
 	}
 
@@ -452,6 +473,66 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 			String style = textArea.getSyntaxEditingStyle();
 			parser.parse(doc, style);
 			return super.refreshPopupWindow();
+		}
+
+	}
+
+
+	/**
+	 * Listens for various events in a text area editing Java (in particular,
+	 * caret events, so we can track the "active" code block).
+	 */
+	private class Listener implements CaretListener, ActionListener {
+
+		private RSyntaxTextArea textArea;
+		private Timer t;
+
+		public Listener(RSyntaxTextArea textArea) {
+			this.textArea = textArea;
+			textArea.addCaretListener(this);
+			t = new Timer(650, this);
+			t.setRepeats(false);
+		}
+
+		public void actionPerformed(ActionEvent e) {
+
+			JavaParser parser = getParser(textArea);
+			if (parser==null) {
+				return; // Shouldn't happen
+			}
+			CompilationUnit cu = parser.getCompilationUnit();
+
+			// Highlight the line range of the Java method being edited in the
+			// gutter.
+			if (cu != null) { // Should always be true
+				int dot = textArea.getCaretPosition();
+				Point p = cu.getEnclosingMethodRange(dot);
+				if (p != null) {
+					try {
+						int startLine = textArea.getLineOfOffset(p.x);
+						int endLine = textArea.getLineOfOffset(p.y);
+						textArea.setActiveLineRange(startLine, endLine);
+					} catch (BadLocationException ble) {
+						ble.printStackTrace();
+					}
+				}
+				else {
+					textArea.setActiveLineRange(-1, -1);
+				}
+			}
+
+		}
+
+		public void caretUpdate(CaretEvent e) {
+			t.restart();
+		}
+
+		/**
+		 * Should be called whenever Java language support is removed from a
+		 * text area.
+		 */
+		public void uninstall() {
+			textArea.removeCaretListener(this);
 		}
 
 	}

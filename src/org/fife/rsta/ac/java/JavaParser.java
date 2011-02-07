@@ -135,6 +135,7 @@ public class JavaParser extends AbstractParser {
 
 		DocumentReader r = new DocumentReader(doc);
 		Scanner scanner = new Scanner(r);
+		scanner.setDocument(doc);
 		ASTFactory fact = new ASTFactory();
 		long start = System.currentTimeMillis();
 		try {

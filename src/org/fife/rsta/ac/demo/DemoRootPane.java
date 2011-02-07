@@ -10,11 +10,6 @@
  */
 package org.fife.rsta.ac.demo;
 
-import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -24,16 +19,13 @@ import java.net.URL;
 import javax.swing.*;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.event.*;
-import javax.swing.text.BadLocationException;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import org.fife.rsta.ac.LanguageSupport;
 import org.fife.rsta.ac.LanguageSupportFactory;
 import org.fife.rsta.ac.java.JavaLanguageSupport;
-import org.fife.rsta.ac.java.JavaParser;
 import org.fife.rsta.ac.java.rjc.ast.ASTNode;
-import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
 import org.fife.rsta.ac.java.tree.JavaOutlineTree;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -53,7 +45,6 @@ class DemoRootPane extends JRootPane implements HyperlinkListener,
 	private JavaOutlineTree tree;
 	private RTextScrollPane scrollPane;
 	private RSyntaxTextArea textArea;
-	private CompilationUnit cu;
 	private Listener listener;
 
 
@@ -76,7 +67,6 @@ jls.getJarManager().addJar(ji);
 		}
 
 		textArea = createTextArea();
-		textArea.addCaretListener(listener);
 		setText("CExample.txt", SYNTAX_STYLE_C);
 		scrollPane = new RTextScrollPane(textArea, true);
 		scrollPane.setIconRowHeaderEnabled(true);
@@ -216,17 +206,6 @@ jls.getJarManager().addJar(ji);
 	 */
 	void setText(String resource, String style) {
 
-		// HACK: TODO: Provide a better means of doing this.
-		LanguageSupportFactory fact = LanguageSupportFactory.get();
-		JavaLanguageSupport jls = (JavaLanguageSupport)fact.
-							getSupportFor(SyntaxConstants.SYNTAX_STYLE_JAVA);
-		JavaParser parser = jls.getParser(textArea);
-		if (parser!=null) {
-			parser.removePropertyChangeListener(
-					JavaParser.PROPERTY_COMPILATION_UNIT, listener);
-		}
-		cu = null;
-
 		textArea.setSyntaxEditingStyle(style);
 
 		ClassLoader cl = getClass().getClassLoader();
@@ -243,73 +222,13 @@ jls.getJarManager().addJar(ji);
 			textArea.setText("Type here to see syntax highlighting");
 		}
 
-		// HACK: TODO: Provide a better means of doing this.
-		if (SyntaxConstants.SYNTAX_STYLE_JAVA.equals(style)) {
-			fact = LanguageSupportFactory.get();
-			jls = (JavaLanguageSupport)fact.getSupportFor(style);
-			parser = jls.getParser(textArea);
-			if (parser!=null) {
-				parser.addPropertyChangeListener(
-						JavaParser.PROPERTY_COMPILATION_UNIT, listener);
-			}
-			else {
-				System.err.println("ERROR: No JavaParser installed!");
-			}
-		}
-
 	}
 
 
 	/**
 	 * Listens for events in the text editor.
 	 */
-	private class Listener implements CaretListener, ActionListener,
-			PropertyChangeListener, TreeSelectionListener {
-
-		private Timer t;
-
-		public Listener() {
-			t = new Timer(500, this);
-			t.setRepeats(false);
-		}
-
-		public void actionPerformed(ActionEvent e) {
-
-			// Highlight the line range of the Java method being edited in the
-			// gutter.
-			// Compilation unit will be null if not editing Java.
-			if (cu != null) {
-				int dot = textArea.getCaretPosition();
-				Point p = cu.getEnclosingMethodRange(dot);
-				if (p != null) {
-					try {
-						int startLine = textArea.getLineOfOffset(p.x);
-						int endLine = textArea.getLineOfOffset(p.y);
-						scrollPane.getGutter().setActiveLineRange(startLine, endLine);
-					} catch (BadLocationException ble) {
-						ble.printStackTrace();
-					}
-				}
-				else {
-					scrollPane.getGutter().clearActiveLineRange();
-				}
-			}
-
-		}
-
-		public void caretUpdate(CaretEvent e) {
-			t.restart();
-		}
-
-		public void propertyChange(PropertyChangeEvent e) {
-
-			String name = e.getPropertyName();
-
-			if (JavaParser.PROPERTY_COMPILATION_UNIT.equals(name)) {
-				CompilationUnit cu = (CompilationUnit)e.getNewValue();
-				DemoRootPane.this.cu = cu;
-			}
-		}
+	private class Listener implements TreeSelectionListener {
 
 		public void valueChanged(TreeSelectionEvent e) {
 			// Select the item clicked in the tree in the editor.
