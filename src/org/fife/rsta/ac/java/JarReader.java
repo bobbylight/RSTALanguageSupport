@@ -220,7 +220,7 @@ class JarReader {
 
 	public boolean containsPackage(String pkgName) {
 
-		String[] items = pkgName.split("\\.");
+		String[] items = Util.splitOnChar(pkgName, '.');
 
 		TreeMap m = packageMap;
 		for (int i=0; i<items.length; i++) {
@@ -546,22 +546,34 @@ class JarReader {
 											throws IOException {
 
 		File[] children = dir.listFiles();
-		TreeMap m = null;
+		TreeMap m = packageMap;
+		boolean firstTimeThrough = true;
 
 		for (int i=0; i<children.length; i++) {
 			File child = children[i];
 			if (child.isFile() && child.getName().endsWith(".class")) {
 				if (pkg!=null) { // will be null the first time through
-					if (m==null) { // Lazily drill down to pkg map node
-						m = packageMap;
+					if (firstTimeThrough) { // Lazily drill down to pkg map node
+						firstTimeThrough = false;
 						String[] items = Util.splitOnChar(pkg, '/');
 						for (int j=0; j<items.length; j++) {
-							TreeMap submap = (TreeMap)m.get(items[j]);
-							if (submap==null) {
-								submap = new TreeMap();
-								m.put(items[j], submap);
+							Object temp = m.get(items[j]);
+							if (temp instanceof TreeMap) {
+								m = (TreeMap)temp;
 							}
-							m = submap;
+							else if (temp==null) {
+								TreeMap submap = new TreeMap();
+								m.put(items[j], submap);
+								m = submap;
+							}
+							else { // e.g. a ClassFile
+								// A class with the same name as a package
+								// name - very unlikely, but could happen.  In
+								// this case, all peer classes/directories will
+								// share this package/class name conflict, so
+								// might as well bail now.
+								return;
+							}
 						}
 					}
 				}

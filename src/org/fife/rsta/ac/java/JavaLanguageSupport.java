@@ -329,6 +329,22 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 				String className = cc.getClassName(false);
 				String fqClassName = cc.getClassName(true);
 
+				// If the completion is in the same package as the source we're
+				// editing (or both are in the default package), bail.
+				int lastClassNameDot = fqClassName.lastIndexOf('.');
+				boolean ccInPackage = lastClassNameDot>-1;
+				Package pkg = cu.getPackage();
+				if (ccInPackage && pkg!=null) {
+					String ccPkg = fqClassName.substring(0, lastClassNameDot);
+					String pkgName = pkg.getName();
+					if (ccPkg.equals(pkgName)) {
+						return null;
+					}
+				}
+				else if (!ccInPackage && pkg==null) {
+					return null;
+				}
+
 				// Loop through all import statements.
 				for (Iterator i=cu.getImportIterator(); i.hasNext(); ) {
 
@@ -342,14 +358,16 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 
 					// Importing all classes in the package...
 					else if (id.isWildcard()) {
-						String imported = id.getName();
-						int dot = imported.lastIndexOf('.');
-						String importedPkg = imported.substring(0, dot);
-						dot = fqClassName.lastIndexOf('.');
-						String classPkg = fqClassName.substring(0, dot);
-						if (importedPkg.equals(classPkg)) {
-							alreadyImported = true;
-							break;
+						// NOTE: Class may be in default package...
+						if (lastClassNameDot>-1) {
+							String imported = id.getName();
+							int dot = imported.lastIndexOf('.');
+							String importedPkg = imported.substring(0, dot);
+							String classPkg = fqClassName.substring(0, lastClassNameDot);
+							if (importedPkg.equals(classPkg)) {
+								alreadyImported = true;
+								break;
+							}
 						}
 					}
 
@@ -388,7 +406,6 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 					// If there are no previous imports, add the import
 					// statement after the package line (if any).
 					if (offset == 0) {
-						Package pkg = cu.getPackage();
 						if (pkg!=null) {
 							offset = pkg.getNameEndOffset() + 1;
 							// Keep an empty line between package and imports.
@@ -419,8 +436,8 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 						// so the compiler resolves the correct class.
 						int dot = fqClassName.lastIndexOf('.');
 						if (dot>-1) {
-							String pkg = fqClassName.substring(0, dot+1);
-							replacementTextPrefix = pkg;
+							String pkgName = fqClassName.substring(0, dot+1);
+							replacementTextPrefix = pkgName;
 						}
 					}
 
