@@ -7,6 +7,7 @@
 	following languages:
 	
 		- C
+		- Groovy
 		- HTML
 		- Java
 		- Perl
@@ -22,7 +23,7 @@
 	"RSyntaxTextArea" and "AutoComplete" checked out along-side this one.
 
 	Author:   Robert Futrell
-	Version:  0.6
+	Version:  0.7
 	Date:     02/03/2010
 
 -->
@@ -37,6 +38,7 @@
 	<!-- Simply remove the properties for languages you don't need.     -->
 	<!-- You will have to modify LanguageSupportFactory.java though.    -->
 	<property name="c"                value="true"/>
+	<property name="groovy"           value="true"/>
 	<property name="html"             value="true"/>
 	<property name="java"             value="true"/>
 	<property name="perl"             value="true"/>
@@ -50,7 +52,7 @@
 
 	<!-- Set global properties for this build.         -->
 	<!-- You generally shouldn't have to change these. -->
-	<property name="version"          value="0.6"/>
+	<property name="version"          value="0.7"/>
 	<property name="source-dir"       location="src"/>
 	<property name="class-dir"        location="ant-classes"/>
 	<property name="dist-dir"         location="dist"/>
@@ -67,19 +69,20 @@
 		<delete includeEmptyDirs="true" quiet="true" dir="${class-dir}"/>
 		<mkdir dir="${class-dir}"/>
 		<javac destdir="${class-dir}" srcdir="${source-dir}" sourcepath=""
-				classpath="${autocomplete-jar}:${rsta-jar}:../JavaAst/bin:lib/fife.common.jar"
+				classpath="${autocomplete-jar}:${rsta-jar}"
 				deprecation="yes" debug="${debug}" debuglevel="${debuglevel}"
 				source="${java-level}" target="${java-level}">
 
 			<include name="org/fife/rsta/ac/*"/>
 			<include name="org/fife/rsta/ac/common/*"/>
 
-			<include if="c"    name="org/fife/rsta/ac/c/**"/>
-			<include if="html" name="org/fife/rsta/ac/html/**"/>
-			<include if="java" name="org/fife/rsta/ac/java/**"/>
-			<include if="perl" name="org/fife/rsta/ac/perl/**"/>
-			<include if="php"  name="org/fife/rsta/ac/php/**"/>
-			<include if="sh"   name="org/fife/rsta/ac/sh/**"/>
+			<include if="c"      name="org/fife/rsta/ac/c/**"/>
+			<include if="groovy" name="org/fife/rsta/ac/groovy/**"/>
+			<include if="html"   name="org/fife/rsta/ac/html/**"/>
+			<include if="java"   name="org/fife/rsta/ac/java/**"/>
+			<include if="perl"   name="org/fife/rsta/ac/perl/**"/>
+			<include if="php"    name="org/fife/rsta/ac/php/**"/>
+			<include if="sh"     name="org/fife/rsta/ac/sh/**"/>
 
 			<include if="demo" name="org/fife/rsta/ac/demo/**"/>
 

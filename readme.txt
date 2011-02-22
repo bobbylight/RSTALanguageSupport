@@ -1,7 +1,7 @@
 RSTALanguageSupport Readme
 --------------------------
-Version 0.6.5
-11jan2011
+Version 0.7
+21feb2011
 
 ----------------------------------------
 Contents
@@ -60,6 +60,12 @@ Languages with support include:
         - Imported classes
         - Methods and fields
         - Local variables (when in a method body)
+   - Method parameter assistance; that is, code-complete a method name, and any
+     parameters will have a drop-down list of fields and local variables of the
+     proper type for that parameter.  This feature is currently very limited
+     and only suggests parameters with exactly the right type (no subtypes).
+     This will be improved in th enext release.
+   - Generics support is implemented, but may be buggy.
 
 5. Perl
    - Error checking (squiggle underlining) via using "perl -c ..." on the local
@@ -105,6 +111,7 @@ properly.
       data/                             Input XML for some languages
       dist/                             Where Ant places the built jar
       lib/                              Libraries used by the demo
+      test/                             (Very) small amount of unit tests
       build.xml                         Ant script to build the library
       license.txt                       License for this library (LGPL)
       readme.txt                        This file

@@ -1,7 +1,9 @@
 ***** Code Completion *****
 1. Make "prefix" go more than "1 level deep" when getting completions at caret
    position.
-
+2. Improve performance of first ctrl+space - have a "pre-load package list?"
+3. Make pre-loading everything an option (vs. old behavior of just imports).
+4. Make ClassFiles lazily load information on members.
 
 
 ***** rjc (parsing) *****
