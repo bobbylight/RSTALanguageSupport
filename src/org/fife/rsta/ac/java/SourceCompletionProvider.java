@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 
 import org.fife.rsta.ac.java.classreader.ClassFile;
@@ -41,6 +42,10 @@ import org.fife.rsta.ac.java.rjc.lang.Type;
 import org.fife.rsta.ac.java.rjc.lang.TypeArgument;
 import org.fife.rsta.ac.java.rjc.lang.TypeParameter;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
+import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
+import org.fife.ui.rsyntaxtextarea.Token;
 
 
 /**
@@ -122,7 +127,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 			}
 		}
 
-		ClassFile superClass = getClassFileFor(cu, pkg, cf.getSuperClassName(true));
+		ClassFile superClass = getClassFileFor(cu, cf.getSuperClassName(true));
 		if (superClass!=null) {
 			addCompletionsForStaticMembers(set, cu, superClass, pkg);
 		}
@@ -176,7 +181,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 		}
 
 		// Add completions for any non-overridden super-class methods.
-		ClassFile superClass = getClassFileFor(cu, pkg, cf.getSuperClassName(true));
+		ClassFile superClass = getClassFileFor(cu, cf.getSuperClassName(true));
 		if (superClass!=null) {
 			addCompletionsForExtendedClass(set, cu, superClass, pkg, typeParamMap);
 		}
@@ -186,7 +191,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 		// TODO: Do this only if "top-level" class is declared abstract
 		for (int i=0; i<cf.getImplementedInterfaceCount(); i++) {
 			String inter = cf.getImplementedInterfaceName(i, true);
-			cf = getClassFileFor(cu, pkg, inter);
+			cf = getClassFileFor(cu, inter);
 			addCompletionsForExtendedClass(set, cu, cf, pkg, typeParamMap);
 		}
 
@@ -208,7 +213,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 		String pkg = cu.getPackageName();
 
 		if (type.isArray()) {
-			ClassFile cf = getClassFileFor(cu, pkg, "java.lang.Object");
+			ClassFile cf = getClassFileFor(cu, "java.lang.Object");
 			addCompletionsForExtendedClass(retVal, cu, cf, pkg, null);
 			FieldCompletion fc = FieldCompletion.
 				createLengthCompletion(this, type.toString());
@@ -217,7 +222,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 
 		else if (!type.isBasicType()) {
 			String typeStr = type.getName(true, false);
-			ClassFile cf = getClassFileFor(cu, pkg, typeStr);
+			ClassFile cf = getClassFileFor(cu, typeStr);
 			if (cf!=null) {
 				Map typeParamMap = createTypeParamMap(type, cf);
 				addCompletionsForExtendedClass(retVal, cu, cf, pkg, typeParamMap);
@@ -242,14 +247,13 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	/**
 	 * Gets the {@link ClassFile} for a class.
 	 *
-	 * @param pkg The package of the class being parsed.
+	 * @param cu The compilation unit being parsed.
 	 * @param className The name of the class (fully qualified or not).
 	 * @return The {@link ClassFile} for the class, or <code>null</code> if
 	 *         <code>cf</code> represents <code>java.lang.Object</code> (or
 	 *         if the super class could not be determined).
 	 */
-	private ClassFile getClassFileFor(CompilationUnit cu, String pkg,
-										String className) {
+	private ClassFile getClassFileFor(CompilationUnit cu, String className) {
 
 		//System.err.println(">>> Getting class file for: " + className);
 		if (className==null) {
@@ -262,6 +266,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 		if (!Util.isFullyQualified(className)) {
 
 			// Check in this source file's package first
+			String pkg = cu.getPackageName();
 			if (pkg!=null) {
 				String temp = pkg + "." + className;
 				superClass = jarManager.getClassEntry(temp);
@@ -381,6 +386,54 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 
 
 	/**
+	 * Checks whether the user is typing a completion for a String member after
+	 * a String literal.
+	 *
+	 * @param comp The text component.
+	 * @param alreadyEntered The text already entered.
+	 * @param cu The compilation unit being parsed.
+	 * @param set The set to add possible completions to.
+	 * @return Whether the user is indeed typing a completion for a String
+	 *         literal member.
+	 */
+	private boolean checkStringLiteralMember(JTextComponent comp,
+											String alreadyEntered,
+											CompilationUnit cu, Set set) {
+
+		boolean stringLiteralMember = false;
+
+		int offs = comp.getCaretPosition() - alreadyEntered.length() - 1;
+		if (offs>1) {
+			RSyntaxTextArea textArea = (RSyntaxTextArea)comp;
+			RSyntaxDocument doc = (RSyntaxDocument)textArea.getDocument();
+			try {
+				System.out.println(doc.charAt(offs) + ", " + doc.charAt(offs+1));
+				if (doc.charAt(offs)=='"' && doc.charAt(offs+1)=='.') {
+					int curLine = textArea.getLineOfOffset(offs);
+					Token list = textArea.getTokenListForLine(curLine);
+					Token prevToken = RSyntaxUtilities.getTokenAtOffset(list, offs);
+					if (prevToken!=null &&
+							prevToken.type==Token.LITERAL_STRING_DOUBLE_QUOTE) {
+						ClassFile cf = getClassFileFor(cu, "java.lang.String");
+						addCompletionsForExtendedClass(set, cu, cf,
+													cu.getPackageName(), null);
+						stringLiteralMember = true;
+					}
+					else {
+						System.out.println(prevToken);
+					}
+				}
+			} catch (BadLocationException ble) { // Never happens
+				ble.printStackTrace();
+			}
+		}
+
+		return stringLiteralMember;
+
+	}
+
+
+	/**
 	 * Removes all jars from the "build path."
 	 *
 	 * @see #removeJar(File)
@@ -445,24 +498,35 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 		Set set = new TreeSet();
 
 		// Cut down the list to just those matching what we've typed.
+		// Note: getAlreadyEnteredText() never returns null
 		String text = getAlreadyEnteredText(comp);
 
-		// Don't add shorthand completions if they're typing something qualified
-		if (text.indexOf('.')==-1) {
-			addShorthandCompletions(set);
+		// Special case - end of a String literal
+		boolean stringLiteralMember = checkStringLiteralMember(comp, text, cu,
+																set);
+
+		// Not after a String literal - regular code completion
+		if (!stringLiteralMember) {
+
+			// Don't add shorthand completions if they're typing something
+			// qualified
+			if (text.indexOf('.')==-1) {
+				addShorthandCompletions(set);
+			}
+
+			loadImportCompletions(set, text, cu);
+
+			// Add completions for fully-qualified stuff (e.g. "com.sun.jav")
+			//long startTime = System.currentTimeMillis();
+			jarManager.addCompletions(this, text, set);
+			//long time = System.currentTimeMillis() - startTime;
+			//System.out.println("jar completions loaded in: " + time);
+
+			// Loop through all types declared in this source, and provide
+			// completions depending on in what type/method/etc. the caret's in.
+			loadCompletionsForCaretPosition(cu, comp, text, set);
+
 		}
-
-		loadImportCompletions(set, text, cu);
-
-		// Add completions for fully-qualified stuff (e.g. "com.sun.jav")
-		//long startTime = System.currentTimeMillis();
-		jarManager.addCompletions(this, text, set);
-		//long time = System.currentTimeMillis() - startTime;
-		//System.out.println("jar completions loaded in: " + time);
-
-		// Loop through all types declared in this source, and provide
-		// completions depending on in what type, method, etc. the caret is in.
-		loadCompletionsForCaretPosition(cu, comp, text, set);
 
 		// Do a final sort of all of our completions and we're good to go!
 		completions = new ArrayList(set);
@@ -692,7 +756,7 @@ public File getSourceLocForClass(String className) {
 				Type extended = ncd.getExtendedType();
 				if (extended!=null) { // e.g., not java.lang.Object
 					String superClassName = extended.toString();
-					ClassFile cf = getClassFileFor(cu, pkg, superClassName);
+					ClassFile cf = getClassFileFor(cu, superClassName);
 					if (cf!=null) {
 						addCompletionsForExtendedClass(retVal, cu, cf, pkg, null);
 					}
@@ -763,7 +827,7 @@ public File getSourceLocForClass(String className) {
 					System.out.println("FOUND: " + prefix + " (" + pkg + ")");
 					Type type = field.getType();
 					if (type.isArray()) {
-						ClassFile cf = getClassFileFor(cu, pkg, "java.lang.Object");
+						ClassFile cf = getClassFileFor(cu, "java.lang.Object");
 						addCompletionsForExtendedClass(retVal, cu, cf, pkg, null);
 						FieldCompletion fc = FieldCompletion.
 							createLengthCompletion(this, type.toString());
@@ -771,7 +835,7 @@ public File getSourceLocForClass(String className) {
 					}
 					else if (!type.isBasicType()) {
 						String typeStr = type.getName(true, false);
-						ClassFile cf = getClassFileFor(cu, pkg, typeStr);
+						ClassFile cf = getClassFileFor(cu, typeStr);
 						// Add completions for extended class type chain
 						if (cf!=null) {
 							Map typeParamMap = createTypeParamMap(type, cf);
@@ -780,7 +844,7 @@ public File getSourceLocForClass(String className) {
 							// TODO: Only do this if type is abstract!
 							for (int i=0; i<cf.getImplementedInterfaceCount(); i++) {
 								String inter = cf.getImplementedInterfaceName(i, true);
-								cf = getClassFileFor(cu, pkg, inter);
+								cf = getClassFileFor(cu, inter);
 								System.out.println(cf);
 							}
 						}
