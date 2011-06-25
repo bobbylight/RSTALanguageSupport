@@ -298,6 +298,40 @@ private void pushOntoStack(Token t) {
 	}
 
 
+	/**
+	 * Eats all tokens up to (and including) the next token of one of the
+	 * specified types.  This is useful, for example, to eat until the next
+	 * equal sign or semicolon.
+	 *
+	 * @param tokenType1 The type of token to eat through.
+	 * @param tokenType2 Another type of token to eat through.
+	 * @return The last token read.  This will either be one of the two token
+	 *         types passed in, or <code>null</code> if the end of the stream
+	 *         is reached.
+	 * @throws IOException If an IO error occurs.
+	 */
+	public Token eatThroughNextSkippingBlocks(int tokenType1,
+									int tokenType2) throws IOException {
+		Token t = null;
+		int blockDepth = 0;
+		while ((t=yylex())!=null) {
+			int type = t.getType();
+			if (type==TokenTypes.SEPARATOR_LBRACE) {
+				blockDepth++;
+			}
+			else if (type==TokenTypes.SEPARATOR_RBRACE) {
+				blockDepth--;
+			}
+			else if (type==tokenType1 || type==tokenType2) {
+				if (blockDepth<=0) {
+					return t;
+				}
+			}
+		}
+		return null;
+	}
+
+
 	public void eatUntilNext(int type1, int type2) throws IOException {
 		Token t = null;
 		while ((t=yylex())!=null) {

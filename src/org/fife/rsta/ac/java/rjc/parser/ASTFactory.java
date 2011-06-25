@@ -307,10 +307,17 @@ case KEYWORD_WHILE:
 								block.addLocalVariable(lVar);
 								nextType = s.yyPeekCheckType();
 								// A "valid" nextType would be '=', ',' or ';'.
-								// If it's a comma, loop to read the next local var.
-								// Otherwise, whether or not it's valid, eat until
-								// the end of the statement.
-								
+								// If it's an '=', skip past the assignment.
+								if (nextType==OPERATOR_EQUALS) {
+									Token temp = s.eatThroughNextSkippingBlocks(SEPARATOR_COMMA, SEPARATOR_SEMICOLON);
+									if (temp!=null) {
+										s.yyPushback(temp);
+									}
+									nextType = s.yyPeekCheckType();
+								}
+								// If next is a comma, loop to read the next local
+								// var.  Otherwise, whether or not it's valid,
+								// eat until the end of the statement.
 								if (nextType!=SEPARATOR_COMMA) {
 									s.eatThroughNextSkippingBlocks(SEPARATOR_SEMICOLON);
 									break;
