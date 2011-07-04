@@ -109,6 +109,7 @@ jls.getJarManager().addJar(ji);
 		addItem(new StyleAction(this, "C",      "CExample.txt",      SYNTAX_STYLE_C), bg, menu);
 		addItem(new StyleAction(this, "Groovy", "GroovyExample.txt", SYNTAX_STYLE_GROOVY), bg, menu);
 		addItem(new StyleAction(this, "Java",   "JavaExample.txt",   SYNTAX_STYLE_JAVA), bg, menu);
+		addItem(new StyleAction(this, "JSP",    "JspExample.txt",    SYNTAX_STYLE_JSP), bg, menu);
 		addItem(new StyleAction(this, "Perl",   "PerlExample.txt",   SYNTAX_STYLE_PERL), bg, menu);
 		addItem(new StyleAction(this, "HTML",   "HtmlExample.txt",   SYNTAX_STYLE_HTML), bg, menu);
 		addItem(new StyleAction(this, "PHP",    "PhpExample.txt",    SYNTAX_STYLE_PHP), bg, menu);

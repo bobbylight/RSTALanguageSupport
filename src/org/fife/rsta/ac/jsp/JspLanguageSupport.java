@@ -1,6 +1,11 @@
 package org.fife.rsta.ac.jsp;
 
+import javax.swing.ListCellRenderer;
+
 import org.fife.rsta.ac.AbstractLanguageSupport;
+import org.fife.rsta.ac.html.HtmlCellRenderer;
+import org.fife.rsta.ac.html.HtmlCompletionProvider;
+import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 
@@ -12,24 +17,58 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
  */
 public class JspLanguageSupport extends AbstractLanguageSupport {
 
+	/**
+	 * The completion provider.  This is shared amongst all JSP text areas.
+	 */
+	private JspCompletionProvider provider;
+
 
 	/**
 	 * Constructor.
 	 */
 	public JspLanguageSupport() {
-		
+		setAutoActivationEnabled(true);
+		setParameterAssistanceEnabled(false);
+		setShowDescWindow(true);
 	}
 
 
+	/**
+	 * {@inheritDoc}
+	 */
+	protected ListCellRenderer createDefaultCompletionCellRenderer() {
+		return new HtmlCellRenderer();
+	}
+
+
+	private JspCompletionProvider getProvider() {
+		if (provider==null) {
+			provider = new JspCompletionProvider();
+		}
+		return provider;
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public void install(RSyntaxTextArea textArea) {
-		// TODO Auto-generated method stub
+
+		HtmlCompletionProvider provider = getProvider();
+		AutoCompletion ac = createAutoCompletion(provider);
+		ac.install(textArea);
+		installImpl(textArea, ac);
+
+		textArea.setToolTipSupplier(null);
 
 	}
 
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void uninstall(RSyntaxTextArea textArea) {
-		// TODO Auto-generated method stub
-
+		uninstallImpl(textArea);
 	}
 
 
