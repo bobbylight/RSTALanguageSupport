@@ -1,3 +1,13 @@
+/*
+ * 07/05/2011
+ *
+ * Copyright (C) 2011 Robert Futrell
+ * robert_futrell at users.sourceforge.net
+ * http://fifesoft.com/rsyntaxtextarea
+ *
+ * This code is licensed under the LGPL.  See the "license.txt" file included
+ * with this project.
+ */
 package org.fife.rsta.ac.jsp;
 
 import javax.swing.ListCellRenderer;

@@ -1,7 +1,16 @@
+/*
+ * 07/05/2011
+ *
+ * Copyright (C) 2011 Robert Futrell
+ * robert_futrell at users.sourceforge.net
+ * http://fifesoft.com/rsyntaxtextarea
+ *
+ * This code is licensed under the LGPL.  See the "license.txt" file included
+ * with this project.
+ */
 package org.fife.rsta.ac.jsp;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.fife.ui.autocomplete.MarkupTagCompletion;
 
 
 /**
@@ -10,35 +19,12 @@ import java.util.List;
  * @author Robert Futrell
  * @version 1.0
  */
-class TldElement {
-
-	public String name;
-	public String desc;
-	public List attributes;
+class TldElement extends MarkupTagCompletion {
 
 
-	public TldElement(String name, String desc) {
-		this.name = name;
-		this.desc = desc;
-		this.attributes = new ArrayList();
-	}
-
-
-	public void addAttr(String name, String desc, boolean required,
-						boolean rtexprvalue) {
-		attributes.add(new TldAttribute(name, desc, required, rtexprvalue));
-	}
-
-
-	public String toString() {
-		StringBuffer sb = new StringBuffer("[");
-		sb.append(name).append(": ");
-		for (int i=0; i<attributes.size(); i++) {
-			TldAttribute attr = (TldAttribute)attributes.get(i);
-			sb.append(attr.name).append(" (").append(attr.required).append("), ");
-		}
-		sb.append("]");
-		return sb.toString();
+	public TldElement(JspCompletionProvider provider, String name, String desc){
+		super(provider, name);
+		setDescription(desc);
 	}
 
 

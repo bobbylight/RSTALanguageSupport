@@ -56,7 +56,7 @@ public class HtmlCompletionProvider extends DefaultCompletionProvider {
 	/**
 	 * Returns the last tag name grabbed via
 	 * {@link #getAlreadyEnteredText(JTextComponent)}.  This value is only
-	 * valid if {@link #isTagName} is <code>true</code>.
+	 * valid if {@link #isTagName} is <code>false</code>.
 	 */
 	private String lastTagName;
 
@@ -128,6 +128,12 @@ public class HtmlCompletionProvider extends DefaultCompletionProvider {
 			else if (t.type==Token.MARKUP_TAG_DELIMITER) {
 				lastTagName = null;
 				foundOpenTag = t.isSingleChar('<');
+t = t.getNextToken();
+// Don't check for MARKUP_TAG_NAME to allow for unknown
+// tag names, such as JSP tags
+if (t!=null && !t.isWhitespace()) {
+	lastTagName = t.getLexeme();
+}
 			}
 		}
 
@@ -144,6 +150,12 @@ public class HtmlCompletionProvider extends DefaultCompletionProvider {
 					else if (t.type==Token.MARKUP_TAG_DELIMITER) {
 						lastTagName = null;
 						foundOpenTag = t.isSingleChar('<');
+t = t.getNextToken();
+//Don't check for MARKUP_TAG_NAME to allow for unknown
+//tag names, such as JSP tags
+if (t!=null && !t.isWhitespace()) {
+	lastTagName = t.getLexeme();
+}
 					}
 				}
 				if (lastTagName!=null || foundOpenTag) {
@@ -253,16 +265,30 @@ public class HtmlCompletionProvider extends DefaultCompletionProvider {
 
 
 	/**
+	 * Returns the attributes that can be code-completed for the specified
+	 * tag.  Subclasses can override this method to handle more than the
+	 * standard set of HTML 5 tags and their attributes.
+	 *
+	 * @param tagName The tag whose attributes are being code-completed.
+	 * @return A list of attributes, or <code>null</code> if the tag is not
+	 *         recognized.
+	 */
+	protected List getAttributeCompletionsForTag(String tagName) {
+		return (List)tagToAttrs.get(lastTagName);
+	}
+
+
+	/**
 	 * {@inheritDoc}
 	 */
 	protected List getCompletionsImpl(JTextComponent comp) {
 
 		List retVal = new ArrayList();
 		String text = getAlreadyEnteredText(comp);
-		List completions = this.completions;
+		List completions = getTagCompletions();
 		if (lastTagName!=null) {
 			lastTagName = lastTagName.toLowerCase();
-			completions = (List)tagToAttrs.get(lastTagName);
+			completions = getAttributeCompletionsForTag(lastTagName);
 			//System.out.println(completions);
 		}
 
@@ -288,6 +314,17 @@ public class HtmlCompletionProvider extends DefaultCompletionProvider {
 
 		return retVal;
 
+	}
+
+
+	/**
+	 * Returns the completions for the basic tag set.  This method is here so
+	 * subclasses can add to it if they provide additional tags (i.e. JSP).
+	 *
+	 * @return The completions for the standard tag set.
+	 */
+	protected List getTagCompletions() {
+		return this.completions;
 	}
 
 
