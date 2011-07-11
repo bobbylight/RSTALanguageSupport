@@ -67,7 +67,10 @@ Languages with support include:
      This will be improved in th enext release.
    - Generics support is implemented, but may be buggy.
 
-5. Perl
+5. JSP
+   - 
+
+6. Perl
    - Error checking (squiggle underlining) via using "perl -c ..." on the local
      system.  You can toggle taint mode, etc.
    - Auto-completion for built-in function names.
@@ -76,13 +79,13 @@ Languages with support include:
      scope at the current caret position).
    - Can specify/override PERL5LIB when syntax checking.
 
-6. PHP
+7. PHP
    - Auto-completion for HTML 5 tags and attributes.  This is inherited
      directly from the HTML support, so improvements there will show up here.
    - Auto-completion for PHP functions.
    - Parameter assistance for PHP functions.
 
-7. Unix Shell
+8. Unix Shell
    - Possibly broken at the moment.  Should attempt to use the local man pages
      for descriptions of standard shell commands if the local host is *nix,
      otherwise (on Windows) it defaults to short, generic descriptions.

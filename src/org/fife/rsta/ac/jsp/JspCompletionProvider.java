@@ -121,6 +121,27 @@ public class JspCompletionProvider extends HtmlCompletionProvider {
 	}
 
 
+	/**
+	 * Overridden to load <code>jsp:*</code> tags also.
+	 */
+	protected void initCompletions() {
+
+		super.initCompletions();
+
+		// Load our JSP completions, but remember the basic HTML ones too.
+		try {
+			loadFromXML("data/jsp.xml");
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+
+		// The completions array is expected to be sorted alphabetically.
+		// We must re-sort since we added to it.
+		Collections.sort(completions, comparator);
+
+	}
+
+
 	protected boolean isValidChar(char ch) {
 		return super.isValidChar(ch) || ch==':';
 	}

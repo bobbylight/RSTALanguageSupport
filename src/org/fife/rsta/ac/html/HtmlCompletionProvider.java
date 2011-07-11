@@ -66,20 +66,16 @@ public class HtmlCompletionProvider extends DefaultCompletionProvider {
 	 */
 	public HtmlCompletionProvider() {
 
-		try {
-			loadFromXML("data/html.xml");
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
+		initCompletions();
 
 		tagToAttrs = new HashMap();
 		for (Iterator i=completions.iterator(); i.hasNext(); ) {
 			MarkupTagCompletion c = (MarkupTagCompletion)i.next();
 			String tag = c.getInputText();
 			ArrayList attrs = new ArrayList();
-			tagToAttrs.put(tag, attrs);
+			tagToAttrs.put(tag.toLowerCase(), attrs);
 			for (int j=0; j<c.getAttributeCount(); j++) {
-				final Parameter param = c.getAttribute(j);
+				Parameter param = c.getAttribute(j);
 				attrs.add(new AttributeCompletion(this, param));
 			}
 		}
@@ -348,6 +344,20 @@ if (t!=null && !t.isWhitespace()) {
 			}
 		}
 		return null;
+	}
+
+
+	/**
+	 * Calls {@link #loadFromXML(String)} to load all standard HTML
+	 * completions.  Subclasses can override to also load additional standard
+	 * tags (i.e. JSP's <code>jsp:*</code> tags).
+	 */
+	protected void initCompletions() {
+		try {
+			loadFromXML("data/html.xml");
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 	}
 
 

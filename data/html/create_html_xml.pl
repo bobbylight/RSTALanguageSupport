@@ -1,6 +1,6 @@
 #!/usr/local/bin/perl
 #
-# create_html_xml.pl - Generates the XML API file for RSyntaxTextArea.
+# create_html_xml.pl - Generates the HTML API file for RSyntaxTextArea.
 #
 # Usage:
 #     perl create_html_xml.pl
