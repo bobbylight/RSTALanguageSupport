@@ -146,7 +146,7 @@ jls.getJarManager().addJar(ji);
 		textArea.addHyperlinkListener(this);
 		textArea.requestFocusInWindow();
 		textArea.setMarkOccurrences(true);
-		textArea.setTextAntiAliasHint("VALUE_TEXT_ANTIALIAS_ON");
+		textArea.setAntiAliasingEnabled(true);
 		ToolTipManager.sharedInstance().registerComponent(textArea);
 		return textArea;
 	}

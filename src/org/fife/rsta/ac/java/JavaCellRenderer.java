@@ -21,6 +21,7 @@ import javax.swing.JList;
 
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionCellRenderer;
+import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
 
 
 /**
@@ -118,7 +119,7 @@ public class JavaCellRenderer extends DefaultListCellRenderer {
 		Object old = null;
 
 		// First, try to use the rendering hint set that is "native".
-		Map hints = (Map)getToolkit().getDesktopProperty("awt.font.desktophints");
+		Map hints = RSyntaxUtilities.getDesktopAntiAliasHints();
 		if (hints!=null) {
 			old = g2d.getRenderingHints();
 			g2d.addRenderingHints(hints);

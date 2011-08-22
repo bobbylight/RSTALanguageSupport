@@ -104,7 +104,7 @@ if (@tokens>2) {
 	my $type = $tokens[2];
 	#$type =~ s/[\[\]]//g;  # Remove leading '[' and trailing ']'
 	$type =~ s/\|/, /g; # Convert dividing '|' to ', '
-	$type =~ s/\*([\w\-]+)/&lt;b&gt;\1&lt;\/b&gt;/; # Convert default values, i.e. "*true", to "<b>true</b>"
+	$type =~ s/\*([\w\-]+)/&lt;b&gt;$1&lt;\/b&gt;/; # Convert default values, i.e. "*true", to "<b>true</b>"
 	$attrsToType{$curAttr} = $type;
 }
 		$curAttr =~ s/\-?\s+//g;
