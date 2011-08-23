@@ -23,7 +23,7 @@ import org.fife.ui.autocomplete.CompletionProvider;
  * @author Robert Futrell
  * @version 1.0
  */
-abstract class AbstractJavaSourceCompletion extends BasicCompletion
+public abstract class AbstractJavaSourceCompletion extends BasicCompletion
 									implements JavaSourceCompletion {
 
 

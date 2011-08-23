@@ -23,7 +23,7 @@ import org.fife.ui.autocomplete.Completion;
  * @author Robert Futrell
  * @version 1.0
  */
-class JavaParamListCellRenderer extends JavaCellRenderer {
+public class JavaParamListCellRenderer extends JavaCellRenderer {
 
 
 	public JavaParamListCellRenderer() {

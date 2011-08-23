@@ -22,7 +22,7 @@ import org.fife.ui.autocomplete.Completion;
  * @author Robert Futrell
  * @version 1.0
  */
-interface JavaSourceCompletion extends Completion {
+public interface JavaSourceCompletion extends Completion {
 
 
 	/**
