@@ -23,6 +23,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -59,7 +60,10 @@ public class AboutDialog extends JDialog {
 
 		Box box = Box.createVerticalBox();
 
-		Box box2 = Box.createVerticalBox();
+		// Don't use a Box, as some JVM's won't have the resulting component
+		// honor its opaque property.
+		JPanel box2 = new JPanel();
+		box2.setLayout(new BoxLayout(box2, BoxLayout.Y_AXIS));
 		box2.setOpaque(true);
 		box2.setBackground(Color.white);
 		box2.setBorder(new TopBorder());
