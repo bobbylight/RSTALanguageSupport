@@ -66,7 +66,7 @@ PrintStream oldErr = System.err;
 		}
 		else {
 //toDo.add(new File("C:\\java\\32\\jdk1.6.0_16\\src\\java\\util\\concurrent\\TimeUnit.java"));
-			File rootDir = new File("C:/java/jdk1.6.0_16/src/");
+			File rootDir = new File("C:/java/32/jdk1.6.0_16/src/");
 //rootDir = new File("C:/dev/rsta/JavaAst/src");
 //rootDir = new File("C:/dev/rjava/Common/src");
 			File[] files = rootDir.listFiles();

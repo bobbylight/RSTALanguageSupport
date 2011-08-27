@@ -277,6 +277,8 @@ private void pushOntoStack(Token t) {
 	 *
 	 * @param tokenType The type of token to eat through.
 	 * @throws IOException If an IO error occurs.
+	 * @see #eatThroughNextSkippingBlocks(int, int)
+	 * @see #eatThroughNextSkippingBlocksAndStuffInParens(int, int)
 	 */
 	public void eatThroughNextSkippingBlocks(int tokenType) throws IOException {
 		Token t = null;
@@ -309,6 +311,7 @@ private void pushOntoStack(Token t) {
 	 *         types passed in, or <code>null</code> if the end of the stream
 	 *         is reached.
 	 * @throws IOException If an IO error occurs.
+	 * @see #eatThroughNextSkippingBlocksAndStuffInParens(int, int)
 	 */
 	public Token eatThroughNextSkippingBlocks(int tokenType1,
 									int tokenType2) throws IOException {
@@ -329,6 +332,55 @@ private void pushOntoStack(Token t) {
 			}
 		}
 		return null;
+	}
+
+
+	/**
+	 * Eats all tokens up to (and including) the next token of one of the
+	 * specified types.  This is useful, for example, to eat until the next
+	 * equal sign or semicolon.
+	 *
+	 * @param tokenType1 The type of token to eat through.
+	 * @param tokenType2 Another type of token to eat through.
+	 * @return The last token read.  This will either be one of the two token
+	 *         types passed in, or <code>null</code> if the end of the stream
+	 *         is reached.
+	 * @throws IOException If an IO error occurs.
+	 * @see #eatThroughNextSkippingBlocks(int, int)
+	 */
+	public Token eatThroughNextSkippingBlocksAndStuffInParens(int tokenType1,
+									int tokenType2) throws IOException {
+
+		Token t = null;
+		int blockDepth = 0;
+		int parenDepth = 0;
+
+		while ((t=yylex())!=null) {
+			int type = t.getType();
+			switch (type) {
+				case TokenTypes.SEPARATOR_LBRACE:
+					blockDepth++;
+					break;
+				case TokenTypes.SEPARATOR_RBRACE:
+					blockDepth--;
+					break;
+				case TokenTypes.SEPARATOR_LPAREN:
+					parenDepth++;
+					break;
+				case TokenTypes.SEPARATOR_RPAREN:
+					parenDepth--;
+					break;
+				default:
+					if (type==tokenType1 || type==tokenType2) {
+						if (blockDepth<=0 && parenDepth<=0) {
+							return t;
+						}
+					}
+			}
+		}
+
+		return null;
+
 	}
 
 

@@ -309,7 +309,7 @@ case KEYWORD_WHILE:
 								// A "valid" nextType would be '=', ',' or ';'.
 								// If it's an '=', skip past the assignment.
 								if (nextType==OPERATOR_EQUALS) {
-									Token temp = s.eatThroughNextSkippingBlocks(SEPARATOR_COMMA, SEPARATOR_SEMICOLON);
+									Token temp = s.eatThroughNextSkippingBlocksAndStuffInParens(SEPARATOR_COMMA, SEPARATOR_SEMICOLON);
 									if (temp!=null) {
 										s.yyPushback(temp);
 									}

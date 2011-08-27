@@ -55,12 +55,23 @@ public class SimpleClass {
 	}
 
 
-	public void setString(String newValue, float unused) {
+	/**
+	 * Contains local variables that are a little harder to parse.
+	 *
+	 * @param newValue
+	 * @param unused
+	 */
+	public void localVarsComplex(String newValue, float unused) {
+		int foo = 5;
+		double val1 = computeValue(foo, "yes"), val2, val3 = 3f, val4;
 		classStr1 = newValue;
 	}
 
 
-	public void swap() {
+	/**
+	 * Contains local variables that are easy to parse.
+	 */
+	public void localVarsSimple() {
 		int temp = classInt1;
 		classInt1 = classInt2;
 		classInt2 = temp;

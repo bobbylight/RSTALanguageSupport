@@ -174,7 +174,7 @@ public class ClassAndLocalVariablesTest extends TestCase {
 		member = (Member)i.next();
 		assertTrue(member instanceof Method);
 		method = (Method)member;
-		assertEquals("setString", method.getName());
+		assertEquals("localVarsComplex", method.getName());
 		assertTrue(method.getModifiers().isPublic());
 		// This method takes two parameters.
 		assertEquals(2, method.getParameterCount());
@@ -182,21 +182,42 @@ public class ClassAndLocalVariablesTest extends TestCase {
 		assertEquals("newValue", param.getName());
 		param = method.getParameter(1);
 		assertEquals("unused", param.getName());
-		assertEquals(null, method.getDocComment());
 
 		member = (Member)i.next();
 		assertTrue(member instanceof Method);
 		method = (Method)member;
-		assertEquals("swap", method.getName());
+		assertEquals("localVarsSimple", method.getName());
 		assertTrue(method.getModifiers().isPublic());
-		assertEquals(null, method.getDocComment());
 
 	}
 
 
-	public void testLocalVariables() {
+	public void testLocalVariablesComplex() {
+
 		TypeDeclaration td = cu.getTypeDeclaration(0);
-		List methods = td.getMethodsByName("swap");
+		List methods = td.getMethodsByName("localVarsComplex");
+		assertEquals(1, methods.size());
+		Method method = (Method)methods.get(0);
+		CodeBlock body = method.getBody();
+		assertEquals(5, body.getLocalVarCount());
+
+		LocalVariable var = body.getLocalVar(0);
+		assertEquals("int", var.getType().getName(false));
+		assertEquals("foo", var.getName());
+
+		for (int i=1; i<5; i++) {
+			var = body.getLocalVar(i);
+			assertEquals("double", var.getType().getName(false));
+			assertEquals("val" + i, var.getName());
+		}
+
+	}
+
+
+	public void testLocalVariablesSimple() {
+
+		TypeDeclaration td = cu.getTypeDeclaration(0);
+		List methods = td.getMethodsByName("localVarsSimple");
 		assertEquals(1, methods.size());
 		Method method = (Method)methods.get(0);
 		CodeBlock body = method.getBody();
