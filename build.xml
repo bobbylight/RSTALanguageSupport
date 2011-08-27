@@ -10,6 +10,7 @@
 		- Groovy
 		- HTML
 		- Java
+		- JSP
 		- Perl
 		- PHP
 		- Unix Shell
@@ -23,8 +24,8 @@
 	"RSyntaxTextArea" and "AutoComplete" checked out along-side this one.
 
 	Author:   Robert Futrell
-	Version:  0.7
-	Date:     02/03/2010
+	Version:  0.7.1
+	Date:     08/27/2011
 
 -->
 
@@ -41,6 +42,7 @@
 	<property name="groovy"           value="true"/>
 	<property name="html"             value="true"/>
 	<property name="java"             value="true"/>
+	<property name="jsp"              value="true"/>
 	<property name="perl"             value="true"/>
 	<property name="php"              value="true"/>
 	<property name="sh"               value="true"/>
@@ -80,6 +82,7 @@
 			<include if="groovy" name="org/fife/rsta/ac/groovy/**"/>
 			<include if="html"   name="org/fife/rsta/ac/html/**"/>
 			<include if="java"   name="org/fife/rsta/ac/java/**"/>
+			<include if="jsp"    name="org/fife/rsta/ac/jsp/**"/>
 			<include if="perl"   name="org/fife/rsta/ac/perl/**"/>
 			<include if="php"    name="org/fife/rsta/ac/php/**"/>
 			<include if="sh"     name="org/fife/rsta/ac/sh/**"/>
@@ -99,6 +102,7 @@
 			<fileset dir=".">
 				<include if="c"    name="data/c.xml"/>
 				<include if="html" name="data/html.xml"/>
+				<include if="jsp"  name="data/jsp.xml"/>
 				<include if="perl" name="data/perl5.xml"/>
 				<include if="php"  name="data/php.xml"/>
 				<include if="sh"   name="data/sh.xml"/>
