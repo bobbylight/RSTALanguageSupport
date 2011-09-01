@@ -13,7 +13,6 @@ package org.fife.rsta.ac.java;
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -261,11 +260,7 @@ class JarReader {
 			return null;
 		}
 
-		DataInputStream in = new DataInputStream(
-					new BufferedInputStream(new FileInputStream(file)));
-		ClassFile cf = new ClassFile(in);
-		in.close();
-		return cf;
+		return new ClassFile(file);
 
 	}
 
