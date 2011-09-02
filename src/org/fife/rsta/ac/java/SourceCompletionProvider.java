@@ -407,7 +407,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 			RSyntaxTextArea textArea = (RSyntaxTextArea)comp;
 			RSyntaxDocument doc = (RSyntaxDocument)textArea.getDocument();
 			try {
-				System.out.println(doc.charAt(offs) + ", " + doc.charAt(offs+1));
+				//System.out.println(doc.charAt(offs) + ", " + doc.charAt(offs+1));
 				if (doc.charAt(offs)=='"' && doc.charAt(offs+1)=='.') {
 					int curLine = textArea.getLineOfOffset(offs);
 					Token list = textArea.getTokenListForLine(curLine);
