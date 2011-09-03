@@ -14,6 +14,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 
 import org.fife.rsta.ac.java.classreader.attributes.AttributeInfo;
+import org.fife.rsta.ac.java.classreader.attributes.Signature;
 
 
 /**
@@ -46,6 +47,16 @@ public abstract class MemberInfo {
 	 * Attribute marking a member as deprecated.
 	 */
 	public static final String DEPRECATED			= "Deprecated";
+
+	/**
+	 * Attribute containing index of the member's signature.
+	 */
+	public static final String SIGNATURE			= "Signature";
+
+	/**
+	 * Attribute containing runtime-visible annotations.
+	 */
+	public static final String RUNTIME_VISIBLE_ANNOTATIONS = "RuntimeVisibleAnnotations";
 
 
 	/**
@@ -134,7 +145,8 @@ public abstract class MemberInfo {
 	 * @param in
 	 * @param attrName
 	 * @param attrLength
-	 * @return
+	 * @return The attribute, or <code>null</code> if it was purposely skipped
+	 *         for some reason (known to be useless for our purposes, etc.).
 	 * @throws IOException
 	 */
 	protected AttributeInfo readAttribute(DataInputStream in, String attrName,
@@ -147,8 +159,23 @@ public abstract class MemberInfo {
 			deprecated = true;
 		}
 
+		else if (SIGNATURE.equals(attrName)) { // 4.8.8
+			//System.err.println(">>> " + attributeLength);
+			int signatureIndex = in.readUnsignedShort();
+			String typeSig = cf.getUtf8ValueFromConstantPool(signatureIndex);
+			ai = new Signature(cf, typeSig);
+		}
+
+		else if (RUNTIME_VISIBLE_ANNOTATIONS.equals(attrName)) { // 4.8.15
+			//String name = getClassFile().getClassName(false) + "." + getName();
+			//System.out.println(name + ": Attribute " + attrName + " not supported");
+			Util.skipBytes(in, attrLength);
+			//ai = null;
+		}
+
 		else {
-			// System.out.println("Unsupported attribute: " + attrName);
+			//String name = getClassFile().getClassName(false) + "." + getName();
+			//System.out.println(name + ": Unsupported attribute: " + attrName);
 			ai = AttributeInfo.readUnsupportedAttribute(cf, in, attrName,
 				attrLength);
 		}

@@ -10,6 +10,9 @@
  */
 package org.fife.rsta.ac.java.classreader;
 
+import java.io.DataInputStream;
+import java.io.IOException;
+
 
 /**
  * Utility methods for this package.
@@ -77,6 +80,22 @@ public class Util implements AccessFlags {
 	 */
 	public static boolean isPublic(int accessFlags) {
 		return (accessFlags&ACC_PUBLIC)>0;
+	}
+
+
+	/**
+	 * Fully skips a given number of bytes in an input stream.
+	 *
+	 * @param in The input stream.
+	 * @param count The number of bytes to skip.
+	 * @throws IOException If an IO error occurs.
+	 */
+	public static void skipBytes(DataInputStream in, int count)
+												throws IOException {
+		int skipped = 0;
+		while (skipped<count) {
+			skipped += in.skipBytes(count-skipped);
+		}
 	}
 
 

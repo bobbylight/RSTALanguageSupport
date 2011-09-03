@@ -13,6 +13,7 @@ package org.fife.rsta.ac.java.classreader.attributes;
 import java.io.*;
 
 import org.fife.rsta.ac.java.classreader.ClassFile;
+import org.fife.rsta.ac.java.classreader.Util;
 
 
 public abstract class AttributeInfo {
@@ -55,27 +56,14 @@ public abstract class AttributeInfo {
 	public static UnsupportedAttribute readUnsupportedAttribute(ClassFile cf,
 										DataInputStream in, String attrName,
 										int attrLength) throws IOException {
+		/*
 		int[] info = new int[attrLength];
 		for (int i=0; i<attrLength; i++) {
 			info[i] = in.readUnsignedByte();
 		}
-		return  new UnsupportedAttribute(cf, attrName, info);
-	}
-
-
-	/**
-	 * Fully skips a given number of bytes in an input stream.
-	 *
-	 * @param in The input stream.
-	 * @param count The number of bytes to skip.
-	 * @throws IOException If an IO error occurs.
-	 */
-	protected static void skipBytes(DataInputStream in, int count)
-												throws IOException {
-		int skipped = 0;
-		while (skipped<count) {
-			skipped += in.skipBytes(count-skipped);
-		}
+		*/
+		Util.skipBytes(in, attrLength);
+		return new UnsupportedAttribute(cf, attrName);
 	}
 
 

@@ -101,7 +101,18 @@ public class IconFactory {
 
 
 	public Icon getIcon(String key) {
-		return (Icon)iconMap.get(key);
+		return getIcon(key, false);
+	}
+
+
+	public Icon getIcon(String key, boolean deprecated) {
+		Icon icon = (Icon)iconMap.get(key);
+		if (deprecated) { // TODO: Optimize me
+			DecoratableIcon di = new DecoratableIcon(16, icon);
+			di.setDeprecated(deprecated);
+			icon = di;
+		}
+		return icon;
 	}
 
 

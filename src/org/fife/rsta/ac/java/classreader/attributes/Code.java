@@ -11,6 +11,8 @@
 package org.fife.rsta.ac.java.classreader.attributes;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.fife.rsta.ac.java.classreader.*;
 
@@ -80,8 +82,9 @@ public class Code extends AttributeInfo {
 	/**
 	 * Attributes of this <code>Code</code> attribute.
 	 */
-	private AttributeInfo[] attributes;
+	private List attributes;
 
+	private static final String LINE_NUMBER_TABLE		= "LineNumberTable";
 	private static final String LOCAL_VARIABLE_TABLE	= "LocalVariableTable";
 
 
@@ -175,15 +178,13 @@ public class Code extends AttributeInfo {
 	 */
 	public static Code read(MethodInfo mi, DataInputStream in)
 							throws IOException {
+
 		Code code = new Code(mi);
 		code.maxStack = in.readUnsignedShort();
 		code.maxLocals = in.readUnsignedShort();
-//		code.code = new int[in.readInt()];
-//		for (int i=0; i<code.code.length; i++) {
-//			code.code[i] = in.readUnsignedByte();
-//		}
-code.codeLength = in.readInt();
-skipBytes(in, code.codeLength);
+		code.codeLength = in.readInt();
+		Util.skipBytes(in, code.codeLength);
+
 		int exceptionTableLength = in.readUnsignedShort();
 		if (exceptionTableLength>0) {
 			code.exceptionTable = new ExceptionTableEntry[exceptionTableLength];
@@ -193,15 +194,20 @@ skipBytes(in, code.codeLength);
 				code.exceptionTable[i] = ete;
 			}
 		}
+
 		int attrCount = in.readUnsignedShort();
 		if (attrCount>0) {
-			code.attributes = new AttributeInfo[attrCount];
+			code.attributes = new ArrayList(1); // Usually just 1 or 2
 			for (int i=0; i<attrCount; i++) {
 				AttributeInfo ai = code.readAttribute(in);
-				code.attributes[i] = ai;
+				if (ai!=null) { // Not one handled "custom"
+					code.attributes.add(ai);
+				}
 			}
 		}
+
 		return code;
+
 	}
 
 
@@ -223,9 +229,17 @@ skipBytes(in, code.codeLength);
 
 		String attrName = cf.getUtf8ValueFromConstantPool(attributeNameIndex);
 
+		// The line number table is more useful to a debugger than to us.
+		if (LINE_NUMBER_TABLE.equals(attrName)) { // 4.8.11
+			//String name = mi.getName(true) + ".<code>";
+			//System.out.println(name + ": Attribute " + attrName + " currently ignored");
+			Util.skipBytes(in, attributeLength);
+			//ai = null;
+		}
+
 		// Describes a local variable during execution of this code.  We only
 		// use it to grab the names of method parameters.
-		if (LOCAL_VARIABLE_TABLE.equals(attrName)) {
+		else if (LOCAL_VARIABLE_TABLE.equals(attrName)) { // 4.8.12
 
 			// If this attribute is defined, then this class was compiled with
 			// debugging enabled!  We can grab the names of the method
@@ -263,6 +277,7 @@ skipBytes(in, code.codeLength);
 		}
 
 		else {
+			System.out.println("Unsupported Code attribute: " +  attrName);
 			ai = AttributeInfo.readUnsupportedAttribute(cf, in, attrName,
 														attributeLength);
 		}

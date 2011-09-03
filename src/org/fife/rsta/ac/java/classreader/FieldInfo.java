@@ -230,7 +230,9 @@ public class FieldInfo extends MemberInfo {
 		int attrCount = in.readUnsignedShort();
 		for (int i=0; i<attrCount; i++) {
 			AttributeInfo ai = info.readAttribute(in);
-			info.addAttribute(ai);
+			if (ai!=null) {
+				info.addAttribute(ai);
+			}
 		}
 		return info;
 	}
@@ -240,7 +242,8 @@ public class FieldInfo extends MemberInfo {
 	 * Reads an attribute for this field from an input stream.
 	 *
 	 * @param in The input stream to read from.
-	 * @return The attribute read.
+	 * @return The attribute read, possibly <code>null</code> if it was known
+	 *         to be unimportant for our purposes.
 	 * @throws IOException If an IO error occurs.
 	 */
 	private AttributeInfo readAttribute(DataInputStream in) throws IOException {

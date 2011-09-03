@@ -22,34 +22,28 @@ import org.fife.rsta.ac.java.classreader.*;
 public class UnsupportedAttribute extends AttributeInfo {
 
 	private String name;
-	private int[] info;
+	//private int[] info;
 
 
 	/**
 	 * Constructor.
 	 *
 	 * @param cf The class file.
-	 * @param info The bytes defining the attribute.
 	 */
-	public UnsupportedAttribute(ClassFile cf, String name, int[] info) {
+	public UnsupportedAttribute(ClassFile cf, String name/*, int[] info*/) {
 		super(cf);
 		this.name = name;
-		this.info = info;
+		//this.info = info;
 	}
 
-
+/*
 	public int[] getInfo() {
 		return info;
 	}
-
+*/
 
 	public String getName() {
 		return name;
-	}
-
-
-	public void setInfo(int[] info) {
-		this.info = info;
 	}
 
 

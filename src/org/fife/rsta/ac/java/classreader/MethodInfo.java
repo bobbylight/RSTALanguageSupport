@@ -84,7 +84,6 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 
 	public static final String CODE					= "Code";
 	public static final String EXCEPTIONS			= "Exceptions";
-	public static final String SIGNATURE			= "Signature";
 
 
 	/**
@@ -654,7 +653,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 			else if (ai instanceof Code) {
 				mi.codeAttr = (Code)ai;
 			}
-			else {
+			else if (ai!=null) {
 				mi.addAttribute(ai);
 			}
 		}
@@ -666,7 +665,8 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 * Reads an attribute for this method from the specified input stream.
 	 *
 	 * @param in The input stream to read from.
-	 * @return The attribute read.
+	 * @return The attribute read, possibly <code>null</code> if it was known
+	 *         to be unimportant for our purposes.
 	 * @throws IOException If an IO error occurs.
 	 */
 	private AttributeInfo readAttribute(DataInputStream in) throws IOException {
@@ -693,14 +693,6 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 			}
 			Exceptions e = new Exceptions(this, exceptionIndexTable);
 			ai = e;
-		}
-
-		else if (SIGNATURE.equals(attrName)) {
-			//System.err.println(">>> " + attributeLength);
-			int u4 = in.readUnsignedShort();
-			String typeSig = cf.getUtf8ValueFromConstantPool(u4);
-			//System.out.println("... " + getClassFile().getClassName(false) + "." + getName() + " - " + typeSig + ", " + getDescriptor());
-			ai = new Signature(cf, typeSig);
 		}
 
 		// TODO: Handle other Attribute types.

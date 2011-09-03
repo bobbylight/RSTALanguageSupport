@@ -82,6 +82,11 @@ public class ClassFile implements AccessFlags {
 	private MethodInfo[] methods;
 
 	/**
+	 * Whether this class is deprecated.
+	 */
+	private boolean deprecated;
+
+	/**
 	 * Attributes of this class or interface.
 	 */
 	private AttributeInfo[] attributes;
@@ -100,6 +105,10 @@ public class ClassFile implements AccessFlags {
 	 */
 	private Map typeMap;
 
+	public static final String DEPRECATED			= "Deprecated";
+	public static final String ENCLOSING_METHOD		= "EnclosingMethod";
+	public static final String INNER_CLASSES		= "InnerClasses";
+	public static final String RUNTIME_VISIBLE_ANNOTATIONS = "RuntimeVisibleAnnotations";
 	public static final String SIGNATURE			= "Signature";
 	public static final String SOURCE_FILE			= "SourceFile";
 
@@ -427,6 +436,16 @@ public class ClassFile implements AccessFlags {
 
 
 	/**
+	 * Returns whether this class is deprecated.
+	 *
+	 * @return Whether this class is deprecated.
+	 */
+	public boolean isDeprecated() {
+		return deprecated;
+	}
+
+
+	/**
 	 * Reads this class or interface's access flags.
 	 *
 	 * @param in
@@ -469,15 +488,38 @@ public class ClassFile implements AccessFlags {
 			paramTypes = ((Signature)ai).getClassParamTypes();
 		}
 
+		else if (INNER_CLASSES.equals(attrName)) { // 4.8.5
+			//String name = getClassName(false) + "." + getName();
+			//System.out.println(name + ": Attribute " + attrName + " not supported");
+			Util.skipBytes(in, attributeLength);
+			//ai = null;
+		}
+
+		else if (ENCLOSING_METHOD.equals(attrName)) { // 4.8.6
+			//String name = getClassName(false) + "." + getName();
+			//System.out.println(name + ": Attribute " + attrName + " not supported");
+			Util.skipBytes(in, attributeLength); // 2 u2's, class_index and method_index
+			//ai = null;
+		}
+
+		else if (DEPRECATED.equals(attrName)) { // 4.7.10
+			// No need to read anything else, attributeLength==0
+			deprecated = true;
+		}
+
+		else if (RUNTIME_VISIBLE_ANNOTATIONS.equals(attrName)) { // 4.8.15
+			//String name = getClassFile().getClassName(false) + "." + getName();
+			//System.out.println(name + ": Attribute " + attrName + " not supported");
+			Util.skipBytes(in, attributeLength);
+			//ai = null;
+		}
+
 		// TODO: Handle other useful Attribute types, if any.
 
 		else { // An unknown/unsupported attribute.
-			int[] info = new int[attributeLength];
-			for (int i = 0; i < attributeLength; i++) {
-				info[i] = in.readUnsignedByte();
-			}
-			//System.out.println("Unsupported class attribute: "+  attrName);
-			ai = new UnsupportedAttribute(this, attrName, info);
+			System.out.println("Unsupported class attribute: "+  attrName);
+			ai = AttributeInfo.readUnsupportedAttribute(this, in, attrName,
+					attributeLength);
 		}
 
 		return ai;

@@ -11,6 +11,7 @@
 package org.fife.rsta.ac.java;
 
 import java.awt.Color;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.io.File;
 import java.util.Iterator;
@@ -127,7 +128,7 @@ class ClassCompletion extends AbstractJavaSourceCompletion {
 			}
 		}
 
-		return fact.getIcon(key);
+		return fact.getIcon(key, cf.isDeprecated());
 
 	}
 
@@ -186,12 +187,19 @@ class ClassCompletion extends AbstractJavaSourceCompletion {
 
 	public void rendererText(Graphics g, int x, int y, boolean selected) {
 
-		StringBuffer sb = new StringBuffer();
-		sb.append(cf.getClassName(false));
-		sb.append(" - ");
-		String s = sb.toString();
+		String s = cf.getClassName(false);
 		g.drawString(s, x, y);
-		x += g.getFontMetrics().stringWidth(s);
+		FontMetrics fm = g.getFontMetrics();
+		int newX = x + fm.stringWidth(s);
+		if (cf.isDeprecated()) {
+			int midY = y + fm.getDescent() - fm.getHeight()/2;
+			g.drawLine(x, midY, newX, midY);
+		}
+		x = newX;
+
+		s = " - ";
+		g.drawString(s, x, y);
+		x += fm.stringWidth(s);
 
 		String pkgName = cf.getClassName(true);
 		int lastIndexOf = pkgName.lastIndexOf('.');
