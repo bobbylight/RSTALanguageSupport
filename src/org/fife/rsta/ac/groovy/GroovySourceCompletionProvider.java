@@ -34,6 +34,8 @@ public class GroovySourceCompletionProvider extends DefaultCompletionProvider {
 
 	private JarManager jarManager;
 
+	private static final char[] KEYWORD_DEF = { 'd', 'e', 'f' };
+
 
 	/**
 	 * Constructor.
@@ -127,7 +129,7 @@ public class GroovySourceCompletionProvider extends DefaultCompletionProvider {
 			} else if (t.isLeftCurly()) {
 				CodeBlock child = block.addChildCodeBlock(t.textOffset);
 				parseCodeBlock(scanner, child);
-			} else if (t.is(Token.RESERVED_WORD, "def")) {
+			} else if (t.is(Token.RESERVED_WORD, KEYWORD_DEF)) {
 				t = scanner.next();
 				if (t != null) {
 					VariableDeclaration varDec = new VariableDeclaration(t
