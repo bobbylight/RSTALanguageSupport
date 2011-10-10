@@ -34,6 +34,7 @@ class TypeDeclarationTreeNode extends JavaTreeNode {
 		super(typeDec);
 		//System.out.println("... " + typeDec);
 		String iconName = null;
+		int priority = PRIORITY_TYPE;
 
 		if (typeDec instanceof NormalClassDeclaration) {
 			NormalClassDeclaration ncd = (NormalClassDeclaration)typeDec;
@@ -85,10 +86,13 @@ class TypeDeclarationTreeNode extends JavaTreeNode {
 				}
 				if (mods.isStatic()) {
 					di.addDecorationIcon(fact.getIcon(IconFactory.STATIC_ICON));
+					priority = PRIORITY_BOOST_STATIC;
 				}
 			}
 			setIcon(di);
 		}
+
+		setSortPriority(priority);
 
 	}
 

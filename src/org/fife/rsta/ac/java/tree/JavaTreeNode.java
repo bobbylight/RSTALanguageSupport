@@ -11,8 +11,8 @@
 package org.fife.rsta.ac.java.tree;
 
 import javax.swing.Icon;
-import javax.swing.tree.DefaultMutableTreeNode;
 
+import org.fife.rsta.ac.SortableTreeNode;
 import org.fife.rsta.ac.java.IconFactory;
 import org.fife.rsta.ac.java.rjc.ast.ASTNode;
 
@@ -23,10 +23,17 @@ import org.fife.rsta.ac.java.rjc.ast.ASTNode;
  * @author Robert Futrell
  * @version 1.0
  */
-class JavaTreeNode extends DefaultMutableTreeNode {
+class JavaTreeNode extends SortableTreeNode {
 
 	private ASTNode astNode;
 	private Icon icon;
+
+	protected static final int PRIORITY_TYPE = 0;
+	protected static final int PRIORITY_FIELD = 1;
+	protected static final int PRIORITY_CONSTRUCTOR = 2;
+	protected static final int PRIORITY_METHOD = 3;
+	protected static final int PRIORITY_LOCAL_VAR = 4;
+	protected static final int PRIORITY_BOOST_STATIC = -16;
 
 
 	protected JavaTreeNode(ASTNode node) {
@@ -35,7 +42,12 @@ class JavaTreeNode extends DefaultMutableTreeNode {
 
 
 	protected JavaTreeNode(ASTNode node, String iconName) {
-		super(node);
+		this(node, iconName, false);
+	}
+
+
+	protected JavaTreeNode(ASTNode node, String iconName, boolean sorted) {
+		super(node, sorted);
 		this.astNode = node;
 		if (iconName!=null) {
 			setIcon(IconFactory.get().getIcon(iconName));
@@ -44,7 +56,12 @@ class JavaTreeNode extends DefaultMutableTreeNode {
 
 
 	public JavaTreeNode(String text, String iconName) {
-		super(text);
+		this(text, iconName, false);
+	}
+
+
+	public JavaTreeNode(String text, String iconName, boolean sorted) {
+		super(text, sorted);
 		if (iconName!=null) {
 			this.icon = IconFactory.get().getIcon(iconName);
 		}

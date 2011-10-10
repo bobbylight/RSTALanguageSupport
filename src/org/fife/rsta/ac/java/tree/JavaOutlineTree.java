@@ -15,7 +15,6 @@ import java.beans.PropertyChangeListener;
 import java.util.Iterator;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
-import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -23,6 +22,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 
+import org.fife.rsta.ac.AbstractSourceTree;
 import org.fife.rsta.ac.LanguageSupport;
 import org.fife.rsta.ac.LanguageSupportFactory;
 import org.fife.rsta.ac.java.IconFactory;
@@ -58,12 +58,13 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
  * @author Robert Futrell
  * @version 1.0
  */
-public class JavaOutlineTree extends /*org.fife.ui.ToolTipTree */JTree {
+public class JavaOutlineTree extends AbstractSourceTree {
 
 	private DefaultTreeModel model;
 	private RSyntaxTextArea textArea;
 	private JavaParser parser;
 	private Listener listener;
+	private boolean showLocalVars;
 
 
 	/**
@@ -77,6 +78,7 @@ public class JavaOutlineTree extends /*org.fife.ui.ToolTipTree */JTree {
 		setModel(model);
 		listener = new Listener();
 		addTreeSelectionListener(listener);
+		showLocalVars = true;
 	}
 
 
@@ -98,7 +100,7 @@ public class JavaOutlineTree extends /*org.fife.ui.ToolTipTree */JTree {
 		Package pkg = cu.getPackage();
 		if (pkg!=null) {
 			String iconName = IconFactory.PACKAGE_ICON;
-			root.add(new JavaTreeNode(pkg, iconName));
+			root.add(new JavaTreeNode(pkg, iconName, false));
 		}
 
 		JavaTreeNode importNode = new JavaTreeNode("Imports",
@@ -117,6 +119,7 @@ public class JavaOutlineTree extends /*org.fife.ui.ToolTipTree */JTree {
 		}
 
 		model.setRoot(root);
+		root.setSorted(isSorted());
 		expandInitialNodes();
 
 	}
@@ -179,7 +182,7 @@ public class JavaOutlineTree extends /*org.fife.ui.ToolTipTree */JTree {
 			body = ((Method)member).getBody();
 		}
 
-		if (body!=null) {
+		if (body!=null && showLocalVars) {
 			for (int i=0; i<body.getLocalVarCount(); i++) {
 				LocalVariable var = body.getLocalVar(i);
 				LocalVarTreeNode varNode = new LocalVarTreeNode(var);
@@ -201,7 +204,8 @@ public class JavaOutlineTree extends /*org.fife.ui.ToolTipTree */JTree {
 			NormalClassDeclaration ncd = (NormalClassDeclaration)td;
 			for (int j=0; j<ncd.getChildTypeCount(); j++) {
 				TypeDeclaration td2 = ncd.getChildType(j);
-				dmtn.add(createTypeDeclarationNode(td2));
+				TypeDeclarationTreeNode tdn = createTypeDeclarationNode(td2);
+				dmtn.add(tdn);
 			}
 			for (Iterator j=ncd.getMemberIterator(); j.hasNext(); ) {
 				dmtn.add(createMemberNode((Member)j.next()));
@@ -212,7 +216,8 @@ public class JavaOutlineTree extends /*org.fife.ui.ToolTipTree */JTree {
 			NormalInterfaceDeclaration nid = (NormalInterfaceDeclaration)td;
 			for (int j=0; j<nid.getChildTypeCount(); j++) {
 				TypeDeclaration td2 = nid.getChildType(j);
-				dmtn.add(createTypeDeclarationNode(td2));
+				TypeDeclarationTreeNode tdn = createTypeDeclarationNode(td2);
+				dmtn.add(tdn);
 			}
 			for (Iterator j=nid.getMemberIterator(); j.hasNext(); ) {
 				dmtn.add(createMemberNode((Member)j.next()));
@@ -253,6 +258,17 @@ public class JavaOutlineTree extends /*org.fife.ui.ToolTipTree */JTree {
 
 
 	/**
+	 * Returns whether local variables are shown in this tree.
+	 *
+	 * @return Whether local variables are shown in this tree.
+	 * @see #setShowLocalVariables(boolean)
+	 */
+	public boolean getShowLocalVariables() {
+		return showLocalVars;
+	}
+
+
+	/**
 	 * Causes this outline tree to reflect the source code in the specified
 	 * text area.
 	 *
@@ -279,6 +295,17 @@ public class JavaOutlineTree extends /*org.fife.ui.ToolTipTree */JTree {
 		// Check whether we're currently editing Java
 		checkForJavaParsing();
 
+	}
+
+
+	/**
+	 * Toggles whether local variables are shown in this tree.
+	 *
+	 * @param show Whether local variables are shown.
+	 * @see #getShowLocalVariables()
+	 */
+	public void setShowLocalVariables(boolean show) {
+		this.showLocalVars = show;
 	}
 
 

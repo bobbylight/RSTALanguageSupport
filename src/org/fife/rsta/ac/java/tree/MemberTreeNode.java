@@ -39,10 +39,13 @@ class MemberTreeNode extends JavaTreeNode {
 		IconFactory fact = IconFactory.get();
 		Icon base = fact.getIcon(IconFactory.METHOD_PRIVATE_ICON);
 		DecoratableIcon di = new DecoratableIcon(base);
+		int priority = PRIORITY_METHOD;
 		if (cb.isStatic()) {
 			di.addDecorationIcon(fact.getIcon(IconFactory.STATIC_ICON));
+			priority += PRIORITY_BOOST_STATIC;
 		}
 		setIcon(di);
+		setSortPriority(priority);
 	}
 
  
@@ -77,6 +80,7 @@ class MemberTreeNode extends JavaTreeNode {
 
 		appendType(field.getType(), sb);
 		text = sb.toString();
+		int priority = PRIORITY_FIELD;
 
 		IconFactory fact = IconFactory.get();
 		Icon base = fact.getIcon(icon);
@@ -85,12 +89,15 @@ class MemberTreeNode extends JavaTreeNode {
 		if (mods!=null) {
 			if (mods.isStatic()) {
 				di.addDecorationIcon(fact.getIcon(IconFactory.STATIC_ICON));
+				priority += PRIORITY_BOOST_STATIC;
 			}
 			if (mods.isFinal()) {
 				di.addDecorationIcon(fact.getIcon(IconFactory.FINAL_ICON));
 			}
 		}
 		setIcon(di);
+
+		setSortPriority(priority);
 
 	}
 
@@ -100,6 +107,7 @@ class MemberTreeNode extends JavaTreeNode {
 		super(method);
 
 		String icon = null;
+		int priority = PRIORITY_METHOD;
 
 		Modifiers mods = method.getModifiers();
 		if (mods==null) {
@@ -146,17 +154,21 @@ class MemberTreeNode extends JavaTreeNode {
 			if (mods.isAbstract()) {
 				di.addDecorationIcon(fact.getIcon(IconFactory.ABSTRACT_ICON));
 			}
+			if (method.isConstructor()) {
+				di.addDecorationIcon(fact.getIcon(IconFactory.CONSTRUCTOR_ICON));
+				priority = PRIORITY_CONSTRUCTOR; // Overrides previous value
+			}
 			if (mods.isStatic()) {
 				di.addDecorationIcon(fact.getIcon(IconFactory.STATIC_ICON));
+				priority += PRIORITY_BOOST_STATIC;
 			}
 			if (mods.isFinal()) {
 				di.addDecorationIcon(fact.getIcon(IconFactory.FINAL_ICON));
 			}
-			if (method.isConstructor()) {
-				di.addDecorationIcon(fact.getIcon(IconFactory.CONSTRUCTOR_ICON));
-			}
 		}
 		setIcon(di);
+
+		setSortPriority(priority);
 
 	}
 
