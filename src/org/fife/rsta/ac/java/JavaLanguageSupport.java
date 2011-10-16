@@ -13,11 +13,16 @@ package org.fife.rsta.ac.java;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.KeyStroke;
 import javax.swing.Timer;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
@@ -149,6 +154,10 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		Info info = new Info(textArea, p, parser);
 		parserToInfoMap.put(parser, info);
 
+InputMap im = textArea.getInputMap();
+ActionMap am = textArea.getActionMap();
+im.put(KeyStroke.getKeyStroke(KeyEvent.VK_O, textArea.getToolkit().getMenuShortcutKeyMask()), "GoToType");
+am.put("GoToType", new GoToMemberAction());
 	}
 
 
