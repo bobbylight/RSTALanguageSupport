@@ -212,15 +212,13 @@ am.put("GoToType", new GoToMemberAction());
 	 */
 	private static class Info implements PropertyChangeListener {
 
-		public RSyntaxTextArea textArea;
 		public JavaCompletionProvider provider;
-		public JavaParser parser;
+		//public JavaParser parser;
 
 		public Info(RSyntaxTextArea textArea, JavaCompletionProvider provider,
 					JavaParser parser) {
-			this.textArea = textArea;
 			this.provider = provider;
-			this.parser = parser;
+			//this.parser = parser;
 			parser.addPropertyChangeListener(
 							JavaParser.PROPERTY_COMPILATION_UNIT, this);
 		}

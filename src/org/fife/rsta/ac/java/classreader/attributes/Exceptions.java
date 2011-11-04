@@ -74,4 +74,14 @@ public class Exceptions extends AttributeInfo {
 	}
 
 
+	/**
+	 * Returns information about the method this attribute is describing.
+	 *
+	 * @return The method information.
+	 */
+	public MethodInfo getMethodInfo() {
+		return mi;
+	}
+
+
 }

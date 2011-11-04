@@ -59,7 +59,7 @@ public class Signature extends AttributeInfo {
 				if (ch=='L') { // A ClassTypeSignature
 					int semicolon = temp.indexOf(';', colon+2);
 					if (semicolon>-1) {
-						String type = temp.substring(colon+2, semicolon);
+						//String type = temp.substring(colon+2, semicolon);
 						// TODO: ...
 						types.add(ident);
 						offs = semicolon + 1;
