@@ -92,6 +92,21 @@ public class ExceptionTableEntry {
 	}
 
 
+	public int getEndPC() {
+		return endPC;
+	}
+
+
+	public int getHandlerPC() {
+		return handlerPC;
+	}
+
+
+	public int getStartPC() {
+		return startPC;
+	}
+
+
 	/**
 	 * Reads an exception table entry from an input stream.
 	 *
