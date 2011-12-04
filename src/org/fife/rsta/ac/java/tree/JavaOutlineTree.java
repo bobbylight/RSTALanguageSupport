@@ -70,7 +70,8 @@ public class JavaOutlineTree extends AbstractSourceTree {
 	/**
 	 * Constructor.
 	 */
-	public JavaOutlineTree() {
+	public JavaOutlineTree(boolean sorted) {
+		setSorted(sorted);
 		setBorder(BorderFactory.createEmptyBorder(0,8,0,8));
 		setRootVisible(false);
 		setCellRenderer(new AstTreeCellRenderer());
@@ -92,6 +93,7 @@ public class JavaOutlineTree extends AbstractSourceTree {
 
 		JavaTreeNode root = new JavaTreeNode("Remove me!",
 												IconFactory.SOURCE_FILE_ICON);
+		root.setSortable(false);
 		if (cu==null) {
 			model.setRoot(root);
 			return;
@@ -120,6 +122,7 @@ public class JavaOutlineTree extends AbstractSourceTree {
 
 		model.setRoot(root);
 		root.setSorted(isSorted());
+		refresh();
 		expandInitialNodes();
 
 	}
@@ -230,11 +233,9 @@ public class JavaOutlineTree extends AbstractSourceTree {
 
 
 	/**
-	 * Expands all nodes in the specified tree.
-	 *
-	 * @param tree The tree.
+	 * {@inheritDoc}
 	 */
-	private void expandInitialNodes() {
+	public void expandInitialNodes() {
 
 		// First, collapse all rows.
 		int j=0;
@@ -265,6 +266,29 @@ public class JavaOutlineTree extends AbstractSourceTree {
 	 */
 	public boolean getShowLocalVariables() {
 		return showLocalVars;
+	}
+
+
+	/**
+	 * Highlights the selected source element in the text editor, if any.
+	 *
+	 * @return Whether anything was selected in the tree.
+	 */
+	public boolean gotoSelectedElement() {
+		TreePath path = getLeadSelectionPath();//e.getNewLeadSelectionPath();
+		if (path != null) {
+			DefaultMutableTreeNode node = (DefaultMutableTreeNode)path.
+											getLastPathComponent();
+			Object obj = node.getUserObject();
+			if (obj instanceof ASTNode) {
+				ASTNode astNode = (ASTNode)obj;
+				int start = astNode.getNameStartOffset();
+				int end = astNode.getNameEndOffset();
+				textArea.select(start, end);
+			}
+			return true;
+		}
+		return false;
 	}
 
 
@@ -364,7 +388,7 @@ public class JavaOutlineTree extends AbstractSourceTree {
 				checkForJavaParsing();
 			}
 
-			if (JavaParser.PROPERTY_COMPILATION_UNIT.equals(name)) {
+			else if (JavaParser.PROPERTY_COMPILATION_UNIT.equals(name)) {
 				CompilationUnit cu = (CompilationUnit)e.getNewValue();
 				update(cu);
 			}
@@ -376,17 +400,8 @@ public class JavaOutlineTree extends AbstractSourceTree {
 		 * clicks on a node in this tree.
 		 */
 		public void valueChanged(TreeSelectionEvent e) {
-			TreePath path = e.getNewLeadSelectionPath();
-			if (path != null) {
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode)path.
-												getLastPathComponent();
-				Object obj = node.getUserObject();
-				if (obj instanceof ASTNode) {
-					ASTNode astNode = (ASTNode)obj;
-					int start = astNode.getNameStartOffset();
-					int end = astNode.getNameEndOffset();
-					textArea.select(start, end);
-				}
+			if (getGotoSelectedElementOnClick()) {
+				gotoSelectedElement();
 			}
 		}
 

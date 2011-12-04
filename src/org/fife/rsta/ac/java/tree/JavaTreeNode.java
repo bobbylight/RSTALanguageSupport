@@ -12,18 +12,18 @@ package org.fife.rsta.ac.java.tree;
 
 import javax.swing.Icon;
 
-import org.fife.rsta.ac.SortableTreeNode;
+import org.fife.rsta.ac.SourceTreeNode;
 import org.fife.rsta.ac.java.IconFactory;
 import org.fife.rsta.ac.java.rjc.ast.ASTNode;
 
 
 /**
- * A node in the Java outline tree.
+ * Base class for nodes in the Java outline tree.
  *
  * @author Robert Futrell
  * @version 1.0
  */
-class JavaTreeNode extends SortableTreeNode {
+class JavaTreeNode extends SourceTreeNode {
 
 	private ASTNode astNode;
 	private Icon icon;
@@ -65,6 +65,22 @@ class JavaTreeNode extends SortableTreeNode {
 		if (iconName!=null) {
 			this.icon = IconFactory.get().getIcon(iconName);
 		}
+	}
+
+
+	/**
+	 * Overridden to compare tree text without HTML.
+	 */
+	public int compareTo(Object obj) {
+		int res = -1;
+		if (obj instanceof JavaTreeNode) {
+			JavaTreeNode jtn2 = (JavaTreeNode)obj;
+			res = getSortPriority() - jtn2.getSortPriority();
+			if (res==0) {
+				res = getText(false).compareToIgnoreCase(jtn2.getText(false));
+			}
+		}
+		return res;
 	}
 
 

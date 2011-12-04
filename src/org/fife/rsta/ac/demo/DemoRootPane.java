@@ -72,7 +72,7 @@ jls.getJarManager().addJar(ji);
 		scrollPane.setIconRowHeaderEnabled(true);
 		scrollPane.getGutter().setBookmarkingEnabled(true);
 
-		tree = new JavaOutlineTree();
+		tree = new JavaOutlineTree(true);
 		tree.addTreeSelectionListener(listener);
 		tree.listenTo(textArea);
 		JScrollPane treeSP = new JScrollPane(tree);
