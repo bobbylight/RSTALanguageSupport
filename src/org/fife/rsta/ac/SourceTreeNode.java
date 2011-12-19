@@ -231,7 +231,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 							text = text.replaceAll("<[^>]+>", "");
 						}
 						if (!text.toLowerCase().startsWith(prefix)) {
-							System.out.println("Removing tree node: " + text);
+							//System.out.println("Removing tree node: " + text);
 							i.remove();
 						}
 					}
