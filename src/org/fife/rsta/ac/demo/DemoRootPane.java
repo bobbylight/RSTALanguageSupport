@@ -217,6 +217,7 @@ jls.getJarManager().addJar(ji);
 			textArea.read(r, null);
 			r.close();
 			textArea.setCaretPosition(0);
+			textArea.discardAllEdits();
 		} catch (RuntimeException re) {
 			throw re; // FindBugs
 		} catch (Exception e) {
