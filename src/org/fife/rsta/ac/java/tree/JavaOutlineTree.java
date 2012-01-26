@@ -64,7 +64,6 @@ public class JavaOutlineTree extends AbstractSourceTree {
 	private RSyntaxTextArea textArea;
 	private JavaParser parser;
 	private Listener listener;
-	private boolean showLocalVars;
 
 
 	/**
@@ -79,7 +78,6 @@ public class JavaOutlineTree extends AbstractSourceTree {
 		setModel(model);
 		listener = new Listener();
 		addTreeSelectionListener(listener);
-		showLocalVars = true;
 	}
 
 
@@ -105,14 +103,17 @@ public class JavaOutlineTree extends AbstractSourceTree {
 			root.add(new JavaTreeNode(pkg, iconName, false));
 		}
 
-		JavaTreeNode importNode = new JavaTreeNode("Imports",
+		if (!getShowMajorElementsOnly()) {
+			JavaTreeNode importNode = new JavaTreeNode("Imports",
 											IconFactory.IMPORT_ROOT_ICON);
-		for (Iterator i=cu.getImportIterator(); i.hasNext(); ) {
-			ImportDeclaration idec = (ImportDeclaration)i.next();
-			JavaTreeNode iNode = new JavaTreeNode(idec,IconFactory.IMPORT_ICON);
-			importNode.add(iNode);
+			for (Iterator i=cu.getImportIterator(); i.hasNext(); ) {
+				ImportDeclaration idec = (ImportDeclaration)i.next();
+				JavaTreeNode iNode = new JavaTreeNode(idec,
+											IconFactory.IMPORT_ICON);
+				importNode.add(iNode);
+			}
+			root.add(importNode);
 		}
-		root.add(importNode);
 
 		for (Iterator i=cu.getTypeDeclarationIterator(); i.hasNext(); ) {
 			TypeDeclaration td = (TypeDeclaration)i.next();
@@ -185,7 +186,7 @@ public class JavaOutlineTree extends AbstractSourceTree {
 			body = ((Method)member).getBody();
 		}
 
-		if (body!=null && showLocalVars) {
+		if (body!=null && !getShowMajorElementsOnly()) {
 			for (int i=0; i<body.getLocalVarCount(); i++) {
 				LocalVariable var = body.getLocalVar(i);
 				LocalVarTreeNode varNode = new LocalVarTreeNode(var);
@@ -258,34 +259,26 @@ public class JavaOutlineTree extends AbstractSourceTree {
 	}
 
 
-	/**
-	 * Returns whether local variables are shown in this tree.
-	 *
-	 * @return Whether local variables are shown in this tree.
-	 * @see #setShowLocalVariables(boolean)
-	 */
-	public boolean getShowLocalVariables() {
-		return showLocalVars;
+	private void gotoElementAtPath(TreePath path) {
+		DefaultMutableTreeNode node = (DefaultMutableTreeNode)path.
+													getLastPathComponent();
+		Object obj = node.getUserObject();
+		if (obj instanceof ASTNode) {
+			ASTNode astNode = (ASTNode)obj;
+			int start = astNode.getNameStartOffset();
+			int end = astNode.getNameEndOffset();
+			textArea.select(start, end);
+		}
 	}
 
 
 	/**
-	 * Highlights the selected source element in the text editor, if any.
-	 *
-	 * @return Whether anything was selected in the tree.
+	 * {@inheritDoc}
 	 */
 	public boolean gotoSelectedElement() {
 		TreePath path = getLeadSelectionPath();//e.getNewLeadSelectionPath();
 		if (path != null) {
-			DefaultMutableTreeNode node = (DefaultMutableTreeNode)path.
-											getLastPathComponent();
-			Object obj = node.getUserObject();
-			if (obj instanceof ASTNode) {
-				ASTNode astNode = (ASTNode)obj;
-				int start = astNode.getNameStartOffset();
-				int end = astNode.getNameEndOffset();
-				textArea.select(start, end);
-			}
+			gotoElementAtPath(path);
 			return true;
 		}
 		return false;
@@ -293,12 +286,7 @@ public class JavaOutlineTree extends AbstractSourceTree {
 
 
 	/**
-	 * Causes this outline tree to reflect the source code in the specified
-	 * text area.
-	 *
-	 * @param textArea The text area.  This should have been registered with
-	 *        the {@link LanguageSupportFactory}, and be editing Java.
-	 * @see #uninstall()
+	 * {@inheritDoc}
 	 */
 	public void listenTo(RSyntaxTextArea textArea) {
 
@@ -323,20 +311,7 @@ public class JavaOutlineTree extends AbstractSourceTree {
 
 
 	/**
-	 * Toggles whether local variables are shown in this tree.
-	 *
-	 * @param show Whether local variables are shown.
-	 * @see #getShowLocalVariables()
-	 */
-	public void setShowLocalVariables(boolean show) {
-		this.showLocalVars = show;
-	}
-
-
-	/**
-	 * Makes this outline tree stop listening to its current text area.
-	 *
-	 * @see #listenTo(RSyntaxTextArea)
+	 *{@inheritDoc}
 	 */
 	public void uninstall() {
 
@@ -401,7 +376,11 @@ public class JavaOutlineTree extends AbstractSourceTree {
 		 */
 		public void valueChanged(TreeSelectionEvent e) {
 			if (getGotoSelectedElementOnClick()) {
-				gotoSelectedElement();
+				//gotoSelectedElement();
+				TreePath newPath = e.getNewLeadSelectionPath();
+				if (newPath!=null) {
+					gotoElementAtPath(newPath);
+				}
 			}
 		}
 

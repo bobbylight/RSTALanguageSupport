@@ -13,6 +13,7 @@ package org.fife.rsta.ac.java;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -156,7 +157,8 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 
 InputMap im = textArea.getInputMap();
 ActionMap am = textArea.getActionMap();
-im.put(KeyStroke.getKeyStroke(KeyEvent.VK_O, textArea.getToolkit().getMenuShortcutKeyMask()), "GoToType");
+int shift = InputEvent.SHIFT_MASK;
+im.put(KeyStroke.getKeyStroke(KeyEvent.VK_O, textArea.getToolkit().getMenuShortcutKeyMask()|shift), "GoToType");
 am.put("GoToType", new GoToMemberAction());
 	}
 

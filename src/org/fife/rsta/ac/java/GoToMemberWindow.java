@@ -45,6 +45,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicTextFieldUI;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
+import org.fife.rsta.ac.AbstractSourceTree;
 import org.fife.rsta.ac.java.tree.JavaOutlineTree;
 import org.fife.ui.rsyntaxtextarea.focusabletip.TipUtil;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -60,7 +61,7 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 public class GoToMemberWindow extends JWindow {
 
 	private JTextField field;
-	private JavaOutlineTree tree;
+	private AbstractSourceTree tree;
 	private Listener listener;
 
 
@@ -85,7 +86,7 @@ public class GoToMemberWindow extends JWindow {
 		contentPane.add(field, BorderLayout.NORTH);
 
 		tree = new JavaOutlineTree(true);
-		tree.setShowLocalVariables(false);
+		tree.setShowMajorElementsOnly(true);
 		tree.setGotoSelectedElementOnClick(false);
 		tree.setFocusable(false);
 		tree.listenTo(textArea);

@@ -18,6 +18,8 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+
 
 /**
  * A tree showing the structure of a source file.  You should only add
@@ -29,15 +31,18 @@ import javax.swing.tree.TreeSelectionModel;
  */
 public abstract class AbstractSourceTree extends JTree {
 
+	protected RSyntaxTextArea textArea;
 	private boolean sorted;
 	private String prefix;
 	private boolean gotoSelectedElementOnClick;
+	private boolean showMajorElementsOnly;
 
 
 	public AbstractSourceTree() {
 		getSelectionModel().setSelectionMode(
 				TreeSelectionModel.SINGLE_TREE_SELECTION);
 		gotoSelectedElementOnClick = true;
+		showMajorElementsOnly = false;
 	}
 
 
@@ -84,6 +89,27 @@ public abstract class AbstractSourceTree extends JTree {
 
 
 	/**
+	 * Returns whether only "major" structural elements are shown in this
+	 * source tree.  An example of a "minor" element could be a local variable
+	 * in a function or method.
+	 *
+	 * @param return Whether only major elements are shown in this source tree.
+	 * @see #setShowMajorElementsOnly(boolean)
+	 */
+	public boolean getShowMajorElementsOnly() {
+		return showMajorElementsOnly;
+	}
+
+
+	/**
+	 * Highlights the selected source element in the text editor, if any.
+	 *
+	 * @return Whether anything was selected in the tree.
+	 */
+	public abstract boolean gotoSelectedElement();
+
+
+	/**
 	 * Returns whether the contents of this tree are sorted.
 	 *
 	 * @return Whether the contents of this tree are sorted.
@@ -92,6 +118,18 @@ public abstract class AbstractSourceTree extends JTree {
 	public boolean isSorted() {
 		return sorted;
 	}
+
+
+	/**
+	 * Causes this outline tree to reflect the source code in the specified
+	 * text area.
+	 *
+	 * @param textArea The text area.  This should have been registered with
+	 *        the {@link LanguageSupportFactory}, and be editing the language
+	 *        we're interested in.
+	 * @see #uninstall()
+	 */
+	public abstract void listenTo(RSyntaxTextArea textArea);
 
 
 	/**
@@ -181,6 +219,19 @@ public abstract class AbstractSourceTree extends JTree {
 
 
 	/**
+	 * Toggles whether only "major" structural elements should be shown in this
+	 * source tree.  An example of a "minor" element could be a local variable
+	 * in a function or method.
+	 *
+	 * @param show Whether only major elements are shown in this source tree.
+	 * @see #getshowMajorElementsOnly()
+	 */
+	public void setShowMajorElementsOnly(boolean show) {
+		showMajorElementsOnly = show;
+	}
+
+
+	/**
 	 * Toggles whether the contents of this tree are sorted.
 	 *
 	 * @param sorted Whether the contents of this tree are sorted.
@@ -197,6 +248,14 @@ public abstract class AbstractSourceTree extends JTree {
 			expandInitialNodes();
 		}
 	}
+
+
+	/**
+	 * Makes this outline tree stop listening to its current text area.
+	 *
+	 * @see #listenTo(RSyntaxTextArea)
+	 */
+	public abstract void uninstall();
 
 
 }
