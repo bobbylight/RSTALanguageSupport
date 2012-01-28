@@ -1,0 +1,15 @@
+function foobar() {
+   alert("Wow");
+}
+
+/**
+ * Another function.
+ *
+ * @param name Your name.
+ */
+function another(name) {
+   alert("Hello there, " + name + "!");
+}
+
+var aaa;
+var abc;

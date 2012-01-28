@@ -72,6 +72,8 @@ public class LanguageSupportFactory implements PropertyChangeListener {
 				prefix + "html.HtmlLanguageSupport");
 		styleToSupport.put(SyntaxConstants.SYNTAX_STYLE_JAVA,
 				prefix + "java.JavaLanguageSupport");
+		styleToSupport.put(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT,
+				prefix + "js.JavaScriptLanguageSupport");
 		styleToSupport.put(SyntaxConstants.SYNTAX_STYLE_JSP,
 				prefix + "jsp.JspLanguageSupport");
 		styleToSupport.put(SyntaxConstants.SYNTAX_STYLE_PERL,

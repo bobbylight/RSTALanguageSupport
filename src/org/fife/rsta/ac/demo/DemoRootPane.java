@@ -106,14 +106,15 @@ jls.getJarManager().addJar(ji);
 
 		menu = new JMenu("Language");
 		ButtonGroup bg = new ButtonGroup();
-		addItem(new StyleAction(this, "C",      "CExample.txt",      SYNTAX_STYLE_C), bg, menu);
-		addItem(new StyleAction(this, "Groovy", "GroovyExample.txt", SYNTAX_STYLE_GROOVY), bg, menu);
-		addItem(new StyleAction(this, "Java",   "JavaExample.txt",   SYNTAX_STYLE_JAVA), bg, menu);
-		addItem(new StyleAction(this, "JSP",    "JspExample.txt",    SYNTAX_STYLE_JSP), bg, menu);
-		addItem(new StyleAction(this, "Perl",   "PerlExample.txt",   SYNTAX_STYLE_PERL), bg, menu);
-		addItem(new StyleAction(this, "HTML",   "HtmlExample.txt",   SYNTAX_STYLE_HTML), bg, menu);
-		addItem(new StyleAction(this, "PHP",    "PhpExample.txt",    SYNTAX_STYLE_PHP), bg, menu);
-		addItem(new StyleAction(this, "sh",     "ShellExample.txt",  SYNTAX_STYLE_UNIX_SHELL), bg, menu);
+		addItem(new StyleAction(this, "C",          "CExample.txt",      SYNTAX_STYLE_C), bg, menu);
+		addItem(new StyleAction(this, "Groovy",     "GroovyExample.txt", SYNTAX_STYLE_GROOVY), bg, menu);
+		addItem(new StyleAction(this, "Java",       "JavaExample.txt",   SYNTAX_STYLE_JAVA), bg, menu);
+		addItem(new StyleAction(this, "JavaScript", "JSExample.txt",     SYNTAX_STYLE_JAVASCRIPT), bg, menu);
+		addItem(new StyleAction(this, "JSP",        "JspExample.txt",    SYNTAX_STYLE_JSP), bg, menu);
+		addItem(new StyleAction(this, "Perl",       "PerlExample.txt",   SYNTAX_STYLE_PERL), bg, menu);
+		addItem(new StyleAction(this, "HTML",       "HtmlExample.txt",   SYNTAX_STYLE_HTML), bg, menu);
+		addItem(new StyleAction(this, "PHP",        "PhpExample.txt",    SYNTAX_STYLE_PHP), bg, menu);
+		addItem(new StyleAction(this, "sh",         "ShellExample.txt",  SYNTAX_STYLE_UNIX_SHELL), bg, menu);
 		menu.getItem(0).setSelected(true);
 		mb.add(menu);
 
@@ -147,6 +148,7 @@ jls.getJarManager().addJar(ji);
 		textArea.requestFocusInWindow();
 		textArea.setMarkOccurrences(true);
 		textArea.setAntiAliasingEnabled(true);
+		textArea.setCodeFoldingEnabled(true);
 		ToolTipManager.sharedInstance().registerComponent(textArea);
 		return textArea;
 	}

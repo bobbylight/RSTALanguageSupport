@@ -1,7 +1,7 @@
 RSTALanguageSupport Readme
 --------------------------
 Version 0.7
-21feb2011
+28jan2012
 
 ----------------------------------------
 Contents
@@ -28,6 +28,12 @@ Documentation is sparse at the moment, but should improve over time.
 
 Like all RSyntaxTextArea-related projects (AutoComplete, SpellChecker), this
 project targets Java 1.4 and beyond.
+
+This library itself relies on the following other libraries (besides
+RSyntaxTextArea and AutoComplete):
+
+1. Mozilla Rhino v1.7R3 (http://http://www.mozilla.org/rhino/)
+   Used to implement code completion and syntax checking for JavaScript.
 
 
 ----------------------------------------
@@ -67,10 +73,16 @@ Languages with support include:
      This will be improved in th enext release.
    - Generics support is implemented, but may be buggy.
 
-5. JSP
+5. JavaScript
+   - Embedded Rhino parser (v1.7R3) for squiggle underlining syntax errors.
+   - Auto-completion for variables and functions in the current source file,
+     derived from the parser above.  Scope is currently ignored.
    - 
 
-6. Perl
+6. JSP
+   - 
+
+7. Perl
    - Error checking (squiggle underlining) via using "perl -c ..." on the local
      system.  You can toggle taint mode, etc.
    - Auto-completion for built-in function names.
@@ -79,13 +91,13 @@ Languages with support include:
      scope at the current caret position).
    - Can specify/override PERL5LIB when syntax checking.
 
-7. PHP
+8. PHP
    - Auto-completion for HTML 5 tags and attributes.  This is inherited
      directly from the HTML support, so improvements there will show up here.
    - Auto-completion for PHP functions.
    - Parameter assistance for PHP functions.
 
-8. Unix Shell
+9. Unix Shell
    - Possibly broken at the moment.  Should attempt to use the local man pages
      for descriptions of standard shell commands if the local host is *nix,
      otherwise (on Windows) it defaults to short, generic descriptions.
@@ -107,13 +119,15 @@ properly.
          org/fife/rsta/ac/groovy        Code completion for Groovy
          org/fife/rsta/ac/html          Code completion for HTML
          org/fife/rsta/ac/java/**       Code completion for Java
+         org/fife/rsta/ac/js            Code completion for JavaScript
          org/fife/rsta/ac/perl          Code completion for Perl
          org/fife/rsta/ac/php           Code completion for PHP
          org/fife/rsta/ac/sh            Code completion fro Unix shell
       res/                              Source snippets used in the demo
       data/                             Input XML for some languages
       dist/                             Where Ant places the built jar
-      lib/                              Libraries used by the demo
+      lib/                              Libraries used by this library
+         rhino/                         Rhino, for JS support
       test/                             (Very) small amount of unit tests
       build.xml                         Ant script to build the library
       license.txt                       License for this library (LGPL)

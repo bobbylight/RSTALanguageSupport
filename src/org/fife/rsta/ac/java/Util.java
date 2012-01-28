@@ -342,6 +342,10 @@ public class Util {
 	 */
 	public static final String docCommentToHtml(String dc) {
 
+		if (dc==null) {
+			return null;
+		}
+
 		// First, strip the line transitions.  These always seem to be stripped
 		// first from Javadoc, even when in between <pre> and </pre> tags.
 		Matcher m = DOC_COMMENT_LINE_HEADER.matcher(dc);

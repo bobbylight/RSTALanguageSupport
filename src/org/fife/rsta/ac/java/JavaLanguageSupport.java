@@ -20,7 +20,6 @@ import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.KeyStroke;
@@ -248,7 +247,7 @@ am.put("GoToType", new GoToMemberAction());
 
 	/**
 	 * A hack of <tt>AutoCompletion</tt> that forces the <tt>JavaParser</tt>
-	 * to re-parse the document when the user presses ctrl+C.
+	 * to re-parse the document when the user presses ctrl+space.
 	 */
 	private class JavaAutoCompletion extends AutoCompletion {
 
