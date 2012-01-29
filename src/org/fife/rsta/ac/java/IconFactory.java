@@ -10,12 +10,9 @@
  */
 package org.fife.rsta.ac.java;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import javax.imageio.ImageIO;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
@@ -139,21 +136,15 @@ public class IconFactory {
 
 
 	private Icon loadIcon(String name) {
-		try {
-			URL res = getClass().getResource("img/" + name);
-			if (res==null) {
-				// IllegalArgumentException is what would be thrown if res
-				// was null anyway, we're just giving the actual arg name to
-				// make the message more descriptive
-				throw new IllegalArgumentException("icon not found: img/" +
-													name);
-			}
-			BufferedImage image = ImageIO.read(res);
-			return new ImageIcon(image);
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
+		URL res = getClass().getResource("img/" + name);
+		if (res==null) {
+			// IllegalArgumentException is what would be thrown if res
+			// was null anyway, we're just giving the actual arg name to
+			// make the message more descriptive
+			throw new IllegalArgumentException("icon not found: img/" +
+												name);
 		}
-		return null;
+		return new ImageIcon(res);
 	}
 
 

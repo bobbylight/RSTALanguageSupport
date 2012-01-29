@@ -1,14 +1,14 @@
 /*
- * 03/21/2010
+ * 01/28/2012
  *
- * Copyright (C) 2010 Robert Futrell
+ * Copyright (C) 2012 Robert Futrell
  * robert_futrell at users.sourceforge.net
  * http://fifesoft.com/rsyntaxtextarea
  *
  * This code is licensed under the LGPL.  See the "license.txt" file included
  * with this project.
  */
-package org.fife.rsta.ac.c;
+package org.fife.rsta.ac.js;
 
 import java.net.URL;
 import javax.swing.Icon;
@@ -23,12 +23,12 @@ import org.fife.ui.autocomplete.VariableCompletion;
 
 
 /**
- * The cell renderer used for the C programming language.
+ * The cell renderer used for JavaScript completion choices.
  *
  * @author Robert Futrell
  * @version 1.0
  */
-class CCellRenderer extends CompletionCellRenderer {
+class JavaScriptCellRenderer extends CompletionCellRenderer {
 
 	private Icon variableIcon;
 	private Icon functionIcon;
@@ -38,10 +38,10 @@ class CCellRenderer extends CompletionCellRenderer {
 	/**
 	 * Constructor.
 	 */
-	public CCellRenderer() {
-		emptyIcon = new EmptyIcon(16); // Should be done first
-		variableIcon = getIcon("var.png");
-		functionIcon = getIcon("function.png");
+	public JavaScriptCellRenderer() {
+		emptyIcon = new EmptyIcon(16); // Must be done first
+		variableIcon = getIcon("img/field_default_obj.gif");
+		functionIcon = getIcon("img/methdef_obj.gif");
 	}
 
 

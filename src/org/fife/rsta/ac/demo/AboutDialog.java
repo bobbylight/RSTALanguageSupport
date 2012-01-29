@@ -79,7 +79,7 @@ public class AboutDialog extends JDialog {
 		JTextArea textArea = new JTextArea(6, 60);
 		// Windows LAF picks a bad font for text areas, for some reason.
 		textArea.setFont(labelFont);
-		textArea.setText("Version 0.1\n\n" + 
+		textArea.setText("Version 0.2\n\n" + 
 			"Demonstrates basic features of the RSTALanguageSupport library.\n" +
 			"Note that some features for some languages may not work unless your system " +
 			"is set up properly.\nFor example, Java code completion requries a JRE on " +

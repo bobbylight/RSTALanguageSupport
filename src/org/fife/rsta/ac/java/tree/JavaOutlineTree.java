@@ -14,12 +14,10 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Iterator;
 import javax.swing.BorderFactory;
-import javax.swing.JComponent;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeCellRenderer;
 import javax.swing.tree.TreePath;
 
 import org.fife.rsta.ac.AbstractSourceTree;
@@ -335,11 +333,9 @@ public class JavaOutlineTree extends AbstractSourceTree {
 	 */
 	public void updateUI() {
 		super.updateUI();
-		// Might not be so the first time through
-		TreeCellRenderer renderer = getCellRenderer();
-		if (renderer instanceof JComponent) {
-			((JComponent)renderer).updateUI();
-		}
+		// DefaultTreeCellRenderer caches colors, so we can't just call
+		// ((JComponent)getCellRenderer()).updateUI()...
+		setCellRenderer(new AstTreeCellRenderer());
 	}
 
 

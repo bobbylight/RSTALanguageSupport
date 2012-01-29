@@ -19,14 +19,14 @@ import java.net.URL;
 import javax.swing.*;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.event.*;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeNode;
 
+import org.fife.rsta.ac.AbstractSourceTree;
 import org.fife.rsta.ac.LanguageSupport;
 import org.fife.rsta.ac.LanguageSupportFactory;
 import org.fife.rsta.ac.java.JavaLanguageSupport;
-import org.fife.rsta.ac.java.rjc.ast.ASTNode;
 import org.fife.rsta.ac.java.tree.JavaOutlineTree;
+import org.fife.rsta.ac.js.tree.JavaScriptOutlineTree;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
@@ -42,15 +42,13 @@ import org.fife.ui.rtextarea.RTextScrollPane;
 class DemoRootPane extends JRootPane implements HyperlinkListener,
 							SyntaxConstants, Actions {
 
-	private JavaOutlineTree tree;
+	private JScrollPane treeSP;
+	private AbstractSourceTree tree;
 	private RTextScrollPane scrollPane;
 	private RSyntaxTextArea textArea;
-	private Listener listener;
 
 
 	public DemoRootPane() {
-
-		listener = new Listener();
 
 		LanguageSupportFactory lsf = LanguageSupportFactory.get();
 		LanguageSupport support = lsf.getSupportFor(SYNTAX_STYLE_JAVA);
@@ -72,14 +70,14 @@ jls.getJarManager().addJar(ji);
 		scrollPane.setIconRowHeaderEnabled(true);
 		scrollPane.getGutter().setBookmarkingEnabled(true);
 
-		tree = new JavaOutlineTree(true);
-		tree.addTreeSelectionListener(listener);
-		tree.listenTo(textArea);
-		JScrollPane treeSP = new JScrollPane(tree);
+		// Dummy tree keeps JViewport's "background" looking right initially
+		JTree dummy = new JTree((TreeNode)null);
+		treeSP = new JScrollPane(dummy);
 
 		//JPanel cp = new JPanel(new BorderLayout());
 		JSplitPane sp = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 										treeSP, scrollPane);
+		sp.setContinuousLayout(true);
 		setContentPane(sp);
 
 		setJMenuBar(createMenuBar());
@@ -202,6 +200,37 @@ jls.getJarManager().addJar(ji);
 
 
 	/**
+	 * Displays a tree view of the current source code, if available for the
+	 * current programming language.
+	 */
+	private void refreshSourceTree() {
+
+		if (tree!=null) {
+			tree.uninstall();
+			treeSP.remove(tree);
+		}
+
+		String language = textArea.getSyntaxEditingStyle();
+		if (SyntaxConstants.SYNTAX_STYLE_JAVA.equals(language)) {
+			tree = new JavaOutlineTree(true);
+		}
+		else if (SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT.equals(language)) {
+			tree = new JavaScriptOutlineTree(true);
+		}
+		else {
+			tree = null;
+		}
+
+		if (tree!=null) {
+			tree.listenTo(textArea);
+			treeSP.setViewportView(tree);
+			treeSP.revalidate();
+		}
+
+	}
+
+
+	/**
 	 * Sets the content in the text area to that in the specified resource.
 	 *
 	 * @param resource The resource to load.
@@ -214,40 +243,20 @@ jls.getJarManager().addJar(ji);
 		ClassLoader cl = getClass().getClassLoader();
 		BufferedReader r = null;
 		try {
+
 			r = new BufferedReader(new InputStreamReader(
 					cl.getResourceAsStream("examples/" + resource), "UTF-8"));
 			textArea.read(r, null);
 			r.close();
 			textArea.setCaretPosition(0);
 			textArea.discardAllEdits();
+
+			refreshSourceTree();
+
 		} catch (RuntimeException re) {
 			throw re; // FindBugs
 		} catch (Exception e) {
 			textArea.setText("Type here to see syntax highlighting");
-		}
-
-	}
-
-
-	/**
-	 * Listens for events in the text editor.
-	 */
-	private class Listener implements TreeSelectionListener {
-
-		public void valueChanged(TreeSelectionEvent e) {
-			// Select the item clicked in the tree in the editor.
-			TreePath path = e.getNewLeadSelectionPath();
-			if (path != null) {
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode) path
-						.getLastPathComponent();
-				Object obj = node.getUserObject();
-				if (obj instanceof ASTNode) {
-					ASTNode astNode = (ASTNode) obj;
-					int start = astNode.getNameStartOffset();
-					int end = astNode.getNameEndOffset();
-					textArea.select(start, end);
-				}
-			}
 		}
 
 	}

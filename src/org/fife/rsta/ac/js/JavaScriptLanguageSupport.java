@@ -17,7 +17,6 @@ import java.util.Map;
 
 import org.fife.rsta.ac.AbstractLanguageSupport;
 import org.fife.ui.autocomplete.AutoCompletion;
-import org.fife.ui.autocomplete.CompletionCellRenderer;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.mozilla.javascript.ast.AstRoot;
@@ -40,7 +39,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 
 	public JavaScriptLanguageSupport() {
 		parserToInfoMap = new HashMap();
-		setDefaultCompletionCellRenderer(new CompletionCellRenderer());
+		setDefaultCompletionCellRenderer(new JavaScriptCellRenderer());
 		setAutoActivationEnabled(true);
 		setParameterAssistanceEnabled(true);
 		setShowDescWindow(true);

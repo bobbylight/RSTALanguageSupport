@@ -94,6 +94,20 @@ public class JavaScriptParser extends AbstractParser {
 	}
 
 
+	/**
+	 * Returns the AST, or <code>null</code> if the editor's content has not
+	 * yet been parsed.
+	 *
+	 * @return The AST, or <code>null</code>.
+	 */
+	public AstRoot getAstRoot() {
+		return astRoot;
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public ParseResult parse(RSyntaxDocument doc, String style) {
 
 		astRoot = null;
