@@ -31,9 +31,11 @@ import javax.swing.text.Document;
 import javax.swing.text.Element;
 
 import org.fife.rsta.ac.AbstractLanguageSupport;
+import org.fife.rsta.ac.GoToMemberAction;
 import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
 import org.fife.rsta.ac.java.rjc.ast.ImportDeclaration;
 import org.fife.rsta.ac.java.rjc.ast.Package;
+import org.fife.rsta.ac.java.tree.JavaOutlineTree;
 import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
@@ -158,7 +160,7 @@ InputMap im = textArea.getInputMap();
 ActionMap am = textArea.getActionMap();
 int shift = InputEvent.SHIFT_MASK;
 im.put(KeyStroke.getKeyStroke(KeyEvent.VK_O, textArea.getToolkit().getMenuShortcutKeyMask()|shift), "GoToType");
-am.put("GoToType", new GoToMemberAction());
+am.put("GoToType", new GoToMemberAction(JavaOutlineTree.class));
 	}
 
 
@@ -184,6 +186,11 @@ am.put("GoToType", new GoToMemberAction());
 			textArea.putClientProperty(PROPERTY_LISTENER, null);
 		}
 
+InputMap im = textArea.getInputMap();
+ActionMap am = textArea.getActionMap();
+int shift = InputEvent.SHIFT_MASK;
+im.remove(KeyStroke.getKeyStroke(KeyEvent.VK_O, textArea.getToolkit().getMenuShortcutKeyMask()|shift));
+am.remove("GoToType");
 	}
 
 

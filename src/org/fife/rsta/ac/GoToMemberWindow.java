@@ -8,7 +8,7 @@
  * This code is licensed under the LGPL.  See the "license.txt" file included
  * with this project.
  */
-package org.fife.rsta.ac.java;
+package org.fife.rsta.ac;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -45,18 +45,17 @@ import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicTextFieldUI;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
-import org.fife.rsta.ac.AbstractSourceTree;
-import org.fife.rsta.ac.java.tree.JavaOutlineTree;
 import org.fife.ui.rsyntaxtextarea.focusabletip.TipUtil;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 
 /**
- * Displays a text field and tree, allowing the user to jump to a specific
- * part of code in the current source file.
+ * A popup window that displays a text field and tree, allowing the user to
+ * jump to a specific part of code in the current source file.
  *
  * @author Robert Futrell
  * @version 1.0
+ * @see GoToMemberAction
  */
 public class GoToMemberWindow extends JWindow {
 
@@ -69,9 +68,11 @@ public class GoToMemberWindow extends JWindow {
 	 * Constructor.
 	 *
 	 * @param parent The parent window (hosting the text component).
-	 * @param ac The auto-completion instance.
+	 * @param textArea The text area.
+	 * @param tree The source tree appropriate for the current language.
 	 */
-	public GoToMemberWindow(Window parent, RSyntaxTextArea textArea) {
+	public GoToMemberWindow(Window parent, RSyntaxTextArea textArea,
+							AbstractSourceTree tree) {
 
 		super(parent);
 		ComponentOrientation o = parent.getComponentOrientation();
@@ -85,7 +86,8 @@ public class GoToMemberWindow extends JWindow {
 		field = createTextField();
 		contentPane.add(field, BorderLayout.NORTH);
 
-		tree = new JavaOutlineTree(true);
+		this.tree = tree;
+		tree.setSorted(true);
 		tree.setShowMajorElementsOnly(true);
 		tree.setGotoSelectedElementOnClick(false);
 		tree.setFocusable(false);

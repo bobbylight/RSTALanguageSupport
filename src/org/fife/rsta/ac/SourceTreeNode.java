@@ -74,7 +74,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 		if (obj instanceof SourceTreeNode) {
 			SourceTreeNode stn2 = (SourceTreeNode)obj;
 			res = getSortPriority() - stn2.getSortPriority();
-			if (res==0) {
+			if (res==0 && ((SourceTreeNode)getParent()).isSorted()) {
 				res = toString().compareToIgnoreCase(stn2.toString());
 			}
 		}

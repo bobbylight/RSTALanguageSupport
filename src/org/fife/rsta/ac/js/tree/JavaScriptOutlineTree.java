@@ -15,9 +15,9 @@ import java.beans.PropertyChangeListener;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.text.BadLocationException;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
@@ -25,10 +25,12 @@ import javax.swing.tree.TreePath;
 import org.fife.rsta.ac.AbstractSourceTree;
 import org.fife.rsta.ac.LanguageSupport;
 import org.fife.rsta.ac.LanguageSupportFactory;
+import org.fife.rsta.ac.js.IconFactory;
 import org.fife.rsta.ac.js.JavaScriptLanguageSupport;
 import org.fife.rsta.ac.js.JavaScriptParser;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+
 import org.mozilla.javascript.Node;
 import org.mozilla.javascript.Token;
 import org.mozilla.javascript.ast.AstNode;
@@ -40,8 +42,16 @@ import org.mozilla.javascript.ast.VariableInitializer;
 
 
 /**
- * A tree view of JavaScript source in an <code>RSyntaxTextArea</code>.
+ * A tree view showing the outline of JavaScript source, similar to the
+ * "Outline" view in the Eclipse JDT.  It also uses Eclipse's icons, just like
+ * the rest of this code completion library.<p>
  *
+ * You can get this tree automatically updating in response to edits in an
+ * <code>RSyntaxTextArea</code> with {@link JavaScriptLanguageSupport}
+ * installed by calling {@link #listenTo(RSyntaxTextArea)}.  Note that, if you
+ * have an application with multiple RSTA editors, you would want to call this
+ * method each time a new editor is focused.
+ * 
  * @author Robert Futrell
  * @version 1.0
  */
@@ -52,12 +62,26 @@ public class JavaScriptOutlineTree extends AbstractSourceTree {
 	private JavaScriptParser parser;
 	private Listener listener;
 
-	private static final int PRIORITY_VARIABLE = 1;
-	private static final int PRIORITY_FUNCTION = 3;
+	private static final int PRIORITY_FUNCTION = 1;
+	private static final int PRIORITY_VARIABLE = 2;
+
+
+	/**
+	 * Constructor.  The tree created will not have its elements sorted
+	 * alphabetically.
+	 */
+	public JavaScriptOutlineTree() {
+		this(false);
+	}
 
 
 	/**
 	 * Constructor.
+	 *
+	 * @param sorted Whether the tree should sort its elements alphabetically.
+	 *        Note that outline trees will likely group nodes by type before
+	 *        sorting (i.e. methods will be sorted in one group, fields in
+	 *        another group, etc.).
 	 */
 	public JavaScriptOutlineTree(boolean sorted) {
 		setSorted(sorted);
@@ -125,14 +149,14 @@ public class JavaScriptOutlineTree extends AbstractSourceTree {
 
 
 	private void gotoElementAtPath(TreePath path) {
-		DefaultMutableTreeNode node = (DefaultMutableTreeNode)path.
-													getLastPathComponent();
-		Object obj = node.getUserObject();
-		if (obj instanceof AstNode) {
-			AstNode astNode = (AstNode)obj;
-			int start = astNode.getPosition();
-			int end = start + astNode.getLength() - 1;
-			textArea.select(start, end);
+		Object node = path.getLastPathComponent();
+		if (node instanceof JavaScriptTreeNode) {
+			JavaScriptTreeNode jstn = (JavaScriptTreeNode)node;
+			int len = jstn.getLength();
+			if (len>-1) { // Should always be true
+				int offs = jstn.getOffset();
+				textArea.select(offs, offs+len);
+			}
 		}
 	}
 
@@ -203,8 +227,7 @@ public class JavaScriptOutlineTree extends AbstractSourceTree {
 	 */
 	private void update(AstRoot ast) {
 
-		JavaScriptTreeNode root = new JavaScriptTreeNode("Remove me!");
-		root.setSortable(false);
+		JavaScriptTreeNode root = new JavaScriptTreeNode(null);
 		if (ast==null) {
 			model.setRoot(root);
 			return;
@@ -242,8 +265,15 @@ public class JavaScriptOutlineTree extends AbstractSourceTree {
 						}
 					}
 					sb.append(')');
-					JavaScriptTreeNode tn = new JavaScriptTreeNode(sb.toString());
-					tn.setIcon(new ImageIcon(getClass().getResource("../img/methdef_obj.gif")));
+					JavaScriptTreeNode tn = new JavaScriptTreeNode(fn.getFunctionName());
+					try {
+						int offs = fn.getFunctionName().getAbsolutePosition();
+						tn.setOffset(textArea.getDocument().createPosition(offs));
+					} catch (BadLocationException ble) { // Never happens
+						ble.printStackTrace();
+					}
+					tn.setText(sb.toString());
+					tn.setIcon(IconFactory.get().getIcon(IconFactory.FUNCTION_ICON));
 					tn.setSortPriority(PRIORITY_FUNCTION);
 					root.add(tn);
 					break;
@@ -252,22 +282,30 @@ public class JavaScriptOutlineTree extends AbstractSourceTree {
 					VariableDeclaration varDec = (VariableDeclaration)child;
 					List vars = varDec.getVariables();
 					for (Iterator i=vars.iterator(); i.hasNext(); ) {
+						Name varNameNode = null;
 						String varName = null;
 						VariableInitializer var = (VariableInitializer)i.next();
 						AstNode target = var.getTarget();
 						switch (target.getType()) {
 							case Token.NAME:
-								Name name = (Name)target;
+								varNameNode = (Name)target;
 								//System.out.println("... Variable: " + name.getIdentifier());
-								varName = name.getIdentifier();
+								varName = varNameNode.getIdentifier();
 								break;
 							default:
 								System.out.println("... Unknown var target type: " + target.getClass());
 								varName = "?";
 								break;
 						}
-						tn = new JavaScriptTreeNode(varName);
-						tn.setIcon(new ImageIcon(getClass().getResource("../img/field_default_obj.gif")));
+						tn = new JavaScriptTreeNode(varNameNode);
+						try {
+							int offs = varNameNode.getAbsolutePosition();
+							tn.setOffset(textArea.getDocument().createPosition(offs));
+						} catch (BadLocationException ble) { // Never happens
+							ble.printStackTrace();
+						}
+						tn.setText(varName);
+						tn.setIcon(IconFactory.get().getIcon(IconFactory.VARIABLE_ICON));
 						tn.setSortPriority(PRIORITY_VARIABLE);
 						root.add(tn);
 					}
@@ -284,6 +322,17 @@ public class JavaScriptOutlineTree extends AbstractSourceTree {
 		refresh();
 		expandInitialNodes();
 
+	}
+
+
+	/**
+	 * Overridden to also update the UI of the child cell renderer.
+	 */
+	public void updateUI() {
+		super.updateUI();
+		// DefaultTreeCellRenderer caches colors, so we can't just call
+		// ((JComponent)getCellRenderer()).updateUI()...
+		setCellRenderer(new JavaScriptTreeCellRenderer());
 	}
 
 

@@ -10,12 +10,19 @@
  */
 package org.fife.rsta.ac.js;
 
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.KeyStroke;
 
 import org.fife.rsta.ac.AbstractLanguageSupport;
+import org.fife.rsta.ac.GoToMemberAction;
+import org.fife.rsta.ac.js.tree.JavaScriptOutlineTree;
 import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -23,7 +30,8 @@ import org.mozilla.javascript.ast.AstRoot;
 
 
 /**
- * Language support for JavaScript.  This requires Rhino.
+ * Language support for JavaScript.  This requires Rhino, which is included
+ * with this library.
  *
  * @author Robert Futrell
  * @version 1.0
@@ -90,6 +98,11 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 		Info info = new Info(textArea, p, parser);
 		parserToInfoMap.put(parser, info);
 
+InputMap im = textArea.getInputMap();
+ActionMap am = textArea.getActionMap();
+int shift = InputEvent.SHIFT_MASK;
+im.put(KeyStroke.getKeyStroke(KeyEvent.VK_O, textArea.getToolkit().getMenuShortcutKeyMask()|shift), "GoToType");
+am.put("GoToType", new GoToMemberAction(JavaScriptOutlineTree.class));
 	}
 
 	public void uninstall(RSyntaxTextArea textArea) {
@@ -111,6 +124,11 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 		//	textArea.putClientProperty(PROPERTY_LISTENER, null);
 		//}
 
+InputMap im = textArea.getInputMap();
+ActionMap am = textArea.getActionMap();
+int shift = InputEvent.SHIFT_MASK;
+im.remove(KeyStroke.getKeyStroke(KeyEvent.VK_O, textArea.getToolkit().getMenuShortcutKeyMask()|shift));
+am.remove("GoToType");
 	}
 
 

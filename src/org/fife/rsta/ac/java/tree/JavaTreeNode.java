@@ -76,7 +76,7 @@ class JavaTreeNode extends SourceTreeNode {
 		if (obj instanceof JavaTreeNode) {
 			JavaTreeNode jtn2 = (JavaTreeNode)obj;
 			res = getSortPriority() - jtn2.getSortPriority();
-			if (res==0) {
+			if (res==0 && ((SourceTreeNode)getParent()).isSorted()) {
 				res = getText(false).compareToIgnoreCase(jtn2.getText(false));
 			}
 		}

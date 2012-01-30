@@ -10,9 +10,7 @@
  */
 package org.fife.rsta.ac.js;
 
-import java.net.URL;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JList;
 
 import org.fife.ui.autocomplete.Completion;
@@ -30,8 +28,6 @@ import org.fife.ui.autocomplete.VariableCompletion;
  */
 class JavaScriptCellRenderer extends CompletionCellRenderer {
 
-	private Icon variableIcon;
-	private Icon functionIcon;
 	private Icon emptyIcon;
 
 
@@ -39,22 +35,7 @@ class JavaScriptCellRenderer extends CompletionCellRenderer {
 	 * Constructor.
 	 */
 	public JavaScriptCellRenderer() {
-		emptyIcon = new EmptyIcon(16); // Must be done first
-		variableIcon = getIcon("img/field_default_obj.gif");
-		functionIcon = getIcon("img/methdef_obj.gif");
-	}
-
-
-	/**
-	 * Returns an icon.
-	 *
-	 * @param resource The icon to retrieve.  This should either be a file,
-	 *        or a resource loadable by the current ClassLoader.
-	 * @return The icon.
-	 */
-	private Icon getIcon(String resource) {
-		URL url = getClass().getResource(resource); // Should never be null
-		return url!=null ? new ImageIcon(url) : emptyIcon;
+		emptyIcon = new EmptyIcon(16);
 	}
 
 
@@ -76,7 +57,7 @@ class JavaScriptCellRenderer extends CompletionCellRenderer {
 			boolean hasFocus) {
 		super.prepareForVariableCompletion(list, vc, index, selected,
 										hasFocus);
-		setIcon(variableIcon);
+		setIcon(IconFactory.get().getIcon(IconFactory.VARIABLE_ICON));
 	}
 
 
@@ -88,7 +69,7 @@ class JavaScriptCellRenderer extends CompletionCellRenderer {
 			boolean hasFocus) {
 		super.prepareForFunctionCompletion(list, fc, index, selected,
 										hasFocus);
-		setIcon(functionIcon);
+		setIcon(IconFactory.get().getIcon(IconFactory.FUNCTION_ICON));
 	}
 
 

@@ -212,10 +212,10 @@ jls.getJarManager().addJar(ji);
 
 		String language = textArea.getSyntaxEditingStyle();
 		if (SyntaxConstants.SYNTAX_STYLE_JAVA.equals(language)) {
-			tree = new JavaOutlineTree(true);
+			tree = new JavaOutlineTree();
 		}
 		else if (SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT.equals(language)) {
-			tree = new JavaScriptOutlineTree(true);
+			tree = new JavaScriptOutlineTree();
 		}
 		else {
 			tree = null;

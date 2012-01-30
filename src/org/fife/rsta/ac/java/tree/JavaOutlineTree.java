@@ -48,7 +48,7 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
  * of this code completion library.<p>
  *
  * You can get this tree automatically updating in response to edits in an
- * <tt>RSyntaxTextArea</tt> with {@link JavaLanguageSupport} installed by
+ * <code>RSyntaxTextArea</code> with {@link JavaLanguageSupport} installed by
  * calling {@link #listenTo(RSyntaxTextArea)}.  Note that, if you have an
  * application with multiple RSTA editors, you would want to call this method
  * each time a new editor is focused.
@@ -65,7 +65,21 @@ public class JavaOutlineTree extends AbstractSourceTree {
 
 
 	/**
+	 * Constructor.  The tree created will not have its elements sorted
+	 * alphabetically.
+	 */
+	public JavaOutlineTree() {
+		this(false);
+	}
+
+
+	/**
 	 * Constructor.
+	 *
+	 * @param sorted Whether the tree should sort its elements alphabetically.
+	 *        Note that outline trees will likely group nodes by type before
+	 *        sorting (i.e. methods will be sorted in one group, fields in
+	 *        another group, etc.).
 	 */
 	public JavaOutlineTree(boolean sorted) {
 		setSorted(sorted);

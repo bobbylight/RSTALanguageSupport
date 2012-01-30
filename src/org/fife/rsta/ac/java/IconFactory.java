@@ -141,8 +141,7 @@ public class IconFactory {
 			// IllegalArgumentException is what would be thrown if res
 			// was null anyway, we're just giving the actual arg name to
 			// make the message more descriptive
-			throw new IllegalArgumentException("icon not found: img/" +
-												name);
+			throw new IllegalArgumentException("icon not found: img/" + name);
 		}
 		return new ImageIcon(res);
 	}

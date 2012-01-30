@@ -18,16 +18,32 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import org.fife.rsta.ac.java.tree.JavaOutlineTree;
+import org.fife.rsta.ac.js.tree.JavaScriptOutlineTree;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 
 /**
- * A tree showing the structure of a source file.  You should only add
- * instances of {@link SourceTreeNode} or subclasses to this tree.
+ * A tree showing the structure of a source file being edited in an
+ * <code>RSyntaxTextArea</code>.  This can be used to display an "outline view"
+ * of the code, for example.<p>
  *
+ * Concrete implementations typically specialize in displaying code structure
+ * for a single language, and are registered to listen to code changes in an
+ * <code>RSyntaxTextArea</code> instance by  calling
+ * {@link #listenTo(RSyntaxTextArea)}.  They should then listen to document
+ * changes and adjust themselves to reflect the code structure of the current
+ * content as best as possible.<p>
+ *
+ * You should only add instances of {@link SourceTreeNode} or subclasses to
+ * this tree.  You should also provide a no-argument constructor if you wish to
+ * use your subclass in {@link GoToMemberAction}.
+ * 
  * @author Robert Futrell
  * @version 1.0
  * @see SourceTreeNode
+ * @see JavaOutlineTree
+ * @see JavaScriptOutlineTree
  */
 public abstract class AbstractSourceTree extends JTree {
 
@@ -165,10 +181,10 @@ public abstract class AbstractSourceTree extends JTree {
 		while (en.hasMoreElements()) {
 			SourceTreeNode stn = (SourceTreeNode)en.nextElement();
 			JLabel renderer = (JLabel)getCellRenderer().
-					getTreeCellRendererComponent(this, stn.getUserObject(),
+					getTreeCellRendererComponent(this, stn,
 							true, true, stn.isLeaf(), 0, true);
-			String text = renderer.getText().toLowerCase();
-			if (text.startsWith(prefixLower)) {
+			String text = renderer.getText();
+			if (text!=null && text.toLowerCase().startsWith(prefixLower)) {
 				setSelectionPath(new TreePath(model.getPathToRoot(stn)));
 				return;
 			}
