@@ -26,7 +26,7 @@ import org.fife.ui.autocomplete.VariableCompletion;
  * @author Robert Futrell
  * @version 1.0
  */
-class JavaScriptCellRenderer extends CompletionCellRenderer {
+public class JavaScriptCellRenderer extends CompletionCellRenderer {
 
 	private Icon emptyIcon;
 

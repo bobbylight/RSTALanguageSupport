@@ -178,9 +178,9 @@ TODO: Verify me!!!
 	 * file I/O to be a bottleneck (perhaps accessing jars over a slow NFS
 	 * mount), you can disable this option.
 	 *
-	 * @param check Whether to check if any jars/directories have been
-	 *        modified since the last access, and clear any cached completion
-	 *        information if so.
+	 * @return Whether jars/directories are checked for modification since
+	 *         the last access, and clear any cached completion information if
+	 *         so.
 	 * @see #setCheckModifiedDatestamps(boolean)
 	 */
 	public static boolean getCheckModifiedDatestamps() {

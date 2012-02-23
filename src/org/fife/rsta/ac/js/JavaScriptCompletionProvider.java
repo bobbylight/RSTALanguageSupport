@@ -35,12 +35,16 @@ public class JavaScriptCompletionProvider extends
 
 
 	public JavaScriptCompletionProvider() {
-		super(new SourceCompletionProvider());
+		this(new SourceCompletionProvider());
+	}
+
+
+	public JavaScriptCompletionProvider(SourceCompletionProvider provider) {
+		super(provider);
 		this.sourceProvider = (SourceCompletionProvider)
 										getDefaultCompletionProvider();
 		sourceProvider.setParent(this);
 		//setDocCommentCompletionProvider(new DocCommentCompletionProvider());
-
 	}
 
 

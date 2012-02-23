@@ -10,6 +10,7 @@
 		- Groovy
 		- HTML
 		- Java
+		- JavaScript
 		- JSP
 		- Perl
 		- PHP
@@ -24,12 +25,10 @@
 	"RSyntaxTextArea" and "AutoComplete" checked out along-side this one.
 
 	Author:   Robert Futrell
-	Version:  0.7.1
-	Date:     08/27/2011
+	Version:  0.8.0
+	Date:     02/19/2012
 
 -->
-
-
 <project name="LanguageSupport" default="make-jar" basedir=".">
 
 	<description>LanguageSupport build file</description>
@@ -42,6 +41,7 @@
 	<property name="groovy"           value="true"/>
 	<property name="html"             value="true"/>
 	<property name="java"             value="true"/>
+	<property name="js"               value="true"/>
 	<property name="jsp"              value="true"/>
 	<property name="perl"             value="true"/>
 	<property name="php"              value="true"/>
@@ -50,11 +50,11 @@
 	<!-- If this property is set, then the demos for all of  -->
 	<!-- the supported languages will be added to the built  -->
 	<!-- jar.  Comment this out if you don't need them.      -->
-	<property name="demo"            value="true"/>
+	<property name="demo"             value="true"/>
 
 	<!-- Set global properties for this build.         -->
 	<!-- You generally shouldn't have to change these. -->
-	<property name="version"          value="0.7.1"/>
+	<property name="version"          value="0.8.0"/>
 	<property name="source-dir"       location="src"/>
 	<property name="class-dir"        location="ant-classes"/>
 	<property name="dist-dir"         location="dist"/>
@@ -71,23 +71,29 @@
 		<delete includeEmptyDirs="true" quiet="true" dir="${class-dir}"/>
 		<mkdir dir="${class-dir}"/>
 		<javac destdir="${class-dir}" srcdir="${source-dir}" sourcepath=""
-				classpath="${autocomplete-jar}:${rsta-jar}"
 				deprecation="yes" debug="${debug}" debuglevel="${debuglevel}"
 				source="${java-level}" target="${java-level}">
 
-			<include name="org/fife/rsta/ac/*"/>
-			<include name="org/fife/rsta/ac/common/*"/>
+			<classpath>
+				<pathelement     location="${rsta-jar}"/>
+				<pathelement     location="${autocomplete-jar}"/>
+				<pathelement     location="lib/rhino/js-14.jar"/>
+			</classpath>
+			
+			<include             name="org/fife/rsta/ac/*"/>
+			<include             name="org/fife/rsta/ac/common/*"/>
 
 			<include if="c"      name="org/fife/rsta/ac/c/**"/>
 			<include if="groovy" name="org/fife/rsta/ac/groovy/**"/>
 			<include if="html"   name="org/fife/rsta/ac/html/**"/>
 			<include if="java"   name="org/fife/rsta/ac/java/**"/>
+			<include if="js"     name="org/fife/rsta/ac/js/**"/>
 			<include if="jsp"    name="org/fife/rsta/ac/jsp/**"/>
 			<include if="perl"   name="org/fife/rsta/ac/perl/**"/>
 			<include if="php"    name="org/fife/rsta/ac/php/**"/>
 			<include if="sh"     name="org/fife/rsta/ac/sh/**"/>
 
-			<include if="demo" name="org/fife/rsta/ac/demo/**"/>
+			<include if="demo"   name="org/fife/rsta/ac/demo/**"/>
 
 		</javac>
 	</target>
@@ -95,8 +101,10 @@
 
 	<!-- Creates the jar file. -->
 	<target name="make-jar" depends="compile" description="Create the jar file">
+
 		<delete includeEmptyDirs="true" quiet="true" dir="${dist-dir}"/>
 		<mkdir dir="${dist-dir}"/>
+
 		<jar destfile="${dist-dir}/language_support.jar">
 			<fileset dir="${class-dir}"/>
 			<fileset dir=".">
@@ -111,21 +119,47 @@
 				<include if="c"    name="org/fife/rsta/ac/c/**/*.png"/>
 				<include if="html" name="org/fife/rsta/ac/html/**/*.png"/>
 				<include if="java" name="org/fife/rsta/ac/java/**/*.gif"/>
+				<include if="js"   name="org/fife/rsta/ac/js/**/*.gif"/>
 			</fileset>
 			<fileset dir="res">
 				<include if="demo" name="**"/>
 			</fileset>
 			<manifest>
 				<attribute name="Main-Class" value="org.fife.rsta.ac.demo.DemoApp"/>
-				<attribute name="Class-Path" value="rsyntaxtextarea.jar autocomplete.jar"/>
+				<attribute name="Class-Path" value="rsyntaxtextarea.jar autocomplete.jar js-14.jar"/>
 				<attribute name="Specification-Title" value="RSyntaxTextArea Language Support"/>
 				<attribute name="Specification-Version" value="${version}"/>
 				<attribute name="Implementation-Title" value="org.fife.ui"/>
 				<attribute name="Implementation-Version" value="${version}"/>
 			</manifest>
 		</jar>
+
+		<!-- Copy dependencies and extra stuff. -->
 		<copy todir="${dist-dir}" file="${rsta-jar}"/>
 		<copy todir="${dist-dir}" file="${autocomplete-jar}"/>
+		<copy todir="${dist-dir}">
+			<fileset dir="${basedir}">
+				<include name="license.txt"/>
+				<include name="readme.txt"/>
+			</fileset>
+		</copy>
+		
+		<!-- Per-language dependencies. -->
+		<antcall target="possibleJavaScriptDependencies"/>
+
+	</target>
+
+
+	<!-- Adds all JavaScript dependencies to the distribution if JS is included. -->
+	<target name="possibleJavaScriptDependencies" if="js">
+		<copy todir="${dist-dir}">
+			<fileset dir="lib/rhino" includes="**"/>
+			<mapper>
+				<mapper type="glob" from="*.jar"       to="*.jar"/> 
+				<mapper type="glob" from="build-date"  to="Rhino.build-date"/>
+				<mapper type="glob" from="LICENSE.txt" to="Rhino.LICENSE.txt"/>
+			</mapper>
+		</copy>
 	</target>
 
 

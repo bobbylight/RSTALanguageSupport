@@ -1,7 +1,7 @@
 RSTALanguageSupport Readme
 --------------------------
-Version 0.7
-28jan2012
+Version 0.8
+22feb2012
 
 ----------------------------------------
 Contents
@@ -12,7 +12,7 @@ III. Project Layout
 IV.  Building the Jar
 V.   Using this Library in your own project
 VI.  License
-
+VII. Contributors and thanks
 
 
 ----------------------------------------
@@ -160,6 +160,8 @@ supported languages, the properties look like this:
    <property name="groovy"         value="true"/>
    <property name="html"           value="true"/>
    <property name="java"           value="true"/>
+   <property name="js"             value="true"/>
+   <property name="jsp"            value="true"/>
    <property name="perl"           value="true"/>
    <property name="php"            value="true"/>
    <property name="sh"             value="true"/>
@@ -218,3 +220,13 @@ Bugs and Feature requests can be sent directly to me, or posted on the
 RSyntaxTextArea forums:
 
 http://forum.fifesoft.com
+
+
+----------------------------------------
+VII. Contributors and Thanks
+----------------------------------------
+Thanks to Steve Upton for being incredibly motivated to implement JavScript
+support!  It would be nowhere near as complete as it is without him.
+
+Mozilla Rhino is a ridiculously easy library to embed.  I always admire
+easy-to-use libraries, and this is definitely a prime example.

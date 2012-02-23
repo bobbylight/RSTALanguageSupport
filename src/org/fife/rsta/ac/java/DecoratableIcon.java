@@ -65,7 +65,7 @@ public class DecoratableIcon implements Icon {
 	/**
 	 * Constructor.
 	 *
-	 * @param w The width for this icon.
+	 * @param width The width for this icon.
 	 * @param mainIcon The "main" icon.  This cannot be <code>null</code>.
 	 */
 	public DecoratableIcon(int width, Icon mainIcon) {
@@ -142,7 +142,7 @@ public class DecoratableIcon implements Icon {
 	 * Sets the main icon.
 	 *
 	 * @param icon The "main" icon.  This cannot be <code>null</code>.
-	 * @see #setDecorationIcon(Icon)
+	 * @see #addDecorationIcon(Icon)
 	 */
 	public void setMainIcon(Icon icon) {
 		if (icon==null) {

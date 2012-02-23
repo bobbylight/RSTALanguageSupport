@@ -51,7 +51,6 @@ public class GroovyCompletionProvider extends LanguageAwareCompletionProvider {
 	 * @return The provider.
 	 * @see #createCommentCompletionProvider()
 	 * @see #createStringCompletionProvider()
-	 * @see #loadCodeCompletionsFromXml(DefaultCompletionProvider)
 	 * @see #addShorthandCompletions(DefaultCompletionProvider)
 	 */
 	protected CompletionProvider createCodeCompletionProvider() {

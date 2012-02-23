@@ -55,6 +55,18 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 
 
 	/**
+	 * Creates the provider to use for an RSTA instance editing JavaScript.
+	 * Subclasses can override to return custom subclasses of
+	 * <code>JavaScriptCompletionProvider</code>.
+	 *
+	 * @return The provider.
+	 */
+	protected JavaScriptCompletionProvider createJavaScriptCompletionProvider() {
+		return new JavaScriptCompletionProvider();
+	}
+
+
+	/**
 	 * Returns the JS parser running on a text area with this JavaScript
 	 * language support installed.
 	 *
@@ -75,7 +87,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 
 	public void install(RSyntaxTextArea textArea) {
 
-		JavaScriptCompletionProvider p = new JavaScriptCompletionProvider();
+		JavaScriptCompletionProvider p = createJavaScriptCompletionProvider();
 		// We use a custom auto-completion.
 		//AutoCompletion ac = createAutoCompletion(p);
 		AutoCompletion ac = new JavaScriptAutoCompletion(p, textArea);

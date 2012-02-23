@@ -109,7 +109,7 @@ public abstract class AbstractSourceTree extends JTree {
 	 * source tree.  An example of a "minor" element could be a local variable
 	 * in a function or method.
 	 *
-	 * @param return Whether only major elements are shown in this source tree.
+	 * @return Whether only major elements are shown in this source tree.
 	 * @see #setShowMajorElementsOnly(boolean)
 	 */
 	public boolean getShowMajorElementsOnly() {
@@ -240,7 +240,7 @@ public abstract class AbstractSourceTree extends JTree {
 	 * in a function or method.
 	 *
 	 * @param show Whether only major elements are shown in this source tree.
-	 * @see #getshowMajorElementsOnly()
+	 * @see #getShowMajorElementsOnly()
 	 */
 	public void setShowMajorElementsOnly(boolean show) {
 		showMajorElementsOnly = show;

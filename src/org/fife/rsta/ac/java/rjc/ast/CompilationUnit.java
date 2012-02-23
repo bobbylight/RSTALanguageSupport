@@ -122,7 +122,7 @@ public class CompilationUnit extends AbstractASTNode
 	 * Also handle child TypeDeclarations.
 	 *
 	 * @param offs
-	 * @return
+	 * @return The starting and ending offset of the enclosing method range.
 	 */
 	public Point getEnclosingMethodRange(int offs) {
 

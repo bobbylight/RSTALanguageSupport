@@ -34,9 +34,9 @@ public class Util implements AccessFlags {
 	 * Returns whether an object has default scope.
 	 *
 	 * @return Whether an object has default scope.
-	 * @see #isPrivate()
-	 * @see #isProtected()
-	 * @see #isPublic()
+	 * @see #isDefault(int)
+	 * @see #isPrivate(int)
+	 * @see #isPublic(int)
 	 */
 	public static boolean isDefault(int accessFlags) {
 		int access = ACC_PUBLIC | ACC_PROTECTED | ACC_PRIVATE;
@@ -48,9 +48,9 @@ public class Util implements AccessFlags {
 	 * Returns whether an object has private scope.
 	 *
 	 * @return Whether an object has private scope.
-	 * @see #isDefault()
-	 * @see #isProtected()
-	 * @see #isPublic()
+	 * @see #isDefault(int)
+	 * @see #isPrivate(int)
+	 * @see #isPublic(int)
 	 */
 	public static boolean isPrivate(int accessFlags) {
 		return (accessFlags&ACC_PRIVATE)>0;
@@ -61,9 +61,9 @@ public class Util implements AccessFlags {
 	 * Returns whether an object has protected scope.
 	 *
 	 * @return Whether an object has protected scope.
-	 * @see #isDefault()
-	 * @see #isPrivate()
-	 * @see #isPublic()
+	 * @see #isDefault(int)
+	 * @see #isPrivate(int)
+	 * @see #isPublic(int)
 	 */
 	public static boolean isProtected(int accessFlags) {
 		return (accessFlags&ACC_PROTECTED)>0;
@@ -74,9 +74,9 @@ public class Util implements AccessFlags {
 	 * Returns whether an object has public scope.
 	 *
 	 * @return Whether an object has public scope.
-	 * @see #isDefault()
-	 * @see #isPrivate()
-	 * @see #isProtected()
+	 * @see #isDefault(int)
+	 * @see #isPrivate(int)
+	 * @see #isPublic(int)
 	 */
 	public static boolean isPublic(int accessFlags) {
 		return (accessFlags&ACC_PUBLIC)>0;

@@ -48,7 +48,6 @@ public class FieldInfo extends MemberInfo {
 	/**
 	 * Constructor.
 	 *
-	 * @return The access flags, as a bit field.
 	 * @see AccessFlags
 	 */
 	public FieldInfo(ClassFile cf, int accessFlags, int nameIndex,

@@ -279,7 +279,7 @@ public class ClassFile implements AccessFlags {
 	 * Returns the number of interfaces this class or interface implements.
 	 *
 	 * @return The number of implemented interfaces.
-	 * @see #getImplementedInterfaceName(int)
+	 * @see #getImplementedInterfaceName(int, boolean)
 	 */
 	public int getImplementedInterfaceCount() {
 		return interfaces==null ? 0 : interfaces.length;

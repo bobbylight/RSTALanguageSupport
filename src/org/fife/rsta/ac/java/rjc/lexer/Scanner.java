@@ -801,7 +801,8 @@ private int currentResetStartOffset;
 	 * Returns the next token, but does not take it off of the stream.  This
 	 * is useful for lookahead.
 	 *
-	 * @param type The type the token must be.
+	 * @param type1 One of the two types the token must be.
+	 * @param type2 The other of the two types the token must be.
 	 * @return The next token.
 	 * @throws IOException If an IO error occurs, or if EOS is reached, or
 	 *         if the token is not of the specified type.
@@ -816,7 +817,9 @@ private int currentResetStartOffset;
 	 * Returns the next token, but does not take it off of the stream.  This
 	 * is useful for lookahead.
 	 *
-	 * @param type The type the token must be.
+	 * @param type1 One of the three types the token must be.
+	 * @param type2 Another of the three types the token must be.
+	 * @param type3 The third of the types the token must be.
 	 * @return The next token.
 	 * @throws IOException If an IO error occurs, or if EOS is reached, or
 	 *         if the token is not of the specified type.

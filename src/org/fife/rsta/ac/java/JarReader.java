@@ -80,9 +80,9 @@ class JarReader {
 	 * Gets the completions in this jar that match a given string.
 	 *
 	 * @param provider The parent completion provider.
-	 * @param The text to match, split into tokens around the '<code>.</code>'
-	 *        character.  This should be (the start of) a fully-qualified
-	 *        class, interface, or enum name.
+	 * @param pkgNames The text to match, split into tokens around the
+	 *        '<code>.</code>' character.  This should be (the start of) a
+	 *        fully-qualified class, interface, or enum name.
 	 * @param addTo The list to add completion choices to.
 	 */
 	public void addCompletions(CompletionProvider provider, String[] pkgNames,
