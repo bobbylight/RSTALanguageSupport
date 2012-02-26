@@ -43,9 +43,7 @@ import org.mozilla.javascript.ast.ParseProblem;
  * When parsing is complete, a property change event of type
  * {@link #PROPERTY_AST} is fired.  Listeners can check the new value of the
  * property for the <code>AstRoot</code> built that represents the source code
- * in the text area.  Note that the <code>AstRoot</code> may be incomplete if
- * there were parsing/syntax errors (it will usually be complete "up to" the
- * error in the content).<p>
+ * in the text area.<p>
  *
  * This parser cannot be shared amongst multiple instances of
  * <code>RSyntaxTextArea</code>.<p>
@@ -65,6 +63,7 @@ public class JavaScriptParser extends AbstractParser {
 	public static final String PROPERTY_AST = "AST";
 
 	private AstRoot astRoot;
+	private JavaScriptLanguageSupport langSupport;
 	private PropertyChangeSupport support;
 	private DefaultParseResult result;
 
@@ -72,7 +71,9 @@ public class JavaScriptParser extends AbstractParser {
 	/**
 	 * Constructor.
 	 */
-	public JavaScriptParser(RSyntaxTextArea textArea) {
+	public JavaScriptParser(JavaScriptLanguageSupport langSupport,
+							RSyntaxTextArea textArea) {
+		this.langSupport = langSupport;
 		support = new PropertyChangeSupport(this);
 		result = new DefaultParseResult(this);
 	}
@@ -90,6 +91,10 @@ public class JavaScriptParser extends AbstractParser {
 		env.setRecordingComments(true);
 		env.setRecordingLocalJsDocComments(true);
 		env.setRecoverFromErrors(true);
+		env.setXmlAvailable(langSupport.isXmlAvailable());
+		env.setStrictMode(langSupport.isStrictMode());
+//		env.setLanguageVersion(170);
+//		System.out.println(env.getLanguageVersion());
 		return env;
 	}
 

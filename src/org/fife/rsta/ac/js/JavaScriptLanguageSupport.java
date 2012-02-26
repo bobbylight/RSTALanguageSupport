@@ -45,6 +45,8 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	 */
 	private Map parserToInfoMap;
 	private JarManager jarManager;
+	private boolean xmlAvailable;
+	private boolean strictMode;
 
 
 	public JavaScriptLanguageSupport() {
@@ -112,7 +114,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 		//Listener listener = new Listener(textArea);
 		//textArea.putClientProperty(PROPERTY_LISTENER, listener);
 
-		JavaScriptParser parser = new JavaScriptParser(textArea);
+		JavaScriptParser parser = new JavaScriptParser(this, textArea);
 		textArea.putClientProperty(PROPERTY_LANGUAGE_PARSER, parser);
 		textArea.addParser(parser);
 
@@ -125,6 +127,51 @@ int shift = InputEvent.SHIFT_MASK;
 im.put(KeyStroke.getKeyStroke(KeyEvent.VK_O, textArea.getToolkit().getMenuShortcutKeyMask()|shift), "GoToType");
 am.put("GoToType", new GoToMemberAction(JavaScriptOutlineTree.class));
 	}
+
+
+	/**
+	 * Returns whether strict mode (more warnings are detected) is enabled.
+	 *
+	 * @return Whether strict mode is enabled.
+	 * @see #setStrictMode(boolean)
+	 */
+	public boolean isStrictMode() {
+		return strictMode;
+	}
+
+
+	/**
+	 * Returns whether E4X is supported in parsed JavaScript.
+	 *
+	 * @return Whether E4X is supported.
+	 * @see #setXmlAvailable(boolean)
+	 */
+	public boolean isXmlAvailable() {
+		return xmlAvailable;
+	}
+
+
+	/**
+	 * Sets whether strict mode (more warnings are detected) is enabled.
+	 *
+	 * @param strict Whether strict mode is enabled.
+	 * @see #isStrictMode()
+	 */
+	public void setStrictMode(boolean strict) {
+		strictMode = strict;
+	}
+
+
+	/**
+	 * Sets whether E4X is supported in parsed JavaScript.
+	 *
+	 * @param available Whether E4X is supported.
+	 * @see #isXmlAvailable()
+	 */
+	public void setXmlAvailable(boolean available) {
+		this.xmlAvailable = available;
+	}
+
 
 	public void uninstall(RSyntaxTextArea textArea) {
 
