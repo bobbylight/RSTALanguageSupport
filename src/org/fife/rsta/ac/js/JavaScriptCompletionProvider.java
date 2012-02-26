@@ -10,19 +10,23 @@
  */
 package org.fife.rsta.ac.js;
 
+import org.fife.rsta.ac.java.JarManager;
 import org.fife.ui.autocomplete.LanguageAwareCompletionProvider;
 import org.mozilla.javascript.ast.AstRoot;
 
 
 /**
  * Completion provider for JavaScript.
- *
+ * 
  * @author Robert Futrell
  * @version 1.0
  */
 public class JavaScriptCompletionProvider extends
 		LanguageAwareCompletionProvider {
 
+	/**
+	 * Jar Manager for source completions
+	 */
 	/**
 	 * The AST for the JS.
 	 */
@@ -34,23 +38,25 @@ public class JavaScriptCompletionProvider extends
 	private SourceCompletionProvider sourceProvider;
 
 
-	public JavaScriptCompletionProvider() {
-		this(new SourceCompletionProvider());
+	public JavaScriptCompletionProvider(JarManager jarManager) {
+		this(new SourceCompletionProvider(), jarManager);
 	}
 
 
-	public JavaScriptCompletionProvider(SourceCompletionProvider provider) {
+	public JavaScriptCompletionProvider(SourceCompletionProvider provider,
+			JarManager jarManager) {
 		super(provider);
-		this.sourceProvider = (SourceCompletionProvider)
-										getDefaultCompletionProvider();
+		this.sourceProvider = (SourceCompletionProvider) getDefaultCompletionProvider();
+		this.sourceProvider.setJarManager(jarManager);
 		sourceProvider.setParent(this);
-		//setDocCommentCompletionProvider(new DocCommentCompletionProvider());
+
+		// setDocCommentCompletionProvider(new DocCommentCompletionProvider());
 	}
 
 
 	/**
 	 * Returns the AST for the JavaScript in the editor.
-	 *
+	 * 
 	 * @return The AST.
 	 */
 	public synchronized AstRoot getASTRoot() {
@@ -58,13 +64,25 @@ public class JavaScriptCompletionProvider extends
 	}
 
 
+	public JarManager getJarManager() {
+		return ((SourceCompletionProvider) getDefaultCompletionProvider())
+				.getJarManager();
+	}
+
+
 	/**
 	 * Sets the AST for the JavaScript in this editor.
-	 *
+	 * 
 	 * @param root The AST.
 	 */
 	public synchronized void setASTRoot(AstRoot root) {
 		this.astRoot = root;
+	}
+
+
+	public void setJarManager(JarManager jarManager) {
+		((SourceCompletionProvider) getDefaultCompletionProvider())
+				.setJarManager(jarManager);
 	}
 
 

@@ -22,6 +22,7 @@ import javax.swing.KeyStroke;
 
 import org.fife.rsta.ac.AbstractLanguageSupport;
 import org.fife.rsta.ac.GoToMemberAction;
+import org.fife.rsta.ac.java.JarManager;
 import org.fife.rsta.ac.js.tree.JavaScriptOutlineTree;
 import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
@@ -43,10 +44,13 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	 * about them.
 	 */
 	private Map parserToInfoMap;
+	private JarManager jarManager;
 
 
 	public JavaScriptLanguageSupport() {
+	    	
 		parserToInfoMap = new HashMap();
+		jarManager = new JarManager();
 		setDefaultCompletionCellRenderer(new JavaScriptCellRenderer());
 		setAutoActivationEnabled(true);
 		setParameterAssistanceEnabled(true);
@@ -62,7 +66,12 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	 * @return The provider.
 	 */
 	protected JavaScriptCompletionProvider createJavaScriptCompletionProvider() {
-		return new JavaScriptCompletionProvider();
+		return new JavaScriptCompletionProvider(jarManager);
+	}
+
+
+	public JarManager getJarManager() {
+	    return jarManager;
 	}
 
 
