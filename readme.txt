@@ -70,14 +70,16 @@ Languages with support include:
      parameters will have a drop-down list of fields and local variables of the
      proper type for that parameter.  This feature is currently very limited
      and only suggests parameters with exactly the right type (no subtypes).
-     This will be improved in th enext release.
+     This will be improved in the next release.
    - Generics support is implemented, but may be buggy.
+   - Ctrl+Shift+O (Cmd+Shift+O on OS X) opens "Go to Member" popup.
 
 5. JavaScript
    - Embedded Rhino parser (v1.7R3) for squiggle underlining syntax errors.
    - Auto-completion for variables and functions in the current source file,
-     derived from the parser above.  Scope is currently ignored.
-   - 
+     derived from the parser above.  Completion choices are based on the
+     type of the variable.  Scope is honored.
+   - Ctrl+Shift+O (Cmd+Shift+O on OS X) opens "Go to Member" popup.
 
 6. JSP
    - 
@@ -119,7 +121,7 @@ properly.
          org/fife/rsta/ac/groovy        Code completion for Groovy
          org/fife/rsta/ac/html          Code completion for HTML
          org/fife/rsta/ac/java/**       Code completion for Java
-         org/fife/rsta/ac/js            Code completion for JavaScript
+         org/fife/rsta/ac/js/**         Code completion for JavaScript
          org/fife/rsta/ac/perl          Code completion for Perl
          org/fife/rsta/ac/php           Code completion for PHP
          org/fife/rsta/ac/sh            Code completion fro Unix shell

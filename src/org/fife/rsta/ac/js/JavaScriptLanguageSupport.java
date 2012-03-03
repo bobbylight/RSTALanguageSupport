@@ -121,11 +121,26 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 		Info info = new Info(textArea, p, parser);
 		parserToInfoMap.put(parser, info);
 
-InputMap im = textArea.getInputMap();
-ActionMap am = textArea.getActionMap();
-int shift = InputEvent.SHIFT_MASK;
-im.put(KeyStroke.getKeyStroke(KeyEvent.VK_O, textArea.getToolkit().getMenuShortcutKeyMask()|shift), "GoToType");
-am.put("GoToType", new GoToMemberAction(JavaScriptOutlineTree.class));
+		installKeyboardShortcuts(textArea);
+
+	}
+
+
+	/**
+	 * Installs extra keyboard shortcuts supported by this language support.
+	 *
+	 * @param textArea The text area to install the shortcuts into.
+	 */
+	private void installKeyboardShortcuts(RSyntaxTextArea textArea) {
+
+		InputMap im = textArea.getInputMap();
+		ActionMap am = textArea.getActionMap();
+		int c = textArea.getToolkit().getMenuShortcutKeyMask();
+		int shift = InputEvent.SHIFT_MASK;
+
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_O, c|shift), "GoToType");
+		am.put("GoToType", new GoToMemberAction(JavaScriptOutlineTree.class));
+
 	}
 
 
@@ -192,11 +207,26 @@ am.put("GoToType", new GoToMemberAction(JavaScriptOutlineTree.class));
 		//	textArea.putClientProperty(PROPERTY_LISTENER, null);
 		//}
 
-InputMap im = textArea.getInputMap();
-ActionMap am = textArea.getActionMap();
-int shift = InputEvent.SHIFT_MASK;
-im.remove(KeyStroke.getKeyStroke(KeyEvent.VK_O, textArea.getToolkit().getMenuShortcutKeyMask()|shift));
-am.remove("GoToType");
+		uninstallKeyboardShortcuts(textArea);
+
+	}
+
+
+	/**
+	 * Uninstalls any keyboard shortcuts specific to this language support.
+	 *
+	 * @param textArea The text area to uninstall the actions from.
+	 */
+	private void uninstallKeyboardShortcuts(RSyntaxTextArea textArea) {
+
+		InputMap im = textArea.getInputMap();
+		ActionMap am = textArea.getActionMap();
+		int c = textArea.getToolkit().getMenuShortcutKeyMask();
+		int shift = InputEvent.SHIFT_MASK;
+
+		im.remove(KeyStroke.getKeyStroke(KeyEvent.VK_O, c|shift));
+		am.remove("GoToType");
+
 	}
 
 

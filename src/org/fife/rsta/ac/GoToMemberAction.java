@@ -24,10 +24,10 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 /**
  * Displays a popup dialog with the "Go to member" tree.  Language support
- * implementations that can create an {@link AbstractSourceTree} representing
- * the source coded an an <code>RSyntaxTextArea</code> can add this action to
- * editors' input/action maps, so users can easily navigate to functions,
- * methods, etc.<p>
+ * implementations that can do in-depth parsing of the source code in an editor
+ * can create an {@link AbstractSourceTree} representing that source, and add
+ * this action to <code>RSyntaxTextArea</code>'s input/action maps, so users
+ * can easily navigate to functions, methods, etc.<p>
  *
  * The preferred keystroke to bind this action to is Ctrl+Shift+O
  * (Cmd+Shift+O on Mac).  Language supports should also be sure to uninstall
@@ -96,7 +96,8 @@ public class GoToMemberAction extends TextAction {
 	 * @param gtmw The window to center.
 	 * @param textArea The parent text area to center it in.
 	 */
-	private void setLocationBasedOn(GoToMemberWindow gtmw, RSyntaxTextArea textArea) {
+	private void setLocationBasedOn(GoToMemberWindow gtmw,
+									RSyntaxTextArea textArea) {
 		Rectangle visibleRect = textArea.getVisibleRect();
 		Dimension gtmwPS = gtmw.getPreferredSize();
 		int x = visibleRect.x + (visibleRect.width-gtmwPS.width)/2;
