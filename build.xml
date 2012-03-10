@@ -139,7 +139,7 @@
 		<copy todir="${dist-dir}" file="${autocomplete-jar}"/>
 		<copy todir="${dist-dir}">
 			<fileset dir="${basedir}">
-				<include name="license.txt"/>
+				<include name="RSTALanguageSupport.License.txt"/>
 				<include name="readme.txt"/>
 			</fileset>
 		</copy>

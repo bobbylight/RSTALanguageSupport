@@ -5,8 +5,8 @@
  * robert_futrell at users.sourceforge.net
  * http://fifesoft.com/rsyntaxtextarea
  *
- * This code is licensed under the LGPL.  See the "license.txt" file included
- * with this project.
+ * This library is distributed under a modified BSD license.  See the included
+ * RSTALanguageSupport.License.txt file for details.
  */
 package org.fife.rsta.ac.groovy;
 

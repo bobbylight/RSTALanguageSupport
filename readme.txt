@@ -132,7 +132,7 @@ properly.
          rhino/                         Rhino, for JS support
       test/                             (Very) small amount of unit tests
       build.xml                         Ant script to build the library
-      license.txt                       License for this library (LGPL)
+      license.txt                       License for this library (BSD)
       readme.txt                        This file
 
 Sub-directories of "data/" contain Perl scripts and input files for generating
@@ -213,7 +213,11 @@ instances of RSyntaxTextArea editing Perl, as well as all future instances.
 ----------------------------------------
 VI.  License
 ----------------------------------------
-All code licensed in this library is LGPL.  See the included license.txt.
+All code licensed in this library is modified BSD.  See the included
+RSTALanguageSupport.License.txt.
+
+The Rhino jar used for JavaScript support is licensed under the MPL 1.1.  See
+the included Rhino.LICENSE.txt for details.
 
 If you use this library in your own projects, please let me know!  I like to
 know that my work is useful for others.
