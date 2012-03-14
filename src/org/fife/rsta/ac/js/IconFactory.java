@@ -17,14 +17,16 @@ import javax.swing.ImageIcon;
 
 /**
  * Holds icons used by JavaScript auto-completion.
- *
+ * 
  * @author Robert Futrell
  * @version 1.0
  */
 public class IconFactory {
 
-	public static final int FUNCTION_ICON		= 0;
-	public static final int VARIABLE_ICON		= 1;
+	public static final int FUNCTION_ICON = 0;
+	public static final int LOCAL_VARIABLE_ICON = 1;
+	public static final int PUBLIC_STATIC_VARIABLE_ICON = 2;
+	public static final int PUBLIC_VARIABLE_ICON = 3;
 
 	private Icon[] icons;
 
@@ -32,15 +34,17 @@ public class IconFactory {
 
 
 	private IconFactory() {
-		icons = new Icon[2];
-		icons[FUNCTION_ICON]	= loadIcon("methdef_obj.gif");
-		icons[VARIABLE_ICON]	= loadIcon("field_default_obj.gif");
+		icons = new Icon[4];
+		icons[FUNCTION_ICON] = loadIcon("methdef_obj.gif");
+		icons[LOCAL_VARIABLE_ICON] = loadIcon("field_default_obj.gif");
+		icons[PUBLIC_STATIC_VARIABLE_ICON] = loadIcon("static_co.gif");
+		icons[PUBLIC_VARIABLE_ICON] = loadIcon("field_public_obj.gif");
 	}
 
 
 	/**
 	 * Returns the singleton instance of this class.
-	 *
+	 * 
 	 * @return The singleton instance.
 	 */
 	public static IconFactory get() {
@@ -50,7 +54,7 @@ public class IconFactory {
 
 	/**
 	 * Returns the specified icon.
-	 *
+	 * 
 	 * @param key The icon to retrieve.
 	 * @return The icon.
 	 */
@@ -61,13 +65,13 @@ public class IconFactory {
 
 	/**
 	 * Loads an icon.
-	 *
+	 * 
 	 * @param name The file name of the icon to load.
 	 * @return The icon.
 	 */
 	private Icon loadIcon(String name) {
 		URL res = getClass().getResource("img/" + name);
-		if (res==null) { // Never happens
+		if (res == null) { // Never happens
 			// IllegalArgumentException is what would be thrown if res
 			// was null anyway, we're just giving the actual arg name to
 			// make the message more descriptive
@@ -75,6 +79,5 @@ public class IconFactory {
 		}
 		return new ImageIcon(res);
 	}
-
 
 }

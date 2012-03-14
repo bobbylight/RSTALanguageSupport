@@ -13,6 +13,7 @@ package org.fife.rsta.ac.js;
 import javax.swing.Icon;
 import javax.swing.JList;
 
+import org.fife.rsta.ac.js.completion.JSFieldCompletion;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionCellRenderer;
 import org.fife.ui.autocomplete.EmptyIcon;
@@ -22,7 +23,7 @@ import org.fife.ui.autocomplete.VariableCompletion;
 
 /**
  * The cell renderer used for JavaScript completion choices.
- *
+ * 
  * @author Robert Futrell
  * @version 1.0
  */
@@ -42,10 +43,14 @@ public class JavaScriptCellRenderer extends CompletionCellRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
-	protected void prepareForOtherCompletion(JList list,
-			Completion c, int index, boolean selected, boolean hasFocus) {
+	protected void prepareForOtherCompletion(JList list, Completion c,
+			int index, boolean selected, boolean hasFocus) {
 		super.prepareForOtherCompletion(list, c, index, selected, hasFocus);
-		setIcon(emptyIcon);
+		if (c instanceof JSFieldCompletion) {
+			setIcon(((JSFieldCompletion) c).getIcon());
+		}
+		else
+			setIcon(emptyIcon);
 	}
 
 
@@ -53,11 +58,9 @@ public class JavaScriptCellRenderer extends CompletionCellRenderer {
 	 * {@inheritDoc}
 	 */
 	protected void prepareForVariableCompletion(JList list,
-			VariableCompletion vc, int index, boolean selected,
-			boolean hasFocus) {
-		super.prepareForVariableCompletion(list, vc, index, selected,
-										hasFocus);
-		setIcon(IconFactory.get().getIcon(IconFactory.VARIABLE_ICON));
+			VariableCompletion vc, int index, boolean selected, boolean hasFocus) {
+		super.prepareForVariableCompletion(list, vc, index, selected, hasFocus);
+		setIcon(IconFactory.get().getIcon(IconFactory.LOCAL_VARIABLE_ICON));
 	}
 
 
@@ -65,12 +68,9 @@ public class JavaScriptCellRenderer extends CompletionCellRenderer {
 	 * {@inheritDoc}
 	 */
 	protected void prepareForFunctionCompletion(JList list,
-			FunctionCompletion fc, int index, boolean selected,
-			boolean hasFocus) {
-		super.prepareForFunctionCompletion(list, fc, index, selected,
-										hasFocus);
+			FunctionCompletion fc, int index, boolean selected, boolean hasFocus) {
+		super.prepareForFunctionCompletion(list, fc, index, selected, hasFocus);
 		setIcon(IconFactory.get().getIcon(IconFactory.FUNCTION_ICON));
 	}
-
 
 }

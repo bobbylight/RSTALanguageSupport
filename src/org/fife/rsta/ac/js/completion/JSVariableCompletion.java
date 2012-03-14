@@ -31,5 +31,4 @@ public class JSVariableCompletion extends VariableCompletion {
 		return dec;
 	}
 
-
 }

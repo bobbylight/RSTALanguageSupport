@@ -85,5 +85,4 @@ public class JavaScriptCompletionProvider extends
 				.setJarManager(jarManager);
 	}
 
-
 }

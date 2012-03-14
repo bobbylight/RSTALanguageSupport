@@ -17,12 +17,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+
 import javax.swing.text.JTextComponent;
 
 import org.fife.rsta.ac.java.JarManager;
+import org.fife.rsta.ac.js.ast.JavaScriptType;
 import org.fife.rsta.ac.js.ast.CodeBlock;
-import org.fife.rsta.ac.js.ast.JSTypeFunctionsHelper;
+import org.fife.rsta.ac.js.ast.JavaScriptTypesFactory;
 import org.fife.rsta.ac.js.ast.JSVariableDeclaration;
+import org.fife.rsta.ac.js.ast.VariableResolver;
 import org.fife.rsta.ac.js.ast.TypeDeclaration;
 import org.fife.rsta.ac.js.completion.JSVariableCompletion;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
@@ -60,11 +63,19 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 	private JavaScriptCompletionProvider parent;
 	private JarManager jarManager;
+	private int dot;
+
+	private VariableResolver variableResolver;
+	// set completion types factory to default
+	private JavaScriptTypesFactory javaScriptTypesFactory = JavaScriptTypesFactory
+			.getDefaultJavaScriptTypesFactory();
 
 
 	public SourceCompletionProvider() {
+		variableResolver = new VariableResolver(this);
 		setParameterizedCompletionParams('(', ", ", ')');
 		setAutoActivationRules(false, "."); // Default - only activate after '.'
+
 	}
 
 
@@ -78,7 +89,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 			completions.clear();
 
-			int dot = comp.getCaretPosition();
+			dot = comp.getCaretPosition();
 
 			AstRoot astRoot = parent.getASTRoot();
 
@@ -95,15 +106,26 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 				return completions; // empty
 			}
 
+			// trim any whitespace as " " are needed to evaluate inputted data
+			text = text.trim();
+
 			// need to populate completions to work out all variables available
 			CodeBlock block = addAllCompletions(astRoot, set, text, dot);
+
 			if (text.indexOf('.') == -1) {
 				recursivelyAddLocalVars(set, block, dot, null, false);
 			}
 			else {
+				// Only search types up to the last . as anything past the last
+				// dot may not be complete e.g myString.charA
+				// 
+				// The charAt will be filtered below.
+				String searchString = text.substring(0, text.lastIndexOf('.'));
+
 				// search for variable in the set and add completions for Type
-				recursivelyAddAutoCompletionForQualifiedName(set, text, block,
-						dot);
+				recursivelyAddAutoCompletionForQualifiedName(set, searchString,
+						block, dot);
+
 			}
 
 			// Do a final sort of all of our completions and we're good to go!
@@ -134,6 +156,8 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 			return completions.subList(start, end);
 
 		} finally {
+			// do not need resolved variables anymore, so clear them
+			variableResolver.reset();
 			comp.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 		}
 
@@ -185,8 +209,8 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 			return;
 
 		if (child instanceof InfixExpression) {
-			// TODO not sure this is needed, processes any node with ==, >, <
-			// etc...
+			// TODO I believe this is called when a variable is re-assigned.
+			// Will need to look into it.
 			processInfix(child, block, set, entered, offset);
 		}
 		else {
@@ -239,11 +263,11 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 					// TODO
 					processCaseNode(child, block, set, entered, offset);
 					break;
-
 				case Token.ERROR:
 					// TODO
 					System.out.println("ERROR: " + child.getClass());
 					break;
+
 				// ignore
 				case Token.BREAK:
 				case Token.CONTINUE:
@@ -359,6 +383,17 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 			String entered, int offset) {
 		ExpressionStatement expr = (ExpressionStatement) child;
 		addCompletions(expr.getExpression(), set, entered, block, offset);
+	}
+
+
+	/**
+	 * Convenience method to call variable resolver
+	 * 
+	 * @param name
+	 * @return
+	 */
+	public TypeDeclaration resolveTypeDeclation(String name) {
+		return variableResolver.resolveType(name, this, dot);
 	}
 
 
@@ -486,7 +521,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	/**
 	 * Extract the variable from the Variable initializer and set the Type
 	 * 
-	 * @param node Rhino node from which to extract the variable
+	 * @param initializer AstNode from which to extract the variable
 	 * @param block code block to add the variable too
 	 * @param offset position of the variable in code
 	 */
@@ -497,17 +532,37 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 		if (target != null) {
 			JSVariableDeclaration dec = extractVariableFromNode(target, block,
 					offset);
-			if (dec != null && initializer.getInitializer() != null) {
+			if (dec != null
+					&& initializer.getInitializer() != null
+					&& JavaScriptHelper.canResolveVariable(target, initializer
+							.getInitializer())) {
 				dec.setTypeNode(initializer.getInitializer());
+				// add declaration to resolver
+				variableResolver.addLocalVariable(dec);
 			}
+
 		}
+	}
+
+
+	/**
+	 * Get the source of the node and try to resolve function node:
+	 * 
+	 * @param functionNode
+	 * @return a.toString().getCharAt(1); returns String TypeDeclaration
+	 */
+	public TypeDeclaration resolveTypeFromFunctionNode(AstNode functionNode) {
+		String functionText = functionNode.toSource();
+
+		// resolve the TypeDeclaration and set on the variable
+		return resolveTypeDeclation(functionText);
 	}
 
 
 	/**
 	 * Extract the variable from the Rhino node and add to the CodeBlock
 	 * 
-	 * @param node Rhino node from which to extract the variable
+	 * @param node AstNode node from which to extract the variable
 	 * @param block code block to add the variable too
 	 * @param offset position of the variable in code
 	 */
@@ -519,11 +574,13 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 			switch (node.getType()) {
 				case Token.NAME:
 					Name name = (Name) node;
-					dec = new JSVariableDeclaration(name.getIdentifier(), offset);
+					dec = new JSVariableDeclaration(name.getIdentifier(),
+							offset, this);
 					block.addVariable(dec);
 					break;
 				default:
-					System.out.println("... Unknown var target type: " + node.getClass());
+					System.out.println("... Unknown var target type: "
+							+ node.getClass());
 					break;
 			}
 		}
@@ -539,32 +596,40 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	private void recursivelyAddAutoCompletionForQualifiedName(Set completions,
 			String enteredText, CodeBlock block, int dot) {
 
-		// TODO will only work one level deep
-
 		// need to slit the entered text using .
 		String[] enteredSplit = enteredText.split("\\.");
 
 		if (enteredSplit.length > 0) {
-			// get variable name and search completions to find it
-			Set findCompletions = new TreeSet();
-			recursivelyAddLocalVars(findCompletions, block, dot,
-					enteredSplit[0], true);
 
-			// hopefully just have one completion
-			if (findCompletions.size() > 0) {
-				Object completionObj = findCompletions.iterator().next();
-				if (completionObj instanceof JSVariableCompletion) {
-					// found the completion for the variable, now create a new
-					// completion adding the type
-					JSVariableCompletion var = (JSVariableCompletion) completionObj;
-					TypeDeclaration typeDec = var.getVariableDeclaration()
-							.getTypeDeclaration();
-					JSTypeFunctionsHelper.addFunctionCompletionsForJSType(
-							completions, typeDec, jarManager, this);
-				}
+			TypeDeclaration dec = resolveTypeDeclation(enteredText);
+			if (dec != null) {
+				populateCompletionsForTypeDeclaration(dec, completions);
 			}
 		}
+	}
 
+
+	private void populateCompletionsForTypeDeclaration(TypeDeclaration typeDec,
+			Set completions) {
+		if (javaScriptTypesFactory != null) {
+			JavaScriptType cachedType = javaScriptTypesFactory.getCachedType(
+					typeDec, jarManager, this);
+			if (cachedType != null) {
+				// extract all completions for the type including super classes
+				javaScriptTypesFactory.populateCompletionsForType(cachedType,
+						completions);
+			}
+		}
+	}
+
+
+	public void setJavaScriptTypesFactory(JavaScriptTypesFactory factory) {
+		this.javaScriptTypesFactory = factory;
+	}
+
+
+	public JavaScriptTypesFactory getJavaScriptTypesFactory() {
+		return javaScriptTypesFactory;
 	}
 
 
@@ -580,6 +645,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 			JSVariableDeclaration dec = block.getVariableDeclaration(i);
 			int decOffs = dec.getOffset();
 			if (dot <= decOffs) {
+
 				if (!findMatch || dec.getName().equals(text)) {
 					JSVariableCompletion completion = new JSVariableCompletion(
 							this, dec.getName(), dec);
@@ -618,7 +684,10 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 
 	protected boolean isValidChar(char ch) {
-		return Character.isJavaIdentifierPart(ch) || ch == '.';
+		return Character.isJavaIdentifierPart(ch) || ch == ',' || ch == '.'
+				|| ch == getParameterListStart() || ch == getParameterListEnd()
+				|| ch == ' ' || ch == '"';
+
 	}
 
 
@@ -637,7 +706,13 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	}
 
 
-	private void debugCodeBlock(CodeBlock block, int tab) {
+	public VariableResolver getVariableResolver() {
+		return variableResolver;
+	}
+
+
+	// TODO remove
+	public void debugCodeBlock(CodeBlock block, int tab) {
 		System.out.println();
 		tab++;
 		if (block != null) {

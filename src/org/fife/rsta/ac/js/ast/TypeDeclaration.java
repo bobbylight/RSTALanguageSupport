@@ -44,4 +44,17 @@ public class TypeDeclaration {
 	}
 
 
+	public boolean equals(Object obj) {
+
+		if (this == obj)
+			return true;
+
+		if (obj instanceof TypeDeclaration) {
+			TypeDeclaration dec = (TypeDeclaration) obj;
+			return getQualifiedName().equals(dec.getQualifiedName());
+		}
+
+		return super.equals(obj);
+	}
+
 }

@@ -16,26 +16,36 @@ import javax.swing.text.JTextComponent;
 
 import org.fife.rsta.ac.java.rjc.ast.FormalParameter;
 import org.fife.rsta.ac.java.rjc.ast.Method;
+import org.fife.rsta.ac.js.ast.TypeDeclarationFactory;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.FunctionCompletion;
 
 
-public class JSFunctionCompletion extends FunctionCompletion {
+public class JSFunctionCompletion extends FunctionCompletion implements
+		JSCompletion {
 
 	private Method method;
 	private String compareString;
-
-
-	public JSFunctionCompletion(CompletionProvider provider, Method method) {
+	private boolean useBeanProperites;
+	
+	private static String NULL_TYPE = "void";
+	
+	public JSFunctionCompletion(CompletionProvider provider, Method method)
+	{
+		this(provider, method, false);
+	}
+	
+	public JSFunctionCompletion(CompletionProvider provider, Method method, boolean useBeanProperites) {
 		super(provider, method.getName(), null);
+		this.useBeanProperites = useBeanProperites;
 		this.method = method;
 		int count = method.getParameterCount();
 		List params = new ArrayList(count);
 		for (int i = 0; i < count; i++) {
 			FormalParameter param = method.getParameter(i);
 			String name = param.getName();
-			params.add(new FunctionCompletion.Parameter(null, name));
+			params.add(new JSFunctionParam(param.getType(), name));
 		}
 		setParams(params);
 	}
@@ -126,6 +136,21 @@ public class JSFunctionCompletion extends FunctionCompletion {
 	}
 
 
+	public String getLookupName() {
+		StringBuffer sb = new StringBuffer(getName());
+		sb.append('(');
+		int count = method.getParameterCount();
+		for (int i = 0; i < count; i++) {
+			sb.append("p");
+			if (i < count - 1) {
+				sb.append(",");
+			}
+		}
+		sb.append(')');
+		return sb.toString();
+	}
+
+
 	public String getDefinitionString() {
 		return getSignature();
 	}
@@ -138,7 +163,15 @@ public class JSFunctionCompletion extends FunctionCompletion {
 
 
 	private String getNameAndParameters() {
-		StringBuffer sb = new StringBuffer(getName());
+		if(useBeanProperites && method.getParameterCount() == 0)
+			return convertNameToBean(getName(), method);
+		else
+			return formatMethodAtString(getName(), method);
+	}
+	
+	private static String formatMethodAtString(String name, Method method)
+	{
+		StringBuffer sb = new StringBuffer(name);
 		sb.append('(');
 		int count = method.getParameterCount();
 		for (int i = 0; i < count; i++) {
@@ -150,6 +183,39 @@ public class JSFunctionCompletion extends FunctionCompletion {
 		}
 		sb.append(')');
 		return sb.toString();
+	}
+	
+	private static String convertNameToBean(String name, Method method)
+	{
+		boolean memberIsGetMethod = name.startsWith("get");
+        boolean memberIsSetMethod = name.startsWith("set");
+        boolean memberIsIsMethod = name.startsWith("is");
+        if (memberIsGetMethod || memberIsIsMethod 
+                || memberIsSetMethod) {
+            // Double check name component.
+            String nameComponent
+                = name.substring(memberIsIsMethod ? 2 : 3);
+            if (nameComponent.length() == 0)
+           	 return name; //return name
+            
+            // Make the bean property name.
+            String beanPropertyName = nameComponent;
+            char ch0 = nameComponent.charAt(0);
+            if (Character.isUpperCase(ch0)) {
+                if (nameComponent.length() == 1) {
+                    beanPropertyName = nameComponent.toLowerCase();
+                } else {
+                    char ch1 = nameComponent.charAt(1);
+                    if (!Character.isUpperCase(ch1)) {
+                        beanPropertyName = Character.toLowerCase(ch0)
+                                           +nameComponent.substring(1);
+                    }
+                }
+            }
+            name = beanPropertyName;
+        }
+		return name;
+         
 	}
 
 
@@ -182,5 +248,49 @@ public class JSFunctionCompletion extends FunctionCompletion {
 		return getSignature();
 	}
 
+
+	public String getType() {
+		return lookupJSType(method.getType() != null ? method.getType()
+				.getName(false) : null);
+	}
+
+
+	/**
+	 * The API may have it's own types, so these need converting back to
+	 * JavaScript types e.g JSString == String, JSNumber == Number
+	 */
+
+	private static String lookupJSType(String lookupName) {
+		if (lookupName != null) {
+			if(NULL_TYPE.equals(lookupName)) { //void has no type
+				return null;
+			}
+			// try a reverse lookup for types such as JSString, JSNumber,
+			// JSRegex first....If null returned, then it
+			// is pretty likely correct anyway
+			String lookup = TypeDeclarationFactory.Instance().getJSTypeName(
+					lookupName);
+			lookupName = lookup != null ? lookup : lookupName;
+		}
+		return lookupName;
+	}
+
+
+	/**
+	 * Override the FunctionCompletion.Parameter to lookup the Javascript name
+	 * for the completion type
+	 */
+	public static class JSFunctionParam extends FunctionCompletion.Parameter {
+
+		public JSFunctionParam(Object type, String name) {
+			super(type, name);
+		}
+
+
+		public String getType() {
+			return lookupJSType(super.getType());
+		}
+
+	}
 
 }

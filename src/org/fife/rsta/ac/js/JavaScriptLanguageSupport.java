@@ -31,9 +31,9 @@ import org.mozilla.javascript.ast.AstRoot;
 
 
 /**
- * Language support for JavaScript.  This requires Rhino, which is included
- * with this library.
- *
+ * Language support for JavaScript. This requires Rhino, which is included with
+ * this library.
+ * 
  * @author Robert Futrell
  * @version 1.0
  */
@@ -50,7 +50,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 
 
 	public JavaScriptLanguageSupport() {
-	    	
+
 		parserToInfoMap = new HashMap();
 		jarManager = new JarManager();
 		setDefaultCompletionCellRenderer(new JavaScriptCellRenderer());
@@ -64,7 +64,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	 * Creates the provider to use for an RSTA instance editing JavaScript.
 	 * Subclasses can override to return custom subclasses of
 	 * <code>JavaScriptCompletionProvider</code>.
-	 *
+	 * 
 	 * @return The provider.
 	 */
 	protected JavaScriptCompletionProvider createJavaScriptCompletionProvider() {
@@ -73,24 +73,24 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 
 
 	public JarManager getJarManager() {
-	    return jarManager;
+		return jarManager;
 	}
 
 
 	/**
 	 * Returns the JS parser running on a text area with this JavaScript
 	 * language support installed.
-	 *
+	 * 
 	 * @param textArea The text area.
-	 * @return The JS parser.  This will be <code>null</code> if the text
-	 *         area does not have this <code>JavaScriptLanguageSupport</code>
+	 * @return The JS parser. This will be <code>null</code> if the text area
+	 *         does not have this <code>JavaScriptLanguageSupport</code>
 	 *         installed.
 	 */
 	public JavaScriptParser getParser(RSyntaxTextArea textArea) {
 		// Could be a parser for another language.
 		Object parser = textArea.getClientProperty(PROPERTY_LANGUAGE_PARSER);
 		if (parser instanceof JavaScriptParser) {
-			return (JavaScriptParser)parser;
+			return (JavaScriptParser) parser;
 		}
 		return null;
 	}
@@ -100,7 +100,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 
 		JavaScriptCompletionProvider p = createJavaScriptCompletionProvider();
 		// We use a custom auto-completion.
-		//AutoCompletion ac = createAutoCompletion(p);
+		// AutoCompletion ac = createAutoCompletion(p);
 		AutoCompletion ac = new JavaScriptAutoCompletion(p, textArea);
 		ac.setListCellRenderer(getDefaultCompletionCellRenderer());
 		ac.setAutoCompleteEnabled(isAutoCompleteEnabled());
@@ -111,8 +111,8 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 		ac.install(textArea);
 		installImpl(textArea, ac);
 
-		//Listener listener = new Listener(textArea);
-		//textArea.putClientProperty(PROPERTY_LISTENER, listener);
+		// Listener listener = new Listener(textArea);
+		// textArea.putClientProperty(PROPERTY_LISTENER, listener);
 
 		JavaScriptParser parser = new JavaScriptParser(this, textArea);
 		textArea.putClientProperty(PROPERTY_LANGUAGE_PARSER, parser);
@@ -128,7 +128,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 
 	/**
 	 * Installs extra keyboard shortcuts supported by this language support.
-	 *
+	 * 
 	 * @param textArea The text area to install the shortcuts into.
 	 */
 	private void installKeyboardShortcuts(RSyntaxTextArea textArea) {
@@ -138,7 +138,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 		int c = textArea.getToolkit().getMenuShortcutKeyMask();
 		int shift = InputEvent.SHIFT_MASK;
 
-		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_O, c|shift), "GoToType");
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_O, c | shift), "GoToType");
 		am.put("GoToType", new GoToMemberAction(JavaScriptOutlineTree.class));
 
 	}
@@ -146,7 +146,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 
 	/**
 	 * Returns whether strict mode (more warnings are detected) is enabled.
-	 *
+	 * 
 	 * @return Whether strict mode is enabled.
 	 * @see #setStrictMode(boolean)
 	 */
@@ -157,7 +157,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 
 	/**
 	 * Returns whether E4X is supported in parsed JavaScript.
-	 *
+	 * 
 	 * @return Whether E4X is supported.
 	 * @see #setXmlAvailable(boolean)
 	 */
@@ -168,7 +168,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 
 	/**
 	 * Sets whether strict mode (more warnings are detected) is enabled.
-	 *
+	 * 
 	 * @param strict Whether strict mode is enabled.
 	 * @see #isStrictMode()
 	 */
@@ -179,7 +179,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 
 	/**
 	 * Sets whether E4X is supported in parsed JavaScript.
-	 *
+	 * 
 	 * @param available Whether E4X is supported.
 	 * @see #isXmlAvailable()
 	 */
@@ -193,19 +193,19 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 		uninstallImpl(textArea);
 
 		JavaScriptParser parser = getParser(textArea);
-		Info info = (Info)parserToInfoMap.remove(parser);
-		if (info!=null) { // Should always be true
-			parser.removePropertyChangeListener(
-				JavaScriptParser.PROPERTY_AST, info);
+		Info info = (Info) parserToInfoMap.remove(parser);
+		if (info != null) { // Should always be true
+			parser.removePropertyChangeListener(JavaScriptParser.PROPERTY_AST,
+					info);
 		}
 		textArea.removeParser(parser);
 		textArea.putClientProperty(PROPERTY_LANGUAGE_PARSER, null);
 
-		//Object listener = textArea.getClientProperty(PROPERTY_LISTENER);
-		//if (listener instanceof Listener) { // Should always be true
-		//	((Listener)listener).uninstall();
-		//	textArea.putClientProperty(PROPERTY_LISTENER, null);
-		//}
+		// Object listener = textArea.getClientProperty(PROPERTY_LISTENER);
+		// if (listener instanceof Listener) { // Should always be true
+		// ((Listener)listener).uninstall();
+		// textArea.putClientProperty(PROPERTY_LISTENER, null);
+		// }
 
 		uninstallKeyboardShortcuts(textArea);
 
@@ -214,7 +214,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 
 	/**
 	 * Uninstalls any keyboard shortcuts specific to this language support.
-	 *
+	 * 
 	 * @param textArea The text area to uninstall the actions from.
 	 */
 	private void uninstallKeyboardShortcuts(RSyntaxTextArea textArea) {
@@ -224,7 +224,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 		int c = textArea.getToolkit().getMenuShortcutKeyMask();
 		int shift = InputEvent.SHIFT_MASK;
 
-		im.remove(KeyStroke.getKeyStroke(KeyEvent.VK_O, c|shift));
+		im.remove(KeyStroke.getKeyStroke(KeyEvent.VK_O, c | shift));
 		am.remove("GoToType");
 
 	}
@@ -232,25 +232,29 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 
 	/**
 	 * Manages information about the parsing/auto-completion for a single text
-	 * area.  Unlike many simpler language supports,
+	 * area. Unlike many simpler language supports,
 	 * <code>JavaScriptLanguageSupport</code> cannot share any information
 	 * amongst instances of <code>RSyntaxTextArea</code>.
 	 */
 	private static class Info implements PropertyChangeListener {
 
 		public JavaScriptCompletionProvider provider;
-		//public JavaScriptParser parser;
 
-		public Info(RSyntaxTextArea textArea, JavaScriptCompletionProvider provider,
-					JavaScriptParser parser) {
+
+		// public JavaScriptParser parser;
+
+		public Info(RSyntaxTextArea textArea,
+				JavaScriptCompletionProvider provider, JavaScriptParser parser) {
 			this.provider = provider;
-			//this.parser = parser;
-			parser.addPropertyChangeListener(JavaScriptParser.PROPERTY_AST, this);
+			// this.parser = parser;
+			parser.addPropertyChangeListener(JavaScriptParser.PROPERTY_AST,
+					this);
 		}
+
 
 		/**
 		 * Called when a text area is re-parsed.
-		 *
+		 * 
 		 * @param e The event.
 		 */
 		public void propertyChange(PropertyChangeEvent e) {
@@ -258,7 +262,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 			String name = e.getPropertyName();
 
 			if (JavaScriptParser.PROPERTY_AST.equals(name)) {
-				AstRoot root = (AstRoot)e.getNewValue();
+				AstRoot root = (AstRoot) e.getNewValue();
 				provider.setASTRoot(root);
 			}
 
@@ -275,22 +279,23 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 
 		private RSyntaxTextArea textArea;
 
+
 		public JavaScriptAutoCompletion(JavaScriptCompletionProvider provider,
-										RSyntaxTextArea textArea) {
+				RSyntaxTextArea textArea) {
 			super(provider);
 			this.textArea = textArea;
 		}
 
+
 		protected int refreshPopupWindow() {
 			// Force the parser to re-parse
 			JavaScriptParser parser = getParser(textArea);
-			RSyntaxDocument doc = (RSyntaxDocument)textArea.getDocument();
+			RSyntaxDocument doc = (RSyntaxDocument) textArea.getDocument();
 			String style = textArea.getSyntaxEditingStyle();
 			parser.parse(doc, style);
 			return super.refreshPopupWindow();
 		}
 
 	}
-
 
 }

@@ -305,7 +305,7 @@ public class JavaScriptOutlineTree extends AbstractSourceTree {
 							ble.printStackTrace();
 						}
 						tn.setText(varName);
-						tn.setIcon(IconFactory.get().getIcon(IconFactory.VARIABLE_ICON));
+						tn.setIcon(IconFactory.get().getIcon(IconFactory.LOCAL_VARIABLE_ICON));
 						tn.setSortPriority(PRIORITY_VARIABLE);
 						root.add(tn);
 					}
