@@ -273,6 +273,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 				case Token.CONTINUE:
 				case Token.CALL:
 				case Token.EXPR_RESULT:
+				case Token.EMPTY:
 					break;
 				default:
 					System.out.println("Unhandled: " + child.getClass());
