@@ -19,6 +19,7 @@ import org.fife.rsta.ac.js.completion.JSCompletion;
 import org.mozilla.javascript.CompilerEnvirons;
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.Token;
+import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.AstRoot;
 import org.mozilla.javascript.ast.ExpressionStatement;
 
@@ -116,42 +117,49 @@ public class VariableResolver {
 	public TypeDeclaration resolveType(String entered,
 			SourceCompletionProvider provider, int dot) {
 		String[] enteredSplit = entered.split("\\.");
-		TypeDeclaration variableType = getTypeDeclarationForVariable(
-				enteredSplit[0], dot);
+
+		// check whether entered is a function
+		TypeDeclaration variableType = null;
+		variableType = getTypeDeclarationForVariable(enteredSplit[0], dot);
 		if (variableType != null) {
-			variableType = resolveTypeForFunction(variableType, enteredSplit,
-					provider, dot);
+			variableType = resolveTypeForFunction(variableType,
+					enteredSplit, provider, dot);
 		}
-		else {
-			// try to parse and resolve first element
-			JSVariableDeclaration dec = parseEnteredContent(enteredSplit[0]);
-			if (dec != null) {
-				switch (dec.getTypeNode().getType()) {
-					case Token.CALL:
-					case Token.GETPROP:
-						// get first part of String ... and work our way through
-						// to the right
-						variableType = provider.resolveTypeDeclation(dec
-								.getTypeNode().toSource());
-						break;
+		// else parse the content and try to parse content on anything but
+		// Name Tokens. Name Tokens are for variable lookup and
+		// this has been done already
+		AstNode node = compileNode(enteredSplit[0]);
+		JSVariableDeclaration dec = null;
+		switch (node.getType()) {
+			case Token.NAME:
+				break;
+			case Token.CALL:
+			case Token.GETPROP:
+				// get first part of String ... and work our way through
+				// to the right
+				dec = makeRootJSVariableDeclaration(node);
+				variableType = provider.resolveTypeDeclation(dec
+						.getTypeNode().toSource());
+				break;
 
-					default: // try to resolve the function type
-					{
-						// only resolve function type if split is > 0 other not
-						// a function
-						if (enteredSplit.length > 1) {
-							variableType = resolveTypeForFunction(
-									JSVariableDeclaration
-											.tokenToTypeDeclaration(dec
-													.getTypeNode(), provider),
-									enteredSplit, provider, dot);
-						}
-						else {
-							variableType = dec.getTypeDeclaration();
-						}
-					}
-						break;
-
+			default: {
+				//make JSTypeDeclaration from node
+				//check whether function delimiter (.)
+				dec = makeRootJSVariableDeclaration(node);
+				if (enteredSplit.length > 1) {
+					variableType = resolveTypeForFunction(
+							JSVariableDeclaration
+									.tokenToTypeDeclaration(dec
+											.getTypeNode(), provider),
+							enteredSplit, provider, dot);
+				}
+				else
+				{
+					//try to resolve type
+					variableType = resolveTypeForFunction(
+							JSVariableDeclaration.tokenToTypeDeclaration(dec
+									.getTypeNode(), provider), enteredSplit,
+							provider, dot);
 				}
 			}
 		}
@@ -234,29 +242,36 @@ public class VariableResolver {
 
 
 	/**
-	 * Initially parse the content to check for new String literal, new Object
-	 * etc..
+	 * Parse Text with Java Parser and return AstNode from the expression etc..
 	 * 
 	 * @param text
 	 * @return
 	 */
-	private JSVariableDeclaration parseEnteredContent(String text) {
+	private AstNode compileNode(String text) {
 		CompilerEnvirons env = new CompilerEnvirons();
 		env.setIdeMode(true);
 		Parser parser = new Parser(env);
 		StringReader r = new StringReader(text);
 		try {
 			AstRoot root = parser.parse(r, null, 0);
-			JSVariableDeclaration dec = new JSVariableDeclaration("root", 0,
-					provider);
-
-			dec.setTypeNode(((ExpressionStatement) root.getFirstChild())
-					.getExpression());
-			return dec;
+			return ((ExpressionStatement) root.getFirstChild()).getExpression();
 
 		} catch (Exception e) {
 		}
 		return null;
+	}
+
+
+	/**
+	 * Make a dummy JSVariableDeclaration
+	 * @param node
+	 * @return
+	 */
+	private JSVariableDeclaration makeRootJSVariableDeclaration(AstNode node) {
+		JSVariableDeclaration dec = new JSVariableDeclaration("root", 0,
+				provider);
+		dec.setTypeNode(node);
+		return dec;
 	}
 
 }
