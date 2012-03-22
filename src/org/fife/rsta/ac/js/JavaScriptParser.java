@@ -90,7 +90,9 @@ public class JavaScriptParser extends AbstractParser {
 		env.setIdeMode(true);
 		env.setRecordingComments(true);
 		env.setRecordingLocalJsDocComments(true);
-		env.setRecoverFromErrors(true);
+		//Rhino gets caught in a recursive loop on some occasions when the JavaScript is incorrect. 
+		//e.g var a = [ //(with no closing bracket sends <code>Parser</code> into a recursive loop  
+		//env.setRecoverFromErrors(true);
 		env.setXmlAvailable(langSupport.isXmlAvailable());
 		env.setStrictMode(langSupport.isStrictMode());
 //		env.setLanguageVersion(170);
@@ -145,6 +147,12 @@ public class JavaScriptParser extends AbstractParser {
 				result.addNotice(new DefaultParserNotice(this, msg, line, offs, len));
 			//}
 		}
+		catch(Exception e)
+		{
+			//catch all
+			result.setError(e);
+		}
+		
 
 		r.close();
 
