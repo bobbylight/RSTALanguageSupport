@@ -17,11 +17,18 @@ import org.fife.rsta.ac.js.JavaScriptHelper;
 import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.rsta.ac.js.completion.JSCompletion;
 import org.mozilla.javascript.CompilerEnvirons;
+import org.mozilla.javascript.ErrorReporter;
+import org.mozilla.javascript.EvaluatorException;
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.Token;
 import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.AstRoot;
 import org.mozilla.javascript.ast.ExpressionStatement;
+import org.mozilla.javascript.ast.ForLoop;
+import org.mozilla.javascript.ast.IfStatement;
+import org.mozilla.javascript.ast.Name;
+import org.mozilla.javascript.ast.SwitchStatement;
+import org.mozilla.javascript.ast.WhileLoop;
 
 
 public class VariableResolver {
@@ -119,49 +126,68 @@ public class VariableResolver {
 		String[] enteredSplit = entered.split("\\.");
 
 		// check whether entered is a function
-		TypeDeclaration variableType = null;
-		variableType = getTypeDeclarationForVariable(enteredSplit[0], dot);
-		if (variableType != null) {
-			variableType = resolveTypeForFunction(variableType,
-					enteredSplit, provider, dot);
-		}
-		// else parse the content and try to parse content on anything but
-		// Name Tokens. Name Tokens are for variable lookup and
-		// this has been done already
-		AstNode node = compileNode(enteredSplit[0]);
-		JSVariableDeclaration dec = null;
-		switch (node.getType()) {
-			case Token.NAME:
-				break;
-			case Token.CALL:
-			case Token.GETPROP:
-				// get first part of String ... and work our way through
-				// to the right
-				dec = makeRootJSVariableDeclaration(node);
-				variableType = provider.resolveTypeDeclation(dec
-						.getTypeNode().toSource());
-				break;
+		TypeDeclaration variableType = lookupVariable(enteredSplit[0], dot);
 
-			default: {
-				//make JSTypeDeclaration from node
-				//check whether function delimiter (.)
-				dec = makeRootJSVariableDeclaration(node);
-				if (enteredSplit.length > 1) {
-					variableType = resolveTypeForFunction(
-							JSVariableDeclaration
-									.tokenToTypeDeclaration(dec
-											.getTypeNode(), provider),
-							enteredSplit, provider, dot);
-				}
-				else
-				{
-					//try to resolve type
-					variableType = resolveTypeForFunction(
-							JSVariableDeclaration.tokenToTypeDeclaration(dec
-									.getTypeNode(), provider), enteredSplit,
-							provider, dot);
+		if (variableType == null) {
+			// else parse the content and try to parse content on anything but
+			// Name Tokens. Name Tokens are for variable lookup and
+			// this has been done already
+			AstNode node = compileNode(enteredSplit[0]);
+			if (node != null) {
+				JSVariableDeclaration dec = null;
+				switch (node.getType()) {
+					case Token.NAME:
+						variableType = lookupVariable(((Name) node)
+								.getIdentifier(), dot);
+						break;
+					case Token.CALL:
+					case Token.GETPROP:
+						// get first part of String ... and work our way through
+						// to the right
+						dec = makeRootJSVariableDeclaration(node);
+						variableType = provider.resolveTypeDeclation(dec
+								.getTypeNode().toSource());
+						break;
+
+					default: {
+						// make JSTypeDeclaration from node
+						// check whether function delimiter (.)
+						dec = makeRootJSVariableDeclaration(node);
+						if (enteredSplit.length > 1) {
+							variableType = resolveTypeForFunction(
+									JSVariableDeclaration
+											.tokenToTypeDeclaration(dec
+													.getTypeNode(), provider),
+									enteredSplit, provider, dot);
+						}
+						else {
+							// try to resolve type
+							variableType = resolveTypeForFunction(
+									JSVariableDeclaration
+											.tokenToTypeDeclaration(dec
+													.getTypeNode(), provider),
+									enteredSplit, provider, dot);
+						}
+					}
 				}
 			}
+		}
+		else {
+			// resolve type from original type, may need to drill down
+			// e.g var a = 1; var b = a.toString(); //b resolves to String
+			variableType = resolveTypeForFunction(variableType, enteredSplit,
+					provider, dot);
+		}
+		return variableType;
+	}
+
+
+	private TypeDeclaration lookupVariable(String name, int dot) {
+		String[] split = name.split("\\.");
+		TypeDeclaration variableType = getTypeDeclarationForVariable(name, dot);
+		if (variableType != null) {
+			variableType = resolveTypeForFunction(variableType, split,
+					provider, dot);
 		}
 		return variableType;
 	}
@@ -250,13 +276,50 @@ public class VariableResolver {
 	private AstNode compileNode(String text) {
 		CompilerEnvirons env = new CompilerEnvirons();
 		env.setIdeMode(true);
+		env.setErrorReporter(new ErrorReporter() {
+
+			public void error(String message, String sourceName, int line,
+					String lineSource, int lineOffset) {
+			}
+
+
+			public EvaluatorException runtimeError(String message,
+					String sourceName, int line, String lineSource,
+					int lineOffset) {
+				return null;
+			}
+
+
+			public void warning(String message, String sourceName, int line,
+					String lineSource, int lineOffset) {
+
+			}
+		});
+		env.setRecoverFromErrors(true);
 		Parser parser = new Parser(env);
 		StringReader r = new StringReader(text);
 		try {
 			AstRoot root = parser.parse(r, null, 0);
-			return ((ExpressionStatement) root.getFirstChild()).getExpression();
+			AstNode child = (AstNode) root.getFirstChild();
+			switch (child.getType()) {
+				case Token.EXPR_VOID:
+				case Token.EXPR_RESULT:
+					return ((ExpressionStatement) child).getExpression();
+				case Token.SWITCH:
+					return ((SwitchStatement) child).getExpression();
+				case Token.IF:
+					return ((IfStatement) child).getCondition();
+				case Token.WHILE:
+					return ((WhileLoop) child).getCondition();
+				case Token.FOR:
+					return ((ForLoop) child).getInitializer();
+				//TODO return other types
+				default:
+					return child;
+			}
 
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return null;
 	}
@@ -264,6 +327,7 @@ public class VariableResolver {
 
 	/**
 	 * Make a dummy JSVariableDeclaration
+	 * 
 	 * @param node
 	 * @return
 	 */
