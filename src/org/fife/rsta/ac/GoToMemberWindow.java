@@ -46,6 +46,7 @@ import javax.swing.plaf.basic.BasicTextFieldUI;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
 import org.fife.ui.rsyntaxtextarea.focusabletip.TipUtil;
+import org.fife.ui.rsyntaxtextarea.PopupWindowDecorator;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 
@@ -104,7 +105,14 @@ public class GoToMemberWindow extends JWindow {
 		tree.setBackground(bg);
 		((DefaultTreeCellRenderer)tree.getCellRenderer()).setBackgroundNonSelectionColor(bg);
 
+		// Give apps a chance to decorate us with drop shadows, etc.
 		setContentPane(contentPane);
+		PopupWindowDecorator decorator = PopupWindowDecorator.get();
+		System.out.println(decorator);
+		if (decorator!=null) {
+			decorator.decorate(this);
+		}
+
 		applyComponentOrientation(o);
 		pack();
 		JRootPane pane = getRootPane();

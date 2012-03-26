@@ -263,9 +263,11 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 	 */
 	public void setSorted(boolean sorted) {
 		if (sorted!=this.sorted) {
+			// We must keep this state, even if we're not sortable, so that
+			// we can know when to toggle the sortable state of our children.
+			this.sorted = sorted;
 			// This individual node may not be sortable...
 			if (sortable) {
-				this.sorted = sorted;
 				refreshVisibleChildren();
 			}
 			// But its children could still be.
