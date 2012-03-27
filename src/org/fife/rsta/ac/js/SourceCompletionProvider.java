@@ -11,6 +11,7 @@
 package org.fife.rsta.ac.js;
 
 import java.awt.Cursor;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -31,7 +32,11 @@ import org.fife.rsta.ac.js.completion.JSVariableCompletion;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
 import org.fife.ui.autocomplete.FunctionCompletion;
 import org.fife.ui.autocomplete.ParameterizedCompletion.Parameter;
+import org.mozilla.javascript.CompilerEnvirons;
+import org.mozilla.javascript.ErrorReporter;
+import org.mozilla.javascript.EvaluatorException;
 import org.mozilla.javascript.Node;
+import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.Token;
 import org.mozilla.javascript.ast.Assignment;
 import org.mozilla.javascript.ast.AstNode;
@@ -113,6 +118,9 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 			CodeBlock block = addAllCompletions(astRoot, set, text, dot);
 
 			if (text.indexOf('.') == -1) {
+				if (text.length() > 0) { //try to convert text by removing any if, while etc...
+					text = parseEnteredText(text);
+				}
 				recursivelyAddLocalVars(set, block, dot, null, false);
 			}
 			else {
@@ -709,6 +717,67 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 	public VariableResolver getVariableResolver() {
 		return variableResolver;
+	}
+
+
+	/**
+	 * Parse Text with Java Parser and return AstNode from the expression etc..
+	 * 
+	 * @param text
+	 * @return
+	 */
+	private String parseEnteredText(String text) {
+		CompilerEnvirons env = new CompilerEnvirons();
+		env.setIdeMode(true);
+		env.setErrorReporter(new ErrorReporter() {
+
+			public void error(String message, String sourceName, int line,
+					String lineSource, int lineOffset) {
+			}
+
+
+			public EvaluatorException runtimeError(String message,
+					String sourceName, int line, String lineSource,
+					int lineOffset) {
+				return null;
+			}
+
+
+			public void warning(String message, String sourceName, int line,
+					String lineSource, int lineOffset) {
+
+			}
+		});
+		env.setRecoverFromErrors(true);
+		Parser parser = new Parser(env);
+		StringReader r = new StringReader(text);
+		try {
+			AstRoot root = parser.parse(r, null, 0);
+			AstNode child = (AstNode) root.getFirstChild();
+			switch (child.getType()) {
+				case Token.EXPR_VOID:
+				case Token.EXPR_RESULT:
+					return ((ExpressionStatement) child).getExpression()
+							.toSource();
+				case Token.SWITCH:
+					return ((SwitchStatement) child).getExpression().toSource();
+				case Token.IF:
+					return ((IfStatement) child).getCondition().toSource();
+				case Token.WHILE:
+					return ((WhileLoop) child).getCondition().toSource();
+				case Token.FOR:
+					return ((ForLoop) child).getInitializer().toSource();
+				case Token.ERROR:
+					return "";
+					// TODO return other types
+				default:
+					return child.toSource();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
 	}
 
 

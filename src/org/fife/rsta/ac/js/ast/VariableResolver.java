@@ -137,9 +137,19 @@ public class VariableResolver {
 				JSVariableDeclaration dec = null;
 				switch (node.getType()) {
 					case Token.NAME:
+					{
 						variableType = lookupVariable(((Name) node)
 								.getIdentifier(), dot);
+						
+						if(variableType != null) //now resolve the variable
+						{
+							// resolve type from original type, may need to drill down
+							// e.g var a = 1; var b = a.toString(); //b resolves to String
+							variableType = resolveTypeForFunction(variableType, enteredSplit,
+									provider, dot);
+						}
 						break;
+					}
 					case Token.CALL:
 					case Token.GETPROP:
 						// get first part of String ... and work our way through
@@ -172,12 +182,14 @@ public class VariableResolver {
 				}
 			}
 		}
-		else {
+		else
+		{
 			// resolve type from original type, may need to drill down
 			// e.g var a = 1; var b = a.toString(); //b resolves to String
 			variableType = resolveTypeForFunction(variableType, enteredSplit,
 					provider, dot);
 		}
+		
 		return variableType;
 	}
 
