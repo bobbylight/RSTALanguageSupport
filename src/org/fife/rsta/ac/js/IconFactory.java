@@ -36,7 +36,7 @@ public class IconFactory {
 	private IconFactory() {
 		icons = new Icon[4];
 		icons[FUNCTION_ICON] = loadIcon("methdef_obj.gif");
-		icons[LOCAL_VARIABLE_ICON] = loadIcon("field_default_obj.gif");
+		icons[LOCAL_VARIABLE_ICON] = loadIcon("localvariable_obj.gif");
 		icons[PUBLIC_STATIC_VARIABLE_ICON] = loadIcon("static_co.gif");
 		icons[PUBLIC_VARIABLE_ICON] = loadIcon("field_public_obj.gif");
 	}
