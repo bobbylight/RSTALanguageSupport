@@ -97,8 +97,14 @@ public class TypeDeclarationFactory {
 
 
 	public void addType(String name, TypeDeclaration td) {
+		addType(name, td, false);
+	}
+
+
+	public void addType(String name, TypeDeclaration td, boolean qualified) {
 		typeDeclarations.put(name, td);
-		addReverseLookup(td.getAPITypeName(), td.getJSName());
+		addReverseLookup(qualified ? td.getQualifiedName() : td
+				.getAPITypeName(), td.getJSName());
 	}
 
 

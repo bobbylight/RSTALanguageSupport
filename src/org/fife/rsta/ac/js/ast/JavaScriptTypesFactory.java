@@ -171,12 +171,12 @@ public abstract class JavaScriptTypesFactory {
 				if (cf != null) {
 					TypeDeclaration type = TypeDeclarationFactory.Instance()
 							.getTypeDeclaration(superClassName, true);
-					if (type != null) {
-						JavaScriptType extendedType = new JavaScriptType(type);
-						cachedType.addExtension(extendedType);
-						readClassFile(extendedType, cf, provider, jarManager,
-								type);
+					if (type == null) {
+						type = createNewTypeDeclaration(cf);
 					}
+					JavaScriptType extendedType = new JavaScriptType(type);
+					cachedType.addExtension(extendedType);
+					readClassFile(extendedType, cf, provider, jarManager, type);
 				}
 			}
 
@@ -193,8 +193,44 @@ public abstract class JavaScriptTypesFactory {
 					cachedType.addCompletion(completion);
 				}
 			}
-			// TODO work out extended interfaces
+			// get extended interfaces
+			if (nid.getExtendedCount() > 0) {
+				for (Iterator i = nid.getExtendedIterator(); i.hasNext();) {
+					Type et = (Type) i.next();
+					if (et != null) {
+						String superClassName = et.toString();
+						ClassFile cf = getClassFileFor(cu, superClassName,
+								jarManager);
+						if (cf != null) {
+							TypeDeclaration type = TypeDeclarationFactory
+									.Instance().getTypeDeclaration(
+											superClassName, true);
+							if (type == null) {
+								type = createNewTypeDeclaration(cf);
+							}
+							JavaScriptType extendedType = new JavaScriptType(
+									type);
+							cachedType.addExtension(extendedType);
+							readClassFile(extendedType, cf, provider,
+									jarManager, type);
+
+						}
+					}
+				}
+			}
 		}
+	}
+
+
+	private TypeDeclaration createNewTypeDeclaration(ClassFile cf) {
+		String className = cf.getClassName(false);
+		String packageName = cf.getPackageName();
+		TypeDeclaration td = new TypeDeclaration(packageName, className,
+				className);
+		// now add to types factory
+		TypeDeclarationFactory.Instance().addType(cf.getClassName(true), td,
+				true);
+		return td;
 	}
 
 
