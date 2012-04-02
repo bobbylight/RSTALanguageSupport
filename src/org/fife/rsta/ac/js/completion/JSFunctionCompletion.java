@@ -12,40 +12,52 @@ package org.fife.rsta.ac.js.completion;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.text.JTextComponent;
 
+import org.fife.rsta.ac.java.JarManager;
+import org.fife.rsta.ac.java.classreader.MethodInfo;
 import org.fife.rsta.ac.java.rjc.ast.FormalParameter;
 import org.fife.rsta.ac.java.rjc.ast.Method;
 import org.fife.rsta.ac.js.ast.TypeDeclarationFactory;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.FunctionCompletion;
+import org.fife.ui.autocomplete.ParameterizedCompletion;
 
 
 public class JSFunctionCompletion extends FunctionCompletion implements
 		JSCompletion {
 
+	private JSMethodData methodData;
 	private Method method;
 	private String compareString;
 	private boolean useBeanProperites;
 	
-	private static String NULL_TYPE = "void";
-	
-	public JSFunctionCompletion(CompletionProvider provider, Method method)
+	public JSFunctionCompletion(CompletionProvider provider, MethodInfo method, JarManager jarManager)
 	{
-		this(provider, method, false);
+		this(provider, method, jarManager, false);
 	}
 	
-	public JSFunctionCompletion(CompletionProvider provider, Method method, boolean useBeanProperites) {
-		super(provider, method.getName(), null);
+	public JSFunctionCompletion(CompletionProvider provider, MethodInfo methodInfo, JarManager jarManager, boolean useBeanProperites) {
+		super(provider, methodInfo.getName(), null);
 		this.useBeanProperites = useBeanProperites;
-		this.method = method;
+		this.methodData = new JSMethodData(methodInfo, jarManager);
+		this.method = methodData.getMethod();
+		/*String[] paramTypes = methodInfo.getParameterTypes();
+		List params = new ArrayList(paramTypes.length);
+		for (int i=0; i<paramTypes.length; i++) {
+			String name = methodData.getParameterName(i);
+			String type = paramTypes[i];
+			params.add(new JSFunctionParam(type, name));
+		}*/
 		int count = method.getParameterCount();
+		String[] paramTypes = methodInfo.getParameterTypes();
 		List params = new ArrayList(count);
 		for (int i = 0; i < count; i++) {
 			FormalParameter param = method.getParameter(i);
 			String name = param.getName();
-			params.add(new JSFunctionParam(param.getType(), name));
+			params.add(new JSFunctionParam(paramTypes[i], name));
 		}
 		setParams(params);
 	}
@@ -250,37 +262,22 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 
 
 	public String getType() {
-		return lookupJSType(method.getType() != null ? method.getType()
-				.getName(false) : null);
+		String value = getType(true);
+		return TypeDeclarationFactory.lookupJSType(value, false);
+	}
+	
+	
+	public String getType(boolean qualified) {
+		return TypeDeclarationFactory.lookupJSType(methodData.getType(qualified), qualified);
 	}
 
-
-	/**
-	 * The API may have it's own types, so these need converting back to
-	 * JavaScript types e.g JSString == String, JSNumber == Number
-	 */
-
-	private static String lookupJSType(String lookupName) {
-		if (lookupName != null) {
-			if(NULL_TYPE.equals(lookupName)) { //void has no type
-				return null;
-			}
-			// try a reverse lookup for types such as JSString, JSNumber,
-			// JSRegex first....If null returned, then it
-			// is pretty likely correct anyway
-			String lookup = TypeDeclarationFactory.Instance().getJSTypeName(
-					lookupName);
-			lookupName = lookup != null ? lookup : lookupName;
-		}
-		return lookupName;
-	}
-
+	
 
 	/**
 	 * Override the FunctionCompletion.Parameter to lookup the Javascript name
 	 * for the completion type
 	 */
-	public static class JSFunctionParam extends FunctionCompletion.Parameter {
+	public static class JSFunctionParam extends ParameterizedCompletion.Parameter {
 
 		public JSFunctionParam(Object type, String name) {
 			super(type, name);
@@ -288,7 +285,7 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 
 
 		public String getType() {
-			return lookupJSType(super.getType());
+			return TypeDeclarationFactory.lookupJSType(super.getType(), false);
 		}
 
 	}

@@ -147,7 +147,7 @@ public class FieldInfo extends MemberInfo {
 	 *
 	 * @return The type of this field.
 	 */
-	public String getTypeString() {
+	public String getTypeString(boolean qualified) {
 
 		StringBuffer sb = new StringBuffer();
 
@@ -186,8 +186,12 @@ public class FieldInfo extends MemberInfo {
 			case 'L':
 				String clazz = descriptor.substring(braceCount+1,
 													descriptor.length()-1);
-				//clazz = org.fife.rsta.ac.java.Util.replaceChar(clazz, '/', '.');
-				clazz = clazz.substring(clazz.lastIndexOf('/')+1);
+				if(qualified) {
+					clazz = org.fife.rsta.ac.java.Util.replaceChar(clazz, '/', '.');
+				}
+				else {
+					clazz = clazz.substring(clazz.lastIndexOf('/')+1);
+				}
 				sb.append(clazz);
 				break;
 

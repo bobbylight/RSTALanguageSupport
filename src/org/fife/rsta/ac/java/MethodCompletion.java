@@ -105,7 +105,7 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 	public MethodCompletion(CompletionProvider provider, MethodInfo info,
 							String typeName) {
 
-		super(provider, info.getName(), info.getReturnTypeString());
+		super(provider, info.getName(), info.getReturnTypeString(false));
 		setDefinedIn(typeName);
 		this.data = new MethodInfoData(info, (SourceCompletionProvider)provider);
 		setRelevanceAppropriately();

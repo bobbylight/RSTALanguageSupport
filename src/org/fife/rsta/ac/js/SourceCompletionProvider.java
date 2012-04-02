@@ -612,17 +612,17 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 			TypeDeclaration dec = resolveTypeDeclation(enteredText);
 			if (dec != null) {
-				populateCompletionsForTypeDeclaration(dec, completions);
+				populateCompletionsForTypeDeclaration(dec, completions, enteredText);
 			}
 		}
 	}
 
 
 	private void populateCompletionsForTypeDeclaration(TypeDeclaration typeDec,
-			Set completions) {
+			Set completions, String enteredText) {
 		if (javaScriptTypesFactory != null) {
 			JavaScriptType cachedType = javaScriptTypesFactory.getCachedType(
-					typeDec, jarManager, this);
+					typeDec, jarManager, this, enteredText);
 			if (cachedType != null) {
 				// extract all completions for the type including super classes
 				javaScriptTypesFactory.populateCompletionsForType(cachedType,

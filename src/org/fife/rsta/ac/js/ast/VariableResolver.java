@@ -12,7 +12,9 @@ package org.fife.rsta.ac.js.ast;
 
 import java.io.StringReader;
 import java.util.HashMap;
+import java.util.List;
 
+import org.fife.rsta.ac.java.classreader.ClassFile;
 import org.fife.rsta.ac.js.JavaScriptHelper;
 import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.rsta.ac.js.completion.JSCompletion;
@@ -25,6 +27,7 @@ import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.AstRoot;
 import org.mozilla.javascript.ast.ExpressionStatement;
 import org.mozilla.javascript.ast.ForLoop;
+import org.mozilla.javascript.ast.FunctionCall;
 import org.mozilla.javascript.ast.IfStatement;
 import org.mozilla.javascript.ast.Name;
 import org.mozilla.javascript.ast.SwitchStatement;
@@ -136,21 +139,37 @@ public class VariableResolver {
 			if (node != null) {
 				JSVariableDeclaration dec = null;
 				switch (node.getType()) {
-					case Token.NAME:
-					{
+					case Token.NAME: {
 						variableType = lookupVariable(((Name) node)
 								.getIdentifier(), dot);
-						
-						if(variableType != null) //now resolve the variable
+
+						if (variableType != null) // now resolve the variable
 						{
-							// resolve type from original type, may need to drill down
-							// e.g var a = 1; var b = a.toString(); //b resolves to String
-							variableType = resolveTypeForFunction(variableType, enteredSplit,
-									provider, dot);
+							// resolve type from original type, may need to
+							// drill down
+							// e.g var a = 1; var b = a.toString(); //b resolves
+							// to String
+							variableType = resolveTypeForFunction(variableType,
+									enteredSplit, provider, dot);
 						}
 						break;
 					}
-					case Token.CALL:
+					case Token.CALL: {
+						FunctionCall call = (FunctionCall)node;
+						List args = call.getArguments();
+						AstNode arg = null;
+						if(args.size() > 0)
+						{
+							arg = (AstNode) args.get(countParamsFromString(enteredSplit[0]));
+						}
+						if(arg != null)
+						{
+							dec = makeRootJSVariableDeclaration(arg);
+							variableType = provider.resolveTypeDeclation(dec
+								.getTypeNode().toSource());
+						}
+						break;
+					}
 					case Token.GETPROP:
 						// get first part of String ... and work our way through
 						// to the right
@@ -182,18 +201,22 @@ public class VariableResolver {
 				}
 			}
 		}
-		else
-		{
+		else {
 			// resolve type from original type, may need to drill down
 			// e.g var a = 1; var b = a.toString(); //b resolves to String
 			variableType = resolveTypeForFunction(variableType, enteredSplit,
 					provider, dot);
 		}
-		
+
 		return variableType;
 	}
 
 
+	private int countParamsFromString(String text)
+	{
+		return text.split(",").length -1;
+	}
+	
 	private TypeDeclaration lookupVariable(String name, int dot) {
 		String[] split = name.split("\\.");
 		TypeDeclaration variableType = getTypeDeclarationForVariable(name, dot);
@@ -220,7 +243,7 @@ public class VariableResolver {
 		TypeDeclaration resolved = null;
 		if (provider.getJavaScriptTypesFactory() != null) {
 			JavaScriptType cachedType = provider.getJavaScriptTypesFactory()
-					.getCachedType(typeDec, provider.getJarManager(), provider);
+					.getCachedType(typeDec, provider.getJarManager(), provider, enteredSplit[0]);
 			if (cachedType != null) {
 				resolved = resolveType(cachedType, enteredSplit, 0, provider);
 			}
@@ -258,22 +281,47 @@ public class VariableResolver {
 			// look up JSCompletion
 			JSCompletion completion = cachedType.getCompletion(text);
 			if (completion != null) {
-				String type = completion.getType();
+				String type = completion.getType(true);
 				if (type != null) {
 					TypeDeclaration newType = TypeDeclarationFactory.Instance()
-							.getTypeDeclaration(type, true);
+							.getTypeDeclaration(type);
 					if (newType != null) {
-						if (provider.getJavaScriptTypesFactory() != null) {
-							JavaScriptType newCachedType = provider
-									.getJavaScriptTypesFactory().getCachedType(
-											newType, provider.getJarManager(),
-											provider);
-							return resolveType(newCachedType, enteredText,
-									newIndex, provider);
-						}
+						return lookupType(newType, provider, enteredText, newIndex);
+					}
+					else {
+						return createNewTypeDeclaration(provider, type,
+								enteredText, newIndex);
 					}
 				}
 			}
+		}
+		return null;
+	}
+
+
+	private TypeDeclaration createNewTypeDeclaration(
+			SourceCompletionProvider provider, String type,
+			String[] enteredText, int newIndex) {
+		if (provider.getJavaScriptTypesFactory() != null) {
+			ClassFile cf = provider.getJarManager().getClassEntry(type);
+			if (cf != null) {
+				TypeDeclaration newType = provider.getJavaScriptTypesFactory()
+						.createNewTypeDeclaration(cf);
+				if (newType != null) {
+					return lookupType(newType, provider, enteredText, newIndex);
+				}
+			}
+		}
+		return null;
+	}
+
+
+	private TypeDeclaration lookupType(TypeDeclaration type,
+			SourceCompletionProvider provider, String[] enteredText, int index) {
+		if (provider.getJavaScriptTypesFactory() != null) {
+			JavaScriptType newCachedType = provider.getJavaScriptTypesFactory()
+					.getCachedType(type, provider.getJarManager(), provider, enteredText[index]);
+			return resolveType(newCachedType, enteredText, index, provider);
 		}
 		return null;
 	}
@@ -325,7 +373,7 @@ public class VariableResolver {
 					return ((WhileLoop) child).getCondition();
 				case Token.FOR:
 					return ((ForLoop) child).getInitializer();
-				//TODO return other types
+					// TODO return other types
 				default:
 					return child;
 			}

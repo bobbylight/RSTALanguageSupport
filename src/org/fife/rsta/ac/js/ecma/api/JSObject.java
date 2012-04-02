@@ -33,7 +33,7 @@ public abstract class JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract String toLocaleString();
+    public abstract JSString toLocaleString();
 
     /**
      * function valueOf()
@@ -44,7 +44,7 @@ public abstract class JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract Object valueOf();
+    public abstract JSObject valueOf();
 
     /**
      * function hasOwnProperty(name)
@@ -56,7 +56,7 @@ public abstract class JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract Boolean hasOwnProperty();
+    public abstract JSBoolean hasOwnProperty();
 
     /**
      * function isPrototypeOf(o)
@@ -68,7 +68,7 @@ public abstract class JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract Boolean isPrototypeOf(Object o);
+    public abstract JSBoolean isPrototypeOf(JSObject o);
 
     /**
      * function propertyIsEnumerable(name)
@@ -80,6 +80,6 @@ public abstract class JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract Boolean propertyIsEnumerable(Object name);
+    public abstract JSBoolean propertyIsEnumerable(JSObject name);
 
 }

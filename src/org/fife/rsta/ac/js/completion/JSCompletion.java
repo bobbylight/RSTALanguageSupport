@@ -9,9 +9,8 @@ public interface JSCompletion {
 
 
 	/**
-	 * @return JavaScript type from Completion: 
-	 * Field - variable type 
-	 * Method - return type
+	 * @return JavaScript type from Completion qualified
 	 */
-	String getType();
+	String getType(boolean qualified);
+	
 }

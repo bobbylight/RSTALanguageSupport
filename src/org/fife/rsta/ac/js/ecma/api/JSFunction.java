@@ -21,7 +21,7 @@ public abstract class JSFunction extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.
      */ 
-    public abstract Object apply(Object thisObject, JSArray argArray);
+    public abstract JSObject apply(JSObject thisObject, JSArray argArray);
     
     /**
       * function call (thisObject, args)
@@ -31,7 +31,7 @@ public abstract class JSFunction extends JSObject {
       * @since   Standard ECMA-262 3rd. Edition 
       * @since   Level 2 Document Object Model Core Definition.    
      */ 
-    public abstract Object call(Object thisObject, Object args);
+    public abstract JSObject call(JSObject thisObject, JSObject args);
     
     /**
       * property length
@@ -39,6 +39,6 @@ public abstract class JSFunction extends JSObject {
       * @since   Standard ECMA-262 3rd. Edition 
       * @since   Level 2 Document Object Model Core Definition.    
      */ 
-    public static Number length;
+    public static JSNumber length;
 
 }

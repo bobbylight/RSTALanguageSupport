@@ -154,7 +154,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	private String[] createParamTypes() {
 		String[] types = createParamTypesFromTypeSignature();
 		if (types==null) {
-			types = createParamTypesFromDescriptor();
+			types = createParamTypesFromDescriptor(true);
 		}
 		return types;
 	}
@@ -168,7 +168,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 * @return The parameter types.
 	 * @see #createParamTypesFromTypeSignature()
 	 */
-	private String[] createParamTypesFromDescriptor() {
+	private String[] createParamTypesFromDescriptor(boolean qualified) {
 
 		String descriptor = getDescriptor();
 		int rparen = descriptor.indexOf(')');
@@ -227,7 +227,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 				case 'L':
 					String clazz = paramDescriptors.substring(pos + 1,
 							paramDescriptors.indexOf(';'));
-					type = clazz.substring(clazz.lastIndexOf('/')+1);
+					type = qualified ? org.fife.rsta.ac.java.Util.replaceChar(clazz, '/', '.') : clazz.substring(clazz.lastIndexOf('/')+1);
 					//clazz = org.fife.rsta.ac.java.Util.replaceChar(clazz, '/', '.');
 					//type = clazz;
 					pos += clazz.length() + 2; // "+2" for the 'L' & semicolon
@@ -438,11 +438,17 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 *
 	 * @return The return type of this method.
 	 */
-	public String getReturnTypeString() {
+	public String getReturnTypeString(boolean fullyQualified) {
 		if (returnType==null) {
 			returnType = getReturnTypeStringFromTypeSignature();
 			if (returnType==null) {
-				returnType = getReturnTypeStringFromDescriptor();
+				returnType = getReturnTypeStringFromDescriptor(fullyQualified);
+			}
+		}
+		if(!fullyQualified)
+		{
+			if(returnType != null && returnType.indexOf(".") > -1) {
+				return returnType.substring(returnType.lastIndexOf(".") +1, returnType.length());  
 			}
 		}
 		return returnType;
@@ -463,7 +469,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 * 'V' case.  It is also very similar to #getParameterTypes().  Try
 	 * to refactor common code from these methods.
 	 */
-	private String getReturnTypeStringFromDescriptor() {
+	private String getReturnTypeStringFromDescriptor(boolean qualified) {
 
 		String descriptor = getDescriptor();
 		int rparen = descriptor.indexOf(')');
@@ -506,8 +512,9 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 			// ObjectType
 			case 'L':
 				String clazz = descriptor.substring(1, descriptor.length()-1);
-				//clazz = org.fife.rsta.ac.java.Util.replaceChar(clazz, '/', '.');
-				clazz = clazz.substring(clazz.lastIndexOf('/')+1);
+				//clazz = clazz.substring(clazz.lastIndexOf('/')+1);
+				clazz = qualified ? org.fife.rsta.ac.java.Util.replaceChar(clazz, '/', '.') : clazz.substring(clazz.lastIndexOf('/')+1);
+				//clazz = clazz.substring(clazz.lastIndexOf('/')+1);
 				sb.append(clazz);
 				break;
 
@@ -558,7 +565,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 
 		// Return type.
 		if (!isConstructor()) { // Don't print "void" return type.
-			sb.append(getReturnTypeString());
+			sb.append(getReturnTypeString(false));
 			sb.append(' ');
 		}
 

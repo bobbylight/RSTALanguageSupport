@@ -333,7 +333,7 @@ class MethodInfoData implements Data {
 	 * {@inheritDoc}
 	 */
 	public String getType() {
-		return info.getReturnTypeString();
+		return info.getReturnTypeString(false);
 	}
 
 

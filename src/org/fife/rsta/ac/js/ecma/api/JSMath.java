@@ -18,7 +18,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.    
     */
-   public static Number E;
+   public static JSNumber E;
    
    /**
      * Property LN10
@@ -26,7 +26,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.    
     */
-   public static Number LN10;
+   public static JSNumber LN10;
    
    /**
      * Property LN2
@@ -34,7 +34,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.
     */
-   public static Number LN2;
+   public static JSNumber LN2;
    
    /**
      * Property LOG2E
@@ -42,7 +42,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.    
     */
-   public static Number LOG2E;
+   public static JSNumber LOG2E;
    
    /**
      * Property LOG10E
@@ -50,7 +50,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition. 
     */
-   public static Number LOG10E;
+   public static JSNumber LOG10E;
    
    /**
      * Property PI
@@ -58,7 +58,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.  
     */
-   public static Number PI;
+   public static JSNumber PI;
    
    /**
      * Property SQRT1_2
@@ -66,7 +66,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.    
     */
-   public static Number SQRT1_2;
+   public static JSNumber SQRT1_2;
    
    /**
      * Property SQRT2
@@ -74,7 +74,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition. 
     */
-   public static Number SQRT2;
+   public static JSNumber SQRT2;
    
    /**
      * function abs(x)
@@ -85,7 +85,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.     
     */
-   public abstract Number abs(Number x);
+   public abstract JSNumber abs(JSNumber x);
    
    /**
      * function acos(x)
@@ -96,7 +96,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.
     */
-   public abstract Number acos(Number x);
+   public abstract JSNumber acos(JSNumber x);
    
    /**
      * function asin(x)
@@ -107,7 +107,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.  
     */
-   public abstract Number asin(Number x);
+   public abstract JSNumber asin(JSNumber x);
    
    /**
      * function atan(x)
@@ -118,7 +118,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.
     */
-   public abstract Number atan(Number x);
+   public abstract JSNumber atan(JSNumber x);
    
    /**
      * function atan2(x,y)
@@ -130,7 +130,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.  
     */
-   public abstract Number atan2(Number x, Number y);
+   public abstract JSNumber atan2(JSNumber x, JSNumber y);
    
    /**
      * function ceil(x)
@@ -141,7 +141,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.    
     */
-   public abstract Number ceil(Number x);
+   public abstract JSNumber ceil(JSNumber x);
    
    /**
      * function cos(x)
@@ -152,7 +152,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.  
     */
-   public abstract Number cos(Number x);
+   public abstract JSNumber cos(JSNumber x);
    
    /**
      * function exp(x)
@@ -163,7 +163,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition. 
     */
-   public abstract Number exp(Number x);
+   public abstract JSNumber exp(JSNumber x);
    
    /**
      * function floor(x)
@@ -174,7 +174,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.  
     */
-   public abstract Number floor(Number x);
+   public abstract JSNumber floor(JSNumber x);
    
    /**
      * function log(x)
@@ -185,7 +185,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.    
     */
-   public abstract Number log(Number x);
+   public abstract JSNumber log(JSNumber x);
    
    /**
      * function max(arg)
@@ -196,7 +196,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.  
     */
-   public abstract Number max(Number args);
+   public abstract JSNumber max(JSNumber args);
    
    /**
      * function min(arg)
@@ -207,7 +207,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.    
     */
-   public abstract Number min(Number args);
+   public abstract JSNumber min(JSNumber args);
    
    /**
      * function pow(x,y)
@@ -219,7 +219,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.    
     */
-   public abstract Number pow(Number x, Number y);
+   public abstract JSNumber pow(JSNumber x, JSNumber y);
    
    /**
      * function pow()
@@ -229,7 +229,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.     
     */
-   public abstract Number random();
+   public abstract JSNumber random();
    
    /**
      * function round(x)
@@ -240,7 +240,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.   
     */
-   public abstract Number round(Number x);
+   public abstract JSNumber round(JSNumber x);
    
    /**
      * function sin(x)
@@ -251,7 +251,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.    
     */
-   public abstract Number sin(Number x);
+   public abstract JSNumber sin(JSNumber x);
    
    /**
      * function sqrt(x)
@@ -262,7 +262,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.     
     */
-   public abstract Number sqrt(Number x);
+   public abstract JSNumber sqrt(JSNumber x);
    
    /**
      * function tan(x)
@@ -273,14 +273,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.    
     */
-   public abstract Number tan(Number x);
-   /**
-     * Object RegExp()
-     * @super Object
-     * @constructor
-     * @memberOf RegExp
-     * @since Standard ECMA-262 3rd. Edition
-     * @since Level 2 Document Object Model Core Definition.
-    */
+   public abstract JSNumber tan(JSNumber x);
+   
 
 }

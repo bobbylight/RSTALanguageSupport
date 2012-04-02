@@ -36,7 +36,7 @@ public class JavaScriptHelper {
 			for (int i = 0; i < count; i++) {
 				sb.append("p");
 				if (i < count - 1) {
-					sb.append(", ");
+					sb.append(",");
 				}
 			}
 			sb.append(")");

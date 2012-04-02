@@ -3,20 +3,26 @@ package org.fife.rsta.ac.js.completion;
 import javax.swing.Icon;
 import javax.swing.text.JTextComponent;
 
+import org.fife.rsta.ac.java.JarManager;
+import org.fife.rsta.ac.java.classreader.FieldInfo;
 import org.fife.rsta.ac.java.rjc.ast.Field;
 import org.fife.rsta.ac.js.IconFactory;
+import org.fife.rsta.ac.js.ast.TypeDeclarationFactory;
 import org.fife.ui.autocomplete.BasicCompletion;
 import org.fife.ui.autocomplete.CompletionProvider;
 
 
 public class JSFieldCompletion extends BasicCompletion implements JSCompletion {
 
+	private JSFieldData fieldData;
 	private Field field;
 
 
-	public JSFieldCompletion(CompletionProvider provider, Field field) {
-		super(provider, field.getName());
-		this.field = field;
+	public JSFieldCompletion(CompletionProvider provider, FieldInfo fieldInfo,
+			JarManager manager) {
+		super(provider, fieldInfo.getName());
+		this.fieldData = new JSFieldData(fieldInfo, manager);
+		this.field = fieldData.getField();
 	}
 
 
@@ -56,7 +62,14 @@ public class JSFieldCompletion extends BasicCompletion implements JSCompletion {
 
 
 	public String getType() {
-		return field.getType().getName(false);
+		return TypeDeclarationFactory.lookupJSType(fieldData.getType(true), false);
 	}
+
+
+	public String getType(boolean qualified) {
+		return TypeDeclarationFactory.lookupJSType(fieldData.getType(true), qualified);
+	}
+	
+	
 
 }

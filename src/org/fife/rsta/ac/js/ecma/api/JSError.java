@@ -24,7 +24,7 @@ public abstract class JSError extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public static String name;
+	public static JSString name;
 
 	/**
 	 * property message
@@ -34,6 +34,6 @@ public abstract class JSError extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public static String message;
+	public static JSString message;
 
 }

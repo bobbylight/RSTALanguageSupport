@@ -3,10 +3,10 @@ package org.fife.rsta.ac.js.ecma.api;
 public abstract class JSArray extends JSObject {
 
 	/**
-	 * Object Array()
+	 * Object JSArray()
 	 * 
 	 * @constructor
-	 * @extends Object
+	 * @extends JSObject
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
@@ -18,13 +18,13 @@ public abstract class JSArray extends JSObject {
 	/**
 	 * Property length
 	 * 
-	 * @type Number
+	 * @type JSNumber
 	 * @memberOf Array
 	 * @see Array
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public static Number length;
+	public static JSNumber length;
 
 
 	/**
@@ -62,7 +62,7 @@ public abstract class JSArray extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract Object pop();
+	public abstract JSObject pop();
 
 
 	/**
@@ -98,7 +98,7 @@ public abstract class JSArray extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract Object shift();
+	public abstract JSObject shift();
 
 
 	/**
@@ -140,7 +140,7 @@ public abstract class JSArray extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSArray splice(Number start, Number deletecount,
+	public abstract JSArray splice(JSNumber start, JSNumber deletecount,
 			JSArray items);
 
 

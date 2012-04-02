@@ -38,7 +38,7 @@ public abstract class JSRegExp extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract Boolean test(String string);
+	public abstract JSBoolean test(String string);
 
 
 	/**
@@ -49,7 +49,7 @@ public abstract class JSRegExp extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public static String source;
+	public static JSString source;
 
 	/**
 	 * property global
@@ -59,7 +59,7 @@ public abstract class JSRegExp extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public static Boolean global;
+	public static JSBoolean global;
 
 	/**
 	 * property ignoreCase
@@ -69,7 +69,7 @@ public abstract class JSRegExp extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public static Boolean ignoreCase;
+	public static JSBoolean ignoreCase;
 
 	/**
 	 * property multiline
@@ -79,7 +79,7 @@ public abstract class JSRegExp extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public static Boolean multiline;
+	public static JSBoolean multiline;
 
 	/**
 	 * property lastIndex
@@ -89,6 +89,6 @@ public abstract class JSRegExp extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public static Number lastIndex;
+	public static JSNumber lastIndex;
 
 }

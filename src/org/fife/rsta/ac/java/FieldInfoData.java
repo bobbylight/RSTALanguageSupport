@@ -165,7 +165,7 @@ class FieldInfoData implements Data {
 	 * {@inheritDoc}
 	 */
 	public String getType() {
-		return info.getTypeString();
+		return info.getTypeString(false);
 	}
 
 

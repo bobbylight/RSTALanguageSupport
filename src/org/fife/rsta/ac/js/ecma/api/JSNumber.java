@@ -23,7 +23,7 @@ public abstract class JSNumber extends JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public static Number MIN_VALUE;
+    public static JSNumber MIN_VALUE;
 
     /**
      * property MAX_VALUE
@@ -34,7 +34,7 @@ public abstract class JSNumber extends JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public static Number MAX_VALUE;
+    public static JSNumber MAX_VALUE;
 
     /**
      * property NaN
@@ -45,7 +45,7 @@ public abstract class JSNumber extends JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public static Number NaN;
+    public static JSNumber NaN;
 
     /**
      * property NEGATIVE_INFINITY
@@ -56,7 +56,7 @@ public abstract class JSNumber extends JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public static Number NEGATIVE_INFINITY;
+    public static JSNumber NEGATIVE_INFINITY;
 
     /**
      * property POSITIVE_INFINITY
@@ -67,7 +67,7 @@ public abstract class JSNumber extends JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public static Number POSITIVE_INFINITY;
+    public static JSNumber POSITIVE_INFINITY;
 
     /**
      * function toFixed(fractionDigits)
@@ -78,7 +78,7 @@ public abstract class JSNumber extends JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract String toFixed(Number fractionDigits);
+    public abstract JSString toFixed(JSNumber fractionDigits);
 
     /**
      * function toExponential(fractionDigits)
@@ -89,7 +89,7 @@ public abstract class JSNumber extends JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract String toExponential(Number fractionDigits);
+    public abstract JSString toExponential(JSNumber fractionDigits);
 
     /**
      * function toPrecision(precision)
@@ -100,5 +100,5 @@ public abstract class JSNumber extends JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract String toPrecision(Number fractionDigits);
+    public abstract JSString toPrecision(JSNumber fractionDigits);
 }

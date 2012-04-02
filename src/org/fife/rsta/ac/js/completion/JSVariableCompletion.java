@@ -11,6 +11,7 @@
 package org.fife.rsta.ac.js.completion;
 
 import org.fife.rsta.ac.js.ast.JSVariableDeclaration;
+import org.fife.rsta.ac.js.ast.TypeDeclarationFactory;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.VariableCompletion;
 
@@ -31,4 +32,13 @@ public class JSVariableCompletion extends VariableCompletion {
 		return dec;
 	}
 
+	public String getType()
+	{
+		String value = super.getType();
+		return TypeDeclarationFactory.lookupJSType(value, false);
+	}
+	
+	public String getType(boolean qualified) {
+		return TypeDeclarationFactory.lookupJSType(super.getType(), qualified);
+	}
 }
