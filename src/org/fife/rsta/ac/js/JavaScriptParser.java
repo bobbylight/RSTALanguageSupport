@@ -147,12 +147,9 @@ public class JavaScriptParser extends AbstractParser {
 				result.addNotice(new DefaultParserNotice(this, msg, line, offs, len));
 			//}
 		}
-		catch(Exception e)
-		{
-			//catch all
-			result.setError(e);
+		catch(Exception e) {
+			result.setError(e); // catch all
 		}
-		
 
 		r.close();
 

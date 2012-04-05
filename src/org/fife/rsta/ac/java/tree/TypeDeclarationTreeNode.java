@@ -14,6 +14,7 @@ import javax.swing.Icon;
 
 import org.fife.rsta.ac.java.DecoratableIcon;
 import org.fife.rsta.ac.java.IconFactory;
+import org.fife.rsta.ac.java.rjc.ast.EnumDeclaration;
 import org.fife.rsta.ac.java.rjc.ast.NormalClassDeclaration;
 import org.fife.rsta.ac.java.rjc.ast.NormalInterfaceDeclaration;
 import org.fife.rsta.ac.java.rjc.ast.TypeDeclaration;
@@ -64,6 +65,27 @@ class TypeDeclarationTreeNode extends JavaTreeNode {
 			}
 			else {
 				iconName = IconFactory.DEFAULT_INTERFACE_ICON;
+			}
+		}
+		else if (typeDec instanceof EnumDeclaration) {
+			EnumDeclaration ed = (EnumDeclaration)typeDec;
+			if (ed.getModifiers()!=null) {
+				if (ed.getModifiers().isPublic()) {
+					iconName = IconFactory.ENUM_ICON;
+				}
+				else if (ed.getModifiers().isProtected()) {
+					iconName = IconFactory.ENUM_PROTECTED_ICON;;
+				}
+				else if (ed.getModifiers().isPrivate()) {
+					iconName = IconFactory.ENUM_PRIVATE_ICON;
+				}
+				else {
+					iconName = IconFactory.ENUM_DEFAULT_ICON;
+				}
+			}
+			else {
+				//System.out.println("...  " + value);
+				iconName = IconFactory.ENUM_DEFAULT_ICON;
 			}
 		}
 

@@ -33,6 +33,10 @@ public class IconFactory {
 	public static final String DEFAULT_CLASS_ICON		= "defaultClassIcon";
 	public static final String DEFAULT_INTERFACE_ICON	= "defaultInterfaceIcon";
 	public static final String CLASS_ICON				= "classIcon";
+	public static final String ENUM_ICON				= "enumIcon";
+	public static final String ENUM_PROTECTED_ICON		= "enumProtectedIcon";
+	public static final String ENUM_PRIVATE_ICON		= "enumPrivateIcon";
+	public static final String ENUM_DEFAULT_ICON		= "enumDefaultIcon";
 	public static final String INNER_CLASS_PUBLIC_ICON		= "innerClassPublicIcon";
 	public static final String INNER_CLASS_PROTECTED_ICON	= "innerClassProtectedIcon";
 	public static final String INNER_CLASS_PRIVATE_ICON	= "innerClassPrivateIcon";
@@ -71,6 +75,10 @@ public class IconFactory {
 		iconMap.put(DEFAULT_CLASS_ICON, loadIcon("class_default_obj.gif"));
 		iconMap.put(DEFAULT_INTERFACE_ICON, loadIcon("int_default_obj.gif"));
 		iconMap.put(CLASS_ICON, loadIcon("class_obj.gif"));
+		iconMap.put(ENUM_ICON, loadIcon("enum_obj.gif"));
+		iconMap.put(ENUM_PROTECTED_ICON, loadIcon("enum_protected_obj.gif"));
+		iconMap.put(ENUM_PRIVATE_ICON, loadIcon("enum_private_obj.gif"));
+		iconMap.put(ENUM_DEFAULT_ICON, loadIcon("enum_default_obj.gif"));
 		iconMap.put(INNER_CLASS_PUBLIC_ICON, loadIcon("innerclass_public_obj.gif"));
 		iconMap.put(INNER_CLASS_PROTECTED_ICON, loadIcon("innerclass_protected_obj.gif"));
 		iconMap.put(INNER_CLASS_PRIVATE_ICON, loadIcon("innerclass_private_obj.gif"));

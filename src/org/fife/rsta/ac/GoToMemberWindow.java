@@ -108,7 +108,7 @@ public class GoToMemberWindow extends JWindow {
 		// Give apps a chance to decorate us with drop shadows, etc.
 		setContentPane(contentPane);
 		PopupWindowDecorator decorator = PopupWindowDecorator.get();
-		System.out.println(decorator);
+		//System.out.println(decorator);
 		if (decorator!=null) {
 			decorator.decorate(this);
 		}

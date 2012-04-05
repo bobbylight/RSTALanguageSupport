@@ -203,6 +203,7 @@ public abstract class AbstractSourceTree extends JTree {
 		if (++currentRow<getRowCount()) {
 			TreePath path = getPathForRow(currentRow);
 			setSelectionPath(path);
+			scrollPathToVisible(path);
 		}
 	}
 
@@ -217,6 +218,7 @@ public abstract class AbstractSourceTree extends JTree {
 		if (--currentRow>=0) {
 			TreePath path = getPathForRow(currentRow);
 			setSelectionPath(path);
+			scrollPathToVisible(path);
 		}
 	}
 

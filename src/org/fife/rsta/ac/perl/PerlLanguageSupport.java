@@ -145,7 +145,7 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 
 
 	/**
-	 * Returns the Perl parser running on a text area with this Java language
+	 * Returns the Perl parser running on a text area with this Perl language
 	 * support installed.
 	 *
 	 * @param textArea The text area.
