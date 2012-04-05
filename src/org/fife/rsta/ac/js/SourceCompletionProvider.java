@@ -622,7 +622,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 			Set completions, String enteredText) {
 		if (javaScriptTypesFactory != null) {
 			JavaScriptType cachedType = javaScriptTypesFactory.getCachedType(
-					typeDec, jarManager, this, enteredText);
+					typeDec, jarManager, this, enteredText, enteredText);
 			if (cachedType != null) {
 				// extract all completions for the type including super classes
 				javaScriptTypesFactory.populateCompletionsForType(cachedType,

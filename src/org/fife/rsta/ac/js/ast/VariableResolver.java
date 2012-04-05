@@ -150,7 +150,7 @@ public class VariableResolver {
 							// e.g var a = 1; var b = a.toString(); //b resolves
 							// to String
 							variableType = resolveTypeForFunction(variableType,
-									enteredSplit, provider, dot);
+									enteredSplit, provider, dot, entered);
 						}
 						break;
 					}
@@ -187,7 +187,7 @@ public class VariableResolver {
 									JSVariableDeclaration
 											.tokenToTypeDeclaration(dec
 													.getTypeNode(), provider),
-									enteredSplit, provider, dot);
+									enteredSplit, provider, dot, entered);
 						}
 						else {
 							// try to resolve type
@@ -195,7 +195,7 @@ public class VariableResolver {
 									JSVariableDeclaration
 											.tokenToTypeDeclaration(dec
 													.getTypeNode(), provider),
-									enteredSplit, provider, dot);
+									enteredSplit, provider, dot, entered);
 						}
 					}
 				}
@@ -205,7 +205,7 @@ public class VariableResolver {
 			// resolve type from original type, may need to drill down
 			// e.g var a = 1; var b = a.toString(); //b resolves to String
 			variableType = resolveTypeForFunction(variableType, enteredSplit,
-					provider, dot);
+					provider, dot, entered);
 		}
 
 		return variableType;
@@ -222,7 +222,7 @@ public class VariableResolver {
 		TypeDeclaration variableType = getTypeDeclarationForVariable(name, dot);
 		if (variableType != null) {
 			variableType = resolveTypeForFunction(variableType, split,
-					provider, dot);
+					provider, dot, name);
 		}
 		return variableType;
 	}
@@ -238,14 +238,14 @@ public class VariableResolver {
 	 * @return
 	 */
 	private TypeDeclaration resolveTypeForFunction(TypeDeclaration typeDec,
-			String[] enteredSplit, SourceCompletionProvider provider, int dot) {
+			String[] enteredSplit, SourceCompletionProvider provider, int dot, String originalEnteredText) {
 
 		TypeDeclaration resolved = null;
 		if (provider.getJavaScriptTypesFactory() != null) {
 			JavaScriptType cachedType = provider.getJavaScriptTypesFactory()
-					.getCachedType(typeDec, provider.getJarManager(), provider, enteredSplit[0]);
+					.getCachedType(typeDec, provider.getJarManager(), provider, enteredSplit[0], originalEnteredText);
 			if (cachedType != null) {
-				resolved = resolveType(cachedType, enteredSplit, 0, provider);
+				resolved = resolveType(cachedType, enteredSplit, 0, provider, originalEnteredText);
 			}
 		}
 
@@ -263,7 +263,7 @@ public class VariableResolver {
 	 * @return
 	 */
 	private TypeDeclaration resolveType(JavaScriptType cachedType,
-			String[] enteredText, int index, SourceCompletionProvider provider) {
+			String[] enteredText, int index, SourceCompletionProvider provider, String originalEnteredText) {
 
 		if (cachedType == null)
 			return null;
@@ -286,11 +286,11 @@ public class VariableResolver {
 					TypeDeclaration newType = TypeDeclarationFactory.Instance()
 							.getTypeDeclaration(type);
 					if (newType != null) {
-						return lookupType(newType, provider, enteredText, newIndex);
+						return lookupType(newType, provider, enteredText, newIndex, originalEnteredText);
 					}
 					else {
 						return createNewTypeDeclaration(provider, type,
-								enteredText, newIndex);
+								enteredText, newIndex, originalEnteredText);
 					}
 				}
 			}
@@ -301,14 +301,14 @@ public class VariableResolver {
 
 	private TypeDeclaration createNewTypeDeclaration(
 			SourceCompletionProvider provider, String type,
-			String[] enteredText, int newIndex) {
+			String[] enteredText, int newIndex, String originalEnteredText) {
 		if (provider.getJavaScriptTypesFactory() != null) {
 			ClassFile cf = provider.getJarManager().getClassEntry(type);
 			if (cf != null) {
 				TypeDeclaration newType = provider.getJavaScriptTypesFactory()
 						.createNewTypeDeclaration(cf);
 				if (newType != null) {
-					return lookupType(newType, provider, enteredText, newIndex);
+					return lookupType(newType, provider, enteredText, newIndex, originalEnteredText);
 				}
 			}
 		}
@@ -317,11 +317,11 @@ public class VariableResolver {
 
 
 	private TypeDeclaration lookupType(TypeDeclaration type,
-			SourceCompletionProvider provider, String[] enteredText, int index) {
+			SourceCompletionProvider provider, String[] enteredText, int index, String originalEnteredText) {
 		if (provider.getJavaScriptTypesFactory() != null) {
 			JavaScriptType newCachedType = provider.getJavaScriptTypesFactory()
-					.getCachedType(type, provider.getJarManager(), provider, enteredText[index]);
-			return resolveType(newCachedType, enteredText, index, provider);
+					.getCachedType(type, provider.getJarManager(), provider, enteredText[index], originalEnteredText);
+			return resolveType(newCachedType, enteredText, index, provider, originalEnteredText);
 		}
 		return null;
 	}

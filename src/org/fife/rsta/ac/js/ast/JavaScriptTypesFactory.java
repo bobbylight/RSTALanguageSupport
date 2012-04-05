@@ -65,10 +65,12 @@ public abstract class JavaScriptTypesFactory {
 	 * 
 	 * @param type TypeDeclaration to read from the API e.g JSString
 	 * @param manager JarManager containing source and classes
+	 * @param indexText - text at index position
+	 * @param fullText - full text entered by user
 	 * @param provider CompletionsProvider to bind the <code>Completion</code>
 	 */
 	public JavaScriptType getCachedType(TypeDeclaration type,
-			JarManager manager, DefaultCompletionProvider provider, String enteredText) {
+			JarManager manager, DefaultCompletionProvider provider, String indexText, String fullText) {
 
 		if (manager == null || type == null) // nothing to add
 			return null;
