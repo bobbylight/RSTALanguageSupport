@@ -70,7 +70,8 @@ public abstract class JavaScriptTypesFactory {
 	 * @param provider CompletionsProvider to bind the <code>Completion</code>
 	 */
 	public JavaScriptType getCachedType(TypeDeclaration type,
-			JarManager manager, DefaultCompletionProvider provider, String indexText, String fullText) {
+			JarManager manager, DefaultCompletionProvider provider,
+			String indexText, String fullText) {
 
 		if (manager == null || type == null) // nothing to add
 			return null;
@@ -81,7 +82,7 @@ public abstract class JavaScriptTypesFactory {
 
 		// now try to read the functions from the API
 		ClassFile cf = manager.getClassEntry(type.getQualifiedName());
-		
+
 		JavaScriptType cachedType = new JavaScriptType(type);
 		// cache if required
 		cachedTypes.put(type, cachedType);
@@ -109,12 +110,14 @@ public abstract class JavaScriptTypesFactory {
 			File file = manager.getSourceLocForClass(cf.getClassName(true));
 			if (file != null) {
 				CompilationUnit cu = Util.getCompilationUnitFromDisk(file, cf);
-				int count = cu.getTypeDeclarationCount();
-				for (int i = 0; i < count; i++) {
-					org.fife.rsta.ac.java.rjc.ast.TypeDeclaration dec = cu
-							.getTypeDeclaration(i);
-					readMethodsAndFieldsFromTypeDeclaration(cachedType, dec,
-							provider, cu, manager, cf);
+				if (cu != null) {
+					int count = cu.getTypeDeclarationCount();
+					for (int i = 0; i < count; i++) {
+						org.fife.rsta.ac.java.rjc.ast.TypeDeclaration dec = cu
+								.getTypeDeclaration(i);
+						readMethodsAndFieldsFromTypeDeclaration(cachedType,
+								dec, provider, cu, manager, cf);
+					}
 				}
 			}
 		}
@@ -138,71 +141,72 @@ public abstract class JavaScriptTypesFactory {
 			org.fife.rsta.ac.java.rjc.ast.TypeDeclaration dec,
 			DefaultCompletionProvider provider, CompilationUnit cu,
 			JarManager jarManager, ClassFile cf) {
-		
-		//get methods
+
+		// get methods
 		int methodCount = cf.getMethodCount();
-		for (int i=0; i<methodCount; i++) {
+		for (int i = 0; i < methodCount; i++) {
 			MethodInfo info = cf.getMethodInfo(i);
-			if(!info.isConstructor())
-			{
+			if (!info.isConstructor()) {
 				JSFunctionCompletion completion = new JSFunctionCompletion(
 						provider, info, jarManager, useBeanproperties);
 				cachedType.addCompletion(completion);
 			}
 		}
-		
-		//now get fields
+
+		// now get fields
 		int fieldCount = cf.getFieldCount();
-		for (int i=0; i<fieldCount; i++) {
+		for (int i = 0; i < fieldCount; i++) {
 			FieldInfo info = cf.getFieldInfo(i);
 			if (isAccessible(info)) {
-				JSFieldCompletion completion = new JSFieldCompletion(provider, info, jarManager);
+				JSFieldCompletion completion = new JSFieldCompletion(provider,
+						info, jarManager);
 				cachedType.addCompletion(completion);
 			}
 		}
-		
+
 		// Add completions for any non-overridden super-class methods.
 		String superClassName = cf.getSuperClassName(true);
 		ClassFile superClass = getClassFileFor(cu, superClassName, jarManager);
-		if (superClass!=null) {
+		if (superClass != null) {
 			TypeDeclaration type = TypeDeclarationFactory.Instance()
-			.getTypeDeclaration(superClassName);
+					.getTypeDeclaration(superClassName);
 			if (type == null) {
 				type = createNewTypeDeclaration(superClass);
 			}
-				JavaScriptType extendedType = new JavaScriptType(type);
-				cachedType.addExtension(extendedType);
-				readClassFile(extendedType, superClass, provider, jarManager, type);
-			
+			JavaScriptType extendedType = new JavaScriptType(type);
+			cachedType.addExtension(extendedType);
+			readClassFile(extendedType, superClass, provider, jarManager, type);
+
 		}
 
 		// Add completions for any interface methods, in case this class is
-		for (int i=0; i<cf.getImplementedInterfaceCount(); i++) {
+		for (int i = 0; i < cf.getImplementedInterfaceCount(); i++) {
 			String inter = cf.getImplementedInterfaceName(i, true);
 			ClassFile intf = getClassFileFor(cu, inter, jarManager);
-			if (intf!=null) {
+			if (intf != null) {
 				TypeDeclaration type = TypeDeclarationFactory.Instance()
-				.getTypeDeclaration(inter);
+						.getTypeDeclaration(inter);
 				if (type == null) {
 					type = createNewTypeDeclaration(intf);
 				}
-					JavaScriptType extendedType = new JavaScriptType(type);
-					cachedType.addExtension(extendedType);
-					readClassFile(extendedType, intf, provider, jarManager, type);
+				JavaScriptType extendedType = new JavaScriptType(type);
+				cachedType.addExtension(extendedType);
+				readClassFile(extendedType, intf, provider, jarManager, type);
 			}
 		}
 	}
-	
+
+
 	private boolean isAccessible(MemberInfo info) {
 
 		boolean accessible = false;
 		int access = info.getAccessFlags();
 
-		if (org.fife.rsta.ac.java.classreader.Util.isPublic(access) ||
-				org.fife.rsta.ac.java.classreader.Util.isProtected(access)) {
+		if (org.fife.rsta.ac.java.classreader.Util.isPublic(access)
+				|| org.fife.rsta.ac.java.classreader.Util.isProtected(access)) {
 			accessible = true;
 		}
-		
+
 		return accessible && info.isStatic();
 
 	}
@@ -211,8 +215,8 @@ public abstract class JavaScriptTypesFactory {
 	public TypeDeclaration createNewTypeDeclaration(ClassFile cf) {
 		String className = cf.getClassName(false);
 		String packageName = cf.getPackageName();
-		TypeDeclaration td = new TypeDeclaration(packageName, className,
-				cf.getClassName(true));
+		TypeDeclaration td = new TypeDeclaration(packageName, className, cf
+				.getClassName(true));
 		// now add to types factory
 		TypeDeclarationFactory.Instance().addType(cf.getClassName(true), td);
 		return td;
@@ -280,7 +284,6 @@ public abstract class JavaScriptTypesFactory {
 	}
 
 
-	
 	/**
 	 * Populate Completions for types... included extended classes. TODO
 	 * optimise this.
