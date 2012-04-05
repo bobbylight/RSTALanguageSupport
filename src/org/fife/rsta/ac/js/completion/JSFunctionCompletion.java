@@ -13,12 +13,14 @@ package org.fife.rsta.ac.js.completion;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.Icon;
 import javax.swing.text.JTextComponent;
 
 import org.fife.rsta.ac.java.JarManager;
 import org.fife.rsta.ac.java.classreader.MethodInfo;
 import org.fife.rsta.ac.java.rjc.ast.FormalParameter;
 import org.fife.rsta.ac.java.rjc.ast.Method;
+import org.fife.rsta.ac.js.IconFactory;
 import org.fife.rsta.ac.js.ast.TypeDeclarationFactory;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
@@ -32,32 +34,28 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 	private JSMethodData methodData;
 	private Method method;
 	private String compareString;
-	private boolean useBeanProperites;
 	
-	public JSFunctionCompletion(CompletionProvider provider, MethodInfo method, JarManager jarManager)
-	{
+
+	public JSFunctionCompletion(CompletionProvider provider, MethodInfo method,
+			JarManager jarManager) {
 		this(provider, method, jarManager, false);
 	}
-	
-	public JSFunctionCompletion(CompletionProvider provider, MethodInfo methodInfo, JarManager jarManager, boolean useBeanProperites) {
+
+
+	public JSFunctionCompletion(CompletionProvider provider,
+			MethodInfo methodInfo, JarManager jarManager,
+			boolean showParameterType) {
 		super(provider, methodInfo.getName(), null);
-		this.useBeanProperites = useBeanProperites;
 		this.methodData = new JSMethodData(methodInfo, jarManager);
 		this.method = methodData.getMethod();
-		/*String[] paramTypes = methodInfo.getParameterTypes();
-		List params = new ArrayList(paramTypes.length);
-		for (int i=0; i<paramTypes.length; i++) {
-			String name = methodData.getParameterName(i);
-			String type = paramTypes[i];
-			params.add(new JSFunctionParam(type, name));
-		}*/
 		int count = method.getParameterCount();
 		String[] paramTypes = methodInfo.getParameterTypes();
 		List params = new ArrayList(count);
 		for (int i = 0; i < count; i++) {
 			FormalParameter param = method.getParameter(i);
 			String name = param.getName();
-			params.add(new JSFunctionParam(paramTypes[i], name));
+			params.add(new JSFunctionParam(paramTypes[i], name,
+					showParameterType));
 		}
 		setParams(params);
 	}
@@ -175,14 +173,11 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 
 
 	private String getNameAndParameters() {
-		if(useBeanProperites && method.getParameterCount() == 0)
-			return convertNameToBean(getName(), method);
-		else
-			return formatMethodAtString(getName(), method);
+		return formatMethodAtString(getName(), method);
 	}
-	
-	private static String formatMethodAtString(String name, Method method)
-	{
+
+
+	private static String formatMethodAtString(String name, Method method) {
 		StringBuffer sb = new StringBuffer(name);
 		sb.append('(');
 		int count = method.getParameterCount();
@@ -195,39 +190,6 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 		}
 		sb.append(')');
 		return sb.toString();
-	}
-	
-	private static String convertNameToBean(String name, Method method)
-	{
-		boolean memberIsGetMethod = name.startsWith("get");
-        boolean memberIsSetMethod = name.startsWith("set");
-        boolean memberIsIsMethod = name.startsWith("is");
-        if (memberIsGetMethod || memberIsIsMethod 
-                || memberIsSetMethod) {
-            // Double check name component.
-            String nameComponent
-                = name.substring(memberIsIsMethod ? 2 : 3);
-            if (nameComponent.length() == 0)
-           	 return name; //return name
-            
-            // Make the bean property name.
-            String beanPropertyName = nameComponent;
-            char ch0 = nameComponent.charAt(0);
-            if (Character.isUpperCase(ch0)) {
-                if (nameComponent.length() == 1) {
-                    beanPropertyName = nameComponent.toLowerCase();
-                } else {
-                    char ch1 = nameComponent.charAt(1);
-                    if (!Character.isUpperCase(ch1)) {
-                        beanPropertyName = Character.toLowerCase(ch0)
-                                           +nameComponent.substring(1);
-                    }
-                }
-            }
-            name = beanPropertyName;
-        }
-		return name;
-         
 	}
 
 
@@ -265,27 +227,39 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 		String value = getType(true);
 		return TypeDeclarationFactory.lookupJSType(value, false);
 	}
-	
-	
+
+
 	public String getType(boolean qualified) {
-		return TypeDeclarationFactory.lookupJSType(methodData.getType(qualified), qualified);
+		return TypeDeclarationFactory.lookupJSType(methodData
+				.getType(qualified), qualified);
 	}
 
-	
+
+	public Icon getIcon() {
+		return IconFactory.get().getIcon(IconFactory.FUNCTION_ICON);
+	}
+
 
 	/**
 	 * Override the FunctionCompletion.Parameter to lookup the Javascript name
 	 * for the completion type
 	 */
-	public static class JSFunctionParam extends ParameterizedCompletion.Parameter {
+	public static class JSFunctionParam extends
+			ParameterizedCompletion.Parameter {
 
-		public JSFunctionParam(Object type, String name) {
+		private boolean showParameterType;
+
+
+		public JSFunctionParam(Object type, String name,
+				boolean showParameterType) {
 			super(type, name);
+			this.showParameterType = showParameterType;
 		}
 
 
 		public String getType() {
-			return TypeDeclarationFactory.lookupJSType(super.getType(), false);
+			return showParameterType ? TypeDeclarationFactory.lookupJSType(
+					super.getType(), false) : null;
 		}
 
 	}

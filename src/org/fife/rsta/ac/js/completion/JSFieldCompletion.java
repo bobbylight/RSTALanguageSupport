@@ -8,19 +8,20 @@ import org.fife.rsta.ac.java.classreader.FieldInfo;
 import org.fife.rsta.ac.java.rjc.ast.Field;
 import org.fife.rsta.ac.js.IconFactory;
 import org.fife.rsta.ac.js.ast.TypeDeclarationFactory;
-import org.fife.ui.autocomplete.BasicCompletion;
 import org.fife.ui.autocomplete.CompletionProvider;
+import org.fife.ui.autocomplete.VariableCompletion;
 
 
-public class JSFieldCompletion extends BasicCompletion implements JSCompletion {
+public class JSFieldCompletion extends VariableCompletion implements JSCompletion {
 
 	private JSFieldData fieldData;
 	private Field field;
+	private int iconIndex = IconFactory.PUBLIC_STATIC_VARIABLE_ICON; //default static
 
 
 	public JSFieldCompletion(CompletionProvider provider, FieldInfo fieldInfo,
 			JarManager manager) {
-		super(provider, fieldInfo.getName());
+		super(provider, fieldInfo.getName(), null);
 		this.fieldData = new JSFieldData(fieldInfo, manager);
 		this.field = fieldData.getField();
 	}
@@ -42,7 +43,17 @@ public class JSFieldCompletion extends BasicCompletion implements JSCompletion {
 
 	public Icon getIcon() {
 		return IconFactory.get().getIcon(
-				IconFactory.PUBLIC_STATIC_VARIABLE_ICON);
+				iconIndex);
+	}
+	
+	/**
+	 * Set icon index
+	 * @param iconIndex
+	 * @see IconFactory
+	 */
+	public void setIcon(int iconIndex)
+	{
+		this.iconIndex = iconIndex;
 	}
 
 

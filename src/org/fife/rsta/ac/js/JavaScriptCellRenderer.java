@@ -13,6 +13,7 @@ package org.fife.rsta.ac.js;
 import javax.swing.Icon;
 import javax.swing.JList;
 
+import org.fife.rsta.ac.js.completion.JSCompletion;
 import org.fife.rsta.ac.js.completion.JSFieldCompletion;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionCellRenderer;
@@ -46,11 +47,7 @@ public class JavaScriptCellRenderer extends CompletionCellRenderer {
 	protected void prepareForOtherCompletion(JList list, Completion c,
 			int index, boolean selected, boolean hasFocus) {
 		super.prepareForOtherCompletion(list, c, index, selected, hasFocus);
-		if (c instanceof JSFieldCompletion) {
-			setIcon(((JSFieldCompletion) c).getIcon());
-		}
-		else
-			setIcon(emptyIcon);
+		setIcon(emptyIcon);
 	}
 
 
@@ -60,7 +57,13 @@ public class JavaScriptCellRenderer extends CompletionCellRenderer {
 	protected void prepareForVariableCompletion(JList list,
 			VariableCompletion vc, int index, boolean selected, boolean hasFocus) {
 		super.prepareForVariableCompletion(list, vc, index, selected, hasFocus);
-		setIcon(IconFactory.get().getIcon(IconFactory.LOCAL_VARIABLE_ICON));
+		if (vc instanceof JSCompletion) {
+			setIcon(((JSCompletion) vc).getIcon());
+		}
+		else
+		{
+			setIcon(IconFactory.get().getIcon(IconFactory.LOCAL_VARIABLE_ICON));
+		}
 	}
 
 

@@ -24,6 +24,7 @@ import org.fife.rsta.ac.java.classreader.MemberInfo;
 import org.fife.rsta.ac.java.classreader.MethodInfo;
 import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
 import org.fife.rsta.ac.java.rjc.ast.ImportDeclaration;
+import org.fife.rsta.ac.js.completion.JSBeanCompletion;
 import org.fife.rsta.ac.js.completion.JSFieldCompletion;
 import org.fife.rsta.ac.js.completion.JSFunctionCompletion;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
@@ -125,6 +126,17 @@ public abstract class JavaScriptTypesFactory {
 
 
 	/**
+	 * @param method
+	 * @return true if the method starts with get or is.
+	 */
+	private boolean isBeanProperty(MethodInfo method) {
+		return method.getParameterCount() == 0
+				&& (method.getName().startsWith("get") || method.getName()
+						.startsWith("is"));
+	}
+
+
+	/**
 	 * Extract all methods and fields from CompilationUnit and add to the
 	 * completions map. Only public methods and fields will be added to
 	 * completions
@@ -148,8 +160,15 @@ public abstract class JavaScriptTypesFactory {
 			MethodInfo info = cf.getMethodInfo(i);
 			if (!info.isConstructor()) {
 				JSFunctionCompletion completion = new JSFunctionCompletion(
-						provider, info, jarManager, useBeanproperties);
+						provider, info, jarManager, true);
 				cachedType.addCompletion(completion);
+				// check java bean types (get/is methods)
+				if (useBeanproperties && isBeanProperty(info)) {
+					JSBeanCompletion beanCompletion = new JSBeanCompletion(
+							provider, info, jarManager);
+					cachedType.addCompletion(beanCompletion);
+				}
+
 			}
 		}
 
