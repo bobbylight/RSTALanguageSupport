@@ -85,8 +85,7 @@ public class JavaScriptType {
 	 */
 	private static JSCompletion getCompletion(JavaScriptType cachedType,
 			String completionLookup) {
-		JSCompletion completion = (JSCompletion) cachedType
-				._getCompletion(completionLookup);
+		JSCompletion completion = cachedType._getCompletion(completionLookup);
 		if (completion == null) {
 			// try the extended types
 			for (Iterator i = cachedType.getExtendedClasses().iterator(); i
