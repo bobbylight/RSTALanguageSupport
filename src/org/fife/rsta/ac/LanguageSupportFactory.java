@@ -81,7 +81,9 @@ public class LanguageSupportFactory implements PropertyChangeListener {
 		styleToSupport.put(SyntaxConstants.SYNTAX_STYLE_PHP,
 				prefix + "php.PhpLanguageSupport");
 		styleToSupport.put(SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL,
-				prefix +"sh.ShellLanguageSupport");
+				prefix + "sh.ShellLanguageSupport");
+		styleToSupport.put(SyntaxConstants.SYNTAX_STYLE_XML,
+				prefix + "xml.XmlLanguageSupport");
 
 	}
 

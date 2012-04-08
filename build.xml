@@ -15,6 +15,7 @@
 		- Perl
 		- PHP
 		- Unix Shell
+		- XML
 	
 	Available targets include:
 	
@@ -46,6 +47,7 @@
 	<property name="perl"             value="true"/>
 	<property name="php"              value="true"/>
 	<property name="sh"               value="true"/>
+	<property name="xml"              value="true"/>
 
 	<!-- If this property is set, then the demos for all of  -->
 	<!-- the supported languages will be added to the built  -->
@@ -92,6 +94,7 @@
 			<include if="perl"   name="org/fife/rsta/ac/perl/**"/>
 			<include if="php"    name="org/fife/rsta/ac/php/**"/>
 			<include if="sh"     name="org/fife/rsta/ac/sh/**"/>
+			<include if="xml"    name="org/fife/rsta/ac/xml/**"/>
 
 			<include if="demo"   name="org/fife/rsta/ac/demo/**"/>
 
@@ -120,6 +123,7 @@
 				<include if="html" name="org/fife/rsta/ac/html/**/*.png"/>
 				<include if="java" name="org/fife/rsta/ac/java/**/*.gif"/>
 				<include if="js"   name="org/fife/rsta/ac/js/**/*.gif"/>
+				<include if="xml"  name="org/fife/rsta/ac/xml/**/*.png"/>
 			</fileset>
 			<fileset dir="res">
 				<include if="demo" name="**"/>

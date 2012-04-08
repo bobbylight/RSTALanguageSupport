@@ -14,7 +14,6 @@ import javax.swing.Icon;
 import javax.swing.JList;
 
 import org.fife.rsta.ac.js.completion.JSCompletion;
-import org.fife.rsta.ac.js.completion.JSFieldCompletion;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionCellRenderer;
 import org.fife.ui.autocomplete.EmptyIcon;

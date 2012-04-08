@@ -320,7 +320,6 @@ public class JavaScriptOutlineTree extends AbstractSourceTree {
 		model.setRoot(root);
 		root.setSorted(isSorted());
 		refresh();
-		expandInitialNodes();
 
 	}
 

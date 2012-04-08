@@ -28,6 +28,7 @@ import org.fife.rsta.ac.java.JavaLanguageSupport;
 import org.fife.rsta.ac.java.tree.JavaOutlineTree;
 import org.fife.rsta.ac.js.JavaScriptLanguageSupport;
 import org.fife.rsta.ac.js.tree.JavaScriptOutlineTree;
+import org.fife.rsta.ac.xml.tree.XmlOutlineTree;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
@@ -118,6 +119,7 @@ class DemoRootPane extends JRootPane implements HyperlinkListener,
 		addItem(new StyleAction(this, "HTML",       "HtmlExample.txt",   SYNTAX_STYLE_HTML), bg, menu);
 		addItem(new StyleAction(this, "PHP",        "PhpExample.txt",    SYNTAX_STYLE_PHP), bg, menu);
 		addItem(new StyleAction(this, "sh",         "ShellExample.txt",  SYNTAX_STYLE_UNIX_SHELL), bg, menu);
+		addItem(new StyleAction(this, "XML",        "XMLExample.txt",    SYNTAX_STYLE_XML), bg, menu);
 		menu.getItem(0).setSelected(true);
 		mb.add(menu);
 
@@ -221,6 +223,9 @@ class DemoRootPane extends JRootPane implements HyperlinkListener,
 		}
 		else if (SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT.equals(language)) {
 			tree = new JavaScriptOutlineTree();
+		}
+		else if (SyntaxConstants.SYNTAX_STYLE_XML.equals(language)) {
+			tree = new XmlOutlineTree();
 		}
 		else {
 			tree = null;

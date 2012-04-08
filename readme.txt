@@ -82,7 +82,7 @@ Languages with support include:
    - Ctrl+Shift+O (Cmd+Shift+O on OS X) opens "Go to Member" popup.
 
 6. JSP
-   - 
+   - Auto-completion for standard JSP tags.
 
 7. Perl
    - Error checking (squiggle underlining) via using "perl -c ..." on the local
@@ -105,6 +105,10 @@ Languages with support include:
      otherwise (on Windows) it defaults to short, generic descriptions.
      Whether local man pages are used is configurable.
 
+10. XML
+   - Ctrl+Shift+O (Cmd+Shift+O on OS X) opens "Go to Member" popup.
+
+
 
 ----------------------------------------
 III. Project Layout
@@ -125,6 +129,7 @@ properly.
          org/fife/rsta/ac/perl          Code completion for Perl
          org/fife/rsta/ac/php           Code completion for PHP
          org/fife/rsta/ac/sh            Code completion fro Unix shell
+         org/fife/rsta/ac/xml           Code completion fro XML
       res/                              Source snippets used in the demo
       data/                             Input XML for some languages
       dist/                             Where Ant places the built jar
@@ -167,6 +172,7 @@ supported languages, the properties look like this:
    <property name="perl"           value="true"/>
    <property name="php"            value="true"/>
    <property name="sh"             value="true"/>
+   <property name="xml"            value="true"/>
 
 Removing the "java" property line will cause the jar to be built without the
 Java-related code completion classes.
