@@ -57,4 +57,15 @@ public class TypeDeclaration {
 		return super.equals(obj);
 	}
 
+
+	/**
+	 * Overridden since {@link #equals(Object)} is overridden.
+	 *
+	 * @return The hash code.
+	 */
+	public int hashCode() {
+		return getQualifiedName().hashCode();
+	}
+
+
 }

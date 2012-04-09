@@ -164,4 +164,15 @@ public class JavaScriptType {
 		return false;
 	}
 
+
+	/**
+	 * Overridden since {@link #equals(Object)} is overridden.
+	 *
+	 * @return The hash code.
+	 */
+	public int hashCode() {
+		return getType().hashCode();
+	}
+
+
 }

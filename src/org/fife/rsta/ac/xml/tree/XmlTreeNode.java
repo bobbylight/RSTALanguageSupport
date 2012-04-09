@@ -11,7 +11,6 @@
 package org.fife.rsta.ac.xml.tree;
 
 import javax.swing.text.Position;
-import javax.swing.tree.TreePath;
 
 import org.fife.rsta.ac.SourceTreeNode;
 
@@ -25,16 +24,14 @@ import org.fife.rsta.ac.SourceTreeNode;
  */
 public class XmlTreeNode extends SourceTreeNode {
 
-	private XmlOutlineTree tree;
 	private String name;
 	private String mainAttr;
-	Position offset;
-	Position endOffset;
+	private Position offset;
+	private Position endOffset;
 
 
-	public XmlTreeNode(XmlOutlineTree tree, String name) {
+	public XmlTreeNode(String name) {
 		super(name);
-		this.tree = tree;
 		this.name = name;
 	}
 
@@ -52,13 +49,6 @@ public class XmlTreeNode extends SourceTreeNode {
 
 	public int getStartOffset() {
 		return offset!=null ? offset.getOffset() : -1;
-	}
-
-
-	public void selectInTree() {
-		TreePath path = new TreePath(getPath());
-		tree.setSelectionPath(path);
-		tree.scrollPathToVisible(path);
 	}
 
 

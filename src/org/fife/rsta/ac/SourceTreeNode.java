@@ -11,7 +11,6 @@
 package org.fife.rsta.ac;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Vector;
@@ -28,7 +27,8 @@ import javax.swing.tree.TreeNode;
  * @version 1.0
  * @see AbstractSourceTree
  */
-public class SourceTreeNode extends DefaultMutableTreeNode {
+public class SourceTreeNode extends DefaultMutableTreeNode
+		implements Cloneable, Comparable {
 
 	private boolean sortable;
 	private boolean sorted;
@@ -37,11 +37,23 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 	private int sortPriority;
 
 
+	/**
+	 * Creates an unsorted tree node.
+	 *
+	 * @param userObject The user data for this tree node.
+	 */
 	public SourceTreeNode(Object userObject) {
 		this(userObject, false);
 	}
 
 
+	/**
+	 * Constructor.
+	 *
+	 * @param userObject The user data for this tree node.
+	 * @param sorted Whether any child nodes added to this one should be
+	 *        sorted.
+	 */
 	public SourceTreeNode(Object userObject, boolean sorted) {
 		super(userObject);
 		visibleChildren = new Vector();
@@ -50,6 +62,12 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 	}
 
 
+	/**
+	 * Overridden to ensure the new child is only made visible if it is
+	 * matched by the current filter.
+	 *
+	 * @param child The child node to add.
+	 */
 	public void add(MutableTreeNode child) {
 		//super.add(child);
 		if(child!=null && child.getParent()==this) {
@@ -64,11 +82,56 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 	}
 
 
+	/**
+	 * Overridden to operate over visible children only.
+	 *
+	 * @return The visible children.
+	 */
 	public Enumeration children() {
 		return visibleChildren.elements();
 	}
 
 
+	/**
+	 * Returns a clone of this tree node.  The clone will not contain any child
+	 * nodes.
+	 *
+	 * @return The clone of this node.
+	 * @see #cloneWithChildren()
+	 */
+	public Object clone() {
+		SourceTreeNode node = (SourceTreeNode)super.clone();
+		// Not based off original, no children!
+		node.visibleChildren = new Vector();
+		return node;
+	}
+
+
+	/**
+	 * Returns a clone of this tree node and all of its children.
+	 *
+	 * @return The clone of this node.
+	 * @see #clone()
+	 */
+	public SourceTreeNode cloneWithChildren() {
+		SourceTreeNode clone = (SourceTreeNode)clone();
+		for (int i=0; i<super.getChildCount(); i++) {
+			clone.add(((SourceTreeNode)super.getChildAt(i)).cloneWithChildren());
+		}
+		return clone;
+	}
+
+
+	/**
+	 * Overridden to provide proper sorting of source tree nodes when the
+	 * parent <code>AbstractSourceTree</code> is sorted.  Sorting is done first
+	 * by priority, and nodes with equal priority are then sorted by their
+	 * string representations, ignoring case.  Subclasses can override this
+	 * method if they wish to do more intricate sorting.
+	 *
+	 * @param obj A tree node to compare to.
+	 * @return How these tree nodes compare relative to each other.
+	 */
 	public int compareTo(Object obj) {
 		int res = -1;
 		if (obj instanceof SourceTreeNode) {
@@ -79,25 +142,6 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 			}
 		}
 		return res;
-	}
-
-
-	/**
-	 * Returns a comparator used to sort the child nodes of this node.
-	 * The default implementation sorts alphabetically.  Subclasses may want
-	 * to override to return a comparator that groups by type of node and sorts
-	 * by group, etc.
-	 *
-	 * @return A comparator.
-	 */
-	public Comparator createComparator() {
-		return new Comparator() {
-			public int compare(Object o1, Object o2) {
-				SourceTreeNode stn1 = (SourceTreeNode)o1;
-				SourceTreeNode stn2 = (SourceTreeNode)o2;
-				return stn1.compareTo(stn2);
-			}
-		};
 	}
 
 
@@ -119,6 +163,13 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 	}
 
 
+	/**
+	 * Overridden to operate over visible children only.
+	 *
+	 * @param child The child node.
+	 * @return The visible child after the specified node, or <code>null</code>
+	 *         if none.
+	 */
 	public TreeNode getChildAfter(TreeNode child) {
 		if (child==null) {
 			throw new IllegalArgumentException("child cannot be null");
@@ -131,12 +182,25 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 	}
 
 
+	/**
+	 * Overridden to operate over visible children only.
+	 *
+	 * @param index The index of the visible child to retrieve.
+	 * @return The visible child after the specified index.
+	 */
 	public TreeNode getChildAt(int index) {
 		//System.out.println(index);
 		return (TreeNode)visibleChildren.get(index);
 	}
 
 
+	/**
+	 * Overridden to operate over visible children only.
+	 *
+	 * @param child The child node.
+	 * @return The visible child before the specified node, or <code>null</code>
+	 *         if none.
+	 */
 	public TreeNode getChildBefore(TreeNode child) {
 		if (child==null) {
 			throw new IllegalArgumentException("child cannot be null");
@@ -149,11 +213,24 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 	}
 
 
+	/**
+	 * Overridden to operate over visible children only.
+	 *
+	 * @return The number of visible child nodes.
+	 */
 	public int getChildCount() {
 		return visibleChildren.size();
 	}
 
 
+	/**
+	 * Overridden to operate over visible children only.
+	 *
+	 * @param child The child node.
+	 * @return The index of the child, if it is visible.  If the child node is
+	 *         not contained in this tree, or is simply not visible,
+	 *         <code>-1</code> is returned.
+	 */
 	public int getIndex(TreeNode child) {
 		if (child==null) {
 			throw new IllegalArgumentException("child cannot be null");
@@ -220,7 +297,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode {
 		if (children!=null) {
 			visibleChildren.addAll(children);
 			if (sortable && sorted) {
-				Collections.sort(visibleChildren, createComparator());
+				Collections.sort(visibleChildren);
 			}
 			if (prefix!=null) {
 				for (Iterator i=visibleChildren.iterator(); i.hasNext(); ) {

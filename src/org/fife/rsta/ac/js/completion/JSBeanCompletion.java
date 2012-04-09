@@ -108,4 +108,15 @@ public class JSBeanCompletion extends VariableCompletion implements JSCompletion
 
 	}
 
+
+	/**
+	 * Overridden since {@link #equals(Object)} is overridden.
+	 *
+	 * @return The hash code.
+	 */
+	public int hashCode() {
+		return getName().hashCode();
+	}
+
+
 }

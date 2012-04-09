@@ -15,28 +15,16 @@ import java.beans.PropertyChangeListener;
 import javax.swing.BorderFactory;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.Element;
-import javax.swing.text.Segment;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
-import org.fife.io.DocumentReader;
 import org.fife.rsta.ac.AbstractSourceTree;
 import org.fife.rsta.ac.LanguageSupport;
 import org.fife.rsta.ac.LanguageSupportFactory;
 import org.fife.rsta.ac.xml.XmlLanguageSupport;
+import org.fife.rsta.ac.xml.XmlParser;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 
 /**
@@ -58,12 +46,8 @@ import org.xml.sax.helpers.XMLReaderFactory;
  */
 public class XmlOutlineTree extends AbstractSourceTree {
 
-	private Document doc;
-	private Locator locator;
+	private XmlParser parser;
 	private XmlEditorListener listener;
-
-	private XmlTreeNode root;
-	private XmlTreeNode curElem;
 	private DefaultTreeModel model;
 	private XmlTreeCellRenderer xmlTreeCellRenderer;
 
@@ -91,7 +75,7 @@ public class XmlOutlineTree extends AbstractSourceTree {
 		setRootVisible(false);
 		xmlTreeCellRenderer = new XmlTreeCellRenderer();
 		setCellRenderer(xmlTreeCellRenderer);
-		model = new DefaultTreeModel(new DefaultMutableTreeNode("Nothing"));
+		model = new DefaultTreeModel(new XmlTreeNode("Nothing"));
 		setModel(model);
 		listener = new XmlEditorListener();
 		addTreeSelectionListener(listener);
@@ -99,29 +83,42 @@ public class XmlOutlineTree extends AbstractSourceTree {
 
 
 	/**
-	 * Creates the XML reader to use.  Note that in 1.4 JRE's, the reader
-	 * class wasn't defined by default, but in 1.5+ it is.
-	 *
-	 * @return The XML reader to use.
+	 * Refreshes listeners on the text area when its syntax style changes.
 	 */
-	private XMLReader createReader() {
-		XMLReader reader = null;
-		try {
-			reader = XMLReaderFactory.createXMLReader();
-		} catch (SAXException e) {
-			// Happens in JRE 1.4.x; 1.5+ define the reader class properly
-			try {
-				reader = XMLReaderFactory.createXMLReader(
-						"org.apache.crimson.parser.XMLReaderImpl");
-			} catch (SAXException se) {
-				//owner.displayException(se);
-				se.printStackTrace();
-			}
+	private void checkForXmlParsing() {
+
+		// Remove possible listener on old Java parser (in case they're just
+		// changing syntax style AWAY from Java)
+		if (parser!=null) {
+			parser.removePropertyChangeListener(XmlParser.PROPERTY_AST, listener);
+			parser = null;
 		}
-		return reader;
+
+		// Get the Java language support (shared by all RSTA instances editing
+		// Java that were registered with the LanguageSupportFactory).
+		LanguageSupportFactory lsf = LanguageSupportFactory.get();
+		LanguageSupport support = lsf.getSupportFor(SyntaxConstants.
+													SYNTAX_STYLE_XML);
+		XmlLanguageSupport xls = (XmlLanguageSupport)support;
+
+		// Listen for re-parsing of the editor, and update the tree accordingly
+		parser = xls.getParser(textArea);
+		if (parser!=null) { // Should always be true
+			parser.addPropertyChangeListener(XmlParser.PROPERTY_AST, listener);
+			// Populate with any already-existing AST.
+			XmlTreeNode root = parser.getAst();
+			update(root);
+		}
+		else {
+			update((XmlTreeNode)null); // Clear the tree
+		}
+
 	}
 
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public void expandInitialNodes() {
 
 		// First, collapse all rows.
@@ -133,41 +130,16 @@ public class XmlOutlineTree extends AbstractSourceTree {
 		// Expand the root node.
 		expandRow(0);
 
-	}
-
-
-	/**
-	 * Returns a string representing the "main" attribute for an element.
-	 *
-	 * @param attributes The attributes of an element.  Calling code should
-	 *        have already verified this has length &gt; 0.
-	 * @return The "main" attribute.
-	 */
-	private String getMainAttribute(Attributes attributes) {
-
-		int nameIndex = -1;
-		int idIndex = -1;
-
-		for (int i=0; i<attributes.getLength(); i++) {
-			String name = attributes.getLocalName(i);
-			if ("id".equals(name)) {
-				idIndex = i;
-				break;
-			}
-			else if ("name".equals(name)) {
-				nameIndex = i;
+		// Expand one level deep also
+		XmlTreeNode root = (XmlTreeNode)getModel().getRoot();
+		int childCount = root==null ? 0 : root.getChildCount();
+		if (childCount>0) { // Should be only 0 or 1
+			root = (XmlTreeNode)root.getChildAt(0);
+			childCount = root==null ? 0 : root.getChildCount();
+			for (int i=childCount-1; i>=0; i--) {
+				expandRow(i+1);
 			}
 		}
-
-		int i = idIndex;
-		if (i==-1) {
-			i = nameIndex;
-			if (i==-1) {
-				i = 0; // Default to first attribute
-			}
-		}
-
-		return attributes.getLocalName(i) + "=" + attributes.getValue(i);
 
 	}
 
@@ -208,80 +180,13 @@ public class XmlOutlineTree extends AbstractSourceTree {
 			return;
 		}
 
-		// If we ever move the actual XML parsing out into the XmlParser,
-		// this will go away, and we'll listen to events to get notified when
-		// it is re-parsed.  Note that FWIW, this tree view *is* the "AST"
-		// we'd be interested in.
-		LanguageSupportFactory fact = LanguageSupportFactory.get();
-		LanguageSupport ls = fact.getSupportFor(SyntaxConstants.SYNTAX_STYLE_XML);
-		XmlLanguageSupport xmlSupport = (XmlLanguageSupport)ls;
-		xmlSupport.registerOutlineTree(textArea, this);
-
 		// Listen for future language changes in the text editor
 		this.textArea = textArea;
 		textArea.addPropertyChangeListener(
 							RSyntaxTextArea.SYNTAX_STYLE_PROPERTY, listener);
 
-		// Check whether we're currently editing XML
-		parseEditorContents();
+		checkForXmlParsing();
 
-	}
-
-
-	private void parseEditorContents() {
-
-		curElem = root = null;
-		model.setRoot(null);
-
-		// If they changed syntax styles (but the programmer forgot to call
-		// uninstall()), bail.
-		if (!SyntaxConstants.SYNTAX_STYLE_XML.equals(
-				textArea.getSyntaxEditingStyle())) {
-			return;
-		}
-
-		doc = textArea.getDocument();
-		curElem = root = new XmlTreeNode(this, "Root");
-
-		//long start = System.currentTimeMillis();
-		try {
-			XMLReader xr = createReader();
-			if (xr==null) { // Couldn't create an XML reader.
-				return;
-			}
-			xr.setContentHandler(new Handler());
-			InputSource is = new InputSource(new DocumentReader(doc));
-			//is.setEncoding("UTF-8");
-			xr.parse(is);
-		} catch (Exception e) {
-			// Don't give an error; they likely just saved an incomplete XML
-			// file
-			// Fall through
-		}
-		//long time = System.currentTimeMillis() - start;
-		//System.err.println("DEBUG: IconGroupLoader parsing: " + time + " ms");
-
-		if (locator!=null) {
-			try {
-				root.offset = doc.createPosition(0);
-				root.endOffset = doc.createPosition(doc.getLength());
-			} catch (BadLocationException ble) {
-				ble.printStackTrace();
-			}
-		}
-
-		model.setRoot(root);
-		root.setSorted(isSorted());
-		refresh();
-
-	}
-
-
-	/**
-	 * Forces this tree to re-parse the RSTA's contents.
-	 */
-	public void reparse() {
-		parseEditorContents();
 	}
 
 
@@ -290,16 +195,29 @@ public class XmlOutlineTree extends AbstractSourceTree {
 	 */
 	public void uninstall() {
 
-		LanguageSupportFactory fact = LanguageSupportFactory.get();
-		LanguageSupport ls = fact.getSupportFor(SyntaxConstants.SYNTAX_STYLE_XML);
-		XmlLanguageSupport xmlSupport = (XmlLanguageSupport)ls;
-
-		if (textArea!=null) {
-			xmlSupport.unregisterOutlineTree(textArea);
-			textArea.removePropertyChangeListener(
-					RSyntaxTextArea.SYNTAX_STYLE_PROPERTY, listener);
+		if (parser!=null) {
+			parser.removePropertyChangeListener(XmlParser.PROPERTY_AST, listener);
+			parser = null;
 		}
 
+		if (textArea!=null) {
+			textArea.removePropertyChangeListener(
+					RSyntaxTextArea.SYNTAX_STYLE_PROPERTY, listener);
+			textArea = null;
+		}
+
+	}
+
+
+	private void update(XmlTreeNode root) {
+		if (root!=null) {
+			root = (XmlTreeNode)root.cloneWithChildren();
+		}
+		model.setRoot(root);
+		if (root!=null) {
+			root.setSorted(isSorted());
+		}
+		refresh();
 	}
 
 
@@ -310,120 +228,6 @@ public class XmlOutlineTree extends AbstractSourceTree {
 		super.updateUI();
 		xmlTreeCellRenderer = new XmlTreeCellRenderer();
 		setCellRenderer(xmlTreeCellRenderer); // So it picks up new LAF's properties
-	}
-
-
-	/**
-	 * Callback for events when we're parsing the XML in the editor.
-	 */
-	private class Handler extends DefaultHandler {
-
-		private Segment s;
-
-		public Handler() {
-			s = new Segment();
-		}
-
-
-		public void endElement(String uri, String localName, String qName) {
-/*
-			if (locator!=null) {
-				int line = locator.getLineNumber();
-				if (line!=-1) {
-					int offs = doc.getDefaultRootElement().
-						getElement(line-1).getStartOffset();
-					int col = locator.getColumnNumber();
-					if (col!=-1) {
-						offs += col - 1;
-					}
-					try {
-						curElem.setEndOffset(doc.createPosition(offs));
-					} catch (BadLocationException ble) {
-						ble.printStackTrace();
-					}
-				}
-			}
-*/
-			curElem = (XmlTreeNode)curElem.getParent();
-
-		}
-
-
-		private int getTagStart(int end) {
-
-			Element root = doc.getDefaultRootElement();
-			int line = root.getElementIndex(end);
-			Element elem = root.getElement(line);
-			int start = elem.getStartOffset();
-			int lastCharOffs = -1;
-
-			try {
-				while (line>=0) {
-					doc.getText(start, end-start, s);
-					for (int i=s.offset+s.count-1; i>=s.offset; i--) {
-						char ch = s.array[i];
-						if (ch=='<') {
-							return lastCharOffs;
-						}
-						else if (Character.isLetterOrDigit(ch)) {
-							//lastCharOffs = start + s.getIndex() - s.getBeginIndex();
-							lastCharOffs = start + i - s.offset;
-						}
-					}
-					if (--line>=0) {
-						elem = root.getElement(line);
-						start = elem.getStartOffset();
-						end = elem.getEndOffset();
-					}
-				}
-			} catch (BadLocationException ble) {
-				ble.printStackTrace();
-			}
-
-			return -1;
-
-		}
-
-
-		public void setDocumentLocator(Locator l) {
-			locator = l;
-		}
-
-
-		public void startElement(String uri, String localName, String qName,
-								Attributes attributes) {
-
-			XmlTreeNode newElem = new XmlTreeNode(XmlOutlineTree.this, qName);
-			if (attributes.getLength()>0) {
-				newElem.setMainAttribute(getMainAttribute(attributes));
-			}
-			if (locator!=null) {
-				int line = locator.getLineNumber();
-				if (line!=-1) {
-					int offs = doc.getDefaultRootElement().
-						getElement(line-1).getStartOffset();
-					int col = locator.getColumnNumber();
-					if (col!=-1) {
-						offs += col - 1;
-					}
-					// "offs" is now the end of the tag.  Find the beginning of it.
-					offs = getTagStart(offs);
-					try {
-						newElem.setStartOffset(doc.createPosition(offs));
-						int endOffs = offs + qName.length();
-						newElem.setEndOffset(doc.createPosition(endOffs));
-					} catch (BadLocationException ble) {
-						ble.printStackTrace();
-					}
-				}
-			}
-
-			curElem.add(newElem);
-			curElem = newElem;
-
-		}
-
-
 	}
 
 
@@ -444,14 +248,13 @@ public class XmlOutlineTree extends AbstractSourceTree {
 
 			// If the text area is changing the syntax style it is editing
 			if (RSyntaxTextArea.SYNTAX_STYLE_PROPERTY.equals(name)) {
-				parseEditorContents();
+				checkForXmlParsing();
 			}
 
-// TODO: Have parser keep our model for code completion purposes?
-//			else if (JavaScriptParser.PROPERTY_AST.equals(name)) {
-//				AstRoot ast = (AstRoot)e.getNewValue();
-//				update(ast);
-//			}
+			else if (XmlParser.PROPERTY_AST.equals(name)) {
+				XmlTreeNode root = (XmlTreeNode)e.getNewValue();
+				update(root);
+			}
 
 		}
 

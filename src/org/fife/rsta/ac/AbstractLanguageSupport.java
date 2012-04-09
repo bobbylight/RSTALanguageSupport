@@ -294,7 +294,7 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	 * Unregisters an textArea.  This should be called by subclasses in their
 	 * {@link #uninstall(org.fife.ui.rsyntaxtextarea.RSyntaxTextArea)} methods.
 	 * This method will also call the <code>uninstall</code> method on the
-	 * <code>AutoComplete</code>.
+	 * <code>AutoCompletion</code>.
 	 *
 	 * @param textArea The text area.
 	 * @see #installImpl(RSyntaxTextArea, AutoCompletion)

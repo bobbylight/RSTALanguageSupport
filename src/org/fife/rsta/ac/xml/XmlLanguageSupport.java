@@ -12,10 +12,6 @@ package org.fife.rsta.ac.xml;
 
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.KeyStroke;
@@ -24,14 +20,13 @@ import org.fife.rsta.ac.AbstractLanguageSupport;
 import org.fife.rsta.ac.GoToMemberAction;
 import org.fife.rsta.ac.xml.tree.XmlOutlineTree;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-import org.fife.ui.rsyntaxtextarea.XMLParser;
 
 
 /**
- * Language support for XML.  At present, this is mostly a stub.  Currently
- * supported features include:
+ * Language support for XML.  Currently supported features include:
  * 
  * <ul>
+ *    <li>Squiggle underlining of basic XML structure errors.</li>
  *    <li>Usage of {@link XmlOutlineTree}, a tree view modeling the XML in
  *        the <code>RSyntaxTextArea</code>.</li>
  * </ul>
@@ -39,7 +34,6 @@ import org.fife.ui.rsyntaxtextarea.XMLParser;
  * Possible future features include:
  * 
  * <ul>
- *    <li>Simple XML structure validation.</li>
  *    <li>DTD/Schema validation.</li>
  *    <li>Code completion based off of other tags in the XML.</li>
  *    <li>Code completion based off of the relevant DTD or schema.</li>
@@ -51,40 +45,19 @@ import org.fife.ui.rsyntaxtextarea.XMLParser;
 public class XmlLanguageSupport extends AbstractLanguageSupport {
 
 	/**
-	 * The parser shared amongst all editors with this language support
-	 * installed.
+	 * Whether syntax errors are squiggle-underlined in the editor.
 	 */
-	private XmlParser parser;
-
-	/**
-	 * Mapping of <code>RSyntaxTextArea</code>s to <code>XmlOutlineTree</code>s.
-	 * If we support a true parser in the future, like we do for Java or
-	 * JavaScript, this will go away, and the trees will listen for "AST"
-	 * updates like they do.
-	 */
-	private Map rstaToOutlineTreeMap;
+	private boolean showSyntaxErrors;
 
 
 	/**
 	 * Constructor.
 	 */
 	public XmlLanguageSupport() {
-		setParameterAssistanceEnabled(true);
-		setShowDescWindow(true);
-		rstaToOutlineTreeMap = new HashMap();
-	}
-
-
-	/**
-	 * Returns the shared parser, lazily creating it if necessary.
-	 *
-	 * @return The parser.
-	 */
-	private XmlParser getParser() {
-		if (parser==null) {
-			parser = new XmlParser(this);
-		}
-		return parser;
+		setAutoCompleteEnabled(false);
+		setParameterAssistanceEnabled(false);
+		setShowDescWindow(false);
+		setShowSyntaxErrors(true);
 	}
 
 
@@ -107,17 +80,28 @@ public class XmlLanguageSupport extends AbstractLanguageSupport {
 
 
 	/**
+	 * Returns whether syntax errors are squiggle-underlined in the editor.
+	 *
+	 * @return Whether errors are squiggle-underlined.
+	 * @see #setShowSyntaxErrors(boolean)
+	 */
+	public boolean getShowSyntaxErrors() {
+		return showSyntaxErrors;
+	}
+
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public void install(RSyntaxTextArea textArea) {
 
 		// No code completion yet; this exists solely to support the tree
-		// view.
+		// view and identifying syntax errors.
 
-		XmlParser parser = getParser();
+		XmlParser parser = new XmlParser(this);
 		textArea.addParser(parser);
 		textArea.putClientProperty(PROPERTY_LANGUAGE_PARSER, parser);
-textArea.addParser(new XMLParser(textArea));
+
 		installKeyboardShortcuts(textArea);
 
 	}
@@ -142,39 +126,13 @@ textArea.addParser(new XMLParser(textArea));
 
 
 	/**
-	 * Tells all XML outline trees to re-parse the RSTAs' contents.
+	 * Sets whether syntax errors are squiggle-underlined in the editor.
+	 *
+	 * @param show Whether syntax errors are squiggle-underlined.
+	 * @see #getShowSyntaxErrors()
 	 */
-	void refreshOutlineTrees() {
-		Set entries = rstaToOutlineTreeMap.entrySet();
-		for (Iterator i=entries.iterator(); i.hasNext(); ) {
-			Map.Entry entry = (Map.Entry)i.next();
-			Object value = entry.getValue();
-			if (value instanceof XmlOutlineTree) { // Should always be true
-				((XmlOutlineTree)value).reparse();
-			}
-		}
-	}
-
-
-	/**
-	 * This method is public due to an unfortunate implementation detail that
-	 * will go away in the future.  DO NOT CALL THIS METHOD DIRECTLY.
-	 */
-	public void registerOutlineTree(RSyntaxTextArea textArea,
-			XmlOutlineTree tree) {
-		Object previous = rstaToOutlineTreeMap.put(textArea, tree);
-		if (previous instanceof XmlOutlineTree) {
-			((XmlOutlineTree)previous).uninstall();
-		}
-	}
-
-
-	/**
-	 * This method is public due to an unfortunate implementation detail that
-	 * will go away in the future.  DO NOT CALL THIS METHOD DIRECTLY.
-	 */
-	public void unregisterOutlineTree(RSyntaxTextArea textArea) {
-		rstaToOutlineTreeMap.remove(textArea);
+	public void setShowSyntaxErrors(boolean show) {
+		showSyntaxErrors = show;
 	}
 
 
@@ -189,6 +147,26 @@ textArea.addParser(new XMLParser(textArea));
 		if (parser!=null) {
 			textArea.removeParser(parser);
 		}
+
+		uninstallKeyboardShortcuts(textArea);
+
+	}
+
+
+	/**
+	 * Uninstalls any keyboard shortcuts specific to this language support.
+	 * 
+	 * @param textArea The text area to uninstall the actions from.
+	 */
+	private void uninstallKeyboardShortcuts(RSyntaxTextArea textArea) {
+
+		InputMap im = textArea.getInputMap();
+		ActionMap am = textArea.getActionMap();
+		int c = textArea.getToolkit().getMenuShortcutKeyMask();
+		int shift = InputEvent.SHIFT_MASK;
+
+		im.remove(KeyStroke.getKeyStroke(KeyEvent.VK_O, c | shift));
+		am.remove("GoToType");
 
 	}
 

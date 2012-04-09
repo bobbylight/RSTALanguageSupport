@@ -20,6 +20,7 @@ import javax.swing.tree.TreeSelectionModel;
 
 import org.fife.rsta.ac.java.tree.JavaOutlineTree;
 import org.fife.rsta.ac.js.tree.JavaScriptOutlineTree;
+import org.fife.rsta.ac.xml.tree.XmlOutlineTree;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 
@@ -44,6 +45,7 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
  * @see SourceTreeNode
  * @see JavaOutlineTree
  * @see JavaScriptOutlineTree
+ * @see XmlOutlineTree
  */
 public abstract class AbstractSourceTree extends JTree {
 

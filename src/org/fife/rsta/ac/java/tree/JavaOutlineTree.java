@@ -49,9 +49,12 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
  *
  * You can get this tree automatically updating in response to edits in an
  * <code>RSyntaxTextArea</code> with {@link JavaLanguageSupport} installed by
- * calling {@link #listenTo(RSyntaxTextArea)}.  Note that, if you have an
- * application with multiple RSTA editors, you would want to call this method
- * each time a new editor is focused.
+ * calling {@link #listenTo(RSyntaxTextArea)}.  Note that an instance of this
+ * class can only listen to a single editor at a time, so if your application
+ * contains multiple instances of RSyntaxTextArea, you'll either need a separate
+ * <code>JavaOutlineTree</code> for each one, or call <code>uninstall()</code>
+ * and <code>listenTo(RSyntaxTextArea)</code> each time a new RSTA receives
+ * focus.
  * 
  * @author Robert Futrell
  * @version 1.0
