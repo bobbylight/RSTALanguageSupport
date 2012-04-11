@@ -67,6 +67,7 @@ public class JavaScriptParser extends AbstractParser {
 	private PropertyChangeSupport support;
 	private DefaultParseResult result;
 
+	private static final boolean DEBUG = true;
 
 	/**
 	 * Constructor.
@@ -95,8 +96,11 @@ public class JavaScriptParser extends AbstractParser {
 		//env.setRecoverFromErrors(true);
 		env.setXmlAvailable(langSupport.isXmlAvailable());
 		env.setStrictMode(langSupport.isStrictMode());
-//		env.setLanguageVersion(170);
-//		System.out.println(env.getLanguageVersion());
+		int version = langSupport.getLanguageVersion();
+		if (version>0) {
+			log("[JavaScriptParser]: JS language version set to: " + version);
+			env.setLanguageVersion(version);
+		}
 		return env;
 	}
 
@@ -109,6 +113,13 @@ public class JavaScriptParser extends AbstractParser {
 	 */
 	public AstRoot getAstRoot() {
 		return astRoot;
+	}
+
+
+	private static final void log(String msg) {
+		if (DEBUG) {
+			System.out.println(msg);
+		}
 	}
 
 

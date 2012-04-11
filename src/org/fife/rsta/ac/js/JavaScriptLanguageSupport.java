@@ -27,6 +27,7 @@ import org.fife.rsta.ac.js.tree.JavaScriptOutlineTree;
 import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ast.AstRoot;
 
 
@@ -47,16 +48,17 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	private JarManager jarManager;
 	private boolean xmlAvailable;
 	private boolean strictMode;
+	private int languageVersion;
 
 
 	public JavaScriptLanguageSupport() {
-
 		parserToInfoMap = new HashMap();
 		jarManager = new JarManager();
 		setDefaultCompletionCellRenderer(new JavaScriptCellRenderer());
 		setAutoActivationEnabled(true);
 		setParameterAssistanceEnabled(true);
 		setShowDescWindow(true);
+		setLanguageVersion(Integer.MIN_VALUE); // Take Rhino's default
 	}
 
 
@@ -74,6 +76,20 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 
 	public JarManager getJarManager() {
 		return jarManager;
+	}
+
+
+	/**
+	 * Sets the JS version to use when parsing the code.
+	 *
+	 * @return The JS version.  This should be one of the
+	 *        <code>VERSION_xxx</code> constants in Rhino's {@link Context}
+	 *        class.  If this is set to a value unknown to Rhino, then Rhino's
+	 *        default value is used (<code>VERSION_DEFAULT</code>).
+	 * @see #setLanguageVersion(int)
+	 */
+	public int getLanguageVersion() {
+		return languageVersion;
 	}
 
 
@@ -163,6 +179,23 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	 */
 	public boolean isXmlAvailable() {
 		return xmlAvailable;
+	}
+
+
+	/**
+	 * Sets the JS version to use when parsing the code.
+	 *
+	 * @param languageVersion  The JS version.  This should be one of the
+	 *        <code>VERSION_xxx</code> constants in Rhino's {@link Context}
+	 *        class.  If this is set to a value unknown to Rhino, then Rhino's
+	 *        default value is used (<code>VERSION_DEFAULT</code>).
+	 * @see #getLanguageVersion()
+	 */
+	public void setLanguageVersion(int languageVersion) {
+		if (languageVersion<0) {
+			languageVersion = Context.VERSION_UNKNOWN;
+		}
+		this.languageVersion = languageVersion;
 	}
 
 

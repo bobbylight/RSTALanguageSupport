@@ -1451,7 +1451,7 @@ OUTER:
 	}
 
 
-	private void log(String msg) {
+	private static final void log(String msg) {
 		if (DEBUG) {
 			System.out.println(msg);
 		}
