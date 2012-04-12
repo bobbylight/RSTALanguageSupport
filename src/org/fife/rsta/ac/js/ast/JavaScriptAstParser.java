@@ -7,8 +7,7 @@ import java.util.Set;
 
 import org.fife.rsta.ac.js.JavaScriptHelper;
 import org.fife.rsta.ac.js.SourceCompletionProvider;
-import org.fife.rsta.ac.js.Util;
-import org.fife.ui.autocomplete.FunctionCompletion;
+import org.fife.rsta.ac.js.completion.JavaScriptFunctionCompletion;
 import org.fife.ui.autocomplete.ParameterizedCompletion.Parameter;
 import org.mozilla.javascript.Node;
 import org.mozilla.javascript.Token;
@@ -319,9 +318,9 @@ public class JavaScriptAstParser {
 			String entered, int offset) {
 		FunctionNode fn = (FunctionNode) child;
 		String jsdoc = fn.getJsDoc();
-		FunctionCompletion fc = new FunctionCompletion(provider, fn.getName(),
+		JavaScriptFunctionCompletion fc = new JavaScriptFunctionCompletion(provider, fn.getName(),
 				null);
-		fc.setShortDescription(Util.jsDocToHtml(jsdoc));
+		fc.setShortDescription(jsdoc);
 		offset = fn.getAbsolutePosition() + fn.getLength();
 		if (fn.getParamCount() > 0) {
 			List fnParams = fn.getParams();
