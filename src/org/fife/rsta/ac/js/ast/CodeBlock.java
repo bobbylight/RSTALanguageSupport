@@ -66,7 +66,7 @@ public class CodeBlock {
 	 * 
 	 * @param varDec The variable declaration.
 	 */
-	public void addVariable(JSVariableDeclaration varDec) {
+	public void addVariable(JavaScriptVariableDeclaration varDec) {
 		if (varDecs == null) {
 			varDecs = new ArrayList();
 		}
@@ -148,8 +148,8 @@ public class CodeBlock {
 	 * @return The declaration.
 	 * @see #getVariableDeclarationCount()
 	 */
-	public JSVariableDeclaration getVariableDeclaration(int index) {
-		return (JSVariableDeclaration) varDecs.get(index);
+	public JavaScriptVariableDeclaration getVariableDeclaration(int index) {
+		return (JavaScriptVariableDeclaration) varDecs.get(index);
 	}
 
 

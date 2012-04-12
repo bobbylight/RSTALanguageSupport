@@ -79,7 +79,7 @@
 			<classpath>
 				<pathelement     location="${rsta-jar}"/>
 				<pathelement     location="${autocomplete-jar}"/>
-				<pathelement     location="lib/rhino/js-14.jar"/>
+				<pathelement     location="lib/rhino/js-14_Patch_716562.jar"/>
 			</classpath>
 			
 			<include             name="org/fife/rsta/ac/*"/>
@@ -125,12 +125,15 @@
 				<include if="js"   name="org/fife/rsta/ac/js/**/*.gif"/>
 				<include if="xml"  name="org/fife/rsta/ac/xml/**/*.png"/>
 			</fileset>
+			<fileset dir="${source-dir}">
+				<include if="js" name="org/fife/rsta/ac/js/ecma/**/*.java"/>
+			</fileset>
 			<fileset dir="res">
 				<include if="demo" name="**"/>
 			</fileset>
 			<manifest>
 				<attribute name="Main-Class" value="org.fife.rsta.ac.demo.DemoApp"/>
-				<attribute name="Class-Path" value="rsyntaxtextarea.jar autocomplete.jar js-14.jar"/>
+				<attribute name="Class-Path" value="rsyntaxtextarea.jar autocomplete.jar js-14_Patch_716562.jar"/>
 				<attribute name="Specification-Title" value="RSyntaxTextArea Language Support"/>
 				<attribute name="Specification-Version" value="${version}"/>
 				<attribute name="Implementation-Title" value="org.fife.ui"/>
