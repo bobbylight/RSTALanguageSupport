@@ -61,7 +61,8 @@ public class JavaScriptParser extends AbstractParser {
 	/**
 	 * The property change event that's fired when the document is re-parsed.
 	 * Applications can listen for this property change and update themselves
-	 * accordingly.
+	 * accordingly.  The "new" value of this property will be an instance of
+	 * <code>org.mozilla.javascript.ast.AstRoot</code>.
 	 */
 	public static final String PROPERTY_AST = "AST";
 
@@ -81,13 +82,26 @@ public class JavaScriptParser extends AbstractParser {
 	}
 
 
+	/**
+	 * Registers a property change listener on this parser.  You'll probably
+	 * want to listen for changes to {@link #PROPERTY_AST}.
+	 *
+	 * @param prop The property to listen for changes in.
+	 * @param l The listener to add.
+	 * @see #removePropertyChangeListener(String, PropertyChangeListener)
+	 */
 	public void addPropertyChangeListener(String prop, PropertyChangeListener l) {
 		support.addPropertyChangeListener(prop, l);
 	}
 
 
-	private CompilerEnvirons createCompilerEnvironment(
-			ErrorReporter errorHandler) {
+	/**
+	 * Creates options for Rhino based off of the user's preferences.
+	 *
+	 * @param errorHandler The container for errors found while parsing.
+	 * @return The properties for the JS compiler to use.
+	 */
+	private CompilerEnvirons createCompilerEnvironment(ErrorReporter errorHandler) {
 		CompilerEnvirons env = new CompilerEnvirons();
 		env.setErrorReporter(errorHandler);
 		env.setIdeMode(true);
@@ -149,9 +163,7 @@ public class JavaScriptParser extends AbstractParser {
 			int offs = elem.getStartOffset();
 			int len = elem.getEndOffset() - offs - 1;
 			String msg = re.details();
-			result
-					.addNotice(new DefaultParserNotice(this, msg, line, offs,
-							len));
+			result.addNotice(new DefaultParserNotice(this, msg, line, offs, len));
 			// }
 		} catch (Exception e) {
 			result.setError(e); // catch all
@@ -184,8 +196,14 @@ public class JavaScriptParser extends AbstractParser {
 	}
 
 
-	public void removePropertyChangeListener(String prop,
-			PropertyChangeListener l) {
+	/**
+	 * Removes a property change listener from this parser.
+	 *
+	 * @param prop The property that was being listened to.
+	 * @param l The listener to remove.
+	 * @see #addPropertyChangeListener(String, PropertyChangeListener)
+	 */
+	public void removePropertyChangeListener(String prop, PropertyChangeListener l) {
 		support.removePropertyChangeListener(prop, l);
 	}
 
