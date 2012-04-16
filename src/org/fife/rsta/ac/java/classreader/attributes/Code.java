@@ -84,8 +84,10 @@ public class Code extends AttributeInfo {
 	 */
 	private List attributes;
 
-	private static final String LINE_NUMBER_TABLE		= "LineNumberTable";
-	private static final String LOCAL_VARIABLE_TABLE	= "LocalVariableTable";
+	private static final String LINE_NUMBER_TABLE			= "LineNumberTable";
+	private static final String LOCAL_VARIABLE_TABLE		= "LocalVariableTable";
+	private static final String LOCAL_VARIABLE_TYPE_TABLE	= "LocalVariableTypeTable";
+	private static final String STACK_MAP_TABLE				= "StackMapTable";
 
 
 	/**
@@ -230,7 +232,7 @@ public class Code extends AttributeInfo {
 		String attrName = cf.getUtf8ValueFromConstantPool(attributeNameIndex);
 
 		// The line number table is more useful to a debugger than to us.
-		if (LINE_NUMBER_TABLE.equals(attrName)) { // 4.8.11
+		if (LINE_NUMBER_TABLE.equals(attrName)) { // 4.7.12
 			//String name = mi.getName(true) + ".<code>";
 			//System.out.println(name + ": Attribute " + attrName + " currently ignored");
 			Util.skipBytes(in, attributeLength);
@@ -239,7 +241,7 @@ public class Code extends AttributeInfo {
 
 		// Describes a local variable during execution of this code.  We only
 		// use it to grab the names of method parameters.
-		else if (LOCAL_VARIABLE_TABLE.equals(attrName)) { // 4.8.12
+		else if (LOCAL_VARIABLE_TABLE.equals(attrName)) { // 4.7.13
 
 			// If this attribute is defined, then this class was compiled with
 			// debugging enabled!  We can grab the names of the method
@@ -274,6 +276,16 @@ public class Code extends AttributeInfo {
 
 			}
 
+		}
+
+		// We don't care about LocalVariableTypeTables
+		else if (LOCAL_VARIABLE_TYPE_TABLE.equals(attrName)) { // 4.7.14
+			Util.skipBytes(in, attributeLength);
+		}
+
+		// Currently skip StackMapTables also
+		else if (STACK_MAP_TABLE.equals(attrName)) { // 4.7.4
+			Util.skipBytes(in, attributeLength);
 		}
 
 		else {
