@@ -52,6 +52,20 @@ public class XmlTreeNode extends SourceTreeNode {
 	}
 
 
+	public String getText(boolean selected) {
+		String text = name;
+		if (mainAttr!=null) {
+			if (selected) {
+				text += " " + mainAttr;
+			}
+			else {
+				text = "<html>" + text + " <font color='#808080'>" + mainAttr;
+			}
+		}
+		return text;
+	}
+
+
 	public void setEndOffset(Position pos) {
 		this.endOffset = pos;
 	}
@@ -67,21 +81,13 @@ public class XmlTreeNode extends SourceTreeNode {
 	}
 
 
+	/**
+	 * Returns a string representation of this tree node.
+	 *
+	 * @return A string representation of this tree node.
+	 */
 	public String toString() {
-		String str = name;
-		if (mainAttr!=null) {
-			str = "<html>" + str + " <font color='#808080'>" + mainAttr;
-		}
-		return str;
-	}
-
-
-	public String toStringSelected() {
-		String str = name;
-		if (mainAttr!=null) {
-			str += " " + mainAttr;
-		}
-		return str;
+		return getText(true);
 	}
 
 

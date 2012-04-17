@@ -42,8 +42,8 @@ class XmlTreeCellRenderer extends DefaultTreeCellRenderer {
 			  boolean focused) {
     	super.getTreeCellRendererComponent(tree, value, sel, expanded,
     										leaf, row, focused);
-    	if (sel) {
-    		setText(((XmlTreeNode)value).toStringSelected());
+    	if (value instanceof XmlTreeNode) {
+    		setText(((XmlTreeNode)value).getText(sel));
     	}
     	setIcon(elemIcon);
     	return this;

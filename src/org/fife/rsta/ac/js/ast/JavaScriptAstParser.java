@@ -153,7 +153,8 @@ public class JavaScriptAstParser {
 				case Token.EMPTY:
 					break;
 				default:
-					System.out.println("Unhandled: " + child.getClass());
+					System.out.println("Unhandled: " + child.getClass() +
+							" (\"" + child.toString() + "\":" + child.getLineno());
 					break;
 			}
 		}
