@@ -7,16 +7,19 @@ import org.fife.rsta.ac.java.JarManager;
 import org.fife.rsta.ac.java.classreader.FieldInfo;
 import org.fife.rsta.ac.java.rjc.ast.Field;
 import org.fife.rsta.ac.js.IconFactory;
+import org.fife.rsta.ac.js.JavaScriptHelper;
 import org.fife.rsta.ac.js.ast.TypeDeclarationFactory;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.VariableCompletion;
 
 
-public class JSFieldCompletion extends VariableCompletion implements JSCompletion {
+public class JSFieldCompletion extends VariableCompletion implements
+		JSCompletion {
 
 	private JSFieldData fieldData;
 	private Field field;
-	private int iconIndex = IconFactory.PUBLIC_STATIC_VARIABLE_ICON; //default static
+	private int iconIndex = IconFactory.PUBLIC_STATIC_VARIABLE_ICON; // default
+																		// static
 
 
 	public JSFieldCompletion(CompletionProvider provider, FieldInfo fieldInfo,
@@ -42,24 +45,25 @@ public class JSFieldCompletion extends VariableCompletion implements JSCompletio
 
 
 	public Icon getIcon() {
-		return IconFactory.get().getIcon(
-				iconIndex);
+		return IconFactory.get().getIcon(iconIndex);
 	}
-	
+
+
 	/**
 	 * Set icon index
+	 * 
 	 * @param iconIndex
 	 * @see IconFactory
 	 */
-	public void setIcon(int iconIndex)
-	{
+	public void setIcon(int iconIndex) {
 		this.iconIndex = iconIndex;
 	}
 
 
 	public String getAlreadyEntered(JTextComponent comp) {
 		String temp = getProvider().getAlreadyEnteredText(comp);
-		int lastDot = temp.lastIndexOf('.');
+		int lastDot = JavaScriptHelper
+				.findLastIndexOfJavaScriptIdentifier(temp);
 		if (lastDot > -1) {
 			temp = temp.substring(lastDot + 1);
 		}
@@ -73,14 +77,14 @@ public class JSFieldCompletion extends VariableCompletion implements JSCompletio
 
 
 	public String getType() {
-		return TypeDeclarationFactory.lookupJSType(fieldData.getType(true), false);
+		return TypeDeclarationFactory.lookupJSType(fieldData.getType(true),
+				false);
 	}
 
 
 	public String getType(boolean qualified) {
-		return TypeDeclarationFactory.lookupJSType(fieldData.getType(true), qualified);
+		return TypeDeclarationFactory.lookupJSType(fieldData.getType(true),
+				qualified);
 	}
-	
-	
 
 }

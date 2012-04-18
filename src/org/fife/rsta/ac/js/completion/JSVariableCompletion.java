@@ -10,6 +10,9 @@
  */
 package org.fife.rsta.ac.js.completion;
 
+import javax.swing.text.JTextComponent;
+
+import org.fife.rsta.ac.js.JavaScriptHelper;
 import org.fife.rsta.ac.js.ast.TypeDeclarationFactory;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.VariableCompletion;
@@ -26,16 +29,27 @@ public class JSVariableCompletion extends VariableCompletion {
 	/**
 	 * @return the type name not qualified
 	 */
-	public String getType()
-	{
+	public String getType() {
 		return getType(false);
 	}
-	
+
+
 	/**
 	 * @param qualified whether to return the name as qualified
 	 * @return the type name based on qualified
 	 */
 	public String getType(boolean qualified) {
 		return TypeDeclarationFactory.lookupJSType(super.getType(), qualified);
+	}
+
+
+	public String getAlreadyEntered(JTextComponent comp) {
+		String temp = getProvider().getAlreadyEnteredText(comp);
+		int lastDot = JavaScriptHelper
+				.findLastIndexOfJavaScriptIdentifier(temp);
+		if (lastDot > -1) {
+			temp = temp.substring(lastDot + 1);
+		}
+		return temp;
 	}
 }

@@ -7,6 +7,7 @@ import org.fife.rsta.ac.java.JarManager;
 import org.fife.rsta.ac.java.classreader.MethodInfo;
 import org.fife.rsta.ac.java.rjc.ast.Method;
 import org.fife.rsta.ac.js.IconFactory;
+import org.fife.rsta.ac.js.JavaScriptHelper;
 import org.fife.rsta.ac.js.ast.TypeDeclarationFactory;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.VariableCompletion;
@@ -40,7 +41,7 @@ public class JSBeanCompletion extends VariableCompletion implements JSCompletion
 
 	public String getAlreadyEntered(JTextComponent comp) {
 		String temp = getProvider().getAlreadyEnteredText(comp);
-		int lastDot = temp.lastIndexOf('.');
+		int lastDot = JavaScriptHelper.findLastIndexOfJavaScriptIdentifier(temp);
 		if (lastDot > -1) {
 			temp = temp.substring(lastDot + 1);
 		}

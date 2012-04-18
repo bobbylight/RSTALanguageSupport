@@ -21,6 +21,7 @@ import org.fife.rsta.ac.java.classreader.MethodInfo;
 import org.fife.rsta.ac.java.rjc.ast.FormalParameter;
 import org.fife.rsta.ac.java.rjc.ast.Method;
 import org.fife.rsta.ac.js.IconFactory;
+import org.fife.rsta.ac.js.JavaScriptHelper;
 import org.fife.rsta.ac.js.ast.TypeDeclarationFactory;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
@@ -34,7 +35,7 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 	private JSMethodData methodData;
 	private Method method;
 	private String compareString;
-	
+
 
 	public JSFunctionCompletion(CompletionProvider provider, MethodInfo method,
 			JarManager jarManager) {
@@ -105,7 +106,8 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 
 	public String getAlreadyEntered(JTextComponent comp) {
 		String temp = getProvider().getAlreadyEnteredText(comp);
-		int lastDot = temp.lastIndexOf('.');
+		int lastDot = JavaScriptHelper
+				.findLastIndexOfJavaScriptIdentifier(temp);
 		if (lastDot > -1) {
 			temp = temp.substring(lastDot + 1);
 		}

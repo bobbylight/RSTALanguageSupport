@@ -2,6 +2,8 @@ package org.fife.rsta.ac.js;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.fife.rsta.ac.java.classreader.ClassFile;
 import org.fife.rsta.ac.js.ast.JavaScriptType;
@@ -15,18 +17,16 @@ import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.Token;
 import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.AstRoot;
+import org.mozilla.javascript.ast.ExpressionStatement;
 import org.mozilla.javascript.ast.FunctionCall;
 import org.mozilla.javascript.ast.Name;
 import org.mozilla.javascript.ast.NodeVisitor;
 
 
 /**
- * Compiles the entered text using Rhino and tries to resolve the JavaScriptType from the AstRoot
- * e.g
- * var a = "";
- * "" --> String JavaScriptType
- * var b = a.toString()
- * a.toString --> String JavaScriptType
+ * Compiles the entered text using Rhino and tries to resolve the JavaScriptType
+ * from the AstRoot e.g var a = ""; "" --> String JavaScriptType var b =
+ * a.toString() a.toString --> String JavaScriptType
  * 
  * etc..
  * 
@@ -78,8 +78,7 @@ public class JavaScriptCompletionResolver {
 		Parser parser = new Parser(env);
 		StringReader r = new StringReader(parseText);
 		AstRoot root = parser.parse(r, null, 0);
-		// iterateNode(root);
-		CompilerNodeVisitor visitor = new CompilerNodeVisitor();
+		CompilerNodeVisitor visitor = new CompilerNodeVisitor(parseText);
 		root.visitAll(visitor);
 		return lastJavaScriptType;
 
@@ -87,23 +86,35 @@ public class JavaScriptCompletionResolver {
 
 
 	public TypeDeclaration resolveNode(AstNode node) {
-		CompilerNodeVisitor visitor = new CompilerNodeVisitor();
+		CompilerNodeVisitor visitor = new CompilerNodeVisitor(null);
 		node.visit(visitor);
 		return lastJavaScriptType != null ? lastJavaScriptType.getType()
 				: TypeDeclarationFactory.getDefaultTypeDeclaration();
 	}
 
 
+	// TODO not sure how right this is, but is very tricky problem resolving
+	// complex completions
+
 	private class CompilerNodeVisitor implements NodeVisitor {
+
+		private String enteredText;
+		private HashSet paramNodes = new HashSet();
+
+
+		private CompilerNodeVisitor(String enteredText) {
+			this.enteredText = enteredText;
+		}
+
 
 		public boolean visit(AstNode node) {
 
 			Logger.log(node.toSource());
 			Logger.log(node.shortName());
-			
-			if(ignore(node))
+
+			if (ignore(node))
 				return true;
-			
+
 			JavaScriptType jsType = null;
 			TypeDeclaration dec = JavaScriptHelper
 					.tokenToNativeTypeDeclaration(node, provider);
@@ -120,35 +131,131 @@ public class JavaScriptCompletionResolver {
 				}
 			}
 			else if (lastJavaScriptType != null) {
-				// lookup from source name
-				jsType = lookupFromName(node, lastJavaScriptType);
-				if (jsType == null) {
-					// lookup name through the functions of lastJavaScriptType
-					jsType = lookupFunctionCompletion(node, lastJavaScriptType);
+				if (node.getType() == Token.NAME) {
+					// lookup from source name
+					jsType = lookupFromName(node, lastJavaScriptType);
+					if (jsType == null) {
+						// lookup name through the functions of
+						// lastJavaScriptType
+						jsType = lookupFunctionCompletion(node,
+								lastJavaScriptType);
+					}
+					lastJavaScriptType = jsType;
 				}
 			}
 
-			lastJavaScriptType = jsType;
-
 			return true;
 		}
-		
+
+
 		/**
-		 * Test node to check whether to ignore resolving
+		 * Test node to check whether to ignore resolving, this is for
+		 * parameters
+		 * 
 		 * @param node node to test
 		 * @return true to ignore
 		 */
-		private boolean ignore(AstNode node)
-		{
-			switch(node.getType())
-			{
-				case Token.NAME : return node.getParent() instanceof FunctionCall; //is a parameter of a function
+		private boolean ignore(AstNode node) {
+			switch (node.getType()) {
+				// ignore errors e.g if statement - if(a. //no closing brace
+				case Token.EXPR_VOID:
+				case Token.EXPR_RESULT:
+					return ((ExpressionStatement) node).getExpression()
+							.getType() == Token.ERROR;
+				case Token.ERROR:
+				case Token.GETPROP:
+				case Token.SCRIPT:
+					return true;
+				default: {
+					if (isParameter(node)) {
+						collectAllNodes(node); // everything within this node
+						// is a parameter
+						return checkNameMatchsEnteredText(node, enteredText);
+					}
+					break;
+				}
+			}
+
+			if (JavaScriptHelper.isInfixOnly(node))
+				return true;
+
+			return false;
+		}
+
+
+		/**
+		 * Get all nodes within AstNode and add to an ArrayList
+		 * 
+		 * @param node
+		 */
+		private void collectAllNodes(AstNode node) {
+			if (node.getParent().getType() == Token.CALL) {
+				VisitorAll all = new VisitorAll();
+				node.visit(all);
+				paramNodes.addAll(all.getAllNodes());
+			}
+		}
+
+
+		/**
+		 * Check the function that a name may belong to contains this actual
+		 * parameter
+		 * 
+		 * @param node Node to check
+		 * @return true if the function contains the parameter
+		 */
+		private boolean isParameter(AstNode node) {
+			if (paramNodes.contains(node))
+				return true;
+			FunctionCall fc = JavaScriptHelper.findFunctionCallFromNode(node);
+			if (fc != null && !(node == fc)
+					&& node.getParent().getType() == Token.CALL) {
+				if (!fc.getArguments().contains(node)) {
+					// get all params from this function too
+					collectAllNodes(fc);
+				}
+				else {
+					return true;
+				}
 			}
 			return false;
+		}
+
+
+		/**
+		 * Check the function of the parameter is the right most function to
+		 * resolve
+		 * 
+		 * @param name
+		 * @param enteredText
+		 * @return
+		 */
+		private boolean checkNameMatchsEnteredText(AstNode node,
+				String enteredText) {
+			if (enteredText != null) {
+				FunctionCall fc = JavaScriptHelper
+						.findFunctionCallFromNode(node);
+				if (fc != null) {
+					// TODO this could be better check as some nodes will have
+					// the same name
+					return !enteredText.endsWith(node.toSource());
+				}
+
+			}
+			return true;
 		}
 	}
 
 
+	/**
+	 * Lookup the name of the node within the last JavaScript type. e.g var a =
+	 * 1; var b = a.MAX_VALUE; looks up MAX_VALUE within NumberLiteral a where a
+	 * is resolve before as a JavaScript Number;
+	 * 
+	 * @param node
+	 * @param lastJavaScriptType
+	 * @return
+	 */
 	private JavaScriptType lookupFromName(AstNode node,
 			JavaScriptType lastJavaScriptType) {
 		JavaScriptType javaScriptType = null;
@@ -171,9 +278,12 @@ public class JavaScriptCompletionResolver {
 
 
 	/**
+	 * Lookup the function name of the node within the last JavaScript type. e.g
+	 * var a = ""; var b = a.toString(); looks up toString() within
+	 * StringLiteral a where a is resolve before as a JavaScript String;
 	 * 
 	 * @param node
-	 * @param javaScriptType
+	 * @param lastJavaScriptType
 	 * @return
 	 */
 	private JavaScriptType lookupFunctionCompletion(AstNode node,
@@ -236,6 +346,22 @@ public class JavaScriptCompletionResolver {
 		}
 		return null;
 	}
-	
+
+
+	private class VisitorAll implements NodeVisitor {
+
+		private ArrayList all = new ArrayList();
+
+
+		public boolean visit(AstNode node) {
+			all.add(node);
+			return true;
+		}
+
+
+		public ArrayList getAllNodes() {
+			return all;
+		}
+	}
 
 }

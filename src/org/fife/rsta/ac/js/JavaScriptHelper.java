@@ -21,17 +21,12 @@ import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.Token;
 import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.AstRoot;
-import org.mozilla.javascript.ast.ExpressionStatement;
-import org.mozilla.javascript.ast.ForLoop;
 import org.mozilla.javascript.ast.FunctionCall;
-import org.mozilla.javascript.ast.IfStatement;
 import org.mozilla.javascript.ast.InfixExpression;
 import org.mozilla.javascript.ast.Name;
 import org.mozilla.javascript.ast.NewExpression;
 import org.mozilla.javascript.ast.NodeVisitor;
 import org.mozilla.javascript.ast.PropertyGet;
-import org.mozilla.javascript.ast.SwitchStatement;
-import org.mozilla.javascript.ast.WhileLoop;
 
 
 public class JavaScriptHelper {
@@ -93,26 +88,9 @@ public class JavaScriptHelper {
 		StringReader r = new StringReader(text);
 		try {
 			AstRoot root = parser.parse(r, null, 0);
-			AstNode child = (AstNode) root.getFirstChild();
-			switch (child.getType()) {
-				case Token.EXPR_VOID:
-				case Token.EXPR_RESULT:
-					return ((ExpressionStatement) child).getExpression()
-							.toSource();
-				case Token.SWITCH:
-					return ((SwitchStatement) child).getExpression().toSource();
-				case Token.IF:
-					return ((IfStatement) child).getCondition().toSource();
-				case Token.WHILE:
-					return ((WhileLoop) child).getCondition().toSource();
-				case Token.FOR:
-					return ((ForLoop) child).getInitializer().toSource();
-				case Token.ERROR:
-					return "";
-					// TODO return other types
-				default:
-					return child.toSource();
-			}
+			ParseTextVisitor visitor = new ParseTextVisitor();
+			root.visitAll(visitor);
+			return visitor.getLastNodeSource();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -148,12 +126,14 @@ public class JavaScriptHelper {
 		return null;
 	}
 
+
 	/**
 	 * Iterate back up through parent nodes and check whether inside a function
+	 * 
 	 * @param node
 	 * @return
 	 */
-	private static FunctionCall findFunctionCallFromNode(AstNode node) {
+	public static FunctionCall findFunctionCallFromNode(AstNode node) {
 		AstNode parent = node;
 		while (parent != null && !(parent instanceof AstRoot)) {
 			if (parent instanceof FunctionCall) {
@@ -167,9 +147,11 @@ public class JavaScriptHelper {
 
 	/**
 	 * Convert AstNode to TypeDeclaration
+	 * 
 	 * @param typeNode AstNode to convert
-	 * @param provider SourceProvider 
-	 * @return TypeDeclaration if node resolves to supported type, e.g Number, New etc.., otherwise null
+	 * @param provider SourceProvider
+	 * @return TypeDeclaration if node resolves to supported type, e.g Number,
+	 *         New etc.., otherwise null
 	 */
 	public static final TypeDeclaration tokenToNativeTypeDeclaration(
 			AstNode typeNode, SourceCompletionProvider provider) {
@@ -196,8 +178,7 @@ public class JavaScriptHelper {
 
 			}
 
-			if (typeNode instanceof InfixExpression
-					&& typeNode.getClass().getName().equals(INFIX)) {
+			if (isInfixOnly(typeNode)) {
 				TypeDeclaration dec = getTypeFromInFixExpression(typeNode);
 				if (dec != null) {
 					return dec;
@@ -206,6 +187,12 @@ public class JavaScriptHelper {
 		}
 		return null;
 
+	}
+
+
+	public static boolean isInfixOnly(AstNode typeNode) {
+		return typeNode instanceof InfixExpression
+				&& typeNode.getClass().getName().equals(INFIX);
 	}
 
 
@@ -249,15 +236,12 @@ public class JavaScriptHelper {
 		}
 	}
 
+
 	/**
-	 * Use a visitor to visit all the nodes to work out which type to return 
-	 * e.g
-	 * 1 + 1 returns Number
-	 * 1 + "" returns String
-	 * true returns Boolean
-	 * etc..
+	 * Use a visitor to visit all the nodes to work out which type to return e.g
+	 * 1 + 1 returns Number 1 + "" returns String true returns Boolean etc..
 	 * 
-	 * @param node 
+	 * @param node
 	 * @return
 	 */
 	private static TypeDeclaration getTypeFromInFixExpression(AstNode node) {
@@ -266,13 +250,11 @@ public class JavaScriptHelper {
 		return getTypeDeclaration(visitor.type);
 	}
 
-	
+
 	/**
-	 * Returns the node name from 'Token.NEW' AstNode
-	 * e.g
-	 * new Object --> Object
-	 * new Date --> Date
-	 * etc..
+	 * Returns the node name from 'Token.NEW' AstNode e.g new Object --> Object
+	 * new Date --> Date etc..
+	 * 
 	 * @param node NewExpression node
 	 * @return Extracts the Name identifier from NewExpression
 	 */
@@ -288,12 +270,46 @@ public class JavaScriptHelper {
 
 
 	/**
-	 * Convenience method to lookup TypeDeclaration through the TypeDeclarationFactory. 
+	 * Convenience method to lookup TypeDeclaration through the
+	 * TypeDeclarationFactory.
+	 * 
 	 * @param name
 	 * @return
 	 */
 	private static TypeDeclaration getTypeDeclaration(String name) {
 		return TypeDeclarationFactory.Instance().getTypeDeclaration(name);
+	}
+
+
+	public static int findLastIndexOfJavaScriptIdentifier(String input) {
+		int index = -1;
+		if (input != null) {
+			char c[] = input.toCharArray();
+			for (int i = 0; i < c.length; i++) {
+				if (!Character.isJavaIdentifierPart(c[i])) {
+					index = i;
+				}
+			}
+		}
+		return index;
+	}
+
+
+	private static class ParseTextVisitor implements NodeVisitor {
+
+		private AstNode lastNode;
+
+
+		public boolean visit(AstNode node) {
+			lastNode = node;
+			return true;
+		}
+
+
+		public String getLastNodeSource() {
+			return lastNode != null ? lastNode.toSource() : "";
+		}
+
 	}
 
 }
