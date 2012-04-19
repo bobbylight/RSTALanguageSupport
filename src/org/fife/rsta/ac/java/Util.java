@@ -485,22 +485,24 @@ public class Util {
 		lastCUClassFileParam = cf;
 		CompilationUnit cu = null;
 
-		if (loc.isFile()) {
-			String name = loc.getName();
-			// "src.jar" is found on OS X
-			if (name.endsWith(".zip") || name.endsWith(".jar")) {
+		if(loc != null) {
+			if (loc.isFile()) {
+				String name = loc.getName();
+				// "src.jar" is found on OS X
+				if (name.endsWith(".zip") || name.endsWith(".jar")) {
+					try {
+						cu = Util.getCompilationUnitFromZip(loc, cf);
+					} catch (IOException ioe) {
+						ioe.printStackTrace();
+					}
+				}
+			}
+			else if (loc.isDirectory()) {
 				try {
-					cu = Util.getCompilationUnitFromZip(loc, cf);
+					cu = Util.getCompilationUnitFromDir(loc, cf);
 				} catch (IOException ioe) {
 					ioe.printStackTrace();
 				}
-			}
-		}
-		else if (loc.isDirectory()) {
-			try {
-				cu = Util.getCompilationUnitFromDir(loc, cf);
-			} catch (IOException ioe) {
-				ioe.printStackTrace();
 			}
 		}
 
