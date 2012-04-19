@@ -10,7 +10,7 @@
  */
 package org.fife.rsta.ac.js.ast;
 
-import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -22,8 +22,6 @@ import org.fife.rsta.ac.java.classreader.ClassFile;
 import org.fife.rsta.ac.java.classreader.FieldInfo;
 import org.fife.rsta.ac.java.classreader.MemberInfo;
 import org.fife.rsta.ac.java.classreader.MethodInfo;
-import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
-import org.fife.rsta.ac.java.rjc.ast.ImportDeclaration;
 import org.fife.rsta.ac.js.completion.JSBeanCompletion;
 import org.fife.rsta.ac.js.completion.JSFieldCompletion;
 import org.fife.rsta.ac.js.completion.JSFunctionCompletion;
@@ -34,6 +32,15 @@ public abstract class JavaScriptTypesFactory {
 
 	private HashMap cachedTypes = new HashMap();
 	private boolean useBeanproperties;
+	
+	private static ArrayList UNSUPPORTED_COMPLETIONS = new ArrayList();
+	private static String SPECIAL_METHOD = "<clinit>";
+	
+	//list of unsupported completions e.g java.lang.Object as JavaScript has it's own
+	static
+	{
+		UNSUPPORTED_COMPLETIONS.add("java.lang.Object");
+	}
 
 
 	private static class DefaultJavaScriptTypeFactory extends
@@ -108,19 +115,8 @@ public abstract class JavaScriptTypesFactory {
 			TypeDeclaration type) {
 
 		if (cf != null) {
-			File file = manager.getSourceLocForClass(cf.getClassName(true));
-			if (file != null) {
-				CompilationUnit cu = Util.getCompilationUnitFromDisk(file, cf);
-				if (cu != null) {
-					int count = cu.getTypeDeclarationCount();
-					for (int i = 0; i < count; i++) {
-						org.fife.rsta.ac.java.rjc.ast.TypeDeclaration dec = cu
-								.getTypeDeclaration(i);
-						readMethodsAndFieldsFromTypeDeclaration(cachedType,
-								dec, provider, cu, manager, cf);
-					}
-				}
-			}
+			readMethodsAndFieldsFromTypeDeclaration(cachedType,
+					provider,  manager, cf);
 		}
 	}
 
@@ -150,15 +146,14 @@ public abstract class JavaScriptTypesFactory {
 	 */
 	private void readMethodsAndFieldsFromTypeDeclaration(
 			JavaScriptType cachedType,
-			org.fife.rsta.ac.java.rjc.ast.TypeDeclaration dec,
-			DefaultCompletionProvider provider, CompilationUnit cu,
+			DefaultCompletionProvider provider,
 			JarManager jarManager, ClassFile cf) {
 
 		// get methods
 		int methodCount = cf.getMethodCount();
 		for (int i = 0; i < methodCount; i++) {
 			MethodInfo info = cf.getMethodInfo(i);
-			if (!info.isConstructor()) {
+			if (!info.isConstructor() && !SPECIAL_METHOD.equals(info.getName())) {
 				JSFunctionCompletion completion = new JSFunctionCompletion(
 						provider, info, jarManager, true);
 				cachedType.addCompletion(completion);
@@ -185,8 +180,8 @@ public abstract class JavaScriptTypesFactory {
 
 		// Add completions for any non-overridden super-class methods.
 		String superClassName = cf.getSuperClassName(true);
-		ClassFile superClass = getClassFileFor(cu, superClassName, jarManager);
-		if (superClass != null) {
+		ClassFile superClass = getClassFileFor(cf, superClassName, jarManager);
+		if (superClass != null && !ignoreClass(superClassName)) {
 			TypeDeclaration type = TypeDeclarationFactory.Instance()
 					.getTypeDeclaration(superClassName);
 			if (type == null) {
@@ -201,8 +196,8 @@ public abstract class JavaScriptTypesFactory {
 		// Add completions for any interface methods, in case this class is
 		for (int i = 0; i < cf.getImplementedInterfaceCount(); i++) {
 			String inter = cf.getImplementedInterfaceName(i, true);
-			ClassFile intf = getClassFileFor(cu, inter, jarManager);
-			if (intf != null) {
+			ClassFile intf = getClassFileFor(cf, inter, jarManager);
+			if (intf != null && !ignoreClass(inter)) {
 				TypeDeclaration type = TypeDeclarationFactory.Instance()
 						.getTypeDeclaration(inter);
 				if (type == null) {
@@ -213,6 +208,11 @@ public abstract class JavaScriptTypesFactory {
 				readClassFile(extendedType, intf, provider, jarManager, type);
 			}
 		}
+	}
+	
+	public static boolean ignoreClass(String className)
+	{
+		return UNSUPPORTED_COMPLETIONS.contains(className);
 	}
 
 
@@ -246,7 +246,7 @@ public abstract class JavaScriptTypesFactory {
 	 * @return returns the ClassFile for the class name, checks all packages
 	 *         available to match to the class name
 	 */
-	private ClassFile getClassFileFor(CompilationUnit cu, String className,
+	private ClassFile getClassFileFor(ClassFile cf, String className,
 			JarManager jarManager) {
 
 		if (className == null) {
@@ -259,14 +259,15 @@ public abstract class JavaScriptTypesFactory {
 		if (!Util.isFullyQualified(className)) {
 
 			// Check in this source file's package first
-			String pkg = cu.getPackageName();
+			String pkg = cf.getPackageName();
 			if (pkg != null) {
 				String temp = pkg + "." + className;
 				superClass = jarManager.getClassEntry(temp);
 			}
 
 			// Next, go through the imports (order is important)
-			if (superClass == null) {
+		/*	if (superClass == null) {
+				
 				for (Iterator i = cu.getImportIterator(); i.hasNext();) {
 					ImportDeclaration id = (ImportDeclaration) i.next();
 					String imported = id.getName();
@@ -291,7 +292,7 @@ public abstract class JavaScriptTypesFactory {
 				String temp = "java.lang." + className;
 				superClass = jarManager.getClassEntry(temp);
 			}
-
+*/
 		}
 
 		else {

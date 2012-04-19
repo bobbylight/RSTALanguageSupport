@@ -13,6 +13,7 @@ import org.fife.rsta.ac.java.rjc.ast.FormalParameter;
 import org.fife.rsta.ac.java.rjc.ast.Member;
 import org.fife.rsta.ac.java.rjc.ast.Method;
 import org.fife.rsta.ac.java.rjc.ast.TypeDeclaration;
+import org.fife.rsta.ac.js.ast.TypeDeclarationFactory;
 
 
 public class JSMethodData {
@@ -44,6 +45,13 @@ public class JSMethodData {
 		// already parsed).
 		String name = info.getParameterName(index);
 
+		//try the method next
+		Method method = getMethod();
+		if(method != null)
+		{
+			name = method.getParameter(index).getName();
+		}
+		
 		// Otherwise...
 		if (name==null) {
 
@@ -101,6 +109,15 @@ public class JSMethodData {
 
 	}
 	
+	public String getParameterType(String[] paramTypes, int index)
+	{
+		if(paramTypes != null && index < paramTypes.length)
+		{
+			return TypeDeclarationFactory.lookupJSType(paramTypes[index], true);
+		}
+		return null;
+	}
+	
 	public String getSummary() {
 
 		ClassFile cf = info.getClassFile();
@@ -115,10 +132,13 @@ public class JSMethodData {
 
 		// Default to the method signature.
 		if (summary==null) {
+			//set the return type
+			info.getReturnTypeString(true);
 			summary = info.getSignature();
 		}
 		return summary;
 	}
+	
 	
 	public Method getMethod()
 	{
@@ -243,6 +263,11 @@ public class JSMethodData {
 	public String getType(boolean qualified)
 	{
 		return info.getReturnTypeString(qualified);
+	}
+	
+	public int getParameterCount()
+	{
+		return info.getParameterCount();
 	}
 	
 }

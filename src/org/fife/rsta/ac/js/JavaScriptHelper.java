@@ -163,7 +163,7 @@ public class JavaScriptHelper {
 					return provider.resolveTypeDeclation(((Name) typeNode)
 							.getIdentifier());
 				case Token.NEW:
-					return getTypeDeclaration(findNewExpressionString(typeNode));
+					return processNewNode(typeNode);
 				case Token.NUMBER:
 					return getTypeDeclaration(TypeDeclarationFactory.ECMA_NUMBER);
 				case Token.OBJECTLIT:
@@ -187,6 +187,23 @@ public class JavaScriptHelper {
 		}
 		return null;
 
+	}
+	
+	private static TypeDeclaration processNewNode(AstNode typeNode)
+	{
+		String newName = findNewExpressionString(typeNode);
+		if(newName != null)
+		{
+			TypeDeclaration newType = getTypeDeclaration(newName);
+			if(newType == null) {
+				//create a new Type
+				String pName = newName.indexOf('.') > 0 ? newName.substring(0, newName.lastIndexOf('.')) : "";
+				String cName = newName.indexOf('.') > 0 ? newName.substring(newName.lastIndexOf('.')+1, newName.length()) : newName;
+				newType = new TypeDeclaration(pName, cName, newName);
+			}
+			return newType;
+		}
+		return null;
 	}
 
 
@@ -261,11 +278,13 @@ public class JavaScriptHelper {
 	private static String findNewExpressionString(AstNode node) {
 		NewExpression newEx = (NewExpression) node;
 		AstNode target = newEx.getTarget();
-		switch (target.getType()) {
-			case Token.NAME:
-				return ((Name) target).getIdentifier();
+		String source = target.toSource();
+		int index = source.indexOf('(');
+		if(index != -1)
+		{
+			source = source.substring(0, index);
 		}
-		return null;
+		return source;
 	}
 
 

@@ -32,7 +32,7 @@ public class JSFieldCompletion extends VariableCompletion implements
 
 	public String getSummary() {
 
-		String summary = field.getDocComment();
+		String summary = field != null ? field.getDocComment() : getName();
 
 		// If it's the Javadoc for the method...
 		if (summary != null && summary.startsWith("/**")) {

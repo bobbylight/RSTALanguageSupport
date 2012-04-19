@@ -59,8 +59,8 @@ public class JSBeanCompletion extends VariableCompletion implements JSCompletion
 	}
 
 	private String getMethodSummary() {
-		String docComment = method.getDocComment();
-		return docComment != null ? docComment : method.toString();
+		String docComment = method != null ? method.getDocComment() : getName();
+		return docComment != null ? docComment : method != null ? method.toString() : null;
 	}
 	
 	public String getSummary() {

@@ -69,10 +69,7 @@ public class JavaScriptCompletionResolver {
 			}
 		});
 
-		int trim = text.lastIndexOf('.') == -1 ? text.length() : text
-				.lastIndexOf('.');
-
-		String parseText = text.substring(0, trim);
+		String parseText = trimString(text);
 
 		env.setRecoverFromErrors(true);
 		Parser parser = new Parser(env);
@@ -82,6 +79,23 @@ public class JavaScriptCompletionResolver {
 		root.visitAll(visitor);
 		return lastJavaScriptType;
 
+	}
+	
+	private String trimString(String text)
+	{
+		int trim = text.length();
+		if(text.indexOf("new") != -1)
+		{
+			
+		}
+		else if(text.lastIndexOf('.') != -1)
+		{
+			trim = text.lastIndexOf('.');
+		}
+
+		String parseText = text.substring(0, trim);
+
+		return parseText;
 	}
 
 

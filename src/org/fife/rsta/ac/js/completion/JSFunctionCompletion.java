@@ -18,7 +18,6 @@ import javax.swing.text.JTextComponent;
 
 import org.fife.rsta.ac.java.JarManager;
 import org.fife.rsta.ac.java.classreader.MethodInfo;
-import org.fife.rsta.ac.java.rjc.ast.FormalParameter;
 import org.fife.rsta.ac.java.rjc.ast.Method;
 import org.fife.rsta.ac.js.IconFactory;
 import org.fife.rsta.ac.js.JavaScriptHelper;
@@ -33,7 +32,6 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 		JSCompletion {
 
 	private JSMethodData methodData;
-	private Method method;
 	private String compareString;
 
 
@@ -48,17 +46,24 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 			boolean showParameterType) {
 		super(provider, methodInfo.getName(), null);
 		this.methodData = new JSMethodData(methodInfo, jarManager);
-		this.method = methodData.getMethod();
-		int count = method.getParameterCount();
+		List params = populateParams(methodData, showParameterType);
+		setParams(params);
+	}
+
+
+	private List populateParams(JSMethodData methodData,
+			boolean showParameterType) {
+		MethodInfo methodInfo = methodData.getMethodInfo();
+		int count = methodInfo.getParameterCount();
 		String[] paramTypes = methodInfo.getParameterTypes();
 		List params = new ArrayList(count);
 		for (int i = 0; i < count; i++) {
-			FormalParameter param = method.getParameter(i);
-			String name = param.getName();
-			params.add(new JSFunctionParam(paramTypes[i], name,
-					showParameterType));
+			String name = methodData.getParameterName(i);
+			String type = methodData.getParameterType(paramTypes, i);
+			params.add(new JSFunctionParam(type, name, showParameterType));
 		}
-		setParams(params);
+
+		return params;
 	}
 
 
@@ -151,7 +156,7 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 	public String getLookupName() {
 		StringBuffer sb = new StringBuffer(getName());
 		sb.append('(');
-		int count = method.getParameterCount();
+		int count = methodData.getParameterCount();
 		for (int i = 0; i < count; i++) {
 			sb.append("p");
 			if (i < count - 1) {
@@ -169,23 +174,23 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 
 
 	private String getMethodSummary() {
-		String docComment = method.getDocComment();
-		return docComment != null ? docComment : method.toString();
+		Method method = methodData.getMethod();
+		String docComment = method != null ? method.getDocComment() : null;
+		return docComment != null ? docComment : getNameAndParameters();
 	}
 
 
 	private String getNameAndParameters() {
-		return formatMethodAtString(getName(), method);
+		return formatMethodAtString(getName(), methodData);
 	}
 
 
-	private static String formatMethodAtString(String name, Method method) {
+	private static String formatMethodAtString(String name, JSMethodData method) {
 		StringBuffer sb = new StringBuffer(name);
 		sb.append('(');
 		int count = method.getParameterCount();
 		for (int i = 0; i < count; i++) {
-			FormalParameter fp = method.getParameter(i);
-			sb.append(fp.getName());
+			sb.append(method.getParameterName(i));
 			if (i < count - 1) {
 				sb.append(", ");
 			}
