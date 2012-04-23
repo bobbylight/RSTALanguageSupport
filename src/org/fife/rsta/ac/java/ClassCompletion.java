@@ -13,10 +13,10 @@ package org.fife.rsta.ac.java;
 import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.io.File;
 import java.util.Iterator;
 import javax.swing.Icon;
 
+import org.fife.rsta.ac.java.buildpath.SourceLocation;
 import org.fife.rsta.ac.java.classreader.AccessFlags;
 import org.fife.rsta.ac.java.classreader.ClassFile;
 import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
@@ -147,7 +147,7 @@ class ClassCompletion extends AbstractJavaSourceCompletion {
 	public String getSummary() {
 
 		SourceCompletionProvider scp = (SourceCompletionProvider)getProvider();
-		File loc = scp.getSourceLocForClass(cf.getClassName(true));
+		SourceLocation  loc = scp.getSourceLocForClass(cf.getClassName(true));
 
 		if (loc!=null) {
 

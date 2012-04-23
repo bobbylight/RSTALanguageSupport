@@ -12,22 +12,16 @@ package org.fife.rsta.ac.java;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
+import org.fife.rsta.ac.java.buildpath.SourceLocation;
 import org.fife.rsta.ac.java.classreader.ClassFile;
 import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
-import org.fife.rsta.ac.java.rjc.lexer.Scanner;
-import org.fife.rsta.ac.java.rjc.parser.ASTFactory;
 
 
 /**
@@ -75,7 +69,7 @@ public class Util {
 	 */
 	private static CompilationUnit lastCUFromDisk;
 
-	private static File lastCUFileParam;
+	private static SourceLocation lastCUFileParam;
 	private static ClassFile lastCUClassFileParam;
 
 
@@ -464,7 +458,9 @@ public class Util {
 
 	/**
 	 * Used by {@link MemberCompletion.Data} implementations to get an AST
-	 * from a source file in a directory or zip/jar file.
+	 * from a source file in a {@link SourceLocation}.  Classes should prefer
+	 * this method over calling into the location directly since this method
+	 * caches the most recent result for performance.
 	 *
 	 * @param loc A directory or zip/jar file.
 	 * @param cf The {@link ClassFile} representing the source grab from the
@@ -472,8 +468,8 @@ public class Util {
 	 * @return The compilation unit, or <code>null</code> if it is not found
 	 *         or an IO error occurs.
 	 */
-	public static CompilationUnit getCompilationUnitFromDisk(File loc,
-															ClassFile cf) {
+	public static CompilationUnit getCompilationUnitFromDisk(
+								SourceLocation loc, ClassFile cf) {
 
 		// Cached value?
 		if (loc==lastCUFileParam && cf==lastCUClassFileParam) {
@@ -486,113 +482,14 @@ public class Util {
 		CompilationUnit cu = null;
 
 		if(loc != null) {
-			if (loc.isFile()) {
-				String name = loc.getName();
-				// "src.jar" is found on OS X
-				if (name.endsWith(".zip") || name.endsWith(".jar")) {
-					try {
-						cu = Util.getCompilationUnitFromZip(loc, cf);
-					} catch (IOException ioe) {
-						ioe.printStackTrace();
-					}
-				}
-			}
-			else if (loc.isDirectory()) {
-				try {
-					cu = Util.getCompilationUnitFromDir(loc, cf);
-				} catch (IOException ioe) {
-					ioe.printStackTrace();
-				}
+			try {
+				cu = loc.getCompilationUnit(cf);
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
 			}
 		}
 
 		lastCUFromDisk = cu;
-		return cu;
-
-	}
-
-
-	/**
-	 * Used by {@link MemberCompletion.Data} implementations to get an AST
-	 * from a source file in a directory.
-	 *
-	 * @param dir The directory.
-	 * @param cf The {@link ClassFile} representing the source grab from the
-	 *        directory.
-	 * @return The compilation unit, or <code>null</code> if it is not found.
-	 * @throws IOException If an IO error occurs.
-	 * @see #getCompilationUnitFromZip(File, ClassFile)
-	 */
-	private static CompilationUnit getCompilationUnitFromDir(File dir,
-			ClassFile cf) throws IOException {
-
-		CompilationUnit cu = null;
-
-		String entryName = cf.getClassName(true);
-		entryName = replaceChar(entryName, '.', '/');
-		entryName += ".java";
-		//System.out.println("DEBUG: entry name: " + entryName);
-		File file = new File(dir, entryName);
-		if (!file.isFile()) {
-			// Be nice and check for "src/" subdirectory
-			file = new File(dir, "src/" + entryName);
-		}
-
-		if (file.isFile()) {
-			BufferedReader r = new BufferedReader(new FileReader(file));
-			try {
-				Scanner s = new Scanner(r);
-				cu = new ASTFactory().getCompilationUnit(entryName, s);
-				//System.out.println("DEBUG: cu: " + cu);
-			} finally {
-				r.close();
-			}
-		}
-
-		return cu;
-
-	}
-
-
-	/**
-	 * Used by {@link MemberCompletion.Data} implementations to get an AST
-	 * from a source file in a zip/jar file.
-	 *
-	 * @param zip The source zip.
-	 * @param cf The {@link ClassFile} representing the source grab from the
-	 *        zip.
-	 * @return The compilation unit, or <code>null</code> if it is not found.
-	 * @throws IOException If an IO error occurs.
-	 * @see #getCompilationUnitFromDir(File, ClassFile)
-	 */
-	private static CompilationUnit getCompilationUnitFromZip(File zip,
-									ClassFile cf) throws IOException {
-
-		CompilationUnit cu = null;
-
-		ZipFile zipFile = new ZipFile(zip);
-
-		try {
-
-			String entryName = cf.getClassName(true).replaceAll("\\.", "/");
-			entryName += ".java";
-			//System.out.println("DEBUG: entry name: " + entryName);
-			ZipEntry entry = zipFile.getEntry(entryName);
-			if (entry == null) {
-				// Seen in some src.jar files, for example OS X's src.jar
-				entry = zipFile.getEntry("src/" + entryName);
-			}
-
-			if (entry != null) {
-				InputStream in = zipFile.getInputStream(entry);
-				Scanner s = new Scanner(new InputStreamReader(in));
-				cu = new ASTFactory().getCompilationUnit(entryName, s);
-			}
-
-		} finally {
-			zipFile.close(); // Closes the input stream too
-		}
-
 		return cu;
 
 	}

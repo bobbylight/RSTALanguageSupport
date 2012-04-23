@@ -1,11 +1,11 @@
 package org.fife.rsta.ac.js.completion;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.fife.rsta.ac.java.JarManager;
+import org.fife.rsta.ac.java.buildpath.SourceLocation;
 import org.fife.rsta.ac.java.classreader.ClassFile;
 import org.fife.rsta.ac.java.classreader.FieldInfo;
 import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
@@ -30,7 +30,8 @@ public class JSFieldData {
 	public Field getField()
 	{
 		ClassFile cf = info.getClassFile();
-		File loc = jarManager.getSourceLocForClass(cf.getClassName(true));
+		SourceLocation loc = jarManager.getSourceLocForClass(
+				cf.getClassName(true));
 		return getFieldFromSourceLoc(loc, cf);
 	}
 	
@@ -44,7 +45,7 @@ public class JSFieldData {
 	 * @return The method, or <code>null</code> if it cannot be found, or an
 	 *         IO error occurred.
 	 */
-	private Field getFieldFromSourceLoc(File loc, ClassFile cf) {
+	private Field getFieldFromSourceLoc(SourceLocation loc, ClassFile cf) {
 
 		CompilationUnit cu = org.fife.rsta.ac.java.Util.
 									getCompilationUnitFromDisk(loc, cf);

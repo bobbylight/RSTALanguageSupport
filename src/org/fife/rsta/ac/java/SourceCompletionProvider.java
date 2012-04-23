@@ -24,6 +24,8 @@ import java.util.TreeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 
+import org.fife.rsta.ac.java.buildpath.LibraryInfo;
+import org.fife.rsta.ac.java.buildpath.SourceLocation;
 import org.fife.rsta.ac.java.classreader.ClassFile;
 import org.fife.rsta.ac.java.classreader.FieldInfo;
 import org.fife.rsta.ac.java.classreader.MemberInfo;
@@ -380,8 +382,8 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	 * @see #getJars()
 	 * @see #removeJar(File)
 	 */
-	public void addJar(JarInfo info) throws IOException {
-		jarManager.addJar(info);
+	public void addJar(LibraryInfo info) throws IOException {
+		jarManager.addClassFileSource(info);
 	}
 
 
@@ -437,11 +439,11 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	 * Removes all jars from the "build path."
 	 *
 	 * @see #removeJar(File)
-	 * @see #addJar(JarInfo)
+	 * @see #addClassFileSource(JarInfo)
 	 * @see #getJars()
 	 */
 	public void clearJars() {
-		jarManager.clearJars();
+		jarManager.clearClassFileSources();
 		// The memory used by the completions can be quite large, so go ahead
 		// and clear out the completions list so no-longer-needed ones are
 		// eligible for GC.
@@ -566,17 +568,17 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	 * @return A list of {@link JarInfo}s.  Modifying a <tt>JarInfo</tt> in
 	 *         this list will have no effect on this completion provider; in
 	 *         order to do that, you must re-add the jar via
-	 *         {@link #addJar(JarInfo)}. If there are no jars on the
+	 *         {@link #addClassFileSource(JarInfo)}. If there are no jars on the
 	 *         "build path," this will be an empty list.
-	 * @see #addJar(JarInfo)
+	 * @see #addClassFileSource(JarInfo)
 	 */
 	public List getJars() {
-		return jarManager.getJars();
+		return jarManager.getClassFileSources();
 	}
 
 
 
-public File getSourceLocForClass(String className) {
+public SourceLocation  getSourceLocForClass(String className) {
 	return jarManager.getSourceLocForClass(className);
 }
 
@@ -1013,12 +1015,12 @@ public File getSourceLocForClass(String className) {
 	 * @param jar The jar to remove.
 	 * @return Whether the jar was removed.  This will be <code>false</code>
 	 *         if the jar was not on the build path.
-	 * @see #addJar(JarInfo)
+	 * @see #addClassFileSource(JarInfo)
 	 * @see #getJars()
 	 * @see #clearJars()
 	 */
 	public boolean removeJar(File jar) {
-		boolean removed = jarManager.removeJar(jar);
+		boolean removed = jarManager.removeClassFileSource(jar);
 		// The memory used by the completions can be quite large, so go ahead
 		// and clear out the completions list so no-longer-needed ones are
 		// eligible for GC.

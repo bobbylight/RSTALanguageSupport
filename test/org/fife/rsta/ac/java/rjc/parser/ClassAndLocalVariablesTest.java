@@ -8,7 +8,7 @@
  * This library is distributed under a modified BSD license.  See the included
  * RSTALanguageSupport.License.txt file for details.
  */
-package org.fife.rjc.java.ast.parser;
+package org.fife.rsta.ac.java.rjc.parser;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

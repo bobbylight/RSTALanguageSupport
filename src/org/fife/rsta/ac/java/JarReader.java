@@ -10,29 +10,27 @@
  */
 package org.fife.rsta.ac.java;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
-import java.util.zip.ZipEntry;
 
+import org.fife.rsta.ac.java.buildpath.LibraryInfo;
 import org.fife.rsta.ac.java.classreader.ClassFile;
 import org.fife.ui.autocomplete.CompletionProvider;
 
 
 /**
- * Reads entries from a Jar.
+ * Reads entries from a source of class files, such as a jar or a "bin/"
+ * directory.  This class acts as an intermediary between a raw
+ * <code>LibraryInfo</code> and the higher level Java completion classes.
+ * It caches information about classes and refreshes that cache when
+ * appropriate.
  *
  * @author Robert Futrell
  * @version 1.0
@@ -42,7 +40,7 @@ class JarReader {
 	/**
 	 * Information about the jar or directory we're reading classes from.
 	 */
-	private JarInfo info;
+	private LibraryInfo info;
 
 	/**
 	 * This is essentially a tree model of all classes in the jar or
@@ -69,7 +67,7 @@ class JarReader {
 	 * @param info The jar file to read from.  This cannot be <code>null</code>.
 	 * @throws IOException If an IO error occurs reading from the jar file.
 	 */
-	public JarReader(JarInfo info) throws IOException {
+	public JarReader(LibraryInfo info) throws IOException {
 		this.info = info;
 		packageMap = new TreeMap(String.CASE_INSENSITIVE_ORDER);
 		loadCompletions();
@@ -157,15 +155,13 @@ class JarReader {
 	 * updated.
 	 */
 	private void checkLastModified() {
-
-		long newLastModified = info.getJarFile().lastModified();
+		long newLastModified = info.getLastModified();
 		if (newLastModified!=0 && newLastModified!=lastModified) {
 			int count = 0;
 			count = clearClassFiles(packageMap);
 			System.out.println("DEBUG: Cleared " + count + " cached ClassFiles");
 			lastModified = newLastModified;
 		}
-
 	}
 
 
@@ -238,52 +234,6 @@ class JarReader {
 	}
 
 
-	private ClassFile createClassFile(String entryName) throws IOException {
-		File binLoc = info.getJarFile();
-		if (binLoc.isFile()) {
-			return createClassFileJar(entryName);
-		}
-		else if (binLoc.isDirectory()) {
-			return createClassFileDirectory(entryName);
-		}
-		return null;
-	}
-
-
-	private ClassFile createClassFileDirectory(String entryName)
-														throws IOException {
-
-		File file = new File(info.getJarFile(), entryName);
-		if (!file.isFile()) {
-			System.err.println("ERROR: Invalid class file: " +
-											file.getAbsolutePath());
-			return null;
-		}
-
-		return new ClassFile(file);
-
-	}
-
-
-	private ClassFile createClassFileJar(String entryName) throws IOException {
-		JarFile jar = new JarFile(info.getJarFile());
-		try {
-			JarEntry entry = (JarEntry)jar.getEntry(entryName);
-			if (entry==null) {
-				System.err.println("ERROR: Invalid entry: " + entryName);
-				return null;
-			}
-			DataInputStream in = new DataInputStream(
-					new BufferedInputStream(jar.getInputStream(entry)));
-			ClassFile cf = new ClassFile(in);
-			in.close();
-			return cf;
-		} finally {
-			jar.close();
-		}
-	}
-
-
 	public ClassFile getClassEntry(String[] items) {
 
 		SortedMap map = packageMap;
@@ -317,7 +267,7 @@ class JarReader {
 						name.append('/').append(items[i]);
 					}
 					name.append(".class");
-					ClassFile cf = createClassFile(name.toString());
+					ClassFile cf = info.createClassFile(name.toString());
 					map.put(className, cf);
 					return cf;
 				} catch (IOException ioe) {
@@ -365,7 +315,7 @@ class JarReader {
 				name.append('/');
 				name.append((String)entry.getKey()).append(".class");
 				try {
-					ClassFile cf = createClassFile(name.toString());
+					ClassFile cf = info.createClassFile(name.toString());
 					if (newClassFiles==null) {
 						newClassFiles = new TreeMap();
 					}
@@ -449,7 +399,7 @@ class JarReader {
 					if (value==null) {
 						String fqClassName = currentPkg + className + ".class";
 						try {
-							value = createClassFile(fqClassName);
+							value = info.createClassFile(fqClassName);
 							entry.setValue(value); // Update the map
 						} catch (IOException ioe) {
 							ioe.printStackTrace();
@@ -475,8 +425,8 @@ class JarReader {
 	 *
 	 * @return The info.
 	 */
-	public JarInfo getJarInfo() {
-		return (JarInfo)info.clone();
+	public LibraryInfo getLibraryInfo() {
+		return (LibraryInfo)info.clone();
 	}
 
 
@@ -503,127 +453,8 @@ class JarReader {
 
 
 	private void loadCompletions() throws IOException {
-		File binLoc = info.getJarFile();
-		// Check explicitly for directory and file.  If the specified
-		// location does not exist, we don't want to give an error, just
-		// do nothing.
-		if (binLoc.isDirectory()) {
-			loadCompletionsDirectory();
-		}
-		else if (binLoc.isFile()) {
-			loadCompletionsJarFile();
-		}
-	}
-
-
-	/**
-	 * Loads all classes, enums, and interfaces from a directory of class
-	 * files.
-	 *
-	 * @throws IOException If an IO error occurs.
-	 */
-	private void loadCompletionsDirectory() throws IOException {
-		File root = info.getJarFile();
-		loadCompletionsDirectoryImpl(root, null);
-		lastModified = root.lastModified();
-	}
-
-
-	/**
-	 * Does the dirty-work of finding all class files in a directory tree.
-	 *
-	 * @param dir The directory to scan.
-	 * @param pkg The package name scanned so far, in the form
-	 *        "<code>com/company/pkgname</code>"...
-	 * @throws IOException If an IO error occurs.
-	 */
-	private void loadCompletionsDirectoryImpl(File dir, String pkg)
-											throws IOException {
-
-		File[] children = dir.listFiles();
-		TreeMap m = packageMap;
-		boolean firstTimeThrough = true;
-
-		for (int i=0; i<children.length; i++) {
-			File child = children[i];
-			if (child.isFile() && child.getName().endsWith(".class")) {
-				if (pkg!=null) { // will be null the first time through
-					if (firstTimeThrough) { // Lazily drill down to pkg map node
-						firstTimeThrough = false;
-						String[] items = Util.splitOnChar(pkg, '/');
-						for (int j=0; j<items.length; j++) {
-							Object temp = m.get(items[j]);
-							if (temp instanceof TreeMap) {
-								m = (TreeMap)temp;
-							}
-							else if (temp==null) {
-								TreeMap submap = new TreeMap();
-								m.put(items[j], submap);
-								m = submap;
-							}
-							else { // e.g. a ClassFile
-								// A class with the same name as a package
-								// name - very unlikely, but could happen.  In
-								// this case, all peer classes/directories will
-								// share this package/class name conflict, so
-								// might as well bail now.
-								return;
-							}
-						}
-					}
-				}
-				String className = child.getName().
-								substring(0, child.getName().length()-6);
-				m.put(className, null);
-			}
-			else if (child.isDirectory()) {
-				String subpkg = pkg==null ? child.getName() :
-										(pkg + "/" + child.getName());
-				loadCompletionsDirectoryImpl(child, subpkg);
-			}
-		}
-
-	}
-
-
-	/**
-	 * Loads all classes, interfaces, and enums from the jar.
-	 *
-	 * @throws IOException If an IO error occurs.
-	 */
-	private void loadCompletionsJarFile() throws IOException {
-
-		JarFile jar = new JarFile(info.getJarFile());
-
-		try {
-
-			Enumeration e = jar.entries();
-			while (e.hasMoreElements()) {
-				ZipEntry entry = (ZipEntry)e.nextElement();
-				String entryName = entry.getName();
-				if (entryName.endsWith(".class")) {
-					entryName = entryName.substring(0, entryName.length()-6);
-					String[] items = Util.splitOnChar(entryName, '/');
-					TreeMap m = packageMap;
-					for (int i=0; i<items.length-1; i++) {
-						TreeMap submap = (TreeMap)m.get(items[i]);
-						if (submap==null) {
-							submap = new TreeMap();
-							m.put(items[i], submap);
-						}
-						m = submap;
-					}
-					String className = items[items.length-1];
-					m.put(className, null); // Lazily set value to ClassFile later
-				}
-			}
-
-		} finally {
-			jar.close();
-		}
-
-		lastModified = info.getJarFile().lastModified();
-
+		packageMap = info.createPackageMap();
+		lastModified = info.getLastModified();
 	}
 
 

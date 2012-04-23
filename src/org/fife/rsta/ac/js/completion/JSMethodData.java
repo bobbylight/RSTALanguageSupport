@@ -1,11 +1,11 @@
 package org.fife.rsta.ac.js.completion;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.fife.rsta.ac.java.JarManager;
+import org.fife.rsta.ac.java.buildpath.SourceLocation;
 import org.fife.rsta.ac.java.classreader.ClassFile;
 import org.fife.rsta.ac.java.classreader.MethodInfo;
 import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
@@ -121,7 +121,8 @@ public class JSMethodData {
 	public String getSummary() {
 
 		ClassFile cf = info.getClassFile();
-		File loc = jarManager.getSourceLocForClass(cf.getClassName(true));
+		SourceLocation loc = jarManager.getSourceLocForClass(
+				cf.getClassName(true));
 		String summary = null;
 
 		// First, try to parse the Javadoc for this method from the attached
@@ -143,7 +144,8 @@ public class JSMethodData {
 	public Method getMethod()
 	{
 		ClassFile cf = info.getClassFile();
-		File loc = jarManager.getSourceLocForClass(cf.getClassName(true));
+		SourceLocation loc = jarManager.getSourceLocForClass(
+				cf.getClassName(true));
 		return getMethodFromSourceLoc(loc, cf);
 	}
 	
@@ -157,7 +159,7 @@ public class JSMethodData {
 	 * @return The summary, or <code>null</code> if the method has no javadoc,
 	 *         the class's source was not found, or an IO error occurred.
 	 */
-	private String getSummaryFromSourceLoc(File loc, ClassFile cf) {
+	private String getSummaryFromSourceLoc(SourceLocation loc, ClassFile cf) {
 		Method method = getMethodFromSourceLoc(loc, cf);
 		return method!=null ? method.getDocComment() : null;
 	}
@@ -172,7 +174,7 @@ public class JSMethodData {
 	 * @return The method, or <code>null</code> if it cannot be found, or an
 	 *         IO error occurred.
 	 */
-	private Method getMethodFromSourceLoc(File loc, ClassFile cf) {
+	private Method getMethodFromSourceLoc(SourceLocation loc, ClassFile cf) {
 
 		Method res = null;
 		CompilationUnit cu = org.fife.rsta.ac.java.Util.

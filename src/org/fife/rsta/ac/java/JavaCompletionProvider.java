@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.List;
 import javax.swing.text.JTextComponent;
 
+import org.fife.rsta.ac.java.buildpath.LibraryInfo;
 import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
 import org.fife.ui.autocomplete.LanguageAwareCompletionProvider;
 
@@ -77,7 +78,7 @@ public class JavaCompletionProvider extends LanguageAwareCompletionProvider {
 	 * @see #removeJar(File)
 	 * @see #getJars()
 	 */
-	public void addJar(JarInfo info) throws IOException {
+	public void addJar(LibraryInfo info) throws IOException {
 		sourceProvider.addJar(info);
 	}
 
@@ -86,7 +87,7 @@ public class JavaCompletionProvider extends LanguageAwareCompletionProvider {
 	 * Removes all jars from the "build path."
 	 *
 	 * @see #removeJar(File)
-	 * @see #addJar(JarInfo)
+	 * @see #addClassFileSource(JarInfo)
 	 * @see #getJars()
 	 */
 	public void clearJars() {
@@ -123,9 +124,9 @@ public class JavaCompletionProvider extends LanguageAwareCompletionProvider {
 	 * @return A list of {@link JarInfo}s.  Modifying a <tt>JarInfo</tt> in
 	 *         this list will have no effect on this completion provider; in
 	 *         order to do that, you must re-add the jar via
-	 *         {@link #addJar(JarInfo)}. If there are no jars on the
+	 *         {@link #addClassFileSource(JarInfo)}. If there are no jars on the
 	 *         "build path," this will be an empty list.
-	 * @see #addJar(JarInfo)
+	 * @see #addClassFileSource(JarInfo)
 	 */
 	public List getJars() {
 		return sourceProvider.getJars();
@@ -146,7 +147,7 @@ public class JavaCompletionProvider extends LanguageAwareCompletionProvider {
 	 * @param jar The jar to remove.
 	 * @return Whether the jar was removed.  This will be <code>false</code>
 	 *         if the jar was not on the build path.
-	 * @see #addJar(JarInfo)
+	 * @see #addClassFileSource(JarInfo)
 	 */
 	public boolean removeJar(File jar) {
 		return sourceProvider.removeJar(jar);

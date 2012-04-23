@@ -26,7 +26,6 @@ import org.fife.rsta.ac.LanguageSupport;
 import org.fife.rsta.ac.LanguageSupportFactory;
 import org.fife.rsta.ac.java.JavaLanguageSupport;
 import org.fife.rsta.ac.java.tree.JavaOutlineTree;
-import org.fife.rsta.ac.js.JavaScriptLanguageSupport;
 import org.fife.rsta.ac.js.tree.JavaScriptOutlineTree;
 import org.fife.rsta.ac.xml.tree.XmlOutlineTree;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
@@ -55,16 +54,11 @@ class DemoRootPane extends JRootPane implements HyperlinkListener,
 		LanguageSupportFactory lsf = LanguageSupportFactory.get();
 		LanguageSupport support = lsf.getSupportFor(SYNTAX_STYLE_JAVA);
 		JavaLanguageSupport jls = (JavaLanguageSupport)support;
-		LanguageSupport jsSupport = lsf.getSupportFor(SYNTAX_STYLE_JAVASCRIPT);
-		JavaScriptLanguageSupport jsls = (JavaScriptLanguageSupport)jsSupport;
 		// TODO: This API will change!  It will be easier to do per-editor
 		// changes to the build path.
 		try {
-			jls.getJarManager().addJar(null);
-			org.fife.rsta.ac.java.JarInfo ji = new org.fife.rsta.ac.java.JarInfo(new File("./bin"));
-			ji.setSourceLocation(new File("./src"));
-			jls.getJarManager().addJar(ji);
-			jsls.getJarManager().addJar(ji);
+			jls.getJarManager().addCurrentJreClassFileSource();
+			//jsls.getJarManager().addClassFileSource(ji);
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
@@ -152,7 +146,6 @@ class DemoRootPane extends JRootPane implements HyperlinkListener,
 		textArea.addHyperlinkListener(this);
 		textArea.requestFocusInWindow();
 		textArea.setMarkOccurrences(true);
-		textArea.setAntiAliasingEnabled(true);
 		textArea.setCodeFoldingEnabled(true);
 		ToolTipManager.sharedInstance().registerComponent(textArea);
 		return textArea;

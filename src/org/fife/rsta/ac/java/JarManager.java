@@ -20,6 +20,9 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import org.fife.rsta.ac.java.buildpath.JarLibraryInfo;
+import org.fife.rsta.ac.java.buildpath.LibraryInfo;
+import org.fife.rsta.ac.java.buildpath.SourceLocation;
 import org.fife.rsta.ac.java.classreader.ClassFile;
 import org.fife.rsta.ac.java.rjc.ast.ImportDeclaration;
 import org.fife.ui.autocomplete.CompletionProvider;
@@ -35,9 +38,9 @@ import org.fife.ui.autocomplete.CompletionProvider;
 public class JarManager {
 
 	/**
-	 * Jars to get completions from.
+	 * Locations of class files to get completions from.
 	 */
-	private List jars;
+	private List classFileSources;
 
 	/**
 	 * Whether to check datestamps on jars/directories when completion
@@ -50,7 +53,7 @@ public class JarManager {
 	 * Constructor.
 	 */
 	public JarManager() {
-		jars = new ArrayList();
+		classFileSources = new ArrayList();
 		setCheckModifiedDatestamps(true);
 	}
 
@@ -82,8 +85,8 @@ TODO: Verify me!!!
 		// If what they've typed is qualified, add qualified completions.
 		if (text.indexOf('.')>-1) {
 			String[] pkgNames = Util.splitOnChar(text, '.');
-			for (int i=0; i<jars.size(); i++) {
-				JarReader jar = (JarReader)jars.get(i);
+			for (int i=0; i<classFileSources.size(); i++) {
+				JarReader jar = (JarReader)classFileSources.get(i);
 				jar.addCompletions(p, pkgNames, addTo);
 			}
 		}
@@ -95,8 +98,8 @@ TODO: Verify me!!!
 		// Thanks to Guilherme Joao Frantz and Jonatas Schuler for the patch!
 		else {//if (text.indexOf('.')==-1) {
 			String lowerCaseText = text.toLowerCase();
-			for (int i=0; i<jars.size(); i++) {
-				JarReader jar = (JarReader) jars.get(i);
+			for (int i=0; i<classFileSources.size(); i++) {
+				JarReader jar = (JarReader) classFileSources.get(i);
 				List classFiles = jar.getClassesWithNamesStartingWith(lowerCaseText);
 				if (classFiles!=null) {
 					for (Iterator j=classFiles.iterator(); j.hasNext(); ) {
@@ -113,58 +116,95 @@ TODO: Verify me!!!
 
 
 	/**
-	 * Adds a jar to read from.
+	 * Adds a jar to read from.  This is a convenience method for folks only
+	 * reading classes from jar files.
 	 *
-	 * @param info The jar to add.  If this is <code>null</code>, then
-	 *        the current JVM's main JRE jar (rt.jar, or classes.jar on OS X)
-	 *        will be added.  If this jar has already been added, adding it
-	 *        again will do nothing (except possibly update its attached source
-	 *        location).
+	 * @param jarFile The jar to add.  This cannot be <code>null</code>.
 	 * @return Whether this jar was added (e.g. it wasn't already loaded, or
 	 *         it has a new source path).
 	 * @throws IOException If an IO error occurs.
-	 * @see #getJars()
-	 * @see #removeJar(File)
+	 * @see #addClassFileSource(LibraryInfo)
+	 * @see #addCurrentJreClassFileSource()
+	 * @see #getClassFileSources()
+	 * @see #removeClassFileSource(File)
 	 */
-	public boolean addJar(JarInfo info) throws IOException {
+	public boolean addClassFileSource(File jarFile) throws IOException {
+		if (jarFile==null) {
+			throw new IllegalArgumentException("jarFile cannot be null");
+		}
+		return addClassFileSource(new JarLibraryInfo(jarFile));
+	}
+
+
+	/**
+	 * Adds a class file source to read from.
+	 *
+	 * @param info The source to add.  If this is <code>null</code>, then
+	 *        the current JVM's main JRE jar (rt.jar, or classes.jar on OS X)
+	 *        will be added.  If this source has already been added, adding it
+	 *        again will do nothing (except possibly update its attached source
+	 *        location).
+	 * @return Whether this source was added (e.g. it wasn't already loaded, or
+	 *         it has a new source path).
+	 * @throws IOException If an IO error occurs.
+	 * @see #addClassFileSource(File)
+	 * @see #addCurrentJreClassFileSource()
+	 * @see #getClassFileSources()
+	 * @see #removeClassFileSource(LibraryInfo)
+	 */
+	public boolean addClassFileSource(LibraryInfo info) throws IOException {
+
+		if (info==null) {
+			throw new IllegalArgumentException("info cannot be null");
+		}
 
 		// First see if this jar is already on the "build path."
-		for (int i=0; i<jars.size(); i++) {
-			JarReader jar = (JarReader)jars.get(i);
-			JarInfo info2 = jar.getJarInfo();
+		for (int i=0; i<classFileSources.size(); i++) {
+			JarReader jar = (JarReader)classFileSources.get(i);
+			LibraryInfo info2 = jar.getLibraryInfo();
 			if (info2.equals(info)) {
 				// Only update if the source location is different.
-				File source = info.getSourceLocation();
-				File source2 = info2.getSourceLocation();
+				SourceLocation  source = info.getSourceLocation();
+				SourceLocation  source2 = info2.getSourceLocation();
 				if ((source==null && source2!=null) ||
 						(source!=null && !source.equals(source2))) {
-					jars.set(i, new JarReader((JarInfo)info.clone()));
+					classFileSources.set(i, new JarReader((LibraryInfo)info.clone()));
 					return true;
 				}
 				return false;
 			}
 		}
 
-		if (info==null) {
-			info = JarInfo.getMainJREJarInfo();
-		}
-
 		// If it isn't on the build path, add it now.
-		jars.add(new JarReader(info));
+		classFileSources.add(new JarReader(info));
 		return true;
 
 	}
 
 
 	/**
-	 * Removes all jars from the "build path."
+	 * Adds the current JVM's rt.jar (or class.jar if on OS X) to the list of
+	 * class file sources.  If the application is running in a JDK, the
+	 * associated source zip is also located and used.
 	 *
-	 * @see #removeJar(File)
-	 * @see #addJar(JarInfo)
-	 * @see #getJars()
+	 * @throws IOException If an IO error occurs.
+	 * @see #addClassFileSource(LibraryInfo)
 	 */
-	public void clearJars() {
-		jars.clear();
+	public void addCurrentJreClassFileSource() throws IOException {
+		addClassFileSource(LibraryInfo.getMainJreJarInfo());
+	}
+
+
+	/**
+	 * Removes all class file sources from the "build path."
+	 *
+	 * @see #removeClassFileSource(LibraryInfo)
+	 * @see #removeClassFileSource(File)
+	 * @see #addClassFileSource(LibraryInfo)
+	 * @see #getClassFileSources()
+	 */
+	public void clearClassFileSources() {
+		classFileSources.clear();
 	}
 
 
@@ -192,8 +232,8 @@ TODO: Verify me!!!
 
 		String[] items = Util.splitOnChar(className, '.');
 
-		for (int i=0; i<jars.size(); i++) {
-			JarReader jar = (JarReader)jars.get(i);
+		for (int i=0; i<classFileSources.size(); i++) {
+			JarReader jar = (JarReader)classFileSources.get(i);
 			ClassFile cf = jar.getClassEntry(items);
 			if (cf!=null) {
 				return cf;
@@ -291,8 +331,8 @@ TODO: Verify me!!!
 		List list = new ArrayList();
 		String[] pkgs = Util.splitOnChar(pkgName, '.');
 
-		for (int i=0; i<jars.size(); i++) {
-			JarReader jar = (JarReader)jars.get(i);
+		for (int i=0; i<classFileSources.size(); i++) {
+			JarReader jar = (JarReader)classFileSources.get(i);
 			jar.getClassesInPackage(list, pkgs, inPkg);
 		}
 
@@ -304,18 +344,18 @@ TODO: Verify me!!!
 	/**
 	 * Returns the jars on the "build path."
 	 *
-	 * @return A list of {@link JarInfo}s.  Modifying a <tt>JarInfo</tt> in
-	 *         this list will have no effect on this completion provider; in
-	 *         order to do that, you must re-add the jar via
-	 *         {@link #addJar(JarInfo)}. If there are no jars on the
-	 *         "build path," this will be an empty list.
-	 * @see #addJar(JarInfo)
+	 * @return A list of {@link ClassFileSource}s. Modifying a
+	 *         <tt>ClassFileSource</tt> in this list will have no effect on
+	 *         this completion provider; in order to do that, you must re-add
+	 *         the jar via {@link #addClassFileSource(LibraryInfo)}. If there
+	 *         are no jars on the "build path," this will be an empty list.
+	 * @see #addClassFileSource(LibraryInfo)
 	 */
-	public List getJars() {
-		List jarList = new ArrayList(jars.size());
-		for (Iterator i=jars.iterator(); i.hasNext(); ) {
+	public List getClassFileSources() {
+		List jarList = new ArrayList(classFileSources.size());
+		for (Iterator i=classFileSources.iterator(); i.hasNext(); ) {
 			JarReader reader = (JarReader)i.next();
-			jarList.add(reader.getJarInfo().clone());
+			jarList.add(reader.getLibraryInfo().clone());
 		}
 		return jarList;
 	}
@@ -327,8 +367,8 @@ TODO: Verify me!!!
 
 		SortedMap map = new TreeMap();
 
-		for (int i=0; i<jars.size(); i++) {
-			JarReader jar = (JarReader)jars.get(i);
+		for (int i=0; i<classFileSources.size(); i++) {
+			JarReader jar = (JarReader)classFileSources.get(i);
 			SortedMap map2 = jar.getPackageEntry(pkgs);
 			if (map2!=null) {
 				mergeMaps(map, map2);
@@ -340,12 +380,12 @@ TODO: Verify me!!!
 	}
 
 
-public File getSourceLocForClass(String className) {
-	File sourceLoc = null;
-	for (int i=0; i<jars.size(); i++) {
-		JarReader jar = (JarReader)jars.get(i);
+public SourceLocation getSourceLocForClass(String className) {
+	SourceLocation  sourceLoc = null;
+	for (int i=0; i<classFileSources.size(); i++) {
+		JarReader jar = (JarReader)classFileSources.get(i);
 		if (jar.containsClass(className)) {
-			sourceLoc = jar.getJarInfo().getSourceLocation();
+			sourceLoc = jar.getLibraryInfo().getSourceLocation();
 			break;
 		}
 	}
@@ -378,20 +418,36 @@ public File getSourceLocForClass(String className) {
 
 
 	/**
-	 * Removes a jar from the "build path."
+	 * Removes a jar from the "build path."  This is a convenience method for
+	 * folks only adding and removing jar sources.
 	 *
 	 * @param jar The jar to remove.
 	 * @return Whether the jar was removed.  This will be <code>false</code>
 	 *         if the jar was not on the build path.
-	 * @see #addJar(JarInfo)
-	 * @see #getJars()
+	 * @see #removeClassFileSource(LibraryInfo)
+	 * @see #addClassFileSource(LibraryInfo)
+	 * @see #getClassFileSources()
 	 */
-	public boolean removeJar(File jar) {
-		for (Iterator i=jars.iterator(); i.hasNext(); ) {
+	public boolean removeClassFileSource(File jar) {
+		return removeClassFileSource(new JarLibraryInfo(jar));
+	}
+
+
+	/**
+	 * Removes a class file source from the "build path."
+	 *
+	 * @param toRemove The source to remove.
+	 * @return Whether source jar was removed.  This will be <code>false</code>
+	 *         if the source was not on the build path.
+	 * @see #removeClassFileSource(File)
+	 * @see #addClassFileSource(LibraryInfo)
+	 * @see #getClassFileSources()
+	 */
+	public boolean removeClassFileSource(LibraryInfo toRemove) {
+		for (Iterator i=classFileSources.iterator(); i.hasNext(); ) {
 			JarReader reader = (JarReader)i.next();
-			JarInfo info = reader.getJarInfo();
-			File jar2 = info.getJarFile();
-			if (jar.equals(jar2)) {
+			LibraryInfo info = reader.getLibraryInfo();
+			if (info.equals(toRemove)) {
 				i.remove();
 				return true;
 			}

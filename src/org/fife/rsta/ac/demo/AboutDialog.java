@@ -36,7 +36,8 @@ import javax.swing.UIManager;
 import javax.swing.border.AbstractBorder;
 import javax.swing.border.Border;
 
-import org.fife.rsta.ac.java.JarInfo;
+import org.fife.rsta.ac.java.buildpath.JarLibraryInfo;
+import org.fife.rsta.ac.java.buildpath.LibraryInfo;
 import org.fife.rsta.ac.perl.PerlLanguageSupport;
 
 
@@ -103,10 +104,10 @@ public class AboutDialog extends JDialog {
 		JTextField perlField = createTextField(text);
 		JLabel javaLabel = new JLabel("Java home:");
 		String jre = null;
-		JarInfo info = JarInfo.getMainJREJarInfo();
+		LibraryInfo info = LibraryInfo.getMainJreJarInfo();
 		if (info!=null) { // Should always be true
-			jre = info.getJarFile().getParentFile().getParentFile().
-													getAbsolutePath();
+			File jarFile = ((JarLibraryInfo)info).getJarFile();
+			jre = jarFile.getParentFile().getParentFile().getAbsolutePath();
 		}
 		JTextField javaField = createTextField(jre);
 

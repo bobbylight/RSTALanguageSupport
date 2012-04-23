@@ -10,10 +10,10 @@
  */
 package org.fife.rsta.ac.java;
 
-import java.io.File;
 import java.util.Iterator;
 
 import org.fife.rsta.ac.java.MemberCompletion.Data;
+import org.fife.rsta.ac.java.buildpath.SourceLocation;
 import org.fife.rsta.ac.java.classreader.ClassFile;
 import org.fife.rsta.ac.java.classreader.FieldInfo;
 import org.fife.rsta.ac.java.classreader.Util;
@@ -93,7 +93,7 @@ class FieldInfoData implements Data {
 	public String getSummary() {
 
 		ClassFile cf = info.getClassFile();;
-		File loc = provider.getSourceLocForClass(cf.getClassName(true));
+		SourceLocation loc = provider.getSourceLocForClass(cf.getClassName(true));
 		String summary = null;
 
 		// First, try to parse the Javadoc for this method from the attached
@@ -121,7 +121,7 @@ class FieldInfoData implements Data {
 	 * @return The summary, or <code>null</code> if the field has no javadoc,
 	 *         the class's source was not found, or an IO error occurred.
 	 */
-	private String getSummaryFromSourceLoc(File loc, ClassFile cf) {
+	private String getSummaryFromSourceLoc(SourceLocation loc, ClassFile cf) {
 
 		String summary = null;
 		CompilationUnit cu = org.fife.rsta.ac.java.Util.
