@@ -61,7 +61,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	 * Resource readable by {@link ClassEnumerationReader} that lists all
 	 * built-in JavaScript types.
 	 */
-	private static final String BUILTIN_JS_TYPES = "BuiltinJavascriptTypes.txt";
+	private static final String BUILTIN_JS_TYPES = "org/fife/rsta/ac/js/BuiltinJavascriptTypes.txt";
 
 
 	public JavaScriptLanguageSupport() {
@@ -85,7 +85,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 		JarManager jarManager = new JarManager();
 
 		// Grab built-in JavaScript types
-		InputStream in = getClass().getResourceAsStream(BUILTIN_JS_TYPES);
+		InputStream in = getClass().getClassLoader().getResourceAsStream(BUILTIN_JS_TYPES);
 		if (in!=null) { // Should always be true
 			try {
 				List classes = ClassEnumerationReader.getClassNames(in);
