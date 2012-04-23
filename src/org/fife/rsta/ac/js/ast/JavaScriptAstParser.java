@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.fife.rsta.ac.js.JavaScriptHelper;
+import org.fife.rsta.ac.js.Logger;
 import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.rsta.ac.js.completion.JavaScriptFunctionCompletion;
 import org.fife.ui.autocomplete.ParameterizedCompletion.Parameter;
@@ -71,7 +72,7 @@ public class JavaScriptAstParser {
 				childBlock = codeBlock.addChildCodeBlock(start);
 				childBlock.setEndOffset(offset);
 			}
-			addCompletions(child, set, entered, childBlock, offset);
+			addCompletions((AstNode) child, set, entered, childBlock, offset);
 
 			child = child.getNext();
 
@@ -79,11 +80,14 @@ public class JavaScriptAstParser {
 	}
 
 
-	private void addCompletions(Node child, Set set, String entered,
+	private void addCompletions(AstNode child, Set set, String entered,
 			CodeBlock block, int offset) {
 
 		if (child == null)
 			return;
+
+		Logger.log(child.toSource());
+		Logger.log(child.shortName());
 
 		if (child instanceof InfixExpression) {
 			// TODO I believe this is called when a variable is re-assigned.
@@ -149,16 +153,53 @@ public class JavaScriptAstParser {
 				case Token.BREAK:
 				case Token.CONTINUE:
 				case Token.CALL:
-				case Token.EXPR_RESULT:
 				case Token.EMPTY:
 					break;
+				case Token.EXPR_RESULT:
+					processExpressionStatement(child, block, set, entered,
+							offset);
+					break;
 				default:
-					System.out.println("Unhandled: " + child.getClass() +
-							" (\"" + child.toString() + "\":" + child.getLineno());
+					System.out.println("Unhandled: " + child.getClass()
+							+ " (\"" + child.toString() + "\":"
+							+ child.getLineno());
 					break;
 			}
 		}
 
+	}
+
+
+	private void processExpressionStatement(Node child, CodeBlock block,
+			Set set, String entered, int offset) {
+		ExpressionStatement exp = (ExpressionStatement) child;
+
+		AstNode expNode = exp.getExpression();
+		switch (expNode.getType()) {
+			case Token.ASSIGN:
+				reassignVariable(expNode, offset);
+				break;
+		}
+	}
+
+
+	private void reassignVariable(AstNode assign, int dot) {
+		Assignment assignNode = (Assignment) assign;
+		// maybe a variable
+		AstNode leftNode = assignNode.getLeft();
+		// assign the variable to
+		AstNode rightNode = assignNode.getRight();
+
+		String name = leftNode.getType() == Token.NAME ? ((Name) leftNode)
+				.getIdentifier() : null;
+		if (name != null) {
+			JavaScriptVariableDeclaration dec = provider.getVariableResolver()
+					.findDeclaration(name, dot);
+			if (dec != null) {
+				// remove set reference to new type
+				dec.setTypeDeclaration(rightNode);
+			}
+		}
 	}
 
 
@@ -319,8 +360,8 @@ public class JavaScriptAstParser {
 			String entered, int offset) {
 		FunctionNode fn = (FunctionNode) child;
 		String jsdoc = fn.getJsDoc();
-		JavaScriptFunctionCompletion fc = new JavaScriptFunctionCompletion(provider, fn.getName(),
-				null);
+		JavaScriptFunctionCompletion fc = new JavaScriptFunctionCompletion(
+				provider, fn.getName(), null);
 		fc.setShortDescription(jsdoc);
 		offset = fn.getAbsolutePosition() + fn.getLength();
 		if (fn.getParamCount() > 0) {
@@ -399,14 +440,16 @@ public class JavaScriptAstParser {
 		AstNode target = initializer.getTarget();
 
 		if (target != null) {
-			JavaScriptVariableDeclaration dec = extractVariableFromNode(target, block,
-					offset);
+			JavaScriptVariableDeclaration dec = extractVariableFromNode(target,
+					block, offset);
 			if (dec != null
 					&& initializer.getInitializer() != null
 					&& JavaScriptHelper.canResolveVariable(target, initializer
 							.getInitializer())) {
 				dec.setTypeDeclaration(initializer.getInitializer());
-				// add declaration to resolver
+			}
+			if (dec != null) {
+				// add declaration to resolver if one is found
 				provider.getVariableResolver().addLocalVariable(dec);
 			}
 
@@ -429,8 +472,8 @@ public class JavaScriptAstParser {
 			switch (node.getType()) {
 				case Token.NAME:
 					Name name = (Name) node;
-					dec = new JavaScriptVariableDeclaration(name.getIdentifier(),
-							offset, provider);
+					dec = new JavaScriptVariableDeclaration(name
+							.getIdentifier(), offset, provider);
 					block.addVariable(dec);
 					break;
 				default:
