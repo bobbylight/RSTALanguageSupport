@@ -157,6 +157,17 @@ public abstract class LibraryInfo implements Comparable, Cloneable {
 
 
 	/**
+	 * Returns the location of this library, as a string.  If this library
+	 * is contained in a single jar file, this will be the full path to that
+	 * jar.  If it is a directory containing classes, it will be the full path
+	 * of the directory.  Otherwise, this value will be <code>null</code>.
+	 *
+	 * @return The location of this library.
+	 */
+	public abstract String getLocationAsString();
+
+
+	/**
 	 * Returns information on the JRE running this application.  This will be
 	 * <tt>rt.jar</tt> everywhere except OS X, where it will be
 	 * <tt>classes.jar</tt>.  The associated source zip/jar file is also

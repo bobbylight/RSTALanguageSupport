@@ -134,6 +134,11 @@ public class JarLibraryInfo extends LibraryInfo {
 	}
 
 
+	public String getLocationAsString() {
+		return jarFile.getAbsolutePath();
+	}
+
+
 	/**
 	 * Returns the jar file this instance is wrapping.
 	 *

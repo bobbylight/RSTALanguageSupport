@@ -96,6 +96,11 @@ public class DirLibraryInfo extends LibraryInfo {
 	}
 
 
+	public String getLocationAsString() {
+		return dir.getAbsolutePath();
+	}
+
+
 	/**
 	 * Does the dirty-work of finding all class files in a directory tree.
 	 *

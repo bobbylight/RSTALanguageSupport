@@ -65,4 +65,12 @@ public class ClasspathSourceLocation implements SourceLocation {
 	}
 
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getLocationAsString() {
+		return null;
+	}
+
+
 }

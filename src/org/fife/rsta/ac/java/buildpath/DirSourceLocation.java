@@ -86,4 +86,12 @@ public class DirSourceLocation implements SourceLocation {
 	}
 
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getLocationAsString() {
+		return dir.getAbsolutePath();
+	}
+
+
 }

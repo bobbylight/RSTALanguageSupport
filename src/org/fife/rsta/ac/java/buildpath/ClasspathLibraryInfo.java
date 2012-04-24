@@ -203,6 +203,11 @@ public class ClasspathLibraryInfo extends LibraryInfo {
 	}
 
 
+	public String getLocationAsString() {
+		return null;
+	}
+
+
 	public int hashCode() {
 		return classNameToClassFile.hashCode();
 	}

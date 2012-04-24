@@ -40,6 +40,17 @@ public class ZipSourceLocation implements SourceLocation {
 	/**
 	 * Constructor.
 	 *
+	 * @param archive The archive containing the source.  This should be an
+	 *        absolute path to ensure correctness.
+	 */
+	public ZipSourceLocation(String archive) {
+		this(new File(archive));
+	}
+
+
+	/**
+	 * Constructor.
+	 *
 	 * @param archive The archive containing the source.
 	 */
 	public ZipSourceLocation(File archive) {
@@ -79,6 +90,14 @@ public class ZipSourceLocation implements SourceLocation {
 
 		return cu;
 
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public String getLocationAsString() {
+		return archive.getAbsolutePath();
 	}
 
 

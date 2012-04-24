@@ -166,6 +166,7 @@
 				<mapper type="glob" from="*.jar"       to="*.jar"/> 
 				<mapper type="glob" from="build-date"  to="Rhino.build-date"/>
 				<mapper type="glob" from="LICENSE.txt" to="Rhino.LICENSE.txt"/>
+				<mapper type="identity" from="rhino.rsta.readme.txt"/>
 			</mapper>
 		</copy>
 	</target>

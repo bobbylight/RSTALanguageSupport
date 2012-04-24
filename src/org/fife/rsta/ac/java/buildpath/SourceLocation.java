@@ -39,4 +39,15 @@ public interface SourceLocation {
 	CompilationUnit getCompilationUnit(ClassFile cf) throws IOException;
 
 
+	/**
+	 * Returns a string representation of this source location.  For locations
+	 * on disk such as zip files or directories, this should be the full path
+	 * to the resource.
+	 *
+	 * @return The location of this source as a string, or <code>null</code> if
+	 *         it is not an accessible location.
+	 */
+	public String getLocationAsString();
+
+
 }
