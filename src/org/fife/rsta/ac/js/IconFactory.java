@@ -11,8 +11,13 @@
 package org.fife.rsta.ac.js;
 
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+
+import org.fife.ui.autocomplete.EmptyIcon;
 
 
 /**
@@ -23,22 +28,39 @@ import javax.swing.ImageIcon;
  */
 public class IconFactory {
 
-	public static final int FUNCTION_ICON = 0;
-	public static final int LOCAL_VARIABLE_ICON = 1;
-	public static final int PUBLIC_STATIC_VARIABLE_ICON = 2;
-	public static final int PUBLIC_VARIABLE_ICON = 3;
+	public static final String FUNCTION_ICON = "function";
+	public static final String LOCAL_VARIABLE_ICON = "local_variable";
+	public static final String TEMPLATE_ICON = "template";
+	public static final String EMPTY_ICON = "empty";
+	public static final String GLOBAL_VARIABLE_ICON = "global_variable";
+	public static final String DEFAULT_FUNCTION_ICON = "default_function";
+	public static final String STATIC_VAR_ICON = "static_var";
+	public static final String DEFAULT_VARIABLE_ICON = "default_variable";
 
-	private Icon[] icons;
+	private Map iconMap;
 
 	private static final IconFactory INSTANCE = new IconFactory();
 
 
 	private IconFactory() {
-		icons = new Icon[4];
-		icons[FUNCTION_ICON] = loadIcon("methdef_obj.gif");
-		icons[LOCAL_VARIABLE_ICON] = loadIcon("localvariable_obj.gif");
-		icons[PUBLIC_STATIC_VARIABLE_ICON] = loadIcon("static_co.gif");
-		icons[PUBLIC_VARIABLE_ICON] = loadIcon("field_public_obj.gif");
+
+		iconMap = new HashMap();
+
+		iconMap.put(FUNCTION_ICON,
+				loadIcon("org/fife/rsta/ac/js/img/methpub_obj.gif"));
+		iconMap.put(LOCAL_VARIABLE_ICON,
+				loadIcon("org/fife/rsta/ac/js/img/localvariable_obj.gif"));
+		iconMap.put(GLOBAL_VARIABLE_ICON,
+				loadIcon("org/fife/rsta/ac/js/img/field_public_obj.gif"));
+		iconMap.put(TEMPLATE_ICON,
+				loadIcon("org/fife/rsta/ac/js/img/template_obj.gif"));
+		iconMap.put(DEFAULT_FUNCTION_ICON,
+				loadIcon("org/fife/rsta/ac/js/img/methdef_obj.gif"));
+		iconMap.put(STATIC_VAR_ICON,
+				loadIcon("org/fife/rsta/ac/js/img/static_co.gif"));
+		iconMap.put(DEFAULT_VARIABLE_ICON,
+				loadIcon("org/fife/rsta/ac/js/img/field_default_obj.gif"));
+		iconMap.put(EMPTY_ICON, new EmptyIcon(16));
 	}
 
 
@@ -52,14 +74,18 @@ public class IconFactory {
 	}
 
 
-	/**
-	 * Returns the specified icon.
-	 * 
-	 * @param key The icon to retrieve.
-	 * @return The icon.
-	 */
-	public Icon getIcon(int key) {
-		return icons[key];
+	private Icon getIconImage(String name) {
+		return (Icon) iconMap.get(name);
+	}
+
+
+	public static Icon getIcon(String name) {
+		return INSTANCE.getIconImage(name);
+	}
+
+
+	public static String getEmptyIcon() {
+		return EMPTY_ICON;
 	}
 
 
@@ -70,12 +96,12 @@ public class IconFactory {
 	 * @return The icon.
 	 */
 	private Icon loadIcon(String name) {
-		URL res = getClass().getResource("img/" + name);
+		URL res = getClass().getClassLoader().getResource(name);
 		if (res == null) { // Never happens
 			// IllegalArgumentException is what would be thrown if res
 			// was null anyway, we're just giving the actual arg name to
 			// make the message more descriptive
-			throw new IllegalArgumentException("icon not found: img/" + name);
+			throw new IllegalArgumentException("icon not found: " + name);
 		}
 		return new ImageIcon(res);
 	}

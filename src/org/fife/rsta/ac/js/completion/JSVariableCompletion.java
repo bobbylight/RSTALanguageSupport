@@ -10,15 +10,18 @@
  */
 package org.fife.rsta.ac.js.completion;
 
+import javax.swing.Icon;
 import javax.swing.text.JTextComponent;
 
+import org.fife.rsta.ac.js.IconFactory;
 import org.fife.rsta.ac.js.JavaScriptHelper;
 import org.fife.rsta.ac.js.ast.TypeDeclarationFactory;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.VariableCompletion;
 
 
-public class JSVariableCompletion extends VariableCompletion {
+public class JSVariableCompletion extends VariableCompletion implements
+		JSCompletionUI {
 
 	public JSVariableCompletion(CompletionProvider provider, String name,
 			String type) {
@@ -52,4 +55,15 @@ public class JSVariableCompletion extends VariableCompletion {
 		}
 		return temp;
 	}
+
+
+	public Icon getIcon() {
+		return IconFactory.getIcon(IconFactory.LOCAL_VARIABLE_ICON);
+	}
+
+
+	public int getSortIndex() {
+		return LOCAL_VARIABLE_INDEX;
+	}
+
 }

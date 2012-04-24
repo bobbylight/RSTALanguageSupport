@@ -8,7 +8,7 @@ import java.util.Set;
 import org.fife.rsta.ac.js.JavaScriptHelper;
 import org.fife.rsta.ac.js.Logger;
 import org.fife.rsta.ac.js.SourceCompletionProvider;
-import org.fife.rsta.ac.js.completion.JavaScriptFunctionCompletion;
+import org.fife.rsta.ac.js.completion.JavaScriptInScriptFunctionCompletion;
 import org.fife.ui.autocomplete.ParameterizedCompletion.Parameter;
 import org.mozilla.javascript.Node;
 import org.mozilla.javascript.Token;
@@ -360,7 +360,7 @@ public class JavaScriptAstParser {
 			String entered, int offset) {
 		FunctionNode fn = (FunctionNode) child;
 		String jsdoc = fn.getJsDoc();
-		JavaScriptFunctionCompletion fc = new JavaScriptFunctionCompletion(
+		JavaScriptInScriptFunctionCompletion fc = new JavaScriptInScriptFunctionCompletion(
 				provider, fn.getName(), null);
 		fc.setShortDescription(jsdoc);
 		offset = fn.getAbsolutePosition() + fn.getLength();

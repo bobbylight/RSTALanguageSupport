@@ -13,56 +13,67 @@ import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.VariableCompletion;
 
 
-public class JSBeanCompletion extends VariableCompletion implements JSCompletion {
+public class JSBeanCompletion extends VariableCompletion implements
+		JSCompletion {
 
-	
 	private JSMethodData methodData;
 	private Method method;
-	
-	public JSBeanCompletion(CompletionProvider provider, MethodInfo methodInfo, JarManager jarManager) {
+
+
+	public JSBeanCompletion(CompletionProvider provider, MethodInfo methodInfo,
+			JarManager jarManager) {
 		super(provider, convertNameToBean(methodInfo.getName()), null);
 		this.methodData = new JSMethodData(methodInfo, jarManager);
 		this.method = methodData.getMethod();
 	}
-	
-	
+
+
 	public boolean equals(Object obj) {
 		return (obj instanceof JSFunctionCompletion)
-				&& ((JSBeanCompletion) obj).getName().equals(
-						getName());
+				&& ((JSBeanCompletion) obj).getName().equals(getName());
 	}
-	
-	
+
+
 	public Icon getIcon() {
-		return IconFactory.get().getIcon(
-				IconFactory.PUBLIC_VARIABLE_ICON);
+		return IconFactory.get().getIcon(IconFactory.GLOBAL_VARIABLE_ICON);
+	}
+
+
+	public int getSortIndex() {
+		return BEAN_METHOD_INDEX;
 	}
 
 
 	public String getAlreadyEntered(JTextComponent comp) {
 		String temp = getProvider().getAlreadyEnteredText(comp);
-		int lastDot = JavaScriptHelper.findLastIndexOfJavaScriptIdentifier(temp);
+		int lastDot = JavaScriptHelper
+				.findLastIndexOfJavaScriptIdentifier(temp);
 		if (lastDot > -1) {
 			temp = temp.substring(lastDot + 1);
 		}
 		return temp;
 	}
-	
+
+
 	public String getType() {
 		String value = getType(true);
 		return TypeDeclarationFactory.lookupJSType(value, false);
 	}
-	
+
+
 	public String getType(boolean qualified) {
 		return TypeDeclarationFactory.lookupJSType(methodData
 				.getType(qualified), qualified);
 	}
 
+
 	private String getMethodSummary() {
 		String docComment = method != null ? method.getDocComment() : getName();
-		return docComment != null ? docComment : method != null ? method.toString() : null;
+		return docComment != null ? docComment : method != null ? method
+				.toString() : null;
 	}
-	
+
+
 	public String getSummary() {
 		String summary = getMethodSummary(); // Could be just the method name
 
@@ -74,9 +85,11 @@ public class JSBeanCompletion extends VariableCompletion implements JSCompletion
 		return summary;
 	}
 
+
 	public String getLookupName() {
 		return getName();
 	}
+
 
 	private static String convertNameToBean(String name) {
 		boolean memberIsGetMethod = name.startsWith("get");
@@ -112,12 +125,11 @@ public class JSBeanCompletion extends VariableCompletion implements JSCompletion
 
 	/**
 	 * Overridden since {@link #equals(Object)} is overridden.
-	 *
+	 * 
 	 * @return The hash code.
 	 */
 	public int hashCode() {
 		return getName().hashCode();
 	}
-
 
 }

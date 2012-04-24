@@ -13,7 +13,7 @@ package org.fife.rsta.ac.js;
 import javax.swing.Icon;
 import javax.swing.JList;
 
-import org.fife.rsta.ac.js.completion.JSCompletion;
+import org.fife.rsta.ac.js.completion.JSCompletionUI;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionCellRenderer;
 import org.fife.ui.autocomplete.EmptyIcon;
@@ -46,7 +46,12 @@ public class JavaScriptCellRenderer extends CompletionCellRenderer {
 	protected void prepareForOtherCompletion(JList list, Completion c,
 			int index, boolean selected, boolean hasFocus) {
 		super.prepareForOtherCompletion(list, c, index, selected, hasFocus);
-		setIcon(emptyIcon);
+		if (c instanceof JSCompletionUI) {
+			setIcon(((JSCompletionUI) c).getIcon());
+		}
+		else {
+			setIcon(emptyIcon);
+		}
 	}
 
 
@@ -56,11 +61,10 @@ public class JavaScriptCellRenderer extends CompletionCellRenderer {
 	protected void prepareForVariableCompletion(JList list,
 			VariableCompletion vc, int index, boolean selected, boolean hasFocus) {
 		super.prepareForVariableCompletion(list, vc, index, selected, hasFocus);
-		if (vc instanceof JSCompletion) {
-			setIcon(((JSCompletion) vc).getIcon());
+		if (vc instanceof JSCompletionUI) {
+			setIcon(((JSCompletionUI) vc).getIcon());
 		}
-		else
-		{
+		else {
 			setIcon(IconFactory.get().getIcon(IconFactory.LOCAL_VARIABLE_ICON));
 		}
 	}
@@ -72,7 +76,13 @@ public class JavaScriptCellRenderer extends CompletionCellRenderer {
 	protected void prepareForFunctionCompletion(JList list,
 			FunctionCompletion fc, int index, boolean selected, boolean hasFocus) {
 		super.prepareForFunctionCompletion(list, fc, index, selected, hasFocus);
-		setIcon(IconFactory.get().getIcon(IconFactory.FUNCTION_ICON));
+		if (fc instanceof JSCompletionUI) {
+			setIcon(((JSCompletionUI) fc).getIcon());
+		}
+		else {
+			setIcon(IconFactory.get()
+					.getIcon(IconFactory.DEFAULT_FUNCTION_ICON));
+		}
 	}
 
 }

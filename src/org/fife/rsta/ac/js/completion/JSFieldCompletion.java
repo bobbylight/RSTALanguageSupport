@@ -18,8 +18,6 @@ public class JSFieldCompletion extends VariableCompletion implements
 
 	private JSFieldData fieldData;
 	private Field field;
-	private int iconIndex = IconFactory.PUBLIC_STATIC_VARIABLE_ICON; // default
-																		// static
 
 
 	public JSFieldCompletion(CompletionProvider provider, FieldInfo fieldInfo,
@@ -45,18 +43,12 @@ public class JSFieldCompletion extends VariableCompletion implements
 
 
 	public Icon getIcon() {
-		return IconFactory.get().getIcon(iconIndex);
+		return IconFactory.get().getIcon(IconFactory.STATIC_VAR_ICON);
 	}
 
 
-	/**
-	 * Set icon index
-	 * 
-	 * @param iconIndex
-	 * @see IconFactory
-	 */
-	public void setIcon(int iconIndex) {
-		this.iconIndex = iconIndex;
+	public int getSortIndex() {
+		return STATIC_FIELD_INDEX;
 	}
 
 
