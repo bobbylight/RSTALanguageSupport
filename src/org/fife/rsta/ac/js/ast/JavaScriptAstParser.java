@@ -89,8 +89,7 @@ public class JavaScriptAstParser {
 		Logger.log(child.toSource());
 		Logger.log(child.shortName());
 
-		if (child instanceof InfixExpression) {
-			// TODO I believe this is called when a variable is re-assigned.
+		if (JavaScriptHelper.isInfixOnly(child)) {
 			// Will need to look into it.
 			processInfix(child, block, set, entered, offset);
 		}
@@ -115,7 +114,7 @@ public class JavaScriptAstParser {
 					break;
 				}
 				case Token.ASSIGN: {
-					processAssignNode(child, block, set, offset);
+					reassignVariable(child, offset);
 					break;
 				}
 				case Token.EXPR_VOID: {
@@ -175,11 +174,7 @@ public class JavaScriptAstParser {
 		ExpressionStatement exp = (ExpressionStatement) child;
 
 		AstNode expNode = exp.getExpression();
-		switch (expNode.getType()) {
-			case Token.ASSIGN:
-				reassignVariable(expNode, offset);
-				break;
-		}
+		addCompletions(expNode, set, entered, block, offset);
 	}
 
 
@@ -303,17 +298,6 @@ public class JavaScriptAstParser {
 			String entered, int offset) {
 		ExpressionStatement expr = (ExpressionStatement) child;
 		addCompletions(expr.getExpression(), set, entered, block, offset);
-	}
-
-
-	/**
-	 * Extract variable from assign node
-	 */
-	private void processAssignNode(Node child, CodeBlock block, Set set,
-			int offset) {
-		Assignment ass = (Assignment) child;
-		AstNode target = ass.getLeft();
-		extractVariableFromNode(target, block, offset);
 	}
 
 
