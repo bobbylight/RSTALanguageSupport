@@ -165,8 +165,8 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	 */
 	protected CodeBlock iterateAstRoot(AstRoot root, Set set, String entered,
 			int dot) {
-		JavaScriptAstParser parser = new JavaScriptAstParser(this);
-		return parser.convertAstNodeToCodeBlock(root, set, entered, dot);
+		JavaScriptAstParser parser = new JavaScriptAstParser(this, dot);
+		return parser.convertAstNodeToCodeBlock(root, set, entered);
 	}
 
 

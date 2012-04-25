@@ -35,15 +35,16 @@ import org.mozilla.javascript.ast.WhileLoop;
 public class JavaScriptAstParser {
 
 	private SourceCompletionProvider provider;
+	private int dot;
 
-
-	public JavaScriptAstParser(SourceCompletionProvider provider) {
+	public JavaScriptAstParser(SourceCompletionProvider provider, int dot) {
 		this.provider = provider;
+		this.dot = dot;
 	}
 
 
 	public CodeBlock convertAstNodeToCodeBlock(AstRoot root, Set set,
-			String entered, int dot) {
+			String entered) {
 		CodeBlock block = new CodeBlock(0);
 		addCodeBlock(root, set, entered, block, Integer.MAX_VALUE);
 		return block;
@@ -95,6 +96,9 @@ public class JavaScriptAstParser {
 		}
 		else {
 			switch (child.getType()) {
+				case Token.IMPORT:
+					processImportNode(child, block, set, entered, offset);
+					break;
 				case Token.FUNCTION:
 					processFunctionNode(child, block, set, entered, offset);
 					break;
@@ -114,7 +118,7 @@ public class JavaScriptAstParser {
 					break;
 				}
 				case Token.ASSIGN: {
-					reassignVariable(child, offset);
+					reassignVariable(child);
 					break;
 				}
 				case Token.EXPR_VOID: {
@@ -167,6 +171,15 @@ public class JavaScriptAstParser {
 		}
 
 	}
+	
+	private void processImportNode(Node child, CodeBlock block,
+			Set set, String entered, int offset)
+	{
+		//ImportDeclaration dec = (ImportDeclaration) child;
+		System.out.println("Stop");
+		//now add import dec to type factory?
+		
+	}
 
 
 	private void processExpressionStatement(Node child, CodeBlock block,
@@ -178,7 +191,7 @@ public class JavaScriptAstParser {
 	}
 
 
-	private void reassignVariable(AstNode assign, int dot) {
+	private void reassignVariable(AstNode assign) {
 		Assignment assignNode = (Assignment) assign;
 		// maybe a variable
 		AstNode leftNode = assignNode.getLeft();
@@ -188,11 +201,17 @@ public class JavaScriptAstParser {
 		String name = leftNode.getType() == Token.NAME ? ((Name) leftNode)
 				.getIdentifier() : null;
 		if (name != null) {
-			JavaScriptVariableDeclaration dec = provider.getVariableResolver()
-					.findDeclaration(name, dot);
-			if (dec != null) {
-				// remove set reference to new type
-				dec.setTypeDeclaration(rightNode);
+			int start = assignNode.getAbsolutePosition();
+			int offset = start + assignNode.getLength();
+			//check that the caret position is below the dot before looking for the variable
+			if(offset <= dot)
+			{
+				JavaScriptVariableDeclaration dec = provider.getVariableResolver()
+						.findDeclaration(name, dot);
+				if (dec != null) {
+					// remove set reference to new type
+					dec.setTypeDeclaration(rightNode);
+				}
 			}
 		}
 	}
