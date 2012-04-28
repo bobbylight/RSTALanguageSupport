@@ -56,6 +56,20 @@ public class LanguageSupportFactory implements PropertyChangeListener {
 
 
 	/**
+	 * Adds language support for a language.  This is a hook for applications
+	 * using this library to add language support for custom languages.
+	 *
+	 * @param style The language to add support for.  This should be one of
+	 *        the values defined in {@link SyntaxConstants}.  Any previous
+	 *        language support for this language is removed. 
+	 * @param lsClassName The class name of the <code>LanguageSupport</code>.
+	 */
+	public void addLanguageSupport(String style, String lsClassName) {
+		styleToSupport.put(style,  lsClassName);
+	}
+
+
+	/**
 	 * Creates the mapping of syntax styles to language supports.
 	 */
 	private void createSupportMap() {
@@ -64,25 +78,25 @@ public class LanguageSupportFactory implements PropertyChangeListener {
 
 		String prefix = "org.fife.rsta.ac.";
 
-		styleToSupport.put(SyntaxConstants.SYNTAX_STYLE_C,
+		addLanguageSupport(SyntaxConstants.SYNTAX_STYLE_C,
 				prefix + "c.CLanguageSupport");
-		styleToSupport.put(SyntaxConstants.SYNTAX_STYLE_GROOVY,
+		addLanguageSupport(SyntaxConstants.SYNTAX_STYLE_GROOVY,
 				prefix + "groovy.GroovyLanguageSupport");
-		styleToSupport.put(SyntaxConstants.SYNTAX_STYLE_HTML,
+		addLanguageSupport(SyntaxConstants.SYNTAX_STYLE_HTML,
 				prefix + "html.HtmlLanguageSupport");
-		styleToSupport.put(SyntaxConstants.SYNTAX_STYLE_JAVA,
+		addLanguageSupport(SyntaxConstants.SYNTAX_STYLE_JAVA,
 				prefix + "java.JavaLanguageSupport");
-		styleToSupport.put(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT,
+		addLanguageSupport(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT,
 				prefix + "js.JavaScriptLanguageSupport");
-		styleToSupport.put(SyntaxConstants.SYNTAX_STYLE_JSP,
+		addLanguageSupport(SyntaxConstants.SYNTAX_STYLE_JSP,
 				prefix + "jsp.JspLanguageSupport");
-		styleToSupport.put(SyntaxConstants.SYNTAX_STYLE_PERL,
+		addLanguageSupport(SyntaxConstants.SYNTAX_STYLE_PERL,
 				prefix + "perl.PerlLanguageSupport");
-		styleToSupport.put(SyntaxConstants.SYNTAX_STYLE_PHP,
+		addLanguageSupport(SyntaxConstants.SYNTAX_STYLE_PHP,
 				prefix + "php.PhpLanguageSupport");
-		styleToSupport.put(SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL,
+		addLanguageSupport(SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL,
 				prefix + "sh.ShellLanguageSupport");
-		styleToSupport.put(SyntaxConstants.SYNTAX_STYLE_XML,
+		addLanguageSupport(SyntaxConstants.SYNTAX_STYLE_XML,
 				prefix + "xml.XmlLanguageSupport");
 
 	}

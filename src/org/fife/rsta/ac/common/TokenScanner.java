@@ -10,6 +10,8 @@
  */
 package org.fife.rsta.ac.common;
 
+import javax.swing.text.Element;
+
 import org.fife.rsta.ac.LanguageSupport;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -30,13 +32,20 @@ import org.fife.ui.rsyntaxtextarea.Token;
  */
 public class TokenScanner {
 
-	private RSyntaxTextArea textArea;
+	private RSyntaxDocument doc;
+	private Element root;
 	private Token t;
 	private int line;
 
 
 	public TokenScanner(RSyntaxTextArea textArea) {
-		this.textArea = textArea;
+		this((RSyntaxDocument)textArea.getDocument());
+	}
+
+
+	public TokenScanner(RSyntaxDocument doc) {
+		this.doc = doc;
+		root = doc.getDefaultRootElement();
 		line = 0;
 		t = null;//textArea.getTokenListForLine(line++);
 	}
@@ -65,10 +74,11 @@ public class TokenScanner {
 	 */
 	private Token nextRaw() {
 		if (t==null || !t.isPaintable()) {
-			while (line<textArea.getLineCount() && (t==null || !t.isPaintable())) {
-				t = textArea.getTokenListForLine(line++);
+			int lineCount = root.getElementCount();
+			while (line<lineCount && (t==null || !t.isPaintable())) {
+				t = doc.getTokenListForLine(line++);
 			}
-			if (line==textArea.getLineCount()) {
+			if (line==lineCount) {
 				return null;
 			}
 		}

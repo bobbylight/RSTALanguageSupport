@@ -24,11 +24,18 @@ import org.fife.rsta.ac.LanguageSupport;
  */
 public class VariableDeclaration {
 
+	private String type;
 	private String name;
 	private int offset;
 
 
 	public VariableDeclaration(String name, int offset) {
+		this(null, name, offset);
+	}
+
+
+	public VariableDeclaration(String type, String name, int offset) {
+		this.type = type;
 		this.name = name;
 		this.offset = offset;
 	}
@@ -41,6 +48,16 @@ public class VariableDeclaration {
 
 	public int getOffset() {
 		return offset;
+	}
+
+
+	/**
+	 * Returns the type of this variable.
+	 *
+	 * @return The variable's type, or <code>null</code> if none.
+	 */
+	public String getType() {
+		return type;
 	}
 
 

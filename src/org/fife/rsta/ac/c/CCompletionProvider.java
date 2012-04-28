@@ -129,17 +129,20 @@ public class CCompletionProvider extends LanguageAwareCompletionProvider {
 		// First try loading resource (running from demo jar), then try
 		// accessing file (debugging in Eclipse).
 		ClassLoader cl = getClass().getClassLoader();
-		InputStream in = cl.getResourceAsStream(getXmlResource());
-		try {
-			if (in!=null) {
-				cp.loadFromXML(in);
-				in.close();
+		String res = getXmlResource();
+		if (res!=null) { // Subclasses may specify a null value
+			InputStream in = cl.getResourceAsStream(res);
+			try {
+				if (in!=null) {
+					cp.loadFromXML(in);
+					in.close();
+				}
+				else {
+					cp.loadFromXML(new File(res));
+				}
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
 			}
-			else {
-				cp.loadFromXML(new File(getXmlResource()));
-			}
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
 		}
 	}
 
