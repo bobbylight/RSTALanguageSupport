@@ -29,6 +29,7 @@ import org.fife.ui.autocomplete.Util;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.Token;
+import org.fife.ui.rsyntaxtextarea.modes.PHPTokenMaker;
 import org.xml.sax.SAXException;
 
 
@@ -228,7 +229,7 @@ public class PhpCompletionProvider extends HtmlCompletionProvider {
 		// HACK: This relies on insider knowledge of PhpTokenmaker!
 		if (!inPhp && line>0) {
 			int prevLineEndType = doc.getLastTokenTypeOnLine(line-1);
-			if (prevLineEndType<=-7 && prevLineEndType>=-10) {
+			if (prevLineEndType<=PHPTokenMaker.INTERNAL_IN_PHP) {
 				inPhp = true;
 			}
 		}
