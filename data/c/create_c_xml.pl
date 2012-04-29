@@ -40,6 +40,7 @@ open(OUT, ">$outfile") || die("Cannot open outfile: $!\n");
 # Header information
 print OUT <<EOT;
 <?xml version=\"1.0\" encoding=\"UTF-8\" ?>
+<!DOCTYPE api SYSTEM \"CompletionXml.dtd\">
 
 <!--
    c.xml - API specification for the C Standard Library.
@@ -96,9 +97,6 @@ while (length($line)>0) {
 			$returnValDesc = $2;
 		}
 		$item .= " definedIn=\"" . $definedIn . "\">\n";
-		if (length($returnValDesc)>0) {
-			$item .= "\t<returnValDesc>" . fixDesc($returnValDesc) . "</returnValDesc>\n";
-		}
 		my $params = "";
 		while (chomp($line=<IN>) && ($line =~ m/^[^ ]/)) {
 			if ($line =~ m/^(\w+) (\([^\)]+\)\([^\)]+\))\|(.*)$/) { # bsearch - tricky function argument
@@ -175,6 +173,9 @@ while (length($line)>0) {
 		}
 		$desc = fixDesc($desc);
 		$item .= "$desc</desc>\n";
+		if (length($returnValDesc)>0) {
+			$item .= "\t<returnValDesc>" . fixDesc($returnValDesc) . "</returnValDesc>\n";
+		}
 		$item .= "</keyword>";
 		#print($item);
 		push(@elems, $item);

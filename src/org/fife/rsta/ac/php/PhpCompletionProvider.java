@@ -82,7 +82,7 @@ public class PhpCompletionProvider extends HtmlCompletionProvider {
 
 	/**
 	 * Loads completions from an XML input stream.  The XML should validate
-	 * against the completion XML schema.
+	 * against the completion DTD found in the AutoComplete library.
 	 *
 	 * @param in The input stream to read from.
 	 * @throws IOException If an IO error occurs.

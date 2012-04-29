@@ -98,6 +98,12 @@ public class JspCompletionProvider extends HtmlCompletionProvider {
 	}
 
 
+	/**
+	 * Overridden to include JSP-specific tags in addition to the standard
+	 * HTML tags.
+	 *
+	 * @return The list of tags.
+	 */
 	protected List getTagCompletions() {
 
 		List completions = new ArrayList(super.getTagCompletions());

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE api SYSTEM "CompletionXml.dtd">
 
 <!--
    perl5.xml - API specification for the Perl 5.
@@ -7,8 +8,8 @@
    Author:         Robert Futrell
    Version:        0.1
 
-   This file was generated from: C:\dev2\rsta\RSTALanguageSupport\data\perl\perl5.txt
-   on date: 2010-02-04 11:20:36
+   This file was generated from: C:/dev/rsta/RSTALanguageSupport/data/perl\perl5.txt
+   on date: 2012-04-29 00:17:32
 
 -->
 <api language="Perl">

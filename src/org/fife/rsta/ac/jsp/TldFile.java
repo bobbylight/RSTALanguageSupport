@@ -89,14 +89,14 @@ public class TldFile {
 		while (entries.hasMoreElements()) {
 			JarEntry entry = (JarEntry)entries.nextElement();
 			if (entry.getName().endsWith("tld")) {
-				System.out.println(entry.getName());
+				//System.out.println(entry.getName());
 				InputStream in = jar.getInputStream(entry);
 				elems = parseTld(in);
-
+/*
 				for (int i=0; i<elems.size(); i++) {
 					System.out.println(elems.get(i));
 				}
-
+*/
 				in.close();
 			}
 		}
@@ -134,8 +134,8 @@ public class TldFile {
 		if (nl.getLength()!=1) {
 			throw new IOException("Expected 1 'uri' tag; found: " + nl.getLength());
 		}
-		String uri = getChildText(nl.item(0));;
-		System.out.println("URI: " + uri);
+//		String uri = getChildText(nl.item(0));;
+//		System.out.println("URI: " + uri);
 
 		nl = root.getElementsByTagName("tag");
 		for (int i=0; i<nl.getLength(); i++) {

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE api SYSTEM "CompletionXml.dtd">
 
 <!--
 
@@ -9,7 +10,7 @@
    Version:        0.1
 
    This file was generated from: C:/dev/rsta/RSTALanguageSupport/data/html/create_html_xml.pl
-   on date: 2010-05-09 11:48:04
+   on date: 2012-04-29 00:11:50
 
 
  -->

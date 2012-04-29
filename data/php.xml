@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE api SYSTEM "CompletionXml.dtd">
 
 <!--
    php.xml - API specification for PHP.
@@ -8,7 +9,7 @@
    Version:        0.1
 
    This file was generated from: C:/dev/rsta/RSTALanguageSupport/data/php/php.txt
-   on date: 2010-05-09 11:48:57
+   on date: 2012-04-29 00:21:13
 
 -->
 <api language="PHP">

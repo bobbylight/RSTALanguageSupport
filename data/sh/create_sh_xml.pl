@@ -40,6 +40,7 @@ open(OUT, ">$outfile") || die("Cannot open outfile: $!\n");
 # Header information
 print OUT <<EOT;
 <?xml version=\"1.0\" encoding=\"UTF-8\" ?>
+<!DOCTYPE api SYSTEM \"CompletionXml.dtd\">
 
 <!--
    sh.xml - API specification for Unix shells.

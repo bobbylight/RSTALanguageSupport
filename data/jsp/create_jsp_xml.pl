@@ -24,6 +24,7 @@ open(OUT, ">$outfile") || die("Cannot open outfile: $!\n");
 # Print header of XML definition file
 print OUT <<EOT;
 <?xml version=\"1.0\" encoding=\"UTF-8\" ?>
+<!DOCTYPE api SYSTEM \"CompletionXml.dtd\">
 
 <!--
 
