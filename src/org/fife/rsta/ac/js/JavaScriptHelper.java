@@ -272,7 +272,8 @@ public class JavaScriptHelper {
 
 	/**
 	 * 
-	 * Returns the index of the first ( working backwards if there is no matching closing bracket
+	 * Returns the index of the first ( working backwards if there is no
+	 * matching closing bracket
 	 * 
 	 * @param text
 	 */
@@ -280,19 +281,17 @@ public class JavaScriptHelper {
 		int index = 0;
 		if (text != null && text.length() > 0) {
 			char[] chars = text.toCharArray();
-			for(int i=chars.length-1; i>=0; i--)
-			{
-				switch(chars[i])
-				{
-					case '(' :
+			for (int i = chars.length - 1; i >= 0; i--) {
+				switch (chars[i]) {
+					case '(':
 						index--;
-					break;
-					case ')' :
+						break;
+					case ')':
 						index++;
-					break;
+						break;
 				}
-				if(index == -1)
-					return i+1; //index + 1 to remove the last (
+				if (index == -1)
+					return i + 1; // index + 1 to remove the last (
 			}
 		}
 		else {
@@ -353,7 +352,17 @@ public class JavaScriptHelper {
 
 
 		public boolean visit(AstNode node) {
-			lastNode = node;
+			switch (node.getType()) {
+				case Token.NAME:
+				case Token.STRING:
+				case Token.NUMBER:
+				case Token.OBJECTLIT:
+				case Token.ARRAYLIT:
+				case Token.TRUE:
+				case Token.FALSE:
+					lastNode = node;
+					break;
+			}
 			return true;
 		}
 
