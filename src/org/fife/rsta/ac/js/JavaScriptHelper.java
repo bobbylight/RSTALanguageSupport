@@ -188,17 +188,19 @@ public class JavaScriptHelper {
 		return null;
 
 	}
-	
-	private static TypeDeclaration processNewNode(AstNode typeNode)
-	{
+
+
+	private static TypeDeclaration processNewNode(AstNode typeNode) {
 		String newName = findNewExpressionString(typeNode);
-		if(newName != null)
-		{
+		if (newName != null) {
 			TypeDeclaration newType = getTypeDeclaration(newName);
-			if(newType == null) {
-				//create a new Type
-				String pName = newName.indexOf('.') > 0 ? newName.substring(0, newName.lastIndexOf('.')) : "";
-				String cName = newName.indexOf('.') > 0 ? newName.substring(newName.lastIndexOf('.')+1, newName.length()) : newName;
+			if (newType == null) {
+				// create a new Type
+				String pName = newName.indexOf('.') > 0 ? newName.substring(0,
+						newName.lastIndexOf('.')) : "";
+				String cName = newName.indexOf('.') > 0 ? newName.substring(
+						newName.lastIndexOf('.') + 1, newName.length())
+						: newName;
 				newType = new TypeDeclaration(pName, cName, newName);
 			}
 			return newType;
@@ -269,6 +271,38 @@ public class JavaScriptHelper {
 
 
 	/**
+	 * 
+	 * Returns the index of the first ( working backwards if there is no matching closing bracket
+	 * 
+	 * @param text
+	 */
+	public static int findIndexOfFirstOpeningBracket(String text) {
+		int index = 0;
+		if (text != null && text.length() > 0) {
+			char[] chars = text.toCharArray();
+			for(int i=chars.length-1; i>=0; i--)
+			{
+				switch(chars[i])
+				{
+					case '(' :
+						index--;
+					break;
+					case ')' :
+						index++;
+					break;
+				}
+				if(index == -1)
+					return i+1; //index + 1 to remove the last (
+			}
+		}
+		else {
+			return 0;
+		}
+		return 0;
+	}
+
+
+	/**
 	 * Returns the node name from 'Token.NEW' AstNode e.g new Object --> Object
 	 * new Date --> Date etc..
 	 * 
@@ -280,8 +314,7 @@ public class JavaScriptHelper {
 		AstNode target = newEx.getTarget();
 		String source = target.toSource();
 		int index = source.indexOf('(');
-		if(index != -1)
-		{
+		if (index != -1) {
 			source = source.substring(0, index);
 		}
 		return source;

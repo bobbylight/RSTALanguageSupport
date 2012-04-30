@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 
 import org.fife.rsta.ac.java.classreader.ClassFile;
 import org.fife.rsta.ac.js.ast.JavaScriptType;
@@ -70,26 +71,24 @@ public class JavaScriptCompletionResolver {
 		});
 
 		String parseText = trimString(text);
-
+		Logger.log("Parse Text BEFORE: " + parseText);
+		int charIndex = JavaScriptHelper.findIndexOfFirstOpeningBracket(parseText);
+		parseText = parseText.substring(charIndex, parseText.length());
+		Logger.log("Parse Text: " + parseText);
 		env.setRecoverFromErrors(true);
 		Parser parser = new Parser(env);
 		StringReader r = new StringReader(parseText);
 		AstRoot root = parser.parse(r, null, 0);
-		CompilerNodeVisitor visitor = new CompilerNodeVisitor(parseText);
+		CompilerNodeVisitor visitor = new CompilerNodeVisitor(charIndex == 0);
 		root.visitAll(visitor);
 		return lastJavaScriptType;
 
 	}
-	
-	private String trimString(String text)
-	{
+
+
+	private String trimString(String text) {
 		int trim = text.length();
-		if(text.indexOf("new") != -1)
-		{
-			
-		}
-		else if(text.lastIndexOf('.') != -1)
-		{
+		if (text.lastIndexOf('.') != -1) {
 			trim = text.lastIndexOf('.');
 		}
 
@@ -100,7 +99,7 @@ public class JavaScriptCompletionResolver {
 
 
 	public TypeDeclaration resolveNode(AstNode node) {
-		CompilerNodeVisitor visitor = new CompilerNodeVisitor(null);
+		CompilerNodeVisitor visitor = new CompilerNodeVisitor(true);
 		node.visit(visitor);
 		return lastJavaScriptType != null ? lastJavaScriptType.getType()
 				: TypeDeclarationFactory.getDefaultTypeDeclaration();
@@ -112,12 +111,13 @@ public class JavaScriptCompletionResolver {
 
 	private class CompilerNodeVisitor implements NodeVisitor {
 
-		private String enteredText;
+		private boolean ignoreParams;
 		private HashSet paramNodes = new HashSet();
+		
 
 
-		private CompilerNodeVisitor(String enteredText) {
-			this.enteredText = enteredText;
+		private CompilerNodeVisitor(boolean ignoreParams) {
+			this.ignoreParams = ignoreParams;
 		}
 
 
@@ -125,8 +125,8 @@ public class JavaScriptCompletionResolver {
 
 			Logger.log(node.toSource());
 			Logger.log(node.shortName());
-
-			if (ignore(node))
+			
+			if (ignore(node, ignoreParams))
 				return true;
 
 			JavaScriptType jsType = null;
@@ -169,7 +169,7 @@ public class JavaScriptCompletionResolver {
 		 * @param node node to test
 		 * @return true to ignore
 		 */
-		private boolean ignore(AstNode node) {
+		private boolean ignore(AstNode node, boolean ignoreParams) {
 			switch (node.getType()) {
 				// ignore errors e.g if statement - if(a. //no closing brace
 				case Token.EXPR_VOID:
@@ -184,7 +184,7 @@ public class JavaScriptCompletionResolver {
 					if (isParameter(node)) {
 						collectAllNodes(node); // everything within this node
 						// is a parameter
-						return checkNameMatchsEnteredText(node, enteredText);
+						return ignoreParams;
 					}
 					break;
 				}
@@ -203,10 +203,16 @@ public class JavaScriptCompletionResolver {
 		 * @param node
 		 */
 		private void collectAllNodes(AstNode node) {
-			if (node.getParent().getType() == Token.CALL) {
-				VisitorAll all = new VisitorAll();
-				node.visit(all);
-				paramNodes.addAll(all.getAllNodes());
+			if (node.getType() == Token.CALL) {
+				// collect all argument nodes
+				FunctionCall call = (FunctionCall) node;
+				for (Iterator args = call.getArguments().iterator(); args
+						.hasNext();) {
+					AstNode arg = (AstNode) args.next();
+					VisitorAll all = new VisitorAll();
+					arg.visit(all);
+					paramNodes.addAll(all.getAllNodes());
+				}
 			}
 		}
 
@@ -221,43 +227,16 @@ public class JavaScriptCompletionResolver {
 		private boolean isParameter(AstNode node) {
 			if (paramNodes.contains(node))
 				return true;
+			// get all params from this function too
 			FunctionCall fc = JavaScriptHelper.findFunctionCallFromNode(node);
-			if (fc != null && !(node == fc)
-					&& node.getParent().getType() == Token.CALL) {
-				if (!fc.getArguments().contains(node)) {
-					// get all params from this function too
-					collectAllNodes(fc);
-				}
-				else {
+			if (fc != null && !(node == fc)) {
+				collectAllNodes(fc);
+				if (paramNodes.contains(node)) {
 					return true;
 				}
 			}
 			return false;
-		}
-
-
-		/**
-		 * Check the function of the parameter is the right most function to
-		 * resolve
-		 * 
-		 * @param name
-		 * @param enteredText
-		 * @return
-		 */
-		private boolean checkNameMatchsEnteredText(AstNode node,
-				String enteredText) {
-			if (enteredText != null) {
-				FunctionCall fc = JavaScriptHelper
-						.findFunctionCallFromNode(node);
-				if (fc != null) {
-					// TODO this could be better check as some nodes will have
-					// the same name
-					return !enteredText.endsWith(node.toSource());
-				}
-
-			}
-			return true;
-		}
+		}		
 	}
 
 
