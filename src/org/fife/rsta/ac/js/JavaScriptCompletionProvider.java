@@ -103,7 +103,7 @@ public class JavaScriptCompletionProvider extends
 	private class CompletionSort implements Comparator {
 
 		public int compare(Object o1, Object o2) {
-			if (01 == 02) {
+			if (o1 == o2) {
 				return 0;
 			}
 

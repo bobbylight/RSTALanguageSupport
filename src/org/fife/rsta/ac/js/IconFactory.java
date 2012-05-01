@@ -61,16 +61,7 @@ public class IconFactory {
 		iconMap.put(DEFAULT_VARIABLE_ICON,
 				loadIcon("org/fife/rsta/ac/js/img/field_default_obj.gif"));
 		iconMap.put(EMPTY_ICON, new EmptyIcon(16));
-	}
 
-
-	/**
-	 * Returns the singleton instance of this class.
-	 * 
-	 * @return The singleton instance.
-	 */
-	public static IconFactory get() {
-		return INSTANCE;
 	}
 
 

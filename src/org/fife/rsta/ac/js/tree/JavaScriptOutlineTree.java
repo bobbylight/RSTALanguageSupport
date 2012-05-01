@@ -273,7 +273,7 @@ public class JavaScriptOutlineTree extends AbstractSourceTree {
 						ble.printStackTrace();
 					}
 					tn.setText(sb.toString());
-					tn.setIcon(IconFactory.get().getIcon(IconFactory.DEFAULT_FUNCTION_ICON));
+					tn.setIcon(IconFactory.getIcon(IconFactory.DEFAULT_FUNCTION_ICON));
 					tn.setSortPriority(PRIORITY_FUNCTION);
 					root.add(tn);
 					break;
@@ -305,7 +305,7 @@ public class JavaScriptOutlineTree extends AbstractSourceTree {
 							ble.printStackTrace();
 						}
 						tn.setText(varName);
-						tn.setIcon(IconFactory.get().getIcon(IconFactory.LOCAL_VARIABLE_ICON));
+						tn.setIcon(IconFactory.getIcon(IconFactory.LOCAL_VARIABLE_ICON));
 						tn.setSortPriority(PRIORITY_VARIABLE);
 						root.add(tn);
 					}

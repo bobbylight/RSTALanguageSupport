@@ -65,7 +65,7 @@ public class JavaScriptCellRenderer extends CompletionCellRenderer {
 			setIcon(((JSCompletionUI) vc).getIcon());
 		}
 		else {
-			setIcon(IconFactory.get().getIcon(IconFactory.LOCAL_VARIABLE_ICON));
+			setIcon(IconFactory.getIcon(IconFactory.LOCAL_VARIABLE_ICON));
 		}
 	}
 
@@ -80,8 +80,7 @@ public class JavaScriptCellRenderer extends CompletionCellRenderer {
 			setIcon(((JSCompletionUI) fc).getIcon());
 		}
 		else {
-			setIcon(IconFactory.get()
-					.getIcon(IconFactory.DEFAULT_FUNCTION_ICON));
+			setIcon(IconFactory.getIcon(IconFactory.DEFAULT_FUNCTION_ICON));
 		}
 	}
 

@@ -43,7 +43,7 @@ public class JSFieldCompletion extends VariableCompletion implements
 
 
 	public Icon getIcon() {
-		return IconFactory.get().getIcon(IconFactory.STATIC_VAR_ICON);
+		return IconFactory.getIcon(IconFactory.STATIC_VAR_ICON);
 	}
 
 

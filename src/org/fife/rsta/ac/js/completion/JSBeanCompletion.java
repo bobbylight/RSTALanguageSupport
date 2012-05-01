@@ -35,7 +35,7 @@ public class JSBeanCompletion extends VariableCompletion implements
 
 
 	public Icon getIcon() {
-		return IconFactory.get().getIcon(IconFactory.GLOBAL_VARIABLE_ICON);
+		return IconFactory.getIcon(IconFactory.GLOBAL_VARIABLE_ICON);
 	}
 
 

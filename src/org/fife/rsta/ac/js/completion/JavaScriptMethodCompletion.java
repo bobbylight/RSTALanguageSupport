@@ -91,6 +91,14 @@ public class JavaScriptMethodCompletion extends FunctionCompletion implements
 
 
 	/**
+	 * Overridden since <code>equals()</code> is overridden.
+	 */
+	public int hashCode() {
+		return getCompareString().hashCode();
+	}
+
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public String toString() {
@@ -139,6 +147,13 @@ public class JavaScriptMethodCompletion extends FunctionCompletion implements
 	}
 
 
+	public boolean equals(Object obj) {
+		return (obj instanceof JavaScriptMethodCompletion)
+				&& ((JavaScriptMethodCompletion) obj).getCompareString()
+						.equals(getCompareString());
+	}
+
+
 	private String getCompareString() {
 
 		/*
@@ -172,14 +187,9 @@ public class JavaScriptMethodCompletion extends FunctionCompletion implements
 	}
 
 
-	public boolean equals(Object obj) {
-		return (obj instanceof JavaScriptMethodCompletion)
-				&& ((JavaScriptMethodCompletion) obj).getCompareString()
-						.equals(getCompareString());
-	}
-
-
 	public String getDefinitionString() {
 		return getSignature();
 	}
+
+
 }
