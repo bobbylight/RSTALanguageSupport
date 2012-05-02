@@ -179,6 +179,18 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	public TypeDeclaration resolveTypeDeclation(String name) {
 		return variableResolver.resolveType(name, dot);
 	}
+	
+	
+	/**
+	 * Convenience method to call variable resolver
+	 * 
+	 * @param name
+	 * @return JavaScript variable declaration
+	 */
+	public JavaScriptVariableDeclaration findDeclaration(String name)
+	{
+		return variableResolver.findDeclaration(name, dot);
+	}
 
 
 	/**

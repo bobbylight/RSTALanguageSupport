@@ -136,7 +136,7 @@ public class JavaScriptCompletionResolver {
 				// lookup JavaScript completions type
 				jsType = provider.getJavaScriptTypesFactory().getCachedType(
 						dec, provider.getJarManager(), provider,
-						node.toSource(), node.toSource());
+						node.toSource());
 
 				if (jsType != null) {
 					lastJavaScriptType = jsType;
@@ -310,7 +310,7 @@ public class JavaScriptCompletionResolver {
 						javaScriptType = provider.getJavaScriptTypesFactory()
 								.getCachedType(newType,
 										provider.getJarManager(), provider,
-										lookupText, lookupText);
+										lookupText);
 					}
 					else {
 						javaScriptType = createNewTypeDeclaration(provider,
@@ -334,7 +334,7 @@ public class JavaScriptCompletionResolver {
 						.createNewTypeDeclaration(cf);
 				return provider.getJavaScriptTypesFactory()
 						.getCachedType(newType, provider.getJarManager(),
-								provider, text, text);
+								provider, text);
 			}
 		}
 		return null;
