@@ -36,10 +36,14 @@ public class JavaScriptAstParser {
 
 	private SourceCompletionProvider provider;
 	private int dot;
+	private boolean preProcessingMode;
 
-	public JavaScriptAstParser(SourceCompletionProvider provider, int dot) {
+
+	public JavaScriptAstParser(SourceCompletionProvider provider, int dot,
+			boolean preProcessingMode) {
 		this.provider = provider;
 		this.dot = dot;
+		this.preProcessingMode = preProcessingMode;
 	}
 
 
@@ -133,9 +137,6 @@ public class JavaScriptAstParser {
 					processTryCatchNode(child, block, set, entered, offset);
 					break;
 				}
-				case Token.CATCH: {
-					break; // do nothing
-				}
 				case Token.DO: {
 					processDoNode(child, block, set, entered, offset);
 					break;
@@ -147,38 +148,36 @@ public class JavaScriptAstParser {
 					// TODO
 					processCaseNode(child, block, set, entered, offset);
 					break;
-				case Token.ERROR:
-					// TODO
-					System.out.println("ERROR: " + child.getClass());
-					break;
 
 				// ignore
 				case Token.BREAK:
 				case Token.CONTINUE:
 				case Token.CALL:
 				case Token.EMPTY:
+				case Token.NAME:
+				case Token.CATCH:
+				case Token.ERROR:
 					break;
 				case Token.EXPR_RESULT:
 					processExpressionStatement(child, block, set, entered,
 							offset);
 					break;
 				default:
-					System.out.println("Unhandled: " + child.getClass()
-							+ " (\"" + child.toString() + "\":"
-							+ child.getLineno());
+					Logger.log("Unhandled: " + child.getClass() + " (\""
+							+ child.toString() + "\":" + child.getLineno());
 					break;
 			}
 		}
 
 	}
-	
-	private void processImportNode(Node child, CodeBlock block,
-			Set set, String entered, int offset)
-	{
-		//ImportDeclaration dec = (ImportDeclaration) child;
+
+
+	private void processImportNode(Node child, CodeBlock block, Set set,
+			String entered, int offset) {
+		// ImportDeclaration dec = (ImportDeclaration) child;
 		System.out.println("Stop");
-		//now add import dec to type factory?
-		
+		// now add import dec to type factory?
+
 	}
 
 
@@ -203,14 +202,14 @@ public class JavaScriptAstParser {
 		if (name != null) {
 			int start = assignNode.getAbsolutePosition();
 			int offset = start + assignNode.getLength();
-			//check that the caret position is below the dot before looking for the variable
-			if(offset <= dot)
-			{
-				JavaScriptVariableDeclaration dec = provider.getVariableResolver()
-						.findDeclaration(name, dot);
+			// check that the caret position is below the dot before looking for
+			// the variable
+			if (offset <= dot) {
+				JavaScriptVariableDeclaration dec = provider
+						.getVariableResolver().findDeclaration(name, dot);
 				if (dec != null) {
-					// remove set reference to new type
-					dec.setTypeDeclaration(rightNode);
+					// Set reference to new type
+					dec.setTypeDeclaration(rightNode, preProcessingMode);
 				}
 			}
 		}
@@ -383,7 +382,9 @@ public class JavaScriptAstParser {
 				Parameter param = new Parameter(null, paramName);
 				params.add(param);
 
-				extractVariableFromNode(node, block, offset);
+				if (!preProcessingMode) {
+					extractVariableFromNode(node, block, offset);
+				}
 			}
 			fc.setParams(params);
 		}
@@ -425,7 +426,29 @@ public class JavaScriptAstParser {
 		else if (child instanceof ForInLoop) {
 			ForInLoop loop = (ForInLoop) child;
 			offset = loop.getAbsolutePosition() + loop.getLength();
-			addCompletions(loop.getIterator(), set, entered, block, offset);
+			if (loop.isForEach()) {
+				AstNode iteratedObject = loop.getIteratedObject();
+				AstNode iterator = loop.getIterator();
+				if (iterator != null) {
+					if (iterator.getType() == Token.VAR) // expected
+					{
+						VariableDeclaration vd = (VariableDeclaration) iterator;
+						List variables = vd.getVariables();
+						if (variables.size() == 1) // expected
+						{
+							VariableInitializer vi = (VariableInitializer) variables
+									.get(0);
+							extractVariableForForEach(vi, block, offset,
+									iteratedObject);
+						}
+					}
+				}
+			}
+			else {
+				// addCompletions(loop.getIterator(), set, entered, block,
+				// offset);
+				// TODO not sure what to do about For in without each at present
+			}
 			addCodeBlock(loop.getBody(), set, entered, block, offset);
 		}
 	}
@@ -452,11 +475,57 @@ public class JavaScriptAstParser {
 				dec.setTypeDeclaration(initializer.getInitializer());
 			}
 			if (dec != null) {
-				// add declaration to resolver if one is found
-				provider.getVariableResolver().addLocalVariable(dec);
+				if (canAddVariable(block)) {
+					// add declaration to resolver if one is found
+					if (preProcessingMode) {
+						block.setStartOffSet(0);
+					}
+
+					if (preProcessingMode) {
+						provider.getVariableResolver()
+								.addPreProcessingVariable(dec);
+					}
+					else {
+						provider.getVariableResolver().addLocalVariable(dec);
+					}
+				}
 			}
 
 		}
+	}
+
+
+	private void extractVariableForForEach(VariableInitializer initializer,
+			CodeBlock block, int offset, AstNode iteratedObject) {
+		AstNode target = initializer.getTarget();
+		if (target != null) {
+			JavaScriptVariableDeclaration dec = extractVariableFromNode(target,
+					block, offset);
+			if (dec != null
+					&& iteratedObject != null
+					&& JavaScriptHelper.canResolveVariable(target,
+							iteratedObject)) {
+				dec.setTypeDeclaration(iteratedObject);
+				if (canAddVariable(block)) {
+					provider.getVariableResolver().addLocalVariable(dec);
+				}
+
+			}
+		}
+	}
+
+
+	private boolean canAddVariable(CodeBlock block) {
+		if (!preProcessingMode)
+			return true;
+		// else check parent is base block
+		CodeBlock parent = block.getParent();
+		return parent != null && parent.getStartOffset() == 0;
+	}
+
+
+	public void setPreProcessingMode(boolean preProcessingMode) {
+		this.preProcessingMode = preProcessingMode;
 	}
 
 

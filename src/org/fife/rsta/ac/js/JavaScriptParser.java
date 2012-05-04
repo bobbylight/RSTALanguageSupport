@@ -27,6 +27,7 @@ import org.fife.ui.rsyntaxtextarea.parser.ParseResult;
 import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
 import org.mozilla.javascript.CompilerEnvirons;
 import org.mozilla.javascript.ErrorReporter;
+import org.mozilla.javascript.EvaluatorException;
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.RhinoException;
 import org.mozilla.javascript.ast.AstRoot;
@@ -101,19 +102,21 @@ public class JavaScriptParser extends AbstractParser {
 	 * @param errorHandler The container for errors found while parsing.
 	 * @return The properties for the JS compiler to use.
 	 */
-	private CompilerEnvirons createCompilerEnvironment(ErrorReporter errorHandler) {
+	public static CompilerEnvirons createCompilerEnvironment(ErrorReporter errorHandler, JavaScriptLanguageSupport langSupport) {
 		CompilerEnvirons env = new CompilerEnvirons();
 		env.setErrorReporter(errorHandler);
 		env.setIdeMode(true);
 		env.setRecordingComments(true);
 		env.setRecordingLocalJsDocComments(true);
 		env.setRecoverFromErrors(true);
-		env.setXmlAvailable(langSupport.isXmlAvailable());
-		env.setStrictMode(langSupport.isStrictMode());
-		int version = langSupport.getLanguageVersion();
-		if (version > 0) {
-			Logger.log("[JavaScriptParser]: JS language version set to: " + version);
-			env.setLanguageVersion(version);
+		if(langSupport != null) {
+			env.setXmlAvailable(langSupport.isXmlAvailable());
+			env.setStrictMode(langSupport.isStrictMode());
+			int version = langSupport.getLanguageVersion();
+			if (version > 0) {
+				Logger.log("[JavaScriptParser]: JS language version set to: " + version);
+				env.setLanguageVersion(version);
+			}
 		}
 		return env;
 	}
@@ -145,7 +148,7 @@ public class JavaScriptParser extends AbstractParser {
 
 		DocumentReader r = new DocumentReader(doc);
 		ErrorCollector errorHandler = new ErrorCollector();
-		CompilerEnvirons env = createCompilerEnvironment(errorHandler);
+		CompilerEnvirons env = createCompilerEnvironment(errorHandler, langSupport);
 		long start = System.currentTimeMillis();
 		try {
 			Parser parser = new Parser(env);
@@ -205,6 +208,26 @@ public class JavaScriptParser extends AbstractParser {
 	 */
 	public void removePropertyChangeListener(String prop, PropertyChangeListener l) {
 		support.removePropertyChangeListener(prop, l);
+	}
+	
+	public static class JSErrorReporter implements ErrorReporter {
+
+		public void error(String message, String sourceName, int line,
+				String lineSource, int lineOffset) {
+		}
+
+
+		public EvaluatorException runtimeError(String message,
+				String sourceName, int line, String lineSource,
+				int lineOffset) {
+			return null;
+		}
+
+
+		public void warning(String message, String sourceName, int line,
+				String lineSource, int lineOffset) {
+
+		}
 	}
 
 }

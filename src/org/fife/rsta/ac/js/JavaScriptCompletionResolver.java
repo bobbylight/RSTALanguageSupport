@@ -12,8 +12,6 @@ import org.fife.rsta.ac.js.ast.TypeDeclaration;
 import org.fife.rsta.ac.js.ast.TypeDeclarationFactory;
 import org.fife.rsta.ac.js.completion.JSCompletion;
 import org.mozilla.javascript.CompilerEnvirons;
-import org.mozilla.javascript.ErrorReporter;
-import org.mozilla.javascript.EvaluatorException;
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.Token;
 import org.mozilla.javascript.ast.AstNode;
@@ -48,33 +46,12 @@ public class JavaScriptCompletionResolver {
 
 
 	public JavaScriptType compileText(String text) throws IOException {
-		CompilerEnvirons env = new CompilerEnvirons();
-		env.setIdeMode(true);
-		env.setErrorReporter(new ErrorReporter() {
-
-			public void error(String message, String sourceName, int line,
-					String lineSource, int lineOffset) {
-			}
-
-
-			public EvaluatorException runtimeError(String message,
-					String sourceName, int line, String lineSource,
-					int lineOffset) {
-				return null;
-			}
-
-
-			public void warning(String message, String sourceName, int line,
-					String lineSource, int lineOffset) {
-
-			}
-		});
-
+		CompilerEnvirons env = JavaScriptParser.createCompilerEnvironment(new JavaScriptParser.JSErrorReporter(), provider.getLanguageSupport());
+		
 		String parseText = trimString(text);
-		Logger.log("Parse Text BEFORE: " + parseText);
+		
 		int charIndex = JavaScriptHelper.findIndexOfFirstOpeningBracket(parseText);
 		parseText = parseText.substring(charIndex, parseText.length());
-		Logger.log("Parse Text: " + parseText);
 		env.setRecoverFromErrors(true);
 		Parser parser = new Parser(env);
 		StringReader r = new StringReader(parseText);

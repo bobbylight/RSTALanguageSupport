@@ -43,18 +43,21 @@ public class JavaScriptCompletionProvider extends
 	 * The provider used for source code, kept here since it's used so much.
 	 */
 	private SourceCompletionProvider sourceProvider;
+	
+	private JavaScriptLanguageSupport languageSupport;
 
 
-	public JavaScriptCompletionProvider(JarManager jarManager) {
-		this(new SourceCompletionProvider(), jarManager);
+	public JavaScriptCompletionProvider(JarManager jarManager, JavaScriptLanguageSupport languageSupport) {
+		this(new SourceCompletionProvider(), jarManager, languageSupport);
 	}
 
 
 	public JavaScriptCompletionProvider(SourceCompletionProvider provider,
-			JarManager jarManager) {
+			JarManager jarManager, JavaScriptLanguageSupport languageSupport) {
 		super(provider);
 		this.sourceProvider = (SourceCompletionProvider) getDefaultCompletionProvider();
 		this.sourceProvider.setJarManager(jarManager);
+		this.languageSupport = languageSupport;
 		sourceProvider.setParent(this);
 
 		// setDocCommentCompletionProvider(new DocCommentCompletionProvider());
@@ -75,6 +78,10 @@ public class JavaScriptCompletionProvider extends
 		return ((SourceCompletionProvider) getDefaultCompletionProvider())
 				.getJarManager();
 	}
+	
+	public JavaScriptLanguageSupport getLanguageSupport() {
+		return languageSupport;
+	}
 
 
 	/**
@@ -84,12 +91,6 @@ public class JavaScriptCompletionProvider extends
 	 */
 	public synchronized void setASTRoot(AstRoot root) {
 		this.astRoot = root;
-	}
-
-
-	public void setJarManager(JarManager jarManager) {
-		((SourceCompletionProvider) getDefaultCompletionProvider())
-				.setJarManager(jarManager);
 	}
 
 

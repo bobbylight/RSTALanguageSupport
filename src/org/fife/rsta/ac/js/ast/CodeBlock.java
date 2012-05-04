@@ -175,4 +175,13 @@ public class CodeBlock {
 	}
 
 
+	/**
+	 * Sets the start offset of this code block.
+	 * @param start the start offset
+	 * @see #getStartOffset()
+	 */
+	public void setStartOffSet(int start)
+	{
+		this.start = start;
+	}
 }

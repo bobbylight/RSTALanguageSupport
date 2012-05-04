@@ -21,10 +21,10 @@ import javax.swing.text.JTextComponent;
 
 import org.fife.rsta.ac.java.JarManager;
 import org.fife.rsta.ac.js.ast.CodeBlock;
-import org.fife.rsta.ac.js.ast.JavaScriptVariableDeclaration;
 import org.fife.rsta.ac.js.ast.JavaScriptAstParser;
 import org.fife.rsta.ac.js.ast.JavaScriptType;
 import org.fife.rsta.ac.js.ast.JavaScriptTypesFactory;
+import org.fife.rsta.ac.js.ast.JavaScriptVariableDeclaration;
 import org.fife.rsta.ac.js.ast.TypeDeclaration;
 import org.fife.rsta.ac.js.ast.VariableResolver;
 import org.fife.rsta.ac.js.completion.JSVariableCompletion;
@@ -49,6 +49,8 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	// set completion types factory to default
 	private JavaScriptTypesFactory javaScriptTypesFactory = JavaScriptTypesFactory
 			.getDefaultJavaScriptTypesFactory();
+
+	private PreProcesssingScripts preProcessing;
 
 
 	public SourceCompletionProvider() {
@@ -82,6 +84,11 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 			// Cut down the list to just those matching what we've typed.
 			// Note: getAlreadyEnteredText() never returns null
 			String text = getAlreadyEnteredText(comp);
+
+			if (supportsPreProcessingScripts()) {
+				variableResolver.resetPreProcessingVariables(false);
+			}
+
 			if (text == null) {
 				return completions; // empty
 			}
@@ -89,15 +96,17 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 			// trim any whitespace as " " are needed to evaluate inputted data
 			text = text.trim();
 
-			// need to populate completions to work out all variables available
-			CodeBlock block = iterateAstRoot(astRoot, set, text, dot);
+			boolean noDotInText = (text == null || text.indexOf('.') == -1);
 
-			if (text.indexOf('.') == -1) {
+			// need to populate completions to work out all variables available
+			CodeBlock block = iterateAstRoot(astRoot, set, text, dot, false);
+
+			if (noDotInText) {
 				if (text.length() > 0) { // try to convert text by removing
 					// any if, while etc...
 					text = JavaScriptHelper.parseEnteredText(text);
 				}
-				recursivelyAddLocalVars(set, block, dot, null, false);
+				recursivelyAddLocalVars(set, block, dot, null, false, false);
 			}
 			else {
 				// Compile the entered text and resolve the variables/function
@@ -117,8 +126,12 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 			}
 
-			// Do a final sort of all of our completions and we're good to go!
+			if (noDotInText && supportsPreProcessingScripts())
+				preProcessing.addPreProcessedCompletions(completions);
+
 			completions.addAll(set);
+
+			// Do a final sort of all of our completions and we're good to go!
 			Collections.sort(completions);
 
 			// Only match based on stuff after the final '.', since that's what
@@ -145,8 +158,9 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 			return completions.subList(start, end);
 
 		} finally {
-			// do not need resolved variables anymore, so clear them
-			variableResolver.reset();
+			// do not need locally (RSTATextArea only) resolved variables
+			// anymore, so clear them
+			variableResolver.resetLocalVariables();
 			comp.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 		}
 
@@ -154,18 +168,22 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 
 	/**
-	 * Iterates through AstRoot to extract all code blocks, functions,
-	 * variables etc.... e.g functions, if statements, variables
+	 * Iterates through AstRoot to extract all code blocks, functions, variables
+	 * etc.... e.g functions, if statements, variables
 	 * 
 	 * @param root AstRoot to iterate
-	 * @param set add add completions to set (functions only TODO remove this and do elsewhere)
+	 * @param set add add completions to set (functions only TODO remove this
+	 *        and do elsewhere)
 	 * @param entered already entered text
 	 * @param dot position in code
+	 * @param preProcessingMode flag to state whether the parsing is before the
+	 *        RSTA parsing
 	 * @return
 	 */
 	protected CodeBlock iterateAstRoot(AstRoot root, Set set, String entered,
-			int dot) {
-		JavaScriptAstParser parser = new JavaScriptAstParser(this, dot);
+			int dot, boolean isPreProcessingMode) {
+		JavaScriptAstParser parser = new JavaScriptAstParser(this, dot,
+				isPreProcessingMode);
 		return parser.convertAstNodeToCodeBlock(root, set, entered);
 	}
 
@@ -179,16 +197,15 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	public TypeDeclaration resolveTypeDeclation(String name) {
 		return variableResolver.resolveType(name, dot);
 	}
-	
-	
+
+
 	/**
 	 * Convenience method to call variable resolver
 	 * 
 	 * @param name
 	 * @return JavaScript variable declaration
 	 */
-	public JavaScriptVariableDeclaration findDeclaration(String name)
-	{
+	public JavaScriptVariableDeclaration findDeclaration(String name) {
 		return variableResolver.findDeclaration(name, dot);
 	}
 
@@ -224,14 +241,15 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 	/**
 	 * Iterate though the CodeBlock and extract all variables within scope
+	 * 
 	 * @param completions
 	 * @param block
 	 * @param dot
 	 * @param text
 	 * @param findMatch
 	 */
-	private void recursivelyAddLocalVars(Set completions, CodeBlock block,
-			int dot, String text, boolean findMatch) {
+	protected void recursivelyAddLocalVars(Set completions, CodeBlock block,
+			int dot, String text, boolean findMatch, boolean isPreprocessing) {
 
 		if (!block.contains(dot)) {
 			return;
@@ -245,12 +263,11 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 				if (!findMatch || dec.getName().equals(text)) {
 					JSVariableCompletion completion = new JSVariableCompletion(
-							this, dec.getName(), dec.getJavaScriptTypeName());
+							this, dec, !isPreprocessing);
 					// check whether the variable exists and replace as the
 					// scope may be local
 					if (completions.contains(completion)) {
 						completions.remove(completion);
-						completions.add(completion);
 					}
 					completions.add(completion);
 				}
@@ -274,7 +291,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 			CodeBlock child = block.getChildCodeBlock(i);
 			if (child.contains(dot)) {
 				recursivelyAddLocalVars(completions, child, dot, text,
-						findMatch);
+						findMatch, isPreprocessing);
 			}
 		}
 	}
@@ -305,6 +322,26 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 	public VariableResolver getVariableResolver() {
 		return variableResolver;
+	}
+
+
+	public JavaScriptLanguageSupport getLanguageSupport() {
+		return parent.getLanguageSupport();
+	}
+
+
+	public void setPreProcessingScripts(PreProcesssingScripts preProcessing) {
+		this.preProcessing = preProcessing;
+	}
+
+
+	public PreProcesssingScripts getPreProcessingScripts() {
+		return preProcessing;
+	}
+
+
+	private boolean supportsPreProcessingScripts() {
+		return preProcessing != null;
 	}
 
 

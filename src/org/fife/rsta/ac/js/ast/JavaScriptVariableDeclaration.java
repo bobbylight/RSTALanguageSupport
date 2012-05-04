@@ -25,6 +25,9 @@ public class JavaScriptVariableDeclaration {
 	private TypeDeclaration typeDec;
 	private SourceCompletionProvider provider;
 
+	private boolean reassigned;
+	private TypeDeclaration originalTypeDec;
+
 
 	/**
 	 * @param name of the variable
@@ -48,9 +51,43 @@ public class JavaScriptVariableDeclaration {
 		typeDec = new JavaScriptCompletionResolver(provider)
 				.resolveNode(typeNode);
 	}
-	
+
+	/**
+	 * Set the TypeDeclaration for the AstNode. Stores the original value so it can be reset 
+	 * @param typeNode
+	 * @param overrideOriginal
+	 * @see #resetVariableToOriginalType()
+	 */
+	public void setTypeDeclaration(AstNode typeNode, boolean overrideOriginal) {
+		// check whether the variable has been reassigned already
+		if (!reassigned) {
+			originalTypeDec = typeDec;
+		}
+
+		setTypeDeclaration(typeNode);
+
+		if (overrideOriginal) {
+			originalTypeDec = typeDec;
+		}
+		reassigned = true;
+
+	}
+
+	/**
+	 * Resets the TypeDeclaration to the original value 
+	 */
+	public void resetVariableToOriginalType() {
+		if (reassigned) {
+			reassigned = false;
+			typeDec = originalTypeDec;
+		}
+		originalTypeDec = null;
+	}
+
+
 	/**
 	 * Set TypeDeclaration
+	 * 
 	 * @param typeDec
 	 */
 	public void setTypeDeclaration(TypeDeclaration typeDec) {

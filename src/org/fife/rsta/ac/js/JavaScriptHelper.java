@@ -173,7 +173,7 @@ public class JavaScriptHelper {
 				case Token.TRUE:
 				case Token.FALSE:
 					return getTypeDeclaration(TypeDeclarationFactory.ECMA_BOOLEAN);
-				case Token.ARRAYLIT:
+				case Token.ARRAYLIT: //TODO need to store the Array Objects onto the variable so they can be resolved in the future
 					return getTypeDeclaration(TypeDeclarationFactory.ECMA_ARRAY);
 
 			}
@@ -193,19 +193,30 @@ public class JavaScriptHelper {
 	private static TypeDeclaration processNewNode(AstNode typeNode) {
 		String newName = findNewExpressionString(typeNode);
 		if (newName != null) {
-			TypeDeclaration newType = getTypeDeclaration(newName);
-			if (newType == null) {
-				// create a new Type
-				String pName = newName.indexOf('.') > 0 ? newName.substring(0,
-						newName.lastIndexOf('.')) : "";
-				String cName = newName.indexOf('.') > 0 ? newName.substring(
-						newName.lastIndexOf('.') + 1, newName.length())
-						: newName;
-				newType = new TypeDeclaration(pName, cName, newName);
-			}
-			return newType;
+			return findOrMakeTypeDeclaration(newName);
 		}
 		return null;
+	}
+	
+	
+	public static TypeDeclaration findOrMakeTypeDeclaration(String name)
+	{
+		TypeDeclaration newType = getTypeDeclaration(name);
+		if (newType == null) {
+			newType = createNewTypeDeclaration(name);
+		}
+		return newType;
+	}
+	
+	public static TypeDeclaration createNewTypeDeclaration(String newName)
+	{
+		// create a new Type
+		String pName = newName.indexOf('.') > 0 ? newName.substring(0,
+				newName.lastIndexOf('.')) : "";
+		String cName = newName.indexOf('.') > 0 ? newName.substring(
+				newName.lastIndexOf('.') + 1, newName.length())
+				: newName;
+		return new TypeDeclaration(pName, cName, newName);
 	}
 
 

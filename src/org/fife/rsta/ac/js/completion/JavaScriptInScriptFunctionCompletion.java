@@ -8,7 +8,7 @@ import org.fife.ui.autocomplete.FunctionCompletion;
 
 
 public class JavaScriptInScriptFunctionCompletion extends FunctionCompletion
-		implements JSCompletionUI {
+		implements JSCompletion {
 
 	public JavaScriptInScriptFunctionCompletion(CompletionProvider provider,
 			String name, String returnType) {
@@ -37,5 +37,45 @@ public class JavaScriptInScriptFunctionCompletion extends FunctionCompletion
 	public int getSortIndex() {
 		return DEFAULT_FUNCTION_INDEX;
 	}
+	
+	public String getLookupName() {
+		StringBuffer sb = new StringBuffer(getName());
+		sb.append('(');
+		int count = getParamCount();
+		for (int i = 0; i < count; i++) {
+			sb.append("p");
+			if (i < count - 1) {
+				sb.append(",");
+			}
+		}
+		sb.append(')');
+		return sb.toString();
+	}
+
+
+	public String getType(boolean qualified) {
+		return getType();
+	}
+
+
+	public boolean equals(Object obj) {
+		if(obj == this) {
+			return true;
+		}
+		if(obj instanceof JSCompletion)
+		{
+			JSCompletion jsComp = (JSCompletion) obj;
+			return getLookupName().equals(jsComp.getLookupName());
+		}
+		return super.equals(obj);
+	}
+
+
+	public int hashCode() {
+		return getLookupName().hashCode();
+	}
+	
+	
+	
 
 }

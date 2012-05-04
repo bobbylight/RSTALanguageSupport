@@ -11,6 +11,7 @@
 package org.fife.rsta.ac.js.ast;
 
 import java.util.HashMap;
+import java.util.Iterator;
 
 
 /**
@@ -22,6 +23,8 @@ public class VariableResolver {
 
 	// HashMap of local variables mapped Name --> JSVariableDeclaration
 	private HashMap localVariables = new HashMap();
+	//pre processing variables - these are set when pre-processing
+	private HashMap preProcessedVariables = new HashMap();
 	// HashMap of system variables mapped Name --> JSVariableDeclaration
 	// system variables do not get cleared as they are always available to the
 	// system
@@ -34,10 +37,18 @@ public class VariableResolver {
 	public void addLocalVariable(JavaScriptVariableDeclaration declaration) {
 		localVariables.put(declaration.getName(), declaration);
 	}
+	
+	/**
+	 * Add pre-processing scope variable to cache.
+	 * @param declaration variable to add
+	 */
+	public void addPreProcessingVariable(JavaScriptVariableDeclaration declaration) {
+		preProcessedVariables.put(declaration.getName(), declaration);
+	}
 
 
 	/**
-	 * Add local scope variable to cache
+	 * Add system scope variable to cache
 	 * @param declaration variable to add
 	 */
 	public void addSystemVariable(JavaScriptVariableDeclaration declaration) {
@@ -45,6 +56,14 @@ public class VariableResolver {
 	}
 
 
+	/**
+	 * remove pre-processing variable from system variable cache
+	 * @param name of the system variable to remove
+	 */
+	public void removePreProcessingVariable(String name) {
+		systemVariables.remove(name);
+	}
+	
 	/**
 	 * remove system variable from system variable cache
 	 * @param name of the system variable to remove
@@ -64,6 +83,10 @@ public class VariableResolver {
 	public JavaScriptVariableDeclaration findDeclaration(String name, int dot) {
 		JavaScriptVariableDeclaration findDeclaration = findDeclaration(localVariables,
 				name, dot);
+		//test whether this was found and then try pre-processing variable
+		findDeclaration = findDeclaration == null ? findDeclaration(preProcessedVariables, name,
+				dot) : findDeclaration;
+		//last chance... look in system variables
 		return findDeclaration == null ? findDeclaration(systemVariables, name,
 				dot) : findDeclaration;
 	}
@@ -76,7 +99,7 @@ public class VariableResolver {
 	 * @param dot
 	 * @return JSVariableDeclaration from the name
 	 */
-	public JavaScriptVariableDeclaration findDeclaration(HashMap variables,
+	private JavaScriptVariableDeclaration findDeclaration(HashMap variables,
 			String name, int dot) {
 		JavaScriptVariableDeclaration dec = (JavaScriptVariableDeclaration) variables.get(name);
 		if (dec != null) {
@@ -104,11 +127,23 @@ public class VariableResolver {
 	/**
 	 * Clear all local scope variables
 	 */
-	public void reset() {
+	public void resetLocalVariables() {
 		localVariables.clear();
 	}
-
-
+	
+	public void resetPreProcessingVariables(boolean clear) {
+		if(clear) {
+			preProcessedVariables.clear();
+		}
+		else {
+			for(Iterator i = preProcessedVariables.values().iterator(); i.hasNext();) {
+				JavaScriptVariableDeclaration dec = (JavaScriptVariableDeclaration) i.next();
+				dec.resetVariableToOriginalType();
+			}
+		}
+	}
+	
+	
 	/**
 	 * Resolve the entered text by chopping up the text and working from left to
 	 * right, resolving each type in turn

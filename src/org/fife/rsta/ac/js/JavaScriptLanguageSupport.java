@@ -115,7 +115,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	 * @return The provider.
 	 */
 	protected JavaScriptCompletionProvider createJavaScriptCompletionProvider() {
-		return new JavaScriptCompletionProvider(jarManager);
+		return new JavaScriptCompletionProvider(jarManager, this);
 	}
 
 
