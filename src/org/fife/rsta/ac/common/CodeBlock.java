@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
 /**
  * A block of code.  This can be used to implement <em>very</em> simple
  * parsing for languages that have some concept of code blocks, such as C,
@@ -110,6 +109,29 @@ public class CodeBlock {
 
 
 	/**
+	 * Returns the deepest code block nested under this one (or this one
+	 * itself) containing a given offset.
+	 *
+	 * @param offs The offset to look for.
+	 * @return The deepest-nested code block containing the offset, or
+	 *         <code>null</code> if this code block and none of its children
+	 *         contain the offset.
+	 */
+	public CodeBlock getDeepestCodeBlockContaining(int offs) {
+		if (!contains(offs)) {
+			return null;
+		}
+		for (int i=0; i<getChildCodeBlockCount(); i++) {
+			CodeBlock child = getChildCodeBlock(i);
+			if (child.contains(offs)) {
+				return child.getDeepestCodeBlockContaining(offs);
+			}
+		}
+		return this;
+	}
+
+
+	/**
 	 * Returns the end offset of this code block.
 	 *
 	 * @return The end offset.
@@ -162,6 +184,38 @@ public class CodeBlock {
 	 */
 	public int getVariableDeclarationCount() {
 		return varDecs==null ? 0 : varDecs.size();
+	}
+
+
+	/**
+	 * Returns all local variables declared before a given offset, both in
+	 * this code block and in all parent blocks.
+	 *
+	 * @param offs The offset.
+	 * @return The {@link VariableDeclaration}s, or an empty list of none were
+	 *         declared before the offset.
+	 */
+	public List getVariableDeclarationsBefore(int offs) {
+
+		List vars = new ArrayList();
+
+		int varCount = getVariableDeclarationCount();
+		for (int i=0; i<varCount; i++) {
+			VariableDeclaration localVar = getVariableDeclaration(i);
+			if (localVar.getOffset()<offs) {
+				vars.add(localVar);
+			}
+			else {
+				break;
+			}
+		}
+
+		if (parent!=null) {
+			vars.addAll(parent.getVariableDeclarationsBefore(offs));
+		}
+
+		return vars;
+
 	}
 
 

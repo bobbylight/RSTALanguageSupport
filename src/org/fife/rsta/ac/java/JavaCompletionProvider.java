@@ -87,7 +87,7 @@ public class JavaCompletionProvider extends LanguageAwareCompletionProvider {
 	 * Removes all jars from the "build path."
 	 *
 	 * @see #removeJar(File)
-	 * @see #addClassFileSource(JarInfo)
+	 * @see #addJar(LibraryInfo)
 	 * @see #getJars()
 	 */
 	public void clearJars() {
@@ -147,7 +147,7 @@ public class JavaCompletionProvider extends LanguageAwareCompletionProvider {
 	 * @param jar The jar to remove.
 	 * @return Whether the jar was removed.  This will be <code>false</code>
 	 *         if the jar was not on the build path.
-	 * @see #addClassFileSource(JarInfo)
+	 * @see #addJar(LibraryInfo)
 	 */
 	public boolean removeJar(File jar) {
 		return sourceProvider.removeJar(jar);
