@@ -8,7 +8,7 @@
  * This code is licensed under the LGPL.  See the "license.txt" file included
  * with this project.
  */
-package org.fife.rsta.ac.js.ast;
+package org.fife.rsta.ac.js.ast.jsType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +22,8 @@ import org.fife.rsta.ac.java.classreader.ClassFile;
 import org.fife.rsta.ac.java.classreader.FieldInfo;
 import org.fife.rsta.ac.java.classreader.MemberInfo;
 import org.fife.rsta.ac.java.classreader.MethodInfo;
+import org.fife.rsta.ac.js.ast.TypeDeclaration;
+import org.fife.rsta.ac.js.ast.TypeDeclarationFactory;
 import org.fife.rsta.ac.js.completion.JSBeanCompletion;
 import org.fife.rsta.ac.js.completion.JSFieldCompletion;
 import org.fife.rsta.ac.js.completion.JSFunctionCompletion;
@@ -30,7 +32,7 @@ import org.fife.ui.autocomplete.DefaultCompletionProvider;
 
 public abstract class JavaScriptTypesFactory {
 
-	private HashMap cachedTypes = new HashMap();
+	protected HashMap cachedTypes = new HashMap();
 	private boolean useBeanproperties;
 	
 	private static ArrayList UNSUPPORTED_COMPLETIONS = new ArrayList();
@@ -87,7 +89,7 @@ public abstract class JavaScriptTypesFactory {
 			return (JavaScriptType) cachedTypes.get(type);
 
 		// now try to read the functions from the API
-		ClassFile cf = manager.getClassEntry(type.getQualifiedName());
+		ClassFile cf = getClassFile(manager, type);
 
 		JavaScriptType cachedType = new JavaScriptType(type);
 		// cache if required
@@ -96,6 +98,11 @@ public abstract class JavaScriptTypesFactory {
 		return cachedType;
 	}
 	
+	
+	protected ClassFile getClassFile(JarManager manager, TypeDeclaration type)
+	{
+		return manager.getClassEntry(type.getQualifiedName());
+	}
 	
 	/**
 	 * Read the class file and extract all completions, add them all to the

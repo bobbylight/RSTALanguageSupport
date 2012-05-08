@@ -8,13 +8,14 @@
  * This library is distributed under a modified BSD license.  See the included
  * RSTALanguageSupport.License.txt file for details.
  */
-package org.fife.rsta.ac.js.ast;
+package org.fife.rsta.ac.js.ast.jsType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import org.fife.rsta.ac.js.ast.TypeDeclaration;
 import org.fife.rsta.ac.js.completion.JSCompletion;
 
 

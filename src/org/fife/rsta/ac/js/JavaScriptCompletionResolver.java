@@ -7,9 +7,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 import org.fife.rsta.ac.java.classreader.ClassFile;
-import org.fife.rsta.ac.js.ast.JavaScriptType;
 import org.fife.rsta.ac.js.ast.TypeDeclaration;
 import org.fife.rsta.ac.js.ast.TypeDeclarationFactory;
+import org.fife.rsta.ac.js.ast.jsType.JavaScriptType;
 import org.fife.rsta.ac.js.completion.JSCompletion;
 import org.mozilla.javascript.CompilerEnvirons;
 import org.mozilla.javascript.Parser;

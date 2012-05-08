@@ -1,4 +1,4 @@
-package org.fife.rsta.ac.js.ast;
+package org.fife.rsta.ac.js.ast.parser;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -8,6 +8,8 @@ import java.util.Set;
 import org.fife.rsta.ac.js.JavaScriptHelper;
 import org.fife.rsta.ac.js.Logger;
 import org.fife.rsta.ac.js.SourceCompletionProvider;
+import org.fife.rsta.ac.js.ast.CodeBlock;
+import org.fife.rsta.ac.js.ast.JavaScriptVariableDeclaration;
 import org.fife.rsta.ac.js.completion.JavaScriptInScriptFunctionCompletion;
 import org.fife.ui.autocomplete.ParameterizedCompletion.Parameter;
 import org.mozilla.javascript.Node;
@@ -77,7 +79,7 @@ public class JavaScriptAstParser {
 				childBlock = codeBlock.addChildCodeBlock(start);
 				childBlock.setEndOffset(offset);
 			}
-			addCompletions((AstNode) child, set, entered, childBlock, offset);
+			iterateNode((AstNode) child, set, entered, childBlock, offset);
 
 			child = child.getNext();
 
@@ -85,7 +87,7 @@ public class JavaScriptAstParser {
 	}
 
 
-	private void addCompletions(AstNode child, Set set, String entered,
+	protected void iterateNode(AstNode child, Set set, String entered,
 			CodeBlock block, int offset) {
 
 		if (child == null)
@@ -100,9 +102,6 @@ public class JavaScriptAstParser {
 		}
 		else {
 			switch (child.getType()) {
-				case Token.IMPORT:
-					processImportNode(child, block, set, entered, offset);
-					break;
 				case Token.FUNCTION:
 					processFunctionNode(child, block, set, entered, offset);
 					break;
@@ -172,21 +171,12 @@ public class JavaScriptAstParser {
 	}
 
 
-	private void processImportNode(Node child, CodeBlock block, Set set,
-			String entered, int offset) {
-		// ImportDeclaration dec = (ImportDeclaration) child;
-		System.out.println("Stop");
-		// now add import dec to type factory?
-
-	}
-
-
 	private void processExpressionStatement(Node child, CodeBlock block,
 			Set set, String entered, int offset) {
 		ExpressionStatement exp = (ExpressionStatement) child;
 
 		AstNode expNode = exp.getExpression();
-		addCompletions(expNode, set, entered, block, offset);
+		iterateNode(expNode, set, entered, block, offset);
 	}
 
 
@@ -228,7 +218,7 @@ public class JavaScriptAstParser {
 			Object o = i.next();
 			if (o instanceof AstNode) {
 				AstNode node = (AstNode) o;
-				addCompletions(node, set, entered, block, offset);
+				iterateNode(node, set, entered, block, offset);
 			}
 		}
 	}
@@ -242,7 +232,7 @@ public class JavaScriptAstParser {
 		for (Iterator i = cases.iterator(); i.hasNext();) {
 			Object o = i.next();
 			if (o instanceof AstNode) {
-				addCompletions((AstNode) o, set, entered, block, offset);
+				iterateNode((AstNode) o, set, entered, block, offset);
 			}
 		}
 	}
@@ -302,7 +292,7 @@ public class JavaScriptAstParser {
 			int start = elseNode.getAbsolutePosition();
 			CodeBlock childBlock = block.addChildCodeBlock(start);
 			offset = start + elseNode.getLength();
-			addCompletions(elseNode, set, entered, childBlock, offset);
+			iterateNode(elseNode, set, entered, childBlock, offset);
 			childBlock.setEndOffset(offset);
 		}
 
@@ -315,7 +305,7 @@ public class JavaScriptAstParser {
 	private void processExpressionNode(Node child, CodeBlock block, Set set,
 			String entered, int offset) {
 		ExpressionStatement expr = (ExpressionStatement) child;
-		addCompletions(expr.getExpression(), set, entered, block, offset);
+		iterateNode(expr.getExpression(), set, entered, block, offset);
 	}
 
 
@@ -420,7 +410,7 @@ public class JavaScriptAstParser {
 		if (child instanceof ForLoop) {
 			ForLoop loop = (ForLoop) child;
 			offset = loop.getAbsolutePosition() + loop.getLength();
-			addCompletions(loop.getInitializer(), set, entered, block, offset);
+			iterateNode(loop.getInitializer(), set, entered, block, offset);
 			addCodeBlock(loop.getBody(), set, entered, block, offset);
 		}
 		else if (child instanceof ForInLoop) {
@@ -556,5 +546,16 @@ public class JavaScriptAstParser {
 		}
 		return dec;
 	}
+	
+	public SourceCompletionProvider getProvider() {
+		return provider;
+	}
+	
+	public int getDot() {
+		return dot;
+	}
 
+	public boolean isPreProcessingMode() {
+		return preProcessingMode;
+	}
 }

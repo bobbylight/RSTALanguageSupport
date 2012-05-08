@@ -21,12 +21,13 @@ import javax.swing.text.JTextComponent;
 
 import org.fife.rsta.ac.java.JarManager;
 import org.fife.rsta.ac.js.ast.CodeBlock;
-import org.fife.rsta.ac.js.ast.JavaScriptAstParser;
-import org.fife.rsta.ac.js.ast.JavaScriptType;
-import org.fife.rsta.ac.js.ast.JavaScriptTypesFactory;
 import org.fife.rsta.ac.js.ast.JavaScriptVariableDeclaration;
 import org.fife.rsta.ac.js.ast.TypeDeclaration;
 import org.fife.rsta.ac.js.ast.VariableResolver;
+import org.fife.rsta.ac.js.ast.jsType.JavaScriptType;
+import org.fife.rsta.ac.js.ast.jsType.JavaScriptTypesFactory;
+import org.fife.rsta.ac.js.ast.parser.JavaScriptAstParser;
+import org.fife.rsta.ac.js.ast.parser.JavaScriptAstParserFactory;
 import org.fife.rsta.ac.js.completion.JSVariableCompletion;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
 import org.mozilla.javascript.ast.AstNode;
@@ -44,6 +45,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	private JavaScriptCompletionProvider parent;
 	private JarManager jarManager;
 	private int dot;
+	private String astParserName;
 
 	private VariableResolver variableResolver;
 	// set completion types factory to default
@@ -165,6 +167,17 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 		}
 
 	}
+	
+	
+
+
+	public String getAlreadyEnteredText(JTextComponent comp) {
+		String text = super.getAlreadyEnteredText(comp);
+		if(text != null && text.endsWith("(")) {
+			text = "";
+		}
+		return text;
+	}
 
 
 	/**
@@ -182,7 +195,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	 */
 	protected CodeBlock iterateAstRoot(AstRoot root, Set set, String entered,
 			int dot, boolean isPreProcessingMode) {
-		JavaScriptAstParser parser = new JavaScriptAstParser(this, dot,
+		JavaScriptAstParser parser = JavaScriptAstParserFactory.instance(getAstParserName(), this, dot,
 				isPreProcessingMode);
 		return parser.convertAstNodeToCodeBlock(root, set, entered);
 	}
@@ -342,6 +355,16 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 	private boolean supportsPreProcessingScripts() {
 		return preProcessing != null;
+	}
+	
+	public String getAstParserName()
+	{
+		return astParserName;
+	}
+	
+	public void setAstParserName(String astParserName)
+	{
+		this.astParserName = astParserName;
 	}
 
 
