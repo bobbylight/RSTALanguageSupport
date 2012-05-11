@@ -243,7 +243,7 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 
 
 	public Icon getIcon() {
-		return IconFactory.getIcon(IconFactory.DEFAULT_FUNCTION_ICON);
+		return methodData.isStatic() ? IconFactory.getIcon(IconFactory.PUBLIC_STATIC_FUNCTION_ICON) : IconFactory.getIcon(IconFactory.DEFAULT_FUNCTION_ICON);
 	}
 
 

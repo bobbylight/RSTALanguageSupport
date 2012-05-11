@@ -91,4 +91,9 @@ public class JSFieldData {
 	{
 		return info.getTypeString(qualified);
 	}
+	
+	public boolean isStatic()
+	{
+		return info.isStatic();
+	}
 }

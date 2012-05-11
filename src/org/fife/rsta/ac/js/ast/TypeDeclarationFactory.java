@@ -149,6 +149,17 @@ public class TypeDeclarationFactory {
 	public void addType(String name, TypeDeclaration td) {
 		typeDeclarations.put(name, td);
 	}
+	
+	/**
+	 * Removes declaration type from type cache
+	 * 
+	 * @param name name of type declaration
+	 * 
+	 */
+	public void removeType(String name)
+	{
+		typeDeclarations.remove(name);
+	}
 
 
 	/**

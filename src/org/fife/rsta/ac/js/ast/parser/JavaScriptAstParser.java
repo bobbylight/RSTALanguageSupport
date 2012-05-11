@@ -34,18 +34,11 @@ import org.mozilla.javascript.ast.VariableInitializer;
 import org.mozilla.javascript.ast.WhileLoop;
 
 
-public class JavaScriptAstParser {
-
-	private SourceCompletionProvider provider;
-	private int dot;
-	private boolean preProcessingMode;
-
+public class JavaScriptAstParser extends JavaScriptParser {
 
 	public JavaScriptAstParser(SourceCompletionProvider provider, int dot,
 			boolean preProcessingMode) {
-		this.provider = provider;
-		this.dot = dot;
-		this.preProcessingMode = preProcessingMode;
+		super(provider, dot, preProcessingMode);
 	}
 
 

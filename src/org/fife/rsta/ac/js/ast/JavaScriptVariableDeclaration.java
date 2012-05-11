@@ -10,7 +10,6 @@
  */
 package org.fife.rsta.ac.js.ast;
 
-import org.fife.rsta.ac.js.JavaScriptCompletionResolver;
 import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.mozilla.javascript.ast.AstNode;
 
@@ -48,7 +47,7 @@ public class JavaScriptVariableDeclaration {
 	 * @param typeNode - Rhino AstNode linked to this variable
 	 */
 	public void setTypeDeclaration(AstNode typeNode) {
-		typeDec = new JavaScriptCompletionResolver(provider)
+		typeDec = provider.getJavaScriptEngine().getJavaScriptResolver(provider)
 				.resolveNode(typeNode);
 	}
 

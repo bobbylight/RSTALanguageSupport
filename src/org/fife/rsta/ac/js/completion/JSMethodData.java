@@ -272,4 +272,9 @@ public class JSMethodData {
 		return info.getParameterCount();
 	}
 	
+	public boolean isStatic()
+	{
+		return info.isStatic();
+	}
+	
 }

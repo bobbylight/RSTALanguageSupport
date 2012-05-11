@@ -61,7 +61,7 @@ public class VariableResolver {
 	 * @param name of the system variable to remove
 	 */
 	public void removePreProcessingVariable(String name) {
-		systemVariables.remove(name);
+		preProcessedVariables.remove(name);
 	}
 	
 	/**
@@ -141,6 +141,11 @@ public class VariableResolver {
 				dec.resetVariableToOriginalType();
 			}
 		}
+	}
+	
+	public void resetSystemVariables()
+	{
+		systemVariables.clear();
 	}
 	
 	

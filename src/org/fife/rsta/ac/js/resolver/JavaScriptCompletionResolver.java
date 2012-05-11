@@ -1,4 +1,4 @@
-package org.fife.rsta.ac.js;
+package org.fife.rsta.ac.js.resolver;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -7,6 +7,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 import org.fife.rsta.ac.java.classreader.ClassFile;
+import org.fife.rsta.ac.js.JavaScriptHelper;
+import org.fife.rsta.ac.js.JavaScriptParser;
+import org.fife.rsta.ac.js.Logger;
+import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.rsta.ac.js.ast.TypeDeclaration;
 import org.fife.rsta.ac.js.ast.TypeDeclarationFactory;
 import org.fife.rsta.ac.js.ast.jsType.JavaScriptType;
@@ -32,23 +36,33 @@ import org.mozilla.javascript.ast.NodeVisitor;
  * Note, will resolve any type added to JavaScriptTypesFactory
  * 
  */
-public class JavaScriptCompletionResolver {
+public class JavaScriptCompletionResolver extends JavaScriptResolver {
 
-	private SourceCompletionProvider provider;
-
+	
 	private JavaScriptType lastJavaScriptType;
 	private String lastLookupName = null;
 
 
+	/**
+	 * Standard ECMA JavaScript resolver
+	 * @param provider
+	 */
 	public JavaScriptCompletionResolver(SourceCompletionProvider provider) {
-		this.provider = provider;
+		super(provider);
 	}
 
 
+	/**
+	 * Compiles Text and resolves the type.
+	 * e.g 
+	 * "Hello World".length; //resolve as a Number
+	 * 
+	 * @param text to compile and resolve  
+	 */
 	public JavaScriptType compileText(String text) throws IOException {
 		CompilerEnvirons env = JavaScriptParser.createCompilerEnvironment(new JavaScriptParser.JSErrorReporter(), provider.getLanguageSupport());
 		
-		String parseText = trimString(text);
+		String parseText = JavaScriptHelper.removeLastDotFromText(text);
 		
 		int charIndex = JavaScriptHelper.findIndexOfFirstOpeningBracket(parseText);
 		parseText = parseText.substring(charIndex, parseText.length());
@@ -62,24 +76,29 @@ public class JavaScriptCompletionResolver {
 
 	}
 
-
-	private String trimString(String text) {
-		int trim = text.length();
-		if (text.lastIndexOf('.') != -1) {
-			trim = text.lastIndexOf('.');
-		}
-
-		String parseText = text.substring(0, trim);
-
-		return parseText;
-	}
-
-
+	/**
+	 * Resolve node type to TypeDeclaration. Called instead of #compileText(String text) when document is already parsed
+	 * @param node AstNode to resolve
+	 * @return TypeDeclaration for node or null if not found.
+	 */
 	public TypeDeclaration resolveNode(AstNode node) {
+		
 		CompilerNodeVisitor visitor = new CompilerNodeVisitor(true);
 		node.visit(visitor);
 		return lastJavaScriptType != null ? lastJavaScriptType.getType()
 				: TypeDeclarationFactory.getDefaultTypeDeclaration();
+	}
+	
+	/**
+	 * Resolve node type to TypeDeclaration
+	 * N.B called from <code>CompilerNodeVisitor.visit()</code>
+	 * 
+	 * @param node AstNode to resolve
+	 * @return TypeDeclaration for node or null if not found.
+	 */
+	protected TypeDeclaration resolveNativeType(AstNode node)
+	{
+		return JavaScriptHelper.tokenToNativeTypeDeclaration(node, provider);
 	}
 
 
@@ -107,8 +126,8 @@ public class JavaScriptCompletionResolver {
 				return true;
 
 			JavaScriptType jsType = null;
-			TypeDeclaration dec = JavaScriptHelper
-					.tokenToNativeTypeDeclaration(node, provider);
+			TypeDeclaration dec = resolveNativeType(node);
+			
 			if (dec != null) {
 				// lookup JavaScript completions type
 				jsType = provider.getJavaScriptTypesFactory().getCachedType(
@@ -137,8 +156,8 @@ public class JavaScriptCompletionResolver {
 
 			return true;
 		}
-
-
+		
+		
 		/**
 		 * Test node to check whether to ignore resolving, this is for
 		 * parameters
@@ -301,6 +320,13 @@ public class JavaScriptCompletionResolver {
 	}
 
 
+	/**
+	 * Creates a new JavaScriptType based on the String type
+	 * @param provider SourceCompletionProvider
+	 * @param type type of JavaScript type to create e.g java.sql.Connection
+	 * @param text Text entered from the user to resolve the node. This will be null if resolveNode(AstNode node) is called
+	 * @return
+	 */
 	private JavaScriptType createNewTypeDeclaration(
 			SourceCompletionProvider provider, String type, String text) {
 		if (provider.getJavaScriptTypesFactory() != null) {
@@ -308,7 +334,7 @@ public class JavaScriptCompletionResolver {
 			TypeDeclaration newType = null;
 			if (cf != null) {
 				newType = provider.getJavaScriptTypesFactory()
-						.createNewTypeDeclaration(cf);
+						.createNewTypeDeclaration(cf, false);
 				return provider.getJavaScriptTypesFactory()
 						.getCachedType(newType, provider.getJarManager(),
 								provider, text);
@@ -318,6 +344,9 @@ public class JavaScriptCompletionResolver {
 	}
 
 
+	/**
+	 * Visit all nodes in the AstNode tree and all to a single list
+	 */
 	private class VisitorAll implements NodeVisitor {
 
 		private ArrayList all = new ArrayList();

@@ -7,8 +7,19 @@ import java.util.LinkedHashSet;
 import org.fife.rsta.ac.java.JarManager;
 import org.fife.rsta.ac.java.classreader.ClassFile;
 import org.fife.rsta.ac.js.ast.TypeDeclaration;
+import org.fife.rsta.ac.js.ast.TypeDeclarationFactory;
 
 
+/**
+ * Rhino Specific JavaScriptTypesFactory
+ * 
+ * Supports: importPackage and importClass
+ * 
+ * importPackage(java.util)
+ * importClass(java.util.HashSet)
+ * 
+ * Clears the cache every time document is parsed for importPackage and importClass to work properly
+ */
 public class RhinoJavaScriptTypesFactory extends JavaScriptTypesFactory {
 
 	private LinkedHashSet importClasses = new LinkedHashSet();
@@ -33,14 +44,38 @@ public class RhinoJavaScriptTypesFactory extends JavaScriptTypesFactory {
 		for(Iterator i = cachedTypes.keySet().iterator(); i.hasNext();) {
 			TypeDeclaration dec = (TypeDeclaration) i.next();
 			if(!dec.getQualifiedName().startsWith("org.fife.rsta.ac.js.ecma")) {
+				removeAllTypes((JavaScriptType) cachedTypes.get(dec));
 				removeTypes.add(dec);
 			}
 		}
 		cachedTypes.keySet().removeAll(removeTypes);
 	}
+	
+	/**
+	 * Remove all TypeDeclarations from the TypeDeclarationFactory from the JavaScriptType and all it's extended classes
+	 * @param type
+	 */
+	private void removeAllTypes(JavaScriptType type)
+	{
+		if(type != null)
+		{
+			TypeDeclarationFactory.Instance().removeType(type.getType().getQualifiedName());
+			if(type.getExtendedClasses().size() > 0)
+			{
+				for(Iterator i = type.getExtendedClasses().iterator(); i.hasNext();)
+				{
+					JavaScriptType extendedType = (JavaScriptType) i.next();
+					removeAllTypes(extendedType);
+				}
+			}
+		}
+	}
 
 
-	protected ClassFile getClassFile(JarManager manager, TypeDeclaration type) {
+	/**
+	 * Override getClassFile that checks the imported packages and classnames based on the TypeDeclaration.getAPITypeName()
+	 */
+	public ClassFile getClassFile(JarManager manager, TypeDeclaration type) {
 
 		ClassFile file = super.getClassFile(manager, type);
 		if (file == null) {
@@ -54,6 +89,12 @@ public class RhinoJavaScriptTypesFactory extends JavaScriptTypesFactory {
 	}
 
 
+	/**
+	 * Look for class file using imported classes
+	 * @param manager
+	 * @param name
+	 * @return
+	 */
 	private ClassFile findFromClasses(JarManager manager, String name) {
 		ClassFile file = null;
 		for (Iterator i = importClasses.iterator(); i.hasNext();) {
@@ -67,7 +108,12 @@ public class RhinoJavaScriptTypesFactory extends JavaScriptTypesFactory {
 		return file;
 	}
 
-
+	/**
+	 * Look for class file using imported packages
+	 * @param manager
+	 * @param name
+	 * @return
+	 */
 	private ClassFile findFromImport(JarManager manager, String name) {
 		ClassFile file = null;
 		for (Iterator i = importPackages.iterator(); i.hasNext();) {

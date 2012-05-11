@@ -10,14 +10,24 @@ import org.mozilla.javascript.Token;
 import org.mozilla.javascript.ast.AstNode;
 
 
+/**
+ * Rhino specific JavaScriptAstParser
+ *  
+ * reads the importPackage and importClass from the parsed document and adds to the RhinoJavaScriptTypesFactory
+ */
 public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 
+	
 	public RhinoJavaScriptAstParser(SourceCompletionProvider provider, int dot,
 			boolean preProcessingMode) {
 		super(provider, dot, preProcessingMode);
 		clearImportCache(provider);
 	}
 
+	/**
+	 * Clear the importPackage and importClass cache
+	 * @param provider SourceCompletionProvider
+	 */
 	private void clearImportCache(SourceCompletionProvider provider)
 	{
 		JavaScriptTypesFactory typesFactory = provider.getJavaScriptTypesFactory();
@@ -26,6 +36,11 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 		}
 	}
 	
+	/**
+	 * Overridden iterateNode to intercept Token.EXPR_RESULT and check for importPackage and importClass named nodes
+	 * If found, then process them and extract the imports and add them to RhinoJavaScriptTypesFactory then return
+	 * otherwise call super.iterateNode() 
+	 */
 	protected void iterateNode(AstNode child, Set set, String entered,
 			CodeBlock block, int offset) {
 		
@@ -41,6 +56,15 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 		super.iterateNode(child, set, entered, block, offset);
 	}
 	
+	/**
+	 * Look for text importPackage and importClass and add to cache
+	 * @param child AstNode to check. This will always be Token.EXPR_RESULT AstNode
+	 * @param set Set to add completions
+	 * @param entered text entered by user if applicable
+	 * @param block CodeBlock 
+	 * @param offset position of AstNode within document
+	 * @return true if either importPackage or importClass is found
+	 */
 	private boolean processImportNode(AstNode child, Set set, String entered,
 			CodeBlock block, int offset) {
 		
@@ -58,6 +82,14 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 		return false;
 	}
 	
+	/**
+	 * @param src String to extract name
+	 * @return import statement from withing the ( and ) 
+	 * e.g  importPackage(java.util)
+	 * 		importClass(java.util.HashSet)
+	 * 
+	 * returns java.util or java.util.HashSet respectively 
+	 */
 	private String extractNameFromSrc(String src)
 	{
 		int startIndex = src.indexOf("(");
@@ -68,6 +100,10 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 		return src;
 	}
 	
+	/**
+	 * Adds package name to RhinoJavaScriptTypesFactory
+	 * @param src source text to extract the package
+	 */
 	private void processImportPackage(String src) {
 		JavaScriptTypesFactory typesFactory = getProvider().getJavaScriptTypesFactory();
 		if(typesFactory instanceof RhinoJavaScriptTypesFactory) {
@@ -77,6 +113,10 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 		}
 	}
 	
+	/**
+	 * Adds class name to RhinoJavaScriptTypesFactory
+	 * @param src source text to extract the class name
+	 */
 	private void processImportClass(String src) {
 		JavaScriptTypesFactory typesFactory = getProvider().getJavaScriptTypesFactory();
 		if(typesFactory instanceof RhinoJavaScriptTypesFactory) {

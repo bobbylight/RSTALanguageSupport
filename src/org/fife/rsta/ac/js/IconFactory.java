@@ -34,6 +34,7 @@ public class IconFactory {
 	public static final String EMPTY_ICON = "empty";
 	public static final String GLOBAL_VARIABLE_ICON = "global_variable";
 	public static final String DEFAULT_FUNCTION_ICON = "default_function";
+	public static final String PUBLIC_STATIC_FUNCTION_ICON = "public_static_function";
 	public static final String STATIC_VAR_ICON = "static_var";
 	public static final String DEFAULT_VARIABLE_ICON = "default_variable";
 
@@ -48,6 +49,8 @@ public class IconFactory {
 
 		iconMap.put(FUNCTION_ICON,
 				loadIcon("org/fife/rsta/ac/js/img/methpub_obj.gif"));
+		iconMap.put(PUBLIC_STATIC_FUNCTION_ICON,
+				loadIcon("org/fife/rsta/ac/js/img/methpub_static.gif"));
 		iconMap.put(LOCAL_VARIABLE_ICON,
 				loadIcon("org/fife/rsta/ac/js/img/localvariable_obj.gif"));
 		iconMap.put(GLOBAL_VARIABLE_ICON,

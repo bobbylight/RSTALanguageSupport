@@ -26,13 +26,14 @@ import org.fife.rsta.ac.js.ast.TypeDeclaration;
 import org.fife.rsta.ac.js.ast.VariableResolver;
 import org.fife.rsta.ac.js.ast.jsType.JavaScriptType;
 import org.fife.rsta.ac.js.ast.jsType.JavaScriptTypesFactory;
-import org.fife.rsta.ac.js.ast.parser.JavaScriptAstParser;
-import org.fife.rsta.ac.js.ast.parser.JavaScriptAstParserFactory;
+import org.fife.rsta.ac.js.ast.parser.JavaScriptParser;
 import org.fife.rsta.ac.js.completion.JSVariableCompletion;
+import org.fife.rsta.ac.js.engine.JavaScriptEngine;
+import org.fife.rsta.ac.js.engine.JavaScriptEngineFactory;
+import org.fife.rsta.ac.js.resolver.JavaScriptResolver;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
 import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.AstRoot;
-
 
 /**
  * Completion provider for JavaScript source code (not comments or strings).
@@ -45,21 +46,23 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	private JavaScriptCompletionProvider parent;
 	private JarManager jarManager;
 	private int dot;
-	private String astParserName;
+	private JavaScriptEngine engine;
+	private JavaScriptTypesFactory javaScriptTypesFactory;
 
 	private VariableResolver variableResolver;
-	// set completion types factory to default
-	private JavaScriptTypesFactory javaScriptTypesFactory = JavaScriptTypesFactory
-			.getDefaultJavaScriptTypesFactory();
-
+	
 	private PreProcesssingScripts preProcessing;
 
-
 	public SourceCompletionProvider() {
+		this(null);
+	}
+	
+	public SourceCompletionProvider(String javaScriptEngine) {
 		variableResolver = new VariableResolver();
 		setParameterizedCompletionParams('(', ", ", ')');
 		setAutoActivationRules(false, "."); // Default - only activate after '.'
-
+		engine = JavaScriptEngineFactory.Instance().getEngineFromCache(javaScriptEngine);
+		javaScriptTypesFactory = engine.getJavaScriptTypesFactory(this);
 	}
 
 
@@ -113,8 +116,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 			else {
 				// Compile the entered text and resolve the variables/function
 				// 
-				JavaScriptCompletionResolver compiler = new JavaScriptCompletionResolver(
-						this);
+				JavaScriptResolver compiler = engine.getJavaScriptResolver(this);
 				try {
 					JavaScriptType type = compiler.compileText(text);
 					if (type != null) {
@@ -195,8 +197,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	 */
 	protected CodeBlock iterateAstRoot(AstRoot root, Set set, String entered,
 			int dot, boolean isPreProcessingMode) {
-		JavaScriptAstParser parser = JavaScriptAstParserFactory.instance(getAstParserName(), this, dot,
-				isPreProcessingMode);
+		JavaScriptParser parser = engine.getParser(this, dot, isPreProcessingMode);
 		return parser.convertAstNodeToCodeBlock(root, set, entered);
 	}
 
@@ -357,17 +358,17 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 		return preProcessing != null;
 	}
 	
-	public String getAstParserName()
+	public JavaScriptEngine getJavaScriptEngine()
 	{
-		return astParserName;
+		return engine;
 	}
 	
-	public void setAstParserName(String astParserName)
+	public void setJavaScriptEngine(JavaScriptEngine engine)
 	{
-		this.astParserName = astParserName;
+		this.engine = engine;
 	}
-
-
+	
+	
 	// TODO remove
 	public void debugCodeBlock(CodeBlock block, int tab) {
 		System.out.println();

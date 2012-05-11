@@ -355,6 +355,22 @@ public class JavaScriptHelper {
 		}
 		return index;
 	}
+	
+	/**
+	 * 
+	 * @param text to trim
+	 * @return text up to the last dot e.g a.getText().length returns a.getText()
+	 */
+	public static String removeLastDotFromText(String text) {
+		int trim = text.length();
+		if (text.lastIndexOf('.') != -1) {
+			trim = text.lastIndexOf('.');
+		}
+
+		String parseText = text.substring(0, trim);
+
+		return parseText;
+	}
 
 
 	private static class ParseTextVisitor implements NodeVisitor {

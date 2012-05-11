@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.fife.rsta.ac.java.JarManager;
-import org.fife.rsta.ac.java.Util;
 import org.fife.rsta.ac.java.classreader.ClassFile;
 import org.fife.rsta.ac.java.classreader.FieldInfo;
 import org.fife.rsta.ac.java.classreader.MemberInfo;
@@ -99,9 +98,9 @@ public abstract class JavaScriptTypesFactory {
 	}
 	
 	
-	protected ClassFile getClassFile(JarManager manager, TypeDeclaration type)
+	public ClassFile getClassFile(JarManager manager, TypeDeclaration type)
 	{
-		return manager.getClassEntry(type.getQualifiedName());
+		return manager != null ? manager.getClassEntry(type.getQualifiedName()) : null;
 	}
 	
 	/**
@@ -153,16 +152,20 @@ public abstract class JavaScriptTypesFactory {
 			DefaultCompletionProvider provider,
 			JarManager jarManager, ClassFile cf) {
 
+		boolean staticOnly = cachedType.getType().isStaticsOnly();
 		// get methods
 		int methodCount = cf.getMethodCount();
 		for (int i = 0; i < methodCount; i++) {
 			MethodInfo info = cf.getMethodInfo(i);
 			if (!info.isConstructor() && !SPECIAL_METHOD.equals(info.getName())) {
-				JSFunctionCompletion completion = new JSFunctionCompletion(
+				if(isAccessible(info.getAccessFlags()) && ((staticOnly && info.isStatic()) || !staticOnly)) {
+					JSFunctionCompletion completion = new JSFunctionCompletion(
 						provider, info, jarManager, true);
-				cachedType.addCompletion(completion);
+					cachedType.addCompletion(completion);
+				}
 				// check java bean types (get/is methods)
-				if (useBeanproperties && isBeanProperty(info)) {
+				
+				if (!staticOnly && useBeanproperties && isBeanProperty(info)) {
 					JSBeanCompletion beanCompletion = new JSBeanCompletion(
 							provider, info, jarManager);
 					cachedType.addCompletion(beanCompletion);
@@ -175,7 +178,7 @@ public abstract class JavaScriptTypesFactory {
 		int fieldCount = cf.getFieldCount();
 		for (int i = 0; i < fieldCount; i++) {
 			FieldInfo info = cf.getFieldInfo(i);
-			if (isAccessible(info)) {
+			if (isAccessible(info, staticOnly)) {
 				JSFieldCompletion completion = new JSFieldCompletion(provider,
 						info, jarManager);
 				cachedType.addCompletion(completion);
@@ -189,7 +192,7 @@ public abstract class JavaScriptTypesFactory {
 			TypeDeclaration type = TypeDeclarationFactory.Instance()
 					.getTypeDeclaration(superClassName);
 			if (type == null) {
-				type = createNewTypeDeclaration(superClass);
+				type = createNewTypeDeclaration(superClass, staticOnly);
 			}
 			JavaScriptType extendedType = new JavaScriptType(type);
 			cachedType.addExtension(extendedType);
@@ -205,7 +208,7 @@ public abstract class JavaScriptTypesFactory {
 				TypeDeclaration type = TypeDeclarationFactory.Instance()
 						.getTypeDeclaration(inter);
 				if (type == null) {
-					type = createNewTypeDeclaration(intf);
+					type = createNewTypeDeclaration(intf, staticOnly);
 				}
 				JavaScriptType extendedType = new JavaScriptType(type);
 				cachedType.addExtension(extendedType);
@@ -220,26 +223,32 @@ public abstract class JavaScriptTypesFactory {
 	}
 
 
-	private boolean isAccessible(MemberInfo info) {
+	private boolean isAccessible(MemberInfo info, boolean staticOnly) {
 
 		boolean accessible = false;
 		int access = info.getAccessFlags();
+		accessible = isAccessible(access);
 
+		return (!staticOnly && accessible) || ((staticOnly && info.isStatic()));
+
+	}
+	
+	private boolean isAccessible(int access)
+	{
+		boolean accessible = false;
 		if (org.fife.rsta.ac.java.classreader.Util.isPublic(access)
 				|| org.fife.rsta.ac.java.classreader.Util.isProtected(access)) {
 			accessible = true;
 		}
-
-		return accessible && info.isStatic();
-
+		return accessible;
 	}
 
 
-	public TypeDeclaration createNewTypeDeclaration(ClassFile cf) {
+	public TypeDeclaration createNewTypeDeclaration(ClassFile cf, boolean staticOnly) {
 		String className = cf.getClassName(false);
 		String packageName = cf.getPackageName();
 		TypeDeclaration td = new TypeDeclaration(packageName, className, cf
-				.getClassName(true));
+				.getClassName(true), staticOnly);
 		// now add to types factory
 		TypeDeclarationFactory.Instance().addType(cf.getClassName(true), td);
 		return td;
@@ -260,7 +269,7 @@ public abstract class JavaScriptTypesFactory {
 		ClassFile superClass = null;
 
 		// Determine the fully qualified class to grab
-		if (!Util.isFullyQualified(className)) {
+		if (!org.fife.rsta.ac.java.Util.isFullyQualified(className)) {
 
 			// Check in this source file's package first
 			String pkg = cf.getPackageName();

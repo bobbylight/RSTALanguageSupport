@@ -15,12 +15,18 @@ public class TypeDeclaration {
 	private String pkg;
 	private String apiName;
 	private String jsName;
+	private boolean staticsOnly;
 
 
-	public TypeDeclaration(String pkg, String apiName, String jsName) {
+	public TypeDeclaration(String pkg, String apiName, String jsName, boolean staticsOnly) {
+		this.staticsOnly = staticsOnly;
 		this.pkg = pkg;
 		this.apiName = apiName;
 		this.jsName = jsName;
+	}
+	
+	public TypeDeclaration(String pkg, String apiName, String jsName) {
+		this(pkg, apiName, jsName, false);
 	}
 
 
@@ -42,6 +48,14 @@ public class TypeDeclaration {
 	public String getQualifiedName() {
 		return pkg != null ? (pkg + '.' + apiName) : apiName;
 	}
+	
+	public boolean isStaticsOnly() {
+		return staticsOnly;
+	}
+	
+	public void setStaticsOnly(boolean staticsOnly) {
+		this.staticsOnly = staticsOnly;
+	}
 
 
 	public boolean equals(Object obj) {
@@ -49,9 +63,13 @@ public class TypeDeclaration {
 		if (this == obj)
 			return true;
 
+		if((obj == null) || (obj.getClass() != this.getClass()))
+			return false;
+		
 		if (obj instanceof TypeDeclaration) {
 			TypeDeclaration dec = (TypeDeclaration) obj;
-			return getQualifiedName().equals(dec.getQualifiedName());
+			return getQualifiedName().equals(dec.getQualifiedName()) &&
+			isStaticsOnly() == dec.isStaticsOnly();
 		}
 
 		return super.equals(obj);
@@ -64,7 +82,10 @@ public class TypeDeclaration {
 	 * @return The hash code.
 	 */
 	public int hashCode() {
-		return getQualifiedName().hashCode();
+		int hash = 7;
+		hash = 31 * new Boolean(staticsOnly).hashCode();
+		hash = 31 * hash + getQualifiedName().hashCode();
+		return hash;
 	}
 
 
