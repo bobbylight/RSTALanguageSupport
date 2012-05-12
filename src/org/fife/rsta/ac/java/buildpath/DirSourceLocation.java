@@ -15,7 +15,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-import org.fife.rsta.ac.java.Util;
 import org.fife.rsta.ac.java.classreader.ClassFile;
 import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
 import org.fife.rsta.ac.java.rjc.lexer.Scanner;
@@ -61,7 +60,7 @@ public class DirSourceLocation implements SourceLocation {
 		CompilationUnit cu = null;
 
 		String entryName = cf.getClassName(true);
-		entryName = Util.replaceChar(entryName, '.', '/');
+		entryName = entryName.replace('.', '/');
 		entryName += ".java";
 		//System.out.println("DEBUG: entry name: " + entryName);
 		File file = new File(dir, entryName);

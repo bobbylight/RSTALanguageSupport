@@ -70,7 +70,7 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 	 *
 	 * @param provider
 	 * @param m Meta data about the method.
-	 * @param typeName
+	 * @param typeName The type of class this method is defined in.
 	 */
 	public MethodCompletion(CompletionProvider provider, Method m,
 							String typeName) {
@@ -100,7 +100,7 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 	 *
 	 * @param provider
 	 * @param info Meta data about the method.
-	 * @param typeName
+	 * @param typeName The type of class this method is defined in.
 	 */
 	public MethodCompletion(CompletionProvider provider, MethodInfo info,
 							String typeName) {

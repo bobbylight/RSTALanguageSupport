@@ -187,7 +187,7 @@ public class FieldInfo extends MemberInfo {
 				String clazz = descriptor.substring(braceCount+1,
 													descriptor.length()-1);
 				if(qualified) {
-					clazz = org.fife.rsta.ac.java.Util.replaceChar(clazz, '/', '.');
+					clazz = clazz.replace('/', '.');
 				}
 				else {
 					clazz = clazz.substring(clazz.lastIndexOf('/')+1);

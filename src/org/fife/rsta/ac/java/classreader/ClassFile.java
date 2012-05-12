@@ -11,6 +11,7 @@
 package org.fife.rsta.ac.java.classreader;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -209,13 +210,12 @@ public class ClassFile implements AccessFlags {
 			ConstantUtf8Info cui = (ConstantUtf8Info)getConstantPoolInfo(index);
 			String className = cui.getRepresentedString(false);
 			if (fullyQualified) {
-				className = org.fife.rsta.ac.java.Util.replaceChar(
-											className, '/', '.');
+				className = className.replace('/', '.');
 			}
 			else {
 				className = className.substring(className.lastIndexOf('/')+1);
 			}
-			return org.fife.rsta.ac.java.Util.replaceChar(className, '$', '.');
+			return className.replace('$', '.');
 		}
 
 		// cpi is never null
@@ -269,9 +269,29 @@ public class ClassFile implements AccessFlags {
 	 *
 	 * @param index The index of the field info.
 	 * @return The field's information.
+	 * @see #getFieldCount()
+	 * @see #getFieldInfoByName(String)
 	 */
 	public FieldInfo getFieldInfo(int index) {
 		return fields[index];
+	}
+
+
+	/**
+	 * Returns a field's information by name.
+	 *
+	 * @param name The name of the field.
+	 * @return The field's information.
+	 * @see #getFieldCount()
+	 * @see #getFieldInfo(int)
+	 */
+	public FieldInfo getFieldInfoByName(String name) {
+		for (int i=0; i<getFieldCount(); i++) {
+			if (name.equals(fields[i].getName())) {
+				return fields[i];
+			}
+		}
+		return null;
 	}
 
 
@@ -324,6 +344,48 @@ public class ClassFile implements AccessFlags {
 	 */
 	public MethodInfo getMethodInfo(int index) {
 		return methods[index];
+	}
+
+
+	/**
+	 * Returns all method overloads with the specified name.
+	 *
+	 * @param name The method name.
+	 * @return Any method overloads with the given name, or <code>null</code>
+	 *         if none.  This is a list of {@link MethodInfo}s.
+	 * @see #getMethodInfoByName(String, int)
+	 */
+	public List getMethodInfoByName(String name) {
+		return getMethodInfoByName(name, -1);
+	}
+
+
+	/**
+	 * Returns all method overloads with the specified name and number of
+	 * arguments.
+	 *
+	 * @param name The method name.
+	 * @param argCount The number of arguments.  If this is less than zero,
+	 *        all overloads will be returned, regardless of argument count.
+	 * @return Any method overloads with the given name and argument count, or
+	 *         <code>null</code> if none.  This is a list of
+	 *         {@link MethodInfo}s.
+	 * @see #getMethodInfoByName(String)
+	 */
+	public List getMethodInfoByName(String name, int argCount) {
+		List methods = null;
+		for (int i=0; i<getMethodCount(); i++) {
+			MethodInfo info = this.methods[i];
+			if (name.equals(info.getName())) {
+				if (argCount<0 || argCount==info.getParameterCount()) {
+					if (methods==null) {
+						methods = new ArrayList(1); // Usually just 1
+					}
+					methods.add(info);
+				}
+			}
+		}
+		return methods;
 	}
 
 

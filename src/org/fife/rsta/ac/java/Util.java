@@ -87,6 +87,7 @@ public class Util {
 		StringBuffer returns = null;
 		StringBuffer throwsItems = null;
 		StringBuffer see = null;
+		StringBuffer seeTemp = null;
 		StringBuffer since = null;
 		StringBuffer author = null;
 		StringBuffer unknowns = null;
@@ -132,9 +133,16 @@ public class Util {
 			else if ("@see".equals(token) && i<st.length) {
 				if (see==null) {
 					see = new StringBuffer("<b>See Also:</b><p class='indented'>");
+					seeTemp = new StringBuffer();
 				}
 				else {
+					if (seeTemp.length()>0) {
+						String temp = seeTemp.substring(0, seeTemp.length()-1);
+						see.append("<a href='").append(temp).append("'>").append(temp).append("</a>");
+					}
 					see.append("<br>");
+					seeTemp.setLength(0);
+					//see.append("<br>");
 				}
 				inSeeAlso = true;
 				inReturns = false;
@@ -213,7 +221,8 @@ public class Util {
 				returns.append(token).append(' ');
 			}
 			else if (inSeeAlso) {
-				see.append(token).append(' ');
+				//see.append(token).append(' ');
+				seeTemp.append(token).append(' ');
 			}
 			else if (inThrows) {
 				throwsItems.append(token).append(' ');
@@ -241,6 +250,11 @@ public class Util {
 			sb.append(throwsItems).append("</p>");
 		}
 		if (see!=null) {
+			if (seeTemp.length()>0) { // Last @see contents
+				String temp = seeTemp.substring(0, seeTemp.length()-1);
+				see.append("<a href='").append(temp).append("'>").append(temp).append("</a>");
+			}
+			see.append("<br>");
 			sb.append(see).append("</p>");
 		}
 		if (author!=null) {
@@ -270,8 +284,7 @@ public class Util {
 
 		if (m.find() && m.start() == 0) {
 
-//System.out.println("Match!!! - '" + m.group(0));
-//System.out.println("... linkContent == '" + linkContent + "'");
+			//System.out.println("Match!!! - '" + m.group(0));
 			String match = m.group(0); // Prevents recalculation
 			String link = match;
 			// TODO: If this starts with '#', "link" must be prepended with
@@ -291,6 +304,7 @@ public class Util {
 					}
 				}
 				else { // Just use whole match (invalid link?)
+					// TODO: Could be just a class name.  Find on classpath
 					text = match;
 				}
 			}
@@ -317,10 +331,11 @@ public class Util {
 				text = text.substring(0, hash) + "." + text.substring(hash+1);
 			}
 
-			appendTo.append(link).append("'>").append(text);
+			appendTo./*append("link://").*/append(link).append("'>").append(text);
 
 		}
 		else { // Malformed link tag
+System.out.println("Unmatched linkContent: " + linkContent);
 			appendTo.append("'>").append(linkContent);
 		}
 
@@ -397,7 +412,8 @@ public class Util {
 	private static final StringBuffer fixDocComment(StringBuffer text) {
 
 		// Nothing to do.
-		if (text.indexOf("{@")==-1) {
+		int index = text.indexOf("{@");
+		if (index==-1) {
 			return text;
 		}
 
@@ -405,9 +421,8 @@ public class Util {
 		// calls with "sb.append(sb2, offs, len)".
 		StringBuffer sb = new StringBuffer();
 		int textOffs = 0;
-		int index = 0;
 
-		while ((index=text.indexOf("{@", index))>-1) {
+		do {
 
 			int closingBrace = indexOf('}', text, index+2);
 			if (closingBrace>-1) { // Should practically always be true
@@ -438,14 +453,12 @@ public class Util {
 				}
 
 				else { // Unhandled Javadoc tag
-					sb.append("<code>").
-							append(content).
-							append("</code>");
+					sb.append("<code>").append(content).append("</code>");
 				}
 
 			}
 
-		}
+		} while ((index=text.indexOf("{@", index))>-1);
 
 		if (textOffs<text.length()) {
 			sb.append(text.substring(textOffs));
@@ -539,6 +552,7 @@ public class Util {
 	 *
 	 * @param str The string to check.
 	 * @return Whether the string is fully qualified.
+	 * @see #getUnqualified(String)
 	 */
 	public static final boolean isFullyQualified(String str) {
 		return str.indexOf('.')>-1;
@@ -558,34 +572,6 @@ public class Util {
 			str = str.substring(0, str.length()-2);
 		}
 		return str;
-	}
-
-
-	/**
-	 * Does a fast replacement of all instances of one char with another.
-	 *
-	 * @param str The string to do the replacements in.
-	 * @param oldCh The character to look for.
-	 * @param newCh The character to replace with.
-	 * @return The string, possibly with the char replaced.
-	 */
-	public static final String replaceChar(String str, char oldCh, char newCh) {
-		String fixed = str; // In case oldCh isn't found
-		int offs = str.indexOf(oldCh);
-		if (offs>-1) {
-			StringBuffer sb = new StringBuffer(str.substring(0, offs++));
-			// NOTE: Don't declare oldCh/newCh as ints, as it'll break the
-			// StringBuffer.append() call below!
-			sb.append(newCh);
-			int nextOffs = 0;
-			while ((nextOffs = str.indexOf(oldCh, offs))>-1) {
-				sb.append(str.substring(offs, nextOffs));
-				sb.append(newCh);
-				offs = nextOffs + 1;
-			}
-			fixed = sb.append(str.substring(offs)).toString();
-		}
-		return fixed;
 	}
 
 

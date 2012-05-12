@@ -227,9 +227,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 				case 'L':
 					String clazz = paramDescriptors.substring(pos + 1,
 							paramDescriptors.indexOf(';'));
-					type = qualified ? org.fife.rsta.ac.java.Util.replaceChar(clazz, '/', '.') : clazz.substring(clazz.lastIndexOf('/')+1);
-					//clazz = org.fife.rsta.ac.java.Util.replaceChar(clazz, '/', '.');
-					//type = clazz;
+					type = qualified ? clazz.replace('/', '.') : clazz.substring(clazz.lastIndexOf('/')+1);
 					pos += clazz.length() + 2; // "+2" for the 'L' & semicolon
 					break;
 
@@ -512,9 +510,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 			// ObjectType
 			case 'L':
 				String clazz = descriptor.substring(1, descriptor.length()-1);
-				//clazz = clazz.substring(clazz.lastIndexOf('/')+1);
-				clazz = qualified ? org.fife.rsta.ac.java.Util.replaceChar(clazz, '/', '.') : clazz.substring(clazz.lastIndexOf('/')+1);
-				//clazz = clazz.substring(clazz.lastIndexOf('/')+1);
+				clazz = qualified ? clazz.replace('/', '.') : clazz.substring(clazz.lastIndexOf('/')+1);
 				sb.append(clazz);
 				break;
 

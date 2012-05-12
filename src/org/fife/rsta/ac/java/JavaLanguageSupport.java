@@ -138,6 +138,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		ac.setAutoCompleteEnabled(isAutoCompleteEnabled());
 		ac.setAutoActivationEnabled(isAutoActivationEnabled());
 		ac.setAutoActivationDelay(getAutoActivationDelay());
+		ac.setExternalURLHandler(new JavadocUrlHandler());
 		ac.setParameterAssistanceEnabled(isParameterAssistanceEnabled());
 		ac.setParamChoicesRenderer(new JavaParamListCellRenderer());
 		ac.setShowDescWindow(getShowDescWindow());
