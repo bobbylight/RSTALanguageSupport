@@ -36,7 +36,7 @@ class FieldData implements Data {
 	/**
 	 * {@inheritDoc}
 	 */
-	public String getDefinedIn() {
+	public String getEnclosingClassName(boolean fullyQualified) {
 		// NOTE: This check isn't really necessary, but is here just in case
 		// there's a bug in the parsing code.
 		TypeDeclaration td = field.getParentTypeDeclaration();
@@ -45,7 +45,7 @@ class FieldData implements Data {
 							printStackTrace();
 			return "";
 		}
-		return field.getParentTypeDeclaration().getName();
+		return td.getName(fullyQualified);
 	}
 
 
@@ -58,19 +58,19 @@ class FieldData implements Data {
 
 		Modifiers mod = field.getModifiers();
 		if (mod==null) {
-			key = IconFactory.METHOD_DEFAULT_ICON;
+			key = IconFactory.FIELD_DEFAULT_ICON;
 		}
 		else if (mod.isPrivate()) {
-			key = IconFactory.METHOD_PRIVATE_ICON;
+			key = IconFactory.FIELD_PRIVATE_ICON;
 		}
 		else if (mod.isProtected()) {
-			key = IconFactory.METHOD_PROTECTED_ICON;
+			key = IconFactory.FIELD_PROTECTED_ICON;
 		}
 		else if (mod.isPublic()) {
-			key = IconFactory.METHOD_PUBLIC_ICON;
+			key = IconFactory.FIELD_PUBLIC_ICON;
 		}
 		else {
-			key = IconFactory.METHOD_DEFAULT_ICON;
+			key = IconFactory.FIELD_DEFAULT_ICON;
 		}
 
 		return key;

@@ -121,7 +121,7 @@ public class JavadocUrlHandler implements ExternalURLHandler {
 		}
 		else if (c instanceof MemberCompletion) {
 			MemberCompletion mc = (MemberCompletion)c;
-			clazz = mc.getDefinedIn();
+			clazz = mc.getEnclosingClassName(true);
 		}
 		else {
 			System.err.println("Can't determine class from completion type: " +
@@ -149,7 +149,7 @@ public class JavadocUrlHandler implements ExternalURLHandler {
 			pkg = ((ClassCompletion)c).getPackageName();
 		}
 		else if (c instanceof MemberCompletion) {
-			String definedIn = ((MemberCompletion)c).getDefinedIn();
+			String definedIn = ((MemberCompletion)c).getEnclosingClassName(true);
 			if (definedIn!=null) {
 				int lastDot = definedIn.lastIndexOf('.');
 				if (lastDot>-1) {
@@ -327,8 +327,7 @@ System.out.println(desc);
 								List miList = cf.getMethodInfoByName(member, -1);
 								if (miList!=null && miList.size()>0) {
 									MethodInfo mi = (MethodInfo)miList.get(0);// Just show the first if multiple
-									String typeName = cf.getClassName(true);
-									memberCompletion = new MethodCompletion(c.getProvider(), mi, typeName);
+									memberCompletion = new MethodCompletion(c.getProvider(), mi);
 								}
 							}
 						}
@@ -344,8 +343,7 @@ System.out.println(desc);
 								}
 								else {
 									MethodInfo mi = (MethodInfo)miList.get(0);
-									String typeName = cf.getClassName(true);
-									memberCompletion = new MethodCompletion(c.getProvider(), mi, typeName);
+									memberCompletion = new MethodCompletion(c.getProvider(), mi);
 								}
 							}
 						}

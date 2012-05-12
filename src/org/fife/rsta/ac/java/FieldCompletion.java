@@ -15,6 +15,7 @@ import javax.swing.Icon;
 
 import org.fife.rsta.ac.java.classreader.FieldInfo;
 import org.fife.rsta.ac.java.rjc.ast.Field;
+import org.fife.rsta.ac.java.rjc.lang.Type;
 import org.fife.ui.autocomplete.CompletionProvider;
 
 
@@ -57,11 +58,13 @@ class FieldCompletion extends AbstractJavaSourceCompletion
 	public FieldCompletion(CompletionProvider provider, FieldInfo info) {
 		super(provider, info.getName());
 		this.data = new FieldInfoData(info, (SourceCompletionProvider)provider);
+		setRelevance(RELEVANCE);
 	}
 
 
 	private FieldCompletion(CompletionProvider provider, String text) {
 		super(provider, text);
+		setRelevance(RELEVANCE);
 	}
 
 
@@ -72,16 +75,16 @@ class FieldCompletion extends AbstractJavaSourceCompletion
 
 
 	public static FieldCompletion createLengthCompletion(
-							CompletionProvider provider, final String type) {
-		FieldCompletion fc = new FieldCompletion(provider, type);
+							CompletionProvider provider, final Type type) {
+		FieldCompletion fc = new FieldCompletion(provider, type.toString());
 		fc.data = new Data() {
 
-			public String getDefinedIn() {
-				return type;
+			public String getEnclosingClassName(boolean fullyQualified) {
+				return type.getName(fullyQualified);
 			}
-
+			
 			public String getIcon() {
-				return IconFactory.METHOD_PUBLIC_ICON;
+				return IconFactory.FIELD_PUBLIC_ICON;
 			}
 
 			public String getSignature() {
@@ -115,14 +118,14 @@ class FieldCompletion extends AbstractJavaSourceCompletion
 			public boolean isStatic() {
 				return false;
 			}
-			
+
 		};
 		return fc;
 	}
 
 
-	public String getDefinedIn() {
-		return data.getDefinedIn();
+	public String getEnclosingClassName(boolean fullyQualified) {
+		return data.getEnclosingClassName(fullyQualified);
 	}
 
 

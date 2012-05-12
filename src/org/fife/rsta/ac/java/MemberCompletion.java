@@ -24,7 +24,14 @@ import org.fife.rsta.ac.java.IconFactory.IconData;
 interface MemberCompletion extends JavaSourceCompletion {
 
 
-	public String getDefinedIn();
+	/**
+	 * Returns the name of the enclosing class.
+	 *
+	 * @param fullyQualified Whether the name returned should be fully
+	 *        qualified.
+	 * @return The class name.
+	 */
+	public String getEnclosingClassName(boolean fullyQualified);
 
 
 	/**
@@ -72,12 +79,13 @@ interface MemberCompletion extends JavaSourceCompletion {
 	public static interface Data extends IconData {
 
 		/**
-		 * Returns the name of the parent type declaration that this member is
-		 * defined in.
+		 * Returns the name of the enclosing class.
 		 *
-		 * @return The type declaration this member is defined in.
+		 * @param fullyQualified Whether the name returned should be fully
+		 *        qualified.
+		 * @return The class name.
 		 */
-		public String getDefinedIn();
+		public String getEnclosingClassName(boolean fullyQualified);
 
 		/**
 		 * Returns the icon to use when rendering this member's completion.

@@ -144,8 +144,7 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 				if (isSimpleGetter(method)) {
 					if (isTypeCompatible(method.getType(), type)) {
 						//members.add(member.getName() + "()");
-						String typeName = method.getType().getName(true);
-						members.add(new MethodCompletion(provider, method, typeName));
+						members.add(new MethodCompletion(provider, method));
 					}
 				}
 			}

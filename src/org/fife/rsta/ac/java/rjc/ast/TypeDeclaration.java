@@ -95,7 +95,24 @@ public interface TypeDeclaration extends ASTNode, TypeDeclarationContainer {
 	public Modifiers getModifiers();
 
 
+	/**
+	 * Returns the name of this type, unqualified.
+	 *
+	 * @return The name of this type.
+	 * @see #getName(boolean)
+	 */
 	public String getName();
+
+
+	/**
+	 * Returns the name of this type.
+	 *
+	 * @param fullyQualified Whether the name returned should be fully
+	 *        qualified.
+	 * @return The type's name.
+	 * @see #getName()
+	 */
+	public String getName(boolean fullyQualified);
 
 
 	/**

@@ -63,7 +63,7 @@ class MemberTreeNode extends JavaTreeNode {
 			icon = IconFactory.FIELD_PRIVATE_ICON;
 		}
 		else if (mods.isProtected()) {
-			icon = IconFactory.FIELD_DEFAULT_ICON;
+			icon = IconFactory.FIELD_PROTECTED_ICON;
 		}
 		else if (mods.isPublic()) {
 			icon = IconFactory.FIELD_PUBLIC_ICON;

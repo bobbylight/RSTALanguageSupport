@@ -180,6 +180,21 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	/**
 	 * {@inheritDoc}
 	 */
+	public String getName(boolean fullyQualified) {
+		String name = getName();
+		if (fullyQualified) {
+			Package pkg = getPackage();
+			if (pkg!=null) {
+				name = pkg.getName() + "." + name;
+			}
+		}
+		return name;
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public Package getPackage() {
 		return pkg;
 	}

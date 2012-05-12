@@ -114,8 +114,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 		for (int i=0; i<methodCount; i++) {
 			MethodInfo info = cf.getMethodInfo(i);
 			if (isAccessible(info, pkg) && info.isStatic()) {
-				MethodCompletion mc = new MethodCompletion(
-											this, info, cf.getClassName(true));
+				MethodCompletion mc = new MethodCompletion(this, info);
 				set.add(mc);
 			}
 		}
@@ -167,8 +166,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 			MethodInfo info = cf.getMethodInfo(i);
 			// Don't show constructors
 			if (isAccessible(info, pkg) && !info.isConstructor()) {
-				MethodCompletion mc = new MethodCompletion(
-											this, info, cf.getClassName(true));
+				MethodCompletion mc = new MethodCompletion(this, info);
 				set.add(mc);
 			}
 		}
@@ -218,7 +216,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 			ClassFile cf = getClassFileFor(cu, "java.lang.Object");
 			addCompletionsForExtendedClass(retVal, cu, cf, pkg, null);
 			FieldCompletion fc = FieldCompletion.
-				createLengthCompletion(this, type.toString());
+				createLengthCompletion(this, type);
 			retVal.add(fc);
 		}
 
@@ -725,13 +723,12 @@ public SourceLocation  getSourceLocForClass(String className) {
 		// vars.  Do this before checking super classes so that, if
 		// we overrode anything, we get the "newest" version.
 		String pkg = cu.getPackageName();
-		String typeName = td.getName();
 		for (Iterator j=td.getMemberIterator(); j.hasNext(); ) {
 			Member m = (Member)j.next();
 			if (m instanceof Method) {
 				Method method = (Method)m;
 				if (prefix==null || THIS.equals(prefix)) {
-					retVal.add(new MethodCompletion(this, method, typeName));
+					retVal.add(new MethodCompletion(this, method));
 				}
 				if (caret>=method.getBodyStartOffset() && caret<method.getBodyEndOffset()) {
 					currentMethod = method;
@@ -832,7 +829,7 @@ public SourceLocation  getSourceLocForClass(String className) {
 						ClassFile cf = getClassFileFor(cu, "java.lang.Object");
 						addCompletionsForExtendedClass(retVal, cu, cf, pkg, null);
 						FieldCompletion fc = FieldCompletion.
-							createLengthCompletion(this, type.toString());
+							createLengthCompletion(this, type);
 						retVal.add(fc);
 					}
 					else if (!type.isBasicType()) {

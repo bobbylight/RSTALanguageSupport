@@ -37,7 +37,7 @@ class MethodData implements Data {
 	/**
 	 * {@inheritDoc}
 	 */
-	public String getDefinedIn() {
+	public String getEnclosingClassName(boolean fullyQualified) {
 		// NOTE: This check isn't really necessary, but is here just in case
 		// there's a bug in the parsing code.
 		TypeDeclaration td = method.getParentTypeDeclaration();
@@ -46,7 +46,7 @@ class MethodData implements Data {
 							printStackTrace();
 			return "";
 		}
-		return method.getParentTypeDeclaration().getName();
+		return td.getName(fullyQualified);
 	}
 
 

@@ -70,14 +70,12 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 	 *
 	 * @param provider
 	 * @param m Meta data about the method.
-	 * @param typeName The type of class this method is defined in.
 	 */
-	public MethodCompletion(CompletionProvider provider, Method m,
-							String typeName) {
+	public MethodCompletion(CompletionProvider provider, Method m) {
 
 		// NOTE: "void" might not be right - I think this might be constructors
 		super(provider, m.getName(), m.getType()==null ? "void" : m.getType().toString());
-		setDefinedIn(typeName);
+		setDefinedIn(m.getParentTypeDeclaration().getName());
 		this.data = new MethodData(m);
 		setRelevanceAppropriately();
 
@@ -100,13 +98,11 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 	 *
 	 * @param provider
 	 * @param info Meta data about the method.
-	 * @param typeName The type of class this method is defined in.
 	 */
-	public MethodCompletion(CompletionProvider provider, MethodInfo info,
-							String typeName) {
+	public MethodCompletion(CompletionProvider provider, MethodInfo info) {
 
 		super(provider, info.getName(), info.getReturnTypeString(false));
-		setDefinedIn(typeName);
+		setDefinedIn(info.getClassFile().getClassName(false));
 		this.data = new MethodInfoData(info, (SourceCompletionProvider)provider);
 		setRelevanceAppropriately();
 
@@ -214,6 +210,11 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 	}
 
 
+	public String getEnclosingClassName(boolean fullyQualified) {
+		return data.getEnclosingClassName(fullyQualified);
+	}
+
+
 	public Icon getIcon() {
 		return IconFactory.get().getIcon(data);
 	}
@@ -307,7 +308,7 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 		if (!selected) {
 			g.setColor(Color.GRAY);
 		}
-		g.drawString(org.fife.rsta.ac.java.Util.getUnqualified(mc.getDefinedIn()), x, y);
+		g.drawString(mc.getEnclosingClassName(false), x, y);
 		if (!selected) {
 			g.setColor(origColor);
 		}

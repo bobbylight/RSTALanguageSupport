@@ -66,8 +66,8 @@ class MethodInfoData implements Data {
 	/**
 	 * {@inheritDoc}
 	 */
-	public String getDefinedIn() {
-		return info.getClassFile().getClassName(false);
+	public String getEnclosingClassName(boolean fullyQualified) {
+		return info.getClassFile().getClassName(fullyQualified);
 	}
 
 

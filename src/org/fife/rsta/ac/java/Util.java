@@ -33,11 +33,8 @@ import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
 public class Util {
 
 	/**
-	 * Optional header for doc comment lines (except the first line) that
+	 * Optional leading text for doc comment lines (except the first line) that
 	 * should be removed if it exists.
-	 */
-	/**
-	 * Spacer between doc comment lines that should be removed.
 	 */
 	static final Pattern DOC_COMMENT_LINE_HEADER =
 						Pattern.compile("\\s*\\n\\s*\\*[ \t\f]*[/]?");//^\\s*\\*\\s*[/]?");
@@ -90,11 +87,12 @@ public class Util {
 		StringBuffer seeTemp = null;
 		StringBuffer since = null;
 		StringBuffer author = null;
+		StringBuffer version = null;
 		StringBuffer unknowns = null;
 		boolean inParams = false, inThrows = false,
 				inReturns = false, inSeeAlso = false,
 				inSince = false, inAuthor = false,
-				inUnknowns = false;
+				inVersion = false, inUnknowns = false;
 
 		String[] st = tail.toString().split("[ \t\r\n\f]+");
 		String token = null;
@@ -116,6 +114,7 @@ public class Util {
 				inThrows = false;
 				inSince = false;
 				inAuthor = false;
+				inVersion = false;
 				inUnknowns = false;
 			}
 			else if ("@return".equals(token) && i<st.length) {
@@ -128,6 +127,7 @@ public class Util {
 				inThrows = false;
 				inSince = false;
 				inAuthor = false;
+				inVersion = false;
 				inUnknowns = false;
 			}
 			else if ("@see".equals(token) && i<st.length) {
@@ -150,6 +150,7 @@ public class Util {
 				inThrows = false;
 				inSince = false;
 				inAuthor = false;
+				inVersion = false;
 				inUnknowns = false;
 			}
 			else if (("@throws".equals(token)) ||
@@ -168,6 +169,7 @@ public class Util {
 				inThrows = true;
 				inSince = false;
 				inAuthor = false;
+				inVersion = false;
 				inUnknowns = false;
 			}
 			else if ("@since".equals(token) && i<st.length) {
@@ -180,6 +182,7 @@ public class Util {
 				inThrows = false;
 				inSince = true;
 				inAuthor = false;
+				inVersion = false;
 				inUnknowns = false;
 			}
 			else if ("@author".equals(token) && i<st.length) {
@@ -195,6 +198,23 @@ public class Util {
 				inThrows = false;
 				inSince = false;
 				inAuthor = true;
+				inVersion = false;
+				inUnknowns = false;
+			}
+			else if ("@version".equals(token) && i<st.length) {
+				if (version==null) {
+					version = new StringBuffer("<b>Version:</b><p class='indented'>");
+				}
+				else {
+					version.append("<br>");
+				}
+				inSeeAlso=false;
+				inReturns = false;
+				inParams = false;
+				inThrows = false;
+				inSince = false;
+				inAuthor = false;
+				inVersion = true;
 				inUnknowns = false;
 			}
 			else if (token.startsWith("@") && token.length()>1) {
@@ -212,6 +232,7 @@ public class Util {
 				inThrows = false;
 				inSince = false;
 				inAuthor = false;
+				inVersion = false;
 				inUnknowns = true;
 			}
 			else if (inParams) {
@@ -232,6 +253,9 @@ public class Util {
 			}
 			else if (inAuthor) {
 				author.append(token).append(' ');
+			}
+			else if (inVersion) {
+				version.append(token).append(' ');
 			}
 			else if (inUnknowns) {
 				unknowns.append(token).append(' ');
@@ -259,6 +283,9 @@ public class Util {
 		}
 		if (author!=null) {
 			sb.append(author).append("</p>");
+		}
+		if (version!=null) {
+			sb.append(version).append("</p>");
 		}
 		if (since!=null) {
 			sb.append(since).append("</p>");
