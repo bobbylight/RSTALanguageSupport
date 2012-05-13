@@ -43,10 +43,13 @@ public interface Token extends TokenTypes {
 	public boolean isIdentifier();
 
 
+	public boolean isInvalid();
+
+
 	public boolean isOperator();
 
 
-	public boolean isInvalid();
+	public boolean isType(int type);
 
 
 }

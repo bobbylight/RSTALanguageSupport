@@ -217,19 +217,33 @@ OUTER:
 							s.yyPeekCheckType(2)==SEPARATOR_LPAREN) {
 						s.yylex(); // catch
 						s.yylex(); // lparen
-						isFinal = false;
-						Token temp = s.yyPeekNonNull(IDENTIFIER, KEYWORD_FINAL, "Throwable type expected");
-						if (temp.getType()==KEYWORD_FINAL) {
-							isFinal = true;
-							s.yylex();
-						}
-						s.yyPeekNonNull(IDENTIFIER, "Variable declarator expected");
-						Type exType = _getType(cu, s);
-						Token var = s.yylexNonNull(IDENTIFIER, "Variable declarator expected");
+						Type exType = null;
+						Token var = null;
+						boolean multiCatch = false;
+						do {
+							isFinal = false;
+							Token temp = s.yyPeekNonNull(IDENTIFIER, KEYWORD_FINAL, "Throwable type expected");
+							if (temp.isType(KEYWORD_FINAL)) {
+								isFinal = true;
+								s.yylex();
+							}
+							s.yyPeekNonNull(IDENTIFIER, "Variable declarator expected");
+							exType = _getType(cu, s); // Not good for multi-catch!
+							var = s.yylexNonNull(IDENTIFIER, OPERATOR_BITWISE_OR, "Variable declarator expected");
+							multiCatch |= var.isType(OPERATOR_BITWISE_OR);
+						} while (var.isType(OPERATOR_BITWISE_OR));
 						s.yylexNonNull(SEPARATOR_RPAREN, "')' expected");
 						s.yyPeekNonNull(SEPARATOR_LBRACE, "'{' expected");
 						CodeBlock catchBlock = _getBlock(cu, block, m, s, false, depth);
 						int offs = var.getOffset(); // Not actually in block!
+						if (multiCatch) {
+							// TODO: With Java 7's multi-catch, calculate
+							// least upper bound for exception type:
+							// http://cr.openjdk.java.net/~darcy/ProjectCoin/ProjectCoin-Documentation-v0.83.html#multi_catch
+							exType = new Type("java");
+							exType.addIdentifier("lang", null);
+							exType.addIdentifier("Throwable", null);
+						}
 						LocalVariable localVar = new LocalVariable(s, isFinal, exType, offs, var.getLexeme());
 						checkForDuplicateLocalVarNames(cu, var, block, m);
 						catchBlock.addLocalVariable(localVar);
@@ -278,7 +292,7 @@ case KEYWORD_WHILE:
 					// Fall through
 
 				default:
-					if (t.getType()==SEPARATOR_SEMICOLON) {
+					if (t.isType(SEPARATOR_SEMICOLON)) {
 						atStatementStart = true;
 						break;
 					}
@@ -360,7 +374,7 @@ case KEYWORD_WHILE:
 
 				case KEYWORD_STATIC:
 					Token t2 = s.yyPeekNonNull("'{' or modifier expected");
-					if (t2.getType() == SEPARATOR_LBRACE) {
+					if (t2.isType(SEPARATOR_LBRACE)) {
 						CodeBlock block = _getBlock(cu, null, null, s, true);
 						classDec.addMember(block);
 						break;
@@ -484,7 +498,7 @@ try {
 		if (t==null) {
 			return cu;
 		}
-		if (t.getType() == KEYWORD_PACKAGE) {
+		if (t.isType(KEYWORD_PACKAGE)) {
 			t = scanner.yyPeekNonNull("Identifier expected");
 			int offs = t.getOffset();
 			String qualifiedID = getQualifiedIdentifier(scanner);
@@ -500,7 +514,7 @@ try {
 
 		// Go through any import statements.
 OUTER:
-		while (t != null && t.getType() == KEYWORD_IMPORT) {
+		while (t!=null && t.isType(KEYWORD_IMPORT)) {
 
 			boolean isStatic = false;
 			StringBuffer buf = new StringBuffer();
@@ -508,7 +522,7 @@ OUTER:
 			Token temp = null;
 			int offs = 0;
 
-			if (t.getType() == KEYWORD_STATIC) {
+			if (t.isType(KEYWORD_STATIC)) {
 				isStatic = true;
 				t = scanner.yylexNonNull("Incomplete import statement");
 			}
@@ -525,7 +539,7 @@ OUTER:
 				buf.append(t.getLexeme());
 				temp = scanner.yylexNonNull(SEPARATOR_DOT, SEPARATOR_SEMICOLON,
 											"'.' or ';' expected");
-				while (temp.getType()==SEPARATOR_DOT) {
+				while (temp.isType(SEPARATOR_DOT)) {
 					temp = scanner.yylexNonNull(IDENTIFIER, OPERATOR_TIMES,
 												"Identifier or '*' expected");
 					if (temp.isIdentifier()) {
@@ -538,7 +552,7 @@ OUTER:
 					}
 					temp = scanner.yylexNonNull(KEYWORD_IMPORT, SEPARATOR_DOT,
 									SEPARATOR_SEMICOLON, "'.' or ';' expected");
-					if (temp.getType()==KEYWORD_IMPORT) {
+					if (temp.isType(KEYWORD_IMPORT)) {
 						cu.addParserNotice(temp, "';' expected");
 						t = temp;
 						continue OUTER;
@@ -547,7 +561,7 @@ OUTER:
 				t = temp;
 			}
 
-			if (temp==null || t.getType()!=SEPARATOR_SEMICOLON) {
+			if (temp==null || !t.isType(SEPARATOR_SEMICOLON)) {
 				throw new IOException("Semicolon expected, found " + t);
 			}
 
@@ -615,18 +629,18 @@ return cu;
 
 		t = s.yylexNonNull("implements or '{' expected");
 
-		if (t.getType() == KEYWORD_IMPLEMENTS) {
+		if (t.isType(KEYWORD_IMPLEMENTS)) {
 			List implemented = new ArrayList(1); // Usually small
 			do {
 				implemented.add(_getType(cu, s));
 				t = s.yylex();
-			} while (t != null && t.getType() == SEPARATOR_COMMA);
+			} while (t != null && t.isType(SEPARATOR_COMMA));
 			// enumDesc.setImplementedInterfaces(implemented);
 			if (t != null) {
 				s.yyPushback(t);
 			}
 		}
-		else if (t.getType() == SEPARATOR_LBRACE) {
+		else if (t.isType(SEPARATOR_LBRACE)) {
 			s.yyPushback(t);
 		}
 
@@ -652,7 +666,7 @@ return cu;
 
 		while (true) {
 			boolean isFinal = false;
-			if (t.getType()==KEYWORD_FINAL) {
+			if (t.isType(KEYWORD_FINAL)) {
 				isFinal = true;
 				t = s.yylexNonNull("Type expected");
 			}
@@ -662,7 +676,7 @@ return cu;
 			Type type = _getType(cu, s);
 			Token temp = s.yylexNonNull("Argument name expected");
 			boolean elipsis = false;
-			if (temp.getType()==ELIPSIS) {
+			if (temp.isType(ELIPSIS)) {
 				elipsis = true;
 				temp = s.yylexNonNull(IDENTIFIER, "Argument name expected");
 			}
@@ -821,7 +835,7 @@ OUTER:
 			Token methodNameToken = tempScanner.yylexNonNull(IDENTIFIER, "Identifier (method name) expected");
 			while (true) {
 				t = s.yylexNonNull("Unexpected end of input");
-				if (t.getType()==SEPARATOR_RPAREN) {
+				if (t.isType(SEPARATOR_RPAREN)) {
 					break;
 				}
 				methodParamsList.add(t);
@@ -960,7 +974,7 @@ OUTER:
 									"Identifier (method name) expected");
 			while (true) {
 				t = s.yylexNonNull("Unexpected end of input");
-				if (t.getType()==SEPARATOR_RPAREN) {
+				if (t.isType(SEPARATOR_RPAREN)) {
 					break;
 				}
 				methodParamsList.add(t);
@@ -979,10 +993,10 @@ OUTER:
 			m.setDocComment(s.getLastDocComment());
 			classDec.addMember(m);
 			t = s.yylexNonNull("'{' or ';' expected");
-			if (t.getType() == SEPARATOR_SEMICOLON) {
+			if (t.isType(SEPARATOR_SEMICOLON)) {
 				// Just a method declaration (such as in an interface)
 			}
-			else if (t.getType() == SEPARATOR_LBRACE) {
+			else if (t.isType(SEPARATOR_LBRACE)) {
 				s.yyPushback(t);
 				block = _getBlock(cu, null, m, s, false);
 			}
@@ -1033,11 +1047,11 @@ OUTER:
 					cu.addParserNotice(t, "Duplicate modifier");
 				}
 			}
-			else if (t.getType()==ANNOTATION_START) {
+			else if (t.isType(ANNOTATION_START)) {
 				Token next = s.yyPeekNonNull("Annotation expected");
 				s.yyPushback(t); // Put '@' back
 				// TODO: Handle at a higher level (even at Scanner?)
-				if (next.getType()==KEYWORD_INTERFACE) {
+				if (next.isType(KEYWORD_INTERFACE)) {
 					return modList;
 				}
 				if (modList==null) {
@@ -1065,7 +1079,7 @@ OUTER:
 		String className = null;
 
 		Token t = s.yylexNonNull("Identifier expected");
-		if (t.getType()==IDENTIFIER) {
+		if (t.isType(IDENTIFIER)) {
 			className = t.getLexeme();
 		}
 		else {
@@ -1080,28 +1094,28 @@ OUTER:
 		addTo.addTypeDeclaration(classDec);
 
 		t = s.yylexNonNull("TypeParameters, extends, implements or '{' expected");
-		if (t.getType() == OPERATOR_LT) {
+		if (t.isType(OPERATOR_LT)) {
 			s.yyPushback(t);
 			List typeParams = _getTypeParameters(cu, s);
 			classDec.setTypeParameters(typeParams);
 			t = s.yylexNonNull("extends, implements or '{' expected");
 		}
 
-		if (t.getType() == KEYWORD_EXTENDS) {
+		if (t.isType(KEYWORD_EXTENDS)) {
 			classDec.setExtendedType(_getType(cu, s));
 			t = s.yylexNonNull("implements or '{' expected");
 		}
 
-		if (t.getType() == KEYWORD_IMPLEMENTS) {
+		if (t.isType(KEYWORD_IMPLEMENTS)) {
 			do {
 				classDec.addImplemented(_getType(cu, s));
 				t = s.yylex();
-			} while (t != null && t.getType() == SEPARATOR_COMMA);
+			} while (t != null && t.isType(SEPARATOR_COMMA));
 			if (t != null) {
 				s.yyPushback(t);
 			}
 		}
-		else if (t.getType() == SEPARATOR_LBRACE) {
+		else if (t.isType(SEPARATOR_LBRACE)) {
 			s.yyPushback(t);
 		}
 
@@ -1120,7 +1134,7 @@ OUTER:
 		String iName = null;
 
 		Token t = s.yylexNonNull("Identifier expected");
-		if (t.getType()==IDENTIFIER) {
+		if (t.isType(IDENTIFIER)) {
 			iName = t.getLexeme();
 		}
 		else {
@@ -1135,22 +1149,22 @@ OUTER:
 		addTo.addTypeDeclaration(iDec);
 
 		t = s.yylexNonNull("TypeParameters, extends or '{' expected");
-		if (t.getType() == OPERATOR_LT) {
+		if (t.isType(OPERATOR_LT)) {
 			s.yyPushback(t);
 			_getTypeParameters(cu, s);
 			t = s.yylexNonNull("Interface body expected");
 		}
 
-		if (t.getType() == KEYWORD_EXTENDS) {
+		if (t.isType(KEYWORD_EXTENDS)) {
 			do {
 				iDec.addExtended(_getType(cu, s));
 				t = s.yylex();
-			} while (t != null && t.getType() == SEPARATOR_COMMA);
+			} while (t != null && t.isType(SEPARATOR_COMMA));
 			if (t != null) {
 				s.yyPushback(t);
 			}
 		}
-		else if (t.getType() == SEPARATOR_LBRACE) {
+		else if (t.isType(SEPARATOR_LBRACE)) {
 			s.yyPushback(t);
 		}
 
@@ -1170,7 +1184,7 @@ OUTER:
 		while ((t = scanner.yylex()).isIdentifier()) {
 			sb.append(t.getLexeme());
 			t = scanner.yylex();
-			if (t.getType() == SEPARATOR_DOT) {
+			if (t.isType(SEPARATOR_DOT)) {
 				sb.append('.');
 			}
 			else {
@@ -1223,7 +1237,7 @@ OUTER:
 		Token t = s.yylexNonNull("Type expected");
 
 		// TODO: "void" checking is NOT in the JLS for type!  Remove me
-		if (t.getType()==KEYWORD_VOID) {
+		if (t.isType(KEYWORD_VOID)) {
 			type.addIdentifier(t.getLexeme(), null);
 			log("Exiting _getType(): " + type.toString());
 			return type;
@@ -1246,11 +1260,11 @@ OUTER:
 					}
 					type.addIdentifier(t.getLexeme(), typeArgs);
 					t = s.yylexNonNull("Unexpected end of input");
-					if (t.getType()==SEPARATOR_DOT) {
+					if (t.isType(SEPARATOR_DOT)) {
 						t = s.yylexNonNull("Unexpected end of input");
 						continue;
 					}
-					else if (t.getType()==SEPARATOR_LBRACKET) {
+					else if (t.isType(SEPARATOR_LBRACKET)) {
 						s.yyPushback(t);
 						type.setBracketPairCount(s.skipBracketPairs());
 						break OUTER;
@@ -1282,7 +1296,7 @@ OUTER:
 
 		Token t = s.yyPeekNonNull("Type or '?' expected");
 
-		if (t.getType()==OPERATOR_QUESTION) {
+		if (t.isType(OPERATOR_QUESTION)) {
 			s.yylex(); // Pop the '?' off the stream.
 			t = s.yyPeek();
 			if (t.getType()!=OPERATOR_GT) {
@@ -1342,7 +1356,7 @@ OUTER:
 				s.decreaseTypeArgumentsLevel();
 				return null;
 			}
-		} while (t.getType()==SEPARATOR_COMMA);
+		} while (t.isType(SEPARATOR_COMMA));
 
 		log("Exiting _getTypeArguments() (" + s.getTypeArgumentsLevel() + ")");
 		s.decreaseTypeArgumentsLevel();
@@ -1368,7 +1382,7 @@ OUTER:
 		}
 
 		// Skip any semicolons.
-		while (t.getType() == SEPARATOR_SEMICOLON) {
+		while (t.isType(SEPARATOR_SEMICOLON)) {
 			t = s.yylex();
 			if (t == null) {
 				return null; // End of source file
@@ -1421,7 +1435,7 @@ OUTER:
 			TypeParameter typeParam = _getTypeParameter(cu, s);
 			typeParams.add(typeParam);
 			t = s.yylexNonNull(SEPARATOR_COMMA, OPERATOR_GT, "',' or '>' expected");
-		} while (t.getType()==SEPARATOR_COMMA);
+		} while (t.isType(SEPARATOR_COMMA));
 
 		log("Exiting _getTypeParameters() (" + s.getTypeArgumentsLevel() + ")");
 		s.decreaseTypeArgumentsLevel();

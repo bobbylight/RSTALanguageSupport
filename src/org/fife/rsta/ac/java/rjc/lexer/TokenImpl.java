@@ -11,7 +11,6 @@
 package org.fife.rsta.ac.java.rjc.lexer;
 
 
-
 /**
  * Implementation of a token in a Java source file.
  *
@@ -142,6 +141,11 @@ class TokenImpl implements Token {
 
 	public boolean isOperator() {
 		return (getType()&OPERATOR)>0;
+	}
+
+
+	public boolean isType(int type) {
+		return this.type==type;
 	}
 
 
