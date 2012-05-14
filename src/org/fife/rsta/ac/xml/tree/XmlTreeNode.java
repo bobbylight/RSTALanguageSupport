@@ -24,7 +24,6 @@ import org.fife.rsta.ac.SourceTreeNode;
  */
 public class XmlTreeNode extends SourceTreeNode {
 
-	private String name;
 	private String mainAttr;
 	private Position offset;
 	private Position endOffset;
@@ -32,7 +31,6 @@ public class XmlTreeNode extends SourceTreeNode {
 
 	public XmlTreeNode(String name) {
 		super(name);
-		this.name = name;
 	}
 
 
@@ -42,27 +40,23 @@ public class XmlTreeNode extends SourceTreeNode {
 	}
 
 
+	public String getElement() {
+		return (String)getUserObject();
+	}
+
+
 	public int getEndOffset() {
 		return endOffset!=null ? endOffset.getOffset() : Integer.MAX_VALUE;
 	}
 
 
-	public int getStartOffset() {
-		return offset!=null ? offset.getOffset() : -1;
+	public String getMainAttr() {
+		return mainAttr;
 	}
 
 
-	public String getText(boolean selected) {
-		String text = name;
-		if (mainAttr!=null) {
-			if (selected) {
-				text += " " + mainAttr;
-			}
-			else {
-				text = "<html>" + text + " <font color='#808080'>" + mainAttr;
-			}
-		}
-		return text;
+	public int getStartOffset() {
+		return offset!=null ? offset.getOffset() : -1;
 	}
 
 
@@ -87,7 +81,11 @@ public class XmlTreeNode extends SourceTreeNode {
 	 * @return A string representation of this tree node.
 	 */
 	public String toString() {
-		return getText(true);
+		String text = getElement();
+		if (mainAttr!=null) {
+			text += " " + mainAttr;
+		}
+		return text;
 	}
 
 
