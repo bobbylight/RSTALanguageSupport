@@ -8,9 +8,12 @@
  * This library is distributed under a modified BSD license.  See the included
  * RSTALanguageSupport.License.txt file for details.
  */
-package org.fife.rsta.ac.js.ast;
+package org.fife.rsta.ac.js.ast.type;
 
 import java.util.HashMap;
+
+import org.fife.rsta.ac.js.JavaScriptHelper;
+
 
 
 /**
@@ -177,15 +180,19 @@ public class TypeDeclarationFactory {
 		TypeDeclaration typeDeclation = (TypeDeclaration) typeDeclarations
 				.get(name);
 		if (typeDeclation == null) {
+			typeDeclation = getJSType(name);
+		}
+		/*if (typeDeclation == null) {
 			name = getJSTypeName(name);
 			if (name != null) {
 				typeDeclation = (TypeDeclaration) typeDeclarations.get(name);
 			}
-		}
+		}*/
+		
 		return typeDeclation;
 	}
-
-
+	
+	
 	/**
 	 * @param name of TypeDeclaration to lookup
 	 * @return lookup <code>TypeDeclaration</code> and return the JavaScript name
@@ -199,14 +206,29 @@ public class TypeDeclarationFactory {
 	/**
 	 * Lookup the JavaScript name for a given name 
 	 * @param lookupName 
-	 * @return check whether the name is wrapped in [] then return Array otherwise lookup from JavaScript Name cache
+	 * @return check whether the name is wrapped in [] then return ArrayTypeDeclaration otherwise lookup from JavaScript Name cache
+	 * @see ArrayTypeDeclaration
 	 */
-	private String getJSTypeName(String lookupName) {
+	private TypeDeclaration getJSType(String lookupName) {
 		// first check whether this is an array
 		if (lookupName.indexOf('[') > -1 && lookupName.indexOf(']') > -1) {
-			return ECMA_ARRAY;
+			TypeDeclaration arrayType = getTypeDeclaration(ECMA_ARRAY);
+			ArrayTypeDeclaration arrayDec = new ArrayTypeDeclaration(arrayType.getPackageName(), arrayType.getAPITypeName(), arrayType.getJSName());
+			
+			//trim last index of [
+			String arrayTypeName = lookupName.substring(0, lookupName.indexOf('['));
+			TypeDeclaration containerType = JavaScriptHelper.createNewTypeDeclaration(arrayTypeName);
+			arrayDec.setArrayType(containerType);
+			return arrayDec;
 		}
-		return (String) typeDeclarationsLookup.get(lookupName);
+		else {
+			String name = (String) typeDeclarationsLookup.get(lookupName);
+			if(name != null) {
+				return (TypeDeclaration) typeDeclarations.get(name);
+			}
+		}
+		
+		return null;
 	}
 
 

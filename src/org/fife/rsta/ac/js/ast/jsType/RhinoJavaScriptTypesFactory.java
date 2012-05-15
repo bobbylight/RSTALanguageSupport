@@ -6,8 +6,8 @@ import java.util.LinkedHashSet;
 
 import org.fife.rsta.ac.java.JarManager;
 import org.fife.rsta.ac.java.classreader.ClassFile;
-import org.fife.rsta.ac.js.ast.TypeDeclaration;
-import org.fife.rsta.ac.js.ast.TypeDeclarationFactory;
+import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
+import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 
 
 /**
@@ -43,7 +43,7 @@ public class RhinoJavaScriptTypesFactory extends JavaScriptTypesFactory {
 		//clear all non ECMA (JavaScript types) for importPackage and importClass to work properly
 		for(Iterator i = cachedTypes.keySet().iterator(); i.hasNext();) {
 			TypeDeclaration dec = (TypeDeclaration) i.next();
-			if(!dec.getQualifiedName().startsWith("org.fife.rsta.ac.js.ecma")) {
+			if(!dec.getQualifiedName().startsWith("org.fife.rsta.ac.js.ecma") && !dec.equals(TypeDeclarationFactory.getDefaultTypeDeclaration())) {
 				removeAllTypes((JavaScriptType) cachedTypes.get(dec));
 				removeTypes.add(dec);
 			}

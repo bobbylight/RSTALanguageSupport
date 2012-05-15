@@ -22,11 +22,11 @@ import javax.swing.text.JTextComponent;
 import org.fife.rsta.ac.java.JarManager;
 import org.fife.rsta.ac.js.ast.CodeBlock;
 import org.fife.rsta.ac.js.ast.JavaScriptVariableDeclaration;
-import org.fife.rsta.ac.js.ast.TypeDeclaration;
 import org.fife.rsta.ac.js.ast.VariableResolver;
 import org.fife.rsta.ac.js.ast.jsType.JavaScriptType;
 import org.fife.rsta.ac.js.ast.jsType.JavaScriptTypesFactory;
 import org.fife.rsta.ac.js.ast.parser.JavaScriptParser;
+import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
 import org.fife.rsta.ac.js.completion.JSVariableCompletion;
 import org.fife.rsta.ac.js.engine.JavaScriptEngine;
 import org.fife.rsta.ac.js.engine.JavaScriptEngineFactory;
@@ -175,8 +175,9 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 	public String getAlreadyEnteredText(JTextComponent comp) {
 		String text = super.getAlreadyEnteredText(comp);
-		if(text != null && text.endsWith("(")) {
-			text = "";
+		if(text != null) {
+			int charIndex = JavaScriptHelper.findIndexOfFirstOpeningBracket(text);
+			text = text.substring(charIndex, text.length());
 		}
 		return text;
 	}

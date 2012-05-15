@@ -11,6 +11,8 @@
 package org.fife.rsta.ac.js.ast;
 
 import org.fife.rsta.ac.js.SourceCompletionProvider;
+import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
+import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 import org.mozilla.javascript.ast.AstNode;
 
 

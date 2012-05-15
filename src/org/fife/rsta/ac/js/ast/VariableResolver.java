@@ -13,6 +13,8 @@ package org.fife.rsta.ac.js.ast;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
+
 
 /**
  * Cache Local and System scope variables

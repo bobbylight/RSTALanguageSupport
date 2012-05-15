@@ -10,7 +10,11 @@ import org.fife.rsta.ac.js.Logger;
 import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.rsta.ac.js.ast.CodeBlock;
 import org.fife.rsta.ac.js.ast.JavaScriptVariableDeclaration;
+import org.fife.rsta.ac.js.ast.type.ArrayTypeDeclaration;
+import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
+import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 import org.fife.rsta.ac.js.completion.JavaScriptInScriptFunctionCompletion;
+import org.fife.rsta.ac.js.resolver.JavaScriptResolver;
 import org.fife.ui.autocomplete.ParameterizedCompletion.Parameter;
 import org.mozilla.javascript.Node;
 import org.mozilla.javascript.Token;
@@ -409,28 +413,27 @@ public class JavaScriptAstParser extends JavaScriptParser {
 		else if (child instanceof ForInLoop) {
 			ForInLoop loop = (ForInLoop) child;
 			offset = loop.getAbsolutePosition() + loop.getLength();
-			if (loop.isForEach()) {
-				AstNode iteratedObject = loop.getIteratedObject();
-				AstNode iterator = loop.getIterator();
-				if (iterator != null) {
-					if (iterator.getType() == Token.VAR) // expected
+			AstNode iteratedObject = loop.getIteratedObject();
+			AstNode iterator = loop.getIterator();
+			if (iterator != null) {
+				if (iterator.getType() == Token.VAR) // expected
+				{
+					VariableDeclaration vd = (VariableDeclaration) iterator;
+					List variables = vd.getVariables();
+					if (variables.size() == 1) // expected
 					{
-						VariableDeclaration vd = (VariableDeclaration) iterator;
-						List variables = vd.getVariables();
-						if (variables.size() == 1) // expected
-						{
-							VariableInitializer vi = (VariableInitializer) variables
-									.get(0);
+						VariableInitializer vi = (VariableInitializer) variables
+								.get(0);
+						if (loop.isForEach()) {
 							extractVariableForForEach(vi, block, offset,
+									iteratedObject);
+						}
+						else {
+							extractVariableForForIn(vi, block, offset,
 									iteratedObject);
 						}
 					}
 				}
-			}
-			else {
-				// addCompletions(loop.getIterator(), set, entered, block,
-				// offset);
-				// TODO not sure what to do about For in without each at present
 			}
 			addCodeBlock(loop.getBody(), set, entered, block, offset);
 		}
@@ -478,6 +481,16 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	}
 
 
+	/**
+	 * Extract variable for each in loop. If the iteratedObject is an Array,
+	 * then resolve the variable to the array type otherwise set to iterator
+	 * object type
+	 * 
+	 * @param initializer
+	 * @param block
+	 * @param offset
+	 * @param iteratedObject
+	 */
 	private void extractVariableForForEach(VariableInitializer initializer,
 			CodeBlock block, int offset, AstNode iteratedObject) {
 		AstNode target = initializer.getTarget();
@@ -488,11 +501,75 @@ public class JavaScriptAstParser extends JavaScriptParser {
 					&& iteratedObject != null
 					&& JavaScriptHelper.canResolveVariable(target,
 							iteratedObject)) {
-				dec.setTypeDeclaration(iteratedObject);
+
+				// resolve the iterated object
+				JavaScriptResolver resolver = provider.getJavaScriptEngine()
+						.getJavaScriptResolver(provider);
+				if (resolver != null) {
+					TypeDeclaration iteratorDec = resolver
+							.resolveNode(iteratedObject);
+					if (iteratorDec instanceof ArrayTypeDeclaration) {
+						// set type to array type dec
+						dec
+								.setTypeDeclaration(((ArrayTypeDeclaration) iteratorDec)
+										.getArrayType());
+					}
+					else {
+						dec.setTypeDeclaration(iteratorDec);
+					}
+
+				}
+
 				if (canAddVariable(block)) {
 					provider.getVariableResolver().addLocalVariable(dec);
 				}
+			}
+		}
+	}
 
+
+	/**
+	 * Extract variable for in loop. If the iteratedObject is an Array, then
+	 * assume the variable to be a number otherwise do not attempt to resolve
+	 * 
+	 * @param initializer
+	 * @param block
+	 * @param offset
+	 * @param iteratedObject
+	 */
+	private void extractVariableForForIn(VariableInitializer initializer,
+			CodeBlock block, int offset, AstNode iteratedObject) {
+		AstNode target = initializer.getTarget();
+		if (target != null) {
+			JavaScriptVariableDeclaration dec = extractVariableFromNode(target,
+					block, offset);
+			if (dec != null
+					&& iteratedObject != null
+					&& JavaScriptHelper.canResolveVariable(target,
+							iteratedObject)) {
+
+				// resolve the iterated object
+				JavaScriptResolver resolver = provider.getJavaScriptEngine()
+						.getJavaScriptResolver(provider);
+				if (resolver != null) {
+					TypeDeclaration iteratorDec = resolver
+							.resolveNode(iteratedObject);
+					if (iteratorDec instanceof ArrayTypeDeclaration) {
+						// always assume a number for arrays
+						dec.setTypeDeclaration(TypeDeclarationFactory
+								.Instance().getTypeDeclaration(
+										TypeDeclarationFactory.ECMA_NUMBER));
+					}
+					else {
+						dec.setTypeDeclaration(TypeDeclarationFactory
+								.getDefaultTypeDeclaration());
+					}
+
+				}
+
+				if (canAddVariable(block)) {
+					provider.getVariableResolver().addLocalVariable(dec);
+				}
 			}
 		}
 	}
@@ -539,14 +616,17 @@ public class JavaScriptAstParser extends JavaScriptParser {
 		}
 		return dec;
 	}
-	
+
+
 	public SourceCompletionProvider getProvider() {
 		return provider;
 	}
-	
+
+
 	public int getDot() {
 		return dot;
 	}
+
 
 	public boolean isPreProcessingMode() {
 		return preProcessingMode;

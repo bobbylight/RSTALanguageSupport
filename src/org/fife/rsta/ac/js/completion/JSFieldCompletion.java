@@ -8,7 +8,7 @@ import org.fife.rsta.ac.java.classreader.FieldInfo;
 import org.fife.rsta.ac.java.rjc.ast.Field;
 import org.fife.rsta.ac.js.IconFactory;
 import org.fife.rsta.ac.js.JavaScriptHelper;
-import org.fife.rsta.ac.js.ast.TypeDeclarationFactory;
+import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.VariableCompletion;
 
@@ -75,8 +75,8 @@ public class JSFieldCompletion extends VariableCompletion implements
 
 
 	public String getType(boolean qualified) {
-		return TypeDeclarationFactory.lookupJSType(fieldData.getType(true),
-				qualified);
+		return fieldData.getType(true); /*TypeDeclarationFactory.lookupJSType(fieldData.getType(true),
+				qualified);*/
 	}
 
 }

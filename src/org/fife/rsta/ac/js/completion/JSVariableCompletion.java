@@ -16,7 +16,7 @@ import javax.swing.text.JTextComponent;
 import org.fife.rsta.ac.js.IconFactory;
 import org.fife.rsta.ac.js.JavaScriptHelper;
 import org.fife.rsta.ac.js.ast.JavaScriptVariableDeclaration;
-import org.fife.rsta.ac.js.ast.TypeDeclarationFactory;
+import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.VariableCompletion;
 

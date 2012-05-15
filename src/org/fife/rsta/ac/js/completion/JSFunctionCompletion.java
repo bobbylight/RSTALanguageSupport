@@ -21,7 +21,7 @@ import org.fife.rsta.ac.java.classreader.MethodInfo;
 import org.fife.rsta.ac.java.rjc.ast.Method;
 import org.fife.rsta.ac.js.IconFactory;
 import org.fife.rsta.ac.js.JavaScriptHelper;
-import org.fife.rsta.ac.js.ast.TypeDeclarationFactory;
+import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.FunctionCompletion;
@@ -237,11 +237,11 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 
 
 	public String getType(boolean qualified) {
-		return TypeDeclarationFactory.lookupJSType(methodData
-				.getType(qualified), qualified);
+		return methodData.getType(true);/*TypeDeclarationFactory.lookupJSType(methodData
+				.getType(qualified), qualified);*/
 	}
-
-
+	
+	
 	public Icon getIcon() {
 		return methodData.isStatic() ? IconFactory.getIcon(IconFactory.PUBLIC_STATIC_FUNCTION_ICON) : IconFactory.getIcon(IconFactory.DEFAULT_FUNCTION_ICON);
 	}

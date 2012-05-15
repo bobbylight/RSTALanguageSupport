@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import org.fife.rsta.ac.js.ast.TypeDeclaration;
+import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
 import org.fife.rsta.ac.js.completion.JSCompletion;
 
 

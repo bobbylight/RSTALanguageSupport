@@ -8,7 +8,7 @@ import org.fife.rsta.ac.java.classreader.MethodInfo;
 import org.fife.rsta.ac.java.rjc.ast.Method;
 import org.fife.rsta.ac.js.IconFactory;
 import org.fife.rsta.ac.js.JavaScriptHelper;
-import org.fife.rsta.ac.js.ast.TypeDeclarationFactory;
+import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.VariableCompletion;
 
@@ -54,7 +54,6 @@ public class JSBeanCompletion extends VariableCompletion implements
 		return temp;
 	}
 
-
 	public String getType() {
 		String value = getType(true);
 		return TypeDeclarationFactory.lookupJSType(value, false);
@@ -62,8 +61,7 @@ public class JSBeanCompletion extends VariableCompletion implements
 
 
 	public String getType(boolean qualified) {
-		return TypeDeclarationFactory.lookupJSType(methodData
-				.getType(qualified), qualified);
+		return methodData.getType(qualified);
 	}
 
 

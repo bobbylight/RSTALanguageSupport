@@ -3,7 +3,7 @@ package org.fife.rsta.ac.js.resolver;
 import org.fife.rsta.ac.java.classreader.ClassFile;
 import org.fife.rsta.ac.js.JavaScriptHelper;
 import org.fife.rsta.ac.js.SourceCompletionProvider;
-import org.fife.rsta.ac.js.ast.TypeDeclaration;
+import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
 import org.mozilla.javascript.Token;
 import org.mozilla.javascript.ast.AstNode;
 

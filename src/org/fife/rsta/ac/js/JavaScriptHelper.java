@@ -11,16 +11,22 @@
 package org.fife.rsta.ac.js;
 
 import java.io.StringReader;
+import java.util.Iterator;
 
-import org.fife.rsta.ac.js.ast.TypeDeclaration;
-import org.fife.rsta.ac.js.ast.TypeDeclarationFactory;
+import org.fife.rsta.ac.js.ast.type.ArrayTypeDeclaration;
+import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
+import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
+import org.fife.rsta.ac.js.resolver.JavaScriptCompletionResolver;
+import org.fife.rsta.ac.js.resolver.JavaScriptResolver;
 import org.mozilla.javascript.CompilerEnvirons;
 import org.mozilla.javascript.ErrorReporter;
 import org.mozilla.javascript.EvaluatorException;
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.Token;
+import org.mozilla.javascript.ast.ArrayLiteral;
 import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.AstRoot;
+import org.mozilla.javascript.ast.ElementGet;
 import org.mozilla.javascript.ast.FunctionCall;
 import org.mozilla.javascript.ast.InfixExpression;
 import org.mozilla.javascript.ast.Name;
@@ -174,7 +180,14 @@ public class JavaScriptHelper {
 				case Token.FALSE:
 					return getTypeDeclaration(TypeDeclarationFactory.ECMA_BOOLEAN);
 				case Token.ARRAYLIT: //TODO need to store the Array Objects onto the variable so they can be resolved in the future
-					return getTypeDeclaration(TypeDeclarationFactory.ECMA_ARRAY);
+					return createArrayType(typeNode, provider); //getTypeDeclaration(TypeDeclarationFactory.ECMA_ARRAY);
+				case Token.GETELEM: {
+					TypeDeclaration dec = findGetElementType(typeNode, provider);
+					if(dec != null) {
+						return dec;
+					}
+					break;
+				}
 
 			}
 
@@ -187,6 +200,81 @@ public class JavaScriptHelper {
 		}
 		return null;
 
+	}
+	
+	/**
+	 * Check the Get Element and extract the Array type from the variable
+	 * e.g
+	 * var a = [1, 2, 3];
+	 * var b = a[1]; //b resolves to Number 
+	 * @param node
+	 * @param provider
+	 * @return
+	 */
+	private static TypeDeclaration findGetElementType(AstNode node, SourceCompletionProvider provider)
+	{
+		ElementGet getElement = (ElementGet) node;
+		//get target
+		AstNode target = getElement.getTarget();
+		if(target != null) {
+			JavaScriptCompletionResolver resolver = new JavaScriptCompletionResolver(provider);
+			TypeDeclaration typeDec = resolver.resolveNode(target);
+			if(typeDec != null) {
+				if(typeDec instanceof ArrayTypeDeclaration) {
+					return ((ArrayTypeDeclaration) typeDec).getArrayType();
+				}
+			}
+		}
+		return  null;
+	}
+	
+	/**
+	 * Create array type from AstNode and try to determine the array type
+	 * @param typeNode
+	 * @param provider
+	 * @return
+	 */
+	private static TypeDeclaration createArrayType(AstNode typeNode, SourceCompletionProvider provider)
+	{
+		TypeDeclaration array = getTypeDeclaration(TypeDeclarationFactory.ECMA_ARRAY);
+		if(array != null) {
+			//create a new ArrayTypeDeclaration
+			ArrayTypeDeclaration arrayDec = new ArrayTypeDeclaration(array.getPackageName(), array.getAPITypeName(), array.getJSName());
+			ArrayLiteral arrayLit = (ArrayLiteral) typeNode;
+			//iterate through array and resolve the underlying types
+			arrayDec.setArrayType(findArrayType(arrayLit, provider));
+			return arrayDec;
+		}
+		else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Find the array type from ArrayLiteral. Iterates through elements and checks all the types are the same
+	 * @param arrayLit
+	 * @param provider
+	 * @return TypeDeclaration if all elements are of the same type else TypeDeclarationFactory.getDefaultTypeDeclaration();
+	 */
+	private static TypeDeclaration findArrayType(ArrayLiteral arrayLit, SourceCompletionProvider provider) {
+		JavaScriptResolver resolver = provider.getJavaScriptEngine().getJavaScriptResolver(provider);
+		TypeDeclaration dec = null;
+		boolean first = true;
+		for(Iterator i = arrayLit.getElements().iterator(); i.hasNext();) {
+			AstNode element = (AstNode) i.next();
+			TypeDeclaration elementType = resolver.resolveNode(element);
+			if(first) {
+				dec = elementType;
+				first = false;
+			}
+			else {
+				if(elementType != null && !elementType.equals(dec)) {
+					dec = TypeDeclarationFactory.getDefaultTypeDeclaration();
+					break;
+				}
+			}
+		}
+		return dec != null ? dec : TypeDeclarationFactory.getDefaultTypeDeclaration();
 	}
 
 
@@ -310,8 +398,8 @@ public class JavaScriptHelper {
 		}
 		return 0;
 	}
-
-
+	
+	
 	/**
 	 * Returns the node name from 'Token.NEW' AstNode e.g new Object --> Object
 	 * new Date --> Date etc..
