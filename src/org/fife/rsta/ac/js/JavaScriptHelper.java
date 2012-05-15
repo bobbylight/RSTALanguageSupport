@@ -399,6 +399,29 @@ public class JavaScriptHelper {
 		return 0;
 	}
 	
+	public static int findIndexOfFirstOpeningSquareBracket(String text) {
+		int index = 0;
+		if (text != null && text.length() > 0) {
+			char[] chars = text.toCharArray();
+			for (int i = chars.length - 1; i >= 0; i--) {
+				switch (chars[i]) {
+					case '[':
+						index--;
+						break;
+					case ']':
+						index++;
+						break;
+				}
+				if (index == -1)
+					return i + 1; // index + 1 to remove the last (
+			}
+		}
+		else {
+			return 0;
+		}
+		return 0;
+	}
+	
 	
 	/**
 	 * Returns the node name from 'Token.NEW' AstNode e.g new Object --> Object

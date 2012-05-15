@@ -65,7 +65,6 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 		String parseText = JavaScriptHelper.removeLastDotFromText(text);
 		
 		int charIndex = JavaScriptHelper.findIndexOfFirstOpeningBracket(parseText);
-		parseText = parseText.substring(charIndex, parseText.length());
 		env.setRecoverFromErrors(true);
 		Parser parser = new Parser(env);
 		StringReader r = new StringReader(parseText);

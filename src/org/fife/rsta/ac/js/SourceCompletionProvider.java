@@ -178,6 +178,8 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 		if(text != null) {
 			int charIndex = JavaScriptHelper.findIndexOfFirstOpeningBracket(text);
 			text = text.substring(charIndex, text.length());
+			int sqIndex = JavaScriptHelper.findIndexOfFirstOpeningSquareBracket(text);
+			text = text.substring(sqIndex).trim();
 		}
 		return text;
 	}
@@ -315,7 +317,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	protected boolean isValidChar(char ch) {
 		return Character.isJavaIdentifierPart(ch) || ch == ',' || ch == '.'
 				|| ch == getParameterListStart() || ch == getParameterListEnd()
-				|| ch == ' ' || ch == '"';
+				|| ch == ' ' || ch == '"' || ch == '[' || ch == ']';
 
 	}
 
