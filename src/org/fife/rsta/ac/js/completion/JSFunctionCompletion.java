@@ -232,13 +232,13 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 
 	public String getType() {
 		String value = getType(true);
-		return TypeDeclarationFactory.lookupJSType(value, false);
+		return TypeDeclarationFactory.convertJavaScriptType(value, false);
 	}
 
 
 	public String getType(boolean qualified) {
-		return methodData.getType(true);/*TypeDeclarationFactory.lookupJSType(methodData
-				.getType(qualified), qualified);*/
+		return TypeDeclarationFactory.convertJavaScriptType(methodData
+				.getType(qualified), qualified);
 	}
 	
 	
@@ -270,7 +270,7 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 
 
 		public String getType() {
-			return showParameterType ? TypeDeclarationFactory.lookupJSType(
+			return showParameterType ? TypeDeclarationFactory.convertJavaScriptType(
 					super.getType(), false) : null;
 		}
 

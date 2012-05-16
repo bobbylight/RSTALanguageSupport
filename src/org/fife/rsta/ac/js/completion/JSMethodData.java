@@ -113,7 +113,7 @@ public class JSMethodData {
 	{
 		if(paramTypes != null && index < paramTypes.length)
 		{
-			return TypeDeclarationFactory.lookupJSType(paramTypes[index], true);
+			return TypeDeclarationFactory.convertJavaScriptType(paramTypes[index], true);
 		}
 		return null;
 	}

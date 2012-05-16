@@ -69,7 +69,7 @@ public class JSFieldCompletion extends VariableCompletion implements
 
 
 	public String getType() {
-		return TypeDeclarationFactory.lookupJSType(fieldData.getType(true),
+		return TypeDeclarationFactory.convertJavaScriptType(fieldData.getType(true),
 				false);
 	}
 

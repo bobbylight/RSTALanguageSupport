@@ -237,14 +237,20 @@ public class TypeDeclarationFactory {
 	 * JavaScript types e.g JSString == String, JSNumber == Number
 	 */
 
-	public static String lookupJSType(String lookupName, boolean qualified) {
+	public static String convertJavaScriptType(String lookupName, boolean qualified) {
 		if (lookupName != null) {
 			if (NULL_TYPE.equals(lookupName)) { // void has no type
 				return null;
 			}
-
-			String lookup = TypeDeclarationFactory.Instance()
-					.getJSTypeDeclarationAsString(lookupName);
+			
+			//remove param descriptor type from type e.g java.util.Iterator<Object> --> java.util.Iterator
+			//as JavaScript does not support this
+			if(lookupName.indexOf('<') > -1) {
+				lookupName = lookupName.substring(0, lookupName.indexOf('<'));
+			}
+			
+			String lookup = !qualified ? TypeDeclarationFactory.Instance()
+					.getJSTypeDeclarationAsString(lookupName) : lookupName;
 			lookupName = lookup != null ? lookup : lookupName;
 			if (!qualified) {
 				if (lookupName != null && lookupName.indexOf(".") > -1) {

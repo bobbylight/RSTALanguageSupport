@@ -55,7 +55,7 @@ public class JSVariableCompletion extends VariableCompletion implements
 	 * @return the type name based on qualified
 	 */
 	public String getType(boolean qualified) {
-		return TypeDeclarationFactory.lookupJSType(dec.getJavaScriptTypeName(),
+		return TypeDeclarationFactory.convertJavaScriptType(dec.getJavaScriptTypeName(),
 				qualified);
 	}
 

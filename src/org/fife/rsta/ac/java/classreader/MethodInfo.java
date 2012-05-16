@@ -271,7 +271,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 		String[] params = null;
 
 		if (signatureAttr!=null) {
-			List paramTypes = signatureAttr.getMethodParamTypes(this, cf);
+			List paramTypes = signatureAttr.getMethodParamTypes(this, cf, false);
 			if (paramTypes!=null) {
 				params = new String[paramTypes.size()];
 				params = (String[])paramTypes.toArray(params);
@@ -438,7 +438,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 */
 	public String getReturnTypeString(boolean fullyQualified) {
 		if (returnType==null) {
-			returnType = getReturnTypeStringFromTypeSignature();
+			returnType = getReturnTypeStringFromTypeSignature(fullyQualified);
 			if (returnType==null) {
 				returnType = getReturnTypeStringFromDescriptor(fullyQualified);
 			}
@@ -509,7 +509,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 
 			// ObjectType
 			case 'L':
-				String clazz = descriptor.substring(1, descriptor.length()-1);
+				String clazz = descriptor.substring(braceCount+1, descriptor.length()-1);
 				clazz = qualified ? clazz.replace('/', '.') : clazz.substring(clazz.lastIndexOf('/')+1);
 				sb.append(clazz);
 				break;
@@ -538,10 +538,10 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 * @return The return type of this method.
 	 * @see #getReturnTypeStringFromDescriptor()
 	 */
-	private String getReturnTypeStringFromTypeSignature() {
+	private String getReturnTypeStringFromTypeSignature(boolean qualified) {
 		String retType = null;
 		if (signatureAttr!=null) {
-			retType = signatureAttr.getMethodReturnType(this, cf);
+			retType = signatureAttr.getMethodReturnType(this, cf, qualified);
 		}
 
 		return retType;

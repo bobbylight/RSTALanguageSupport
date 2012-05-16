@@ -56,12 +56,13 @@ public class JSBeanCompletion extends VariableCompletion implements
 
 	public String getType() {
 		String value = getType(true);
-		return TypeDeclarationFactory.lookupJSType(value, false);
+		return TypeDeclarationFactory.convertJavaScriptType(value, false);
 	}
 
 
 	public String getType(boolean qualified) {
-		return methodData.getType(qualified);
+		return TypeDeclarationFactory.convertJavaScriptType(methodData
+				.getType(qualified), qualified);
 	}
 
 

@@ -104,7 +104,7 @@ public class Signature extends AttributeInfo {
 	}
 
 
-	public List getMethodParamTypes(MethodInfo mi, ClassFile cf) {
+	public List getMethodParamTypes(MethodInfo mi, ClassFile cf, boolean qualified) {
 
 		List paramTypeList = null;
 		String signature = this.signature; // Since we modify it
@@ -130,7 +130,7 @@ public class Signature extends AttributeInfo {
 
 				while (paramDescriptors.length()>0) {
 					parseParamDescriptor(paramDescriptors, cf, additionalTypeArgs,
-							mi, "Error parsing method signature for ", res);
+							mi, "Error parsing method signature for ", res, qualified);
 					paramTypeList.add(res.type);
 					paramDescriptors = paramDescriptors.substring(res.pos);
 				}
@@ -149,7 +149,7 @@ public class Signature extends AttributeInfo {
 	}
 
 
-	public String getMethodReturnType(MethodInfo mi, ClassFile cf) {
+	public String getMethodReturnType(MethodInfo mi, ClassFile cf, boolean qualified) {
 
 		String signature = this.signature; // Since we modify it
 		String sig = null;
@@ -171,7 +171,7 @@ public class Signature extends AttributeInfo {
 					String afterRParen = signature.substring(rparen+1);
 					ParamDescriptorResult res = new ParamDescriptorResult();
 					parseParamDescriptor(afterRParen, cf, additionalTypeArgs, mi,
-							"Can't parse return type from method sig for ", res);
+							"Can't parse return type from method sig for ", res, qualified);
 					sig = res.type;
 				}
 			}
@@ -248,7 +248,7 @@ public class Signature extends AttributeInfo {
 	private ParamDescriptorResult parseParamDescriptor(String str,
 									ClassFile cf, Map additionalTypeArgs,
 									MethodInfo mi, String errorDesc,
-									ParamDescriptorResult res) {
+									ParamDescriptorResult res, boolean qualified) {
 
 		// Can't do lastIndexOf() as there may be > 1 array parameter
 		// in the descriptors.
@@ -311,7 +311,8 @@ public class Signature extends AttributeInfo {
 						// Set "type" to class name, without type params
 						type = str.substring(pos+1, lt); 
 						//type = org.fife.rsta.ac.java.Util.replaceChar(type, '/', '.');
-						type = type.substring(type.lastIndexOf('/')+1);
+						//type = type.substring(type.lastIndexOf('/')+1);
+						type = qualified ? type.replace('/', '.') : type.substring(type.lastIndexOf('/')+1);
 						// Get type parameters
 						String paramDescriptors = str.substring(lt+1, offs-1);
 						ParamDescriptorResult res2 = new ParamDescriptorResult();
@@ -319,7 +320,7 @@ public class Signature extends AttributeInfo {
 						// Recursively parse type parameters of this parameter
 						while (paramDescriptors.length()>0) {
 							parseParamDescriptor(paramDescriptors, cf, additionalTypeArgs,
-									mi, "Error parsing method signature for ", res2);
+									mi, "Error parsing method signature for ", res2, qualified);
 							paramTypeList.add(res2.type);
 							paramDescriptors = paramDescriptors.substring(res2.pos);
 						}
@@ -337,7 +338,8 @@ public class Signature extends AttributeInfo {
 				else {
 					String clazz = str.substring(pos + 1, semicolon);
 					//clazz = org.fife.rsta.ac.java.Util.replaceChar(clazz, '/', '.');
-					clazz = clazz.substring(clazz.lastIndexOf('/')+1);
+					//clazz = clazz.substring(clazz.lastIndexOf('/')+1);
+					clazz = qualified ? clazz.replace('/', '.').substring(1) : clazz.substring(clazz.lastIndexOf('/')+1);
 					type = clazz;
 					pos += semicolon + 1;
 				}
