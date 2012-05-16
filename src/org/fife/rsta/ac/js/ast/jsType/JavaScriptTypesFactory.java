@@ -229,15 +229,14 @@ public abstract class JavaScriptTypesFactory {
 		int access = info.getAccessFlags();
 		accessible = isAccessible(access);
 
-		return (!staticOnly && accessible) || ((staticOnly && info.isStatic()));
+		return (!staticOnly && accessible) || ((staticOnly && info.isStatic() && accessible));
 
 	}
 	
 	private boolean isAccessible(int access)
 	{
 		boolean accessible = false;
-		if (org.fife.rsta.ac.java.classreader.Util.isPublic(access)
-				|| org.fife.rsta.ac.java.classreader.Util.isProtected(access)) {
+		if (org.fife.rsta.ac.java.classreader.Util.isPublic(access)) {
 			accessible = true;
 		}
 		return accessible;
