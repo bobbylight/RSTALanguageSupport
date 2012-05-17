@@ -159,8 +159,7 @@ public abstract class JavaScriptTypesFactory {
 			MethodInfo info = cf.getMethodInfo(i);
 			if (!info.isConstructor() && !SPECIAL_METHOD.equals(info.getName())) {
 				if(isAccessible(info.getAccessFlags()) && ((staticOnly && info.isStatic()) || !staticOnly)) {
-					JSFunctionCompletion completion = new JSFunctionCompletion(
-						provider, info, jarManager, true);
+					JSFunctionCompletion completion = new JSFunctionCompletion(provider, info, true);
 					cachedType.addCompletion(completion);
 				}
 				// check java bean types (get/is methods)
@@ -179,8 +178,7 @@ public abstract class JavaScriptTypesFactory {
 		for (int i = 0; i < fieldCount; i++) {
 			FieldInfo info = cf.getFieldInfo(i);
 			if (isAccessible(info, staticOnly)) {
-				JSFieldCompletion completion = new JSFieldCompletion(provider,
-						info, jarManager);
+				JSFieldCompletion completion = new JSFieldCompletion(provider, info);
 				cachedType.addCompletion(completion);
 			}
 		}

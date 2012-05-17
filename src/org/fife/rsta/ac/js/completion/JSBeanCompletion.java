@@ -88,6 +88,13 @@ public class JSBeanCompletion extends VariableCompletion implements
 	public String getLookupName() {
 		return getName();
 	}
+	
+	
+
+
+	public String getEnclosingClassName(boolean fullyQualified) {
+		return methodData.getEnclosingClassName(fullyQualified);
+	}
 
 
 	private static String convertNameToBean(String name) {

@@ -14,5 +14,13 @@ public interface JSCompletion extends JSCompletionUI {
 	 */
 	String getType(boolean qualified);
 		
+	/**
+	 * Returns the name of the enclosing class.
+	 *
+	 * @param fullyQualified Whether the name returned should be fully
+	 *        qualified.
+	 * @return The class name.
+	 */
+	String getEnclosingClassName(boolean fullyQualified);
 	
 }

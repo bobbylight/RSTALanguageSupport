@@ -16,11 +16,11 @@ import java.util.List;
 import javax.swing.Icon;
 import javax.swing.text.JTextComponent;
 
-import org.fife.rsta.ac.java.JarManager;
 import org.fife.rsta.ac.java.classreader.MethodInfo;
 import org.fife.rsta.ac.java.rjc.ast.Method;
 import org.fife.rsta.ac.js.IconFactory;
 import org.fife.rsta.ac.js.JavaScriptHelper;
+import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
@@ -35,17 +35,16 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 	private String compareString;
 
 
-	public JSFunctionCompletion(CompletionProvider provider, MethodInfo method,
-			JarManager jarManager) {
-		this(provider, method, jarManager, false);
+	public JSFunctionCompletion(CompletionProvider provider, MethodInfo method) {
+		this(provider, method, false);
 	}
 
 
 	public JSFunctionCompletion(CompletionProvider provider,
-			MethodInfo methodInfo, JarManager jarManager,
+			MethodInfo methodInfo,
 			boolean showParameterType) {
 		super(provider, methodInfo.getName(), null);
-		this.methodData = new JSMethodData(methodInfo, jarManager);
+		this.methodData = new JSMethodData(methodInfo, ((SourceCompletionProvider) provider).getJarManager());
 		List params = populateParams(methodData, showParameterType);
 		setParams(params);
 	}
@@ -174,9 +173,17 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 
 
 	private String getMethodSummary() {
+		
+		//String summary = methodData.getSummary(); // Could be just the method name
+
 		Method method = methodData.getMethod();
-		String docComment = method != null ? method.getDocComment() : null;
-		return docComment != null ? docComment : getNameAndParameters();
+		String summary = method != null ? method.getDocComment() : null;
+		// If it's the Javadoc for the method...
+		if (summary!=null && summary.startsWith("/**")) {
+			summary = org.fife.rsta.ac.java.Util.docCommentToHtml(summary);
+		}
+
+		return summary != null ? summary : getNameAndParameters();
 	}
 
 
@@ -249,6 +256,11 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 
 	public int getSortIndex() {
 		return DEFAULT_FUNCTION_INDEX;
+	}
+	
+	
+	public String getEnclosingClassName(boolean fullyQualified) {
+		return methodData.getEnclosingClassName(fullyQualified);
 	}
 
 

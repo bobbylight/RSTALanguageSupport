@@ -3,11 +3,11 @@ package org.fife.rsta.ac.js.completion;
 import javax.swing.Icon;
 import javax.swing.text.JTextComponent;
 
-import org.fife.rsta.ac.java.JarManager;
 import org.fife.rsta.ac.java.classreader.FieldInfo;
 import org.fife.rsta.ac.java.rjc.ast.Field;
 import org.fife.rsta.ac.js.IconFactory;
 import org.fife.rsta.ac.js.JavaScriptHelper;
+import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.VariableCompletion;
@@ -20,10 +20,9 @@ public class JSFieldCompletion extends VariableCompletion implements
 	private Field field;
 
 
-	public JSFieldCompletion(CompletionProvider provider, FieldInfo fieldInfo,
-			JarManager manager) {
+	public JSFieldCompletion(CompletionProvider provider, FieldInfo fieldInfo) {
 		super(provider, fieldInfo.getName(), null);
-		this.fieldData = new JSFieldData(fieldInfo, manager);
+		this.fieldData = new JSFieldData(fieldInfo, ((SourceCompletionProvider) provider).getJarManager());
 		this.field = fieldData.getField();
 	}
 
@@ -49,6 +48,12 @@ public class JSFieldCompletion extends VariableCompletion implements
 
 	public int getSortIndex() {
 		return STATIC_FIELD_INDEX;
+	}
+
+	
+
+	public String getEnclosingClassName(boolean fullyQualified) {
+		return fieldData.getEnclosingClassName(fullyQualified);
 	}
 
 

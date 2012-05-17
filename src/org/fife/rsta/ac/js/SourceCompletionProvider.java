@@ -20,6 +20,7 @@ import java.util.TreeSet;
 import javax.swing.text.JTextComponent;
 
 import org.fife.rsta.ac.java.JarManager;
+import org.fife.rsta.ac.java.buildpath.SourceLocation;
 import org.fife.rsta.ac.js.ast.CodeBlock;
 import org.fife.rsta.ac.js.ast.JavaScriptVariableDeclaration;
 import org.fife.rsta.ac.js.ast.VariableResolver;
@@ -369,6 +370,10 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	public void setJavaScriptEngine(JavaScriptEngine engine)
 	{
 		this.engine = engine;
+	}
+	
+	public SourceLocation  getSourceLocForClass(String className) {
+		return jarManager.getSourceLocForClass(className);
 	}
 	
 	

@@ -249,7 +249,8 @@ public class TypeDeclarationFactory {
 				lookupName = lookupName.substring(0, lookupName.indexOf('<'));
 			}
 			
-			String lookup = TypeDeclarationFactory.Instance().getJSTypeDeclarationAsString(lookupName);
+			String lookup = !qualified ? TypeDeclarationFactory.Instance()
+					.getJSTypeDeclarationAsString(lookupName) : lookupName;
 			
 			lookupName = lookup != null ? lookup : lookupName;
 			if (!qualified) {

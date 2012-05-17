@@ -63,6 +63,13 @@ public class JavaScriptInScriptFunctionCompletion extends FunctionCompletion
 	public TypeDeclaration getTypeDeclaration() {
 		return TypeDeclarationFactory.Instance().getTypeDeclaration(getType(true));
 	}
+	
+	
+
+
+	public String getEnclosingClassName(boolean fullyQualified) {
+		return null;
+	}
 
 
 	public boolean equals(Object obj) {
