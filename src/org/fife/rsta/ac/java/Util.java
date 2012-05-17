@@ -37,7 +37,7 @@ public class Util {
 	 * should be removed if it exists.
 	 */
 	static final Pattern DOC_COMMENT_LINE_HEADER =
-						Pattern.compile("\\s*\\n\\s*\\*[ \t\f]*[/]?");//^\\s*\\*\\s*[/]?");
+						Pattern.compile("\\s*\\n\\s*\\*");//^\\s*\\*\\s*[/]?");
 
 	/**
 	 * Pattern matching a link in a "@link" tag.  This should match the
@@ -372,7 +372,10 @@ System.out.println("Unmatched linkContent: " + linkContent);
 
 	/**
 	 * Converts a Java documentation comment to HTML.
-	 *
+	 * <pre>
+	 * This is a
+	 * pre block
+	 *</pre>
 	 * @param dc The documentation comment.
 	 * @return An HTML version of the comment.
 	 */
@@ -380,6 +383,9 @@ System.out.println("Unmatched linkContent: " + linkContent);
 
 		if (dc==null) {
 			return null;
+		}
+		if (dc.endsWith("*/")) {
+			dc = dc.substring(0, dc.length()-2);
 		}
 
 		// First, strip the line transitions.  These always seem to be stripped
@@ -403,8 +409,10 @@ System.out.println("Unmatched linkContent: " + linkContent);
 				offs++;
 			}
 			if (offs<line.length()) {
-				html.append(line.substring(offs)).append(" ");
+				html.append(line.substring(offs));
 			}
+			boolean inPreBlock = isInPreBlock(line, false);
+			html.append(inPreBlock ? '\n' : ' ');
 
 			// Read all subsequent lines.
 			while ((line=r.readLine())!=null) {
@@ -412,12 +420,14 @@ System.out.println("Unmatched linkContent: " + linkContent);
 				if (tailBuf!=null) {
 					tailBuf.append(line).append(' ');
 				}
-				else if (line.startsWith("@")) {
+				else if (line.trim().startsWith("@")) {
 					tailBuf = new StringBuffer();
 					tailBuf.append(line).append(' ');
 				}
 				else {
-					html.append(line).append(' ');
+					html.append(line);
+					inPreBlock = isInPreBlock(line, inPreBlock);
+					html.append(inPreBlock ? '\n' : ' ');
 				}
 
 			}
@@ -583,6 +593,31 @@ System.out.println("Unmatched linkContent: " + linkContent);
 	 */
 	public static final boolean isFullyQualified(String str) {
 		return str.indexOf('.')>-1;
+	}
+
+
+	/**
+	 * Returns whether this line ends in the middle of a pre-block.
+	 *
+	 * @param line The line's contents.
+	 * @param prevValue Whether this line started in a pre-block.
+	 * @return Whether the line ends in a pre-block.
+	 */
+	private static final boolean isInPreBlock(String line, boolean prevValue) {
+		int lastPre = line.lastIndexOf("pre>");
+		if (lastPre<=0) {
+			return prevValue;
+		}
+		char prevChar = line.charAt(lastPre-1);
+		if (prevChar=='<') {
+			return true;
+		}
+		else if (prevChar=='/' && lastPre>=2) {
+			if (line.charAt(lastPre-2)=='<') {
+				return false;
+			}
+		}
+		return prevValue;
 	}
 
 
