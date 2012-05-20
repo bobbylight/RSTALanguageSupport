@@ -1,16 +1,15 @@
 ***** Code Completion *****
 1. Load less stuff on first scan of ClassFiles, lazy-load rest of stuff as
-   needed (for member completion info, etc.).
+   needed (for member completion info, etc.). -- not possible/practical due to
+   class file format?
 2. Make "prefix" go more than "1 level deep" when getting completions at caret
    position.
 3. Improve performance of first ctrl+space - have a "pre-load package list?"
-4. Make pre-loading everything an option (vs. old behavior of just imports).
-5. Allow options to be added to text areas - Ctrl+Shift+O => Go to member dialog,
-   like Eclipse's Ctrl+O.  Easy to add for JavaLanguageSupport - functionality
-   is already there!
-6. Add support for parsing Java 7 language features.  Only problematic ones for
-   us are AutoCloseable support and multi-catch?
-
+4. Make pre-loading everything an option (vs. old behavior of just imports)
+   instead of the only choice.
+5. Java 7: add parsing support for auto-closable try-blocks.
+6. Javadoc links: unqualified @see/@link tags should scan imports to identify
+   the actual class being linked to.
 
 ***** rjc (parsing) *****
 BUGS:
