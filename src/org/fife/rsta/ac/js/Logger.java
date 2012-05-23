@@ -5,6 +5,11 @@ public class Logger {
 
 	private static boolean DEBUG = false;
 	
+	static
+	{
+		DEBUG = Boolean.valueOf(System.getProperty("javascript.debug")).booleanValue(); 
+	}
+	
 	/**
 	 * TODO change logging to Log4J?
 	 * Log message to console
