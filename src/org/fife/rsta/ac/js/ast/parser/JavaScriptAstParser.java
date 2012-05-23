@@ -350,7 +350,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 		FunctionNode fn = (FunctionNode) child;
 		String jsdoc = fn.getJsDoc();
 		JavaScriptInScriptFunctionCompletion fc = new JavaScriptInScriptFunctionCompletion(
-				provider, fn.getName(), null);
+				provider, fn.getName(), null); //TODO work out return type
 		fc.setShortDescription(jsdoc);
 		offset = fn.getAbsolutePosition() + fn.getLength();
 		if (fn.getParamCount() > 0) {
@@ -609,7 +609,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 					block.addVariable(dec);
 					break;
 				default:
-					System.out.println("... Unknown var target type: "
+					Logger.log("... Unknown var target type: "
 							+ node.getClass());
 					break;
 			}
