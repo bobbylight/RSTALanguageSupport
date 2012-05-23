@@ -182,13 +182,6 @@ public class TypeDeclarationFactory {
 		if (typeDeclation == null) {
 			typeDeclation = getJSType(name);
 		}
-		/*if (typeDeclation == null) {
-			name = getJSTypeName(name);
-			if (name != null) {
-				typeDeclation = (TypeDeclaration) typeDeclarations.get(name);
-			}
-		}*/
-		
 		return typeDeclation;
 	}
 	
