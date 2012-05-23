@@ -46,7 +46,7 @@ public class TypeDeclaration {
 
 
 	public String getQualifiedName() {
-		return pkg != null ? (pkg + '.' + apiName) : apiName;
+		return pkg != null && pkg.length() > 0 ? (pkg + '.' + apiName) : apiName;
 	}
 	
 	public boolean isStaticsOnly() {
