@@ -7,5 +7,5 @@ JSFunction
 JSMath
 JSNumber
 JSObject
-JSRegexp
+JSRegExp
 JSString
