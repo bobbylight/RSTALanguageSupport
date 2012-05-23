@@ -210,6 +210,11 @@ OUTER:
 					break OUTER;
 
 				case KEYWORD_TRY:
+					t = s.yyPeekNonNull(SEPARATOR_LBRACE, SEPARATOR_LPAREN, "'{' or '(' expected");
+					if (t.getType()==SEPARATOR_LPAREN) { // Auto-closeable stuff
+						// TODO: Get block-scoped var(s)
+						s.eatParenPairs();
+					}
 					s.yyPeekNonNull(SEPARATOR_LBRACE, "'{' expected");
 					CodeBlock tryBlock = _getBlock(cu, block, m, s, isStatic, depth+1);
 					block.add(tryBlock);
