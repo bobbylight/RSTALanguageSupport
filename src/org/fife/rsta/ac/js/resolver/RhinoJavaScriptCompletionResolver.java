@@ -1,11 +1,17 @@
 package org.fife.rsta.ac.js.resolver;
 
+import java.io.IOException;
+
 import org.fife.rsta.ac.java.classreader.ClassFile;
 import org.fife.rsta.ac.js.JavaScriptHelper;
+import org.fife.rsta.ac.js.Logger;
 import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
+import org.fife.rsta.ac.js.completion.JSMethodData;
 import org.mozilla.javascript.Token;
 import org.mozilla.javascript.ast.AstNode;
+import org.mozilla.javascript.ast.FunctionCall;
+import org.mozilla.javascript.ast.PropertyGet;
 
 
 public class RhinoJavaScriptCompletionResolver extends
@@ -32,6 +38,60 @@ public class RhinoJavaScriptCompletionResolver extends
 		}
 
 		return dec;
+	}
+	
+	
+
+
+	public String getLookupText(JSMethodData methodData, String name) {
+		StringBuffer sb = new StringBuffer(name);
+		sb.append('(');
+		int count = methodData.getParameterCount();
+		String[] parameterTypes = methodData.getMethodInfo()
+				.getParameterTypes();
+		for (int i = 0; i < count; i++) {
+			String paramName = methodData.getParameterType(parameterTypes, i);
+			sb.append(paramName);
+			if (i < count - 1) {
+				sb.append(",");
+			}
+		}
+		sb.append(')');
+		return sb.toString();
+	}
+	
+	
+
+
+	public String getFunctionNameLookup(FunctionCall call, SourceCompletionProvider provider) {
+		if (call != null) {
+			StringBuffer sb = new StringBuffer();
+			if (call.getTarget() instanceof PropertyGet) {
+				PropertyGet get = (PropertyGet) call.getTarget();
+				sb.append(get.getProperty().getIdentifier());
+			}
+			sb.append("(");
+			int count = call.getArguments().size();
+			
+			for (int i = 0; i < count; i++) {
+				AstNode paramNode = (AstNode) call.getArguments().get(i);
+				JavaScriptResolver resolver = provider.getJavaScriptEngine().getJavaScriptResolver(provider);
+				Logger.log("PARAM: " + paramNode.toSource());
+				try
+				{
+					TypeDeclaration type = resolver.resolveParamNode(paramNode.toSource());
+					String resolved = type != null ? type.getQualifiedName() : "any";
+					sb.append(resolved);
+					if (i < count - 1) {
+						sb.append(",");
+					}
+				}
+				catch(IOException io){io.printStackTrace();}
+			}
+			sb.append(")");
+			return sb.toString();
+		}
+		return null;
 	}
 
 

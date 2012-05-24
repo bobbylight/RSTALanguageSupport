@@ -125,4 +125,8 @@ public class RhinoJavaScriptTypesFactory extends JavaScriptTypesFactory {
 		}
 		return file;
 	}
+	
+	public JavaScriptType makeJavaScriptType(TypeDeclaration type) {
+		return new JSR233Type(type);
+	}
 }

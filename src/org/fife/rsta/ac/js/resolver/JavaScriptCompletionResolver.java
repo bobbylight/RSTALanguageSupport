@@ -15,6 +15,7 @@ import org.fife.rsta.ac.js.ast.jsType.JavaScriptType;
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
 import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 import org.fife.rsta.ac.js.completion.JSCompletion;
+import org.fife.rsta.ac.js.completion.JSMethodData;
 import org.mozilla.javascript.CompilerEnvirons;
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.Token;
@@ -24,6 +25,7 @@ import org.mozilla.javascript.ast.ExpressionStatement;
 import org.mozilla.javascript.ast.FunctionCall;
 import org.mozilla.javascript.ast.Name;
 import org.mozilla.javascript.ast.NodeVisitor;
+import org.mozilla.javascript.ast.PropertyGet;
 
 
 /**
@@ -52,6 +54,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	}
 
 
+	
 	/**
 	 * Compiles Text and resolves the type.
 	 * e.g 
@@ -72,9 +75,29 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 		CompilerNodeVisitor visitor = new CompilerNodeVisitor(charIndex == 0);
 		root.visitAll(visitor);
 		return lastJavaScriptType;
-
 	}
 
+	/**
+	 * Resolve node type to TypeDeclaration. Called instead of #compileText(String text) when document is already parsed
+	 * @param node AstNode to resolve
+	 * @return TypeDeclaration for node or null if not found.
+	 */
+	public TypeDeclaration resolveParamNode(String text) throws IOException {
+		CompilerEnvirons env = JavaScriptParser.createCompilerEnvironment(new JavaScriptParser.JSErrorReporter(), provider.getLanguageSupport());
+		
+		
+		int charIndex = JavaScriptHelper.findIndexOfFirstOpeningBracket(text);
+		env.setRecoverFromErrors(true);
+		Parser parser = new Parser(env);
+		StringReader r = new StringReader(text);
+		AstRoot root = parser.parse(r, null, 0);
+		CompilerNodeVisitor visitor = new CompilerNodeVisitor(charIndex == 0);
+		root.visitAll(visitor);
+		
+		return lastJavaScriptType != null ? lastJavaScriptType.getType()
+				: TypeDeclarationFactory.getDefaultTypeDeclaration();
+	}
+	
 	/**
 	 * Resolve node type to TypeDeclaration. Called instead of #compileText(String text) when document is already parsed
 	 * @param node AstNode to resolve
@@ -146,8 +169,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 					if (jsType == null) {
 						// lookup name through the functions of
 						// lastJavaScriptType
-						jsType = lookupFunctionCompletion(node,
-								lastJavaScriptType);
+						jsType = lookupFunctionCompletion(node, lastJavaScriptType);
 					}
 					lastJavaScriptType = jsType;
 				}
@@ -279,7 +301,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 		JavaScriptType javaScriptType = null;
 		if (lastJavaScriptType != null) {
 
-			String lookupText = JavaScriptHelper.getFunctionNameLookup(node);
+			String lookupText = JavaScriptHelper.getFunctionNameLookup(node, provider);
 			javaScriptType = lookupJavaScriptType(lastJavaScriptType,
 					lookupText);
 
@@ -287,6 +309,47 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 		// return last type
 		return javaScriptType;
 	}
+	
+	
+
+
+	public String getLookupText(JSMethodData method, String name) {
+		StringBuffer sb = new StringBuffer(name);
+		sb.append('(');
+		int count = method.getParameterCount();
+		for (int i = 0; i < count; i++) {
+			sb.append("p");
+			if (i < count - 1) {
+				sb.append(",");
+			}
+		}
+		sb.append(')');
+		return sb.toString();
+	}
+
+
+	public String getFunctionNameLookup(FunctionCall call,
+			SourceCompletionProvider provider) {
+		if (call != null) {
+			StringBuffer sb = new StringBuffer();
+			if (call.getTarget() instanceof PropertyGet) {
+				PropertyGet get = (PropertyGet) call.getTarget();
+				sb.append(get.getProperty().getIdentifier());
+			}
+			sb.append("(");
+			int count = call.getArguments().size();
+			for (int i = 0; i < count; i++) {
+				sb.append("p");
+				if (i < count - 1) {
+					sb.append(",");
+				}
+			}
+			sb.append(")");
+			return sb.toString();
+		}
+		return null;
+	}
+
 
 
 	private JavaScriptType lookupJavaScriptType(
@@ -295,7 +358,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 		if (lookupText != null && !lookupText.equals(lastLookupName)) {
 			// look up JSCompletion
 			JSCompletion completion = lastJavaScriptType
-					.getCompletion(lookupText);
+					.getCompletion(lookupText, provider);
 			if (completion != null) {
 				String type = completion.getType(true);
 				if (type != null) {

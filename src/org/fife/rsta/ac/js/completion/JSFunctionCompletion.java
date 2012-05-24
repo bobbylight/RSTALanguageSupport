@@ -41,10 +41,10 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 
 
 	public JSFunctionCompletion(CompletionProvider provider,
-			MethodInfo methodInfo,
-			boolean showParameterType) {
+			MethodInfo methodInfo, boolean showParameterType) {
 		super(provider, methodInfo.getName(), null);
-		this.methodData = new JSMethodData(methodInfo, ((SourceCompletionProvider) provider).getJarManager());
+		this.methodData = new JSMethodData(methodInfo,
+				((SourceCompletionProvider) provider).getJarManager());
 		List params = populateParams(methodData, showParameterType);
 		setParams(params);
 	}
@@ -130,21 +130,8 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 		 */
 
 		if (compareString == null) {
-			StringBuffer sb = new StringBuffer(getName());
-			// NOTE: This will fail if a method has > 99 parameters (!)
-			int paramCount = getParamCount();
-			if (paramCount < 10) {
-				sb.append('0');
-			}
-			sb.append(paramCount);
-			for (int i = 0; i < paramCount; i++) {
-				String type = getParam(i).getType();
-				sb.append(type);
-				if (i < paramCount - 1) {
-					sb.append(',');
-				}
-			}
-			compareString = sb.toString();
+
+			compareString = getLookupName();
 		}
 
 		return compareString;
@@ -153,17 +140,8 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 
 
 	public String getLookupName() {
-		StringBuffer sb = new StringBuffer(getName());
-		sb.append('(');
-		int count = methodData.getParameterCount();
-		for (int i = 0; i < count; i++) {
-			sb.append("p");
-			if (i < count - 1) {
-				sb.append(",");
-			}
-		}
-		sb.append(')');
-		return sb.toString();
+		SourceCompletionProvider provider = (SourceCompletionProvider) getProvider();
+		return provider.getJavaScriptEngine().getJavaScriptResolver(provider).getLookupText(methodData, getName());
 	}
 
 
@@ -173,13 +151,14 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 
 
 	private String getMethodSummary() {
-		
-		//String summary = methodData.getSummary(); // Could be just the method name
+
+		// String summary = methodData.getSummary(); // Could be just the method
+		// name
 
 		Method method = methodData.getMethod();
 		String summary = method != null ? method.getDocComment() : null;
 		// If it's the Javadoc for the method...
-		if (summary!=null && summary.startsWith("/**")) {
+		if (summary != null && summary.startsWith("/**")) {
 			summary = org.fife.rsta.ac.java.Util.docCommentToHtml(summary);
 		}
 
@@ -247,18 +226,20 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 		return TypeDeclarationFactory.convertJavaScriptType(methodData
 				.getType(qualified), qualified);
 	}
-	
-	
+
+
 	public Icon getIcon() {
-		return methodData.isStatic() ? IconFactory.getIcon(IconFactory.PUBLIC_STATIC_FUNCTION_ICON) : IconFactory.getIcon(IconFactory.DEFAULT_FUNCTION_ICON);
+		return methodData.isStatic() ? IconFactory
+				.getIcon(IconFactory.PUBLIC_STATIC_FUNCTION_ICON) : IconFactory
+				.getIcon(IconFactory.DEFAULT_FUNCTION_ICON);
 	}
 
 
 	public int getSortIndex() {
 		return DEFAULT_FUNCTION_INDEX;
 	}
-	
-	
+
+
 	public String getEnclosingClassName(boolean fullyQualified) {
 		return methodData.getEnclosingClassName(fullyQualified);
 	}
@@ -282,8 +263,8 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 
 
 		public String getType() {
-			return showParameterType ? TypeDeclarationFactory.convertJavaScriptType(
-					super.getType(), false) : null;
+			return showParameterType ? TypeDeclarationFactory
+					.convertJavaScriptType(super.getType(), false) : null;
 		}
 
 	}

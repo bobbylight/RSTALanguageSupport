@@ -32,7 +32,6 @@ import org.mozilla.javascript.ast.InfixExpression;
 import org.mozilla.javascript.ast.Name;
 import org.mozilla.javascript.ast.NewExpression;
 import org.mozilla.javascript.ast.NodeVisitor;
-import org.mozilla.javascript.ast.PropertyGet;
 
 
 public class JavaScriptHelper {
@@ -110,26 +109,9 @@ public class JavaScriptHelper {
 	 * @return function lookup name from it's AstNode. i.e concat function name
 	 *         and parameters. If no function is found, then return null
 	 */
-	public static String getFunctionNameLookup(AstNode node) {
+	public static String getFunctionNameLookup(AstNode node, SourceCompletionProvider provider) {
 		FunctionCall call = findFunctionCallFromNode(node);
-		if (call != null) {
-			StringBuffer sb = new StringBuffer();
-			if (call.getTarget() instanceof PropertyGet) {
-				PropertyGet get = (PropertyGet) call.getTarget();
-				sb.append(get.getProperty().getIdentifier());
-			}
-			sb.append("(");
-			int count = call.getArguments().size();
-			for (int i = 0; i < count; i++) {
-				sb.append("p");
-				if (i < count - 1) {
-					sb.append(",");
-				}
-			}
-			sb.append(")");
-			return sb.toString();
-		}
-		return null;
+		return provider.getJavaScriptEngine().getJavaScriptResolver(provider).getFunctionNameLookup(call, provider);
 	}
 
 

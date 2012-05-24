@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
 import org.fife.rsta.ac.js.completion.JSCompletion;
 
@@ -30,15 +31,15 @@ import org.fife.rsta.ac.js.completion.JSCompletion;
 public class JavaScriptType {
 
 	// base type
-	private TypeDeclaration type;
+	protected TypeDeclaration type;
 	// completions for base type String-->JSCompletion
-	private HashMap typeCompletions;
+	protected HashMap typeCompletions;
 
 	// extended cached types
 	private ArrayList extended;
 
 
-	public JavaScriptType(TypeDeclaration type) {
+	protected JavaScriptType(TypeDeclaration type) {
 		this.type = type;
 		typeCompletions = new HashMap();
 		extended = new ArrayList();
@@ -61,8 +62,9 @@ public class JavaScriptType {
 	 * @return JSCompletion using lookup name
 	 * @see JSCompletion
 	 */
-	public JSCompletion getCompletion(String completionLookup) {
-		return getCompletion(this, completionLookup);
+	public JSCompletion getCompletion(String completionLookup,
+			SourceCompletionProvider provider) {
+		return getCompletion(this, completionLookup, provider);
 	}
 
 
@@ -71,7 +73,7 @@ public class JavaScriptType {
 	 * @return JSCompletion using lookup name
 	 * @see JSCompletion
 	 */
-	private JSCompletion _getCompletion(String completionLookup) {
+	protected JSCompletion _getCompletion(String completionLookup, SourceCompletionProvider provider) {
 		return (JSCompletion) typeCompletions.get(completionLookup);
 	}
 
@@ -85,27 +87,20 @@ public class JavaScriptType {
 	 * @see JSCompletion
 	 */
 	private static JSCompletion getCompletion(JavaScriptType cachedType,
-			String completionLookup) {
-		JSCompletion completion = cachedType._getCompletion(completionLookup);
+			String completionLookup, SourceCompletionProvider provider) {
+		JSCompletion completion = cachedType._getCompletion(completionLookup,
+				provider);
 		if (completion == null) {
 			// try the extended types
 			for (Iterator i = cachedType.getExtendedClasses().iterator(); i
 					.hasNext();) {
 				completion = getCompletion((JavaScriptType) i.next(),
-						completionLookup);
+						completionLookup, provider);
 				if (completion != null)
 					break;
 			}
 		}
 		return completion;
-	}
-
-
-	/**
-	 * @return true if completion exists for lookupname
-	 */
-	public boolean containsCompletion(String completionLookup) {
-		return typeCompletions.containsKey(completionLookup);
 	}
 
 
@@ -168,12 +163,11 @@ public class JavaScriptType {
 
 	/**
 	 * Overridden since {@link #equals(Object)} is overridden.
-	 *
+	 * 
 	 * @return The hash code.
 	 */
 	public int hashCode() {
 		return getType().hashCode();
 	}
-
 
 }

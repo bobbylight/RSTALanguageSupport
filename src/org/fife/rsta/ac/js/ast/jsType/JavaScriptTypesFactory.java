@@ -90,7 +90,7 @@ public abstract class JavaScriptTypesFactory {
 		// now try to read the functions from the API
 		ClassFile cf = getClassFile(manager, type);
 
-		JavaScriptType cachedType = new JavaScriptType(type);
+		JavaScriptType cachedType = makeJavaScriptType(type);
 		// cache if required
 		cachedTypes.put(type, cachedType);
 		readClassFile(cachedType, cf, provider, manager, type);
@@ -192,7 +192,7 @@ public abstract class JavaScriptTypesFactory {
 			if (type == null) {
 				type = createNewTypeDeclaration(superClass, staticOnly);
 			}
-			JavaScriptType extendedType = new JavaScriptType(type);
+			JavaScriptType extendedType = makeJavaScriptType(type);
 			cachedType.addExtension(extendedType);
 			readClassFile(extendedType, superClass, provider, jarManager, type);
 
@@ -241,13 +241,19 @@ public abstract class JavaScriptTypesFactory {
 	}
 
 
-	public TypeDeclaration createNewTypeDeclaration(ClassFile cf, boolean staticOnly) {
+	public TypeDeclaration createNewTypeDeclaration(ClassFile cf, boolean staticOnly)
+	{
+		return createNewTypeDeclaration(cf, staticOnly, true);
+	}
+	
+	public TypeDeclaration createNewTypeDeclaration(ClassFile cf, boolean staticOnly, boolean addToCache) {
 		String className = cf.getClassName(false);
 		String packageName = cf.getPackageName();
 		TypeDeclaration td = new TypeDeclaration(packageName, className, cf
 				.getClassName(true), staticOnly);
 		// now add to types factory
-		TypeDeclarationFactory.Instance().addType(cf.getClassName(true), td);
+		if(addToCache)
+			TypeDeclarationFactory.Instance().addType(cf.getClassName(true), td);
 		return td;
 	}
 
@@ -351,4 +357,9 @@ public abstract class JavaScriptTypesFactory {
 	public void clearCache() {
 		cachedTypes.clear();
 	}
+	
+	public JavaScriptType makeJavaScriptType(TypeDeclaration type) {
+		return new JavaScriptType(type);
+	}
+	
 }
