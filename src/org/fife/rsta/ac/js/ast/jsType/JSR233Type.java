@@ -12,7 +12,7 @@ import org.fife.ui.autocomplete.FunctionCompletion;
 
 public class JSR233Type extends JavaScriptType {
 
-	protected JSR233Type(TypeDeclaration type) {
+	public JSR233Type(TypeDeclaration type) {
 		super(type);
 	}
 

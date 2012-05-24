@@ -39,7 +39,7 @@ public class JavaScriptType {
 	private ArrayList extended;
 
 
-	protected JavaScriptType(TypeDeclaration type) {
+	public JavaScriptType(TypeDeclaration type) {
 		this.type = type;
 		typeCompletions = new HashMap();
 		extended = new ArrayList();
