@@ -12,9 +12,12 @@ import org.fife.ui.autocomplete.FunctionCompletion;
 public class JavaScriptInScriptFunctionCompletion extends FunctionCompletion
 		implements JSCompletion {
 
+	private TypeDeclaration returnType;
+	
 	public JavaScriptInScriptFunctionCompletion(CompletionProvider provider,
-			String name, String returnType) {
-		super(provider, name, returnType);
+			String name, TypeDeclaration returnType) {
+		super(provider, name, null);
+		this.returnType = returnType;
 	}
 
 
@@ -55,18 +58,19 @@ public class JavaScriptInScriptFunctionCompletion extends FunctionCompletion
 	}
 
 
+	public String getType() {
+		String value = getType(true);
+		return TypeDeclarationFactory.convertJavaScriptType(value, false);
+	}
+
+
 	public String getType(boolean qualified) {
-		return getType();
+		String type = returnType != null ? returnType.getQualifiedName() : null;
+		return TypeDeclarationFactory.convertJavaScriptType(type, qualified);
 	}
 	
 	
-	public TypeDeclaration getTypeDeclaration() {
-		return TypeDeclarationFactory.Instance().getTypeDeclaration(getType(true));
-	}
 	
-	
-
-
 	public String getEnclosingClassName(boolean fullyQualified) {
 		return null;
 	}

@@ -30,6 +30,8 @@ import org.mozilla.javascript.ast.FunctionNode;
 import org.mozilla.javascript.ast.IfStatement;
 import org.mozilla.javascript.ast.InfixExpression;
 import org.mozilla.javascript.ast.Name;
+import org.mozilla.javascript.ast.NodeVisitor;
+import org.mozilla.javascript.ast.ReturnStatement;
 import org.mozilla.javascript.ast.SwitchCase;
 import org.mozilla.javascript.ast.SwitchStatement;
 import org.mozilla.javascript.ast.TryStatement;
@@ -349,8 +351,9 @@ public class JavaScriptAstParser extends JavaScriptParser {
 			String entered, int offset) {
 		FunctionNode fn = (FunctionNode) child;
 		String jsdoc = fn.getJsDoc();
+		TypeDeclaration returnType = getFunctionType(fn);
 		JavaScriptInScriptFunctionCompletion fc = new JavaScriptInScriptFunctionCompletion(
-				provider, fn.getName(), null); //TODO work out return type
+				provider, fn.getName(), returnType); 
 		fc.setShortDescription(jsdoc);
 		offset = fn.getAbsolutePosition() + fn.getLength();
 		if (fn.getParamCount() > 0) {
@@ -381,6 +384,12 @@ public class JavaScriptAstParser extends JavaScriptParser {
 		}
 		// get body
 		addCodeBlock(fn.getBody(), set, entered, block, offset);
+	}
+	
+	private TypeDeclaration getFunctionType(FunctionNode fn) {
+		FunctionReturnVisitor visitor = new FunctionReturnVisitor();
+		fn.visit(visitor);
+		return visitor.getCommonReturnType();
 	}
 
 
@@ -630,5 +639,44 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 	public boolean isPreProcessingMode() {
 		return preProcessingMode;
+	}
+	
+	private class FunctionReturnVisitor implements NodeVisitor
+	{
+		private ArrayList returnStatements = new ArrayList();
+		public boolean visit(AstNode node) {
+			switch(node.getType()) {
+				case Token.RETURN : returnStatements.add(node);
+				break;
+			}
+			return true;
+		}
+		
+		/**
+		 * Iterate through all the return types and check they are all the same, otherwise 
+		 * return no type
+		 * @return
+		 */
+		public TypeDeclaration getCommonReturnType() {
+			TypeDeclaration commonType = null;
+			for(Iterator i = returnStatements.iterator(); i.hasNext();) {
+				ReturnStatement rs = (ReturnStatement) i.next();
+				AstNode returnValue = rs.getReturnValue();
+				//resolve the node
+				TypeDeclaration type = provider.getJavaScriptEngine().getJavaScriptResolver(provider).resolveNode(returnValue);
+				if(commonType == null) {
+					commonType = type;
+				}
+				else {
+					if(!commonType.equals(type)) {
+						commonType = TypeDeclarationFactory.getDefaultTypeDeclaration();
+						break; //not matching
+					}
+						
+				}
+			}
+			return commonType;
+		}
+		
 	}
 }
