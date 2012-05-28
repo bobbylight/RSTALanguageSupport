@@ -41,8 +41,8 @@ import org.mozilla.javascript.ast.PropertyGet;
 public class JavaScriptCompletionResolver extends JavaScriptResolver {
 
 	
-	private JavaScriptType lastJavaScriptType;
-	private String lastLookupName = null;
+	protected JavaScriptType lastJavaScriptType;
+	protected String lastLookupName = null;
 
 
 	/**
