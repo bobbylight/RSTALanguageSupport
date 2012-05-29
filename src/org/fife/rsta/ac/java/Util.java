@@ -495,6 +495,9 @@ System.out.println("Unmatched linkContent: " + linkContent);
 				}
 
 			}
+			else {
+				break; // Unclosed javadoc tag - just bail
+			}
 
 		} while ((index=text.indexOf("{@", index))>-1);
 
