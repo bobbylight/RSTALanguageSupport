@@ -55,7 +55,8 @@ public class Util {
 	 * </ul>
 	 */
 	static final Pattern LINK_TAG_MEMBER_PATTERN =
-						Pattern.compile("(?:\\w+\\.)*(?:\\w+)?(?:\\#\\w+(?:\\([^\\)]*\\))?)?");
+		Pattern.compile("(?:\\w+\\.)*\\w+(?:#\\w+(?:\\([^\\)]*\\))?)?|" +
+				"#\\w+(?:\\([^\\)]*\\))?");
 
 	/**
 	 * A cache of the last {@link CompilationUnit} read from some attached
@@ -138,7 +139,8 @@ public class Util {
 				else {
 					if (seeTemp.length()>0) {
 						String temp = seeTemp.substring(0, seeTemp.length()-1);
-						see.append("<a href='").append(temp).append("'>").append(temp).append("</a>");
+						String linkText = fixLinkText(temp);
+						see.append("<a href='").append(temp).append("'>").append(linkText).append("</a>");
 					}
 					see.append("<br>");
 					seeTemp.setLength(0);
@@ -276,7 +278,8 @@ public class Util {
 		if (see!=null) {
 			if (seeTemp.length()>0) { // Last @see contents
 				String temp = seeTemp.substring(0, seeTemp.length()-1);
-				see.append("<a href='").append(temp).append("'>").append(temp).append("</a>");
+				String linkText = fixLinkText(temp);
+				see.append("<a href='").append(temp).append("'>").append(linkText).append("</a>");
 			}
 			see.append("<br>");
 			sb.append(see).append("</p>");
@@ -307,6 +310,7 @@ public class Util {
 	private static final void appendLinkTagText(StringBuffer appendTo,
 										String linkContent) {
 		appendTo.append("<a href='");
+		linkContent = linkContent.trim(); // If "@link" and text on different lines
 		Matcher m = LINK_TAG_MEMBER_PATTERN.matcher(linkContent);
 
 		if (m.find() && m.start() == 0) {
@@ -353,10 +357,7 @@ public class Util {
 			}
 
 			// Replace the '#' sign, if any.
-			int hash = text.indexOf('#');
-			if (hash>-1) {
-				text = text.substring(0, hash) + "." + text.substring(hash+1);
-			}
+			text = fixLinkText(text);
 
 			appendTo./*append("link://").*/append(link).append("'>").append(text);
 
@@ -454,7 +455,7 @@ System.out.println("Unmatched linkContent: " + linkContent);
 			return text;
 		}
 
-		// TODO: In Java 5, replace "sb.substring(sb2.substring(...))"
+		// TODO: In Java 5, replace "sb.append(sb2.substring(...))"
 		// calls with "sb.append(sb2, offs, len)".
 		StringBuffer sb = new StringBuffer();
 		int textOffs = 0;
@@ -503,6 +504,20 @@ System.out.println("Unmatched linkContent: " + linkContent);
 
 		return sb;
 
+	}
+
+
+	/**
+	 * Tidies up a link's display text for use in a &lt;a&gt; tag.
+	 * 
+	 * @param text The text (a class, method, or field signature).
+	 * @return The display value for the signature.
+	 */
+	private static final String fixLinkText(String text) {
+		if (text.startsWith("#")) { // Method in the current class
+			return text.substring(1);
+		}
+		return text.replace('#', '.');
 	}
 
 

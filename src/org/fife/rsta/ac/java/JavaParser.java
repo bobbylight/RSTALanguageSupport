@@ -144,7 +144,7 @@ public class JavaParser extends AbstractParser {
 			result.setParseTime(time);
 		} catch (IOException ioe) {
 			result.setError(ioe);
-			ioe.printStackTrace();
+//			ioe.printStackTrace();
 		}
 
 		r.close();
