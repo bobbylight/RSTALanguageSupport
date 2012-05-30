@@ -141,7 +141,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 
 		public boolean visit(AstNode node) {
 
-			Logger.log(node.toSource());
+			Logger.log(JavaScriptHelper.convertNodeToSource(node));
 			Logger.log(node.shortName());
 			
 			if (ignore(node, ignoreParams))
@@ -154,7 +154,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 				// lookup JavaScript completions type
 				jsType = provider.getJavaScriptTypesFactory().getCachedType(
 						dec, provider.getJarManager(), provider,
-						node.toSource());
+						JavaScriptHelper.convertNodeToSource(node));
 
 				if (jsType != null) {
 					lastJavaScriptType = jsType;
@@ -266,7 +266,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	 * @param lastJavaScriptType
 	 * @return
 	 */
-	private JavaScriptType lookupFromName(AstNode node,
+	protected JavaScriptType lookupFromName(AstNode node,
 			JavaScriptType lastJavaScriptType) {
 		JavaScriptType javaScriptType = null;
 		if (lastJavaScriptType != null) {
@@ -296,7 +296,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	 * @param lastJavaScriptType
 	 * @return
 	 */
-	private JavaScriptType lookupFunctionCompletion(AstNode node,
+	protected JavaScriptType lookupFunctionCompletion(AstNode node,
 			JavaScriptType lastJavaScriptType) {
 		JavaScriptType javaScriptType = null;
 		if (lastJavaScriptType != null) {

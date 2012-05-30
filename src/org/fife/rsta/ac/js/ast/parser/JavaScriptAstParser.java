@@ -92,7 +92,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 		if (child == null)
 			return;
 
-		Logger.log(child.toSource());
+		Logger.log(JavaScriptHelper.convertNodeToSource(child));
 		Logger.log(child.shortName());
 
 		if (JavaScriptHelper.isInfixOnly(child)) {

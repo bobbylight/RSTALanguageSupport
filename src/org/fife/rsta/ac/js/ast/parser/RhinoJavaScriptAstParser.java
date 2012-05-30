@@ -2,6 +2,7 @@ package org.fife.rsta.ac.js.ast.parser;
 
 import java.util.Set;
 
+import org.fife.rsta.ac.js.JavaScriptHelper;
 import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.rsta.ac.js.ast.CodeBlock;
 import org.fife.rsta.ac.js.ast.jsType.JavaScriptTypesFactory;
@@ -68,14 +69,16 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 	private boolean processImportNode(AstNode child, Set set, String entered,
 			CodeBlock block, int offset) {
 		
-		String src = child.toSource();
-		if(src.startsWith("importPackage")) {
-			processImportPackage(src);
-			return true;
-		}
-		else if(src.startsWith("importClass")) {
-			processImportClass(src);
-			return true;
+		String src = JavaScriptHelper.convertNodeToSource(child);
+		if(src != null) {
+			if(src.startsWith("importPackage")) {
+				processImportPackage(src);
+				return true;
+			}
+			else if(src.startsWith("importClass")) {
+				processImportClass(src);
+				return true;
+			}
 		}
 		
 		

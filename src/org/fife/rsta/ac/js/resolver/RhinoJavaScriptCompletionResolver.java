@@ -76,10 +76,10 @@ public class RhinoJavaScriptCompletionResolver extends
 			for (int i = 0; i < count; i++) {
 				AstNode paramNode = (AstNode) call.getArguments().get(i);
 				JavaScriptResolver resolver = provider.getJavaScriptEngine().getJavaScriptResolver(provider);
-				Logger.log("PARAM: " + paramNode.toSource());
+				Logger.log("PARAM: " + JavaScriptHelper.convertNodeToSource(paramNode));
 				try
 				{
-					TypeDeclaration type = resolver.resolveParamNode(paramNode.toSource());
+					TypeDeclaration type = resolver.resolveParamNode(JavaScriptHelper.convertNodeToSource(paramNode));
 					String resolved = type != null ? type.getQualifiedName() : "any";
 					sb.append(resolved);
 					if (i < count - 1) {

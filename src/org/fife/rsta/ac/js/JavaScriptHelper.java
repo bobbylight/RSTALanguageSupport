@@ -93,7 +93,7 @@ public class JavaScriptHelper {
 		StringReader r = new StringReader(text);
 		try {
 			AstRoot root = parser.parse(r, null, 0);
-			ParseTextVisitor visitor = new ParseTextVisitor();
+			ParseTextVisitor visitor = new ParseTextVisitor(text);
 			root.visitAll(visitor);
 			return visitor.getLastNodeSource();
 
@@ -349,6 +349,20 @@ public class JavaScriptHelper {
 		node.visit(visitor);
 		return getTypeDeclaration(visitor.type);
 	}
+	
+	
+	public static String convertNodeToSource(AstNode node)
+	{
+		try
+		{
+			return node.toSource();
+		}
+		catch(Exception e)
+		{
+			Logger.log(e.getMessage());
+		}
+		return null;
+	}
 
 
 	/**
@@ -469,7 +483,12 @@ public class JavaScriptHelper {
 	private static class ParseTextVisitor implements NodeVisitor {
 
 		private AstNode lastNode;
-
+		private String text;
+		
+		private ParseTextVisitor(String text) {
+			this.text = text;
+		}
+		
 
 		public boolean visit(AstNode node) {
 			switch (node.getType()) {
@@ -488,7 +507,7 @@ public class JavaScriptHelper {
 
 
 		public String getLastNodeSource() {
-			return lastNode != null ? lastNode.toSource() : "";
+			return lastNode != null ? lastNode.toSource() : text;
 		}
 
 	}

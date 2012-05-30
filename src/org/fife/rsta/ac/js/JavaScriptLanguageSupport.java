@@ -23,6 +23,8 @@ import java.util.Map;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.KeyStroke;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 
 import org.fife.rsta.ac.AbstractLanguageSupport;
 import org.fife.rsta.ac.GoToMemberAction;
@@ -31,10 +33,13 @@ import org.fife.rsta.ac.java.buildpath.ClassEnumerationReader;
 import org.fife.rsta.ac.java.buildpath.ClasspathLibraryInfo;
 import org.fife.rsta.ac.java.buildpath.ClasspathSourceLocation;
 import org.fife.rsta.ac.java.buildpath.LibraryInfo;
+import org.fife.rsta.ac.js.completion.JavaScriptTemplateCompletion;
 import org.fife.rsta.ac.js.tree.JavaScriptOutlineTree;
 import org.fife.ui.autocomplete.AutoCompletion;
+import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ast.AstRoot;
 
@@ -290,6 +295,8 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 		uninstallKeyboardShortcuts(textArea);
 
 	}
+	
+	
 
 
 	/**
@@ -365,6 +372,29 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 			super(provider);
 			this.textArea = textArea;
 		}
+
+
+		
+		protected String getReplacementText(Completion c, Document doc,
+				int start, int len) {
+			
+			String replacement = super.getReplacementText(c, doc, start, len);
+			if(c instanceof JavaScriptTemplateCompletion)
+			{
+				try
+				{
+					int caret = textArea.getCaretPosition();
+					String leadingWS = RSyntaxUtilities.getLeadingWhitespace(doc, caret);
+					if (replacement.indexOf('\n')>-1) {
+						replacement = replacement.replaceAll("\n", "\n" + leadingWS);
+					}
+					
+				}
+				catch(BadLocationException ble){}
+			}
+			return replacement;
+		}
+
 
 
 		protected int refreshPopupWindow() {
