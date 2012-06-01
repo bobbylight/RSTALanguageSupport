@@ -1,6 +1,6 @@
 package org.fife.rsta.ac.js.ecma.api;
 
-public abstract class JSRegExp extends JSObject {
+public class JSRegExp extends JSObject {
 
 	/**
 	 * Object RegExp()
@@ -25,7 +25,7 @@ public abstract class JSRegExp extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSArray exec(String string);
+	public JSArray exec(String string){return null;}
 
 
 	/**
@@ -38,7 +38,7 @@ public abstract class JSRegExp extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSBoolean test(String string);
+	public JSBoolean test(String string){return null;}
 
 
 	/**

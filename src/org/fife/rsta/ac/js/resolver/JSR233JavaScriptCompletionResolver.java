@@ -14,7 +14,7 @@ import org.mozilla.javascript.ast.FunctionCall;
 import org.mozilla.javascript.ast.PropertyGet;
 
 
-public class RhinoJavaScriptCompletionResolver extends
+public class JSR233JavaScriptCompletionResolver extends
 		JavaScriptCompletionResolver {
 
 	/**
@@ -23,7 +23,7 @@ public class RhinoJavaScriptCompletionResolver extends
 	 * Used to resolve Static class e.g java.lag.String methods and fields 
 	 * @param provider
 	 */
-	public RhinoJavaScriptCompletionResolver(SourceCompletionProvider provider) {
+	public JSR233JavaScriptCompletionResolver(SourceCompletionProvider provider) {
 		super(provider);
 	}
 
@@ -130,23 +130,21 @@ public class RhinoJavaScriptCompletionResolver extends
 				testName = longName.substring(0, index + name.length());
 			}
 		}
-		else if (node.getParent() != null
-				&& node.getParent().getType() == Token.EXPR_RESULT) { // compile
-																		// text
-			testName = node.toSource();
-		}
 		else {
 			testName = node.toSource();
 		}
 
 		if (testName != null) {
-			TypeDeclaration dec = JavaScriptHelper
-					.createNewTypeDeclaration(testName);
+			TypeDeclaration dec = JavaScriptHelper.getTypeDeclaration(testName);
+			
+			if(dec == null)
+				dec = JavaScriptHelper.createNewTypeDeclaration(testName);
+			
 			ClassFile cf = provider.getJavaScriptTypesFactory().getClassFile(
 					provider.getJarManager(), dec);
 			if (cf != null) {
 				TypeDeclaration returnDec = provider.getJavaScriptTypesFactory()
-						.createNewTypeDeclaration(cf, true);
+						.createNewTypeDeclaration(cf, true, false);
 				return returnDec;
 			}
 		}

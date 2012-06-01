@@ -1,7 +1,7 @@
 package org.fife.rsta.ac.js.ecma.api;
 
 
-public abstract class JSString extends JSObject {
+public class JSString extends JSObject {
 
     /**
      * Object JSString()
@@ -25,7 +25,7 @@ public abstract class JSString extends JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract JSString fromCharCode(JSNumber charCode);
+    public JSString fromCharCode(JSNumber charCode){return null;}
 
     /**
      * Property length
@@ -48,7 +48,7 @@ public abstract class JSString extends JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract JSString charAt(JSNumber position);
+    public JSString charAt(JSNumber position){return null;}
 
     /**
      * function charCodeAt(position)
@@ -60,7 +60,7 @@ public abstract class JSString extends JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract JSNumber charCodeAt(JSNumber position);
+    public JSNumber charCodeAt(JSNumber position){return null;}
 
     /**
      * function concat(value1, ...)
@@ -72,7 +72,7 @@ public abstract class JSString extends JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract JSString concat(JSString value);
+    public JSString concat(JSString value){return null;}
 
     /**
      * function indexOf(searchString, startPosition)
@@ -85,7 +85,7 @@ public abstract class JSString extends JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract JSNumber indexOf(JSNumber searchString, JSNumber startPosition);
+    public JSNumber indexOf(JSNumber searchString, JSNumber startPosition){return null;}
 
     /**
      * function lastIndexOf(searchString, startPosition)
@@ -98,7 +98,7 @@ public abstract class JSString extends JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract JSNumber lastIndexOf(JSNumber searchString, JSNumber startPosition);
+    public JSNumber lastIndexOf(JSNumber searchString, JSNumber startPosition){return null;}
 
     /**
      * function localeCompare(otherString)
@@ -110,7 +110,7 @@ public abstract class JSString extends JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract JSNumber localeCompare(JSString otherString);
+    public JSNumber localeCompare(JSString otherString){return null;}
 
     /**
      * function match(regexp)
@@ -122,7 +122,7 @@ public abstract class JSString extends JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract JSString match(JSRegExp regexp);
+    public JSString match(JSRegExp regexp){return null;}
 
     /**
      * function replace(regexp, replaceValue)
@@ -135,7 +135,7 @@ public abstract class JSString extends JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract JSString replace(JSRegExp regexp, JSString replaceValue);
+    public JSString replace(JSRegExp regexp, JSString replaceValue){return null;}
 
     /**
      * function search(regexp)
@@ -147,7 +147,7 @@ public abstract class JSString extends JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract JSNumber search(JSRegExp regexp);
+    public JSNumber search(JSRegExp regexp){return null;}
 
     /**
      * function slice(start, end)
@@ -160,7 +160,7 @@ public abstract class JSString extends JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract JSString slice(JSNumber start, JSNumber end);
+    public JSString slice(JSNumber start, JSNumber end){return null;}
 
     /**
      * function split(separator, limit)
@@ -173,7 +173,7 @@ public abstract class JSString extends JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract JSArray split(JSString separator, JSNumber limit);
+    public JSArray split(JSString separator, JSNumber limit){return null;}
 
     /**
      * function substring(start, end)
@@ -186,7 +186,7 @@ public abstract class JSString extends JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract JSString substring(JSNumber start, JSNumber end);
+    public JSString substring(JSNumber start, JSNumber end){return null;}
 
     /**
      * function toLowerCase()
@@ -197,7 +197,7 @@ public abstract class JSString extends JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract JSString toLowerCase();
+    public JSString toLowerCase(){return null;}
 
     /**
      * function toLocaleLowerCase()
@@ -208,7 +208,7 @@ public abstract class JSString extends JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract JSString toLocaleLowerCase();
+    public JSString toLocaleLowerCase(){return null;}
 
     /**
      * function toUpperCase()
@@ -219,7 +219,7 @@ public abstract class JSString extends JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract JSString toUpperCase();
+    public JSString toUpperCase(){return null;}
 
     /**
      * function toLocaleUpperCase()
@@ -230,6 +230,6 @@ public abstract class JSString extends JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract JSString toLocaleUpperCase();
+    public JSString toLocaleUpperCase(){return null;}
 
 }

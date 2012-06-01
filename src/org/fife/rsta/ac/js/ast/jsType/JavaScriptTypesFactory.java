@@ -169,7 +169,6 @@ public abstract class JavaScriptTypesFactory {
 							provider, info, jarManager);
 					cachedType.addCompletion(beanCompletion);
 				}
-
 			}
 		}
 
@@ -182,16 +181,12 @@ public abstract class JavaScriptTypesFactory {
 				cachedType.addCompletion(completion);
 			}
 		}
-
+		
 		// Add completions for any non-overridden super-class methods.
 		String superClassName = cf.getSuperClassName(true);
 		ClassFile superClass = getClassFileFor(cf, superClassName, jarManager);
 		if (superClass != null && !ignoreClass(superClassName)) {
-			TypeDeclaration type = TypeDeclarationFactory.Instance()
-					.getTypeDeclaration(superClassName);
-			if (type == null) {
-				type = createNewTypeDeclaration(superClass, staticOnly);
-			}
+			TypeDeclaration type = createNewTypeDeclaration(superClass, staticOnly, false);
 			JavaScriptType extendedType = makeJavaScriptType(type);
 			cachedType.addExtension(extendedType);
 			readClassFile(extendedType, superClass, provider, jarManager, type);
@@ -203,11 +198,8 @@ public abstract class JavaScriptTypesFactory {
 			String inter = cf.getImplementedInterfaceName(i, true);
 			ClassFile intf = getClassFileFor(cf, inter, jarManager);
 			if (intf != null && !ignoreClass(inter)) {
-				TypeDeclaration type = TypeDeclarationFactory.Instance()
-						.getTypeDeclaration(inter);
-				if (type == null) {
-					type = createNewTypeDeclaration(intf, staticOnly);
-				}
+				TypeDeclaration type = createNewTypeDeclaration(intf, staticOnly, false);
+				
 				JavaScriptType extendedType = new JavaScriptType(type);
 				cachedType.addExtension(extendedType);
 				readClassFile(extendedType, intf, provider, jarManager, type);
@@ -279,36 +271,7 @@ public abstract class JavaScriptTypesFactory {
 			if (pkg != null) {
 				String temp = pkg + "." + className;
 				superClass = jarManager.getClassEntry(temp);
-			}
-
-			// Next, go through the imports (order is important)
-		/*	if (superClass == null) {
-				
-				for (Iterator i = cu.getImportIterator(); i.hasNext();) {
-					ImportDeclaration id = (ImportDeclaration) i.next();
-					String imported = id.getName();
-					if (imported.endsWith(".*")) {
-						String temp = imported.substring(0,
-								imported.length() - 1)
-								+ className;
-						superClass = jarManager.getClassEntry(temp);
-						if (superClass != null) {
-							break;
-						}
-					}
-					else if (imported.endsWith("." + className)) {
-						superClass = jarManager.getClassEntry(imported);
-						break;
-					}
-				}
-			}
-
-			// Finally, try java.lang
-			if (superClass == null) {
-				String temp = "java.lang." + className;
-				superClass = jarManager.getClassEntry(temp);
-			}
-*/
+			}			
 		}
 
 		else {

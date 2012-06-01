@@ -1,6 +1,6 @@
 package org.fife.rsta.ac.js.ecma.api;
 
-public abstract class JSArray extends JSObject {
+public class JSArray extends JSObject {
 
 	/**
 	 * Object JSArray()
@@ -37,7 +37,7 @@ public abstract class JSArray extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSArray concat(JSArray args);
+	public JSArray concat(JSArray args){return null;}
 
 
 	/**
@@ -50,7 +50,7 @@ public abstract class JSArray extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSArray join(String seperator);
+	public JSArray join(String seperator){return null;}
 
 
 	/**
@@ -62,7 +62,7 @@ public abstract class JSArray extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSObject pop();
+	public JSObject pop(){return null;}
 
 
 	/**
@@ -74,7 +74,7 @@ public abstract class JSArray extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract void push(JSArray array);
+	public void push(JSArray array){}
 
 
 	/**
@@ -86,7 +86,7 @@ public abstract class JSArray extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSArray reverse();
+	public JSArray reverse(){return null;}
 
 
 	/**
@@ -98,7 +98,7 @@ public abstract class JSArray extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSObject shift();
+	public JSObject shift(){return null;}
 
 
 	/**
@@ -112,7 +112,7 @@ public abstract class JSArray extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSArray slice(Number start, Number end);
+	public JSArray slice(Number start, Number end){return null;}
 
 
 	/**
@@ -125,7 +125,7 @@ public abstract class JSArray extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSArray sort(JSFunction function);
+	public JSArray sort(JSFunction function){return null;}
 
 
 	/**
@@ -140,8 +140,8 @@ public abstract class JSArray extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSArray splice(JSNumber start, JSNumber deletecount,
-			JSArray items);
+	public JSArray splice(JSNumber start, JSNumber deletecount,
+			JSArray items){return null;}
 
 
 	/**
@@ -154,6 +154,6 @@ public abstract class JSArray extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSArray unshift(JSArray start);
+	public JSArray unshift(JSArray start){return null;}
 
 }

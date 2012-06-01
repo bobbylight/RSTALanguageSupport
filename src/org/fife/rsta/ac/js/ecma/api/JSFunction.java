@@ -1,6 +1,6 @@
 package org.fife.rsta.ac.js.ecma.api;
 
-public abstract class JSFunction extends JSObject {
+public class JSFunction extends JSObject {
 
     /**
      * Object Function()
@@ -21,7 +21,7 @@ public abstract class JSFunction extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.
      */ 
-    public abstract JSObject apply(JSObject thisObject, JSArray argArray);
+    public JSObject apply(JSObject thisObject, JSArray argArray){return null;}
     
     /**
       * function call (thisObject, args)
@@ -31,7 +31,7 @@ public abstract class JSFunction extends JSObject {
       * @since   Standard ECMA-262 3rd. Edition 
       * @since   Level 2 Document Object Model Core Definition.    
      */ 
-    public abstract JSObject call(JSObject thisObject, JSObject args);
+    public JSObject call(JSObject thisObject, JSObject args){return null;}
     
     /**
       * property length

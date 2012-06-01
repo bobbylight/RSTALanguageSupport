@@ -1,7 +1,7 @@
 package org.fife.rsta.ac.js.ecma.api;
 
 
-public abstract class JSBoolean extends JSObject {
+public class JSBoolean extends JSObject {
 
     /**
      * Object Boolean()

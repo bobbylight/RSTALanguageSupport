@@ -445,7 +445,7 @@ public class JavaScriptHelper {
 	 * @param name
 	 * @return
 	 */
-	private static TypeDeclaration getTypeDeclaration(String name) {
+	public static TypeDeclaration getTypeDeclaration(String name) {
 		return TypeDeclarationFactory.Instance().getTypeDeclaration(name);
 	}
 

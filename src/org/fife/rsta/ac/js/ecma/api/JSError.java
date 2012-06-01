@@ -1,6 +1,6 @@
 package org.fife.rsta.ac.js.ecma.api;
 
-public abstract class JSError extends JSObject {
+public class JSError extends JSObject {
 
 	/**
 	 * Object Error(message)

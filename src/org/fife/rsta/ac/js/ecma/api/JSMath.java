@@ -1,6 +1,6 @@
 package org.fife.rsta.ac.js.ecma.api;
 
-public abstract class JSMath extends JSObject {
+public class JSMath extends JSObject {
 
     /**
      * Object Math(\s)
@@ -85,7 +85,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.     
     */
-   public abstract JSNumber abs(JSNumber x);
+   public static JSNumber abs(JSNumber x){return null;}
    
    /**
      * function acos(x)
@@ -96,7 +96,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.
     */
-   public abstract JSNumber acos(JSNumber x);
+   public static JSNumber acos(JSNumber x){return null;}
    
    /**
      * function asin(x)
@@ -107,7 +107,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.  
     */
-   public abstract JSNumber asin(JSNumber x);
+   public static JSNumber asin(JSNumber x){return null;}
    
    /**
      * function atan(x)
@@ -118,7 +118,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.
     */
-   public abstract JSNumber atan(JSNumber x);
+   public static JSNumber atan(JSNumber x){return null;}
    
    /**
      * function atan2(x,y)
@@ -130,7 +130,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.  
     */
-   public abstract JSNumber atan2(JSNumber x, JSNumber y);
+   public static JSNumber atan2(JSNumber x, JSNumber y){return null;}
    
    /**
      * function ceil(x)
@@ -141,7 +141,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.    
     */
-   public abstract JSNumber ceil(JSNumber x);
+   public static JSNumber ceil(JSNumber x){return null;}
    
    /**
      * function cos(x)
@@ -152,7 +152,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.  
     */
-   public abstract JSNumber cos(JSNumber x);
+   public static JSNumber cos(JSNumber x){return null;}
    
    /**
      * function exp(x)
@@ -163,7 +163,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition. 
     */
-   public abstract JSNumber exp(JSNumber x);
+   public static JSNumber exp(JSNumber x){return null;}
    
    /**
      * function floor(x)
@@ -174,7 +174,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.  
     */
-   public abstract JSNumber floor(JSNumber x);
+   public static JSNumber floor(JSNumber x){return null;}
    
    /**
      * function log(x)
@@ -185,7 +185,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.    
     */
-   public abstract JSNumber log(JSNumber x);
+   public static JSNumber log(JSNumber x){return null;}
    
    /**
      * function max(arg)
@@ -196,7 +196,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.  
     */
-   public abstract JSNumber max(JSNumber args);
+   public static JSNumber max(JSNumber args){return null;}
    
    /**
      * function min(arg)
@@ -207,7 +207,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.    
     */
-   public abstract JSNumber min(JSNumber args);
+   public static JSNumber min(JSNumber args){return null;}
    
    /**
      * function pow(x,y)
@@ -219,7 +219,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.    
     */
-   public abstract JSNumber pow(JSNumber x, JSNumber y);
+   public static JSNumber pow(JSNumber x, JSNumber y){return null;}
    
    /**
      * function pow()
@@ -229,7 +229,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.     
     */
-   public abstract JSNumber random();
+   public static JSNumber random(){return null;}
    
    /**
      * function round(x)
@@ -240,7 +240,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.   
     */
-   public abstract JSNumber round(JSNumber x);
+   public static JSNumber round(JSNumber x){return null;}
    
    /**
      * function sin(x)
@@ -251,7 +251,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.    
     */
-   public abstract JSNumber sin(JSNumber x);
+   public static JSNumber sin(JSNumber x){return null;}
    
    /**
      * function sqrt(x)
@@ -262,7 +262,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.     
     */
-   public abstract JSNumber sqrt(JSNumber x);
+   public static JSNumber sqrt(JSNumber x){return null;}
    
    /**
      * function tan(x)
@@ -273,7 +273,7 @@ public abstract class JSMath extends JSObject {
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.    
     */
-   public abstract JSNumber tan(JSNumber x);
+   public static JSNumber tan(JSNumber x){return null;}
    
 
 }

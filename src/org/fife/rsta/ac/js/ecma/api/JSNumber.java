@@ -1,7 +1,7 @@
 package org.fife.rsta.ac.js.ecma.api;
 
 
-public abstract class JSNumber extends JSObject {
+public class JSNumber extends JSObject {
 
     /**
      * Object Number()
@@ -78,7 +78,7 @@ public abstract class JSNumber extends JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract JSString toFixed(JSNumber fractionDigits);
+    public JSString toFixed(JSNumber fractionDigits){return null;}
 
     /**
      * function toExponential(fractionDigits)
@@ -89,7 +89,7 @@ public abstract class JSNumber extends JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract JSString toExponential(JSNumber fractionDigits);
+    public JSString toExponential(JSNumber fractionDigits){return null;}
 
     /**
      * function toPrecision(precision)
@@ -100,5 +100,5 @@ public abstract class JSNumber extends JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract JSString toPrecision(JSNumber fractionDigits);
+    public JSString toPrecision(JSNumber fractionDigits){return null;}
 }

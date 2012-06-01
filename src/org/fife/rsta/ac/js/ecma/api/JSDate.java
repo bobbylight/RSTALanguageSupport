@@ -1,6 +1,6 @@
 package org.fife.rsta.ac.js.ecma.api;
 
-public abstract class JSDate extends JSObject {
+public class JSDate extends JSObject {
 
 	/**
 	 * JSObject JSDate(s)
@@ -28,7 +28,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber UTC(JSNumber hour, JSNumber min, JSNumber sec, JSNumber ms);
+	public JSNumber UTC(JSNumber hour, JSNumber min, JSNumber sec, JSNumber ms){return null;}
 
 
 	/**
@@ -41,7 +41,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber parse(JSString string);
+	public JSNumber parse(JSString string){return null;}
 
 
 	/**
@@ -52,7 +52,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSString toDateString();
+	public JSString toDateString(){return null;}
 
 
 	/**
@@ -63,7 +63,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSString toTimeString();
+	public JSString toTimeString(){return null;}
 
 
 	/**
@@ -74,7 +74,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSString toLocaleString();
+	public JSString toLocaleString(){return null;}
 
 
 	/**
@@ -85,7 +85,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSString toLocaleDateString();
+	public JSString toLocaleDateString(){return null;}
 
 
 	/**
@@ -96,7 +96,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSString toLocaleTimeString();
+	public JSString toLocaleTimeString(){return null;}
 
 
 	/**
@@ -107,7 +107,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSObject valueOf();
+	public JSObject valueOf(){return null;}
 
 
 	/**
@@ -118,7 +118,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber getFullYear();
+	public JSNumber getFullYear(){return null;}
 
 
 	/**
@@ -129,7 +129,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber getTime();
+	public JSNumber getTime(){return null;}
 
 
 	/**
@@ -140,7 +140,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber getUTCFullYear();
+	public JSNumber getUTCFullYear(){return null;}
 
 
 	/**
@@ -151,7 +151,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber getMonth();
+	public JSNumber getMonth(){return null;}
 
 
 	/**
@@ -162,7 +162,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber getUTCMonth();
+	public JSNumber getUTCMonth(){return null;}
 
 
 	/**
@@ -173,7 +173,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber getDate();
+	public JSNumber getDate(){return null;}
 
 
 	/**
@@ -184,7 +184,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber getUTCDate();
+	public JSNumber getUTCDate(){return null;}
 
 
 	/**
@@ -195,7 +195,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber getDay();
+	public JSNumber getDay(){return null;}
 
 
 	/**
@@ -208,7 +208,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Level 2 Document Object Model Core Definition.
 	 * 
 	 */
-	public abstract JSNumber getUTCDay();
+	public JSNumber getUTCDay(){return null;}
 
 
 	/**
@@ -219,7 +219,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber getHours();
+	public JSNumber getHours(){return null;}
 
 
 	/**
@@ -230,7 +230,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber getUTCHours();
+	public JSNumber getUTCHours(){return null;}
 
 
 	/**
@@ -241,7 +241,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber getMinutes();
+	public JSNumber getMinutes(){return null;}
 
 
 	/**
@@ -252,7 +252,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber getUTCMinutes();
+	public JSNumber getUTCMinutes(){return null;}
 
 
 	/**
@@ -263,7 +263,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber getSeconds();
+	public JSNumber getSeconds(){return null;}
 
 
 	/**
@@ -274,7 +274,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber getUTCSeconds();
+	public JSNumber getUTCSeconds(){return null;}
 
 
 	/**
@@ -285,7 +285,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber getMilliseconds();
+	public JSNumber getMilliseconds(){return null;}
 
 
 	/**
@@ -296,7 +296,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber getUTCMilliseconds();
+	public JSNumber getUTCMilliseconds(){return null;}
 
 
 	/**
@@ -307,7 +307,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber getTimezoneOffset();
+	public JSNumber getTimezoneOffset(){return null;}
 
 
 	/**
@@ -319,7 +319,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber setTime(Number value);
+	public JSNumber setTime(JSNumber value){return null;}
 
 
 	/**
@@ -331,7 +331,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber setMilliseconds(Number value);
+	public JSNumber setMilliseconds(JSNumber value){return null;}
 
 
 	/**
@@ -343,7 +343,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber setUTCMilliseconds(Number ms);
+	public JSNumber setUTCMilliseconds(JSNumber ms){return null;}
 
 
 	/**
@@ -356,7 +356,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber setSeconds(Number sec, Number ms);
+	public JSNumber setSeconds(JSNumber sec, JSNumber ms){return null;}
 
 
 	/**
@@ -369,7 +369,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber setUTCSeconds(Number sec, Number ms);
+	public JSNumber setUTCSeconds(JSNumber sec, JSNumber ms){return null;}
 
 
 	/**
@@ -383,7 +383,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber setMinutes(Number min, Number sec, Number ms);
+	public JSNumber setMinutes(JSNumber min, JSNumber sec, JSNumber ms){return null;}
 
 
 	/**
@@ -397,7 +397,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber setUTCMinute(Number min, Number sec, Number ms);
+	public JSNumber setUTCMinute(JSNumber min, JSNumber sec, JSNumber ms){return null;}
 
 
 	/**
@@ -412,8 +412,8 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber setHours(JSNumber hour, JSNumber min, JSNumber sec,
-			JSNumber ms);
+	public JSNumber setHours(JSNumber hour, JSNumber min, JSNumber sec,
+			JSNumber ms){return null;}
 
 
 	/**
@@ -428,8 +428,8 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber setUTCHours(JSNumber hour, JSNumber min, JSNumber sec,
-			JSNumber ms);
+	public JSNumber setUTCHours(JSNumber hour, JSNumber min, JSNumber sec,
+			JSNumber ms) {return null;}
 
 
 	/**
@@ -441,7 +441,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber setDate(JSNumber date);
+	public JSNumber setDate(JSNumber date){return null;}
 
 
 	/**
@@ -453,7 +453,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber setUTCDate(JSNumber date);
+	public JSNumber setUTCDate(JSNumber date){return null;}
 
 
 	/**
@@ -466,7 +466,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber setMonth(JSNumber month, JSNumber date);
+	public JSNumber setMonth(JSNumber month, JSNumber date){return null;}
 
 
 	/**
@@ -479,7 +479,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber setUTCMonth(JSNumber month, JSNumber date);
+	public JSNumber setUTCMonth(JSNumber month, JSNumber date){return null;}
 
 
 	/**
@@ -493,7 +493,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber setFullYear(JSNumber year, JSNumber month, JSNumber date);
+	public JSNumber setFullYear(JSNumber year, JSNumber month, JSNumber date){return null;}
 
 
 	/**
@@ -507,7 +507,7 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSNumber setUTCFullYear(JSNumber year, JSNumber month, JSNumber date);
+	public JSNumber setUTCFullYear(JSNumber year, JSNumber month, JSNumber date){return null;}
 
 
 	/**
@@ -518,5 +518,5 @@ public abstract class JSDate extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public abstract JSString toUTCString();
+	public JSString toUTCString(){return null;}
 }

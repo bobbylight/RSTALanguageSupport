@@ -20,7 +20,7 @@ import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
  * 
  * Clears the cache every time document is parsed for importPackage and importClass to work properly
  */
-public class RhinoJavaScriptTypesFactory extends JavaScriptTypesFactory {
+public class RhinoJavaScriptTypesFactory extends JSR233JavaScriptTypesFactory {
 
 	private LinkedHashSet importClasses = new LinkedHashSet();
 	private LinkedHashSet importPackages = new LinkedHashSet();
@@ -126,7 +126,5 @@ public class RhinoJavaScriptTypesFactory extends JavaScriptTypesFactory {
 		return file;
 	}
 	
-	public JavaScriptType makeJavaScriptType(TypeDeclaration type) {
-		return new JSR233Type(type);
-	}
+	
 }

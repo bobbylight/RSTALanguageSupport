@@ -1,7 +1,7 @@
 package org.fife.rsta.ac.js.ecma.api;
 
 
-public abstract class JSObject {
+public class JSObject {
 
     /**
      * Object Object()
@@ -22,7 +22,7 @@ public abstract class JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract String toString();
+    public String toString(){return null;}
 
     /**
      * function toLocaleString()
@@ -33,7 +33,7 @@ public abstract class JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract JSString toLocaleString();
+    public JSString toLocaleString(){return null;}
 
     /**
      * function valueOf()
@@ -44,7 +44,7 @@ public abstract class JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract JSObject valueOf();
+    public JSObject valueOf(){return null;};
 
     /**
      * function hasOwnProperty(name)
@@ -56,7 +56,7 @@ public abstract class JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract JSBoolean hasOwnProperty();
+    public JSBoolean hasOwnProperty(){return null;}
 
     /**
      * function isPrototypeOf(o)
@@ -68,7 +68,7 @@ public abstract class JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract JSBoolean isPrototypeOf(JSObject o);
+    public JSBoolean isPrototypeOf(JSObject o){return null;}
 
     /**
      * function propertyIsEnumerable(name)
@@ -80,6 +80,6 @@ public abstract class JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public abstract JSBoolean propertyIsEnumerable(JSObject name);
+    public JSBoolean propertyIsEnumerable(JSObject name){return null;}
 
 }
