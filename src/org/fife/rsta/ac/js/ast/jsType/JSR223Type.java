@@ -10,9 +10,9 @@ import org.fife.rsta.ac.js.completion.JSCompletion;
 import org.fife.ui.autocomplete.FunctionCompletion;
 
 
-public class JSR233Type extends JavaScriptType {
+public class JSR223Type extends JavaScriptType {
 
-	public JSR233Type(TypeDeclaration type) {
+	public JSR223Type(TypeDeclaration type) {
 		super(type);
 	}
 

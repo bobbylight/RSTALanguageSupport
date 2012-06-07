@@ -6,7 +6,7 @@ import org.fife.rsta.ac.js.ast.jsType.RhinoJavaScriptTypesFactory;
 import org.fife.rsta.ac.js.ast.parser.JavaScriptParser;
 import org.fife.rsta.ac.js.ast.parser.RhinoJavaScriptAstParser;
 import org.fife.rsta.ac.js.resolver.JavaScriptResolver;
-import org.fife.rsta.ac.js.resolver.JSR233JavaScriptCompletionResolver;
+import org.fife.rsta.ac.js.resolver.JSR223JavaScriptCompletionResolver;
 
 
 public class RhinoJavaScriptEngine implements JavaScriptEngine {
@@ -14,7 +14,7 @@ public class RhinoJavaScriptEngine implements JavaScriptEngine {
 	public static final String RHINO_ENGINE = "RHINO";
 	
 	public JavaScriptResolver getJavaScriptResolver(SourceCompletionProvider provider) {
-		return new JSR233JavaScriptCompletionResolver(provider);
+		return new JSR223JavaScriptCompletionResolver(provider);
 	}
 
 

@@ -14,7 +14,7 @@ import org.mozilla.javascript.ast.FunctionCall;
 import org.mozilla.javascript.ast.PropertyGet;
 
 
-public class JSR233JavaScriptCompletionResolver extends
+public class JSR223JavaScriptCompletionResolver extends
 		JavaScriptCompletionResolver {
 
 	/**
@@ -23,7 +23,7 @@ public class JSR233JavaScriptCompletionResolver extends
 	 * Used to resolve Static class e.g java.lag.String methods and fields 
 	 * @param provider
 	 */
-	public JSR233JavaScriptCompletionResolver(SourceCompletionProvider provider) {
+	public JSR223JavaScriptCompletionResolver(SourceCompletionProvider provider) {
 		super(provider);
 	}
 
