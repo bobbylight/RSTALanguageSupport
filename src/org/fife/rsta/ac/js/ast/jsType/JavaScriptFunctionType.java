@@ -271,10 +271,10 @@ public class JavaScriptFunctionType {
 		}
 
 		// check js types
-		String paramJSType = TypeDeclarationFactory.Instance()
-				.convertJavaScriptType(param.getQualifiedName(), true);
-		String compareParamJSType = TypeDeclarationFactory.Instance()
-				.convertJavaScriptType(compareParam.getQualifiedName(), true);
+		String paramJSType = TypeDeclarationFactory.
+				convertJavaScriptType(param.getQualifiedName(), true);
+		String compareParamJSType = TypeDeclarationFactory.
+				convertJavaScriptType(compareParam.getQualifiedName(), true);
 
 		try {
 			Class paramClzz = Class.forName(paramJSType);

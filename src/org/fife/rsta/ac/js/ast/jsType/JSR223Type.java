@@ -45,7 +45,7 @@ public class JSR223Type extends JavaScriptType {
 			int bestFitWeight = -1;
 			for (int i = 0; i < matches.length; i++) {
 				Logger.log("Potential match : " + matches[i].getLookupName());
-				JavaScriptFunctionType matchFunctionType = javaScriptFunctionType
+				JavaScriptFunctionType matchFunctionType = JavaScriptFunctionType
 						.parseFunction(matches[i].getLookupName());
 				Logger.log("Matching against completion: " + completionLookup);
 				int weight = matchFunctionType.compare(javaScriptFunctionType,
