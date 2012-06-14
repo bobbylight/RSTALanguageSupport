@@ -10,15 +10,22 @@
  */
 package org.fife.rsta.ac.js.completion;
 
+import java.util.Iterator;
+
 import javax.swing.Icon;
 import javax.swing.text.JTextComponent;
 
+import org.fife.rsta.ac.java.buildpath.SourceLocation;
+import org.fife.rsta.ac.java.classreader.ClassFile;
+import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
 import org.fife.rsta.ac.js.IconFactory;
 import org.fife.rsta.ac.js.JavaScriptHelper;
+import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.rsta.ac.js.ast.JavaScriptVariableDeclaration;
 import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.VariableCompletion;
+import org.fife.rsta.ac.java.Util;
 
 
 public class JSVariableCompletion extends VariableCompletion implements
@@ -99,5 +106,40 @@ public class JSVariableCompletion extends VariableCompletion implements
 	public int hashCode() {
 		return getName().hashCode();
 	}
+	
+	public String getSummary() {
+
+        SourceCompletionProvider scp = (SourceCompletionProvider)getProvider();
+        ClassFile cf = scp.getJavaScriptTypesFactory().getClassFile(scp.getJarManager(), JavaScriptHelper.createNewTypeDeclaration(getType(true)));
+        if(cf != null)
+        {
+            SourceLocation  loc = scp.getSourceLocForClass(cf.getClassName(true));
+    
+            if (loc!=null) {
+    
+                CompilationUnit cu = Util.getCompilationUnitFromDisk(loc, cf);
+                if (cu!=null) {
+                    for (Iterator i=cu.getTypeDeclarationIterator(); i.hasNext(); ) {
+                        org.fife.rsta.ac.java.rjc.ast.TypeDeclaration td = (org.fife.rsta.ac.java.rjc.ast.TypeDeclaration)i.next();
+                        String typeName = td.getName();
+                        // Avoid inner classes, etc.
+                        if (typeName.equals(cf.getClassName(false))) {
+                            String summary = td.getDocComment();
+                            // Be cautious - might be no doc comment (or a bug?)
+                            if (summary!=null && summary.startsWith("/**")) {
+                                return Util.docCommentToHtml(summary);
+                            }
+                        }
+                    }
+                }
+            }
+            // Default to the fully-qualified class name.
+            return cf.getClassName(true);
+        }
+        
+        return super.getSummary();
+        
+
+    }
 
 }
