@@ -44,6 +44,7 @@ import org.fife.rsta.ac.java.rjc.lang.Type;
 import org.fife.rsta.ac.java.rjc.lang.TypeArgument;
 import org.fife.rsta.ac.java.rjc.lang.TypeParameter;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
+import org.fife.ui.autocomplete.TemplateCompletion;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
@@ -241,6 +242,10 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 		// TODO: Cache us
 		set.add(new JavaShorthandCompletion(this, "sysout", "System.out.println("));
 		set.add(new JavaShorthandCompletion(this, "syserr", "System.err.println("));
+String template = "for (int ${i} = 0; ${i} < ${array}.length; ${i}++) {\n\t${cursor}\n}";
+set.add(new TemplateCompletion(this, "for", "for-loop", template));
+template = "do {\n\t${cursor}\n} while (${condition});";
+set.add(new TemplateCompletion(this, "do", "do-loop", template));
 	}
 
 

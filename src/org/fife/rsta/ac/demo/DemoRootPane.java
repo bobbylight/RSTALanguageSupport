@@ -147,6 +147,8 @@ class DemoRootPane extends JRootPane implements HyperlinkListener,
 		textArea.requestFocusInWindow();
 		textArea.setMarkOccurrences(true);
 		textArea.setCodeFoldingEnabled(true);
+		textArea.setTabsEmulated(true);
+		textArea.setTabSize(3);
 		ToolTipManager.sharedInstance().registerComponent(textArea);
 		return textArea;
 	}
