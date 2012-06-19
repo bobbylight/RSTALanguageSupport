@@ -210,7 +210,7 @@ public class JavadocUrlHandler implements ExternalURLHandler {
 		// Class should be in the same package as the one we're currently
 		// viewing.  Example:  java.lang.String class documentation
 		String desc = e.getDescription();
-System.out.println(desc);
+		//System.out.println(desc);
 		if (desc!=null) {
 
 			if (isRelativeUrl(desc)) {
