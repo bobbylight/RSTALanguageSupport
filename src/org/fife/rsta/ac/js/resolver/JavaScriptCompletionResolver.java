@@ -11,6 +11,7 @@ import org.fife.rsta.ac.js.JavaScriptHelper;
 import org.fife.rsta.ac.js.JavaScriptParser;
 import org.fife.rsta.ac.js.Logger;
 import org.fife.rsta.ac.js.SourceCompletionProvider;
+import org.fife.rsta.ac.js.ast.JavaScriptFunctionDeclaration;
 import org.fife.rsta.ac.js.ast.jsType.JavaScriptType;
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
 import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
@@ -104,7 +105,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	 * @return TypeDeclaration for node or null if not found.
 	 */
 	public TypeDeclaration resolveNode(AstNode node) {
-		
+		if(node == null) return TypeDeclarationFactory.getDefaultTypeDeclaration();
 		CompilerNodeVisitor visitor = new CompilerNodeVisitor(true);
 		node.visit(visitor);
 		return lastJavaScriptType != null ? lastJavaScriptType.getType()
@@ -174,10 +175,48 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 					lastJavaScriptType = jsType;
 				}
 			}
+			else if(node instanceof FunctionCall)
+			{
+				FunctionCall fn = (FunctionCall) node;
+				String lookupText = createLookupString(fn);
+				JavaScriptFunctionDeclaration funcDec = provider.getVariableResolver().findFunctionDeclaration(lookupText);
+				if(funcDec != null)
+				{
+					jsType = provider.getJavaScriptTypesFactory().getCachedType(
+							funcDec.getTypeDeclaration(), provider.getJarManager(), provider,
+							JavaScriptHelper.convertNodeToSource(node));
+					if (jsType != null) {
+						lastJavaScriptType = jsType;
+						// stop here
+						return false;
+					}
+				}
+			}
 
 			return true;
 		}
 		
+		private String createLookupString(FunctionCall fn)
+		{
+			StringBuffer sb = new StringBuffer();
+			String name = "";
+			switch(fn.getTarget().getType())
+			{
+				case Token.NAME : name = ((Name) fn.getTarget()).getIdentifier();
+				break;
+			}
+			sb.append(name);
+			sb.append("(");
+			for(Iterator i = fn.getArguments().iterator(); i.hasNext();)
+			{
+				i.next();
+				sb.append("p");
+				if(i.hasNext())
+					sb.append(",");	
+			}
+			sb.append(")");
+			return sb.toString();
+		}
 		
 		/**
 		 * Test node to check whether to ignore resolving, this is for

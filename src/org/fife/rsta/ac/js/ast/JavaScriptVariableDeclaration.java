@@ -24,7 +24,9 @@ public class JavaScriptVariableDeclaration {
 	private String name;
 	private int offset;
 	private TypeDeclaration typeDec;
+	private AstNode typeNode;
 	private SourceCompletionProvider provider;
+	private CodeBlock block;
 
 	private boolean reassigned;
 	private TypeDeclaration originalTypeDec;
@@ -36,10 +38,11 @@ public class JavaScriptVariableDeclaration {
 	 * @param provider JavaScript source provider
 	 */
 	public JavaScriptVariableDeclaration(String name, int offset,
-			SourceCompletionProvider provider) {
+			SourceCompletionProvider provider, CodeBlock block) {
 		this.name = name;
 		this.offset = offset;
 		this.provider = provider;
+		this.block = block;
 	}
 
 
@@ -49,8 +52,7 @@ public class JavaScriptVariableDeclaration {
 	 * @param typeNode - Rhino AstNode linked to this variable
 	 */
 	public void setTypeDeclaration(AstNode typeNode) {
-		typeDec = provider.getJavaScriptEngine().getJavaScriptResolver(provider)
-				.resolveNode(typeNode);
+		this.typeNode = typeNode;
 	}
 
 	/**
@@ -100,7 +102,10 @@ public class JavaScriptVariableDeclaration {
 	 * @return TypeDeclaration for the variable
 	 */
 	public TypeDeclaration getTypeDeclaration() {
-		return typeDec;
+		if(typeDec == null) {
+			typeDec = provider.getJavaScriptEngine().getJavaScriptResolver(provider).resolveNode(typeNode);
+		}
+		return typeDec;	
 	}
 
 
@@ -127,6 +132,10 @@ public class JavaScriptVariableDeclaration {
 	 */
 	public int getOffset() {
 		return offset;
+	}
+	
+	public CodeBlock getCodeBlock() {
+		return block;
 	}
 
 }
