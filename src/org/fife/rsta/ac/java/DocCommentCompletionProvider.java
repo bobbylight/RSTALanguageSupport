@@ -55,13 +55,13 @@ class DocCommentCompletionProvider extends DefaultCompletionProvider {
 		addCompletion(new JavadocCompletion(this, "@threadsafety"));
 
 		// Inline tags
-		addCompletion(new JavadocCompletion(this, "{@code}"));
-		addCompletion(new JavadocCompletion(this, "{@docRoot}"));
-		addCompletion(new JavadocCompletion(this, "{@inheritDoc}"));
-		addCompletion(new JavadocCompletion(this, "{@link}"));
-		addCompletion(new JavadocCompletion(this, "{@linkplain}"));
-		addCompletion(new JavadocCompletion(this, "{@literal}"));
-		addCompletion(new JavadocCompletion(this, "{@value}"));
+		addCompletion(new JavadocTemplateCompletion(this, "{@code", "{@code}", "{@code ${}}${cursor}"));
+		addCompletion(new JavadocTemplateCompletion(this, "{@docRoot", "{@docRoot}", "{@docRoot ${}}${cursor}"));
+		addCompletion(new JavadocTemplateCompletion(this, "{@inheritDoc", "{@inheritDoc}", "{@inheritDoc ${}}${cursor}"));
+		addCompletion(new JavadocTemplateCompletion(this, "{@link", "{@link}", "{@link ${}}${cursor}"));
+		addCompletion(new JavadocTemplateCompletion(this, "{@linkplain", "{@linkplain}", "{@linkplain ${}}${cursor}"));
+		addCompletion(new JavadocTemplateCompletion(this, "{@literal", "{@literal}", "{@literal ${}}${cursor}"));
+		addCompletion(new JavadocTemplateCompletion(this, "{@value", "{@value}", "{@value ${}}${cursor}"));
 
 		// Other common stuff
 		addCompletion(new JavaShorthandCompletion(this, "null", "<code>null</code>", "<code>null</code>"));
@@ -73,7 +73,7 @@ class DocCommentCompletionProvider extends DefaultCompletionProvider {
 	}
 
 
-	/**
+	/**{@link something};
 	 * {@inheritDoc}
 	 */
 	protected boolean isValidChar(char ch) {
@@ -101,6 +101,18 @@ class DocCommentCompletionProvider extends DefaultCompletionProvider {
 			g.drawString(getReplacementText(), x, y);
 		}
 		
+	}
+
+
+	private static class JavadocTemplateCompletion
+						extends JavaTemplateCompletion {
+
+		public JavadocTemplateCompletion(CompletionProvider provider,
+				String inputText, String definitionString, String template) {
+			super(provider, inputText, definitionString, template);
+			setIcon(IconFactory.JAVADOC_ITEM_ICON);
+		}
+
 	}
 
 

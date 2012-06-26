@@ -69,21 +69,40 @@ class JavaShorthandCompletion extends ShorthandCompletion implements
 	 * {@inheritDoc}
 	 */
 	public void rendererText(Graphics g, int x, int y, boolean selected) {
-//		g.drawString(toString(), x, y);
-//		if (shortDesc==null) {
-//			return getInputText();
-//		}
-//		return getInputText() + " - " + shortDesc;
-		if (!selected) {
+		renderText(g, getInputText(), getReplacementText(), x, y, selected);
+	}
+
+
+	/**
+	 * Renders a completion in the style of a short-hand completion.
+	 * 
+	 * @param g The graphics context.
+	 * @param input The text the user enters to display this completion.
+	 * @param shortDesc An optional short description of the completion.
+	 * @param x The x-offset at which to paint.
+	 * @param y The y-offset at which to paint.
+	 * @param selected Whether this completion choice is selected.
+	 */
+	public static void renderText(Graphics g, String input, String shortDesc,
+								int x, int y, boolean selected) {
+		Color orig = g.getColor();
+		if (!selected && shortDesc!=null) {
 			g.setColor(SHORTHAND_COLOR);
 		}
-		String temp = getInputText() + " - ";
-		g.drawString(temp, x, y);
-		x += g.getFontMetrics().stringWidth(temp);
-		if (!selected) {
-			g.setColor(Color.GRAY);
+		g.drawString(input, x, y);
+		if (shortDesc!=null) {
+			x += g.getFontMetrics().stringWidth(input);
+			if (!selected) {
+				g.setColor(orig);
+			}
+			String temp = " - ";
+			g.drawString(temp, x, y);
+			x += g.getFontMetrics().stringWidth(temp);
+			if (!selected) {
+				g.setColor(Color.GRAY);
+			}
+			g.drawString(shortDesc, x, y);
 		}
-		g.drawString(getReplacementText(), x, y);
 	}
 
 

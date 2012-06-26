@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeSet;
 import javax.swing.text.BadLocationException;
@@ -44,7 +45,6 @@ import org.fife.rsta.ac.java.rjc.lang.Type;
 import org.fife.rsta.ac.java.rjc.lang.TypeArgument;
 import org.fife.rsta.ac.java.rjc.lang.TypeParameter;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
-import org.fife.ui.autocomplete.TemplateCompletion;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
@@ -80,6 +80,9 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 
 	private static final String JAVA_LANG_PACKAGE			= "java.lang.*";
 	private static final String THIS						= "this";
+
+	private static final String MSG = "org.fife.rsta.ac.java.resources";
+	private static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
 
 
 	/**
@@ -239,13 +242,30 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	 * @param set The set to add to.
 	 */
 	private void addShorthandCompletions(Set set) {
-		// TODO: Cache us
-		set.add(new JavaShorthandCompletion(this, "sysout", "System.out.println("));
-		set.add(new JavaShorthandCompletion(this, "syserr", "System.err.println("));
-String template = "for (int ${i} = 0; ${i} < ${array}.length; ${i}++) {\n\t${cursor}\n}";
-set.add(new TemplateCompletion(this, "for", "for-loop", template));
-template = "do {\n\t${cursor}\n} while (${condition});";
-set.add(new TemplateCompletion(this, "do", "do-loop", template));
+
+		// TODO: Cache us?
+
+		String template = "System.out.println(${});${cursor}";
+		set.add(new JavaTemplateCompletion(this, "sysout", "sysout", template,
+				msg.getString("sysout.shortDesc")));
+
+		template = "System.err.println(${});${cursor}";
+		set.add(new JavaTemplateCompletion(this, "syserr", "syserr", template,
+				msg.getString("syserr.shortDesc")));
+
+		template =
+			"for (int ${i} = 0; ${i} < ${array}.length; ${i}++) {\n\t${cursor}\n}";
+		set.add(new JavaTemplateCompletion(this, "for", "for-loop", template,
+				msg.getString("for.array.shortDesc")));
+
+		template = "do {\n\t${cursor}\n} while (${condition});";
+		set.add(new JavaTemplateCompletion(this, "do", "do-loop", template,
+				msg.getString("do.shortDesc")));
+
+		template = "new Runnable() {\n\tpublic void run() {\n\t\t${cursor}\n\t}\n}";
+		set.add(new JavaTemplateCompletion(this, "runnable", "runnable", template,
+				msg.getString("runnable.shortDesc")));
+
 	}
 
 
