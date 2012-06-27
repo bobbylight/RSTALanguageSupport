@@ -242,13 +242,15 @@ private void pushOntoStack(Token t) {
 					blockDepth++;
 					break;
 				case TokenTypes.SEPARATOR_RBRACE:
-					blockDepth--;
+					blockDepth = Math.max(blockDepth-1, 0);
 					break;
 				case TokenTypes.SEPARATOR_LPAREN:
-					parenDepth++;
+					if (blockDepth==0) {
+						parenDepth++;
+					}
 					break;
 				case TokenTypes.SEPARATOR_RPAREN:
-					if (--parenDepth == 0) {
+					if (blockDepth==0 && --parenDepth == 0) {
 						return;
 					}
 					break;

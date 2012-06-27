@@ -693,9 +693,6 @@ class SourceCodeScanner implements org.fife.rsta.ac.java.rjc.lexer.TokenTypes {
   /** the textposition at the last accepting state */
   private int zzMarkedPos;
 
-  /** the textposition at the last state to be included in yytext */
-  private int zzPushbackPos;
-
   /** the current text position in the buffer */
   private int zzCurrentPos;
 
@@ -917,7 +914,6 @@ class SourceCodeScanner implements org.fife.rsta.ac.java.rjc.lexer.TokenTypes {
       zzEndRead-= zzStartRead;
       zzCurrentPos-= zzStartRead;
       zzMarkedPos-= zzStartRead;
-      zzPushbackPos-= zzStartRead;
       zzStartRead = 0;
     }
 
@@ -969,7 +965,7 @@ class SourceCodeScanner implements org.fife.rsta.ac.java.rjc.lexer.TokenTypes {
     zzReader = reader;
     zzAtEOF  = false;
     zzEndRead = zzStartRead = 0;
-    zzCurrentPos = zzMarkedPos = zzPushbackPos = 0;
+    zzCurrentPos = zzMarkedPos = 0;
     yyline = yychar = yycolumn = 0;
     zzLexicalState = YYINITIAL;
   }
