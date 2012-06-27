@@ -79,7 +79,7 @@
 			<classpath>
 				<pathelement     location="${rsta-jar}"/>
 				<pathelement     location="${autocomplete-jar}"/>
-				<pathelement     location="lib/rhino/js-14_Patch_716562.jar"/>
+				<pathelement     location="lib/rhino/js-14.jar"/>
 			</classpath>
 			
 			<include             name="org/fife/rsta/ac/*"/>
