@@ -65,7 +65,7 @@ class JavaShorthandCompletion extends ShorthandCompletion implements
 	}
 
 
-	/**f
+	/**
 	 * {@inheritDoc}
 	 */
 	public void rendererText(Graphics g, int x, int y, boolean selected) {

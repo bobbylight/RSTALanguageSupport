@@ -18,6 +18,7 @@ import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionCellRenderer;
 import org.fife.ui.autocomplete.EmptyIcon;
 import org.fife.ui.autocomplete.FunctionCompletion;
+import org.fife.ui.autocomplete.TemplateCompletion;
 import org.fife.ui.autocomplete.VariableCompletion;
 
 
@@ -51,6 +52,21 @@ public class JavaScriptCellRenderer extends CompletionCellRenderer {
 		}
 		else {
 			setIcon(emptyIcon);
+		}
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	protected void prepareForTemplateCompletion(JList list,
+		TemplateCompletion tc, int index, boolean selected, boolean hasFocus) {
+		super.prepareForTemplateCompletion(list, tc, index, selected, hasFocus);
+		if (tc instanceof JSCompletionUI) {
+			setIcon(((JSCompletionUI) tc).getIcon());
+		}
+		else {
+			setIcon(IconFactory.getIcon(IconFactory.TEMPLATE_ICON));
 		}
 	}
 

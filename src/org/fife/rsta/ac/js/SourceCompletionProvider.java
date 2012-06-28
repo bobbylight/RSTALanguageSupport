@@ -14,9 +14,9 @@ import java.awt.Cursor;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeSet;
-
 import javax.swing.text.JTextComponent;
 
 import org.fife.rsta.ac.java.JarManager;
@@ -29,6 +29,7 @@ import org.fife.rsta.ac.js.ast.jsType.JavaScriptTypesFactory;
 import org.fife.rsta.ac.js.ast.parser.JavaScriptParser;
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
 import org.fife.rsta.ac.js.completion.JSVariableCompletion;
+import org.fife.rsta.ac.js.completion.JavaScriptTemplateCompletion;
 import org.fife.rsta.ac.js.engine.JavaScriptEngine;
 import org.fife.rsta.ac.js.engine.JavaScriptEngineFactory;
 import org.fife.rsta.ac.js.resolver.JavaScriptResolver;
@@ -54,16 +55,40 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	
 	private PreProcesssingScripts preProcessing;
 
+	private static final String MSG = "org.fife.rsta.ac.js.resources";
+	private static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
+
+
 	public SourceCompletionProvider() {
 		this(null);
 	}
-	
+
+
 	public SourceCompletionProvider(String javaScriptEngine) {
 		variableResolver = new VariableResolver();
 		setParameterizedCompletionParams('(', ", ", ')');
 		setAutoActivationRules(false, "."); // Default - only activate after '.'
 		engine = JavaScriptEngineFactory.Instance().getEngineFromCache(javaScriptEngine);
 		javaScriptTypesFactory = engine.getJavaScriptTypesFactory(this);
+	}
+
+
+	/**
+	 * Adds simple shorthand completions relevant to JavaScript.
+	 *
+	 * @param set The set to add to.
+	 */
+	private void addShorthandCompletions(Set set) {
+
+		String template =
+				"for (var ${i} = 0; ${i} < ${array}.length; ${i}++) {\n\t${cursor}\n}";
+			set.add(new JavaScriptTemplateCompletion(this, "for", "for-loop", template,
+					msg.getString("for.array.shortDesc")));
+
+		template = "do {\n\t${cursor}\n} while (${condition});";
+		set.add(new JavaScriptTemplateCompletion(this, "do", "do-loop", template,
+				msg.getString("do.shortDesc")));
+
 	}
 
 
@@ -108,15 +133,22 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 			CodeBlock block = iterateAstRoot(astRoot, set, text, dot, false);
 
 			if (noDotInText) {
+
+				// Don't add shorthand completions if they're typing something
+				// qualified
+				if (text.indexOf('.')==-1) {
+					addShorthandCompletions(set);
+				}
+
 				if (text.length() > 0) { // try to convert text by removing
 					// any if, while etc...
 					text = JavaScriptHelper.parseEnteredText(text);
 				}
 				recursivelyAddLocalVars(set, block, dot, null, false, false);
+
 			}
 			else {
 				// Compile the entered text and resolve the variables/function
-				// 
 				JavaScriptResolver compiler = engine.getJavaScriptResolver(this);
 				try {
 					JavaScriptType type = compiler.compileText(text);

@@ -33,7 +33,7 @@ import org.fife.rsta.ac.java.buildpath.ClassEnumerationReader;
 import org.fife.rsta.ac.java.buildpath.ClasspathLibraryInfo;
 import org.fife.rsta.ac.java.buildpath.ClasspathSourceLocation;
 import org.fife.rsta.ac.java.buildpath.LibraryInfo;
-import org.fife.rsta.ac.js.completion.JavaScriptTemplateCompletion;
+import org.fife.rsta.ac.js.completion.JavaScriptShorthandCompletion;
 import org.fife.rsta.ac.js.tree.JavaScriptOutlineTree;
 import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.autocomplete.Completion;
@@ -379,7 +379,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 				int start, int len) {
 			
 			String replacement = super.getReplacementText(c, doc, start, len);
-			if(c instanceof JavaScriptTemplateCompletion)
+			if(c instanceof JavaScriptShorthandCompletion)
 			{
 				try
 				{

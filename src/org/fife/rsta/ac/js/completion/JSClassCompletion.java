@@ -175,7 +175,7 @@ public class JSClassCompletion extends AbstractJavaSourceCompletion {
 
 
 	public void rendererText(Graphics g, int x, int y, boolean selected) {
-
+System.out.println("aaaaaaaaaaaaaaaaaaaa");
 		String s = cf.getClassName(false);
 		g.drawString(s, x, y);
 		FontMetrics fm = g.getFontMetrics();
