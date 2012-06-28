@@ -145,6 +145,14 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 			Logger.log(JavaScriptHelper.convertNodeToSource(node));
 			Logger.log(node.shortName());
 			
+			if(!validNode(node))
+			{
+				//invalid node found, set last completion invalid and stop processing
+				lastJavaScriptType = null;
+				return false;
+			}
+				
+			
 			if (ignore(node, ignoreParams))
 				return true;
 
@@ -193,6 +201,15 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 				}
 			}
 
+			return true;
+		}
+		
+		private boolean validNode(AstNode node)
+		{
+			switch(node.getType())
+			{
+				case Token.NAME: return ((Name) node).getIdentifier() != null && ((Name) node).getIdentifier().length() > 0;
+			}
 			return true;
 		}
 		
