@@ -37,8 +37,8 @@ public class JavaScriptShorthandCompletion extends ShorthandCompletion implement
 	}
 
 
-	public int getSortIndex() {
-		return TEMPLATE_INDEX;
+	public int getRelevance() {
+		return TEMPLATE_RELEVANCE;
 	}
 
 

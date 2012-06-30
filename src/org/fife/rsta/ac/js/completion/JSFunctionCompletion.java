@@ -235,8 +235,8 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 	}
 
 
-	public int getSortIndex() {
-		return DEFAULT_FUNCTION_INDEX;
+	public int getRelevance() {
+		return DEFAULT_FUNCTION_RELEVANCE;
 	}
 
 

@@ -11,5 +11,12 @@ function another(name) {
    alert("Hello there, " + name + "!");
 }
 
-var aaa;
 var abc;
+var aaa;
+
+function what(foo) {
+   var temp = 44;
+   
+}
+
+var goo = 'Hello world';

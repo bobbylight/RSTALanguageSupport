@@ -85,8 +85,8 @@ public class JSVariableCompletion extends VariableCompletion implements
 	}
 
 
-	public int getSortIndex() {
-		return localVariable ? LOCAL_VARIABLE_INDEX : GLOBAL_VARIABLE_INDEX;
+	public int getRelevance() {
+		return localVariable ? LOCAL_VARIABLE_RELEVANCE : GLOBAL_VARIABLE_RELEVANCE;
 	}
 
 

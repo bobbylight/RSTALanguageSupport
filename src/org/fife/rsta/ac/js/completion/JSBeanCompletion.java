@@ -39,8 +39,8 @@ public class JSBeanCompletion extends VariableCompletion implements
 	}
 
 
-	public int getSortIndex() {
-		return BEAN_METHOD_INDEX;
+	public int getRelevance() {
+		return BEAN_METHOD_RELEVANCE;
 	}
 
 

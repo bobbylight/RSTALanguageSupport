@@ -10,14 +10,7 @@
  */
 package org.fife.rsta.ac.js;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-import javax.swing.text.JTextComponent;
-
 import org.fife.rsta.ac.java.JarManager;
-import org.fife.rsta.ac.js.completion.JSCompletionUI;
 import org.fife.ui.autocomplete.LanguageAwareCompletionProvider;
 import org.mozilla.javascript.ast.AstRoot;
 
@@ -31,9 +24,6 @@ import org.mozilla.javascript.ast.AstRoot;
 public class JavaScriptCompletionProvider extends
 		LanguageAwareCompletionProvider {
 
-	/**
-	 * Jar Manager for source completions
-	 */
 	/**
 	 * The AST for the JS.
 	 */
@@ -94,28 +84,4 @@ public class JavaScriptCompletionProvider extends
 	}
 
 
-	public List getCompletions(JTextComponent comp) {
-		List completions = super.getCompletions(comp);
-		Collections.sort(completions, new CompletionSort());
-		return completions;
-	}
-
-
-	private class CompletionSort implements Comparator {
-
-		public int compare(Object o1, Object o2) {
-			if (o1 == o2) {
-				return 0;
-			}
-
-			if (o1 instanceof JSCompletionUI && o2 instanceof JSCompletionUI) {
-				return new Integer(((JSCompletionUI) o1).getSortIndex())
-						.compareTo(new Integer(((JSCompletionUI) o2)
-								.getSortIndex()));
-			}
-
-			return -1;
-		}
-
-	}
 }

@@ -39,8 +39,8 @@ public class JavaScriptInScriptFunctionCompletion extends FunctionCompletion
 	}
 
 
-	public int getSortIndex() {
-		return DEFAULT_FUNCTION_INDEX;
+	public int getRelevance() {
+		return DEFAULT_FUNCTION_RELEVANCE;
 	}
 	
 	public String getLookupName() {

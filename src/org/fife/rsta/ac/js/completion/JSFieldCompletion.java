@@ -46,8 +46,8 @@ public class JSFieldCompletion extends VariableCompletion implements
 	}
 
 
-	public int getSortIndex() {
-		return STATIC_FIELD_INDEX;
+	public int getRelevance() {
+		return STATIC_FIELD_RELEVANCE;
 	}
 
 	

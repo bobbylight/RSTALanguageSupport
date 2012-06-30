@@ -46,8 +46,8 @@ public class JavascriptBasicCompletion extends BasicCompletion implements
 	}
 
 
-	public int getSortIndex() {
-		return BASIC_COMPLETION_INDEX;
+	public int getRelevance() {
+		return BASIC_COMPLETION_RELEVANCE;
 	}
 
 }

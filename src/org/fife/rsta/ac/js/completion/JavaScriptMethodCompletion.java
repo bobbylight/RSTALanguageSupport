@@ -42,8 +42,8 @@ public class JavaScriptMethodCompletion extends FunctionCompletion implements
 	}
 
 
-	public int getSortIndex() {
-		return systemFunction ? GLOBAL_FUNCTION_INDEX : DEFAULT_FUNCTION_INDEX;
+	public int getRelevance() {
+		return systemFunction ? GLOBAL_FUNCTION_RELEVANCE : DEFAULT_FUNCTION_RELEVANCE;
 	}
 
 
