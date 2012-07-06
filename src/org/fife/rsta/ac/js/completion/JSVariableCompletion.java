@@ -11,7 +11,6 @@
 package org.fife.rsta.ac.js.completion;
 
 import java.util.Iterator;
-
 import javax.swing.Icon;
 import javax.swing.text.JTextComponent;
 

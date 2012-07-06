@@ -11,7 +11,6 @@
 package org.fife.rsta.ac.java;
 
 import java.awt.Graphics;
-import javax.swing.Icon;
 
 import org.fife.ui.autocomplete.Completion;
 
@@ -29,15 +28,7 @@ public interface JavaSourceCompletion extends Completion {
 	 * Force subclasses to override equals().
 	 * TODO: Remove me
 	 */
-	public abstract boolean equals(Object obj);
-
-
-	/**
-	 * Returns the icon to use when rendering this completion.
-	 *
-	 * @return The icon.
-	 */
-	public abstract Icon getIcon();
+	public boolean equals(Object obj);
 
 
 	/**
@@ -48,8 +39,7 @@ public interface JavaSourceCompletion extends Completion {
 	 * @param y
 	 * @param selected
 	 */
-	public abstract void rendererText(Graphics g, int x, int y,
-										boolean selected);
+	public void rendererText(Graphics g, int x, int y, boolean selected);
 
 
 }

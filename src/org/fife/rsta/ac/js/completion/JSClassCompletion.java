@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.util.Iterator;
-
 import javax.swing.Icon;
 
 import org.fife.rsta.ac.java.AbstractJavaSourceCompletion;

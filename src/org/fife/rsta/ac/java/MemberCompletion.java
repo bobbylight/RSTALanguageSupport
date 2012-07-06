@@ -10,8 +10,6 @@
  */
 package org.fife.rsta.ac.java;
 
-import javax.swing.Icon;
-
 import org.fife.rsta.ac.java.IconFactory.IconData;
 
 
@@ -35,23 +33,11 @@ interface MemberCompletion extends JavaSourceCompletion {
 
 
 	/**
-	 * {@inheritDoc}
-	 */
-	public Icon getIcon();
-
-
-	/**
 	 * Returns the signature of this member.
 	 *
 	 * @return The signature.
 	 */
 	public String getSignature();
-
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public String getSummary();
 
 
 	/**
@@ -88,14 +74,6 @@ interface MemberCompletion extends JavaSourceCompletion {
 		public String getEnclosingClassName(boolean fullyQualified);
 
 		/**
-		 * Returns the icon to use when rendering this member's completion.
-		 *
-		 * @return The icon to use.
-		 * @see MemberCompletion#getIcon()
-		 */
-		public String getIcon();
-
-		/**
 		 * Returns the signature of this member.
 		 *
 		 * @return The signature.
@@ -126,14 +104,6 @@ interface MemberCompletion extends JavaSourceCompletion {
 		 * @return Whether this member is a constructor.
 		 */
 		public boolean isConstructor();
-
-		/**
-		 * Returns whether this member is deprecated.
-		 *
-		 * @return Whether this member is deprecated.
-		 * @see MemberCompletion#isDeprecated()
-		 */
-		public boolean isDeprecated();
 
 	}
 

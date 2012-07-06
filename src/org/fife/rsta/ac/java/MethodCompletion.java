@@ -63,7 +63,6 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 	private static final int NON_CONSTRUCTOR_RELEVANCE		= 2;
 
 
-
 	/**
 	 * Creates a completion for a method discovered when parsing a Java
 	 * source file.

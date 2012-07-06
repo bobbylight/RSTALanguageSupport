@@ -1,8 +1,6 @@
 package org.fife.rsta.ac.js.completion;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import org.fife.rsta.ac.java.JarManager;
 import org.fife.rsta.ac.java.buildpath.SourceLocation;
@@ -65,14 +63,10 @@ public class JSFieldData {
 					// Get all overloads of this method with the number of
 					// parameters we're looking for.  99% of the time, there
 					// will only be 1, the method we're looking for.
-					List contenders = null;
 					for (Iterator j=td.getMemberIterator(); j.hasNext(); ) {
 						Member member = (Member)j.next();
 						if (member instanceof Field &&
 								member.getName().equals(info.getName())) {
-							if (contenders==null) {
-								contenders = new ArrayList(1); // Usually just 1
-							}
 							return (Field) member;
 						}
 					}

@@ -23,6 +23,7 @@ public class JSBeanCompletion extends VariableCompletion implements
 	public JSBeanCompletion(CompletionProvider provider, MethodInfo methodInfo,
 			JarManager jarManager) {
 		super(provider, convertNameToBean(methodInfo.getName()), null);
+		setRelevance(BEAN_METHOD_RELEVANCE);
 		this.methodData = new JSMethodData(methodInfo, jarManager);
 		this.method = methodData.getMethod();
 	}
@@ -36,11 +37,6 @@ public class JSBeanCompletion extends VariableCompletion implements
 
 	public Icon getIcon() {
 		return IconFactory.getIcon(IconFactory.GLOBAL_VARIABLE_ICON);
-	}
-
-
-	public int getRelevance() {
-		return BEAN_METHOD_RELEVANCE;
 	}
 
 
@@ -88,8 +84,6 @@ public class JSBeanCompletion extends VariableCompletion implements
 	public String getLookupName() {
 		return getName();
 	}
-	
-	
 
 
 	public String getEnclosingClassName(boolean fullyQualified) {

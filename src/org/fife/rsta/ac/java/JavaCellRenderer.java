@@ -99,7 +99,7 @@ public class JavaCellRenderer extends DefaultListCellRenderer {
 		else {
 			jsc = null;
 			nonJavaCompletion = (Completion)value;
-			setIcon(null); // TODO: emptyIcon
+			setIcon(nonJavaCompletion.getIcon());
 		}
 
 		evenRow = (index&1) == 0;
@@ -160,7 +160,7 @@ public class JavaCellRenderer extends DefaultListCellRenderer {
 			jsc.rendererText(g, x, g.getFontMetrics().getHeight(), selected);
 		}
 		else {
-			Completion c = jsc!=null ? (Completion)jsc : nonJavaCompletion;
+			Completion c = jsc!=null ? jsc : nonJavaCompletion;
 			if (c!=null) {
 				g.drawString(c.toString(), x, g.getFontMetrics().getHeight());
 			}

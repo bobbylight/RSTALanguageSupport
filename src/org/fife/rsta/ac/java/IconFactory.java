@@ -157,6 +157,13 @@ public class IconFactory {
 
 	public static interface IconData {
 
+		/**
+		 * Returns the main icon to use when rendering this member's completion.
+		 * This icon will be decorated appropriately based on whether it is
+		 * abstract, deprecated, final, static, or any of the above.
+		 *
+		 * @return The icon to use.
+		 */
 		public String getIcon();
 
 		public boolean isAbstract();

@@ -80,6 +80,9 @@ class ClassCompletion extends AbstractJavaSourceCompletion {
 	}
 
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public Icon getIcon() {
 
 		// TODO: Add functionality to ClassFile to make this simpler.

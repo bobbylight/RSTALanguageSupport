@@ -1,7 +1,5 @@
 package org.fife.rsta.ac.js.completion;
 
-import javax.swing.Icon;
-
 
 public interface JSCompletionUI {
 
@@ -14,12 +12,6 @@ public interface JSCompletionUI {
 	static final int GLOBAL_FUNCTION_RELEVANCE = 2;
 	static final int BASIC_COMPLETION_RELEVANCE = 1;
 	static final int TEMPLATE_RELEVANCE = 0;
-
-
-	/**
-	 * @return Icon for completion
-	 */
-	Icon getIcon();
 
 
 }

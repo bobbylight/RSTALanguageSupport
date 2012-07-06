@@ -17,6 +17,7 @@ public class JavaScriptInScriptFunctionCompletion extends FunctionCompletion
 	public JavaScriptInScriptFunctionCompletion(CompletionProvider provider,
 			String name, TypeDeclaration returnType) {
 		super(provider, name, null);
+		setRelevance(DEFAULT_FUNCTION_RELEVANCE);
 		this.returnType = returnType;
 	}
 
@@ -39,10 +40,6 @@ public class JavaScriptInScriptFunctionCompletion extends FunctionCompletion
 	}
 
 
-	public int getRelevance() {
-		return DEFAULT_FUNCTION_RELEVANCE;
-	}
-	
 	public String getLookupName() {
 		StringBuffer sb = new StringBuffer(getName());
 		sb.append('(');
@@ -92,8 +89,6 @@ public class JavaScriptInScriptFunctionCompletion extends FunctionCompletion
 	public int hashCode() {
 		return getLookupName().hashCode();
 	}
-	
-	
-	
+
 
 }
