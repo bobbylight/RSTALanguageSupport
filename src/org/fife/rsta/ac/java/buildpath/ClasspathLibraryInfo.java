@@ -46,6 +46,7 @@ import org.fife.rsta.ac.java.classreader.ClassFile;
  * @version 1.0
  * @see JarLibraryInfo
  * @see DirLibraryInfo
+ * @see ClasspathSourceLocation
  */
 public class ClasspathLibraryInfo extends LibraryInfo {
 

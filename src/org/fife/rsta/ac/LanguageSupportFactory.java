@@ -15,7 +15,6 @@ import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.fife.ui.autocomplete.LinkRedirector;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
@@ -39,12 +38,6 @@ public class LanguageSupportFactory implements PropertyChangeListener {
 	 * <code>LanguageSupports</code> when necessary.
 	 */
 	private Map styleToSupport;
-
-	/**
-	 * Given the chance to modify external URL's in documentation when they
-	 * are clicked.  This field is shared amongst all language supports.
-	 */
-	private LinkRedirector externalLinkRedirector;
 
 	/**
 	 * Client property set on RSyntaxTextAreas that points to the current
@@ -197,24 +190,6 @@ public class LanguageSupportFactory implements PropertyChangeListener {
 		installSupport(textArea);
 		textArea.addPropertyChangeListener(
 				RSyntaxTextArea.SYNTAX_STYLE_PROPERTY, this);
-	}
-
-
-	/**
-	 * Sets the redirector for external URL's found in code completion
-	 * documentation.  When a non-local link is clicked, this redirector is
-	 * given the chance to modify the URL fetched and displayed.<p>
-	 * 
-	 * This method must be called before retrieving any language support via
-	 * {@link #getSupportFor(String)}, since language supports are cached and
-	 * shared amongst all relevant <code>RSyntaxTextArea</code>s.  If you need
-	 * to modify the link redirector at runtime, you can grab it from the
-	 * getter method.
-	 *
-	 * @param redirector The new link redirector.
-	 */
-	public void setExternalLinkRedirector(LinkRedirector redirector) {
-		this.externalLinkRedirector = redirector;
 	}
 
 

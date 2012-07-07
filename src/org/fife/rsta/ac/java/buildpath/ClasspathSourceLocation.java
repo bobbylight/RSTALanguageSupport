@@ -35,15 +35,9 @@ import org.fife.rsta.ac.java.rjc.parser.ASTFactory;
  *
  * @author Robert Futrell
  * @version 1.0
+ * @see ClasspathLibraryInfo
  */
 public class ClasspathSourceLocation implements SourceLocation {
-
-
-	/**
-	 * Constructor.
-	 */
-	public ClasspathSourceLocation() {
-	}
 
 
 	/**
