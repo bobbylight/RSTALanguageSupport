@@ -226,7 +226,8 @@ public class PhpCompletionProvider extends HtmlCompletionProvider {
 		}
 
 		// Check if previous line ended in a PHP block.
-		// HACK: This relies on insider knowledge of PhpTokenmaker!
+		// HACK: This relies on insider knowledge of PhpTokenmaker! All
+		// PHP-related states have the "lowest" token types.
 		if (!inPhp && line>0) {
 			int prevLineEndType = doc.getLastTokenTypeOnLine(line-1);
 			if (prevLineEndType<=PHPTokenMaker.INTERNAL_IN_PHP) {

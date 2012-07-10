@@ -226,7 +226,7 @@ if (t!=null && !t.isWhitespace()) {
 							// also check for an EOL token that means "we're in
 							// a tag."
 							// HACK: Using knowledge of HTML/JSP/PHPTokenMaker!
-							if (t.type>-1 || t.type<-4) {
+							if (t.type>-1 || t.type<-9) {
 								text = null;
 							}
 
@@ -401,10 +401,10 @@ if (t!=null && !t.isWhitespace()) {
 				RSyntaxDocument doc = (RSyntaxDocument)textArea.getDocument();
 				int prevLastToken = doc.getLastTokenTypeOnLine(line-1);
 				// HACK: This code uses the insider knowledge that token types
-				// -1 through -4 mean "something inside a tag" for all
+				// -1 through -9 mean "something inside a tag" for all
 				// applicable markup languages (HTML, JSP, and PHP)!
-				// TODO: Remove knowledge of internal toktn types.
-				if (prevLastToken<=-1 && prevLastToken>=-4) {
+				// TODO: Remove knowledge of internal token types.
+				if (prevLastToken<=-1 && prevLastToken>=-9) {
 					inside = 1;
 				}
 				else {
