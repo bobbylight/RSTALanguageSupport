@@ -135,8 +135,9 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 			if (noDotInText) {
 
 				// Don't add shorthand completions if they're typing something
-				// qualified
-				if (text.indexOf('.')==-1) {
+				// qualified 
+				// only add shorthand completions if the user has started typing something in (Eclipse behaviour)
+				if (text.indexOf('.')==-1 && text.length() > 0) {
 					addShorthandCompletions(set);
 				}
 
