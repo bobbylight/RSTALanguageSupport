@@ -26,7 +26,6 @@ import org.fife.ui.autocomplete.TemplateCompletion;
 public class JavaTemplateCompletion extends TemplateCompletion
 		implements JavaSourceCompletion {
 
-	private String shortDesc;
 	private String icon;
 
 
@@ -39,8 +38,13 @@ public class JavaTemplateCompletion extends TemplateCompletion
 	public JavaTemplateCompletion(CompletionProvider provider,
 			String inputText, String definitionString, String template,
 			String shortDesc) {
-		super(provider, inputText, definitionString, template);
-		setShortDescription(shortDesc);
+		this(provider, inputText, definitionString, template, shortDesc, null);
+	}
+	
+	public JavaTemplateCompletion(CompletionProvider provider,
+			String inputText, String definitionString, String template,
+			String shortDesc, String summary) {
+		super(provider, inputText, definitionString, template, shortDesc, summary);
 		setIcon(IconFactory.TEMPLATE_ICON);
 	}
 
@@ -49,10 +53,6 @@ public class JavaTemplateCompletion extends TemplateCompletion
 		return IconFactory.get().getIcon(icon);
 	}
 
-
-	public String getShortDescription() {
-		return shortDesc;
-	}
 
 	public void rendererText(Graphics g, int x, int y, boolean selected) {
 		JavaShorthandCompletion.renderText(g, getDefinitionString(),
@@ -63,11 +63,5 @@ public class JavaTemplateCompletion extends TemplateCompletion
 	public void setIcon(String iconId) {
 		this.icon = iconId;
 	}
-
-
-	public void setShortDescription(String shortDesc) {
-		this.shortDesc = shortDesc;
-	}
-
 
 }

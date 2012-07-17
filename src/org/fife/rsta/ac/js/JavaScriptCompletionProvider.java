@@ -10,7 +10,12 @@
  */
 package org.fife.rsta.ac.js;
 
+import java.util.Iterator;
+
 import org.fife.rsta.ac.java.JarManager;
+import org.fife.rsta.ac.java.ShorthandCompletionCache;
+import org.fife.ui.autocomplete.Completion;
+import org.fife.ui.autocomplete.DefaultCompletionProvider;
 import org.fife.ui.autocomplete.LanguageAwareCompletionProvider;
 import org.mozilla.javascript.ast.AstRoot;
 
@@ -48,9 +53,9 @@ public class JavaScriptCompletionProvider extends
 		this.sourceProvider = (SourceCompletionProvider) getDefaultCompletionProvider();
 		this.sourceProvider.setJarManager(jarManager);
 		this.languageSupport = languageSupport;
+		
+		setShorthandCompletionCache(new JavaScriptShorthandCompletionCache(sourceProvider, new DefaultCompletionProvider()));
 		sourceProvider.setParent(this);
-
-		// setDocCommentCompletionProvider(new DocCommentCompletionProvider());
 	}
 
 
@@ -71,6 +76,33 @@ public class JavaScriptCompletionProvider extends
 	
 	public JavaScriptLanguageSupport getLanguageSupport() {
 		return languageSupport;
+	}
+	
+	/**
+	 * Set short hand completion cache
+	 */
+	public void setShorthandCompletionCache(ShorthandCompletionCache shorthandCache)
+	{
+		sourceProvider.setShorthandCache(shorthandCache);
+		//reset comment completions too
+		setCommentCompletions(shorthandCache);
+	}
+	
+	/**
+	 * load the comment completions from the short hand cache
+	 * @param shorthandCache
+	 */
+	private void setCommentCompletions(ShorthandCompletionCache shorthandCache)
+	{
+		DefaultCompletionProvider provider = shorthandCache.getCommentProvider();
+		if(provider != null) {
+			
+			for(Iterator i = shorthandCache.getCommentCompletions().iterator(); i.hasNext();) {
+				Completion c = (Completion)i.next();
+				provider.addCompletion(c);
+			}
+			setCommentCompletionProvider(provider);
+		}
 	}
 
 

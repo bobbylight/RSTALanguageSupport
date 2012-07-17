@@ -7,11 +7,12 @@ import org.fife.ui.autocomplete.BasicCompletion;
 import org.fife.ui.autocomplete.CompletionProvider;
 
 
+/**
+ * Basic JavaScript completion that requires no icon
+ * e.g for or while
+ */
 public class JavascriptBasicCompletion extends BasicCompletion implements
 		JSCompletionUI {
-
-	private boolean template;
-
 
 	public JavascriptBasicCompletion(CompletionProvider provider,
 			String replacementText, String shortDesc, String summary) {
@@ -33,16 +34,6 @@ public class JavascriptBasicCompletion extends BasicCompletion implements
 
 	public Icon getIcon() {
 		return IconFactory.getIcon(IconFactory.getEmptyIcon());
-	}
-
-
-	public boolean isTemplate() {
-		return template;
-	}
-
-
-	public void setTemplate(boolean template) {
-		this.template = template;
 	}
 
 

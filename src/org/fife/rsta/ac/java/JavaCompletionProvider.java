@@ -13,11 +13,14 @@ package org.fife.rsta.ac.java;
 import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import javax.swing.text.JTextComponent;
 
 import org.fife.rsta.ac.java.buildpath.LibraryInfo;
 import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
+import org.fife.ui.autocomplete.Completion;
+import org.fife.ui.autocomplete.DefaultCompletionProvider;
 import org.fife.ui.autocomplete.LanguageAwareCompletionProvider;
 
 
@@ -60,11 +63,35 @@ public class JavaCompletionProvider extends LanguageAwareCompletionProvider {
 		this.sourceProvider = (SourceCompletionProvider)
 										getDefaultCompletionProvider();
 		sourceProvider.setJavaProvider(this);
-
+		setShorthandCompletionCache(new JavaShorthandCompletionCache(sourceProvider, new DefaultCompletionProvider()));
 		setDocCommentCompletionProvider(new DocCommentCompletionProvider());
 
 	}
 
+	/**
+	 * Set short hand completion cache (template and comment completions)
+	 */
+	public void setShorthandCompletionCache(ShorthandCompletionCache shorthandCache)
+	{
+		sourceProvider.setShorthandCache(shorthandCache);
+		//reset comment completions too
+		setCommentCompletions(shorthandCache);
+	}
+	
+	private void setCommentCompletions(ShorthandCompletionCache shorthandCache)
+	{
+		DefaultCompletionProvider provider = shorthandCache.getCommentProvider();
+		if(provider != null) {
+			
+			for(Iterator i = shorthandCache.getCommentCompletions().iterator(); i.hasNext();) {
+				Completion c = (Completion)i.next();
+				provider.addCompletion(c);
+			}
+			setCommentCompletionProvider(provider);
+		}
+			
+		
+	}
 
 	/**
 	 * Adds a jar to the "build path."

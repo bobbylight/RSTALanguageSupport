@@ -14,12 +14,13 @@ import java.awt.Cursor;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeSet;
+
 import javax.swing.text.JTextComponent;
 
 import org.fife.rsta.ac.java.JarManager;
+import org.fife.rsta.ac.java.ShorthandCompletionCache;
 import org.fife.rsta.ac.java.buildpath.SourceLocation;
 import org.fife.rsta.ac.js.ast.CodeBlock;
 import org.fife.rsta.ac.js.ast.JavaScriptVariableDeclaration;
@@ -29,7 +30,6 @@ import org.fife.rsta.ac.js.ast.jsType.JavaScriptTypesFactory;
 import org.fife.rsta.ac.js.ast.parser.JavaScriptParser;
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
 import org.fife.rsta.ac.js.completion.JSVariableCompletion;
-import org.fife.rsta.ac.js.completion.JavaScriptTemplateCompletion;
 import org.fife.rsta.ac.js.engine.JavaScriptEngine;
 import org.fife.rsta.ac.js.engine.JavaScriptEngineFactory;
 import org.fife.rsta.ac.js.resolver.JavaScriptResolver;
@@ -54,10 +54,9 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	private VariableResolver variableResolver;
 	
 	private PreProcesssingScripts preProcessing;
-
-	private static final String MSG = "org.fife.rsta.ac.js.resources";
-	private static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
-
+	
+	//Shorthand completions (templates and comments)
+	private ShorthandCompletionCache shorthandCache;
 
 	public SourceCompletionProvider() {
 		this(null);
@@ -74,23 +73,25 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 
 	/**
-	 * Adds simple shorthand completions relevant to JavaScript.
+	 * Adds simple shorthand completions relevant to JavaScript from the short hand template.
 	 *
 	 * @param set The set to add to.
+	 * @see ShorthandCompletionCache
 	 */
 	private void addShorthandCompletions(Set set) {
 
-		String template =
-				"for (var ${i} = 0; ${i} < ${array}.length; ${i}++) {\n\t${cursor}\n}";
-			set.add(new JavaScriptTemplateCompletion(this, "for", "for-loop", template,
-					msg.getString("for.array.shortDesc")));
-
-		template = "do {\n\t${cursor}\n} while (${condition});";
-		set.add(new JavaScriptTemplateCompletion(this, "do", "do-loop", template,
-				msg.getString("do.shortDesc")));
-
+		if(shorthandCache != null) {
+			set.addAll(shorthandCache.getShorthandCompletions());
+		}
 	}
 
+	/**
+	 * Set template completion cache for source completion provider
+	 * @param templateCache
+	 */
+	public void setShorthandCache(ShorthandCompletionCache shorthandCache) {
+		this.shorthandCache = shorthandCache;
+	}
 
 	/**
 	 * {@inheritDoc}
