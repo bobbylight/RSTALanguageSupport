@@ -122,8 +122,10 @@
 				<include if="c"    name="org/fife/rsta/ac/c/**/*.png"/>
 				<include if="html" name="org/fife/rsta/ac/html/**/*.png"/>
 				<include if="java" name="org/fife/rsta/ac/java/**/*.gif"/>
+				<include if="java" name="org/fife/rsta/ac/java/*.properties"/>
 				<include if="js"   name="org/fife/rsta/ac/js/**/*.gif"/>
 				<include if="js"   name="org/fife/rsta/ac/js/*.txt"/>
+				<include if="js"   name="org/fife/rsta/ac/js/*.properties"/>
 				<include if="xml"  name="org/fife/rsta/ac/xml/**/*.png"/>
 			</fileset>
 			<fileset dir="${source-dir}">
