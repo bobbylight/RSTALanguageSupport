@@ -10,6 +10,7 @@ import org.fife.rsta.ac.js.Logger;
 import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.rsta.ac.js.ast.CodeBlock;
 import org.fife.rsta.ac.js.ast.JavaScriptFunctionDeclaration;
+import org.fife.rsta.ac.js.ast.JavaScriptFunctionTypeDeclaration;
 import org.fife.rsta.ac.js.ast.JavaScriptVariableDeclaration;
 import org.fife.rsta.ac.js.ast.type.ArrayTypeDeclaration;
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
@@ -517,7 +518,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 		if (target != null) {
 			JavaScriptVariableDeclaration dec = extractVariableFromNode(target,
-					block, offset);
+					block, offset, initializer.getInitializer());
 			if (dec != null
 					&& initializer.getInitializer() != null
 					&& JavaScriptHelper.canResolveVariable(target, initializer
@@ -653,6 +654,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	}
 
 
+
 	/**
 	 * Extract the variable from the Rhino node and add to the CodeBlock
 	 * 
@@ -662,6 +664,19 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	 */
 	private JavaScriptVariableDeclaration extractVariableFromNode(AstNode node,
 			CodeBlock block, int offset) {
+		return extractVariableFromNode(node, block, offset, null);
+	}
+	
+	/**
+	 * Extract the variable from the Rhino node and add to the CodeBlock
+	 * 
+	 * @param node AstNode node from which to extract the variable
+	 * @param block code block to add the variable too
+	 * @param offset position of the variable in code
+	 * @param initializer node associated with variable 
+	 */
+	private JavaScriptVariableDeclaration extractVariableFromNode(AstNode node,
+			CodeBlock block, int offset, AstNode initializer) {
 		JavaScriptVariableDeclaration dec = null;
 		// check that the caret position is below the dot before looking for
 		// the variable
@@ -670,8 +685,13 @@ public class JavaScriptAstParser extends JavaScriptParser {
 			switch (node.getType()) {
 				case Token.NAME:
 					Name name = (Name) node;
-					dec = new JavaScriptVariableDeclaration(name
+					if(initializer != null && initializer.getType() == Token.CALL) {
+					    dec = new JavaScriptFunctionTypeDeclaration(name
+	                            .getIdentifier(), offset, provider, block);
+					} else {
+						dec = new JavaScriptVariableDeclaration(name
 							.getIdentifier(), offset, provider, block);
+					}
 					block.addVariable(dec);
 					break;
 				default:

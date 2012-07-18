@@ -100,7 +100,10 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 		comp.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 		try {
-
+			// reset local variables 
+			//They maybe needed outside this method so keep them in memory and clear them at the start
+			variableResolver.resetLocalVariables();
+			
 			completions.clear();
 
 			dot = comp.getCaretPosition();
@@ -197,9 +200,6 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 			return completions.subList(start, end);
 
 		} finally {
-			// do not need locally (RSTATextArea only) resolved variables
-			// anymore, so clear them
-			variableResolver.resetLocalVariables();
 			comp.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 		}
 

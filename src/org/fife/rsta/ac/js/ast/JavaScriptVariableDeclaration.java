@@ -23,8 +23,8 @@ public class JavaScriptVariableDeclaration {
 
 	private String name;
 	private int offset;
-	private TypeDeclaration typeDec;
-	private SourceCompletionProvider provider;
+	protected TypeDeclaration typeDec;
+	protected SourceCompletionProvider provider;
 
 	private boolean reassigned;
 	private TypeDeclaration originalTypeDec;
