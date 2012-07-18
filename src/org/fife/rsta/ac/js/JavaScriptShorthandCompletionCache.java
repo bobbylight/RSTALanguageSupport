@@ -15,7 +15,7 @@ public class JavaScriptShorthandCompletionCache extends ShorthandCompletionCache
 	private static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
 
 
-	public JavaScriptShorthandCompletionCache(DefaultCompletionProvider templateProvider, DefaultCompletionProvider commentsProvider) {
+	public JavaScriptShorthandCompletionCache(DefaultCompletionProvider templateProvider, DefaultCompletionProvider commentsProvider, boolean e4xSuppport) {
 		
 		super(templateProvider, commentsProvider);
 		//add basic keywords
@@ -39,6 +39,15 @@ public class JavaScriptShorthandCompletionCache extends ShorthandCompletionCache
         template = "for (var ${iterable_element} in ${iterable})\n{\n\t${cursor}\n}";
         addShorthandCompletion(new JavaScriptTemplateCompletion(templateProvider, "for", "for-loop-in",
                 template, msg.getString("for.in.shortDesc"), msg.getString("for.in.summary")));
+        
+        //e4x specific
+        if(e4xSuppport)
+        {
+	        //for each
+	        template = "for each (var ${iterable_element} in ${iterable})\n{\n\t${cursor}\n}";
+	        addShorthandCompletion(new JavaScriptTemplateCompletion(templateProvider, "for", "for-loop-in-each",
+	                template, msg.getString("for.in.each.shortDesc"), msg.getString("for.in.each.summary")));
+        }
 
         //do while
 		template = "do {\n\t${cursor}\n} while (${condition});";

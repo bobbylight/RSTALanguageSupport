@@ -40,6 +40,7 @@ import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
+import org.fife.ui.rsyntaxtextarea.modes.JavaScriptTokenMaker;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ast.AstRoot;
 
@@ -190,6 +191,9 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 		parserToInfoMap.put(parser, info);
 
 		installKeyboardShortcuts(textArea);
+		
+		//Set XML on JavascriptTokenMaker
+		JavaScriptTokenMaker.setE4xSupported(isXmlAvailable());
 
 	}
 

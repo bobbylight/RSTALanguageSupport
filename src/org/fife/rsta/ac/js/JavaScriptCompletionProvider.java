@@ -54,7 +54,7 @@ public class JavaScriptCompletionProvider extends
 		this.sourceProvider.setJarManager(jarManager);
 		this.languageSupport = languageSupport;
 		
-		setShorthandCompletionCache(new JavaScriptShorthandCompletionCache(sourceProvider, new DefaultCompletionProvider()));
+		setShorthandCompletionCache(new JavaScriptShorthandCompletionCache(sourceProvider, new DefaultCompletionProvider(), languageSupport.isXmlAvailable()));
 		sourceProvider.setParent(this);
 	}
 
