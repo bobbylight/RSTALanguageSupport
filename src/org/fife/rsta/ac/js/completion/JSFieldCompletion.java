@@ -22,11 +22,19 @@ public class JSFieldCompletion extends VariableCompletion implements
 
 	public JSFieldCompletion(CompletionProvider provider, FieldInfo fieldInfo) {
 		super(provider, fieldInfo.getName(), null);
-		setRelevance(STATIC_FIELD_RELEVANCE);
 		this.fieldData = new JSFieldData(fieldInfo, ((SourceCompletionProvider) provider).getJarManager());
 		this.field = fieldData.getField();
+		setRelevance(fieldData);
 	}
-
+	
+	private void setRelevance(JSFieldData data)
+	{
+		if(data.isStatic()) {
+			setRelevance(STATIC_FIELD_RELEVANCE);
+		} else  {
+			setRelevance(GLOBAL_VARIABLE_RELEVANCE);
+		}
+	}
 
 	public String getSummary() {
 
@@ -43,7 +51,8 @@ public class JSFieldCompletion extends VariableCompletion implements
 
 
 	public Icon getIcon() {
-		return fieldData.isStatic() ? IconFactory.getIcon(IconFactory.STATIC_VAR_ICON) : IconFactory.getIcon(IconFactory.GLOBAL_VARIABLE_ICON);
+		return fieldData.isStatic() ? IconFactory.getIcon(IconFactory.STATIC_VAR_ICON) : 
+			fieldData.isPublic() ? IconFactory.getIcon(IconFactory.GLOBAL_VARIABLE_ICON) : IconFactory.getIcon(IconFactory.DEFAULT_VARIABLE_ICON);
 	}
 
 

@@ -22,6 +22,8 @@ import org.fife.rsta.ac.js.JavaScriptHelper;
  */
 public class TypeDeclarationFactory {
 
+	//default package
+	public static final String ECMA_PACKAGE = "org.fife.rsta.ac.js.ecma.api";
 	// list of supported JavaScript Types
 	public static final String ECMA_ARRAY = "org.fife.rsta.ac.js.ecma.api.JSArray";
 	public static final String ECMA_BOOLEAN = "org.fife.rsta.ac.js.ecma.api.JSBoolean";
@@ -83,6 +85,7 @@ public class TypeDeclarationFactory {
 		factory.addJavaScriptLookup("Number",
 				TypeDeclarationFactory.ECMA_NUMBER);
 		factory.addJavaScriptLookup("Math", TypeDeclarationFactory.ECMA_MATH);
+		factory.addJavaScriptLookup("Function", TypeDeclarationFactory.ECMA_FUNCTION);
 		factory.addJavaScriptLookup("Object",
 				TypeDeclarationFactory.ECMA_OBJECT);
 		factory.addJavaScriptLookup("Array", TypeDeclarationFactory.ECMA_ARRAY);
@@ -162,6 +165,16 @@ public class TypeDeclarationFactory {
 	public void removeType(String name)
 	{
 		typeDeclarations.remove(name);
+	}
+	
+	/**
+	 * Returns whether the qualified name is a built in JavaScript type
+	 * @param name
+	 * @return
+	 */
+	public boolean isJavaScriptType(TypeDeclaration td)
+	{
+		return td != null && ECMA_PACKAGE.equals(td.getPackageName());
 	}
 
 

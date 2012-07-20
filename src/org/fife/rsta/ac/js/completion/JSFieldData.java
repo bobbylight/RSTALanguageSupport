@@ -91,6 +91,12 @@ public class JSFieldData {
 		return info.isStatic();
 	}
 	
+	public boolean isPublic()
+	{
+		int access = info.getAccessFlags();
+		return org.fife.rsta.ac.java.classreader.Util.isPublic(access);
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */

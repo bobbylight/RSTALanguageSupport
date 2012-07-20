@@ -13,6 +13,28 @@ public class JSDate extends JSObject {
 	public JSDate() {
 
 	}
+	
+	/**
+    * Property prototype
+    * 
+    * @type Date
+    * @memberOf Date
+    * @see Date
+    * @since Standard ECMA-262 3rd. Edition
+    * @since Level 2 Document Object Model Core Definition.
+    */
+   public JSDate protype;
+   
+   /**
+    * Property constructor
+    * 
+    * @type Function
+    * @memberOf Date
+    * @see Function
+    * @since Standard ECMA-262 3rd. Edition
+    * @since Level 2 Document Object Model Core Definition.
+    */
+   protected JSFunction constructor;
 
 
 	/**

@@ -14,6 +14,38 @@ public class JSFunction extends JSObject {
     }
     
     /**
+     * property length
+     * @type    Number
+     * @since   Standard ECMA-262 3rd. Edition 
+     * @since   Level 2 Document Object Model Core Definition.    
+    */ 
+   protected JSNumber length;
+   
+   /**
+    * Property prototype
+    * 
+    * @type Function
+    * @memberOf Function
+    * @see Function
+    * @since Standard ECMA-262 3rd. Edition
+    * @since Level 2 Document Object Model Core Definition.
+    */
+   public JSFunction protype;
+   
+   /**
+    * Property constructor
+    * 
+    * @type Function
+    * @memberOf Function
+    * @see Function
+    * @since Standard ECMA-262 3rd. Edition
+    * @since Level 2 Document Object Model Core Definition.
+    */
+   protected JSFunction constructor;
+   
+   
+    
+    /**
      * function apply (thisObject, argArray)
      * @param {Object} thisObject
      * @param {Array} argArray
@@ -33,12 +65,6 @@ public class JSFunction extends JSObject {
      */ 
     public JSObject call(JSObject thisObject, JSObject args){return null;}
     
-    /**
-      * property length
-      * @type    Number
-      * @since   Standard ECMA-262 3rd. Edition 
-      * @since   Level 2 Document Object Model Core Definition.    
-     */ 
-    public static JSNumber length;
+    
 
 }

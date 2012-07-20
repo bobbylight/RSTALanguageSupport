@@ -12,6 +12,28 @@ public class JSObject {
      */
     public JSObject() {
     }
+    
+    /**
+     * Property prototype
+     * 
+     * @type Object
+     * @memberOf Object
+     * @see Object
+     * @since Standard ECMA-262 3rd. Edition
+     * @since Level 2 Document Object Model Core Definition.
+     */
+    public JSObject protype;
+    
+    /**
+     * Property constructor
+     * 
+     * @type Function
+     * @memberOf Object
+     * @see Function
+     * @since Standard ECMA-262 3rd. Edition
+     * @since Level 2 Document Object Model Core Definition.
+     */
+    protected JSFunction constructor;
 
     /**
      * function toString()

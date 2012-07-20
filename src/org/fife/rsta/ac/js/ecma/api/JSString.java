@@ -25,7 +25,7 @@ public class JSString extends JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSString fromCharCode(JSNumber charCode){return null;}
+    public static JSString fromCharCode(JSNumber charCode){return null;}
 
     /**
      * Property length
@@ -36,7 +36,30 @@ public class JSString extends JSObject {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public static JSNumber length;
+    protected JSNumber length;
+    
+    /**
+     * Property prototype
+     * 
+     * @type String
+     * @memberOf String
+     * @see String
+     * @since Standard ECMA-262 3rd. Edition
+     * @since Level 2 Document Object Model Core Definition.
+     */
+    public JSString protype;
+    
+    /**
+     * Property constructor
+     * 
+     * @type Function
+     * @memberOf String
+     * @see Function
+     * @since Standard ECMA-262 3rd. Edition
+     * @since Level 2 Document Object Model Core Definition.
+     */
+    protected JSFunction constructor;
+
 
     /**
      * function charAt(position)

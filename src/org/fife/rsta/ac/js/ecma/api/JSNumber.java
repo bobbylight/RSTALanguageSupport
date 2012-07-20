@@ -13,6 +13,28 @@ public class JSNumber extends JSObject {
      */
     public JSNumber() {
     }
+    
+    /**
+     * Property prototype
+     * 
+     * @type Number
+     * @memberOf Number
+     * @see Number
+     * @since Standard ECMA-262 3rd. Edition
+     * @since Level 2 Document Object Model Core Definition.
+     */
+    public JSNumber protype;
+    
+    /**
+     * Property constructor
+     * 
+     * @type Function
+     * @memberOf Number
+     * @see Function
+     * @since Standard ECMA-262 3rd. Edition
+     * @since Level 2 Document Object Model Core Definition.
+     */
+    protected JSFunction constructor;
 
     /**
      * property MIN_VALUE

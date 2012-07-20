@@ -15,7 +15,28 @@ public class JSError extends JSObject {
 	public JSError() {
 	}
 
-
+	/**
+    * Property prototype
+    * 
+    * @type Error
+    * @memberOf Error
+    * @see Error
+    * @since Standard ECMA-262 3rd. Edition
+    * @since Level 2 Document Object Model Core Definition.
+    */
+   public JSError protype;
+   
+   /**
+    * Property constructor
+    * 
+    * @type Function
+    * @memberOf Error
+    * @see Function
+    * @since Standard ECMA-262 3rd. Edition
+    * @since Level 2 Document Object Model Core Definition.
+    */
+   protected JSFunction constructor;
+	   
 	/**
 	 * property name
 	 * 
@@ -24,7 +45,7 @@ public class JSError extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public static JSString name;
+	protected JSString name;
 
 	/**
 	 * property message
@@ -34,6 +55,8 @@ public class JSError extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public static JSString message;
+	protected JSString message;
+	
+	
 
 }

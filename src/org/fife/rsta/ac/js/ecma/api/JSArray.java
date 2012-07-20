@@ -24,7 +24,29 @@ public class JSArray extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public static JSNumber length;
+	public JSNumber length;
+	
+	/**
+    * Property prototype
+    * 
+    * @type Array
+    * @memberOf Array
+    * @see Array
+    * @since Standard ECMA-262 3rd. Edition
+    * @since Level 2 Document Object Model Core Definition.
+    */
+   public JSArray protype;
+   
+   /**
+    * Property constructor
+    * 
+    * @type Function
+    * @memberOf Array
+    * @see Function
+    * @since Standard ECMA-262 3rd. Edition
+    * @since Level 2 Document Object Model Core Definition.
+    */
+   protected JSFunction constructor;
 
 
 	/**

@@ -153,12 +153,13 @@ public abstract class JavaScriptTypesFactory {
 			JarManager jarManager, ClassFile cf) {
 
 		boolean staticOnly = cachedType.getType().isStaticsOnly();
+		boolean isJSType = TypeDeclarationFactory.Instance().isJavaScriptType(cachedType.getType());
 		// get methods
 		int methodCount = cf.getMethodCount();
 		for (int i = 0; i < methodCount; i++) {
 			MethodInfo info = cf.getMethodInfo(i);
 			if (!info.isConstructor() && !SPECIAL_METHOD.equals(info.getName())) {
-				if(isAccessible(info.getAccessFlags()) && ((staticOnly && info.isStatic()) || !staticOnly)) {
+				if(isAccessible(info.getAccessFlags(), staticOnly, isJSType) && ((staticOnly && info.isStatic()) || !staticOnly)) {
 					JSFunctionCompletion completion = new JSFunctionCompletion(provider, info, true);
 					cachedType.addCompletion(completion);
 				}
@@ -176,7 +177,7 @@ public abstract class JavaScriptTypesFactory {
 		int fieldCount = cf.getFieldCount();
 		for (int i = 0; i < fieldCount; i++) {
 			FieldInfo info = cf.getFieldInfo(i);
-			if (isAccessible(info, staticOnly)) {
+			if (isAccessible(info, staticOnly, isJSType)) {
 				JSFieldCompletion completion = new JSFieldCompletion(provider, info);
 				cachedType.addCompletion(completion);
 			}
@@ -213,20 +214,34 @@ public abstract class JavaScriptTypesFactory {
 	}
 
 
-	private boolean isAccessible(MemberInfo info, boolean staticOnly) {
+	private boolean isAccessible(MemberInfo info, boolean staticOnly, boolean isJJType) {
 
 		boolean accessible = false;
 		int access = info.getAccessFlags();
-		accessible = isAccessible(access);
+		accessible = isAccessible(access, staticOnly, isJJType);
 
 		return (!staticOnly && accessible) || ((staticOnly && info.isStatic() && accessible));
 
 	}
 	
-	private boolean isAccessible(int access)
+	/**
+	 * Returns whether the value is accessible based on the access flag for Methods and Fields
+	 * Rules are as follows:
+	 * 		<OL>
+	 * 			<LI>staticsOnly && public return true; //All public static methods and fields</LI>
+	 * 			<LI>!staticsOnly && public return true; //All public methods and fields</LI>
+	 * 			<LI>Built in JavaScript type and public or protected return true; //All public/protected built in JSType (org.fife.rsta.ac.js.ecma.api package) methods and fields</LI>
+	 * 		</OL> 
+	 * @param access - access flag to test
+	 * @param staticsOnly - whether loading static methods and fields only
+	 * @param isJSType - is a built in JavasScript type
+	 * @return
+	 */
+	private boolean isAccessible(int access, boolean staticsOnly, boolean isJSType)
 	{
 		boolean accessible = false;
-		if (org.fife.rsta.ac.java.classreader.Util.isPublic(access)) {
+		if (staticsOnly && org.fife.rsta.ac.java.classreader.Util.isPublic(access) 
+				|| !staticsOnly && org.fife.rsta.ac.java.classreader.Util.isPublic(access) || (isJSType && org.fife.rsta.ac.java.classreader.Util.isProtected(access))){
 			accessible = true;
 		}
 		return accessible;

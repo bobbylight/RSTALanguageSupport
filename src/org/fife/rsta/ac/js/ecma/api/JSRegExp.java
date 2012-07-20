@@ -13,6 +13,28 @@ public class JSRegExp extends JSObject {
 	 */
 	public JSRegExp() {
 	};
+	
+	/**
+    * Property prototype
+    * 
+    * @type RegExp
+    * @memberOf RegExp
+    * @see RegExp
+    * @since Standard ECMA-262 3rd. Edition
+    * @since Level 2 Document Object Model Core Definition.
+    */
+   public JSRegExp protype;
+   
+   /**
+    * Property constructor
+    * 
+    * @type Function
+    * @memberOf RegExp
+    * @see Function
+    * @since Standard ECMA-262 3rd. Edition
+    * @since Level 2 Document Object Model Core Definition.
+    */
+   protected JSFunction constructor;
 
 
 	/**
@@ -49,7 +71,7 @@ public class JSRegExp extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public static JSString source;
+	protected JSString source;
 
 	/**
 	 * property global
@@ -59,7 +81,7 @@ public class JSRegExp extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public static JSBoolean global;
+	protected JSBoolean global;
 
 	/**
 	 * property ignoreCase
@@ -69,7 +91,7 @@ public class JSRegExp extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public static JSBoolean ignoreCase;
+	protected JSBoolean ignoreCase;
 
 	/**
 	 * property multiline
@@ -79,7 +101,7 @@ public class JSRegExp extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public static JSBoolean multiline;
+	protected JSBoolean multiline;
 
 	/**
 	 * property lastIndex
@@ -89,6 +111,6 @@ public class JSRegExp extends JSObject {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public static JSNumber lastIndex;
+	protected JSNumber lastIndex;
 
 }

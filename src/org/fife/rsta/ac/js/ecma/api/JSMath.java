@@ -13,6 +13,28 @@ public class JSMath extends JSObject {
    public JSMath(){};
    
    /**
+    * Property prototype
+    * 
+    * @type Math
+    * @memberOf Math
+    * @see Math
+    * @since Standard ECMA-262 3rd. Edition
+    * @since Level 2 Document Object Model Core Definition.
+    */
+   public JSMath protype;
+   
+   /**
+    * Property constructor
+    * 
+    * @type Function
+    * @memberOf Math
+    * @see Function
+    * @since Standard ECMA-262 3rd. Edition
+    * @since Level 2 Document Object Model Core Definition.
+    */
+   protected JSFunction constructor;
+   
+   /**
      * Property E
      * @memberOf Math
      * @since   Standard ECMA-262 3rd. Edition 
