@@ -74,7 +74,6 @@ class DemoRootPane extends JRootPane implements HyperlinkListener,
 		JTree dummy = new JTree((TreeNode)null);
 		treeSP = new JScrollPane(dummy);
 
-		//JPanel cp = new JPanel(new BorderLayout());
 		JSplitPane sp = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 										treeSP, scrollPane);
 		sp.setContinuousLayout(true);

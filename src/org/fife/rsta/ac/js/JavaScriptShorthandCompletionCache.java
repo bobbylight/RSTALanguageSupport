@@ -1,3 +1,13 @@
+/*
+ * 07/22/2012
+ *
+ * Copyright (C) 2012 Robert Futrell
+ * robert_futrell at users.sourceforge.net
+ * http://fifesoft.com/rsyntaxtextarea
+ *
+ * This library is distributed under a modified BSD license.  See the included
+ * RSTALanguageSupport.License.txt file for details.
+ */
 package org.fife.rsta.ac.js;
 
 import java.util.ResourceBundle;
@@ -9,6 +19,12 @@ import org.fife.ui.autocomplete.BasicCompletion;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
 
 
+/**
+ * Cache of template and comment completions for JavaScript.
+ *
+ * @author Steve
+ * @version 1.0
+ */
 public class JavaScriptShorthandCompletionCache extends ShorthandCompletionCache {
 
 	private static final String MSG = "org.fife.rsta.ac.js.resources";
@@ -18,6 +34,7 @@ public class JavaScriptShorthandCompletionCache extends ShorthandCompletionCache
 	public JavaScriptShorthandCompletionCache(DefaultCompletionProvider templateProvider, DefaultCompletionProvider commentsProvider, boolean e4xSuppport) {
 		
 		super(templateProvider, commentsProvider);
+
 		//add basic keywords
 		addShorthandCompletion(new JavascriptBasicCompletion(templateProvider, "do"));
         addShorthandCompletion(new JavascriptBasicCompletion(templateProvider, "if"));
@@ -41,8 +58,7 @@ public class JavaScriptShorthandCompletionCache extends ShorthandCompletionCache
                 template, msg.getString("for.in.shortDesc"), msg.getString("for.in.summary")));
         
         //e4x specific
-        if(e4xSuppport)
-        {
+        if(e4xSuppport) {
 	        //for each
 	        template = "for each (var ${iterable_element} in ${iterable})\n{\n\t${cursor}\n}";
 	        addShorthandCompletion(new JavaScriptTemplateCompletion(templateProvider, "for", "for-loop-in-each",
@@ -73,4 +89,6 @@ public class JavaScriptShorthandCompletionCache extends ShorthandCompletionCache
         addCommentCompletion(new BasicCompletion(commentsProvider, "TODO:", null, msg.getString("todo")));
         addCommentCompletion(new BasicCompletion(commentsProvider, "FIXME:", null, msg.getString("fixme")));
 	}
+
+
 }

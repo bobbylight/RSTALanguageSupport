@@ -40,7 +40,8 @@ public class JavaTemplateCompletion extends TemplateCompletion
 			String shortDesc) {
 		this(provider, inputText, definitionString, template, shortDesc, null);
 	}
-	
+
+
 	public JavaTemplateCompletion(CompletionProvider provider,
 			String inputText, String definitionString, String template,
 			String shortDesc, String summary) {
@@ -63,5 +64,6 @@ public class JavaTemplateCompletion extends TemplateCompletion
 	public void setIcon(String iconId) {
 		this.icon = iconId;
 	}
+
 
 }

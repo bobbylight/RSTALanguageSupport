@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
@@ -69,6 +70,48 @@ public abstract class AbstractSourceTree extends JTree {
 	 * this in a way logical for the language.
 	 */
 	public abstract void expandInitialNodes();
+
+
+	/**
+	 * An attempt to quickly expand all tree nodes.  Only need to expand the
+	 * "deepest" nodes, as they will auto-expand all parents to make sure they
+	 * are visible.
+	 *
+	 * @return Whether an expandPath was called for the last node in the parent
+	 *         path
+	 */
+	protected boolean fastExpandAll(TreePath parent, boolean expand) {
+		// Traverse children
+		TreeNode node = (TreeNode) parent.getLastPathComponent();
+		if (node.getChildCount() > 0) {
+			boolean childExpandCalled = false;
+			for (Enumeration e = node.children(); e.hasMoreElements();) {
+				TreeNode n = (TreeNode) e.nextElement();
+				TreePath path = parent.pathByAddingChild(n);
+				// The || order is important, don't let childExpand be first,
+				// or the fastExpandAll() call won't happen in some cases.
+				childExpandCalled = fastExpandAll(path, expand) || childExpandCalled;
+			}
+
+			// Only expand me if one of the children hasn't already expanded
+			// its path (which includes me).
+			if (!childExpandCalled) {
+				// Expansion or collapse must be done bottom-up, BUT only for
+				// non-leaf nodes
+				if (expand) {
+					expandPath(parent);
+				}
+				else {
+					collapsePath(parent);
+				}
+				//expandCount++;
+			}
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 
 
 	/**

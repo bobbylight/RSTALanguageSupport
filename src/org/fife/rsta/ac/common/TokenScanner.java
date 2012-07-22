@@ -52,6 +52,16 @@ public class TokenScanner {
 
 
 	/**
+	 * Returns the document being parsed.
+	 *
+	 * @return The document.
+	 */
+	public RSyntaxDocument getDocument() {
+		return doc;
+	}
+
+
+	/**
 	 * Returns the next non-whitespace, non-comment token in the text area.
 	 *
 	 * @return The next token, or <code>null</code> if we are at the end of
