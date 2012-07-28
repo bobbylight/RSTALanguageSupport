@@ -60,6 +60,7 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
  */
 public class GoToMemberWindow extends JWindow {
 
+	private RSyntaxTextArea textArea;
 	private JTextField field;
 	private AbstractSourceTree tree;
 	private Listener listener;
@@ -76,6 +77,7 @@ public class GoToMemberWindow extends JWindow {
 							AbstractSourceTree tree) {
 
 		super(parent);
+		this.textArea = textArea;
 		ComponentOrientation o = parent.getComponentOrientation();
 		JPanel contentPane = new JPanel(new BorderLayout());
 		contentPane.setBorder(TipUtil.getToolTipBorder());
@@ -147,6 +149,10 @@ public class GoToMemberWindow extends JWindow {
 	public void dispose() {
 		listener.uninstall();
 		super.dispose();
+		// Force refocus of text area to prevent NPE in GoToMemberAction's
+		// (TextAction's) getTextComponent(ActinEvent) when a different
+		// component is focused and this action is executed twice.
+		textArea.requestFocusInWindow();
 	}
 
 
