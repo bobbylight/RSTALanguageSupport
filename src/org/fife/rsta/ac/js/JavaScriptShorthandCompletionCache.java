@@ -40,6 +40,7 @@ public class JavaScriptShorthandCompletionCache extends ShorthandCompletionCache
         addShorthandCompletion(new JavascriptBasicCompletion(templateProvider, "if"));
         addShorthandCompletion(new JavascriptBasicCompletion(templateProvider, "while"));
         addShorthandCompletion(new JavascriptBasicCompletion(templateProvider, "for"));
+        addShorthandCompletion(new JavascriptBasicCompletion(templateProvider, "switch"));
 		
 		//add template completions
         //iterate array
@@ -85,6 +86,11 @@ public class JavaScriptShorthandCompletionCache extends ShorthandCompletionCache
         addShorthandCompletion(new JavaScriptTemplateCompletion(templateProvider, "while", "while-cond",
                 template, msg.getString("while.shortDesc"), msg.getString("while.summary")));
 		
+        //switch case statement
+        template = "switch (${key}) {\n\tcase ${value}:\n\t\t${cursor}\n\t\tbreak;\n\tdefault:\n\t\tbreak;\n}";
+        addShorthandCompletion(new JavaScriptTemplateCompletion(templateProvider, "switch", "switch-statement",
+                template, msg.getString("switch.case.shortDesc"), msg.getString("switch.case.summary")));
+        
         /** Comments **/
         addCommentCompletion(new BasicCompletion(commentsProvider, "TODO:", null, msg.getString("todo")));
         addCommentCompletion(new BasicCompletion(commentsProvider, "FIXME:", null, msg.getString("fixme")));
