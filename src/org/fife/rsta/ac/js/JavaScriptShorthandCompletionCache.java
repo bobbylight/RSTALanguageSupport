@@ -41,8 +41,12 @@ public class JavaScriptShorthandCompletionCache extends ShorthandCompletionCache
         addShorthandCompletion(new JavascriptBasicCompletion(templateProvider, "while"));
         addShorthandCompletion(new JavascriptBasicCompletion(templateProvider, "for"));
         addShorthandCompletion(new JavascriptBasicCompletion(templateProvider, "switch"));
+        addShorthandCompletion(new JavascriptBasicCompletion(templateProvider, "try"));
+        addShorthandCompletion(new JavascriptBasicCompletion(templateProvider, "catch"));
+        addShorthandCompletion(new JavascriptBasicCompletion(templateProvider, "case"));
 		
-		//add template completions
+        
+        //add template completions
         //iterate array
 		String template = "for (var ${i} = 0; ${i} < ${array}.length; ${i}++) {\n\t${cursor}\n}";
 		addShorthandCompletion(new JavaScriptTemplateCompletion(templateProvider, "for", "for-loop-array",
@@ -90,6 +94,16 @@ public class JavaScriptShorthandCompletionCache extends ShorthandCompletionCache
         template = "switch (${key}) {\n\tcase ${value}:\n\t\t${cursor}\n\t\tbreak;\n\tdefault:\n\t\tbreak;\n}";
         addShorthandCompletion(new JavaScriptTemplateCompletion(templateProvider, "switch", "switch-statement",
                 template, msg.getString("switch.case.shortDesc"), msg.getString("switch.case.summary")));
+        
+        //try catch statement
+        template = "try {\n\t ${cursor} \n} catch (${err}) {\n\t\n}";
+        addShorthandCompletion(new JavaScriptTemplateCompletion(templateProvider, "try", "try-catch",
+                template, msg.getString("try.catch.shortDesc"), msg.getString("try.catch.summary")));
+        
+        //catch block
+        template = "catch (${err}) {\n\t${cursor}\n}";
+        addShorthandCompletion(new JavaScriptTemplateCompletion(templateProvider, "catch", "catch-block",
+                template, msg.getString("catch.block.shortDesc"), msg.getString("catch.block.summary")));
         
         /** Comments **/
         addCommentCompletion(new BasicCompletion(commentsProvider, "TODO:", null, msg.getString("todo")));
