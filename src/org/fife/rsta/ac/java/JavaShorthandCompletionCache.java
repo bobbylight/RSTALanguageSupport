@@ -71,6 +71,18 @@ public class JavaShorthandCompletionCache extends ShorthandCompletionCache {
 		addShorthandCompletion(new JavaTemplateCompletion(templateProvider, "runnable", "runnable", template,
 				msg.getString("runnable.shortDesc")));
 		
+        template = "switch (${key}) {\n\tcase ${value}:\n\t\t${cursor}\n\t\tbreak;\n\tdefault:\n\t\tbreak;\n}";
+        addShorthandCompletion(new JavaTemplateCompletion(templateProvider, "switch", "switch-statement",
+                template, msg.getString("switch.case.shortDesc"), msg.getString("switch.case.summary")));
+        
+        template = "try {\n\t ${cursor} \n} catch (${err}) {\n\t\n}";
+        addShorthandCompletion(new JavaTemplateCompletion(templateProvider, "try", "try-catch",
+                template, msg.getString("try.catch.shortDesc"), msg.getString("try.catch.summary")));
+        
+        template = "catch (${err}) {\n\t${cursor}\n}";
+        addShorthandCompletion(new JavaTemplateCompletion(templateProvider, "catch", "catch-block",
+                template, msg.getString("catch.block.shortDesc"), msg.getString("catch.block.summary")));
+        
 		/** Comments **/
         addCommentCompletion(new BasicCompletion(commentsProvider, "TODO:", null, msg.getString("todo")));
         addCommentCompletion(new BasicCompletion(commentsProvider, "FIXME:", null, msg.getString("fixme")));

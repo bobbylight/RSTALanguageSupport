@@ -11,6 +11,7 @@
 package org.fife.rsta.ac.java;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.fife.rsta.ac.js.JavaScriptShorthandCompletionCache;
@@ -57,8 +58,19 @@ public abstract class ShorthandCompletionCache {
 	}
 	
 	public void addShorthandCompletion(Completion completion) {
-		shorthandCompletion.add(completion);
+		addSorted(shorthandCompletion, completion);
 	}
+
+
+	private static final void addSorted(List list, Completion completion) {
+		int index = Collections.binarySearch(list, completion);
+		if (index<0) {
+			// index = -insertion_point - 1
+			index = -(index+1);
+		}
+		list.add(index, completion);
+	}
+
 
 	public List getShorthandCompletions() {
 		return shorthandCompletion;
@@ -74,7 +86,7 @@ public abstract class ShorthandCompletionCache {
 	
 	//comments
 	public void addCommentCompletion(Completion completion) {
-		commentCompletion.add(completion);
+		addSorted(commentCompletion, completion);
 	}
 
 	public List getCommentCompletions() {
