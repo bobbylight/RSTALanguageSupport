@@ -151,10 +151,15 @@ the method and parameter descriptions, is welcome.
 ----------------------------------------
 IV.  Building the Jar
 ----------------------------------------
-Use Apache Ant (http://ant.apache.org).  The default target in the supplied
-build script builds the library:
+Use Apache Ant (http://ant.apache.org).  This project depends on the sister
+RSyntaxTextArea and AutoComplete projects.  It is recommended that you check
+all three projects out side by side.  Then, to build:
 
-   cd RSTALanguageSuppport
+   cd RSyntaxTextArea
+   ant
+   cd ../AutoComplete
+   ant
+   cd ../RSTALanguageSuppport
    ant
 
 At the top of build.xml is a list of properties, one per language with code
