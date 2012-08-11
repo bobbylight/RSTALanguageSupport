@@ -19,6 +19,7 @@ import javax.swing.text.JTextComponent;
 
 import org.fife.rsta.ac.java.buildpath.LibraryInfo;
 import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
+import org.fife.ui.autocomplete.AbstractCompletionProvider;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
 import org.fife.ui.autocomplete.LanguageAwareCompletionProvider;
@@ -63,35 +64,12 @@ public class JavaCompletionProvider extends LanguageAwareCompletionProvider {
 		this.sourceProvider = (SourceCompletionProvider)
 										getDefaultCompletionProvider();
 		sourceProvider.setJavaProvider(this);
-		setShorthandCompletionCache(new JavaShorthandCompletionCache(sourceProvider, new DefaultCompletionProvider()));
+		setShorthandCompletionCache(new JavaShorthandCompletionCache(
+				sourceProvider, new DefaultCompletionProvider()));
 		setDocCommentCompletionProvider(new DocCommentCompletionProvider());
 
 	}
 
-	/**
-	 * Set short hand completion cache (template and comment completions)
-	 */
-	public void setShorthandCompletionCache(ShorthandCompletionCache shorthandCache)
-	{
-		sourceProvider.setShorthandCache(shorthandCache);
-		//reset comment completions too
-		setCommentCompletions(shorthandCache);
-	}
-	
-	private void setCommentCompletions(ShorthandCompletionCache shorthandCache)
-	{
-		DefaultCompletionProvider provider = shorthandCache.getCommentProvider();
-		if(provider != null) {
-			
-			for(Iterator i = shorthandCache.getCommentCompletions().iterator(); i.hasNext();) {
-				Completion c = (Completion)i.next();
-				provider.addCompletion(c);
-			}
-			setCommentCompletionProvider(provider);
-		}
-			
-		
-	}
 
 	/**
 	 * Adds a jar to the "build path."
@@ -181,8 +159,31 @@ public class JavaCompletionProvider extends LanguageAwareCompletionProvider {
 	}
 
 
+	private void setCommentCompletions(ShorthandCompletionCache shorthandCache) {
+		AbstractCompletionProvider provider = shorthandCache.getCommentProvider();
+		if(provider != null) {
+			for(Iterator i = shorthandCache.getCommentCompletions().iterator();
+					i.hasNext();) {
+				Completion c = (Completion)i.next();
+				provider.addCompletion(c);
+			}
+			setCommentCompletionProvider(provider);
+		}
+	}
+
+
 	public synchronized void setCompilationUnit(CompilationUnit cu) {
 		this.cu = cu;
+	}
+
+
+	/**
+	 * Set short hand completion cache (template and comment completions)
+	 */
+	public void setShorthandCompletionCache(ShorthandCompletionCache cache) {
+		sourceProvider.setShorthandCache(cache);
+		//reset comment completions too
+		setCommentCompletions(cache);
 	}
 
 

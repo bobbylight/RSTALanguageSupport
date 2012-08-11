@@ -14,6 +14,7 @@ import java.util.Iterator;
 
 import org.fife.rsta.ac.java.JarManager;
 import org.fife.rsta.ac.java.ShorthandCompletionCache;
+import org.fife.ui.autocomplete.AbstractCompletionProvider;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
 import org.fife.ui.autocomplete.LanguageAwareCompletionProvider;
@@ -94,9 +95,8 @@ public class JavaScriptCompletionProvider extends
 	 */
 	private void setCommentCompletions(ShorthandCompletionCache shorthandCache)
 	{
-		DefaultCompletionProvider provider = shorthandCache.getCommentProvider();
+		AbstractCompletionProvider provider = shorthandCache.getCommentProvider();
 		if(provider != null) {
-			
 			for(Iterator i = shorthandCache.getCommentCompletions().iterator(); i.hasNext();) {
 				Completion c = (Completion)i.next();
 				provider.addCompletion(c);

@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.fife.rsta.ac.js.JavaScriptShorthandCompletionCache;
+import org.fife.ui.autocomplete.AbstractCompletionProvider;
 import org.fife.ui.autocomplete.Completion;
-import org.fife.ui.autocomplete.DefaultCompletionProvider;
 
 
 /**
@@ -48,10 +48,10 @@ public abstract class ShorthandCompletionCache {
 	private ArrayList shorthandCompletion = new ArrayList();
 	private ArrayList commentCompletion = new ArrayList();
 	
-	private DefaultCompletionProvider templateProvider, commentProvider;
+	private AbstractCompletionProvider templateProvider, commentProvider;
 	
-	public ShorthandCompletionCache(DefaultCompletionProvider templateProvider,
-			DefaultCompletionProvider commentProvider) {
+	public ShorthandCompletionCache(AbstractCompletionProvider templateProvider,
+			AbstractCompletionProvider commentProvider) {
 		this.templateProvider = templateProvider;
 		this.commentProvider = commentProvider;
 	}
@@ -85,11 +85,11 @@ public abstract class ShorthandCompletionCache {
 		commentCompletion.remove(completion);
 	}
 	
-	public DefaultCompletionProvider getTemplateProvider() {
+	public AbstractCompletionProvider getTemplateProvider() {
 		return templateProvider;
 	}
 	
-	public DefaultCompletionProvider getCommentProvider() {
+	public AbstractCompletionProvider getCommentProvider() {
 		return commentProvider;
 	}
 
