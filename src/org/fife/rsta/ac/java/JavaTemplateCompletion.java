@@ -56,7 +56,7 @@ public class JavaTemplateCompletion extends TemplateCompletion
 
 
 	public void rendererText(Graphics g, int x, int y, boolean selected) {
-		JavaShorthandCompletion.renderText(g, getDefinitionString(),
+		JavaShorthandCompletion.renderText(g, getInputText(),
 				getShortDescription(), x, y, selected);
 	}
 
