@@ -573,7 +573,10 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 				if (p != null) {
 					try {
 						int startLine = textArea.getLineOfOffset(p.x);
-						int endLine = textArea.getLineOfOffset(p.y);
+						// Unterminated blocks can end in Integer.MAX_VALUE
+						int endOffs = Math.min(p.y,
+								textArea.getDocument().getLength());
+						int endLine = textArea.getLineOfOffset(endOffs);
 						textArea.setActiveLineRange(startLine, endLine);
 					} catch (BadLocationException ble) {
 						ble.printStackTrace();

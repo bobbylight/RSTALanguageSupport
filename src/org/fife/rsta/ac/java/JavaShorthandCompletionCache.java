@@ -32,9 +32,10 @@ public class JavaShorthandCompletionCache extends ShorthandCompletionCache {
 			templateProvider, DefaultCompletionProvider commentsProvider) {
 
 		super(templateProvider, commentsProvider);
+		String template = null;
 
 		//load defaults
-		String template = "System.out.println(${});${cursor}";
+		template = "System.out.println(${});${cursor}";
 		addShorthandCompletion(new JavaTemplateCompletion(templateProvider, "sysout", "sysout", template,
 				msg.getString("sysout.shortDesc"), msg.getString("sysout.summary")));
 
