@@ -24,6 +24,7 @@ import java.util.TreeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 
+import org.fife.rsta.ac.ShorthandCompletionCache;
 import org.fife.rsta.ac.java.buildpath.LibraryInfo;
 import org.fife.rsta.ac.java.buildpath.SourceLocation;
 import org.fife.rsta.ac.java.classreader.ClassFile;

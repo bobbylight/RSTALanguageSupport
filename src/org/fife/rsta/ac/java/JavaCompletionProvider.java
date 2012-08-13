@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 import javax.swing.text.JTextComponent;
 
+import org.fife.rsta.ac.ShorthandCompletionCache;
 import org.fife.rsta.ac.java.buildpath.LibraryInfo;
 import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
 import org.fife.ui.autocomplete.AbstractCompletionProvider;

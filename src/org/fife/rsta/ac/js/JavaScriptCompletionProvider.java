@@ -12,8 +12,8 @@ package org.fife.rsta.ac.js;
 
 import java.util.Iterator;
 
+import org.fife.rsta.ac.ShorthandCompletionCache;
 import org.fife.rsta.ac.java.JarManager;
-import org.fife.rsta.ac.java.ShorthandCompletionCache;
 import org.fife.ui.autocomplete.AbstractCompletionProvider;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;

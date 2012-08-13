@@ -8,13 +8,12 @@
  * This library is distributed under a modified BSD license.  See the included
  * RSTALanguageSupport.License.txt file for details.
  */
-package org.fife.rsta.ac.java;
+package org.fife.rsta.ac;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.fife.rsta.ac.js.JavaScriptShorthandCompletionCache;
 import org.fife.ui.autocomplete.AbstractCompletionProvider;
 import org.fife.ui.autocomplete.Completion;
 
@@ -39,18 +38,16 @@ import org.fife.ui.autocomplete.Completion;
  * This is really a convenient place to store these types of completions that
  * are re-used.
  * 
- * @see JavaShorthandCompletionCache
- * @see JavaScriptShorthandCompletionCache
  * @author Steve
  */
-public abstract class ShorthandCompletionCache {
-
+public class ShorthandCompletionCache {
 	
 	private ArrayList shorthandCompletion = new ArrayList();
 	private ArrayList commentCompletion = new ArrayList();
 	
 	private AbstractCompletionProvider templateProvider, commentProvider;
-	
+
+
 	public ShorthandCompletionCache(AbstractCompletionProvider templateProvider,
 			AbstractCompletionProvider commentProvider) {
 		this.templateProvider = templateProvider;

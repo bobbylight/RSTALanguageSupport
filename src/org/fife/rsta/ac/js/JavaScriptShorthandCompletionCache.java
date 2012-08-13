@@ -12,7 +12,7 @@ package org.fife.rsta.ac.js;
 
 import java.util.ResourceBundle;
 
-import org.fife.rsta.ac.java.ShorthandCompletionCache;
+import org.fife.rsta.ac.ShorthandCompletionCache;
 import org.fife.rsta.ac.js.completion.JavaScriptTemplateCompletion;
 import org.fife.rsta.ac.js.completion.JavascriptBasicCompletion;
 import org.fife.ui.autocomplete.BasicCompletion;

@@ -12,6 +12,7 @@ package org.fife.rsta.ac.java;
 
 import java.util.ResourceBundle;
 
+import org.fife.rsta.ac.ShorthandCompletionCache;
 import org.fife.ui.autocomplete.BasicCompletion;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
 
