@@ -10,7 +10,6 @@ import org.fife.rsta.ac.js.Logger;
 import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.rsta.ac.js.ast.CodeBlock;
 import org.fife.rsta.ac.js.ast.JavaScriptFunctionDeclaration;
-import org.fife.rsta.ac.js.ast.JavaScriptFunctionTypeDeclaration;
 import org.fife.rsta.ac.js.ast.JavaScriptVariableDeclaration;
 import org.fife.rsta.ac.js.ast.type.ArrayTypeDeclaration;
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
@@ -44,6 +43,9 @@ import org.mozilla.javascript.ast.WhileLoop;
 
 public class JavaScriptAstParser extends JavaScriptParser {
 
+
+	private ArrayList functions = new ArrayList();
+	
 	public JavaScriptAstParser(SourceCompletionProvider provider, int dot,
 			boolean preProcessingMode) {
 		super(provider, dot, preProcessingMode);
@@ -52,9 +54,19 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 	public CodeBlock convertAstNodeToCodeBlock(AstRoot root, Set set,
 			String entered) {
+		functions.clear();
 		CodeBlock block = new CodeBlock(0);
 		addCodeBlock(root, set, entered, block, Integer.MAX_VALUE);
+		setFunctionValues();
 		return block;
+	}
+	
+	private void setFunctionValues() {
+		//iterate through any found functions and set their types
+		for(Iterator i = functions.iterator(); i.hasNext();) {
+			ProcessFunctionType type = (ProcessFunctionType) i.next();
+			type.dec.setTypeDeclaration(type.typeNode);
+		}
 	}
 
 
@@ -685,13 +697,16 @@ public class JavaScriptAstParser extends JavaScriptParser {
 			switch (node.getType()) {
 				case Token.NAME:
 					Name name = (Name) node;
-					if(initializer != null && initializer.getType() == Token.CALL) {
-					    dec = new JavaScriptFunctionTypeDeclaration(name
-	                            .getIdentifier(), offset, provider, block);
-					} else {
-						dec = new JavaScriptVariableDeclaration(name
+					dec = new JavaScriptVariableDeclaration(name
 							.getIdentifier(), offset, provider, block);
-					}
+					if(initializer != null && initializer.getType() == Token.CALL) {
+						//set the type node later for functions as these sometimes cannot be resolved until
+						//after the entire document is parsed
+					   ProcessFunctionType func = new ProcessFunctionType();
+					   func.dec = dec;
+					   func.typeNode = initializer;
+					   functions.add(func);
+					} 
 					block.addVariable(dec);
 					break;
 				default:
@@ -765,5 +780,11 @@ public class JavaScriptAstParser extends JavaScriptParser {
 			return commonType;
 		}
 
+	}
+	
+	static class ProcessFunctionType
+	{
+		AstNode typeNode;
+		JavaScriptVariableDeclaration dec;
 	}
 }
