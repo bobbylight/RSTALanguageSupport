@@ -16,17 +16,23 @@ public class TypeDeclaration {
 	private String apiName;
 	private String jsName;
 	private boolean staticsOnly;
+	private boolean supportsBeanProperties;
 
 
-	public TypeDeclaration(String pkg, String apiName, String jsName, boolean staticsOnly) {
+	public TypeDeclaration(String pkg, String apiName, String jsName, boolean staticsOnly, boolean supportsBeanProperties) {
 		this.staticsOnly = staticsOnly;
 		this.pkg = pkg;
 		this.apiName = apiName;
 		this.jsName = jsName;
+		this.supportsBeanProperties = supportsBeanProperties;
+	}
+	
+	public TypeDeclaration(String pkg, String apiName, String jsName, boolean staticsOnly) {
+		this(pkg, apiName, jsName, staticsOnly, true);
 	}
 	
 	public TypeDeclaration(String pkg, String apiName, String jsName) {
-		this(pkg, apiName, jsName, false);
+		this(pkg, apiName, jsName, false, true);
 	}
 
 
@@ -57,6 +63,13 @@ public class TypeDeclaration {
 		this.staticsOnly = staticsOnly;
 	}
 
+	public void setSupportsBeanProperties(boolean supportsBeanProperties){
+		this.supportsBeanProperties = supportsBeanProperties;
+	}
+	
+	public boolean supportsBeanProperties() {
+		return supportsBeanProperties;
+	}
 
 	public boolean equals(Object obj) {
 

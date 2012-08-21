@@ -153,6 +153,7 @@ public abstract class JavaScriptTypesFactory {
 			JarManager jarManager, ClassFile cf) {
 
 		boolean staticOnly = cachedType.getType().isStaticsOnly();
+		boolean supportsBeanProperties = cachedType.getType().supportsBeanProperties();
 		boolean isJSType = TypeDeclarationFactory.Instance().isJavaScriptType(cachedType.getType());
 		// get methods
 		int methodCount = cf.getMethodCount();
@@ -165,7 +166,7 @@ public abstract class JavaScriptTypesFactory {
 				}
 				// check java bean types (get/is methods)
 				
-				if (!staticOnly && useBeanproperties && isBeanProperty(info)) {
+				if (!staticOnly && useBeanproperties && supportsBeanProperties && isBeanProperty(info)) {
 					JSBeanCompletion beanCompletion = new JSBeanCompletion(
 							provider, info, jarManager);
 					cachedType.addCompletion(beanCompletion);

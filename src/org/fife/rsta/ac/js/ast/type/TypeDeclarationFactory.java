@@ -52,27 +52,27 @@ public class TypeDeclarationFactory {
 	static {
 		TypeDeclarationFactory factory = Instance();
 		factory.addType(ECMA_ARRAY, new TypeDeclaration(
-				"org.fife.rsta.ac.js.ecma.api", "JSArray", "Array"));
+				"org.fife.rsta.ac.js.ecma.api", "JSArray", "Array", false, false));
 		factory.addType(ECMA_BOOLEAN, new TypeDeclaration(
-				"org.fife.rsta.ac.js.ecma.api", "JSBoolean", "Boolean"));
+				"org.fife.rsta.ac.js.ecma.api", "JSBoolean", "Boolean", false, false));
 		factory.addType(ECMA_DATE, new TypeDeclaration(
-				"org.fife.rsta.ac.js.ecma.api", "JSDate", "Date"));
+				"org.fife.rsta.ac.js.ecma.api", "JSDate", "Date", false, false));
 		factory.addType(ECMA_ERROR, new TypeDeclaration(
-				"org.fife.rsta.ac.js.ecma.api", "JSError", "Error"));
+				"org.fife.rsta.ac.js.ecma.api", "JSError", "Error", false, false));
 		factory.addType(ECMA_FUNCTION, new TypeDeclaration(
-				"org.fife.rsta.ac.js.ecma.api", "JSFunction", "Function"));
+				"org.fife.rsta.ac.js.ecma.api", "JSFunction", "Function", false, false));
 		factory.addType(ECMA_MATH, new TypeDeclaration(
-				"org.fife.rsta.ac.js.ecma.api", "JSMath", "Math"));
+				"org.fife.rsta.ac.js.ecma.api", "JSMath", "Math", false, false));
 		factory.addType(ECMA_NUMBER, new TypeDeclaration(
-				"org.fife.rsta.ac.js.ecma.api", "JSNumber", "Number"));
+				"org.fife.rsta.ac.js.ecma.api", "JSNumber", "Number", false, false));
 		factory.addType(ECMA_OBJECT, new TypeDeclaration(
-				"org.fife.rsta.ac.js.ecma.api", "JSObject", "Object"));
+				"org.fife.rsta.ac.js.ecma.api", "JSObject", "Object", false, false));
 		factory.addType(ECMA_REGEXP, new TypeDeclaration(
-				"org.fife.rsta.ac.js.ecma.api", "JSRegExp", "RegExp"));
+				"org.fife.rsta.ac.js.ecma.api", "JSRegExp", "RegExp", false, false));
 		factory.addType(ECMA_STRING, new TypeDeclaration(
-				"org.fife.rsta.ac.js.ecma.api", "JSString", "String"));
+				"org.fife.rsta.ac.js.ecma.api", "JSString", "String", false, false));
 		factory.addType(FUNCTION_CALL, new TypeDeclaration(null, FUNCTION_CALL,
-				FUNCTION_CALL));
+				FUNCTION_CALL, false, false));
 		factory.addType(ANY, new TypeDeclaration(null, "any", "any"));
 
 		// need to add lookup for Javascript Objects such as new Date(), String
