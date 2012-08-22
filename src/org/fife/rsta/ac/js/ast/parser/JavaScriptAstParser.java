@@ -337,8 +337,10 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	 */
 	private void processExpressionNode(Node child, CodeBlock block, Set set,
 			String entered, int offset) {
-		ExpressionStatement expr = (ExpressionStatement) child;
-		iterateNode(expr.getExpression(), set, entered, block, offset);
+		if(child instanceof ExpressionStatement) {
+			ExpressionStatement expr = (ExpressionStatement) child;
+			iterateNode(expr.getExpression(), set, entered, block, offset);
+		}
 	}
 
 
