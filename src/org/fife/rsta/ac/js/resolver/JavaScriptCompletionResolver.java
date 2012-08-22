@@ -157,7 +157,12 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 				return true;
 
 			JavaScriptType jsType = null;
-			TypeDeclaration dec = resolveNativeType(node);
+			TypeDeclaration dec = null;
+			//only resolve native type if last type is null
+			//otherwise it can be assumed that this is part of multi depth - e.g "".length.toString()
+			if(lastJavaScriptType == null) {
+				dec = resolveNativeType(node);
+			}
 			
 			if (dec != null) {
 				// lookup JavaScript completions type
