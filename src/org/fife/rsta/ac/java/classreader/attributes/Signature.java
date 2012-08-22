@@ -339,7 +339,7 @@ public class Signature extends AttributeInfo {
 					String clazz = str.substring(pos + 1, semicolon);
 					//clazz = org.fife.rsta.ac.java.Util.replaceChar(clazz, '/', '.');
 					//clazz = clazz.substring(clazz.lastIndexOf('/')+1);
-					clazz = qualified ? clazz.replace('/', '.').substring(1) : clazz.substring(clazz.lastIndexOf('/')+1);
+					clazz = qualified ? clazz.replace('/', '.') : clazz.substring(clazz.lastIndexOf('/')+1);
 					type = clazz;
 					pos += semicolon + 1;
 				}
