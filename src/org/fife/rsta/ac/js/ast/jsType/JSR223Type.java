@@ -2,6 +2,7 @@ package org.fife.rsta.ac.js.ast.jsType;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.fife.rsta.ac.js.Logger;
 import org.fife.rsta.ac.js.SourceCompletionProvider;
@@ -43,6 +44,7 @@ public class JSR223Type extends JavaScriptType {
 			// iterate through types and check best fit parameters
 			int bestFitIndex = -1;
 			int bestFitWeight = -1;
+			Logger.log("Potential matches : " + matches.length);
 			for (int i = 0; i < matches.length; i++) {
 				Logger.log("Potential match : " + matches[i].getLookupName());
 				JavaScriptFunctionType matchFunctionType = JavaScriptFunctionType
@@ -68,11 +70,19 @@ public class JSR223Type extends JavaScriptType {
 		return null;
 	}
 
+	private JSCompletion[] getPotentialLookupList(String name)
+	{
+		//get a list of all potential matches, including extended
+		ArrayList completionMatches = new ArrayList();
+		getPotentialLookupList(name, completionMatches, this);
+		return (JSCompletion[]) completionMatches.toArray(new JSCompletion[completionMatches.size()]);
+	}
 
 	// get a list of all potential method matches
-	private JSCompletion[] getPotentialLookupList(String name) {
-		ArrayList completionMatches = new ArrayList();
-
+	private void getPotentialLookupList(String name, ArrayList completionMatches, JavaScriptType type) {
+		
+		Map typeCompletions = type.typeCompletions;
+		
 		for (Iterator i = typeCompletions.keySet().iterator(); i.hasNext();) {
 			String key = (String) i.next();
 			if (key.startsWith(name)) {
@@ -83,9 +93,14 @@ public class JSR223Type extends JavaScriptType {
 				}
 			}
 		}
+		
+		//loop through extended and add it's methods too recursively
+		for(Iterator extended = type.getExtendedClasses().iterator(); extended.hasNext();) {
+			JavaScriptType extendedType = (JavaScriptType) extended.next();
+			getPotentialLookupList(name, completionMatches, extendedType);
+		}
 
-		return (JSCompletion[]) completionMatches
-				.toArray(new JSCompletion[completionMatches.size()]);
+		
 	}
 
 }
