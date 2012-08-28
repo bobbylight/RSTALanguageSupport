@@ -128,9 +128,9 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 				return completions; // empty
 			}
 
-			// trim any whitespace as " " are needed to evaluate inputted data
-			text = text.trim();
-
+			// remove anything right of comma (if applicable) as this causes Rhino Ast Compile errors and is not required.
+			text = JavaScriptHelper.trimFromLastParam(text.trim());
+			
 			boolean noDotInText = (text == null || text.indexOf('.') == -1);
 
 			// need to populate completions to work out all variables available
@@ -327,16 +327,6 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 			else
 				break;
 		}
-
-		// add functions
-		// TODO
-		/*
-		 * for (int i = 0; i < block.getFunctionCount(); i++) {
-		 * FunctionDeclaration fc = block.getFunctionAt(i);
-		 * 
-		 * int decOffs = fc.getOffset(); if (dot <= decOffs)
-		 * completions.add(fc.getFunction()); else break; }
-		 */
 
 		// Add any local variables declared in a child code block
 		for (int i = 0; i < block.getChildCodeBlockCount(); i++) {

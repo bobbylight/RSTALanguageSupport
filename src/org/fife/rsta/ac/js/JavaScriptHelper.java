@@ -50,10 +50,15 @@ public class JavaScriptHelper {
 	 */
 	public static boolean canResolveVariable(AstNode target, AstNode initialiser) {
 		String varName = target.toSource();
-		String init = initialiser.toSource();
-		String[] splitInit = init.split("\\.");
-		if (splitInit.length > 0) {
-			return !varName.equals(splitInit[0]);
+		try {
+			String init = initialiser.toSource();
+			String[] splitInit = init.split("\\.");
+			if (splitInit.length > 0) {
+				return !varName.equals(splitInit[0]);
+			}
+		} 
+		catch(Exception e) {
+			//AstNode can throw exceptions if toSource() is invalid e.g new Date(""..toString());
 		}
 		return false;
 	}
@@ -239,10 +244,10 @@ public class JavaScriptHelper {
 	 * @return TypeDeclaration if all elements are of the same type else TypeDeclarationFactory.getDefaultTypeDeclaration();
 	 */
 	private static TypeDeclaration findArrayType(ArrayLiteral arrayLit, SourceCompletionProvider provider) {
-		JavaScriptResolver resolver = provider.getJavaScriptEngine().getJavaScriptResolver(provider);
 		TypeDeclaration dec = null;
 		boolean first = true;
 		for(Iterator i = arrayLit.getElements().iterator(); i.hasNext();) {
+			JavaScriptResolver resolver = provider.getJavaScriptEngine().getJavaScriptResolver(provider);
 			AstNode element = (AstNode) i.next();
 			TypeDeclaration elementType = resolver.resolveNode(element);
 			if(first) {
@@ -477,6 +482,22 @@ public class JavaScriptHelper {
 		String parseText = text.substring(0, trim);
 
 		return parseText;
+	}
+	
+	/**
+	 * Trims the text from the last , from the string
+	 * @param text
+	 * @return
+	 */
+	public static String trimFromLastParam(String text) {
+		int trim = 0;
+		if (text.lastIndexOf(',') != -1) {
+			trim = text.lastIndexOf(',') + 1;
+		}
+		
+		String parseText = text.substring(trim, text.length());
+
+		return parseText.trim();
 	}
 
 
