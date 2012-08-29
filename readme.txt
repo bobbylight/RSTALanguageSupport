@@ -1,7 +1,7 @@
 RSTALanguageSupport Readme
 --------------------------
-Version 0.8
-22feb2012
+Version 0.9
+28aug2012
 
 ----------------------------------------
 Contents
@@ -32,7 +32,7 @@ project targets Java 1.4 and beyond.
 This library itself relies on the following other libraries (besides
 RSyntaxTextArea and AutoComplete):
 
-1. Mozilla Rhino v1.7R3 (http://http://www.mozilla.org/rhino/)
+1. Mozilla Rhino v1.7R4 (http://http://www.mozilla.org/rhino/)
    Used to implement code completion and syntax checking for JavaScript.
 
 

@@ -56,7 +56,7 @@
 
 	<!-- Set global properties for this build.         -->
 	<!-- You generally shouldn't have to change these. -->
-	<property name="version"          value="0.8.0"/>
+	<property name="version"          value="0.9.0"/>
 	<property name="source-dir"       location="src"/>
 	<property name="class-dir"        location="ant-classes"/>
 	<property name="dist-dir"         location="dist"/>
@@ -74,7 +74,7 @@
 		<mkdir dir="${class-dir}"/>
 		<javac destdir="${class-dir}" srcdir="${source-dir}" sourcepath=""
 				deprecation="yes" debug="${debug}" debuglevel="${debuglevel}"
-				source="${java-level}" target="${java-level}">
+				source="${java-level}" target="${java-level}" includeantruntime="false">
 
 			<classpath>
 				<pathelement     location="${rsta-jar}"/>
