@@ -74,8 +74,13 @@ class DemoRootPane extends JRootPane implements HyperlinkListener,
 		JTree dummy = new JTree((TreeNode)null);
 		treeSP = new JScrollPane(dummy);
 
-		JSplitPane sp = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+		final JSplitPane sp = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 										treeSP, scrollPane);
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				sp.setDividerLocation(0.25);
+			}
+		});
 		sp.setContinuousLayout(true);
 		setContentPane(sp);
 
@@ -139,7 +144,7 @@ class DemoRootPane extends JRootPane implements HyperlinkListener,
 	 * @return The text area.
 	 */
 	private RSyntaxTextArea createTextArea() {
-		RSyntaxTextArea textArea = new RSyntaxTextArea(25, 70);
+		RSyntaxTextArea textArea = new RSyntaxTextArea(25, 80);
 		LanguageSupportFactory.get().register(textArea);
 		textArea.setCaretPosition(0);
 		textArea.addHyperlinkListener(this);
