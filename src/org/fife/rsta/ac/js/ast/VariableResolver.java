@@ -88,7 +88,7 @@ public class VariableResolver {
 
 
 	/**
-	 * Find JSVariableDeclaration and check is in scope of caret position
+	 * Find JSVariableDeclaration for name against all variable types and check is in scope of caret position
 	 * 
 	 * @param name
 	 * @param dot
@@ -100,6 +100,22 @@ public class VariableResolver {
 		// test whether this was found and then try pre-processing variable
 		findDeclaration = findDeclaration == null ? findDeclaration(
 				preProcessedVariables, name, dot) : findDeclaration;
+		// last chance... look in system variables
+		return findDeclaration == null ? findDeclaration(systemVariables, name,
+				dot) : findDeclaration;
+	}
+	
+	/**
+	 * Find JSVariableDeclaration within pre-processed and system variable only. Also check is in scope of caret position
+	 * 
+	 * @param name of variable to resolve
+	 * @param dot position in text document
+	 * @return JSVariableDeclaration from the name
+	 */
+	
+	public JavaScriptVariableDeclaration findNonLocalDeclaration(String name, int dot) {
+		//try pre-processing variable
+		JavaScriptVariableDeclaration findDeclaration = findDeclaration(preProcessedVariables, name, dot);
 		// last chance... look in system variables
 		return findDeclaration == null ? findDeclaration(systemVariables, name,
 				dot) : findDeclaration;

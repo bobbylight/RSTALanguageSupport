@@ -260,6 +260,16 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	public JavaScriptVariableDeclaration findDeclaration(String name) {
 		return variableResolver.findDeclaration(name, dot);
 	}
+	
+	/**
+	 * Convenience method to call variable resolver for non local variables
+	 * i.e does NOT try to resolve name to any local variables (just pre-processed or system) 
+	 * @param name
+	 * @return JavaScript variable declaration
+	 */
+	public JavaScriptVariableDeclaration findNonLocalDeclaration(String name) {
+		return variableResolver.findNonLocalDeclaration(name, dot);
+	}
 
 
 	/**

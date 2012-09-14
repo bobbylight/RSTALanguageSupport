@@ -163,6 +163,9 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 			if(lastJavaScriptType == null) {
 				dec = resolveNativeType(node);
 			}
+			else {
+				dec = resolveTypeFromLastJavaScriptType(node);
+			}
 			
 			if (dec != null) {
 				// lookup JavaScript completions type
@@ -463,6 +466,18 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 								provider, text);
 			}
 		}
+		return null;
+	}
+	
+	/**
+	 * Method called if the lastJavaScriptType is not null. i.e has gone through one iteration at least. 
+	 * Resolves TypeDeclaration for parts of a variable past the first part. e.g "".toString() //resolve toString()
+	 * In some circumstances this is useful to resolve this. e.g for Custom Object completions  
+	 * @param node Node to resolve
+	 * @return Type Declaration
+	 * 
+	 */
+	protected TypeDeclaration resolveTypeFromLastJavaScriptType(AstNode node) {
 		return null;
 	}
 
