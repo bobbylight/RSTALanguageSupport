@@ -500,7 +500,8 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		 * completions will edit more in the source file than just the text
 		 * at the current caret position.
 		 */
-		protected void insertCompletion(Completion c) {
+		protected void insertCompletion(Completion c,
+				boolean typedParamListStartChar) {
 
 			ImportToAddInfo importInfo = null;
 
@@ -518,7 +519,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 			}
 
 			try {
-				super.insertCompletion(c);
+				super.insertCompletion(c, typedParamListStartChar);
 				if (importInfo!=null) {
 					textArea.insert(importInfo.text, importInfo.offs);
 				}
