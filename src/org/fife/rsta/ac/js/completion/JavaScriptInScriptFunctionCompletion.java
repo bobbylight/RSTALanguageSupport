@@ -89,6 +89,20 @@ public class JavaScriptInScriptFunctionCompletion extends FunctionCompletion
 	public int hashCode() {
 		return getLookupName().hashCode();
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public int compareTo(Object o) {
+		if (o==this) {
+			return 0;
+		}
+		else if (o instanceof JSCompletion) {
+			JSCompletion c2 = (JSCompletion)o;
+			return getLookupName().compareTo(c2.getLookupName());
+		}
+		return -1;
+	}
 
 
 }

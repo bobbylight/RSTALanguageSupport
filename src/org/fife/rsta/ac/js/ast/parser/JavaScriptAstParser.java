@@ -169,6 +169,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 				case Token.NAME:
 				case Token.CATCH:
 				case Token.ERROR:
+				case Token.RETURN:
 					break;
 				case Token.EXPR_RESULT:
 					processExpressionStatement(child, block, set, entered,

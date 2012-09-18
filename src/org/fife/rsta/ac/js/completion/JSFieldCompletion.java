@@ -87,5 +87,31 @@ public class JSFieldCompletion extends VariableCompletion implements
 		return fieldData.getType(true); /*TypeDeclarationFactory.lookupJSType(fieldData.getType(true),
 				qualified);*/
 	}
+	
+	public boolean equals(Object obj) {
+		if(obj == this) {
+			return true;
+		}
+		if(obj instanceof JSFieldCompletion)
+		{
+			JSFieldCompletion jsComp = (JSFieldCompletion) obj;
+			return getLookupName().equals(jsComp.getLookupName());
+		}
+		return super.equals(obj);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public int compareTo(Object o) {
+		if (o==this) {
+			return 0;
+		}
+		else if (o instanceof JSFieldCompletion) {
+			JSFieldCompletion c2 = (JSFieldCompletion)o;
+			return getLookupName().compareTo(c2.getLookupName());
+		}
+		return -1;
+	}
 
 }

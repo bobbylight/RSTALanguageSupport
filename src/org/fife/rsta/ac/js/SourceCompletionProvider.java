@@ -168,8 +168,9 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 			}
 
-			if (noDotInText && supportsPreProcessingScripts())
-				preProcessing.addPreProcessedCompletions(completions);
+			if (noDotInText && supportsPreProcessingScripts()) {
+				set.addAll(preProcessing.getCompletions());
+			}
 
 			completions.addAll(set);
 

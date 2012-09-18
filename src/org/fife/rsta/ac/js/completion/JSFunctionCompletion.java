@@ -22,7 +22,6 @@ import org.fife.rsta.ac.js.IconFactory;
 import org.fife.rsta.ac.js.JavaScriptHelper;
 import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
-import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.FunctionCompletion;
 import org.fife.ui.autocomplete.ParameterizedCompletion;
@@ -67,44 +66,23 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 
 
 	/**
-	 * Overridden to compare methods by their comparison strings.
-	 * 
-	 * @param o A <code>Completion</code> to compare to.
-	 * @return The sort order.
+	 * {@inheritDoc}
 	 */
 	public int compareTo(Object o) {
-
-		int rc = -1;
-
-		if (o == this)
-			rc = 0;
-
-		else if (o instanceof JSFunctionCompletion) {
-			rc = getCompareString().compareTo(
-					((JSFunctionCompletion) o).getCompareString());
+		if (o==this) {
+			return 0;
 		}
-
-		else if (o instanceof Completion) {
-			Completion c2 = (Completion) o;
-			rc = toString().compareToIgnoreCase(c2.toString());
-			if (rc == 0) { // Same text value
-				String clazz1 = getClass().getName();
-				clazz1 = clazz1.substring(clazz1.lastIndexOf('.'));
-				String clazz2 = c2.getClass().getName();
-				clazz2 = clazz2.substring(clazz2.lastIndexOf('.'));
-				rc = clazz1.compareTo(clazz2);
-			}
+		else if (o instanceof JSCompletion) {
+			JSCompletion c2 = (JSCompletion)o;
+			return getLookupName().compareTo(c2.getLookupName());
 		}
-
-		return rc;
-
+		return -1;
 	}
 
-
 	public boolean equals(Object obj) {
-		return (obj instanceof JSFunctionCompletion)
-				&& ((JSFunctionCompletion) obj).getCompareString().equals(
-						getCompareString());
+		return (obj instanceof JSCompletion)
+				&& ((JSCompletion) obj).getLookupName().equals(
+						getLookupName());
 	}
 
 
@@ -243,7 +221,8 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 	public String getEnclosingClassName(boolean fullyQualified) {
 		return methodData.getEnclosingClassName(fullyQualified);
 	}
-
+	
+	
 
 	/**
 	 * Override the FunctionCompletion.Parameter to lookup the Javascript name

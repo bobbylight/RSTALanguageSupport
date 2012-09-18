@@ -3,8 +3,6 @@ package org.fife.rsta.ac.js;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 
 import org.fife.rsta.ac.js.ast.CodeBlock;
@@ -64,16 +62,4 @@ public class PreProcesssingScripts {
 	}
 	
 	
-	public void addPreProcessedCompletions(List completions)
-	{
-		for(Iterator i = preProcessingCompletions.iterator(); i.hasNext();)
-		{
-			Object o = i.next();
-			if(!completions.contains(o))
-			{
-				completions.add(o);
-			}
-		}
-		
-	}
 }
