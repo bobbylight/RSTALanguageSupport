@@ -9,6 +9,7 @@ import org.fife.rsta.ac.java.rjc.ast.Method;
 import org.fife.rsta.ac.js.IconFactory;
 import org.fife.rsta.ac.js.JavaScriptHelper;
 import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
+import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.VariableCompletion;
 
@@ -142,6 +143,10 @@ public class JSBeanCompletion extends VariableCompletion implements
 		else if (o instanceof JSBeanCompletion) {
 			JSBeanCompletion c2 = (JSBeanCompletion)o;
 			return getLookupName().compareTo(c2.getLookupName());
+		}
+		else if (o instanceof Completion) {
+			Completion c2 = (Completion)o;
+			return toString().compareTo(c2.toString());
 		}
 		return -1;
 	}

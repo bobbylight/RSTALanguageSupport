@@ -9,6 +9,7 @@ import org.fife.rsta.ac.java.rjc.ast.FormalParameter;
 import org.fife.rsta.ac.java.rjc.ast.Method;
 import org.fife.rsta.ac.js.IconFactory;
 import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
+import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.FunctionCompletion;
 
@@ -116,14 +117,27 @@ public class JavaScriptMethodCompletion extends FunctionCompletion implements
 	 * {@inheritDoc}
 	 */
 	public int compareTo(Object o) {
+		int rc = -1;
 		if (o==this) {
-			return 0;
+			rc = 0;
 		}
 		else if (o instanceof JSCompletion) {
 			JSCompletion c2 = (JSCompletion)o;
-			return getLookupName().compareTo(c2.getLookupName());
+			rc= getLookupName().compareTo(c2.getLookupName());
 		}
-		return -1;
+		else if (o instanceof Completion) {
+			Completion c2 = (Completion) o;
+			rc = toString().compareTo(c2.toString());
+			if (rc == 0) { // Same text value
+				String clazz1 = getClass().getName();
+				clazz1 = clazz1.substring(clazz1.lastIndexOf('.'));
+				String clazz2 = c2.getClass().getName();
+				clazz2 = clazz2.substring(clazz2.lastIndexOf('.'));
+				rc = clazz1.compareTo(clazz2);
+			}
+		}
+
+		return rc;
 	}
 
 

@@ -5,6 +5,7 @@ import javax.swing.Icon;
 import org.fife.rsta.ac.js.IconFactory;
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
 import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
+import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.FunctionCompletion;
 
@@ -90,6 +91,11 @@ public class JavaScriptInScriptFunctionCompletion extends FunctionCompletion
 		return getLookupName().hashCode();
 	}
 	
+	public String toString()
+	{
+		return getLookupName();
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -100,6 +106,10 @@ public class JavaScriptInScriptFunctionCompletion extends FunctionCompletion
 		else if (o instanceof JSCompletion) {
 			JSCompletion c2 = (JSCompletion)o;
 			return getLookupName().compareTo(c2.getLookupName());
+		}
+		else if (o instanceof Completion) {
+			Completion c2 = (Completion)o;
+			return toString().compareTo(c2.toString());
 		}
 		return -1;
 	}

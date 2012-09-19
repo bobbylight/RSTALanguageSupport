@@ -174,8 +174,8 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 			completions.addAll(set);
 
-			// Do a final sort of all of our completions and we're good to go!
-			Collections.sort(completions);
+			// Do a sort of all of our completions to put into case insensitive order and we're good to go!
+			Collections.sort(completions, comparator);
 
 			// Only match based on stuff after the final '.', since that's what
 			// is

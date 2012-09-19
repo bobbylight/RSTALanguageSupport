@@ -9,6 +9,7 @@ import org.fife.rsta.ac.js.IconFactory;
 import org.fife.rsta.ac.js.JavaScriptHelper;
 import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
+import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.VariableCompletion;
 
@@ -110,6 +111,10 @@ public class JSFieldCompletion extends VariableCompletion implements
 		else if (o instanceof JSFieldCompletion) {
 			JSFieldCompletion c2 = (JSFieldCompletion)o;
 			return getLookupName().compareTo(c2.getLookupName());
+		}
+		else if (o instanceof Completion) {
+			Completion c2 = (Completion)o;
+			return toString().compareTo(c2.toString());
 		}
 		return -1;
 	}

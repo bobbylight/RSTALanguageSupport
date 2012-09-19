@@ -22,6 +22,7 @@ import org.fife.rsta.ac.js.JavaScriptHelper;
 import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.rsta.ac.js.ast.JavaScriptVariableDeclaration;
 import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
+import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.VariableCompletion;
 import org.fife.rsta.ac.java.Util;
@@ -99,6 +100,17 @@ public class JSVariableCompletion extends VariableCompletion implements
 		}
 
 		return super.equals(obj);
+	}
+	
+	public int compareTo(Object o) {
+		if (o==this) {
+			return 0;
+		}
+		else if (o instanceof Completion) {
+			Completion c2 = (Completion)o;
+			return toString().compareTo(c2.toString());
+		}
+		return -1;
 	}
 
 
