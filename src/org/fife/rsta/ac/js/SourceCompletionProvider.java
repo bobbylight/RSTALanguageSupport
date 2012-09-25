@@ -129,7 +129,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 			}
 
 			// remove anything right of comma (if applicable) as this causes Rhino Ast Compile errors and is not required.
-			text = JavaScriptHelper.trimFromLastParam(text.trim());
+			//text = JavaScriptHelper.trimFromLastParam(text.trim());
 			
 			boolean noDotInText = (text == null || text.indexOf('.') == -1);
 
@@ -216,7 +216,12 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 			text = text.substring(charIndex, text.length());
 			int sqIndex = JavaScriptHelper.findIndexOfFirstOpeningSquareBracket(text);
 			text = text.substring(sqIndex).trim();
+			if(!text.contains("(") && !text.contains(")") && !text.contains("[") && !text.contains("]"))
+			{
+				text = JavaScriptHelper.trimFromLastParam(text);
+			}
 		}
+		
 		return text;
 	}
 
