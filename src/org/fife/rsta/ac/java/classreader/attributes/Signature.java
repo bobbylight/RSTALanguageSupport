@@ -132,7 +132,11 @@ public class Signature extends AttributeInfo {
 					parseParamDescriptor(paramDescriptors, cf, additionalTypeArgs,
 							mi, "Error parsing method signature for ", res, qualified);
 					paramTypeList.add(res.type);
-					paramDescriptors = paramDescriptors.substring(res.pos);
+					if(paramDescriptors.length()>res.pos) {
+						paramDescriptors = paramDescriptors.substring(res.pos);
+					} else {
+						break;
+					}
 				}
 
 			}
@@ -322,7 +326,12 @@ public class Signature extends AttributeInfo {
 							parseParamDescriptor(paramDescriptors, cf, additionalTypeArgs,
 									mi, "Error parsing method signature for ", res2, qualified);
 							paramTypeList.add(res2.type);
-							paramDescriptors = paramDescriptors.substring(res2.pos);
+							if(paramDescriptors.length()>res2.pos) {
+								paramDescriptors = paramDescriptors.substring(res2.pos);
+							} else {
+								break;
+							}
+								
 						}
 						StringBuffer sb = new StringBuffer(type).append('<');
 						for (int i=0; i<paramTypeList.size(); i++) {
