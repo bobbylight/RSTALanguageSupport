@@ -131,7 +131,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 			// remove anything right of comma (if applicable) as this causes Rhino Ast Compile errors and is not required.
 			//text = JavaScriptHelper.trimFromLastParam(text.trim());
 			
-			boolean noDotInText = (text == null || text.indexOf('.') == -1);
+			boolean noDotInText = text.indexOf('.') == -1;
 
 			// need to populate completions to work out all variables available
 			CodeBlock block = iterateAstRoot(astRoot, set, text, dot, false);
@@ -216,7 +216,8 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 			text = text.substring(charIndex, text.length());
 			int sqIndex = JavaScriptHelper.findIndexOfFirstOpeningSquareBracket(text);
 			text = text.substring(sqIndex).trim();
-			if(!text.contains("(") && !text.contains(")") && !text.contains("[") && !text.contains("]"))
+			if(text.indexOf('(')==-1 && text.indexOf(')')==-1 &&
+					text.indexOf('[')==-1 && text.indexOf(']')==-1)
 			{
 				text = JavaScriptHelper.trimFromLastParam(text);
 			}

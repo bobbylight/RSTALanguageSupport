@@ -11,6 +11,7 @@
 package org.fife.rsta.ac;
 
 import java.util.Enumeration;
+import java.util.regex.Pattern;
 import javax.swing.JLabel;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -23,6 +24,7 @@ import org.fife.rsta.ac.java.tree.JavaOutlineTree;
 import org.fife.rsta.ac.js.tree.JavaScriptOutlineTree;
 import org.fife.rsta.ac.xml.tree.XmlOutlineTree;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
 
 
 /**
@@ -52,7 +54,7 @@ public abstract class AbstractSourceTree extends JTree {
 
 	protected RSyntaxTextArea textArea;
 	private boolean sorted;
-	private String prefix;
+	private Pattern pattern;
 	private boolean gotoSelectedElementOnClick;
 	private boolean showMajorElementsOnly;
 
@@ -117,19 +119,18 @@ public abstract class AbstractSourceTree extends JTree {
 	/**
 	 * Filters visible tree nodes based on the specified prefix.
 	 *
-	 * @param prefix The prefix.  If this is <code>null</code>, all possible
-	 *        children are shown.
+	 * @param pattern The prefix, as a wildcard expression.  If this is
+	 *        <code>null</code>, all possible children are shown.
 	 */
-	public void filter(String prefix) {
-		if ((prefix==null && this.prefix!=null) ||
-				(prefix!=null && !prefix.equals(this.prefix))) {
-			if (prefix!=null) {
-				prefix = prefix.toLowerCase();
-			}
-			this.prefix = prefix;
+	public void filter(String pattern) {
+		if ((pattern==null && this.pattern!=null) ||
+				(pattern!=null && this.pattern==null) ||
+				(pattern!=null && !pattern.equals(this.pattern.pattern()))) {
+			this.pattern = (pattern==null || pattern.length()==0) ? null :
+				RSyntaxUtilities.wildcardToPattern("^" + pattern, false, false);
 			Object root = getModel().getRoot();
 			if (root instanceof SourceTreeNode) {
-				((SourceTreeNode)root).filter(prefix);
+				((SourceTreeNode)root).filter(this.pattern);
 			}
 			((DefaultTreeModel)getModel()).reload();
 			expandInitialNodes();
@@ -214,14 +215,13 @@ public abstract class AbstractSourceTree extends JTree {
 	 */
 	public void selectFirstNodeMatchingFilter() {
 
-		if (prefix==null) {
+		if (pattern==null) {
 			return;
 		}
 
 		DefaultTreeModel model = (DefaultTreeModel)getModel();
 		DefaultMutableTreeNode root = (DefaultMutableTreeNode)model.getRoot();
 		Enumeration en = root.depthFirstEnumeration();
-		String prefixLower = prefix.toLowerCase();
 
 		while (en.hasMoreElements()) {
 			SourceTreeNode stn = (SourceTreeNode)en.nextElement();
@@ -229,7 +229,7 @@ public abstract class AbstractSourceTree extends JTree {
 					getTreeCellRendererComponent(this, stn,
 							true, true, stn.isLeaf(), 0, true);
 			String text = renderer.getText();
-			if (text!=null && text.toLowerCase().startsWith(prefixLower)) {
+			if (text!=null && pattern.matcher(text).find()) {
 				setSelectionPath(new TreePath(model.getPathToRoot(stn)));
 				return;
 			}

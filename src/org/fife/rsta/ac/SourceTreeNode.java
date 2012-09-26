@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Vector;
+import java.util.regex.Pattern;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
@@ -32,7 +33,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 
 	private boolean sortable;
 	private boolean sorted;
-	private String prefix;
+	private Pattern pattern;
 	private Vector visibleChildren;
 	private int sortPriority;
 
@@ -148,16 +149,16 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 	/**
 	 * Filters the children of this tree node based on the specified prefix.
 	 *
-	 * @param prefix The prefix.  If this is <code>null</code>, all possible
-	 *        children are shown.  This should be all lower case.
+	 * @param pattern The pattern that the child nodes must match.  If this is
+	 *        <code>null</code>, all possible children are shown.
 	 */
-	protected void filter(String prefix) {
-		this.prefix = prefix;
+	protected void filter(Pattern pattern) {
+		this.pattern = pattern;
 		refreshVisibleChildren();
 		for (int i=0; i<super.getChildCount(); i++) {
 			Object child = children.get(i);
 			if (child instanceof SourceTreeNode) {
-				((SourceTreeNode)child).filter(prefix);
+				((SourceTreeNode)child).filter(pattern);
 			}
 		}
 	}
@@ -299,7 +300,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 			if (sortable && sorted) {
 				Collections.sort(visibleChildren);
 			}
-			if (prefix!=null) {
+			if (pattern!=null) {
 				for (Iterator i=visibleChildren.iterator(); i.hasNext(); ) {
 					TreeNode node = (TreeNode)i.next();
 					if (node.isLeaf()) {
@@ -307,8 +308,8 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 						if (text.startsWith("<html>")) { // Strip out HTML
 							text = text.replaceAll("<[^>]+>", "");
 						}
-						if (!text.toLowerCase().startsWith(prefix)) {
-							//System.out.println("Removing tree node: " + text);
+						if (!pattern.matcher(text).find()) {
+							//System.out.println(pattern + ": Removing tree node: " + text);
 							i.remove();
 						}
 					}

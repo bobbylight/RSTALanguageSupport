@@ -119,4 +119,8 @@ public class JSFieldCompletion extends VariableCompletion implements
 		return -1;
 	}
 
+	public int hashCode() {
+		return getLookupName().hashCode();
+	}
+	
 }
