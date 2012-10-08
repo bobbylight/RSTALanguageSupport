@@ -87,7 +87,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	 *
 	 * @return The jar manager instance.
 	 */
-	private JarManager createJarManager() {
+	protected JarManager createJarManager() {
 
 		JarManager jarManager = new JarManager();
 
