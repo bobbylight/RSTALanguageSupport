@@ -1,12 +1,13 @@
 package org.fife.rsta.ac.js.ast.jsType;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
 import org.fife.rsta.ac.js.Logger;
 import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
+import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 import org.fife.rsta.ac.js.completion.JSCompletion;
 import org.fife.ui.autocomplete.FunctionCompletion;
 
@@ -32,6 +33,7 @@ public class JSR223Type extends JavaScriptType {
 		}
 		// else
 		if (completionLookup.indexOf('(') != -1) {
+			boolean isJavaScriptType = TypeDeclarationFactory.Instance().isJavaScriptType(getType());
 			// must be a function, so compare function strings
 			// get a list of best fit methods
 			Logger.log("Completion Lookup : " + completionLookup);
@@ -51,7 +53,7 @@ public class JSR223Type extends JavaScriptType {
 						.parseFunction(matches[i].getLookupName());
 				Logger.log("Matching against completion: " + completionLookup);
 				int weight = matchFunctionType.compare(javaScriptFunctionType,
-						provider);
+						provider, isJavaScriptType);
 				Logger.log("Weight: " + weight);
 				if (weight < JavaScriptFunctionType.CONVERSION_NONE
 						&& (weight < bestFitWeight || bestFitIndex == -1)) {
@@ -73,13 +75,13 @@ public class JSR223Type extends JavaScriptType {
 	private JSCompletion[] getPotentialLookupList(String name)
 	{
 		//get a list of all potential matches, including extended
-		ArrayList completionMatches = new ArrayList();
+		HashSet completionMatches = new HashSet();
 		getPotentialLookupList(name, completionMatches, this);
 		return (JSCompletion[]) completionMatches.toArray(new JSCompletion[completionMatches.size()]);
 	}
 
 	// get a list of all potential method matches
-	private void getPotentialLookupList(String name, ArrayList completionMatches, JavaScriptType type) {
+	private void getPotentialLookupList(String name, HashSet completionMatches, JavaScriptType type) {
 		
 		Map typeCompletions = type.typeCompletions;
 		

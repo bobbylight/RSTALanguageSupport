@@ -14,6 +14,7 @@ import org.mozilla.javascript.Kit;
 public class JavaScriptFunctionType {
 
 	public static int CONVERSION_NONE = 999;
+	public static int CONVERSION_JS = 99;
 
 	public final static Class BooleanClass = Kit.classOrNull("java.lang.Boolean"), 
 							  ByteClass = Kit.classOrNull("java.lang.Byte"), 
@@ -94,17 +95,24 @@ public class JavaScriptFunctionType {
 	 * @param provider SourceCompletionProvider
 	 * @return weight based on the compatibleness of method to compare
 	 */
-	public int compare(JavaScriptFunctionType compareType, SourceCompletionProvider provider) {
-		if (compareType.getArgumentCount() != getArgumentCount()) {
-			return CONVERSION_NONE;
-		}
-
+	public int compare(JavaScriptFunctionType compareType, SourceCompletionProvider provider, boolean isJavaScriptType) {
+		//first check name
 		if (!compareType.getName().equals(getName())) {
 			return CONVERSION_NONE;
 		}
-
-		// check parameters
+		
+		//args match?
+		boolean argsMatch = compareType.getArgumentCount() == getArgumentCount();
+		
+		//if Java type and args do not match... cannot match
+		if (!isJavaScriptType && !argsMatch) {
+			return CONVERSION_NONE;
+		} else if(isJavaScriptType && !argsMatch) { //is javascript type and args do not match, return higher compare number
+			return CONVERSION_JS;
+		}
+		
 		int weight = 0;
+		// check parameters
 		for (int i = 0; i < getArgumentCount(); i++) {
 			TypeDeclaration param = getArgument(i);
 			TypeDeclaration compareParam = compareType.getArgument(i);
@@ -348,12 +356,14 @@ public class JavaScriptFunctionType {
 		if (paramStartIndex > -1 && paramEndIndex > -1) {
 			// strip parameters and resolve types
 			String paramsStr = function.substring(paramStartIndex + 1,
-					paramEndIndex);
-			// iterate through params
-			String[] params = paramsStr.split(",");
-			for (int i = 0; i < params.length; i++) {
-				functionType.addArgument(JavaScriptHelper
-						.createNewTypeDeclaration(params[i]));
+					paramEndIndex).trim();
+			if(paramsStr.length() > 0) {
+				// iterate through params
+				String[] params = paramsStr.split(",");
+				for (int i = 0; i < params.length; i++) {
+					functionType.addArgument(JavaScriptHelper
+							.createNewTypeDeclaration(params[i]));
+				}
 			}
 		}
 
@@ -374,23 +384,25 @@ public class JavaScriptFunctionType {
 				function.substring(0, paramStartIndex));
 
 		if (paramStartIndex > -1 && paramEndIndex > -1) {
-			// strip parameters and resolve types
+			// strip parameters and resolve types (trim any whitespace)
 			String paramsStr = function.substring(paramStartIndex + 1,
-					paramEndIndex);
+					paramEndIndex).trim();
 			// iterate through params
-			String[] params = paramsStr.split(",");
-			for (int i = 0; i < params.length; i++) {
-				String param = TypeDeclarationFactory.convertJavaScriptType(
-						params[i], true);
-				TypeDeclaration type = TypeDeclarationFactory.Instance()
-						.getTypeDeclaration(param);
-				if (type != null) {
-					functionType.addArgument(type);
-				}
-				else {
-
-					functionType.addArgument(JavaScriptHelper
-							.createNewTypeDeclaration(param));
+			if(paramsStr.length() > 0) {
+				String[] params = paramsStr.split(",");
+				for (int i = 0; i < params.length; i++) {
+					String param = TypeDeclarationFactory.convertJavaScriptType(
+							params[i], true);
+					TypeDeclaration type = TypeDeclarationFactory.Instance()
+							.getTypeDeclaration(param);
+					if (type != null) {
+						functionType.addArgument(type);
+					}
+					else {
+	
+						functionType.addArgument(JavaScriptHelper
+								.createNewTypeDeclaration(param));
+					}
 				}
 			}
 		}
