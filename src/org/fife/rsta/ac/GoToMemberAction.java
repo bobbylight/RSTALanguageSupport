@@ -17,6 +17,7 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.text.JTextComponent;
 import javax.swing.text.TextAction;
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -63,11 +64,17 @@ public class GoToMemberAction extends TextAction {
 			UIManager.getLookAndFeel().provideErrorFeedback(null);
 			return;
 		}
-		RSyntaxTextArea textArea = (RSyntaxTextArea)getTextComponent(e);
-		Window parent = SwingUtilities.getWindowAncestor(textArea);
-		GoToMemberWindow gtmw = new GoToMemberWindow(parent, textArea, tree);
-		setLocationBasedOn(gtmw, textArea);
-		gtmw.setVisible(true);
+		JTextComponent tc = getTextComponent(e);
+		if (tc instanceof RSyntaxTextArea) {
+			RSyntaxTextArea textArea = (RSyntaxTextArea)tc;
+			Window parent = SwingUtilities.getWindowAncestor(textArea);
+			GoToMemberWindow gtmw = new GoToMemberWindow(parent, textArea, tree);
+			setLocationBasedOn(gtmw, textArea);
+			gtmw.setVisible(true);
+		}
+		else {
+			UIManager.getLookAndFeel().provideErrorFeedback(null);
+		}
 	}
 
 
