@@ -278,8 +278,8 @@ public class Util {
 		if (see!=null) {
 			if (seeTemp.length()>0) { // Last @see contents
 				String temp = seeTemp.substring(0, seeTemp.length()-1);
-				String linkText = fixLinkText(temp);
-				see.append("<a href='").append(temp).append("'>").append(linkText).append("</a>");
+				//syntax is exactly the same as link
+				appendLinkTagText(see, temp);
 			}
 			see.append("<br>");
 			sb.append(see).append("</p>");

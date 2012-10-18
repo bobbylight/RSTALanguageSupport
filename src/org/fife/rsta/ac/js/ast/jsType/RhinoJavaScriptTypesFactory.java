@@ -43,7 +43,7 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 		//clear all non ECMA (JavaScript types) for importPackage and importClass to work properly
 		for(Iterator i = cachedTypes.keySet().iterator(); i.hasNext();) {
 			TypeDeclaration dec = (TypeDeclaration) i.next();
-			if(!dec.getQualifiedName().startsWith("org.fife.rsta.ac.js.ecma") && !dec.equals(TypeDeclarationFactory.getDefaultTypeDeclaration())) {
+			if(!TypeDeclarationFactory.Instance().isJavaScriptType(dec) && !dec.equals(TypeDeclarationFactory.getDefaultTypeDeclaration())) {
 				removeAllTypes((JavaScriptType) cachedTypes.get(dec));
 				removeTypes.add(dec);
 			}

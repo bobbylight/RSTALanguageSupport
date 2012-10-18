@@ -1,42 +1,16 @@
-package org.fife.rsta.ac.js.ecma.api;
+package org.fife.rsta.ac.js.ecma.api.ecma3;
 
-public class JSMath extends JSObject {
+
+/**
+ * Object Math
+ * @since Standard ECMA-262 3rd. Edition
+ */
+public abstract class JSMath {
 
     /**
-     * Object Math(\s)
-     * @super Object
-     * @constructor
-     * @memberOf Math
-     * @since Standard ECMA-262 3rd. Edition
-     * @since Level 2 Document Object Model Core Definition.
-    */
-   public JSMath(){};
-   
-   /**
-    * Property prototype
-    * 
-    * @type Math
-    * @memberOf Math
-    * @see Math
-    * @since Standard ECMA-262 3rd. Edition
-    * @since Level 2 Document Object Model Core Definition.
-    */
-   public JSMath protype;
-   
-   /**
-    * Property constructor
-    * 
-    * @type Function
-    * @memberOf Math
-    * @see Function
-    * @since Standard ECMA-262 3rd. Edition
-    * @since Level 2 Document Object Model Core Definition.
-    */
-   protected JSFunction constructor;
-   
-   /**
      * Property E
      * @memberOf Math
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.    
     */
@@ -45,6 +19,7 @@ public class JSMath extends JSObject {
    /**
      * Property LN10
      * @memberOf Math
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.    
     */
@@ -53,6 +28,7 @@ public class JSMath extends JSObject {
    /**
      * Property LN2
      * @memberOf Math
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.
     */
@@ -61,6 +37,7 @@ public class JSMath extends JSObject {
    /**
      * Property LOG2E
      * @memberOf Math
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.    
     */
@@ -69,6 +46,7 @@ public class JSMath extends JSObject {
    /**
      * Property LOG10E
      * @memberOf Math
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition. 
     */
@@ -77,6 +55,7 @@ public class JSMath extends JSObject {
    /**
      * Property PI
      * @memberOf Math
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.  
     */
@@ -85,6 +64,7 @@ public class JSMath extends JSObject {
    /**
      * Property SQRT1_2
      * @memberOf Math
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.    
     */
@@ -93,6 +73,7 @@ public class JSMath extends JSObject {
    /**
      * Property SQRT2
      * @memberOf Math
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition. 
     */
@@ -104,6 +85,7 @@ public class JSMath extends JSObject {
      * @param {Number} x
      * @type Number
      * @returns {Number}
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.     
     */
@@ -115,6 +97,7 @@ public class JSMath extends JSObject {
      * @param {Number} x
      * @type Number
      * @returns {Number}
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.
     */
@@ -126,6 +109,7 @@ public class JSMath extends JSObject {
      * @param {Number} x
      * @type Number
      * @returns {Number}
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.  
     */
@@ -137,6 +121,7 @@ public class JSMath extends JSObject {
      * @param {Number} x
      * @type Number
      * @returns {Number}
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.
     */
@@ -149,6 +134,7 @@ public class JSMath extends JSObject {
      * @param {Number} y
      * @type Number
      * @returns {Number}
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.  
     */
@@ -160,6 +146,7 @@ public class JSMath extends JSObject {
      * @param {Number} x
      * @type Number
      * @returns {Number}
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.    
     */
@@ -171,6 +158,7 @@ public class JSMath extends JSObject {
      * @param {Number} x
      * @type Number
      * @returns {Number}
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.  
     */
@@ -182,6 +170,7 @@ public class JSMath extends JSObject {
      * @param {Number} x
      * @type Number
      * @returns {Number}
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition. 
     */
@@ -193,6 +182,7 @@ public class JSMath extends JSObject {
      * @param {Number} x
      * @type Number
      * @returns {Number}
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.  
     */
@@ -204,6 +194,7 @@ public class JSMath extends JSObject {
      * @param {Number} x
      * @type Number
      * @returns {Number}
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.    
     */
@@ -215,6 +206,7 @@ public class JSMath extends JSObject {
      * @param {Number} args
      * @type Number
      * @returns {Number}
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.  
     */
@@ -226,6 +218,7 @@ public class JSMath extends JSObject {
      * @param {Number} args
      * @type Number
      * @returns {Number}
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.    
     */
@@ -238,6 +231,7 @@ public class JSMath extends JSObject {
      * @param {Number} y
      * @type Number
      * @returns {Number}
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.    
     */
@@ -248,6 +242,7 @@ public class JSMath extends JSObject {
      * @memberOf Math
      * @type Number
      * @returns {Number}
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.     
     */
@@ -259,6 +254,7 @@ public class JSMath extends JSObject {
      * @param {Number} x
      * @type Number
      * @returns {Number}
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.   
     */
@@ -270,6 +266,7 @@ public class JSMath extends JSObject {
      * @param {Number} x
      * @type Number
      * @returns {Number}
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.    
     */
@@ -281,6 +278,7 @@ public class JSMath extends JSObject {
      * @param {Number} x
      * @type Number
      * @returns {Number}
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.     
     */
@@ -292,6 +290,7 @@ public class JSMath extends JSObject {
      * @param {Number} x
      * @type Number
      * @returns {Number}
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.    
     */

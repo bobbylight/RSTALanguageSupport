@@ -1,6 +1,13 @@
-package org.fife.rsta.ac.js.ecma.api;
+package org.fife.rsta.ac.js.ecma.api.ecma3;
 
-public class JSFunction extends JSObject {
+import org.fife.rsta.ac.js.ecma.api.ecma3.functions.JSFunctionFunctions;
+
+
+/**
+ * Object Function
+ * @since Standard ECMA-262 3rd. Edition
+ */
+public abstract class JSFunction implements JSFunctionFunctions {
 
     /**
      * Object Function()
@@ -16,6 +23,7 @@ public class JSFunction extends JSObject {
     /**
      * property length
      * @type    Number
+     * @see  org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since   Standard ECMA-262 3rd. Edition 
      * @since   Level 2 Document Object Model Core Definition.    
     */ 
@@ -26,7 +34,7 @@ public class JSFunction extends JSObject {
     * 
     * @type Function
     * @memberOf Function
-    * @see Function
+    * @see  org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction Function
     * @since Standard ECMA-262 3rd. Edition
     * @since Level 2 Document Object Model Core Definition.
     */
@@ -37,34 +45,10 @@ public class JSFunction extends JSObject {
     * 
     * @type Function
     * @memberOf Function
-    * @see Function
+    * @see  org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction Function
     * @since Standard ECMA-262 3rd. Edition
     * @since Level 2 Document Object Model Core Definition.
     */
    protected JSFunction constructor;
    
-   
-    
-    /**
-     * function apply (thisObject, argArray)
-     * @param {Object} thisObject
-     * @param {Array} argArray
-     * @returns {Object}
-     * @since   Standard ECMA-262 3rd. Edition 
-     * @since   Level 2 Document Object Model Core Definition.
-     */ 
-    public JSObject apply(JSObject thisObject, JSArray argArray){return null;}
-    
-    /**
-      * function call (thisObject, args)
-      * @param {Object} thisObject
-      * @param {Object} args
-      * @returns {Object}
-      * @since   Standard ECMA-262 3rd. Edition 
-      * @since   Level 2 Document Object Model Core Definition.    
-     */ 
-    public JSObject call(JSObject thisObject, JSObject args){return null;}
-    
-    
-
 }

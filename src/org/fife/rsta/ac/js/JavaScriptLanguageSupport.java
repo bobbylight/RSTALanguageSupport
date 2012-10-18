@@ -15,7 +15,6 @@ import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,10 +28,10 @@ import javax.swing.text.Document;
 import org.fife.rsta.ac.AbstractLanguageSupport;
 import org.fife.rsta.ac.GoToMemberAction;
 import org.fife.rsta.ac.java.JarManager;
-import org.fife.rsta.ac.java.buildpath.ClassEnumerationReader;
 import org.fife.rsta.ac.java.buildpath.ClasspathLibraryInfo;
 import org.fife.rsta.ac.java.buildpath.ClasspathSourceLocation;
 import org.fife.rsta.ac.java.buildpath.LibraryInfo;
+import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 import org.fife.rsta.ac.js.completion.JavaScriptShorthandCompletion;
 import org.fife.rsta.ac.js.tree.JavaScriptOutlineTree;
 import org.fife.ui.autocomplete.AutoCompletion;
@@ -64,13 +63,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	private boolean strictMode;
 	private int languageVersion;
 
-	/**
-	 * Resource readable by {@link ClassEnumerationReader} that lists all
-	 * built-in JavaScript types.
-	 */
-	private static final String BUILTIN_JS_TYPES = "org/fife/rsta/ac/js/BuiltinJavascriptTypes.txt";
-
-
+	
 	public JavaScriptLanguageSupport() {
 		parserToInfoMap = new HashMap();
 		jarManager = createJarManager();
@@ -90,27 +83,25 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	protected JarManager createJarManager() {
 
 		JarManager jarManager = new JarManager();
-
-		// Grab built-in JavaScript types
-		InputStream in = getClass().getClassLoader().getResourceAsStream(BUILTIN_JS_TYPES);
-		if (in!=null) { // Should always be true
-			try {
-				List classes = ClassEnumerationReader.getClassNames(in);
-				if (classes!=null) {
-					LibraryInfo info = new ClasspathLibraryInfo(classes,
-												new ClasspathSourceLocation());
-					jarManager.addClassFileSource(info);
-				}
-			} catch (IOException ioe) {
-				ioe.printStackTrace();
-			}
-		}
-		else {
-			System.err.println("ERROR: Resource not found: " + BUILTIN_JS_TYPES);
-		}
-
+		setECMAVersion(null, jarManager); //load default ecma 
+		
 		return jarManager;
 
+	}
+	
+	public void setECMAVersion(String version, JarManager jarManager)
+	{
+		//load classes
+		try {
+			List classes = TypeDeclarationFactory.Instance().setTypeDeclarationVersion(version);
+			if (classes!=null) {
+				LibraryInfo info = new ClasspathLibraryInfo(classes,
+											new ClasspathSourceLocation());
+				jarManager.addClassFileSource(info);
+			}
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 	}
 
 

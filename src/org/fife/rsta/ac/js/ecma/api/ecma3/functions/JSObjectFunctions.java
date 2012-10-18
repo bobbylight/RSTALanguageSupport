@@ -1,72 +1,45 @@
-package org.fife.rsta.ac.js.ecma.api;
+package org.fife.rsta.ac.js.ecma.api.ecma3.functions;
+
+import org.fife.rsta.ac.js.ecma.api.ecma3.JSBoolean;
+import org.fife.rsta.ac.js.ecma.api.ecma3.JSObject;
+import org.fife.rsta.ac.js.ecma.api.ecma3.JSString;
 
 
-public class JSObject {
-
-    /**
-     * Object Object()
-     * 
-     * @constructor
-     * @since Standard ECMA-262 3rd. Edition
-     * @since Level 2 Document Object Model Core Definition.
-     */
-    public JSObject() {
-    }
-    
-    /**
-     * Property prototype
-     * 
-     * @type Object
-     * @memberOf Object
-     * @see Object
-     * @since Standard ECMA-262 3rd. Edition
-     * @since Level 2 Document Object Model Core Definition.
-     */
-    public JSObject protype;
-    
-    /**
-     * Property constructor
-     * 
-     * @type Function
-     * @memberOf Object
-     * @see Function
-     * @since Standard ECMA-262 3rd. Edition
-     * @since Level 2 Document Object Model Core Definition.
-     */
-    protected JSFunction constructor;
+public interface JSObjectFunctions {
+	
 
     /**
      * function toString()
      * 
      * @memberOf Object
      * @returns {String}
-     * @see JSObject
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSObject Object
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public String toString(){return null;}
+    public String toString();
 
     /**
      * function toLocaleString()
      * 
      * @memberOf Object
      * @returns {String}
-     * @see Object
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSObject Object
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSString toLocaleString(){return null;}
+    public JSString toLocaleString();
 
     /**
      * function valueOf()
      * 
      * @memberOf Object
      * @returns {Object}
-     * @see Object
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSObject Object
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSObject valueOf(){return null;};
+    public JSObject valueOf();
 
     /**
      * function hasOwnProperty(name)
@@ -74,11 +47,11 @@ public class JSObject {
      * @memberOf Object
      * @param {String} name
      * @returns {Boolean}
-     * @see Object
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSObject Object
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSBoolean hasOwnProperty(){return null;}
+    public JSBoolean hasOwnProperty();
 
     /**
      * function isPrototypeOf(o)
@@ -86,11 +59,11 @@ public class JSObject {
      * @memberOf Object
      * @param {Object} o
      * @returns {Boolean}
-     * @see Object
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSObject Object
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSBoolean isPrototypeOf(JSObject o){return null;}
+    public JSBoolean isPrototypeOf(JSObject o);
 
     /**
      * function propertyIsEnumerable(name)
@@ -98,10 +71,9 @@ public class JSObject {
      * @memberOf Object
      * @param {Object} name
      * @returns {Boolean}
-     * @see Object
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSObject Object
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSBoolean propertyIsEnumerable(JSObject name){return null;}
-
+    public JSBoolean propertyIsEnumerable(JSObject name);
 }

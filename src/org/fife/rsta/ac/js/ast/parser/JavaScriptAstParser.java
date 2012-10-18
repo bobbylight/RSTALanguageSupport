@@ -14,6 +14,7 @@ import org.fife.rsta.ac.js.ast.JavaScriptVariableDeclaration;
 import org.fife.rsta.ac.js.ast.type.ArrayTypeDeclaration;
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
 import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
+import org.fife.rsta.ac.js.ast.type.ecma.TypeDeclarations;
 import org.fife.rsta.ac.js.completion.JavaScriptInScriptFunctionCompletion;
 import org.fife.rsta.ac.js.resolver.JavaScriptResolver;
 import org.fife.ui.autocomplete.ParameterizedCompletion.Parameter;
@@ -638,7 +639,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 						// always assume a number for arrays
 						dec.setTypeDeclaration(TypeDeclarationFactory
 								.Instance().getTypeDeclaration(
-										TypeDeclarationFactory.ECMA_NUMBER));
+										TypeDeclarations.ECMA_NUMBER));
 					}
 					else {
 						dec.setTypeDeclaration(TypeDeclarationFactory

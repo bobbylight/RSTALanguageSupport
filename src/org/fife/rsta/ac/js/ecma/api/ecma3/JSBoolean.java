@@ -1,7 +1,13 @@
-package org.fife.rsta.ac.js.ecma.api;
+package org.fife.rsta.ac.js.ecma.api.ecma3;
+
+import org.fife.rsta.ac.js.ecma.api.ecma3.functions.JSObjectFunctions;
 
 
-public class JSBoolean extends JSObject {
+/**
+ * Object Boolean
+ * @since Standard ECMA-262 3rd. Edition
+ */
+public abstract class JSBoolean implements JSObjectFunctions {
 
     /**
      * Object Boolean()
@@ -19,7 +25,7 @@ public class JSBoolean extends JSObject {
      * 
      * @type Boolean
      * @memberOf Boolean
-     * @see Boolean
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSBoolean Boolean
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
@@ -30,7 +36,7 @@ public class JSBoolean extends JSObject {
      * 
      * @type Function
      * @memberOf Boolean
-     * @see Function
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction Function
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */

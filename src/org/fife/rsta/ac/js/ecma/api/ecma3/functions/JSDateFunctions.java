@@ -1,80 +1,22 @@
-package org.fife.rsta.ac.js.ecma.api;
+package org.fife.rsta.ac.js.ecma.api.ecma3.functions;
 
-public class JSDate extends JSObject {
+import org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber;
+import org.fife.rsta.ac.js.ecma.api.ecma3.JSObject;
+import org.fife.rsta.ac.js.ecma.api.ecma3.JSString;
 
-	/**
-	 * JSObject JSDate(s)
-	 * 
-	 * @constructor
-	 * @extends Object
-	 * @since Standard ECMA-262 3rd. Edition
-	 * @since Level 2 Document Object Model Core Definition.
-	 */
-	public JSDate() {
 
-	}
+public interface JSDateFunctions extends JSObjectFunctions {
 	
-	/**
-    * Property prototype
-    * 
-    * @type Date
-    * @memberOf Date
-    * @see Date
-    * @since Standard ECMA-262 3rd. Edition
-    * @since Level 2 Document Object Model Core Definition.
-    */
-   public JSDate protype;
-   
-   /**
-    * Property constructor
-    * 
-    * @type Function
-    * @memberOf Date
-    * @see Function
-    * @since Standard ECMA-262 3rd. Edition
-    * @since Level 2 Document Object Model Core Definition.
-    */
-   protected JSFunction constructor;
-
-
-	/**
-	 * function UTC(hour, min, sec, ms)
-	 * 
-	 * @memberOf Date
-	 * @param {Number} hour
-	 * @param {Number} min
-	 * @param {Number} sec
-	 * @param {Number} ms
-	 * @returns {Number}
-	 * @static
-	 * @since Standard ECMA-262 3rd. Edition
-	 * @since Level 2 Document Object Model Core Definition.
-	 */
-	public JSNumber UTC(JSNumber hour, JSNumber min, JSNumber sec, JSNumber ms){return null;}
-
-
-	/**
-	 * function parse(string)
-	 * 
-	 * @memberOf Date
-	 * @param {String} string
-	 * @returns {Number}
-	 * @static
-	 * @since Standard ECMA-262 3rd. Edition
-	 * @since Level 2 Document Object Model Core Definition.
-	 */
-	public JSNumber parse(JSString string){return null;}
-
-
 	/**
 	 * function toDateString()
 	 * 
 	 * @memberOf Date
 	 * @returns {String}
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSString toDateString(){return null;}
+	public JSString toDateString();
 
 
 	/**
@@ -82,10 +24,11 @@ public class JSDate extends JSObject {
 	 * 
 	 * @memberOf Date
 	 * @returns {String}
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSString toTimeString(){return null;}
+	public JSString toTimeString();
 
 
 	/**
@@ -93,10 +36,11 @@ public class JSDate extends JSObject {
 	 * 
 	 * @memberOf Date
 	 * @returns {String}
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSString toLocaleString(){return null;}
+	public JSString toLocaleString();
 
 
 	/**
@@ -104,10 +48,11 @@ public class JSDate extends JSObject {
 	 * 
 	 * @memberOf Date
 	 * @returns {String}
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSString toLocaleDateString(){return null;}
+	public JSString toLocaleDateString();
 
 
 	/**
@@ -115,10 +60,11 @@ public class JSDate extends JSObject {
 	 * 
 	 * @memberOf Date
 	 * @returns {String}
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSString toLocaleTimeString(){return null;}
+	public JSString toLocaleTimeString();
 
 
 	/**
@@ -126,10 +72,11 @@ public class JSDate extends JSObject {
 	 * 
 	 * @memberOf Date
 	 * @returns {Object}
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSObject valueOf(){return null;}
+	public JSObject valueOf();
 
 
 	/**
@@ -137,10 +84,11 @@ public class JSDate extends JSObject {
 	 * 
 	 * @memberOf Date
 	 * @returns {Number}
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getFullYear(){return null;}
+	public JSNumber getFullYear();
 
 
 	/**
@@ -148,10 +96,11 @@ public class JSDate extends JSObject {
 	 * 
 	 * @memberOf Date
 	 * @returns {Number}
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getTime(){return null;}
+	public JSNumber getTime();
 
 
 	/**
@@ -159,10 +108,11 @@ public class JSDate extends JSObject {
 	 * 
 	 * @memberOf Date
 	 * @returns {Number}
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getUTCFullYear(){return null;}
+	public JSNumber getUTCFullYear();
 
 
 	/**
@@ -170,10 +120,11 @@ public class JSDate extends JSObject {
 	 * 
 	 * @memberOf Date
 	 * @returns {Number}
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getMonth(){return null;}
+	public JSNumber getMonth();
 
 
 	/**
@@ -181,10 +132,11 @@ public class JSDate extends JSObject {
 	 * 
 	 * @memberOf Date
 	 * @returns {Number}
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getUTCMonth(){return null;}
+	public JSNumber getUTCMonth();
 
 
 	/**
@@ -192,10 +144,11 @@ public class JSDate extends JSObject {
 	 * 
 	 * @memberOf Date
 	 * @returns {Number}
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getDate(){return null;}
+	public JSNumber getDate();
 
 
 	/**
@@ -203,10 +156,11 @@ public class JSDate extends JSObject {
 	 * 
 	 * @memberOf Date
 	 * @returns {Number}
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getUTCDate(){return null;}
+	public JSNumber getUTCDate();
 
 
 	/**
@@ -214,10 +168,11 @@ public class JSDate extends JSObject {
 	 * 
 	 * @memberOf Date
 	 * @returns {Number}
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getDay(){return null;}
+	public JSNumber getDay();
 
 
 	/**
@@ -226,11 +181,12 @@ public class JSDate extends JSObject {
 	 * @memberOf Date
 	 * @type Number
 	 * @returns {Number}
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 * 
 	 */
-	public JSNumber getUTCDay(){return null;}
+	public JSNumber getUTCDay();
 
 
 	/**
@@ -238,10 +194,11 @@ public class JSDate extends JSObject {
 	 * 
 	 * @memberOf Date
 	 * @returns {Number}
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getHours(){return null;}
+	public JSNumber getHours();
 
 
 	/**
@@ -249,10 +206,11 @@ public class JSDate extends JSObject {
 	 * 
 	 * @memberOf Date
 	 * @returns {Number}
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getUTCHours(){return null;}
+	public JSNumber getUTCHours();
 
 
 	/**
@@ -260,10 +218,11 @@ public class JSDate extends JSObject {
 	 * 
 	 * @memberOf Date
 	 * @returns {Number}
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getMinutes(){return null;}
+	public JSNumber getMinutes();
 
 
 	/**
@@ -271,10 +230,11 @@ public class JSDate extends JSObject {
 	 * 
 	 * @memberOf Date
 	 * @returns {Number}
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getUTCMinutes(){return null;}
+	public JSNumber getUTCMinutes();
 
 
 	/**
@@ -282,10 +242,11 @@ public class JSDate extends JSObject {
 	 * 
 	 * @memberOf Date
 	 * @returns {Number}
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getSeconds(){return null;}
+	public JSNumber getSeconds();
 
 
 	/**
@@ -293,10 +254,11 @@ public class JSDate extends JSObject {
 	 * 
 	 * @memberOf Date
 	 * @returns {Number}
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getUTCSeconds(){return null;}
+	public JSNumber getUTCSeconds();
 
 
 	/**
@@ -304,10 +266,11 @@ public class JSDate extends JSObject {
 	 * 
 	 * @memberOf Date
 	 * @returns {Number}
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getMilliseconds(){return null;}
+	public JSNumber getMilliseconds();
 
 
 	/**
@@ -315,10 +278,11 @@ public class JSDate extends JSObject {
 	 * 
 	 * @memberOf Date
 	 * @returns {Number}
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getUTCMilliseconds(){return null;}
+	public JSNumber getUTCMilliseconds();
 
 
 	/**
@@ -326,10 +290,11 @@ public class JSDate extends JSObject {
 	 * 
 	 * @memberOf Date
 	 * @returns {Number}
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getTimezoneOffset(){return null;}
+	public JSNumber getTimezoneOffset();
 
 
 	/**
@@ -338,10 +303,11 @@ public class JSDate extends JSObject {
 	 * @memberOf Date
 	 * @returns {Number}
 	 * @param {Number} value
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber setTime(JSNumber value){return null;}
+	public JSNumber setTime(JSNumber value);
 
 
 	/**
@@ -350,10 +316,11 @@ public class JSDate extends JSObject {
 	 * @memberOf Date
 	 * @returns {Number}
 	 * @param {Number} value
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber setMilliseconds(JSNumber value){return null;}
+	public JSNumber setMilliseconds(JSNumber value);
 
 
 	/**
@@ -362,10 +329,11 @@ public class JSDate extends JSObject {
 	 * @memberOf JSDate
 	 * @returns {Number}
 	 * @param {Number} ms
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber setUTCMilliseconds(JSNumber ms){return null;}
+	public JSNumber setUTCMilliseconds(JSNumber ms);
 
 
 	/**
@@ -375,10 +343,11 @@ public class JSDate extends JSObject {
 	 * @returns {Number}
 	 * @param {Number} sec
 	 * @param {Number} ms
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber setSeconds(JSNumber sec, JSNumber ms){return null;}
+	public JSNumber setSeconds(JSNumber sec, JSNumber ms);
 
 
 	/**
@@ -388,10 +357,11 @@ public class JSDate extends JSObject {
 	 * @returns {Number}
 	 * @param {Number} sec
 	 * @param {Number} ms
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber setUTCSeconds(JSNumber sec, JSNumber ms){return null;}
+	public JSNumber setUTCSeconds(JSNumber sec, JSNumber ms);
 
 
 	/**
@@ -402,10 +372,11 @@ public class JSDate extends JSObject {
 	 * @param {Number} min
 	 * @param {Number} sec
 	 * @param {Number} ms
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber setMinutes(JSNumber min, JSNumber sec, JSNumber ms){return null;}
+	public JSNumber setMinutes(JSNumber min, JSNumber sec, JSNumber ms);
 
 
 	/**
@@ -416,10 +387,11 @@ public class JSDate extends JSObject {
 	 * @param {Number} min
 	 * @param {Number} sec
 	 * @param {Number} ms
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber setUTCMinute(JSNumber min, JSNumber sec, JSNumber ms){return null;}
+	public JSNumber setUTCMinute(JSNumber min, JSNumber sec, JSNumber ms);
 
 
 	/**
@@ -431,11 +403,11 @@ public class JSDate extends JSObject {
 	 * @param {Number} min
 	 * @param {Number} sec
 	 * @param {Number} ms
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber setHours(JSNumber hour, JSNumber min, JSNumber sec,
-			JSNumber ms){return null;}
+	public JSNumber setHours(JSNumber hour, JSNumber min, JSNumber sec, JSNumber ms);
 
 
 	/**
@@ -447,11 +419,11 @@ public class JSDate extends JSObject {
 	 * @param {Number} min
 	 * @param {Number} sec
 	 * @param {Number} ms
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber setUTCHours(JSNumber hour, JSNumber min, JSNumber sec,
-			JSNumber ms) {return null;}
+	public JSNumber setUTCHours(JSNumber hour, JSNumber min, JSNumber sec, JSNumber ms);
 
 
 	/**
@@ -460,10 +432,11 @@ public class JSDate extends JSObject {
 	 * @memberOf Date
 	 * @returns {Number}
 	 * @param {Number} date
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber setDate(JSNumber date){return null;}
+	public JSNumber setDate(JSNumber date);
 
 
 	/**
@@ -472,10 +445,11 @@ public class JSDate extends JSObject {
 	 * @memberOf Date
 	 * @returns {Number}
 	 * @param {Number} date
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber setUTCDate(JSNumber date){return null;}
+	public JSNumber setUTCDate(JSNumber date);
 
 
 	/**
@@ -485,10 +459,11 @@ public class JSDate extends JSObject {
 	 * @returns {Number}
 	 * @param {Number} date
 	 * @param {Number} month
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber setMonth(JSNumber month, JSNumber date){return null;}
+	public JSNumber setMonth(JSNumber month, JSNumber date);
 
 
 	/**
@@ -498,10 +473,11 @@ public class JSDate extends JSObject {
 	 * @returns {Number}
 	 * @param {Number} date
 	 * @param {Number} month
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber setUTCMonth(JSNumber month, JSNumber date){return null;}
+	public JSNumber setUTCMonth(JSNumber month, JSNumber date);
 
 
 	/**
@@ -512,10 +488,11 @@ public class JSDate extends JSObject {
 	 * @param {Number} date
 	 * @param {Number} month
 	 * @param {Number} year
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber setFullYear(JSNumber year, JSNumber month, JSNumber date){return null;}
+	public JSNumber setFullYear(JSNumber year, JSNumber month, JSNumber date);
 
 
 	/**
@@ -526,10 +503,11 @@ public class JSDate extends JSObject {
 	 * @param {Number} date
 	 * @param {Number} month
 	 * @param {Number} year
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber setUTCFullYear(JSNumber year, JSNumber month, JSNumber date){return null;}
+	public JSNumber setUTCFullYear(JSNumber year, JSNumber month, JSNumber date);
 
 
 	/**
@@ -537,8 +515,9 @@ public class JSDate extends JSObject {
 	 * 
 	 * @memberOf Date
 	 * @returns {String}
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSString toUTCString(){return null;}
+	public JSString toUTCString();
 }

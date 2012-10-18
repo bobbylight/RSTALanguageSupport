@@ -231,7 +231,7 @@ public abstract class JavaScriptTypesFactory {
 	 * 		<OL>
 	 * 			<LI>staticsOnly && public return true; //All public static methods and fields</LI>
 	 * 			<LI>!staticsOnly && public return true; //All public methods and fields</LI>
-	 * 			<LI>Built in JavaScript type and public or protected return true; //All public/protected built in JSType (org.fife.rsta.ac.js.ecma.api package) methods and fields</LI>
+	 * 			<LI>Built in JavaScript type and public or protected return true; //All public/protected built in JSType (org.fife.rsta.ac.js.ecma.api.ecma3 package) methods and fields</LI>
 	 * 		</OL> 
 	 * @param access - access flag to test
 	 * @param staticsOnly - whether loading static methods and fields only
@@ -257,11 +257,24 @@ public abstract class JavaScriptTypesFactory {
 	public TypeDeclaration createNewTypeDeclaration(ClassFile cf, boolean staticOnly, boolean addToCache) {
 		String className = cf.getClassName(false);
 		String packageName = cf.getPackageName();
-		TypeDeclaration td = new TypeDeclaration(packageName, className, cf
-				.getClassName(true), staticOnly);
-		// now add to types factory
-		if(addToCache)
-			TypeDeclarationFactory.Instance().addType(cf.getClassName(true), td);
+		
+		if(staticOnly && !addToCache)
+		{
+			return new TypeDeclaration(packageName, className, cf
+					.getClassName(true), staticOnly);
+		}
+		
+		String qualified = cf.getClassName(true);
+		//lookup type
+		TypeDeclaration td = TypeDeclarationFactory.Instance().getTypeDeclaration(qualified);
+		if(td == null) {
+			td = new TypeDeclaration(packageName, className, cf
+					.getClassName(true), staticOnly);
+			// now add to types factory
+			if(addToCache)
+				TypeDeclarationFactory.Instance().addType(qualified, td);
+		}
+		
 		return td;
 	}
 

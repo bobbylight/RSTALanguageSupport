@@ -8,6 +8,7 @@ import org.fife.rsta.ac.js.JavaScriptHelper;
 import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
 import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
+import org.fife.rsta.ac.js.ast.type.ecma.TypeDeclarations;
 import org.mozilla.javascript.Kit;
 
 
@@ -29,12 +30,12 @@ public class JavaScriptFunctionType {
 							  ShortClass = Kit.classOrNull("java.lang.Short"), 
 							  StringClass = Kit.classOrNull("java.lang.String"), 
 							  DateClass = Kit.classOrNull("java.util.Date"), 
-							  JSBooleanClass = Kit.classOrNull("org.fife.rsta.ac.js.ecma.api.JSBoolean"),
-							  JSStringClass = Kit.classOrNull("org.fife.rsta.ac.js.ecma.api.JSString"),
-							  JSNumberClass = Kit.classOrNull("org.fife.rsta.ac.js.ecma.api.JSNumber"),
-							  JSObjectClass = Kit.classOrNull("org.fife.rsta.ac.js.ecma.api.JSObject"),
-							  JSDateClass = Kit.classOrNull("org.fife.rsta.ac.js.ecma.api.JSDate"),
-							  JSArray = Kit.classOrNull("org.fife.rsta.ac.js.ecma.api.JSArray");
+							  JSBooleanClass = Kit.classOrNull(TypeDeclarationFactory.getClassName(TypeDeclarations.ECMA_BOOLEAN)),
+							  JSStringClass = Kit.classOrNull(TypeDeclarationFactory.getClassName(TypeDeclarations.ECMA_STRING)),
+							  JSNumberClass = Kit.classOrNull(TypeDeclarationFactory.getClassName(TypeDeclarations.ECMA_NUMBER)),
+							  JSObjectClass = Kit.classOrNull(TypeDeclarationFactory.getClassName(TypeDeclarations.ECMA_OBJECT)),
+							  JSDateClass = Kit.classOrNull(TypeDeclarationFactory.getClassName(TypeDeclarations.ECMA_DATE)),
+							  JSArray = Kit.classOrNull(TypeDeclarationFactory.getClassName(TypeDeclarations.ECMA_ARRAY));
 
 	private String name;
 	private List arguments;

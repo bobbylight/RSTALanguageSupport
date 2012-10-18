@@ -1,65 +1,23 @@
-package org.fife.rsta.ac.js.ecma.api;
+package org.fife.rsta.ac.js.ecma.api.ecma3.functions;
 
-public class JSArray extends JSObject {
-
-	/**
-	 * Object JSArray()
-	 * 
-	 * @constructor
-	 * @extends JSObject
-	 * @since Standard ECMA-262 3rd. Edition
-	 * @since Level 2 Document Object Model Core Definition.
-	 */
-	public JSArray() {
-
-	}
+import org.fife.rsta.ac.js.ecma.api.ecma3.JSArray;
+import org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction;
+import org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber;
+import org.fife.rsta.ac.js.ecma.api.ecma3.JSObject;
 
 
-	/**
-	 * Property length
-	 * 
-	 * @type JSNumber
-	 * @memberOf Array
-	 * @see Array
-	 * @since Standard ECMA-262 3rd. Edition
-	 * @since Level 2 Document Object Model Core Definition.
-	 */
-	public JSNumber length;
-	
-	/**
-    * Property prototype
-    * 
-    * @type Array
-    * @memberOf Array
-    * @see Array
-    * @since Standard ECMA-262 3rd. Edition
-    * @since Level 2 Document Object Model Core Definition.
-    */
-   public JSArray protype;
-   
-   /**
-    * Property constructor
-    * 
-    * @type Function
-    * @memberOf Array
-    * @see Function
-    * @since Standard ECMA-262 3rd. Edition
-    * @since Level 2 Document Object Model Core Definition.
-    */
-   protected JSFunction constructor;
-
-
+public interface JSArrayFunctions extends JSObjectFunctions {
 	/**
 	 * function concat(args)
 	 * 
 	 * @param {Array} args
 	 * @returns {Array}
 	 * @memberOf Array
-	 * @see Array
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSArray Array
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSArray concat(JSArray args){return null;}
+	public JSArray concat(JSArray args);
 
 
 	/**
@@ -68,11 +26,11 @@ public class JSArray extends JSObject {
 	 * @param {String} seperator
 	 * @returns {Array}
 	 * @memberOf Array
-	 * @see Array
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSArray Array
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSArray join(String seperator){return null;}
+	public JSArray join(String seperator);
 
 
 	/**
@@ -80,11 +38,11 @@ public class JSArray extends JSObject {
 	 * 
 	 * @returns {Object}
 	 * @memberOf Array
-	 * @see Array
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSArray Array
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSObject pop(){return null;}
+	public JSObject pop();
 
 
 	/**
@@ -92,11 +50,11 @@ public class JSArray extends JSObject {
 	 * 
 	 * @param {Array} args
 	 * @memberOf Array
-	 * @see Array
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSArray Array
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public void push(JSArray array){}
+	public void push(JSArray array);
 
 
 	/**
@@ -104,11 +62,11 @@ public class JSArray extends JSObject {
 	 * 
 	 * @returns {Array}
 	 * @memberOf Array
-	 * @see Array
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSArray Array
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSArray reverse(){return null;}
+	public JSArray reverse();
 
 
 	/**
@@ -116,11 +74,11 @@ public class JSArray extends JSObject {
 	 * 
 	 * @returns {Object}
 	 * @memberOf Array
-	 * @see Array
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSArray Array
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSObject shift(){return null;}
+	public JSObject shift();
 
 
 	/**
@@ -130,24 +88,24 @@ public class JSArray extends JSObject {
 	 * @param {Number} end
 	 * @returns {Array}
 	 * @memberOf Array
-	 * @see Array
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSArray Array
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSArray slice(Number start, Number end){return null;}
+	public JSArray slice(Number start, Number end);
 
 
 	/**
-	 * function sort(funct)
+	 * function sort(function)
 	 * 
-	 * @param {Function} funct
+	 * @param {Function} function
 	 * @returns {Array}
 	 * @memberOf Array
-	 * @see Array
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSArray Array
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSArray sort(JSFunction function){return null;}
+	public JSArray sort(JSFunction function);
 
 
 	/**
@@ -158,12 +116,11 @@ public class JSArray extends JSObject {
 	 * @param {Array} items
 	 * @returns {Array}
 	 * @memberOf Array
-	 * @see Array
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSArray Array
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSArray splice(JSNumber start, JSNumber deletecount,
-			JSArray items){return null;}
+	public JSArray splice(JSNumber start, JSNumber deletecount, JSArray items);
 
 
 	/**
@@ -172,10 +129,9 @@ public class JSArray extends JSObject {
 	 * @param {Array} start
 	 * @returns {Array}
 	 * @memberOf Array
-	 * @see Array
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSArray Array
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSArray unshift(JSArray start){return null;}
-
+	public JSArray unshift(JSArray start);
 }

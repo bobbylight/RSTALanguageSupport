@@ -1,6 +1,13 @@
-package org.fife.rsta.ac.js.ecma.api;
+package org.fife.rsta.ac.js.ecma.api.ecma3;
 
-public class JSError extends JSObject {
+import org.fife.rsta.ac.js.ecma.api.ecma3.functions.JSObjectFunctions;
+
+
+/**
+ * Object Error
+ * @since Standard ECMA-262 3rd. Edition
+ */
+public abstract class JSError implements JSObjectFunctions {
 
 	/**
 	 * Object Error(message)
@@ -20,7 +27,7 @@ public class JSError extends JSObject {
     * 
     * @type Error
     * @memberOf Error
-    * @see Error
+    * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSError Error
     * @since Standard ECMA-262 3rd. Edition
     * @since Level 2 Document Object Model Core Definition.
     */
@@ -31,7 +38,7 @@ public class JSError extends JSObject {
     * 
     * @type Function
     * @memberOf Error
-    * @see Function
+    * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction Function
     * @since Standard ECMA-262 3rd. Edition
     * @since Level 2 Document Object Model Core Definition.
     */
@@ -42,6 +49,7 @@ public class JSError extends JSObject {
 	 * 
 	 * @type String
 	 * @memberOf Error
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
@@ -52,6 +60,7 @@ public class JSError extends JSObject {
 	 * 
 	 * @type String
 	 * @memberOf Error
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */

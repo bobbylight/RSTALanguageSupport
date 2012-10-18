@@ -16,6 +16,7 @@ import java.util.Iterator;
 import org.fife.rsta.ac.js.ast.type.ArrayTypeDeclaration;
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
 import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
+import org.fife.rsta.ac.js.ast.type.ecma.TypeDeclarations;
 import org.fife.rsta.ac.js.resolver.JavaScriptCompletionResolver;
 import org.fife.rsta.ac.js.resolver.JavaScriptResolver;
 import org.mozilla.javascript.CompilerEnvirons;
@@ -151,21 +152,21 @@ public class JavaScriptHelper {
 		if (typeNode != null) {
 			switch (typeNode.getType()) {
 				case Token.CATCH:
-					return getTypeDeclaration(TypeDeclarationFactory.ECMA_ERROR);
+					return getTypeDeclaration(TypeDeclarations.ECMA_ERROR);
 				case Token.NAME:
 					return provider.resolveTypeDeclation(((Name) typeNode)
 							.getIdentifier());
 				case Token.NEW:
 					return processNewNode(typeNode);
 				case Token.NUMBER:
-					return getTypeDeclaration(TypeDeclarationFactory.ECMA_NUMBER);
+					return getTypeDeclaration(TypeDeclarations.ECMA_NUMBER);
 				case Token.OBJECTLIT:
-					return getTypeDeclaration(TypeDeclarationFactory.ECMA_OBJECT);
+					return getTypeDeclaration(TypeDeclarations.ECMA_OBJECT);
 				case Token.STRING:
-					return getTypeDeclaration(TypeDeclarationFactory.ECMA_STRING);
+					return getTypeDeclaration(TypeDeclarations.ECMA_STRING);
 				case Token.TRUE:
 				case Token.FALSE:
-					return getTypeDeclaration(TypeDeclarationFactory.ECMA_BOOLEAN);
+					return getTypeDeclaration(TypeDeclarations.ECMA_BOOLEAN);
 				case Token.ARRAYLIT: //TODO need to store the Array Objects onto the variable so they can be resolved in the future
 					return createArrayType(typeNode, provider); //getTypeDeclaration(TypeDeclarationFactory.ECMA_ARRAY);
 				case Token.GETELEM: {
@@ -223,7 +224,7 @@ public class JavaScriptHelper {
 	 */
 	private static TypeDeclaration createArrayType(AstNode typeNode, SourceCompletionProvider provider)
 	{
-		TypeDeclaration array = getTypeDeclaration(TypeDeclarationFactory.ECMA_ARRAY);
+		TypeDeclaration array = getTypeDeclaration(TypeDeclarations.ECMA_ARRAY);
 		if(array != null) {
 			//create a new ArrayTypeDeclaration
 			ArrayTypeDeclaration arrayDec = new ArrayTypeDeclaration(array.getPackageName(), array.getAPITypeName(), array.getJSName());
@@ -320,18 +321,18 @@ public class JavaScriptHelper {
 			{
 				switch (node.getType()) {
 					case Token.STRING:
-						type = TypeDeclarationFactory.ECMA_STRING;
+						type = TypeDeclarations.ECMA_STRING;
 						break;
 					case Token.NUMBER:
 						if (type == null) {
-							type = TypeDeclarationFactory.ECMA_NUMBER;
+							type = TypeDeclarations.ECMA_NUMBER;
 						}
 						break;
 					default:
 						if (type == null
-								|| !TypeDeclarationFactory.ECMA_STRING
+								|| !TypeDeclarations.ECMA_STRING
 										.equals(type)) {
-							type = TypeDeclarationFactory.ANY;
+							type = TypeDeclarations.ANY;
 						}
 						break;
 				}

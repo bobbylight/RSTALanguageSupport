@@ -1,7 +1,13 @@
-package org.fife.rsta.ac.js.ecma.api;
+package org.fife.rsta.ac.js.ecma.api.ecma3;
+
+import org.fife.rsta.ac.js.ecma.api.ecma3.functions.JSNumberFunctions;
 
 
-public class JSNumber extends JSObject {
+/**
+ * Object Number
+ * @since Standard ECMA-262 3rd. Edition
+ */
+public abstract class JSNumber implements JSNumberFunctions {
 
     /**
      * Object Number()
@@ -19,7 +25,7 @@ public class JSNumber extends JSObject {
      * 
      * @type Number
      * @memberOf Number
-     * @see Number
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
@@ -30,7 +36,7 @@ public class JSNumber extends JSObject {
      * 
      * @type Function
      * @memberOf Number
-     * @see Function
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction Function
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
@@ -42,6 +48,7 @@ public class JSNumber extends JSObject {
      * @type Number
      * @memberOf Number
      * @static
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
@@ -53,6 +60,7 @@ public class JSNumber extends JSObject {
      * @type Number
      * @memberOf Number
      * @static
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
@@ -64,6 +72,7 @@ public class JSNumber extends JSObject {
      * @type Number
      * @memberOf Number
      * @static
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
@@ -75,6 +84,7 @@ public class JSNumber extends JSObject {
      * @type Number
      * @memberOf Number
      * @static
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
@@ -86,41 +96,10 @@ public class JSNumber extends JSObject {
      * @type Number
      * @memberOf Number
      * @static
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
     public static JSNumber POSITIVE_INFINITY;
 
-    /**
-     * function toFixed(fractionDigits)
-     * 
-     * @memberOf Number
-     * @param {Number} fractionDigits
-     * @returns {String}
-     * @since Standard ECMA-262 3rd. Edition
-     * @since Level 2 Document Object Model Core Definition.
-     */
-    public JSString toFixed(JSNumber fractionDigits){return null;}
-
-    /**
-     * function toExponential(fractionDigits)
-     * 
-     * @memberOf Number
-     * @param {Number} fractionDigits
-     * @returns {String}
-     * @since Standard ECMA-262 3rd. Edition
-     * @since Level 2 Document Object Model Core Definition.
-     */
-    public JSString toExponential(JSNumber fractionDigits){return null;}
-
-    /**
-     * function toPrecision(precision)
-     * 
-     * @memberOf Number
-     * @param {Number} fractionDigits
-     * @returns {String}
-     * @since Standard ECMA-262 3rd. Edition
-     * @since Level 2 Document Object Model Core Definition.
-     */
-    public JSString toPrecision(JSNumber fractionDigits){return null;}
 }

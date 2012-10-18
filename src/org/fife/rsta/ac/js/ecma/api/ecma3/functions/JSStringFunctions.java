@@ -1,77 +1,24 @@
-package org.fife.rsta.ac.js.ecma.api;
+package org.fife.rsta.ac.js.ecma.api.ecma3.functions;
+
+import org.fife.rsta.ac.js.ecma.api.ecma3.JSArray;
+import org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber;
+import org.fife.rsta.ac.js.ecma.api.ecma3.JSRegExp;
+import org.fife.rsta.ac.js.ecma.api.ecma3.JSString;
 
 
-public class JSString extends JSObject {
-
-    /**
-     * Object JSString()
-     * 
-     * @constructor
-     * @extends JSObject
-     * @since Standard ECMA-262 3rd. Edition
-     * @since Level 2 Document Object Model Core Definition.
-     */
-    public JSString() {
-    }
-
-    /**
-     * static function fromCharCode(charCode1, ...)
-     * 
-     * @memberOf String
-     * @param {Number} charCode
-     * @returns {String}
-     * @static
-     * @see String
-     * @since Standard ECMA-262 3rd. Edition
-     * @since Level 2 Document Object Model Core Definition.
-     */
-    public static JSString fromCharCode(JSNumber charCode){return null;}
-
-    /**
-     * Property length
-     * 
-     * @type Number
-     * @memberOf String
-     * @see String
-     * @since Standard ECMA-262 3rd. Edition
-     * @since Level 2 Document Object Model Core Definition.
-     */
-    protected JSNumber length;
-    
-    /**
-     * Property prototype
-     * 
-     * @type String
-     * @memberOf String
-     * @see String
-     * @since Standard ECMA-262 3rd. Edition
-     * @since Level 2 Document Object Model Core Definition.
-     */
-    public JSString protype;
-    
-    /**
-     * Property constructor
-     * 
-     * @type Function
-     * @memberOf String
-     * @see Function
-     * @since Standard ECMA-262 3rd. Edition
-     * @since Level 2 Document Object Model Core Definition.
-     */
-    protected JSFunction constructor;
-
-
-    /**
+public interface JSStringFunctions extends JSObjectFunctions {
+	
+	/**
      * function charAt(position)
      * 
      * @memberOf String
      * @param {Number} position
      * @returns {String}
-     * @see String
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSString charAt(JSNumber position){return null;}
+    public JSString charAt(JSNumber position);
 
     /**
      * function charCodeAt(position)
@@ -79,11 +26,11 @@ public class JSString extends JSObject {
      * @memberOf String
      * @param {Number} position
      * @returns {Number}
-     * @see String
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSNumber charCodeAt(JSNumber position){return null;}
+    public JSNumber charCodeAt(JSNumber position);
 
     /**
      * function concat(value1, ...)
@@ -91,11 +38,11 @@ public class JSString extends JSObject {
      * @memberOf String
      * @param {String} value
      * @returns {String}
-     * @see String
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSString concat(JSString value){return null;}
+    public JSString concat(JSString value);
 
     /**
      * function indexOf(searchString, startPosition)
@@ -104,11 +51,11 @@ public class JSString extends JSObject {
      * @param {String} searchString
      * @param {Number} startPosition
      * @returns {Number}
-     * @see String
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSNumber indexOf(JSNumber searchString, JSNumber startPosition){return null;}
+    public JSNumber indexOf(JSNumber searchString, JSNumber startPosition);
 
     /**
      * function lastIndexOf(searchString, startPosition)
@@ -117,11 +64,11 @@ public class JSString extends JSObject {
      * @param {String} searchString
      * @param {Number} startPosition
      * @returns {Number}
-     * @see String
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSNumber lastIndexOf(JSNumber searchString, JSNumber startPosition){return null;}
+    public JSNumber lastIndexOf(JSNumber searchString, JSNumber startPosition);
 
     /**
      * function localeCompare(otherString)
@@ -129,11 +76,11 @@ public class JSString extends JSObject {
      * @memberOf String
      * @param {String} otherString
      * @returns {Number}
-     * @see String
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSNumber localeCompare(JSString otherString){return null;}
+    public JSNumber localeCompare(JSString otherString);
 
     /**
      * function match(regexp)
@@ -141,11 +88,11 @@ public class JSString extends JSObject {
      * @memberOf String
      * @param {RegExp} regexp
      * @returns {Array}
-     * @see String
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSString match(JSRegExp regexp){return null;}
+    public JSString match(JSRegExp regexp);
 
     /**
      * function replace(regexp, replaceValue)
@@ -154,11 +101,11 @@ public class JSString extends JSObject {
      * @param {RegExp} regexp
      * @param {String} replaceValue
      * @returns {String}
-     * @see String
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSString replace(JSRegExp regexp, JSString replaceValue){return null;}
+    public JSString replace(JSRegExp regexp, JSString replaceValue);
 
     /**
      * function search(regexp)
@@ -166,11 +113,11 @@ public class JSString extends JSObject {
      * @memberOf String
      * @param {RegExp} regexp
      * @returns {Number}
-     * @see String
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSNumber search(JSRegExp regexp){return null;}
+    public JSNumber search(JSRegExp regexp);
 
     /**
      * function slice(start, end)
@@ -179,11 +126,11 @@ public class JSString extends JSObject {
      * @param {Number} start
      * @param {Number} end
      * @returns {String}
-     * @see String
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSString slice(JSNumber start, JSNumber end){return null;}
+    public JSString slice(JSNumber start, JSNumber end);
 
     /**
      * function split(separator, limit)
@@ -192,11 +139,11 @@ public class JSString extends JSObject {
      * @param {String} separator
      * @param {Number} limit
      * @returns {Array}
-     * @see String
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSArray split(JSString separator, JSNumber limit){return null;}
+    public JSArray split(JSString separator, JSNumber limit);
 
     /**
      * function substring(start, end)
@@ -205,54 +152,53 @@ public class JSString extends JSObject {
      * @param {Number} start
      * @param {Number} end
      * @returns {String}
-     * @see String
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSString substring(JSNumber start, JSNumber end){return null;}
+    public JSString substring(JSNumber start, JSNumber end);
 
     /**
      * function toLowerCase()
      * 
      * @memberOf String
      * @returns {String}
-     * @see String
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSString toLowerCase(){return null;}
+    public JSString toLowerCase();
 
     /**
      * function toLocaleLowerCase()
      * 
      * @memberOf String
      * @returns {String}
-     * @see String
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSString toLocaleLowerCase(){return null;}
+    public JSString toLocaleLowerCase();
 
     /**
      * function toUpperCase()
      * 
      * @memberOf String
      * @returns {String}
-     * @see String
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSString toUpperCase(){return null;}
+    public JSString toUpperCase();
 
     /**
      * function toLocaleUpperCase()
      * 
      * @memberOf String
      * @returns {String}
-     * @see String
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSString toLocaleUpperCase(){return null;}
-
+    public JSString toLocaleUpperCase();
 }

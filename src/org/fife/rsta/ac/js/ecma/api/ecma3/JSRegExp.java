@@ -1,73 +1,53 @@
-package org.fife.rsta.ac.js.ecma.api;
+package org.fife.rsta.ac.js.ecma.api.ecma3;
 
-public class JSRegExp extends JSObject {
+import org.fife.rsta.ac.js.ecma.api.ecma3.functions.JSRegExpFunctions;
+
+
+/**
+ * Object RegExp
+ * @since Standard ECMA-262 3rd. Edition
+ */
+public abstract class JSRegExp implements JSRegExpFunctions {
 
 	/**
-	 * Object RegExp()
-	 * 
-	 * @super Object
-	 * @constructor
-	 * @memberOf RegExp
-	 * @since Standard ECMA-262 3rd. Edition
-	 * @since Level 2 Document Object Model Core Definition.
-	 */
-	public JSRegExp() {
-	};
+	* Object RegExp()
+	* 
+	* @super Object
+	* @constructor
+	* @memberOf RegExp
+	* @since Standard ECMA-262 3rd. Edition
+	* @since Level 2 Document Object Model Core Definition.
+	*/
+	public JSRegExp() {};
 	
 	/**
     * Property prototype
     * 
     * @type RegExp
     * @memberOf RegExp
-    * @see RegExp
+    * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSRegExp RegExp
     * @since Standard ECMA-262 3rd. Edition
     * @since Level 2 Document Object Model Core Definition.
     */
-   public JSRegExp protype;
+    public JSRegExp protype;
    
-   /**
+	/**
     * Property constructor
     * 
     * @type Function
     * @memberOf RegExp
-    * @see Function
+    * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction Function
     * @since Standard ECMA-262 3rd. Edition
     * @since Level 2 Document Object Model Core Definition.
     */
-   protected JSFunction constructor;
-
-
-	/**
-	 * function exec(string)
-	 * 
-	 * @param {String} string
-	 * @returns {Array}
-	 * @type Array
-	 * @memberOf RegExp
-	 * @since Standard ECMA-262 3rd. Edition
-	 * @since Level 2 Document Object Model Core Definition.
-	 */
-	public JSArray exec(String string){return null;}
-
-
-	/**
-	 * function test(string)
-	 * 
-	 * @param {String} string
-	 * @returns {Boolean}
-	 * @type Boolean
-	 * @memberOf RegExp
-	 * @since Standard ECMA-262 3rd. Edition
-	 * @since Level 2 Document Object Model Core Definition.
-	 */
-	public JSBoolean test(String string){return null;}
-
-
+    protected JSFunction constructor;
+   
 	/**
 	 * property source
 	 * 
 	 * @type String
 	 * @memberOf RegExp
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
@@ -78,6 +58,7 @@ public class JSRegExp extends JSObject {
 	 * 
 	 * @type Boolean
 	 * @memberOf RegExp
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSBoolean Boolean
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
@@ -88,6 +69,7 @@ public class JSRegExp extends JSObject {
 	 * 
 	 * @type Boolean
 	 * @memberOf RegExp
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSBoolean Boolean
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
@@ -98,6 +80,7 @@ public class JSRegExp extends JSObject {
 	 * 
 	 * @type Boolean
 	 * @memberOf RegExp
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSBoolean Boolean
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
@@ -108,6 +91,7 @@ public class JSRegExp extends JSObject {
 	 * 
 	 * @type Number
 	 * @memberOf RegExp
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
