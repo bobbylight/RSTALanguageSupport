@@ -11,11 +11,10 @@ import org.fife.rsta.ac.js.ecma.api.ecma5.functions.JS5DateFunctions;
 public abstract class JS5Date extends JSDate implements JS5DateFunctions {
 
 	/**
-	 * function now()
+	 * <b>function now()</b> return the current time in milliseconds
 	 * 
 	 * @memberOf Date
-	 * @param {String} string
-	 * @returns {Number}
+	 * @returns The current time in milliseconds since midnight GMT on January 1, 1970
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma5.JS5Date Date
 	 * @static
 	 * @since Standard ECMA-262 5th. Edition

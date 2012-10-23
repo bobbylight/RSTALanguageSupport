@@ -22,7 +22,7 @@ public abstract class JSDate implements JSDateFunctions {
 	}
 	
 	/**
-    * Property prototype
+    * <b>property prototype</b>
     * 
     * @type Date
     * @memberOf Date
@@ -33,7 +33,7 @@ public abstract class JSDate implements JSDateFunctions {
    public JSDate protype;
    
    /**
-    * Property constructor
+    * <b>property constructor</b>
     * 
     * @type Function
     * @memberOf Date
@@ -45,28 +45,32 @@ public abstract class JSDate implements JSDateFunctions {
 
 
    /**
-	 * function UTC(hour, min, sec, ms)
+	 * <b>function UTC(year,month,day,hour,min,sec,ms)</b> Converts a Date specification to milliseconds
 	 * 
 	 * @memberOf Date
-	 * @param {Number} hour
-	 * @param {Number} min
-	 * @param {Number} sec
-	 * @param {Number} ms
-	 * @returns {Number}
+	 * @param year The year in four digit format. If the year is added between 0 and 99 --> 1900 is added to it. 
+	 * @param month The month specified from 0 (January) to 11 (December). 
+	 * @param day The day in the month between 1 and 31.
+	 * @param hour The hour specified from 0 (midnight) and 23 (11 p.m).
+	 * @param min The minutes in the hour, specified from 0 to 59.
+	 * @param sec The seconds in the minute, specified from 0 to 59.
+	 * @param ms The milliseconds within the second, specified from 0 to 999.
+	 * @returns The millisecond representation of the specified universal time (between 1st January 1970 and the specified time).
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
+	 * @see #parse(JSString) parse()
 	 * @static
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public static JSNumber UTC(JSNumber hour, JSNumber min, JSNumber sec, JSNumber ms){return null;}
+	public static JSNumber UTC(JSNumber year, JSNumber month, JSNumber day, JSNumber hour, JSNumber min, JSNumber sec, JSNumber ms){return null;}
 
 
 	/**
-	 * function parse(string)
+	 * <b>function parse(string)</b> parse a date/time string
 	 * 
 	 * @memberOf Date
-	 * @param {String} string
-	 * @returns {Number}
+	 * @param string A string containing the date and time to be parsed.
+	 * @returns The millisecond between 1st January 1970 and the specified date and time.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @static
 	 * @since Standard ECMA-262 3rd. Edition

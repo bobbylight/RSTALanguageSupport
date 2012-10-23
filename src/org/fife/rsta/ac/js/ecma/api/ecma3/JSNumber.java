@@ -21,7 +21,7 @@ public abstract class JSNumber implements JSNumberFunctions {
     }
     
     /**
-     * Property prototype
+     * <b>property prototype</b>
      * 
      * @type Number
      * @memberOf Number
@@ -32,7 +32,7 @@ public abstract class JSNumber implements JSNumberFunctions {
     public JSNumber protype;
     
     /**
-     * Property constructor
+     * <b>property constructor</b>
      * 
      * @type Function
      * @memberOf Number
@@ -43,7 +43,7 @@ public abstract class JSNumber implements JSNumberFunctions {
     protected JSFunction constructor;
 
     /**
-     * property MIN_VALUE
+     * <b>property MIN_VALUE</b> The smallest representable number.
      * 
      * @type Number
      * @memberOf Number
@@ -55,7 +55,7 @@ public abstract class JSNumber implements JSNumberFunctions {
     public static JSNumber MIN_VALUE;
 
     /**
-     * property MAX_VALUE
+     * <b>property MAX_VALUE</b> The largest representable number.
      * 
      * @type Number
      * @memberOf Number
@@ -67,7 +67,7 @@ public abstract class JSNumber implements JSNumberFunctions {
     public static JSNumber MAX_VALUE;
 
     /**
-     * property NaN
+     * <b>property NaN</b> Not-a-number value.
      * 
      * @type Number
      * @memberOf Number
@@ -79,7 +79,7 @@ public abstract class JSNumber implements JSNumberFunctions {
     public static JSNumber NaN;
 
     /**
-     * property NEGATIVE_INFINITY
+     * <b>property NEGATIVE_INFINITY</b> Negative infinite value.
      * 
      * @type Number
      * @memberOf Number
@@ -91,7 +91,7 @@ public abstract class JSNumber implements JSNumberFunctions {
     public static JSNumber NEGATIVE_INFINITY;
 
     /**
-     * property POSITIVE_INFINITY
+     * <b>property POSITIVE_INFINITY</b> Infinite value.
      * 
      * @type Number
      * @memberOf Number

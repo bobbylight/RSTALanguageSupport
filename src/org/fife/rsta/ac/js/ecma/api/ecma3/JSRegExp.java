@@ -21,7 +21,7 @@ public abstract class JSRegExp implements JSRegExpFunctions {
 	public JSRegExp() {};
 	
 	/**
-    * Property prototype
+    * <b>property prototype</b>
     * 
     * @type RegExp
     * @memberOf RegExp
@@ -32,7 +32,7 @@ public abstract class JSRegExp implements JSRegExpFunctions {
     public JSRegExp protype;
    
 	/**
-    * Property constructor
+    * <b>property constructor</b>
     * 
     * @type Function
     * @memberOf RegExp
@@ -43,7 +43,7 @@ public abstract class JSRegExp implements JSRegExpFunctions {
     protected JSFunction constructor;
    
 	/**
-	 * property source
+	 * <b>property source</b>
 	 * 
 	 * @type String
 	 * @memberOf RegExp
@@ -54,7 +54,7 @@ public abstract class JSRegExp implements JSRegExpFunctions {
 	protected JSString source;
 
 	/**
-	 * property global
+	 * <b>property global</b>
 	 * 
 	 * @type Boolean
 	 * @memberOf RegExp
@@ -65,7 +65,7 @@ public abstract class JSRegExp implements JSRegExpFunctions {
 	protected JSBoolean global;
 
 	/**
-	 * property ignoreCase
+	 * <b>property ignoreCase</b>
 	 * 
 	 * @type Boolean
 	 * @memberOf RegExp
@@ -76,7 +76,7 @@ public abstract class JSRegExp implements JSRegExpFunctions {
 	protected JSBoolean ignoreCase;
 
 	/**
-	 * property multiline
+	 * <b>property multiline</b>
 	 * 
 	 * @type Boolean
 	 * @memberOf RegExp
@@ -87,7 +87,7 @@ public abstract class JSRegExp implements JSRegExpFunctions {
 	protected JSBoolean multiline;
 
 	/**
-	 * property lastIndex
+	 * <b>property lastIndex</b>
 	 * 
 	 * @type Number
 	 * @memberOf RegExp

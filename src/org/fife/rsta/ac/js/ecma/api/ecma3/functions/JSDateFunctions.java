@@ -8,10 +8,10 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.JSString;
 public interface JSDateFunctions extends JSObjectFunctions {
 	
 	/**
-	 * function toDateString()
+	 * <b>function toDateString()</b> return the date portion of a Date as a string.
 	 * 
 	 * @memberOf Date
-	 * @returns {String}
+	 * @returns a human-readable representation of the date portion of <b><i>date</i></b>.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -20,10 +20,10 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function toTimeString()
+	 * <b>function toTimeString()</b> return the time portion of Date as a string.
 	 * 
 	 * @memberOf Date
-	 * @returns {String}
+	 * @returns a human-readable representation of the time portion of <b><i>date</i></b>.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -32,10 +32,10 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function toLocaleString()
+	 * <b>function toLocaleString()</b> convert a Date to a locally formatted string.
 	 * 
 	 * @memberOf Date
-	 * @returns {String}
+	 * @returns a string representation of the date and time specified by <b><i>date</i></b> in local time.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -44,10 +44,10 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function toLocaleDateString()
+	 * <b>function toLocaleDateString()</b> return the date portion of a Date as a locally formatted string.
 	 * 
 	 * @memberOf Date
-	 * @returns {String}
+	 * @returns a string representation of the date portion specified by <b><i>date</i></b> in local time.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -56,10 +56,10 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function toLocaleTimeString()
+	 * <b>function toLocaleTimeString()</b> return the time portion of a date as a locally formatted string.
 	 * 
 	 * @memberOf Date
-	 * @returns {String}
+	 * @returns a string representation of the time portion specified by <b><i>date</i></b> in local time.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -68,10 +68,10 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function valueOf()
+	 * <b>function valueOf()</b> convert a Date to millisecond representation.
 	 * 
 	 * @memberOf Date
-	 * @returns {Object}
+	 * @returns The millisecond representation of <b><i>date</i></b>.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -80,10 +80,10 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function getFullYear()
+	 * <b>function getFullYear()</b> return the year field of a Date.
 	 * 
 	 * @memberOf Date
-	 * @returns {Number}
+	 * @returns The year that results when <b><i>date</i></b> is expressed in local time.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -92,10 +92,10 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function getTime()
+	 * <b>function getTime()</b> return a Date in milliseconds.
 	 * 
 	 * @memberOf Date
-	 * @returns {Number}
+	 * @returns The millisecond representation of a specified Date object <b><i>date</i></b>, between midnight 1/1/1970 and date and time specified by <b><i>date</i></b>. 
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -104,10 +104,10 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function getUTCFullYear()
+	 * <b>function getUTCFullYear()</b> return the year field of a Date (universal time).
 	 * 
 	 * @memberOf Date
-	 * @returns {Number}
+	 * @returns The year that results when <b><i>date</i></b> is expressed in local time in universal time.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -116,10 +116,10 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function getMonth()
+	 * <b>function getMonth()</b> return the month field of a Date.
 	 * 
 	 * @memberOf Date
-	 * @returns {Number}
+	 * @returns The month that results when <b><i>date</i></b> is expressed in local time.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -128,10 +128,10 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function getUTCMonth()
+	 * <b>function getUTCMonth()</b> return the month field of a Date (universal time).
 	 * 
 	 * @memberOf Date
-	 * @returns {Number}
+	 * @returns The month that results when <b><i>date</i></b> is expressed in universal time.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -140,10 +140,10 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function getDate()
+	 * <b>function getDate()</b> return the day-of-month field of a Date.
 	 * 
 	 * @memberOf Date
-	 * @returns {Number}
+	 * @returns The day of the month that results when <b><i>date</i></b> is expressed in local time.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -152,10 +152,10 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function getUTCDate()
+	 * <b>function getUTCDate()</b> return the day-of-month field of a Date (universal time).
 	 * 
 	 * @memberOf Date
-	 * @returns {Number}
+	 * @returns The day of the month that results when <b><i>date</i></b> is expressed in universal time.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -164,10 +164,10 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function getDay()
+	 * <b>function getDay()</b> return the day-of-week field of a Date.
 	 * 
 	 * @memberOf Date
-	 * @returns {Number}
+	 * @returns The day of the week that results when <b><i>date</i></b> is expressed in local time. 0 == Sunday --> 6 Saturday.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -176,11 +176,11 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function getUTCDay()
+	 * <b>function getUTCDay()</b> return the day-of-week field of a Date (universal time).
 	 * 
 	 * @memberOf Date
 	 * @type Number
-	 * @returns {Number}
+	 * @returns The day of the week that results when <b><i>date</i></b> is expressed in universal time. 0 == Sunday --> 6 Saturday.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -190,10 +190,10 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function getHours()
+	 * <b>function getHours()</b> return the hour field of a Date.
 	 * 
 	 * @memberOf Date
-	 * @returns {Number}
+	 * @returns The hour field that results when <b><i>date</i></b> is expressed in local time.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -202,10 +202,10 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function getUTCHours()
+	 * <b>function getUTCHours()</b> return the hour field of a Date (universal time).
 	 * 
 	 * @memberOf Date
-	 * @returns {Number}
+	 * @returns The hour field that results when <b><i>date</i></b> is expressed in universal time.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -214,10 +214,10 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function getMinutes()
+	 * <b>function getMinutes()</b> return the minute field of a Date.
 	 * 
 	 * @memberOf Date
-	 * @returns {Number}
+	 * @returns The minute field that results when <b><i>date</i></b> is expressed in local time.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -226,10 +226,10 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function getUTCMinutes()
+	 * <b>function getUTCMinutes()</b> return the minute field of a Date (universal time).
 	 * 
 	 * @memberOf Date
-	 * @returns {Number}
+	 * @returns The minute field that results when <b><i>date</i></b> is expressed in universal time.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -238,10 +238,10 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function getSeconds()
+	 * <b>function getSeconds()</b> return the second field of a Date.
 	 * 
 	 * @memberOf Date
-	 * @returns {Number}
+	 * @returns The second field that results when <b><i>date</i></b> is expressed in local time.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -250,10 +250,10 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function getUTCSeconds()
+	 * <b>function getUTCSeconds()</b> return the second field of a Date (universal time).
 	 * 
 	 * @memberOf Date
-	 * @returns {Number}
+	 * @returns The second field that results when <b><i>date</i></b> is expressed in universal time.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -262,10 +262,10 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function getMilliseconds()
+	 * <b>function getMilliseconds()</b> return the millisecond field of a Date.
 	 * 
 	 * @memberOf Date
-	 * @returns {Number}
+	 * @returns The millisecond field that results when <b><i>date</i></b> is expressed in local time.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -274,10 +274,10 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function getUTCMilliseconds()
+	 * <b>function getUTCMilliseconds()</b> return the millisecond field of a Date (universal time).
 	 * 
 	 * @memberOf Date
-	 * @returns {Number}
+	 * @returns The millisecond field that results when <b><i>date</i></b> is expressed in universal time.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -286,10 +286,10 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function getTimezoneOffset()
+	 * <b>function getTimezoneOffset()</b> determine the offset from GMT.
 	 * 
 	 * @memberOf Date
-	 * @returns {Number}
+	 * @returns The difference in minutes, between GMT and local time.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -298,11 +298,11 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function setTime(value)
+	 * <b>function setTime(value)</b> set a Date in milliseconds.
 	 * 
 	 * @memberOf Date
-	 * @returns {Number}
-	 * @param {Number} value
+	 * @param value The number of milliseconds between desired date and time and midnight GMT on 1/1/1970.
+	 * @returns the milliseconds argument.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -311,11 +311,11 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function setMilliseconds(value)
+	 * <b>function setMilliseconds(value)</b> set the milliseconds field of a Date.
 	 * 
 	 * @memberOf Date
-	 * @returns {Number}
-	 * @param {Number} value
+	 * @param value The milliseconds field expressed in local time, to be set in <b></i>date</i></b>.
+	 * @returns The millisecond representation of the adjusted date.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -324,11 +324,11 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function setUTCMilliseconds(ms)
+	 * <b>function setUTCMilliseconds(ms)</b> set the milliseconds field of a Date (universal time).
 	 * 
 	 * @memberOf JSDate
-	 * @returns {Number}
-	 * @param {Number} ms
+	 * @param ms The millisecond field expressed in universal time, to be set in <b></i>date</i></b>.
+	 * @returns The millisecond representation of the adjusted date.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -337,12 +337,12 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function setSeconds(sec,ms)
+	 * <b>function setSeconds(sec,ms)</b> set the seconds and milliseconds field of a Date.
 	 * 
 	 * @memberOf Date
-	 * @returns {Number}
-	 * @param {Number} sec
-	 * @param {Number} ms
+	 * @param sec The second field expressed in local time, to be set in <b></i>date</i></b>.
+	 * @param <i>ms</i> Optional millisecond field expressed in local time, to be set in <b></i>date</i></b>.
+	 * @returns The millisecond representation of the adjusted date.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -351,12 +351,12 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function setUTCSeconds(sec,ms)
+	 * <b>function setUTCSeconds(sec,ms)</b> set the seconds and milliseconds field of a Date (universal time).
 	 * 
 	 * @memberOf Date
-	 * @returns {Number}
-	 * @param {Number} sec
-	 * @param {Number} ms
+	 * @param sec The second field expressed in universal time, to be set in <b></i>date</i></b>.
+	 * @param <i>ms</i> Optional millisecond field expressed in universal time, to be set in <b></i>date</i></b>.
+	 * @returns The millisecond representation of the adjusted date.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -365,13 +365,13 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function setMinutes(min,sec,ms)
+	 * <b>function setMinutes(min,sec,ms)</b> set the minutes, seconds and milliseconds field of a Date.
 	 * 
 	 * @memberOf Date
-	 * @returns {Number}
-	 * @param {Number} min
-	 * @param {Number} sec
-	 * @param {Number} ms
+	 * @param min The minute field expressed in local time, to be set in <b></i>date</i></b>.
+	 * @param <i>sec</i> Optional second field expressed in local time, to be set in <b></i>date</i></b>.
+	 * @param <i>ms</i> Optional millisecond field expressed in local time, to be set in <b></i>date</i></b>.
+	 * @returns {Number} The millisecond representation of the adjusted date.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -380,13 +380,13 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function setUTCMinute(min,sec,ms)
+	 * <b>function setUTCMinute(min,sec,ms)</b> set the minutes, seconds and milliseconds field of a Date (universal time).
 	 * 
 	 * @memberOf Date
-	 * @returns {Number}
-	 * @param {Number} min
-	 * @param {Number} sec
-	 * @param {Number} ms
+	 * @param min The minute field expressed in universal time, to be set in <b></i>date</i></b>.
+	 * @param <i>sec</i> Optional second field expressed in universal time, to be set in <b></i>date</i></b>.
+	 * @param <i>ms</i> Optional millisecond field expressed in universal time, to be set in <b></i>date</i></b>.
+	 * @returns {Number} The millisecond representation of the adjusted date.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -395,14 +395,14 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function setHours(hour, min,sec,ms)
+	 * <b>function setHours(hour,min,sec,ms)</b> set the hours, minutes, seconds and milliseconds field of a Date.
 	 * 
 	 * @memberOf Date
-	 * @returns {Number}
-	 * @param {Number} hour
-	 * @param {Number} min
-	 * @param {Number} sec
-	 * @param {Number} ms
+	 * @param hour The hour field expressed in local time, to be set in <b></i>date</i></b>.
+	 * @param <i>min</i> Optional minute field expressed in local time, to be set in <b></i>date</i></b>.
+	 * @param <i>sec</i> Optional second field expressed in local time, to be set in <b></i>date</i></b>.
+	 * @param <i>ms</i> Optional millisecond field expressed in local time, to be set in <b></i>date</i></b>.
+	 * @returns {The millisecond representation of the adjusted date.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -411,14 +411,14 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function setUTCHours(hour, min,sec,ms)
+	 * <b>function setUTCHours(hour,min,sec,ms)</b> set the hours, minutes, seconds and milliseconds field of a Date (universal time). 
 	 * 
 	 * @memberOf Date
-	 * @returns {Number}
-	 * @param {Number} hour
-	 * @param {Number} min
-	 * @param {Number} sec
-	 * @param {Number} ms
+	 * @param hour The hour field expressed in universal time, to be set in <b></i>date</i></b>.
+	 * @param <i>min</i> Optional minute field expressed in universal time, to be set in <b></i>date</i></b>.
+	 * @param <i>sec</i> Optional second field expressed in universal time, to be set in <b></i>date</i></b>.
+	 * @param <i>ms</i> Optional millisecond field expressed in universal time, to be set in <b></i>date</i></b>.
+	 * @returns The millisecond representation of the adjusted date.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -427,11 +427,11 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function setDate(date)
+	 * <b>function setDate(date)</b> set the day of month field of a Date.
 	 * 
 	 * @memberOf Date
-	 * @returns {Number}
-	 * @param {Number} date
+	 * @param date The day of the month field expressed in local time, to be set in <b></i>date</i></b>.
+	 * @returns The millisecond representation of the adjusted date.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -440,11 +440,11 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function setUTCDate(date)
+	 * <b>function setUTCDate(date)</b> set the day of month field of a Date (universal time).
 	 * 
 	 * @memberOf Date
-	 * @returns {Number}
-	 * @param {Number} date
+	 * @param date The day of the month field expressed in universal time, to be set in <b></i>date</i></b>.
+	 * @returns The millisecond representation of the adjusted date.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -453,12 +453,12 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function setMonth(month,date)
+	 * <b>function setMonth(month,date)</b> set the month, day field of a Date.
 	 * 
 	 * @memberOf Date
-	 * @returns {Number}
-	 * @param {Number} date
-	 * @param {Number} month
+	 * @param month An integer between 0 (January) and 11 (December) representing the month field expressed in local time, to be set in <b></i>date</i></b>.
+	 * @param <i>date</i> Optional day of the month field expressed in local time, to be set in <b></i>date</i></b>.
+	 * @returns The millisecond representation of the adjusted date.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -467,12 +467,12 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function setUTCMonth(month,date)
+	 * <b>function setUTCMonth(month,date)</b> set the month, day field of a Date (Universal time).
 	 * 
 	 * @memberOf Date
-	 * @returns {Number}
-	 * @param {Number} date
-	 * @param {Number} month
+	 * @param month An integer between 0 (January) and 11 (December) representing the month field expressed in universal time, to be set in <b></i>date</i></b>.
+	 * @param <i>date</i> Optional day of the month field expressed in universal time, to be set in <b></i>date</i></b>.
+	 * @returns The millisecond representation of the adjusted date.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -481,13 +481,13 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function setFullYear(month,date)
+	 * <b>function setFullYear(year,month,date)</b> set the year, month, day field of a Date.
 	 * 
 	 * @memberOf Date
-	 * @returns {Number}
-	 * @param {Number} date
-	 * @param {Number} month
-	 * @param {Number} year
+	 * @param year The year field expressed in local time, to be set in <b></i>date</i></b>.
+	 * @param <i>month</i> Optional integer between 0 (January) and 11 (December) representing the month field expressed in local time, to be set in <b></i>date</i></b>.
+	 * @param <i>date</i> Optional day of the month field expressed in local time, to be set in <b></i>date</i></b>.
+	 * @returns The millisecond representation of the adjusted date.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -496,13 +496,13 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function setUTCFullYear(month,date)
+	 * <b>function setUTCFullYear(year,month,date)</b> set the year, month, day field of a Date (Universal time).
 	 * 
 	 * @memberOf Date
-	 * @returns {Date}
-	 * @param {Number} date
-	 * @param {Number} month
-	 * @param {Number} year
+	 * @param year The year field expressed in universal time, to be set in <b></i>date</i></b>.
+	 * @param <i>month</i> Optional integer between 0 (January) and 11 (December) representing the month field expressed in universal time, to be set in <b></i>date</i></b>.
+	 * @param <i>date</i> Optional day of the month field expressed in universal time, to be set in <b></i>date</i></b>.
+	 * @returns The millisecond representation of the adjusted date.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -511,10 +511,10 @@ public interface JSDateFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * function toUTCString()
+	 * <b>function toUTCString()</b> convert Date to a string (universal time).
 	 * 
 	 * @memberOf Date
-	 * @returns {String}
+	 * @returns a human-readable string representation, expressed in universal time, of <b><i>date</i></b> 
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.

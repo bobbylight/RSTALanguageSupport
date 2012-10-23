@@ -23,10 +23,10 @@ public abstract class JS5Array extends JSArray implements JS5ArrayFunctions {
 	}
 	
 	/**
-	 * function isArray(o)
+	 * <b>function isArray(o)</b> test whether argument is an array.
 	 * 
-	 * @param {Object} o
-	 * @returns {Boolean}
+	 * @param o object to test.
+	 * @returns <b><i>true</b></i> if object is of type array, otherwise <b><i>false</b></i>.
 	 * @memberOf Array
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma5.JS5Array Array
 	 * @since Standard ECMA-262 5th. Edition

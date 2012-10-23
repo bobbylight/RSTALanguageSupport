@@ -21,7 +21,7 @@ public abstract class JSBoolean implements JSObjectFunctions {
     }
     
     /**
-     * Property prototype
+     * <b>property prototype</b>
      * 
      * @type Boolean
      * @memberOf Boolean
@@ -32,7 +32,7 @@ public abstract class JSBoolean implements JSObjectFunctions {
     public JSBoolean protype;
     
     /**
-     * Property constructor
+     * <b>property constructor</b>
      * 
      * @type Function
      * @memberOf Boolean

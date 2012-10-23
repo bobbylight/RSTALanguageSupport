@@ -21,7 +21,7 @@ public abstract class JSObject implements JSObjectFunctions {
     }
     
     /**
-     * Property prototype
+     * <b>property prototype</b>
      * 
      * @type Object
      * @memberOf Object
@@ -32,7 +32,7 @@ public abstract class JSObject implements JSObjectFunctions {
     public JSObject protype;
     
     /**
-     * Property constructor
+     * <b>property constructor</b>
      * 
      * @type Function
      * @memberOf Object

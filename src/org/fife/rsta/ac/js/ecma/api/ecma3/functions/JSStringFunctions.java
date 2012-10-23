@@ -9,61 +9,67 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.JSString;
 public interface JSStringFunctions extends JSObjectFunctions {
 	
 	/**
-     * function charAt(position)
+     * <b>function charAt(position)</b> get the nth character from a string.
      * 
      * @memberOf String
-     * @param {Number} position
-     * @returns {String}
+     * @param position The index of the character that should be returned from <b><i>string</i></b>.
+     * @returns The <i>nth</i> character of <b><i>string</i></b>.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
+     * @see #charCodeAt(JSNumber) charCodeAt()
+     * @see #indexOf(JSNumber, JSNumber) indexOf()
+     * @see #lastIndexOf(JSNumber, JSNumber) lastIndexOf()
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
     public JSString charAt(JSNumber position);
 
     /**
-     * function charCodeAt(position)
+     * <b>function charCodeAt(position)</b> get the nth character code from a string.
      * 
      * @memberOf String
-     * @param {Number} position
-     * @returns {Number}
+     * @param position The index of the character whose encoding is to be returned.
+     * @returns The Unicode encoding of the i>nth</i> character within <b><i>string</i></b>.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
+     * @see #charAt(JSNumber) charAt()
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
     public JSNumber charCodeAt(JSNumber position);
 
     /**
-     * function concat(value1, ...)
+     * <b>function concat(value1, ...)</b> concatenate strings
      * 
      * @memberOf String
-     * @param {String} value
-     * @returns {String}
+     * @param one or more values to be concatenated to <b><i>string</i></b>.
+     * @returns A new string that results from concatenating each argument to a <b><i>string</i></b>.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
     public JSString concat(JSString value);
 
+    
     /**
-     * function indexOf(searchString, startPosition)
+     * <b>function indexOf(searchString, startPosition)</b> search a string.
      * 
      * @memberOf String
-     * @param {String} searchString
-     * @param {Number} startPosition
-     * @returns {Number}
+     * @param searchString The substring to be search within <b><i>string</i></b>.
+     * @param startPosition Optional start index.
+     * @returns The position of the first occurrence of <b><i>searchString</i></b>. -1 if not found.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
     public JSNumber indexOf(JSNumber searchString, JSNumber startPosition);
 
+    
     /**
-     * function lastIndexOf(searchString, startPosition)
+     * <b>function lastIndexOf(searchString, startPosition)</b> search a string backward.
      * 
      * @memberOf String
-     * @param {String} searchString
-     * @param {Number} startPosition
-     * @returns {Number}
+     * @param searchString The substring to be search within <b><i>string</i></b>.
+     * @param startPosition Optional start index.
+     * @returns The position of the last occurrence of <b><i>searchString</i></b>. -1 if not found.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
@@ -71,11 +77,15 @@ public interface JSStringFunctions extends JSObjectFunctions {
     public JSNumber lastIndexOf(JSNumber searchString, JSNumber startPosition);
 
     /**
-     * function localeCompare(otherString)
-     * 
+     * <b>function localeCompare(otherString)</b> compare one string to another, using locale-specific ordering.
+     * <h4>Example</h4>
+	 * <code>
+	 * 	var string;//array of string initialised somewhere<br>
+	 * 	strings.sort(function(a,b){return a.localCompare(b);});<br>
+	 * </code> 
      * @memberOf String
-     * @param {String} otherString
-     * @returns {Number}
+     * @param otherString A <b><i>string</i></b> to be compared, in a locale-sensitive fashion, with <b><i>string</i></b>. 
+     * @returns A number that indicates the result of the comparison.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
@@ -83,11 +93,11 @@ public interface JSStringFunctions extends JSObjectFunctions {
     public JSNumber localeCompare(JSString otherString);
 
     /**
-     * function match(regexp)
+     * <b>function match(regexp)</b> find one or more regular-expression matches
      * 
      * @memberOf String
-     * @param {RegExp} regexp
-     * @returns {Array}
+     * @param regexp A RegExp object that specifies the pattern to be matched. 
+     * @returns An Array containing results of the match.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
@@ -95,11 +105,11 @@ public interface JSStringFunctions extends JSObjectFunctions {
     public JSString match(JSRegExp regexp);
 
     /**
-     * function replace(regexp, replaceValue)
+     * <b>function replace(regexp, replaceValue)</b> replace substring(s) matching a regular expression.
      * 
      * @memberOf String
-     * @param {RegExp} regexp
-     * @param {String} replaceValue
+     * @param regexp A RegExp object that specifies the pattern to be replaced. 
+     * @param replaceValue A string that specifies the replacement text.
      * @returns {String}
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
@@ -108,11 +118,11 @@ public interface JSStringFunctions extends JSObjectFunctions {
     public JSString replace(JSRegExp regexp, JSString replaceValue);
 
     /**
-     * function search(regexp)
+     * <b>function search(regexp)</b> search for a regular expression
      * 
      * @memberOf String
-     * @param {RegExp} regexp
-     * @returns {Number}
+     * @param regexp A RegExp object that specifies the pattern to be searched.  
+     * @returns The position of the start of the first substring of <b><i>string</i></b>. -1 if no match is found.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
@@ -120,12 +130,20 @@ public interface JSStringFunctions extends JSObjectFunctions {
     public JSNumber search(JSRegExp regexp);
 
     /**
-     * function slice(start, end)
-     * 
+     * <b>function slice(start, end)</b> extract a substring
+     * <h4>Example</h4>
+	 * <code>
+	 * 	var s = "abcdefg";<br>
+	 *  s.slice(0,4); //returns "abcd"<br>
+	 *  s.slice(2,4); //returns "cd"<br>
+	 *  s.slice(4); //returns "efg"<br>
+	 *  s.slice(3, -1); //returns "def"<br>
+	 *  s.slice(3,-2); //returns "de"<br>
+	 * </code> 
      * @memberOf String
-     * @param {Number} start
-     * @param {Number} end
-     * @returns {String}
+     * @param start The start index where the slice if to begin.
+     * @param <i>end<i> Optional end index where the slice is to end.
+     * @returns A new string that contains all the characters of <b><i>string</i></b> from and including <b><i>start</i></b> up to the <b><i>end</i></b>.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
@@ -133,58 +151,67 @@ public interface JSStringFunctions extends JSObjectFunctions {
     public JSString slice(JSNumber start, JSNumber end);
 
     /**
-     * function split(separator, limit)
-     * 
+     * <b>function split(separator, limit)</b> break a string into an array of strings
+     * <h4>Example</h4>
+	 * <code>
+     *  "1|2|3|4".split("|"); //returns ["1","2","3","4"]<br>
+	 *  "%1%2%3%4%".split("%"); //returns ["","1","2","3","4",""]<br>
+	 * </code>
      * @memberOf String
-     * @param {String} separator
-     * @param {Number} limit
-     * @returns {Array}
+     * @param separator The string or regular expression at which the <b><i>string</i></b> splits
+     * @param limit Optional value that specifies the maximum length of the returned array.
+     * @returns An array of strings, created by splitting <b><i>string</i></b> using the separator.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
     public JSArray split(JSString separator, JSNumber limit);
 
+
     /**
-     * function substring(start, end)
+     * <b>function substring(from,to)</b> return a substring of a string.
      * 
      * @memberOf String
-     * @param {Number} start
-     * @param {Number} end
-     * @returns {String}
+     * @param from The index where to start the extraction. First character is at index 0
+     * @param to Optional. The index where to stop the extraction. If omitted, it extracts the rest of the string 
+     * @returns A new string of length <b><i>from-to</i></b> which contains a substring of <b><i>string</i></b>.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSString substring(JSNumber start, JSNumber end);
+    public JSString substring(JSNumber from, JSNumber too);
 
     /**
-     * function toLowerCase()
+     * <b>function toLowerCase()</b> Converts a string to lower case.
      * 
      * @memberOf String
-     * @returns {String}
+     * @returns A copy of <b><i>string</i></b> converted to lower case.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
+     * @see #charAt(JSNumber) charAt()
+     * @see #indexOf(JSNumber, JSNumber) indexOf()
+     * @see #lastIndexOf(JSNumber, JSNumber) lastIndexOf()
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
     public JSString toLowerCase();
 
     /**
-     * function toLocaleLowerCase()
+     * <b>function toLocaleLowerCase()</b> Converts a string to lower case.
      * 
      * @memberOf String
-     * @returns {String}
+     * @returns A copy of <b><i>string</i></b> converted to lower case a locale-specific way.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
+     * @see #toLocaleUpperCase() 
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
     public JSString toLocaleLowerCase();
 
     /**
-     * function toUpperCase()
+     * <b>function toUpperCase()</b> Converts a string to upper case.
      * 
      * @memberOf String
-     * @returns {String}
+     * @returns A copy of <b><i>string</i></b> converted to upper case.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
@@ -192,10 +219,10 @@ public interface JSStringFunctions extends JSObjectFunctions {
     public JSString toUpperCase();
 
     /**
-     * function toLocaleUpperCase()
+     * <b>function toLocaleUpperCase()</b> Converts a string to upper case.
      * 
      * @memberOf String
-     * @returns {String}
+     * @returns A copy of <b><i>string</i></b> converted to upper case a locale-specific way.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.

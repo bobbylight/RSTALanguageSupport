@@ -23,7 +23,7 @@ public abstract class JSError implements JSObjectFunctions {
 	}
 
 	/**
-    * Property prototype
+    * Property <b>prototype</b>
     * 
     * @type Error
     * @memberOf Error
@@ -34,7 +34,7 @@ public abstract class JSError implements JSObjectFunctions {
    public JSError protype;
    
    /**
-    * Property constructor
+    * <b>property constructor
     * 
     * @type Function
     * @memberOf Error
@@ -45,7 +45,7 @@ public abstract class JSError implements JSObjectFunctions {
    protected JSFunction constructor;
 	   
 	/**
-	 * property name
+	 * <b>property name</b>
 	 * 
 	 * @type String
 	 * @memberOf Error
@@ -56,7 +56,7 @@ public abstract class JSError implements JSObjectFunctions {
 	protected JSString name;
 
 	/**
-	 * property message
+	 * <b>property message</b>
 	 * 
 	 * @type String
 	 * @memberOf Error

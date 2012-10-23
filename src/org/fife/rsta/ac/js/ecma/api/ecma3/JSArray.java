@@ -22,7 +22,7 @@ public abstract class JSArray implements JSArrayFunctions {
 
 
 	/**
-	 * Property length
+	 * <b>property length</b>
 	 * 
 	 * @type Number
 	 * @memberOf Array
@@ -33,7 +33,7 @@ public abstract class JSArray implements JSArrayFunctions {
 	public JSNumber length;
 	
 	/**
-    * Property prototype
+    * <b>property prototype</b>
     * 
     * @type Array
     * @memberOf Array
@@ -44,7 +44,7 @@ public abstract class JSArray implements JSArrayFunctions {
    public JSArray protype;
    
    /**
-    * Property constructor
+    * <b>property constructor</b>
     * 
     * @type Function
     * @memberOf Array

@@ -8,11 +8,11 @@ public abstract class JS5JSON  {
 	
 	
 	/**
-	 * function parse(s, reviver)
+	 * <b>function parse(s, reviver)</b> parse a JSON-formatted string.
 	 * 
 	 * @memberOf Date
-	 * @param {String} s
-	 * @param {JS5Function} reviver
+	 * @param s The string to be parsed.
+	 * @param <i>reviver</b> An optional argument function that can transform parsed values. 
 	 * @returns {Object}
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma5.JS5JSON JSON
 	 * @since Standard ECMA-262 5th. Edition
@@ -20,13 +20,13 @@ public abstract class JS5JSON  {
 	public static JS5Object parse(JS5String s, JS5Function reviver){return null;} 
 	
 	/**
-	 * function stringify(o, filter, indent)
+	 * <b>function stringify(o, filter, indent)</b> serialize an object, array or primitive value. 
 	 * 
 	 * @memberOf Date
-	 * @param {Object} o
-	 * @param {JS5Function} filter
-	 * @param {JS5Object} indent
-	 * @returns {String}
+	 * @param o The object, array or primitive value to convert to JSON string.
+	 * @param <i>filter</i> An optional function that can replace values before stringification.
+	 * @param <i>indent</i> An optional argument that specifies am indentation string or number of spaces to use for indentation. 
+	 * @returns A JSON formatted string representing the value <b><i>o</i></b>.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma5.JS5JSON JSON
 	 * @since Standard ECMA-262 5th. Edition
 	 */

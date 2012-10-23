@@ -9,56 +9,77 @@ public interface JSObjectFunctions {
 	
 
     /**
-     * function toString()
+     * <b>function toString()</b> define an objects string representation 
      * 
      * @memberOf Object
-     * @returns {String}
+     * @returns a string representing the object
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSObject Object
+     * @see #toLocaleString() toLocalString()
+     * @see #valueOf() valueOf()
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
     public String toString();
 
     /**
-     * function toLocaleString()
+     * <b>function toLocaleString()</b> return an object localized string representation
      * 
      * @memberOf Object
-     * @returns {String}
+     * @returns A string representing the object
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSObject Object
+     * @see #toString() toString()
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
     public JSString toLocaleString();
 
     /**
-     * function valueOf()
+     * <b>function valueOf()</b> the primitive value of a specified object.
      * 
      * @memberOf Object
-     * @returns {Object}
-     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSObject Object
+     * @returns The primitive value associated with the <b><i>object</i></b>, if any. 
+     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSObject Object.
+     * @see #toString() toString()
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
     public JSObject valueOf();
 
     /**
-     * function hasOwnProperty(name)
-     * 
+     * <b>function hasOwnProperty(name)</b> check whether a promperty is inherited.
+     * <h4>Example</h4>
+	 * <code>
+	 * 	var o = new Object();<br>
+	 * 	o.x = 3.14;<br>
+	 *  o.hasOwnProperty("x"); //return true; o has property x.<br>
+	 *  o.hasOwnProperty("y"); //return false; o does not have property y.<br>
+	 *  o.hasOwnProperty("toString"); //return false; o inherits toString.<br>
+	 * </code> 
      * @memberOf Object
-     * @param {String} name
-     * @returns {Boolean}
+     * @param name A string that contains the name of a property of <b><i>object</i></b>.
+     * @returns <b><i>true</i></b> if <b><i>object</i></b> has a noninherited property with the name specified by <b><i>name</i></b>. 
+     * <b><i>false</i></b> if <b><i>object</i></b> does not contain the property with the specified name or if it inherits the property from
+     * its prototype object. 
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSObject Object
+     * @see #propertyIsEnumerable(JSObject) propertyIsEnumerable()
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
     public JSBoolean hasOwnProperty();
 
     /**
-     * function isPrototypeOf(o)
-     * 
+     * <b>function isPrototypeOf(o)</b> is an object the prototype of another?
+     * <h4>Example</h4>
+	 * <code>
+	 * 	var o = new Object();<br>
+	 * 	Object.prototype.isPrototypeOf(o); //true: o is an object.<br>
+	 *  Function.prototype.isPrototypeOf(o.toString(); //return true: toString is a function.<br>
+	 *  Array.prototype.isPrototypeOf([1,2,3]; //return true: [1,2,3] is an Array.<br>
+	 * </code> 
      * @memberOf Object
-     * @param {Object} o
-     * @returns {Boolean}
+     * @param o Any object
+     * @returns <b><i>true</i></b> if <b><i>object</i></b> is prototype of o. <b><i>false</i></b> is not an object or if <b><i>object</i></b>
+     * is not prototype of o
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSObject Object
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
@@ -66,12 +87,21 @@ public interface JSObjectFunctions {
     public JSBoolean isPrototypeOf(JSObject o);
 
     /**
-     * function propertyIsEnumerable(name)
-     * 
+     * <b>function propertyIsEnumerable(name)</b>  will property be seen by for/in loop?
+     * <h4>Example</h4>
+	 * <code>
+	 * 	var o = new Object();<br>
+	 * 	o.x = 3.14;<br>
+	 *  o.propertyIsEnumerable("x"); //return true; property x is local and enumerable.<br>
+	 *  o.propertyIsEnumerable("y"); //return false; o does not have property y.<br>
+	 *  o.propertyIsEnumerable("toString"); //return false; o inherits toString.<br>
+	 * </code> 
      * @memberOf Object
-     * @param {Object} name
-     * @returns {Boolean}
+     * @param name A string that contains the name of a property of <b><i>object</i></b>.
+     * @returns <b><i>true</i></b> if <b><i>object</i></b> has a noninherited property with the name specified by <b><i>name</i></b> and
+     * if that name is enumerable.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSObject Object
+     * @see #hasOwnProperty() hasOwnProperty()
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */

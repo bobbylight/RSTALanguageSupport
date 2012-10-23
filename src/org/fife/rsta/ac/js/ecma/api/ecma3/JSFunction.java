@@ -21,7 +21,7 @@ public abstract class JSFunction implements JSFunctionFunctions {
     }
     
     /**
-     * property length
+     * <b>property length</b>
      * @type    Number
      * @see  org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since   Standard ECMA-262 3rd. Edition 
@@ -30,7 +30,7 @@ public abstract class JSFunction implements JSFunctionFunctions {
    protected JSNumber length;
    
    /**
-    * Property prototype
+    * <b>property prototype</b>
     * 
     * @type Function
     * @memberOf Function
@@ -41,7 +41,7 @@ public abstract class JSFunction implements JSFunctionFunctions {
    public JSFunction protype;
    
    /**
-    * Property constructor
+    * <b>property constructor</b>
     * 
     * @type Function
     * @memberOf Function
