@@ -8,15 +8,16 @@ public interface JSRegExpFunctions extends JSObjectFunctions{
 
 	/**
 	 * <b>function exec(string)</b> general purpose pattern matching.
-	 * <h4>Example</h4>
-	 * <code>
-	 * 	var r = new RegExp("/\bJava\w*\b/g");<br>
-	 * 	var text = "JavaScript is not the same as Java";<br>
-	 *  while((result = e.exec(text)) != null)<br>
-	 *  {<br>
-	 *  &nbsp;&nbsp;alert("Matched: " + result[0]);<br>
-	 *  }<br>
-	 * </code> 
+	 * <p>
+	 * <strong>Example</strong>
+	 * <pre>
+	 * var r = new RegExp("/\bJava\w*\b/g");
+	 * var text = "JavaScript is not the same as Java";
+	 * while((result = e.exec(text)) != null)
+	 * {
+	 *   alert("Matched: " + result[0]);
+	 * }
+	 * </pre> 
 	 * @param string The string to be searched
 	 * @returns An array containing results on the match or <b><i>null</i></b> if no match is found.
 	 * @type Array
@@ -30,13 +31,14 @@ public interface JSRegExpFunctions extends JSObjectFunctions{
 
 
 	/**
-	 * <b>function test(string)</b> test whether a string matches a pattern
-	 * <h4>Example</h4>
-	 * <code>
-	 * 	var r = new RegExp("/java/i");<br>
-	 * 	r.test("JavaScript"); //returns true<br>
-	 *  r.test("ECMAScript"); //returns false<br>
-	 * </code> 
+	 * <b>function test(string)</b> test whether a string matches a pattern.
+	 * <p>
+	 * <strong>Example</strong>
+	 * <pre>
+	 * var r = new RegExp("/java/i");
+	 * r.test("JavaScript"); //returns true
+	 * r.test("ECMAScript"); //returns false
+	 * </pre> 
 	 * @param string The string to be tested
 	 * @returns <b><i>true</i></b> if <b><i>string</i></b> contains text that matches <b><i>regexp</i></b>, otherwise <b><i>false</i></b>.
 	 * @type Boolean

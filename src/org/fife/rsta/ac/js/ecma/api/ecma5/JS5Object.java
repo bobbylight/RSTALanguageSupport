@@ -13,13 +13,14 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
 	
 	/**
      * <b>function create(proto, descriptors)</b> create an object with specified prototype and properties.
-     * <h4>Example</h4>
-	 * <code>
-	 * 	var p = Object.create({z:0}), {<br>
-	 * 	&nbsp;&nbsp;x: { value: 1, writable, false, enumerable:true. configurable:true},<br>
-	 *  &nbsp;&nbsp;y: { value: 2, writable, false, enumerable:true. configurable:true},<br>
-	 *  });<br>
-	 * </code> 
+     * <p>
+     * <strong>Example</strong>
+	 * <pre>
+	 * var p = Object.create({z:0}), {
+	 *   x: { value: 1, writable, false, enumerable:true. configurable:true},
+	 *   y: { value: 2, writable, false, enumerable:true. configurable:true},
+	 * });
+	 * </pre> 
      * @param proto The prototype of the newly created object, or null.
      * @param <i>descriptors</i> An optional object that maps property names to property descriptors.
      * @returns A newly created object that inherits from <b><i>proto</b></i> and has properties described by <b><i>descriptors</i></b>
@@ -35,13 +36,14 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
 	
 	/**
      * <b>function defineProperties(o, descriptors)</b> create or configure multiple object properties.
-     * <h4>Example</h4>
-	 * <code>
-	 * 	var p = Object.defineProperties({}), {<br>
-	 * 	&nbsp;&nbsp;x: { value: 1, writable, false, enumerable:true. configurable:true},<br>
-	 *  &nbsp;&nbsp;y: { value: 2, writable, false, enumerable:true. configurable:true},<br>
-	 *  });<br>
-	 * </code> 
+     * <p>
+     * <strong>Example</strong>
+	 * <pre>
+	 * var p = Object.defineProperties({}), {
+	 *   x: { value: 1, writable, false, enumerable:true. configurable:true},
+	 *   y: { value: 2, writable, false, enumerable:true. configurable:true},
+	 * });
+	 * </pre> 
      * @param o The object on which properties are to be created or configured.
      * @param descriptors An object that maps property names to property descriptors.
      * @returns The object <b><i>o</b></i>
@@ -56,12 +58,13 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
 	
 	/**
      * <b>function defineProperty(o, name, desc)</b> create or configure an object property.
-     * <h4>Example</h4>
-	 * <code>
-	 * 	function constant(o, n, v) { //define a constant with value v<br>
-	 * 	&nbsp;&nbsp;Object.defineProperty (o, n, { value: v, writable, false, enumerable:true. configurable:true});<br>
-	 *  }<br>
-	 * </code> 
+     * <p>
+     * <strong>Example</strong>
+	 * <pre>
+	 * function constant(o, n, v) { //define a constant with value v
+	 *   Object.defineProperty (o, n, { value: v, writable, false, enumerable:true. configurable:true});
+	 * }
+	 * </pre> 
      * @param o The object on which a property is to be created or configured.
      * @param name The name of the property created or configured.
      * @param desc A property descriptor object that describes the new property.
@@ -74,6 +77,7 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
 	
 	/**
      * <b>function freeze(o)</b> make an object immutable.
+     * 
      * @param o The object to be frozen.
      * @returns The now-frozen argument object <b><i>o</b></i>.
      * @see  org.fife.rsta.ac.js.ecma.api.ecma5.JS5Object Object
@@ -88,6 +92,7 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
 	
 	/**
      * <b>function getOwnPropertyDescriptor(o, name)</b> query property attributes.
+     * 
      * @param o The object that is to have its property attributes queried.
      * @param name The name of the property to query.
      * @returns A property descriptor object for the specified property or <b><i>undefined</b></i> if no such property exitsts.
@@ -100,10 +105,11 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
 	
 	/**
      * <b>function getOwnPropertyNames(o)</b> return the names of non-inherited properties.
-     * <h4>Example</h4>
-	 * <code>
-	 * 	Object.getOwnPropertyNames([]); //returns [length]: "length" is non enumerable<br>
-	 * </code> 
+     * <p>
+     * <strong>Example</strong>
+	 * <pre>
+	 * Object.getOwnPropertyNames([]); //returns [length]: "length" is non enumerable
+	 * </pre> 
      * @param o An object
      * @returns An array that contains the names of all non-inherited properties of <b><i>o</b></i>, including non-enumerable properties.
      * @see  org.fife.rsta.ac.js.ecma.api.ecma5.JS5Object Object
@@ -115,13 +121,14 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
 	
 	/**
      * <b>function getPrototypeOf(o)</b> return the prototype of an object
-     * <h4>Example</h4>
-	 * <code>
-	 *   var p = {}; //create object<br>
-	 *   Object.getPrototypeOf(p); //=> Object.prototype<br>
-	 *   var o = Object.create(p); //an object inherited from p<br>
-	 *   Object.getPrototypeOf(o); //=> p<br>
-	 * </code> 
+     * <p>
+     * <strong>Example</strong>
+	 * <pre>
+	 * var p = {}; //create object
+	 * Object.getPrototypeOf(p); //=> Object.prototype
+	 * var o = Object.create(p); //an object inherited from p
+	 * Object.getPrototypeOf(o); //=> p
+	 * </pre> 
      * @param o An object.
      * @returns The prototype of object <b><i>o</b></i>.
      * @see  org.fife.rsta.ac.js.ecma.api.ecma5.JS5Object Object
@@ -133,13 +140,14 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
 	
 	/**
      * <b>function isExtensible(o)</b> can new properties be added to an object?
-     * <h4>Example</h4>
-	 * <code>
-	 *   var o = {}; //create object<br>
-	 *   Object.isExtensible(o); //=> true<br>
-	 *   Object.preventExtensions(o); //Make it non-extensible<br>
-	 *   Object.isExtensible(o); //=> false<br>
-	 * </code> 
+     * <p>
+     * <strong>Example</strong>
+	 * <pre>
+	 * var o = {}; //create object
+	 * Object.isExtensible(o); //=> true
+	 * Object.preventExtensions(o); //Make it non-extensible
+	 * Object.isExtensible(o); //=> false
+	 * </pre> 
      * @param o The object to be checked for extensibility
      * @returns <b><i>true</b></i> if the object can be extended with new properties, otherwise <b><i>false</b></i>.
      * @see  org.fife.rsta.ac.js.ecma.api.ecma5.JS5Object Object
@@ -150,6 +158,7 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
 	
 	/**
      * <b>function isFrozen(o)</b> is an object immutable?
+     * 
      * @param o The object to be checked.
      * @returns <b><i>true</b></i> if the object is frozen or immutable, otherwise <b><i>false</b></i>.
      * @see  org.fife.rsta.ac.js.ecma.api.ecma5.JS5Object Object
@@ -166,6 +175,7 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
 	
 	/**
      * <b>function isSealed(o)</b> can properties be added or deleted from an object?
+     * 
      * @param o The object to be checked.
      * @returns <b><i>true</b></i> if the object is sealed, otherwise <b><i>false</b></i>.
      * @see  org.fife.rsta.ac.js.ecma.api.ecma5.JS5Object Object
@@ -182,11 +192,11 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
 	
 	/**
      * <b>function keys(o)</b> return enumerable property names.
-     * <h4>Example</h4>
-	 * <code>
-	 *   Object.keys({x:1, y:2}); // => ["x", "y"]<br>
-	 *   
-	 * </code> 
+     * 
+     * <strong>Example</strong>
+	 * <pre>
+	 * Object.keys({x:1, y:2}); // => ["x", "y"]
+	 * </pre> 
      * @param o an object
      * @returns An array that contains the names of all enumerable own (non-inherited) properties of <b><i>o</b></i>.
      * @see  org.fife.rsta.ac.js.ecma.api.ecma5.JS5Object Object
@@ -198,6 +208,7 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
 	
 	/**
      * <b>function preventExtensions(o)</b> don't allow new properties on an object.
+     * 
      * @param o The object is to have its extensibility attribute set.
      * @returns The argument <b><i>o</b></i>.
      * @see  org.fife.rsta.ac.js.ecma.api.ecma5.JS5Object Object
@@ -211,7 +222,8 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
 	
 	/**
      * <b>function seal(o)</b> prevent the addition or deletion of properties.
-     * @param o The objetc to be sealed.
+     * 
+     * @param o The object to be sealed.
      * @returns The now-sealed argument of <b><i>o</b></i>.
      * @see  org.fife.rsta.ac.js.ecma.api.ecma5.JS5Object Object
      * @see #defineProperty(JS5Object, JS5String, JS5Object) defineProperty()

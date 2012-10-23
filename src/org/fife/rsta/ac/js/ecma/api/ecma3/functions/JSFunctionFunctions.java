@@ -8,12 +8,13 @@ public interface JSFunctionFunctions extends JSObjectFunctions {
 	 
 	/**
      * <b>function apply (thisObject, argArray)</b> invoke a function as a method of an object.
-     * <h4>Example</h4>
-	 * <code>
-	 * 	//Apply the default  Object.toString() method to an object that<br>
-	 *  //overrides it with its own version of the method<br>
-	 *  Object.prototype.toString().apply(o);<br>
-	 * </code> 
+     * <p>
+     * <strong>Example</strong>
+	 * <pre>
+	 * //Apply the default  Object.toString() method to an object that
+	 * //overrides it with its own version of the method
+	 * Object.prototype.toString().apply(o);
+	 * </pre> 
      * @param thisObject The object to which the <b><i>function</i></b> is applied.
      * @param argArray An array of arguments to be passed to <b><i>function</i></b>
      * @returns Whatever value is returned by <b><i>function</i></b>
@@ -25,12 +26,13 @@ public interface JSFunctionFunctions extends JSObjectFunctions {
     
     /**
      * <b>function call (thisObject, args)</b> invoke a function as a method of an object
-     * <h4>Example</h4>
-	 * <code>
-	 * 	//Call the default  Object.toString() method to an object that<br>
-	 *  //overrides it with its own version of the method<br>
-	 *  Object.prototype.toString().call(o);<br>
-	 * </code> 
+     * <p>
+     * <strong>Example</strong>
+	 * <pre>
+	 * //Call the default  Object.toString() method to an object that
+	 * //overrides it with its own version of the method
+	 * Object.prototype.toString().call(o);
+	 * </pre> 
      *  @param thisObject The object to which the <b><i>function</i></b> is applied.
      *  @param argArray An array of arguments to be passed to <b><i>function</i></b>
      *  @returns Whatever value is returned by <b><i>function</i></b>

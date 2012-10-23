@@ -78,11 +78,12 @@ public interface JSStringFunctions extends JSObjectFunctions {
 
     /**
      * <b>function localeCompare(otherString)</b> compare one string to another, using locale-specific ordering.
-     * <h4>Example</h4>
-	 * <code>
-	 * 	var string;//array of string initialised somewhere<br>
-	 * 	strings.sort(function(a,b){return a.localCompare(b);});<br>
-	 * </code> 
+     * <p>
+     * <strong>Example</strong>
+	 * <pre>
+	 * var string;//array of string initialised somewhere
+	 * strings.sort(function(a,b){return a.localCompare(b);});
+	 * </pre> 
      * @memberOf String
      * @param otherString A <b><i>string</i></b> to be compared, in a locale-sensitive fashion, with <b><i>string</i></b>. 
      * @returns A number that indicates the result of the comparison.
@@ -130,16 +131,17 @@ public interface JSStringFunctions extends JSObjectFunctions {
     public JSNumber search(JSRegExp regexp);
 
     /**
-     * <b>function slice(start, end)</b> extract a substring
-     * <h4>Example</h4>
-	 * <code>
-	 * 	var s = "abcdefg";<br>
-	 *  s.slice(0,4); //returns "abcd"<br>
-	 *  s.slice(2,4); //returns "cd"<br>
-	 *  s.slice(4); //returns "efg"<br>
-	 *  s.slice(3, -1); //returns "def"<br>
-	 *  s.slice(3,-2); //returns "de"<br>
-	 * </code> 
+     * <b>function slice(start, end)</b> extract a substring.
+     * <p>
+     * <strong>Example</strong>
+	 * <pre>
+	 * var s = "abcdefg";
+	 * s.slice(0,4); //returns "abcd"
+	 * s.slice(2,4); //returns "cd"
+	 * s.slice(4); //returns "efg"
+	 * s.slice(3, -1); //returns "def"
+	 * s.slice(3,-2); //returns "de"
+	 * </pre> 
      * @memberOf String
      * @param start The start index where the slice if to begin.
      * @param <i>end<i> Optional end index where the slice is to end.
@@ -151,12 +153,13 @@ public interface JSStringFunctions extends JSObjectFunctions {
     public JSString slice(JSNumber start, JSNumber end);
 
     /**
-     * <b>function split(separator, limit)</b> break a string into an array of strings
-     * <h4>Example</h4>
-	 * <code>
-     *  "1|2|3|4".split("|"); //returns ["1","2","3","4"]<br>
-	 *  "%1%2%3%4%".split("%"); //returns ["","1","2","3","4",""]<br>
-	 * </code>
+     * <b>function split(separator, limit)</b> break a string into an array of strings.
+     * <p>
+     * <strong>Example</strong>
+	 * <pre>
+     * "1|2|3|4".split("|"); //returns ["1","2","3","4"]
+	 * "%1%2%3%4%".split("%"); //returns ["","1","2","3","4",""]
+	 * </pre>
      * @memberOf String
      * @param separator The string or regular expression at which the <b><i>string</i></b> splits
      * @param limit Optional value that specifies the maximum length of the returned array.

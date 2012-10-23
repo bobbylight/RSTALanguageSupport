@@ -7,7 +7,7 @@ import org.fife.rsta.ac.js.ecma.api.ecma5.JS5String;
 public interface JS5DateFunctions extends JS5ObjectFunctions, JSDateFunctions {
 
 	/**
-	 * <b>function toISOString()</b> converts a Date to ISO8601-formatted string
+	 * <b>function toISOString()</b> converts a Date to ISO8601-formatted string.
 	 * 
 	 * @memberOf Date
 	 * @returns A string representation of <b><i>date</i></b>, formatted according to ISO-8601 - yyyy-mm-ddThh:mm:ss.sssZ
@@ -18,7 +18,7 @@ public interface JS5DateFunctions extends JS5ObjectFunctions, JSDateFunctions {
 	public JS5String toISOString(); 
 	
 	/**
-	 * <b>function toJSON(key)</b> JSON-serialize a Date object
+	 * <b>function toJSON(key)</b> JSON-serialize a Date object.
 	 * 
 	 * @memberOf Date
 	 * @param key JSON.stringify() passes this argument.

@@ -45,7 +45,7 @@ public abstract class JSDate implements JSDateFunctions {
 
 
    /**
-	 * <b>function UTC(year,month,day,hour,min,sec,ms)</b> Converts a Date specification to milliseconds
+	 * <b>function UTC(year,month,day,hour,min,sec,ms)</b> Converts a Date specification to milliseconds.
 	 * 
 	 * @memberOf Date
 	 * @param year The year in four digit format. If the year is added between 0 and 99 --> 1900 is added to it. 
@@ -66,7 +66,7 @@ public abstract class JSDate implements JSDateFunctions {
 
 
 	/**
-	 * <b>function parse(string)</b> parse a date/time string
+	 * <b>function parse(string)</b> parse a date/time string.
 	 * 
 	 * @memberOf Date
 	 * @param string A string containing the date and time to be parsed.
