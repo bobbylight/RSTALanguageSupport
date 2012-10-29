@@ -124,12 +124,22 @@ public class JavaScriptHelper {
 	/**
 	 * Iterate back up through parent nodes and check whether inside a function
 	 * 
+	 * If the node is a function, then the Parsed parent node structure is:
+	 * FunctionCall
+	 *   --> PropertyGet
+	 *    --> Name
+	 * 
+	 * Anything other structure should be rejected.
+	 * 
 	 * @param node
 	 * @return
 	 */
 	public static FunctionCall findFunctionCallFromNode(AstNode node) {
 		AstNode parent = node;
-		while (parent != null && !(parent instanceof AstRoot)) {
+		for(int i=0; i<3; i++)
+		{
+			if(parent == null || (parent instanceof AstRoot))
+				break;
 			if (parent instanceof FunctionCall) {
 				return (FunctionCall) parent;
 			}
@@ -167,14 +177,17 @@ public class JavaScriptHelper {
 				case Token.TRUE:
 				case Token.FALSE:
 					return getTypeDeclaration(TypeDeclarations.ECMA_BOOLEAN);
-				case Token.ARRAYLIT: //TODO need to store the Array Objects onto the variable so they can be resolved in the future
-					return createArrayType(typeNode, provider); //getTypeDeclaration(TypeDeclarationFactory.ECMA_ARRAY);
+				case Token.ARRAYLIT: 
+					return createArrayType(typeNode, provider);
 				case Token.GETELEM: {
 					TypeDeclaration dec = findGetElementType(typeNode, provider);
 					if(dec != null) {
 						return dec;
 					}
 					break;
+				}
+				case Token.THIS : {
+					return getTypeDeclaration(TypeDeclarations.ECMA_GLOBAL);
 				}
 
 			}

@@ -25,7 +25,8 @@ public abstract class TypeDeclarations {
 	public static final String ECMA_OBJECT = "JSObject";
 	public static final String ECMA_REGEXP = "JSRegExp";
 	public static final String ECMA_STRING = "JSString";
-	public static final String ECMA_JSON = "JSSON";
+	public static final String ECMA_GLOBAL = "JSGlobal";
+	public static final String ECMA_JSON = "JSJSON";
 	
 	public static final String FUNCTION_CALL = "FC";
 	// Default - Any type cannot be resolved as any javascript type

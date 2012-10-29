@@ -162,6 +162,10 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 			//otherwise it can be assumed that this is part of multi depth - e.g "".length.toString()
 			if(lastJavaScriptType == null) {
 				dec = resolveNativeType(node);
+				if(dec == null && node.getType() == Token.NAME) {
+					lastJavaScriptType = null;
+					return false;
+				}
 			}
 			else {
 				dec = resolveTypeFromLastJavaScriptType(node);

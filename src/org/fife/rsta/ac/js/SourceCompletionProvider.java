@@ -141,30 +141,22 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 				// Don't add shorthand completions if they're typing something
 				// qualified 
 				// only add shorthand completions if the user has started typing something in (Eclipse behaviour)
-				if (text.indexOf('.')==-1 && text.length() > 0) {
+				if (text.length() > 0) {
 					addShorthandCompletions(set);
-				}
-
+				} 
+				
 				if (text.length() > 0) { // try to convert text by removing
 					// any if, while etc...
 					text = JavaScriptHelper.parseEnteredText(text);
 				}
+				
+				//load global object
+				parseTextAndResolve(set, "this." + text);
+				
 				recursivelyAddLocalVars(set, block, dot, null, false, false);
 
-			}
-			else {
-				// Compile the entered text and resolve the variables/function
-				JavaScriptResolver compiler = engine.getJavaScriptResolver(this);
-				try {
-					JavaScriptType type = compiler.compileText(text);
-					if (type != null) {
-						javaScriptTypesFactory.populateCompletionsForType(type,
-								set);
-					}
-				} catch (IOException io) {
-					// TODO
-					io.printStackTrace();
-				}
+			} else {
+				parseTextAndResolve(set, text);
 
 			}
 
@@ -206,9 +198,38 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 	}
 	
+	/**
+	 * Parse Text and add completions to set
+	 */
+	private void parseTextAndResolve(Set set, String text)
+	{
+		// Compile the entered text and resolve the variables/function
+		JavaScriptResolver compiler = engine.getJavaScriptResolver(this);
+		try {
+			JavaScriptType type = compiler.compileText(text);
+			boolean resolved = populateCompletionsFromType(type, set);
+			if(!resolved) {
+				type = compiler.compileText("this." + text);
+				populateCompletionsFromType(type, set);
+			}
+		} catch (IOException io) {
+			// TODO
+			io.printStackTrace();
+		}
+	}
 	
-
-
+	/**
+	 * Populate Set of completions if JavaScriptType is not null and return true, 
+	 * otherwise return false
+	 */
+	private boolean populateCompletionsFromType(JavaScriptType type, Set set) {
+		if (type != null) {
+			javaScriptTypesFactory.populateCompletionsForType(type, set);
+			return true;
+		}
+		return false;
+	}
+	
 	public String getAlreadyEnteredText(JTextComponent comp) {
 		String text = super.getAlreadyEnteredText(comp);
 		if(text != null) {

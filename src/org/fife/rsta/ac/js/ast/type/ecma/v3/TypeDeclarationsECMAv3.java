@@ -29,6 +29,10 @@ public class TypeDeclarationsECMAv3 extends TypeDeclarations {
 				"org.fife.rsta.ac.js.ecma.api.ecma3", "JSRegExp", "RegExp", false, false));
 		addTypeDeclaration(ECMA_STRING, new TypeDeclaration(
 				"org.fife.rsta.ac.js.ecma.api.ecma3", "JSString", "String", false, false));
+		addTypeDeclaration(ECMA_GLOBAL, new TypeDeclaration(
+				"org.fife.rsta.ac.js.ecma.api.ecma3", "JSGlobal", "Global", false, false));
+		addTypeDeclaration(ANY, new TypeDeclaration(
+				"org.fife.rsta.ac.js.ecma.api.ecma3", "JSUndefined", "undefined", false, false));
 
 		addTypeDeclaration("org.fife.rsta.ac.js.ecma.api.ecma3.functions.JSObjectFunctions", new TypeDeclaration(
 				"org.fife.rsta.ac.js.ecma.api.ecma3.functions", "JSObjectFunctions", "Object", false, false));
@@ -44,6 +48,8 @@ public class TypeDeclarationsECMAv3 extends TypeDeclarations {
 				"org.fife.rsta.ac.js.ecma.api.ecma3.functions", "JSRegExpFunctions", "RegExp", false, false));
 		addTypeDeclaration("org.fife.rsta.ac.js.ecma.api.ecma3.functions.JSStringFunctions", new TypeDeclaration(
 				"org.fife.rsta.ac.js.ecma.api.ecma3.functions", "JSStringFunctions", "String", false, false));
+		addTypeDeclaration("org.fife.rsta.ac.js.ecma.api.ecma3.functions.JSGlobalFunctions", new TypeDeclaration(
+				"org.fife.rsta.ac.js.ecma.api.ecma3.functions", "JSGlobalFunctions", "String", false, false));
 	}
 	
 }
