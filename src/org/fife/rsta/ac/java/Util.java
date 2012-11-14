@@ -14,6 +14,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.text.CharacterIterator;
+import java.text.StringCharacterIterator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -445,6 +447,36 @@ System.out.println("Unmatched linkContent: " + linkContent);
 		return html.toString();
 
 	}
+	
+	public static String forXML(String aText){
+	    final StringBuilder result = new StringBuilder();
+	    final StringCharacterIterator iterator = new StringCharacterIterator(aText);
+	    char character =  iterator.current();
+	    while (character != CharacterIterator.DONE ){
+	      if (character == '<') {
+	        result.append("&lt;");
+	      }
+	      else if (character == '>') {
+	        result.append("&gt;");
+	      }
+	      else if (character == '\"') {
+	        result.append("&quot;");
+	      }
+	      else if (character == '\'') {
+	        result.append("&#039;");
+	      }
+	      else if (character == '&') {
+	         result.append("&amp;");
+	      }
+	      else {
+	        //the char is not a special one
+	        //add it to the result as is
+	        result.append(character);
+	      }
+	      character = iterator.next();
+	    }
+	    return result.toString();
+	  }
 
 
 	private static final StringBuffer fixDocComment(StringBuffer text) {
@@ -471,7 +503,7 @@ System.out.println("Unmatched linkContent: " + linkContent);
 
 				if (content.startsWith("code ")) {
 					sb.append("<code>").
-							append(content.substring(5)).
+							append(forXML(content.substring(5))).
 							append("</code>");
 				}
 
