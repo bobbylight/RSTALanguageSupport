@@ -50,6 +50,11 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 	private static File DEFAULT_PERL_INSTALL_LOC;
 
 	/**
+	 * Whether parens should be used around arguments to functions.
+	 */
+	private static boolean useParensWithFunctions;
+
+	/**
 	 * Whether to use the system "perldoc" command for function descriptions.
 	 * This parameter is ignored if {@link #DEFAULT_PERL_INSTALL_LOC} is
 	 * <code>false</code>.
@@ -194,7 +199,7 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 	 * @see #setUseParensWithFunctions(boolean)
 	 */
 	public boolean getUseParensWithFunctions() {
-		return getProvider().getUseParensWithFunctions();
+		return useParensWithFunctions;
 	}
 
 
@@ -339,7 +344,12 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 	 * @see #getUseParensWithFunctions()
 	 */
 	public void setUseParensWithFunctions(boolean use) {
-		getProvider().setUseParensWithFunctions(use);
+		if (use!=useParensWithFunctions) {
+			useParensWithFunctions = use;
+			if (provider!=null) {
+				provider.setUseParensWithFunctions(use);
+			}
+		}
 	}
 
 
