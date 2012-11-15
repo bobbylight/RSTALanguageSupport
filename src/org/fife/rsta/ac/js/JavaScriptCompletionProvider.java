@@ -44,7 +44,7 @@ public class JavaScriptCompletionProvider extends
 
 
 	public JavaScriptCompletionProvider(JarManager jarManager, JavaScriptLanguageSupport languageSupport) {
-		this(new SourceCompletionProvider(), jarManager, languageSupport);
+		this(new SourceCompletionProvider(languageSupport.isXmlAvailable()), jarManager, languageSupport);
 	}
 
 

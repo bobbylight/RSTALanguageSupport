@@ -13,6 +13,7 @@ package org.fife.rsta.ac.js.ast.type;
 import java.util.List;
 
 import org.fife.rsta.ac.js.ast.type.ecma.TypeDeclarations;
+import org.fife.rsta.ac.js.ast.type.ecma.e4x.ECMAvE4xAdditions;
 import org.fife.rsta.ac.js.ast.type.ecma.v3.TypeDeclarationsECMAv3;
 import org.fife.rsta.ac.js.ast.type.ecma.v5.TypeDeclarationsECMAv5;
 
@@ -31,18 +32,24 @@ public class TypeDeclarationFactory {
 	
 	private TypeDeclarationFactory()
 	{
-		setTypeDeclarationVersion(null);
+		setTypeDeclarationVersion(null, false);
 	}
 
-	public List setTypeDeclarationVersion(String ecmaVersion) {
+	public List setTypeDeclarationVersion(String ecmaVersion, boolean xmlSupported) {
 		if(TypeDeclarationsECMAv5.ECMA_VERSION.equals(ecmaVersion)) {
 			ecma = new TypeDeclarationsECMAv5();
 		}
 		else {
 			ecma = new TypeDeclarationsECMAv3();
 		}
+		
+		if(xmlSupported) { //add E4X API
+			new ECMAvE4xAdditions().addAdditionalTypes(ecma);
+		}
+		
 		return ecma.getAllClasses();
 	}
+	
 	
 
 	/**

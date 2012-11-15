@@ -28,6 +28,12 @@ public abstract class TypeDeclarations {
 	public static final String ECMA_GLOBAL = "JSGlobal";
 	public static final String ECMA_JSON = "JSJSON";
 	
+	//xml support
+	public static final String ECMA_NAMESPACE = "E4XNamespace";
+	public static final String ECMA_QNAME = "E4XQName";
+	public static final String ECMA_XML = "E4XXML";
+	public static final String ECMA_XMLLIST = "E4XXMLList";
+	
 	public static final String FUNCTION_CALL = "FC";
 	// Default - Any type cannot be resolved as any javascript type
 	public static final String ANY = "any";
@@ -83,6 +89,11 @@ public abstract class TypeDeclarations {
 		addJavaScriptLookup("int", ECMA_NUMBER);
 		addJavaScriptLookup("boolean", ECMA_BOOLEAN);
 		addJavaScriptLookup("JSON", ECMA_JSON);
+		//xml support
+		addJavaScriptLookup("Namespace", ECMA_NAMESPACE);
+		addJavaScriptLookup("QName", ECMA_QNAME);
+		addJavaScriptLookup("XML", ECMA_XML);
+		addJavaScriptLookup("XMLList", ECMA_XMLLIST);
 	}
 	
 	protected abstract void loadTypes();

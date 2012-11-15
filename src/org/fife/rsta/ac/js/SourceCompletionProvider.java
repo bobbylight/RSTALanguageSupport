@@ -57,14 +57,17 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	
 	//Shorthand completions (templates and comments)
 	private ShorthandCompletionCache shorthandCache;
+	
+	private boolean xmlSupported;
 
-	public SourceCompletionProvider() {
-		this(null);
+	public SourceCompletionProvider(boolean xmlSupported) {
+		this(null, xmlSupported);
 	}
 
 
-	public SourceCompletionProvider(String javaScriptEngine) {
+	public SourceCompletionProvider(String javaScriptEngine, boolean xmlSupported) {
 		variableResolver = new VariableResolver();
+		this.xmlSupported = xmlSupported;
 		setParameterizedCompletionParams('(', ", ", ')');
 		setAutoActivationRules(false, "."); // Default - only activate after '.'
 		engine = JavaScriptEngineFactory.Instance().getEngineFromCache(javaScriptEngine);
@@ -438,6 +441,11 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 		return jarManager.getSourceLocForClass(className);
 	}
 	
+	
+	public boolean isXMLSupported()
+	{
+		return xmlSupported;
+	}
 	
 	// TODO remove
 	public void debugCodeBlock(CodeBlock block, int tab) {

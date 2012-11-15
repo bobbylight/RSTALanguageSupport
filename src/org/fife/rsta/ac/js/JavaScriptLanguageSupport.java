@@ -93,7 +93,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	{
 		//load classes
 		try {
-			List classes = TypeDeclarationFactory.Instance().setTypeDeclarationVersion(version);
+			List classes = TypeDeclarationFactory.Instance().setTypeDeclarationVersion(version, isXmlAvailable());
 			if (classes!=null) {
 				LibraryInfo info = new ClasspathLibraryInfo(classes,
 											new ClasspathSourceLocation());

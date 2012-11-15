@@ -189,6 +189,13 @@ public class JavaScriptHelper {
 				case Token.THIS : {
 					return getTypeDeclaration(TypeDeclarations.ECMA_GLOBAL);
 				}
+				//xml support
+				case Token.XML : {
+					if(provider.isXMLSupported())
+					{
+						return getTypeDeclaration(TypeDeclarations.ECMA_XML);
+					}
+				}
 
 			}
 

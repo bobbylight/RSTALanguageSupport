@@ -1,7 +1,5 @@
 package org.fife.rsta.ac.js.ast.type.ecma.v5;
 
-import java.util.List;
-
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
 import org.fife.rsta.ac.js.ast.type.ecma.v3.TypeDeclarationsECMAv3;
 
@@ -40,16 +38,4 @@ public class TypeDeclarationsECMAv5 extends TypeDeclarationsECMAv3 {
 		
 	}
 	
-	
-	public List getAllClasses() {
-		List classes = super.getAllClasses();
-		
-		//need to load version 3 too
-		TypeDeclarationsECMAv3 v3 = new TypeDeclarationsECMAv3();
-		classes.addAll(v3.getAllClasses());
-		
-		return classes;
-	}
-	
-
 }
