@@ -449,7 +449,7 @@ System.out.println("Unmatched linkContent: " + linkContent);
 	}
 	
 	public static String forXML(String aText){
-	    final StringBuilder result = new StringBuilder();
+	    final StringBuffer result = new StringBuffer();
 	    final StringCharacterIterator iterator = new StringCharacterIterator(aText);
 	    char character =  iterator.current();
 	    while (character != CharacterIterator.DONE ){
