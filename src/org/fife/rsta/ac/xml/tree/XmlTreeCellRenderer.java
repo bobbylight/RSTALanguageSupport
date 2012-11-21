@@ -15,6 +15,7 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.net.URL;
+import java.util.Map;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -92,7 +93,10 @@ class XmlTreeCellRenderer extends DefaultTreeCellRenderer {
 				int textX, int textY) {
 			XmlTreeCellRenderer r = (XmlTreeCellRenderer)l;
 			Graphics2D g2d = (Graphics2D)g.create();
-			g2d.addRenderingHints(RSyntaxUtilities.getDesktopAntiAliasHints());
+			Map hints = RSyntaxUtilities.getDesktopAntiAliasHints();
+			if (hints!=null) {
+				g2d.addRenderingHints(hints);
+			}
 			g2d.drawString(r.elem, textX, textY);
 			if (r.attr!=null) {
 				textX += g2d.getFontMetrics().stringWidth(r.elem + " ");
