@@ -26,7 +26,7 @@
 	"RSyntaxTextArea" and "AutoComplete" checked out along-side this one.
 
 	Author:   Robert Futrell
-	Version:  0.9.0
+	Version:  0.9.1
 	Date:     02/19/2012
 
 -->
@@ -56,7 +56,7 @@
 
 	<!-- Set global properties for this build.         -->
 	<!-- You generally shouldn't have to change these. -->
-	<property name="version"          value="0.9.0"/>
+	<property name="version"          value="0.9.1"/>
 	<property name="source-dir"       location="src"/>
 	<property name="class-dir"        location="ant-classes"/>
 	<property name="dist-dir"         location="dist"/>
