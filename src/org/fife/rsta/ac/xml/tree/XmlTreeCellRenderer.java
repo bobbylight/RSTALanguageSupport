@@ -73,7 +73,10 @@ class XmlTreeCellRenderer extends DefaultTreeCellRenderer {
 
 
 	public void updateUI() {
-		setUI(UI);
+		// We must call super.updateUI() since, as of Java 7, that's where
+		// DefaultTreeCellRenderer caches its fonts, colors, etc.
+		super.updateUI(); // Get "real" new defaults
+		setUI(UI); // Doesn't update colors, border, etc., just paint method
 	}
 
 
@@ -89,14 +92,19 @@ class XmlTreeCellRenderer extends DefaultTreeCellRenderer {
 	 */
 	private static class XmlTreeCellUI extends BasicLabelUI {
 
+		protected void installDefaults(JLabel label) {
+			// Do nothing
+		}
+
 		protected void paintEnabledText(JLabel l, Graphics g, String s, 
 				int textX, int textY) {
 			XmlTreeCellRenderer r = (XmlTreeCellRenderer)l;
-			Graphics2D g2d = (Graphics2D)g.create();
+			Graphics2D g2d = (Graphics2D)g;
 			Map hints = RSyntaxUtilities.getDesktopAntiAliasHints();
 			if (hints!=null) {
 				g2d.addRenderingHints(hints);
 			}
+			g2d.setColor(l.getForeground());
 			g2d.drawString(r.elem, textX, textY);
 			if (r.attr!=null) {
 				textX += g2d.getFontMetrics().stringWidth(r.elem + " ");
@@ -106,6 +114,10 @@ class XmlTreeCellRenderer extends DefaultTreeCellRenderer {
 				g2d.drawString(r.attr, textX, textY);
 			}
 			g2d.dispose();
+		}
+
+		protected void uninstallDefaults(JLabel label) {
+			// Do nothing
 		}
 
 	}
