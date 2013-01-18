@@ -12,6 +12,30 @@ import org.fife.rsta.ac.js.ecma.api.ecma5.functions.JS5ObjectFunctions;
 public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
 	
 	/**
+     * Object Object()
+     * 
+     * <p>Creates a new object instance</p>
+     * 
+     * @constructor
+     * @since Standard ECMA-262 3rd. Edition
+     * @since Level 2 Document Object Model Core Definition.
+     */
+    public JS5Object() {
+    }
+    
+    /**
+     * Object Object(value)
+     * 
+     * 
+     * @constructor
+     * @param <i>value</i> optional argument specifies a primitive JavaScript value - a number, boolean etc...
+     * @since Standard ECMA-262 3rd. Edition
+     * @since Level 2 Document Object Model Core Definition.
+     */
+    public JS5Object(JSObject value) {
+    }
+    
+	/**
      * <b>function create(proto, descriptors)</b> create an object with specified prototype and properties.
      * <p>
      * <strong>Example</strong>

@@ -13,11 +13,25 @@ public abstract class JSObject implements JSObjectFunctions {
     /**
      * Object Object()
      * 
+     * <p>Creates a new object instance</p>
+     * 
      * @constructor
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
     public JSObject() {
+    }
+    
+    /**
+     * Object Object(value)
+     * 
+     * 
+     * @constructor
+     * @param <i>value</i> optional argument specifies a primitive JavaScript value - a number, boolean etc...
+     * @since Standard ECMA-262 3rd. Edition
+     * @since Level 2 Document Object Model Core Definition.
+     */
+    public JSObject(JSObject value) {
     }
     
     /**

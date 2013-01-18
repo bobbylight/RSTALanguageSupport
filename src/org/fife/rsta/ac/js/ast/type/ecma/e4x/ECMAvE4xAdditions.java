@@ -30,6 +30,12 @@ public class ECMAvE4xAdditions  {
 		
 		typeDecs.addTypeDeclaration("org.fife.rsta.ac.js.ecma.api.e4x.functions.E4XXMLListFunctions", new TypeDeclaration(
 				"org.fife.rsta.ac.js.ecma.api.e4x.functions", "E4XXMLListFunctions", "XMList", false, false));
+		
+		//xml lookups for constructors and class completions
+		typeDecs.addECMAObject(TypeDeclarations.ECMA_NAMESPACE, true);
+		typeDecs.addECMAObject(TypeDeclarations.ECMA_QNAME, true);
+		typeDecs.addECMAObject(TypeDeclarations.ECMA_XML, true);
+		typeDecs.addECMAObject(TypeDeclarations.ECMA_XMLLIST, true);
 	}
 	
 }

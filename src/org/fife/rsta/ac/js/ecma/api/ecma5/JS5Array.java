@@ -2,6 +2,8 @@ package org.fife.rsta.ac.js.ecma.api.ecma5;
 
 import org.fife.rsta.ac.js.ecma.api.ecma3.JSArray;
 import org.fife.rsta.ac.js.ecma.api.ecma3.JSBoolean;
+import org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber;
+import org.fife.rsta.ac.js.ecma.api.ecma3.JSObject;
 import org.fife.rsta.ac.js.ecma.api.ecma5.functions.JS5ArrayFunctions;
 
 
@@ -12,13 +14,40 @@ import org.fife.rsta.ac.js.ecma.api.ecma5.functions.JS5ArrayFunctions;
 public abstract class JS5Array extends JSArray implements JS5ArrayFunctions {
 	
 	/**
-	 * Object JS5Array()
+	 * Object Array()
 	 * 
 	 * @constructor
-	 * @extends JS5Object
-	 * @since Standard ECMA-262 5th. Edition
+	 * @extends Object
+	 * @since Standard ECMA-262 3rd. Edition
+	 * @since Level 2 Document Object Model Core Definition.
 	 */
 	public JS5Array() {
+
+	}
+	
+	/**
+	 * Object Array(size)
+	 * 
+	 * @constructor
+	 * @extends Object
+	 * @param size The desired number of elements in the array. The returned value has its <b>length</b> field set to <b><i>size</b></i>
+	 * @since Standard ECMA-262 3rd. Edition
+	 * @since Level 2 Document Object Model Core Definition.
+	 */
+	public JS5Array(JSNumber size) {
+
+	}
+	
+	/**
+	 * Object Array(element0, ... elementn)
+	 * 
+	 * @constructor
+	 * @extends Object
+	 * @param elements  An argument list of two or more values. The <b>length</b> field set to the number of arguments.
+	 * @since Standard ECMA-262 3rd. Edition
+	 * @since Level 2 Document Object Model Core Definition.
+	 */
+	public JS5Array(JSObject element0, JSObject elementn) {
 
 	}
 	

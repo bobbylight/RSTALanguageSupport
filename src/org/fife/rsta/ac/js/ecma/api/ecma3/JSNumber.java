@@ -10,14 +10,15 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.functions.JSNumberFunctions;
 public abstract class JSNumber implements JSNumberFunctions {
 
     /**
-     * Object Number()
+     * Object Number(value)
      * 
      * @constructor
      * @extends Object
+     * @param value The numeric value of the Number object being created or a value to be converted to a number.
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSNumber() {
+    public JSNumber(JSObject value) {
     }
     
     /**

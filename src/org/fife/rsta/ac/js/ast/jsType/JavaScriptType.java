@@ -33,7 +33,11 @@ public class JavaScriptType {
 	// base type
 	protected TypeDeclaration type;
 	// completions for base type String-->JSCompletion
-	protected HashMap typeCompletions;
+	protected HashMap methodFieldCompletions;
+	//constructor completions
+	protected HashMap constructors;
+	//class type
+	protected JSCompletion classType;
 
 	// extended cached types
 	private ArrayList extended;
@@ -41,21 +45,44 @@ public class JavaScriptType {
 
 	public JavaScriptType(TypeDeclaration type) {
 		this.type = type;
-		typeCompletions = new HashMap();
+		methodFieldCompletions = new HashMap();
+		constructors = new HashMap();
 		extended = new ArrayList();
 	}
 
 
 	/**
-	 * Add completion to CachedType
+	 * Add method or field completion to CachedType
 	 * 
 	 * @param completion
 	 * @see JSCompletion
 	 */
 	public void addCompletion(JSCompletion completion) {
-		typeCompletions.put(completion.getLookupName(), completion);
+		methodFieldCompletions.put(completion.getLookupName(), completion);
+	}
+	
+	/**
+	 * Adds a constructor completion to CachedType object type
+	 * @param completion 
+	 */
+	public void addConstructor(JSCompletion completion) {
+		constructors.put(completion.getLookupName(), completion);
 	}
 
+	/**
+	 * Set the class type completion e.g String, Number
+	 * @param classType Completion to format the class
+	 */
+	public void setClassTypeCompletion(JSCompletion classType) {
+		this.classType = classType;
+	}
+	
+	/**
+	 * @return the class type completion for the javascript type
+	 */
+	public JSCompletion getClassTypeCompletion() {
+		return classType;
+	}
 
 	/**
 	 * @param completionLookup
@@ -74,7 +101,7 @@ public class JavaScriptType {
 	 * @see JSCompletion
 	 */
 	protected JSCompletion _getCompletion(String completionLookup, SourceCompletionProvider provider) {
-		return (JSCompletion) typeCompletions.get(completionLookup);
+		return (JSCompletion) methodFieldCompletions.get(completionLookup);
 	}
 
 
@@ -108,8 +135,12 @@ public class JavaScriptType {
 	 * @return Map of completions String --> JSCompletion
 	 * @see JSCompletion
 	 */
-	public HashMap getCompletions() {
-		return typeCompletions;
+	public HashMap getMethodFieldCompletions() {
+		return methodFieldCompletions;
+	}
+	
+	public HashMap getConstructorCompletions() {
+		return constructors;
 	}
 
 

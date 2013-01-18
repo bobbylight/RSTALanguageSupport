@@ -13,6 +13,7 @@ package org.fife.rsta.ac.js;
 import java.awt.Cursor;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -22,6 +23,7 @@ import javax.swing.text.JTextComponent;
 import org.fife.rsta.ac.ShorthandCompletionCache;
 import org.fife.rsta.ac.java.JarManager;
 import org.fife.rsta.ac.java.buildpath.SourceLocation;
+import org.fife.rsta.ac.js.JavaScriptHelper.ParseText;
 import org.fife.rsta.ac.js.ast.CodeBlock;
 import org.fife.rsta.ac.js.ast.JavaScriptVariableDeclaration;
 import org.fife.rsta.ac.js.ast.VariableResolver;
@@ -122,7 +124,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 			// Cut down the list to just those matching what we've typed.
 			// Note: getAlreadyEnteredText() never returns null
 			String text = getAlreadyEnteredText(comp);
-
+			
 			if (supportsPreProcessingScripts()) {
 				variableResolver.resetPreProcessingVariables(false);
 			}
@@ -139,6 +141,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 			// need to populate completions to work out all variables available
 			CodeBlock block = iterateAstRoot(astRoot, set, text, dot, false);
 
+			boolean isNew = false;
 			if (noDotInText) {
 
 				// Don't add shorthand completions if they're typing something
@@ -148,14 +151,26 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 					addShorthandCompletions(set);
 				} 
 				
+				
 				if (text.length() > 0) { // try to convert text by removing
 					// any if, while etc...
-					text = JavaScriptHelper.parseEnteredText(text);
+					ParseText pt = JavaScriptHelper.parseEnteredText(text);
+					text = pt.text;
+					isNew = pt.isNew;
+					
+					if(isNew)  {
+						return handleNewFilter(set, text);
+					}
+					else
+					{
+						//load classes and move on
+						loadECMAClasses(set, "");
+					}
+					
 				}
 				
 				//load global object
 				parseTextAndResolve(set, "this." + text);
-				
 				recursivelyAddLocalVars(set, block, dot, null, false, false);
 
 			} else {
@@ -163,42 +178,87 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 			}
 
-			if (noDotInText && supportsPreProcessingScripts()) {
+			if (noDotInText && supportsPreProcessingScripts() && !isNew) {
 				set.addAll(preProcessing.getCompletions());
 			}
 
-			completions.addAll(set);
-
-			// Do a sort of all of our completions to put into case insensitive order and we're good to go!
-			Collections.sort(completions, comparator);
-
-			// Only match based on stuff after the final '.', since that's what
-			// is
-			// displayed for all of our completions.
-			text = text.substring(text.lastIndexOf('.') + 1);
-
-			int start = Collections.binarySearch(completions, text, comparator);
-			if (start < 0) {
-				start = -(start + 1);
-			}
-			else {
-				// There might be multiple entries with the same input text.
-				while (start > 0
-						&& comparator.compare(completions.get(start - 1), text) == 0) {
-					start--;
-				}
-			}
-
-			int end = Collections.binarySearch(completions, text + '{',
-					comparator);
-			end = -(end + 1);
-
-			return completions.subList(start, end);
+			return resolveCompletions(text, set);
 
 		} finally {
 			comp.setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 		}
 
+	}
+	
+	private List handleNewFilter(Set set, String text)
+	{
+		set.clear(); //reset as just interested in the
+		//just load the constructors
+		loadECMAClasses(set, text);
+		return resolveCompletions(text, set);
+	}
+	
+	private List resolveCompletions(String text, Set set)
+	{
+		completions.addAll(set);
+
+		// Do a sort of all of our completions to put into case insensitive order and we're good to go!
+		Collections.sort(completions, comparator);
+
+		// Only match based on stuff after the final '.', since that's what
+		// is
+		// displayed for all of our completions.
+		text = text.substring(text.lastIndexOf('.') + 1);
+
+		int start = Collections.binarySearch(completions, text, comparator);
+		if (start < 0) {
+			start = -(start + 1);
+		}
+		else {
+			// There might be multiple entries with the same input text.
+			while (start > 0
+					&& comparator.compare(completions.get(start - 1), text) == 0) {
+				start--;
+			}
+		}
+
+		int end = Collections.binarySearch(completions, text + '{',
+				comparator);
+		end = -(end + 1);
+
+		return completions.subList(start, end);
+	}
+	
+	/**
+	 * Load ECMA JavaScript class completions
+	 * @param set completion set
+	 * @param text
+	 */
+	private void loadECMAClasses(Set set, String text)
+	{
+		//all the constructors
+		List list = engine.getJavaScriptTypesFactory(this).getECMAObjectTypes(this);
+		for(Iterator i = list.iterator(); i.hasNext();)
+		{
+			JavaScriptType type = (JavaScriptType) i.next();
+			//iterate through the constructors
+			if(text.length() == 0)
+			{
+				set.add(type.getClassTypeCompletion());
+			}
+			else
+			{
+				if(type.getType().getJSName().startsWith(text))
+				{
+					for(Iterator ii = type.getConstructorCompletions().values().iterator(); ii.hasNext();)
+					{
+						set.add(ii.next());
+					}
+				}
+				
+			}
+			
+		}
 	}
 	
 	/**
@@ -384,7 +444,6 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 		return Character.isJavaIdentifierPart(ch) || ch == ',' || ch == '.'
 				|| ch == getParameterListStart() || ch == getParameterListEnd()
 				|| ch == ' ' || ch == '"' || ch == '[' || ch == ']';
-
 	}
 
 

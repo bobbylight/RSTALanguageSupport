@@ -10,13 +10,15 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.functions.JSFunctionFunctions;
 public abstract class JSFunction implements JSFunctionFunctions {
 
     /**
-     * Object Function()
+     * Object Function(argument_names..., body)
      * @constructor
      * @extends Object
+     * @param argument_names Any number of string arguments, each naming one or more arguments of the Function object to be created.
+     * @param body A string that represents the body of the function. It may contain an number of JavaScript statements, separated by semicolons.
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
     */
-    public JSFunction(){
+    public JSFunction(JSString argument_names, JSString body) {
 	
     }
     

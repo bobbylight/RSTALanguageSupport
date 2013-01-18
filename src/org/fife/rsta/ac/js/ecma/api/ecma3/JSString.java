@@ -9,16 +9,17 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.functions.JSStringFunctions;
  */
 public abstract class JSString implements JSStringFunctions {
 
-    /**
-     * Object JSString()
+    
+	/**
+     * Object String(s)
      * 
      * @constructor
-     * @extends JSObject
+     * @extends Object
+     * @param s The value to be stored in a String or converted to a primitive type
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSString() {
-    }
+	public JSString(JSString s){}
 
     /**
      * <b>property length</b>

@@ -10,14 +10,15 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.functions.JSObjectFunctions;
 public abstract class JSBoolean implements JSObjectFunctions {
 
     /**
-     * Object Boolean()
+     * Object Boolean(value)
      * 
      * @constructor
      * @extends Object
+     * @param value The value to be held by the Boolean object or be converted to a boolean value
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSBoolean() {
+    public JSBoolean(JSObject value) {
     }
     
     /**

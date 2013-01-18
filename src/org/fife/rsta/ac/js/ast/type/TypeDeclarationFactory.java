@@ -11,6 +11,7 @@
 package org.fife.rsta.ac.js.ast.type;
 
 import java.util.List;
+import java.util.Set;
 
 import org.fife.rsta.ac.js.ast.type.ecma.TypeDeclarations;
 import org.fife.rsta.ac.js.ast.type.ecma.e4x.ECMAvE4xAdditions;
@@ -50,7 +51,9 @@ public class TypeDeclarationFactory {
 		return ecma.getAllClasses();
 	}
 	
-	
+	public List getAllJavaScriptTypes() {
+		return ecma.getAllJavaScriptTypeDeclarations();
+	}
 
 	/**
 	 * @return Instance of TypeDeclarationFactory
@@ -152,14 +155,30 @@ public class TypeDeclarationFactory {
 		ecma.addTypeDeclaration(name, dec);
 	}
 	
-	public static String getClassName(String lookup) throws RuntimeException
-	{
+	public static String getClassName(String lookup) throws RuntimeException {
 		TypeDeclaration td = Instance().getTypeDeclaration(lookup);
 		if(td != null) {
 			return td.getQualifiedName();
 		}
 		//else
 		throw new RuntimeException("Error finding TypeDeclaration for: " + lookup);
+	}
+	
+	/**
+	 * 
+	 * @return a list of ECMA JavaScriptObjects
+	 */
+	public Set getECMAScriptObjects() {
+		return ecma.getJavaScriptObjects();
+	}
+	
+	/**
+	 * Answers the question whether an object can be instantiated (i.e has a constructor) 
+	 * @param name name of class to test
+	 * 
+	 */
+	public boolean canJavaScriptBeInstantiated(String name) {
+		return ecma.canECMAObjectBeInstantiated(name);
 	}
 	
 }

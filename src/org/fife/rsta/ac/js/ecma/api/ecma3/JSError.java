@@ -10,16 +10,30 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.functions.JSObjectFunctions;
 public abstract class JSError implements JSObjectFunctions {
 
 	/**
-	 * Object Error(message)
-	 * 
-	 * @super Object
-	 * @constructor
-	 * @param {String} message
-	 * @memberOf Error
-	 * @since Standard ECMA-262 3rd. Edition
-	 * @since Level 2 Document Object Model Core Definition.
-	 */
+	* Object Error()
+	* 
+	* @super Object
+	* @constructor
+	* 
+	* @memberOf Error
+	* @since Standard ECMA-262 3rd. Edition
+	* @since Level 2 Document Object Model Core Definition.
+	*/
 	public JSError() {
+		
+	}
+	
+	/**
+	* Object Error(message)
+	* 
+	* @super Object
+	* @constructor
+	* @param <i>message</i> An optional error message that provides details about the exception
+	* @memberOf Error
+	* @since Standard ECMA-262 3rd. Edition
+	* @since Level 2 Document Object Model Core Definition.
+	*/
+	public JSError(JSString message) {
 	}
 
 	/**

@@ -218,7 +218,7 @@ public class JavaScriptDocUrlhandler implements ExternalURLHandler {
 						JavaScriptLanguageSupport jls = getJavaScriptLanguageSupport();
 						ClassFile cf = jls.getJarManager().getClassEntry(clazz);
 						if (cf!=null) {
-							JSClassCompletion cc = new JSClassCompletion(c.getProvider(), cf);
+							JSClassCompletion cc = new JSClassCompletion(c.getProvider(), cf, true);
 							callback.showSummaryFor(cc, anchor);
 						}
 					}
@@ -258,7 +258,7 @@ public class JavaScriptDocUrlhandler implements ExternalURLHandler {
 						cf = jls.getJarManager().getClassEntry(clazz);
 					}
 					if (cf!=null) {
-						JSClassCompletion cc = new JSClassCompletion(c.getProvider(), cf);
+						JSClassCompletion cc = new JSClassCompletion(c.getProvider(), cf, true);
 						callback.showSummaryFor(cc, null);
 					}
 					else {

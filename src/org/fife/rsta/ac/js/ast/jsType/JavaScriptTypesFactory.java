@@ -21,9 +21,13 @@ import org.fife.rsta.ac.java.classreader.ClassFile;
 import org.fife.rsta.ac.java.classreader.FieldInfo;
 import org.fife.rsta.ac.java.classreader.MemberInfo;
 import org.fife.rsta.ac.java.classreader.MethodInfo;
+import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
 import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
+import org.fife.rsta.ac.js.ast.type.ecma.TypeDeclarations.JavaScriptObject;
 import org.fife.rsta.ac.js.completion.JSBeanCompletion;
+import org.fife.rsta.ac.js.completion.JSClassCompletion;
+import org.fife.rsta.ac.js.completion.JSConstructorCompletion;
 import org.fife.rsta.ac.js.completion.JSFieldCompletion;
 import org.fife.rsta.ac.js.completion.JSFunctionCompletion;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
@@ -118,8 +122,7 @@ public abstract class JavaScriptTypesFactory {
 			TypeDeclaration type) {
 
 		if (cf != null) {
-			readMethodsAndFieldsFromTypeDeclaration(cachedType,
-					provider,  manager, cf);
+			readMethodsAndFieldsFromTypeDeclaration(cachedType, provider,  manager, cf);
 		}
 	}
 
@@ -155,6 +158,12 @@ public abstract class JavaScriptTypesFactory {
 		boolean staticOnly = cachedType.getType().isStaticsOnly();
 		boolean supportsBeanProperties = cachedType.getType().supportsBeanProperties();
 		boolean isJSType = TypeDeclarationFactory.Instance().isJavaScriptType(cachedType.getType());
+		
+		//set the class type only for JavaScript types for now
+		if(isJSType) {
+			cachedType.setClassTypeCompletion(new JSClassCompletion(provider, cf, false));
+		}
+		
 		// get methods
 		int methodCount = cf.getMethodCount();
 		for (int i = 0; i < methodCount; i++) {
@@ -170,6 +179,15 @@ public abstract class JavaScriptTypesFactory {
 					JSBeanCompletion beanCompletion = new JSBeanCompletion(
 							provider, info, jarManager);
 					cachedType.addCompletion(beanCompletion);
+				}
+			}
+			
+			//load constructors for JavaScript types only
+			if(isJSType && info.isConstructor() && !SPECIAL_METHOD.equals(info.getName())) {
+				if(TypeDeclarationFactory.Instance().canJavaScriptBeInstantiated(cachedType.getType().getQualifiedName()))
+				{
+					JSConstructorCompletion completion = new JSConstructorCompletion(provider, info);
+					cachedType.addConstructor(completion);
 				}
 			}
 		}
@@ -209,8 +227,8 @@ public abstract class JavaScriptTypesFactory {
 		}
 	}
 	
-	public static boolean ignoreClass(String className)
-	{
+	
+	public static boolean ignoreClass(String className) {
 		return UNSUPPORTED_COMPLETIONS.contains(className);
 	}
 
@@ -325,7 +343,7 @@ public abstract class JavaScriptTypesFactory {
 			Set completions) {
 
 		if (cachedType != null) {
-			HashMap completionsForType = cachedType.getCompletions();
+			HashMap completionsForType = cachedType.getMethodFieldCompletions();
 			for (Iterator i = completionsForType.values().iterator(); i
 					.hasNext();) {
 				completions.add(i.next());
@@ -352,6 +370,27 @@ public abstract class JavaScriptTypesFactory {
 	
 	public JavaScriptType makeJavaScriptType(TypeDeclaration type) {
 		return new JavaScriptType(type);
+	}
+	
+	/**
+	 * Return all the JavaScript types that are part of the EMCA API
+	 * @param provider SourceCompletionProvider
+	 * @return
+	 */
+	public List getECMAObjectTypes(SourceCompletionProvider provider) {
+		ArrayList constructors = new ArrayList();
+		//no constructors... we'd better load them
+		Set types = TypeDeclarationFactory.Instance().getECMAScriptObjects();
+		JarManager manager = provider.getJarManager();
+		for(Iterator i = types.iterator(); i.hasNext();) {
+			JavaScriptObject object = (JavaScriptObject) i.next();
+			TypeDeclaration type = TypeDeclarationFactory.Instance().getTypeDeclaration(object.getName());
+			JavaScriptType js = getCachedType(type, manager, provider, null);
+			if(js != null) {
+				constructors.add(js);
+			}
+		}
+		return constructors;
 	}
 	
 }

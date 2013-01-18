@@ -5,27 +5,32 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.util.Iterator;
 import javax.swing.Icon;
+import javax.swing.text.JTextComponent;
 
-import org.fife.rsta.ac.java.AbstractJavaSourceCompletion;
-import org.fife.rsta.ac.java.IconFactory;
 import org.fife.rsta.ac.java.Util;
 import org.fife.rsta.ac.java.buildpath.SourceLocation;
-import org.fife.rsta.ac.java.classreader.AccessFlags;
 import org.fife.rsta.ac.java.classreader.ClassFile;
 import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
 import org.fife.rsta.ac.java.rjc.ast.TypeDeclaration;
+import org.fife.rsta.ac.js.IconFactory;
+import org.fife.rsta.ac.js.JavaScriptHelper;
 import org.fife.rsta.ac.js.SourceCompletionProvider;
+import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
+import org.fife.ui.autocomplete.BasicCompletion;
 import org.fife.ui.autocomplete.CompletionProvider;
 
 
-public class JSClassCompletion extends AbstractJavaSourceCompletion {
+public class JSClassCompletion extends BasicCompletion implements JSCompletion {
 
 	private ClassFile cf;
+	private boolean qualified;
 
 
-	public JSClassCompletion(CompletionProvider provider, ClassFile cf) {
-		super(provider, cf.getClassName(false));
+	public JSClassCompletion(CompletionProvider provider, ClassFile cf, boolean qualified) {
+		super(provider, TypeDeclarationFactory.convertJavaScriptType(cf.getClassName(true), qualified));
 		this.cf = cf;
+		this.qualified = qualified;
+		setRelevance(DEFAULT_CLASS_RELEVANCE);
 	}
 
 
@@ -42,7 +47,7 @@ public class JSClassCompletion extends AbstractJavaSourceCompletion {
 		else if(o.toString().equalsIgnoreCase(toString())) {
 			if (o instanceof JSClassCompletion) {
 				JSClassCompletion c2 = (JSClassCompletion) o;
-				return getClassName(true).compareTo(c2.getClassName(true));
+				return getReplacementText().compareTo(c2.getReplacementText());
 			}
 		}
 		return super.compareTo(o);
@@ -54,6 +59,20 @@ public class JSClassCompletion extends AbstractJavaSourceCompletion {
 			((JSClassCompletion)obj).getReplacementText().equals(getReplacementText());
 	}
 
+	public String getAlreadyEntered(JTextComponent comp) {
+		String temp = getProvider().getAlreadyEnteredText(comp);
+		int lastDot = JavaScriptHelper
+				.findLastIndexOfJavaScriptIdentifier(temp);
+		if (lastDot > -1) {
+			return temp.substring(lastDot + 1);
+		}
+		if(temp.indexOf("new") != -1)
+		{
+			return "";
+		}
+		
+		return temp;
+	}
 
 	/**
 	 * Returns the name of the class represented by this completion.
@@ -64,60 +83,12 @@ public class JSClassCompletion extends AbstractJavaSourceCompletion {
 	 * @see #getPackageName()
 	 */
 	public String getClassName(boolean fullyQualified){
-		return cf.getClassName(fullyQualified);
+		return TypeDeclarationFactory.convertJavaScriptType(cf.getClassName(fullyQualified), fullyQualified);
 	}
 
 
 	public Icon getIcon() {
-
-		// TODO: Add functionality to ClassFile to make this simpler.
-
-		boolean isInterface = false;
-		boolean isPublic = false;
-		//boolean isProtected = false;
-		//boolean isPrivate = false;
-		boolean isDefault = false;
-
-		int access = cf.getAccessFlags();
-		if ((access&AccessFlags.ACC_INTERFACE)>0) {
-			isInterface = true;
-		}
-
-		else if (org.fife.rsta.ac.java.classreader.Util.isPublic(access)) {
-			isPublic = true;
-		}
-//		else if (org.fife.rsta.ac.java.classreader.Util.isProtected(access)) {
-//			isProtected = true;
-//		}
-//		else if (org.fife.rsta.ac.java.classreader.Util.isPrivate(access)) {
-//			isPrivate = true;
-//		}
-		else {
-			isDefault = true;
-		}
-
-		IconFactory fact = IconFactory.get();
-		String key = null;
-
-		if (isInterface) {
-			if (isDefault) {
-				key = IconFactory.DEFAULT_INTERFACE_ICON;
-			}
-			else {
-				key = IconFactory.INTERFACE_ICON;
-			}
-		}
-		else {
-			if (isDefault) {
-				key = IconFactory.DEFAULT_CLASS_ICON;
-			}
-			else if (isPublic) {
-				key = IconFactory.CLASS_ICON;
-			}
-		}
-
-		return fact.getIcon(key, cf.isDeprecated());
-
+		return IconFactory.getIcon(IconFactory.DEFAULT_CLASS_ICON);
 	}
 
 
@@ -158,13 +129,13 @@ public class JSClassCompletion extends AbstractJavaSourceCompletion {
 		}
 
 		// Default to the fully-qualified class name.
-		return cf.getClassName(true);
+		return TypeDeclarationFactory.convertJavaScriptType(cf.getClassName(true), qualified);
 
 	}
 
 
 	public String getToolTipText() {
-		return "class " + getReplacementText();
+		return "type " + getReplacementText();
 	}
 
 
@@ -174,7 +145,6 @@ public class JSClassCompletion extends AbstractJavaSourceCompletion {
 
 
 	public void rendererText(Graphics g, int x, int y, boolean selected) {
-System.out.println("aaaaaaaaaaaaaaaaaaaa");
 		String s = cf.getClassName(false);
 		g.drawString(s, x, y);
 		FontMetrics fm = g.getFontMetrics();
@@ -185,23 +155,43 @@ System.out.println("aaaaaaaaaaaaaaaaaaaa");
 		}
 		x = newX;
 
-		s = " - ";
-		g.drawString(s, x, y);
-		x += fm.stringWidth(s);
-
-		String pkgName = cf.getClassName(true);
-		int lastIndexOf = pkgName.lastIndexOf('.');
-		if (lastIndexOf != -1) { // Class may not be in a package
-			pkgName = pkgName.substring(0, lastIndexOf);
-			Color origColor = g.getColor();
-			if (!selected) {
-				g.setColor(Color.GRAY);
-			}
-			g.drawString(pkgName, x, y);
-			if (!selected) {
-				g.setColor(origColor);
+		if(qualified)
+		{
+			s = " - ";
+			g.drawString(s, x, y);
+			x += fm.stringWidth(s);
+	
+			String pkgName = cf.getClassName(true);
+			int lastIndexOf = pkgName.lastIndexOf('.');
+			if (lastIndexOf != -1) { // Class may not be in a package
+				pkgName = pkgName.substring(0, lastIndexOf);
+				Color origColor = g.getColor();
+				if (!selected) {
+					g.setColor(Color.GRAY);
+				}
+				g.drawString(pkgName, x, y);
+				if (!selected) {
+					g.setColor(origColor);
+				}
 			}
 		}
 
 	}
+
+
+	public String getEnclosingClassName(boolean fullyQualified) {
+		return cf.getClassName(fullyQualified);
+	}
+
+
+	public String getLookupName() {
+		return  getReplacementText();
+	}
+
+
+	public String getType(boolean qualified) {
+		return getClassName(qualified);
+	}
+	
+	
 }

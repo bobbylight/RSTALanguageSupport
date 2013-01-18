@@ -72,7 +72,7 @@ public class JavaScriptHelper {
 	 * @param text to parse
 	 * @return expression statement text from source
 	 */
-	public static final String parseEnteredText(String text) {
+	public static final ParseText parseEnteredText(String text) {
 		CompilerEnvirons env = new CompilerEnvirons();
 		env.setIdeMode(true);
 		env.setErrorReporter(new ErrorReporter() {
@@ -97,16 +97,18 @@ public class JavaScriptHelper {
 		env.setRecoverFromErrors(true);
 		Parser parser = new Parser(env);
 		StringReader r = new StringReader(text);
+		ParseText pt = new ParseText();
 		try {
 			AstRoot root = parser.parse(r, null, 0);
 			ParseTextVisitor visitor = new ParseTextVisitor(text);
 			root.visitAll(visitor);
-			return visitor.getLastNodeSource();
+			pt.isNew = visitor.isNew();
+			pt.text = visitor.getLastNodeSource();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "";
+		return pt;
 	}
 
 
@@ -526,6 +528,7 @@ public class JavaScriptHelper {
 
 		private AstNode lastNode;
 		private String text;
+		private boolean isNew;
 		
 		private ParseTextVisitor(String text) {
 			this.text = text;
@@ -543,15 +546,30 @@ public class JavaScriptHelper {
 				case Token.FALSE:
 					lastNode = node;
 					break;
+				case Token.NEW:
+					isNew = true;
+					break;
 			}
 			return true;
 		}
 
 
 		public String getLastNodeSource() {
-			return lastNode != null ? lastNode.toSource() : text;
+			return lastNode != null ? lastNode.toSource() : isNew ? "" : text;
+		}
+		
+		public boolean isNew()
+		{
+			return isNew;
 		}
 
+	}
+	
+	public static class ParseText
+	{
+		public String text = "";
+		public boolean isNew;
+		
 	}
 
 }

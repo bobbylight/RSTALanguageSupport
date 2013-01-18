@@ -42,13 +42,21 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 
 	public JSFunctionCompletion(CompletionProvider provider,
 			MethodInfo methodInfo, boolean showParameterType) {
-		super(provider, methodInfo.getName(), null);
+		super(provider, getMethodName(methodInfo), null);
 		this.methodData = new JSMethodData(methodInfo,
 				((SourceCompletionProvider) provider).getJarManager());
 		List params = populateParams(methodData, showParameterType);
 		setParams(params);
 	}
-
+	
+	private static String getMethodName(MethodInfo info)
+	{
+		if(info.isConstructor()){
+			return TypeDeclarationFactory.convertJavaScriptType(info.getClassFile().getClassName(true), false);
+		} else {
+			return info.getName();
+		}
+	}
 
 	private List populateParams(JSMethodData methodData,
 			boolean showParameterType) {

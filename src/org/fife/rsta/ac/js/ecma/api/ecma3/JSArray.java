@@ -19,6 +19,32 @@ public abstract class JSArray implements JSArrayFunctions {
 	public JSArray() {
 
 	}
+	
+	/**
+	 * Object Array(size)
+	 * 
+	 * @constructor
+	 * @extends Object
+	 * @param size The desired number of elements in the array. The returned value has its <b>length</b> field set to <b><i>size</b></i>
+	 * @since Standard ECMA-262 3rd. Edition
+	 * @since Level 2 Document Object Model Core Definition.
+	 */
+	public JSArray(JSNumber size) {
+
+	}
+	
+	/**
+	 * Object Array(element0, ... elementn)
+	 * 
+	 * @constructor
+	 * @extends Object
+	 * @param elements  An argument list of two or more values. The <b>length</b> field set to the number of arguments.
+	 * @since Standard ECMA-262 3rd. Edition
+	 * @since Level 2 Document Object Model Core Definition.
+	 */
+	public JSArray(JSObject element0, JSObject elementn) {
+
+	}
 
 
 	/**

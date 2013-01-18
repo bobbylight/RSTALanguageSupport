@@ -26,7 +26,7 @@ public class JSR223Type extends JavaScriptType {
 	 */
 	protected JSCompletion _getCompletion(String completionLookup,
 			SourceCompletionProvider provider) {
-		JSCompletion completion = (JSCompletion) typeCompletions
+		JSCompletion completion = (JSCompletion) methodFieldCompletions
 				.get(completionLookup);
 		if (completion != null) {
 			return completion;
@@ -83,7 +83,7 @@ public class JSR223Type extends JavaScriptType {
 	// get a list of all potential method matches
 	private void getPotentialLookupList(String name, HashSet completionMatches, JavaScriptType type) {
 		
-		Map typeCompletions = type.typeCompletions;
+		Map typeCompletions = type.methodFieldCompletions;
 		
 		for (Iterator i = typeCompletions.keySet().iterator(); i.hasNext();) {
 			String key = (String) i.next();
