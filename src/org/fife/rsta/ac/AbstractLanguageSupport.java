@@ -16,9 +16,12 @@ import java.util.Map;
 import java.util.Set;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.ListCellRenderer;
+import javax.swing.UIManager;
 
 import org.fife.ui.autocomplete.AutoCompletion;
+import org.fife.ui.autocomplete.CompletionCellRenderer;
 import org.fife.ui.autocomplete.CompletionProvider;
+import org.fife.ui.autocomplete.Util;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 
@@ -115,6 +118,21 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	 */
 	protected ListCellRenderer createDefaultCompletionCellRenderer() {
 		return new DefaultListCellRenderer();
+	}
+
+
+	/**
+	 * Attempts to delegate rendering to a Substance cell renderer.
+	 *
+	 * @param ccr The cell renderer to modify.
+	 */
+	private void delegateToSubstanceRenderer(CompletionCellRenderer ccr) {
+		try {
+			ccr.delegateToSubstanceRenderer();
+		} catch (Exception e) {
+			// Never happens if Substance is on the classpath.
+			e.printStackTrace();
+		}
 	}
 
 
@@ -255,6 +273,14 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	public void setDefaultCompletionCellRenderer(ListCellRenderer r) {
 		if (r==null) {
 			r = createDefaultCompletionCellRenderer();
+		}
+		if (r instanceof CompletionCellRenderer &&
+				Util.getUseSubstanceRenderers()) {
+			if (UIManager.getLookAndFeel().getClass().getName().
+					indexOf(".Substance")>-1) {
+				CompletionCellRenderer ccr = (CompletionCellRenderer)r;
+				delegateToSubstanceRenderer(ccr);
+			}
 		}
 		renderer = r;
 	}
