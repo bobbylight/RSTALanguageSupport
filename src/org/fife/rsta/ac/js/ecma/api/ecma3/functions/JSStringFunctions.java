@@ -60,7 +60,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSNumber indexOf(JSNumber searchString, JSNumber startPosition);
+    public JSNumber indexOf(JSString searchString, JSNumber startPosition);
 
     
     /**
@@ -74,7 +74,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSNumber lastIndexOf(JSNumber searchString, JSNumber startPosition);
+    public JSNumber lastIndexOf(JSString searchString, JSNumber startPosition);
 
     /**
      * <b>function localeCompare(otherString)</b> compare one string to another, using locale-specific ordering.
