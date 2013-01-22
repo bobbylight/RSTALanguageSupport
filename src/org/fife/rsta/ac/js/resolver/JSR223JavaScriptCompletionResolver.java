@@ -121,13 +121,25 @@ public class JSR223JavaScriptCompletionResolver extends
 		if (node.getParent() != null
 				&& node.getParent().getType() == Token.GETPROP) { // ast
 																	// parser
+			
 			String name = node.toSource();
-			String longName = node.getParent().toSource();
+			try
+			{
+				String longName = node.getParent().toSource();
+				
+				if(longName.indexOf('[') == -1 && longName.indexOf(']') == -1 &&
+						longName.indexOf('(') == -1 && longName.indexOf(')') == -1) {
 
-			// trim the text to the short name
-			int index = longName.lastIndexOf(name);
-			if (index > -1) {
-				testName = longName.substring(0, index + name.length());
+					// trim the text to the short name
+					int index = longName.lastIndexOf(name);
+					if (index > -1) {
+						testName = longName.substring(0, index + name.length());
+					}
+				}
+			}
+			catch(Exception e)
+			{
+				Logger.log(e.getMessage());
 			}
 		}
 		else {

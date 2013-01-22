@@ -300,10 +300,9 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 			text = text.substring(charIndex, text.length());
 			int sqIndex = JavaScriptHelper.findIndexOfFirstOpeningSquareBracket(text);
 			text = text.substring(sqIndex).trim();
-			if(text.indexOf('(')==-1 && text.indexOf(')')==-1 &&
-					text.indexOf('[')==-1 && text.indexOf(']')==-1)
-			{
+			if(charIndex > 0 || sqIndex > 0) {
 				text = JavaScriptHelper.trimFromLastParam(text);
+				Logger.log("SourceCompletionProvider:getAlreadyEnteredText()::afterTrim " + text);
 			}
 		}
 		

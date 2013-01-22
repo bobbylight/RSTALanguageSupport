@@ -84,16 +84,19 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	 * @return TypeDeclaration for node or null if not found.
 	 */
 	public TypeDeclaration resolveParamNode(String text) throws IOException {
-		CompilerEnvirons env = JavaScriptParser.createCompilerEnvironment(new JavaScriptParser.JSErrorReporter(), provider.getLanguageSupport());
 		
-		
-		int charIndex = JavaScriptHelper.findIndexOfFirstOpeningBracket(text);
-		env.setRecoverFromErrors(true);
-		Parser parser = new Parser(env);
-		StringReader r = new StringReader(text);
-		AstRoot root = parser.parse(r, null, 0);
-		CompilerNodeVisitor visitor = new CompilerNodeVisitor(charIndex == 0);
-		root.visitAll(visitor);
+		if(text != null) {
+			CompilerEnvirons env = JavaScriptParser.createCompilerEnvironment(new JavaScriptParser.JSErrorReporter(), provider.getLanguageSupport());
+			
+			
+			int charIndex = JavaScriptHelper.findIndexOfFirstOpeningBracket(text);
+			env.setRecoverFromErrors(true);
+			Parser parser = new Parser(env);
+			StringReader r = new StringReader(text);
+			AstRoot root = parser.parse(r, null, 0);
+			CompilerNodeVisitor visitor = new CompilerNodeVisitor(charIndex == 0);
+			root.visitAll(visitor);
+		}
 		
 		return lastJavaScriptType != null ? lastJavaScriptType.getType()
 				: TypeDeclarationFactory.getDefaultTypeDeclaration();

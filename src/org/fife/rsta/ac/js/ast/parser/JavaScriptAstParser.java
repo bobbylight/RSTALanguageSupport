@@ -172,6 +172,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 				case Token.ERROR:
 				case Token.RETURN:
 				case Token.NEW:
+				case Token.GETPROP:
 				//xml support -- ignore these
 				case Token.DEFAULTNAMESPACE:
 				case Token.XMLATTR:

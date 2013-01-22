@@ -509,15 +509,48 @@ public class JavaScriptHelper {
 	
 	/**
 	 * Trims the text from the last , from the string
+	 * Looks for ( or [ starting at the end of the string to find out where in the string to substring.
+	 * Do not need to trim off if inside either () or [].
+	 * e.g
+	 * 1, "".charAt(position).indexOf(2, "")
+	 * 
+	 * String should be trimmed at the 1, not the 2,
+	 * 
 	 * @param text
 	 * @return
 	 */
 	public static String trimFromLastParam(String text) {
 		int trim = 0;
 		if (text.lastIndexOf(',') != -1) {
+			int i1 = 0;
+			int i2 = 0;
+			char[] chars = text.toCharArray();
+			for (int i = chars.length - 1; i >= 0; i--) {
+				switch (chars[i]) {
+					case '(':
+						i1--;
+						break;
+					case '[':
+						i2--;
+						break;
+					case ')':
+						i1++;
+						break;
+					case ']':
+						i2++;
+						break;
+					case ',': {
+						if(i1 == 0 && i2 ==0) {
+							return text.substring(i+1, text.length()).trim();
+						}
+						break;
+					}
+				}
+			}
+			//not trimmed yet, so find last index and trim there
 			trim = text.lastIndexOf(',') + 1;
 		}
-		
+		//all else fails, trim 
 		String parseText = text.substring(trim, text.length());
 
 		return parseText.trim();
