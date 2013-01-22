@@ -19,6 +19,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeNode;
 
+import org.fife.ui.autocomplete.Util;
+
 
 /**
  * Base class for tree nodes in an {@link AbstractSourceTree}.  They can be
@@ -305,9 +307,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 					TreeNode node = (TreeNode)i.next();
 					if (node.isLeaf()) {
 						String text = node.toString();
-						if (text.startsWith("<html>")) { // Strip out HTML
-							text = text.replaceAll("<[^>]+>", "");
-						}
+						text = Util.stripHtml(text);
 						if (!pattern.matcher(text).find()) {
 							//System.out.println(pattern + ": Removing tree node: " + text);
 							i.remove();

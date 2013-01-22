@@ -12,6 +12,7 @@ package org.fife.rsta.ac.java.tree;
 
 import org.fife.rsta.ac.java.IconFactory;
 import org.fife.rsta.ac.java.rjc.ast.LocalVariable;
+import org.fife.ui.autocomplete.Util;
 
 
 /**
@@ -43,7 +44,7 @@ class LocalVarTreeNode extends JavaTreeNode {
 
 	public String getText(boolean selected) {
 		// Strip out HTML tags
-		return selected ? text.replaceAll("<[^>]*>", "").
+		return selected ? Util.stripHtml(text).
 				replaceAll("&lt;", "<").replaceAll("&gt;", ">") : text;
 	}
 

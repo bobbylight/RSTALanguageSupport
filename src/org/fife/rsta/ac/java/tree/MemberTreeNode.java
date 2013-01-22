@@ -20,6 +20,7 @@ import org.fife.rsta.ac.java.rjc.ast.FormalParameter;
 import org.fife.rsta.ac.java.rjc.ast.Method;
 import org.fife.rsta.ac.java.rjc.lang.Modifiers;
 import org.fife.rsta.ac.java.rjc.lang.Type;
+import org.fife.ui.autocomplete.Util;
 
 
 /**
@@ -185,7 +186,7 @@ class MemberTreeNode extends JavaTreeNode {
 
 	public String getText(boolean selected) {
 		// Strip out HTML tags
-		return selected ? text.replaceAll("<[^>]*>", "").
+		return selected ? Util.stripHtml(text).
 				replaceAll("&lt;", "<").replaceAll("&gt;", ">") : text;
 	}
 
