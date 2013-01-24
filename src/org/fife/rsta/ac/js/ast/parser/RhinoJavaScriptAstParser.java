@@ -1,5 +1,7 @@
 package org.fife.rsta.ac.js.ast.parser;
 
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.fife.rsta.ac.js.JavaScriptHelper;
@@ -9,6 +11,7 @@ import org.fife.rsta.ac.js.ast.jsType.JavaScriptTypesFactory;
 import org.fife.rsta.ac.js.ast.jsType.RhinoJavaScriptTypesFactory;
 import org.mozilla.javascript.Token;
 import org.mozilla.javascript.ast.AstNode;
+import org.mozilla.javascript.ast.AstRoot;
 
 
 /**
@@ -19,21 +22,48 @@ import org.mozilla.javascript.ast.AstNode;
 public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 
 	
+	private LinkedHashSet importClasses = new LinkedHashSet();
+	private LinkedHashSet importPackages = new LinkedHashSet();
+	
 	public RhinoJavaScriptAstParser(SourceCompletionProvider provider, int dot,
 			boolean preProcessingMode) {
 		super(provider, dot, preProcessingMode);
-		clearImportCache(provider);
 	}
 
 	/**
 	 * Clear the importPackage and importClass cache
 	 * @param provider SourceCompletionProvider
 	 */
-	private void clearImportCache(SourceCompletionProvider provider)
+	public void clearImportCache(SourceCompletionProvider provider)
 	{
 		JavaScriptTypesFactory typesFactory = provider.getJavaScriptTypesFactory();
 		if(typesFactory instanceof RhinoJavaScriptTypesFactory) {
-			((RhinoJavaScriptTypesFactory) typesFactory).clearImports();
+			((RhinoJavaScriptTypesFactory) typesFactory).clearAllImports();
+		}
+	}
+	
+	
+	public CodeBlock convertAstNodeToCodeBlock(AstRoot root, Set set,
+			String entered) {
+		try
+		{
+			return super.convertAstNodeToCodeBlock(root, set, entered);
+		}
+		finally
+		{
+			//merge import packages
+			mergeImportCache(importPackages, importClasses);
+			//clear, as these are now merged
+			importClasses.clear();
+			importPackages.clear();
+		}
+	}
+	
+	private void mergeImportCache(HashSet packages, HashSet classes)
+	{
+		JavaScriptTypesFactory typesFactory = provider.getJavaScriptTypesFactory();
+		if(typesFactory instanceof RhinoJavaScriptTypesFactory) {
+			((RhinoJavaScriptTypesFactory) typesFactory).mergeImports(packages, classes);
 		}
 	}
 	
@@ -108,12 +138,8 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 	 * @param src source text to extract the package
 	 */
 	private void processImportPackage(String src) {
-		JavaScriptTypesFactory typesFactory = getProvider().getJavaScriptTypesFactory();
-		if(typesFactory instanceof RhinoJavaScriptTypesFactory) {
-			String pkg = extractNameFromSrc(src);
-			RhinoJavaScriptTypesFactory rf = (RhinoJavaScriptTypesFactory) typesFactory;
-			rf.addImportPackage(pkg);
-		}
+		String pkg = extractNameFromSrc(src);
+		importPackages.add(pkg);
 	}
 	
 	/**
@@ -121,12 +147,8 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 	 * @param src source text to extract the class name
 	 */
 	private void processImportClass(String src) {
-		JavaScriptTypesFactory typesFactory = getProvider().getJavaScriptTypesFactory();
-		if(typesFactory instanceof RhinoJavaScriptTypesFactory) {
-			String cls = extractNameFromSrc(src);
-			RhinoJavaScriptTypesFactory rf = (RhinoJavaScriptTypesFactory) typesFactory;
-			rf.addImportClass(cls);
-		}
+		String cls = extractNameFromSrc(src);
+		importClasses.add(cls);
 	}
 	
 	

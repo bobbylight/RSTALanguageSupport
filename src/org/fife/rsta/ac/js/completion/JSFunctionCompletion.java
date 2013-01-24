@@ -244,7 +244,10 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 		return methodData.getEnclosingClassName(fullyQualified);
 	}
 	
-	
+	public JSMethodData getMethodData()
+	{
+		return methodData;
+	}
 
 	/**
 	 * Override the FunctionCompletion.Parameter to lookup the Javascript name

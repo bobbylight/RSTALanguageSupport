@@ -61,12 +61,42 @@ public class JavaScriptType {
 		methodFieldCompletions.put(completion.getLookupName(), completion);
 	}
 	
+	public JSCompletion removeCompletion(String completionLookup, SourceCompletionProvider provider)
+	{
+		JSCompletion completion = getCompletion(completionLookup, provider);
+		if(completion != null) {
+			removeCompletion(this, completion);
+		}
+		return completion;
+	}
+	
+	/**
+	 * Recursively walk through completions for this and extended classes to remove completion for this lookup name
+	 * @param type
+	 * @param lookupName
+	 */
+	private void removeCompletion(JavaScriptType type, JSCompletion completion) {
+		
+		if(type.methodFieldCompletions.containsKey(completion.getLookupName())) {
+			type.methodFieldCompletions.remove(completion.getLookupName());
+		}
+		//get extended classes and recursively remove method from them
+		for(Iterator i = type.extended.iterator(); i.hasNext();) {
+			removeCompletion((JavaScriptType) i.next(), completion);
+		}
+	}
+	
 	/**
 	 * Adds a constructor completion to CachedType object type
 	 * @param completion 
 	 */
 	public void addConstructor(JSCompletion completion) {
 		constructors.put(completion.getLookupName(), completion);
+	}
+	
+	public void removeConstructor(JSCompletion completion)
+	{
+		constructors.remove(completion.getLookupName());
 	}
 
 	/**

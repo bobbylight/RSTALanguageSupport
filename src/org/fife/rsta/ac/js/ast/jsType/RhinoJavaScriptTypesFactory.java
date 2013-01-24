@@ -35,7 +35,49 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 		importPackages.add(packageName);
 	}
 	
-	public void clearImports()
+	public void mergeImports(HashSet packages, HashSet classes)
+	{
+		mergeImports(packages, importPackages, true);
+		mergeImports(classes, importClasses, false);
+	}
+	
+	private void mergeImports(HashSet newImports, LinkedHashSet oldImports, boolean packages)
+	{
+		//iterate through the old imports and check whether the the import exists in new. If not then add to remove and remove all types for that package/class
+		HashSet remove = new HashSet();
+		for(Iterator i = oldImports.iterator(); i.hasNext();)
+		{
+			Object obj = i.next();
+			if(!newImports.contains(obj)) {
+				remove.add(obj);
+			}
+		}
+		//clear old imports
+		oldImports.clear();
+		oldImports.addAll(newImports);
+		//now iterate through the remove list and remove imports not needed
+		
+		if(!remove.isEmpty())
+		{
+			HashSet removeTypes = new HashSet();
+			for(Iterator i = remove.iterator(); i.hasNext();)
+			{
+				String name = (String) i.next();
+				for(Iterator ii = cachedTypes.keySet().iterator(); ii.hasNext();) {
+					TypeDeclaration dec = (TypeDeclaration) ii.next();
+					if((packages && dec.getQualifiedName().startsWith(name)) || (!packages && dec.getQualifiedName().equals(name)))
+					{
+						removeAllTypes((JavaScriptType) cachedTypes.get(dec));
+						removeTypes.add(dec);
+					}
+				}
+			}
+			cachedTypes.keySet().removeAll(removeTypes);
+		}
+		
+	}
+	
+	public void clearAllImports()
 	{
 		importClasses.clear();
 		importPackages.clear();
