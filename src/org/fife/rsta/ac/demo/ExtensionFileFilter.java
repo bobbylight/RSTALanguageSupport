@@ -20,7 +20,7 @@ import javax.swing.filechooser.FileFilter;
  * @author Robert Futrell
  * @version 1.0
  */
-public class ExtensionFileFilter extends FileFilter {
+class ExtensionFileFilter extends FileFilter {
 
 	private String desc;
 	private String ext;
