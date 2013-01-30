@@ -16,7 +16,7 @@ import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.KeyStroke;
 
-import org.fife.rsta.ac.AbstractLanguageSupport;
+import org.fife.rsta.ac.AbstractMarkupLanguageSupport;
 import org.fife.rsta.ac.GoToMemberAction;
 import org.fife.rsta.ac.xml.tree.XmlOutlineTree;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -42,7 +42,7 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
  * @author Robert Futrell
  * @version 1.0
  */
-public class XmlLanguageSupport extends AbstractLanguageSupport {
+public class XmlLanguageSupport extends AbstractMarkupLanguageSupport {
 
 	/**
 	 * Whether syntax errors are squiggle-underlined in the editor.
@@ -108,11 +108,11 @@ public class XmlLanguageSupport extends AbstractLanguageSupport {
 
 
 	/**
-	 * Installs extra keyboard shortcuts supported by this language support.
-	 *
-	 * @param textArea The text area to install the shortcuts into.
+	 * {@inheritDoc}
 	 */
-	private void installKeyboardShortcuts(RSyntaxTextArea textArea) {
+	protected void installKeyboardShortcuts(RSyntaxTextArea textArea) {
+
+		super.installKeyboardShortcuts(textArea);
 
 		InputMap im = textArea.getInputMap();
 		ActionMap am = textArea.getActionMap();
@@ -139,6 +139,14 @@ public class XmlLanguageSupport extends AbstractLanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	protected boolean shouldAutoCloseTag(String tag) {
+		return true;
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public void uninstall(RSyntaxTextArea textArea) {
 
 		uninstallImpl(textArea);
@@ -154,11 +162,11 @@ public class XmlLanguageSupport extends AbstractLanguageSupport {
 
 
 	/**
-	 * Uninstalls any keyboard shortcuts specific to this language support.
-	 * 
-	 * @param textArea The text area to uninstall the actions from.
+	 * {@inheritDoc}
 	 */
-	private void uninstallKeyboardShortcuts(RSyntaxTextArea textArea) {
+	protected void uninstallKeyboardShortcuts(RSyntaxTextArea textArea) {
+
+		super.uninstallKeyboardShortcuts(textArea);
 
 		InputMap im = textArea.getInputMap();
 		ActionMap am = textArea.getActionMap();

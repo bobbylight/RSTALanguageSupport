@@ -10,10 +10,13 @@
  */
 package org.fife.rsta.ac.php;
 
+import java.util.HashSet;
+import java.util.Set;
 import javax.swing.ListCellRenderer;
 
-import org.fife.rsta.ac.AbstractLanguageSupport;
+import org.fife.rsta.ac.AbstractMarkupLanguageSupport;
 import org.fife.rsta.ac.html.HtmlCellRenderer;
+import org.fife.rsta.ac.html.HtmlLanguageSupport;
 import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
@@ -24,12 +27,17 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
  * @author Robert Futrell
  * @version 1.0
  */
-public class PhpLanguageSupport extends AbstractLanguageSupport {
+public class PhpLanguageSupport extends AbstractMarkupLanguageSupport {
 
 	/**
 	 * The completion provider.  This is shared amongst all PHP text areas.
 	 */
 	private PhpCompletionProvider provider;
+
+	/**
+	 * A cached set of tags that require closing tags.
+	 */
+	private static Set tagsToClose = new HashSet();
 
 
 	/**
@@ -39,6 +47,7 @@ public class PhpLanguageSupport extends AbstractLanguageSupport {
 		setAutoActivationEnabled(true);
 		setParameterAssistanceEnabled(true);
 		setShowDescWindow(true);
+		tagsToClose = HtmlLanguageSupport.getTagsToClose();
 	}
 
 
@@ -72,6 +81,7 @@ public class PhpLanguageSupport extends AbstractLanguageSupport {
 		AutoCompletion ac = createAutoCompletion(provider);
 		ac.install(textArea);
 		installImpl(textArea, ac);
+		installKeyboardShortcuts(textArea);
 
 		textArea.setToolTipSupplier(null);
 
@@ -81,8 +91,17 @@ public class PhpLanguageSupport extends AbstractLanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	protected boolean shouldAutoCloseTag(String tag) {
+		return tagsToClose.contains(tag.toLowerCase());
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public void uninstall(RSyntaxTextArea textArea) {
 		uninstallImpl(textArea);
+		uninstallKeyboardShortcuts(textArea);
 	}
 
 

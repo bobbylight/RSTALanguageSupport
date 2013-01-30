@@ -75,7 +75,7 @@ while (chomp($line = <INFILE>)) {
 close(INFILE);
 
 
-# create mapping of tags to their attribuets, mapping of attributes to their
+# create mapping of tags to their attributes, mapping of attributes to their
 # descriptions, etc.
 my %tagsToAttributes;
 my %attrsToDesc;
@@ -97,12 +97,24 @@ while (chomp($line = <INFILE>)) {
 	$attr =~ s!\s+$!!g;
 	$attrDesc =~ s!^\s+!!g;
 	$attrDesc =~ s!\s+$!!g;
+	my $negated = 0;
+	if ($elemsStr =~ /^All elements but /) {
+		$elemsStr =~ s/All elements but //;
+		$negated = 1;
+	}
 	my @elems = split(", ", $elemsStr);
-	foreach my $elem (@elems) {
-		$elem = lc($elem);
-		$elem =~ s!^\s+!!g;
-		$elem =~ s!\s+$!!g;
-		push(@{$tagsToAttributes{$elem}}, $attr);
+	if ($negated) { # Add this attribute to all elements except the ones in @elems
+		foreach my $elem (keys(%tagToDesc)) {
+			push(@{$tagsToAttributes{$elem}}, $attr) if (!grep(/^$elem$/, @elems))
+		}
+	}
+	else { # Add this attribute to all elements in @elems
+		foreach my $elem (@elems) {
+			$elem = lc($elem);
+			$elem =~ s!^\s+!!g;
+			$elem =~ s!\s+$!!g;
+			push(@{$tagsToAttributes{$elem}}, $attr);
+		}
 	}
 	if (defined($attrDesc) && length($attrDesc)>0) {
 		$attrsToDesc{$attr} = $attrDesc;
