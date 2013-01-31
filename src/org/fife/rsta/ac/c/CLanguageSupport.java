@@ -76,6 +76,7 @@ public class CLanguageSupport extends AbstractLanguageSupport {
 	 */
 	public void uninstall(RSyntaxTextArea textArea) {
 		uninstallImpl(textArea);
+		textArea.setToolTipSupplier(null);
 	}
 
 
