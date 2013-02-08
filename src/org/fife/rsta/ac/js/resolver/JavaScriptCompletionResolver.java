@@ -278,8 +278,8 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 				}
 			}
 
-			if (JavaScriptHelper.isInfixOnly(node))
-				return true;
+			//if (JavaScriptHelper.isInfixOnly(node))
+			//	return true;
 
 			return false;
 		}

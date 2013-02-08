@@ -135,7 +135,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 					break;
 				}
 				case Token.ASSIGN: {
-					reassignVariable(child);
+					reassignVariable(child, block, offset);
 					break;
 				}
 				case Token.EXPR_VOID: {
@@ -200,7 +200,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	}
 
 
-	private void reassignVariable(AstNode assign) {
+	private void reassignVariable(AstNode assign, CodeBlock block, int locationOffSet) {
 		Assignment assignNode = (Assignment) assign;
 		// maybe a variable
 		AstNode leftNode = assignNode.getLeft();
@@ -222,6 +222,41 @@ public class JavaScriptAstParser extends JavaScriptParser {
 								.contains(dot))) {
 					// Set reference to new type
 					dec.setTypeDeclaration(rightNode, preProcessingMode);
+				}
+				else
+				{
+					//assume we can add variable as we are trying to assign to name
+					addVariableToResolver(leftNode, rightNode, block, locationOffSet);
+				}
+			}
+		}
+	}
+	
+	private void addVariableToResolver(AstNode name, AstNode target, CodeBlock block, int offset)
+	{
+		JavaScriptVariableDeclaration dec = extractVariableFromNode(name,
+				block, offset, target);
+		if (dec != null
+				&& target != null
+				&& JavaScriptHelper.canResolveVariable(name, target)) {
+					dec.setTypeDeclaration(target);
+		}
+		else {
+			dec = null;
+		}
+		if (dec != null) {
+			if (canAddVariable(block)) {
+				// add declaration to resolver if one is found
+				if (preProcessingMode) {
+					block.setStartOffSet(0);
+				}
+
+				if (preProcessingMode) {
+					provider.getVariableResolver()
+							.addPreProcessingVariable(dec);
+				}
+				else {
+					provider.getVariableResolver().addLocalVariable(dec);
 				}
 			}
 		}
@@ -538,31 +573,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 		AstNode target = initializer.getTarget();
 
 		if (target != null) {
-			JavaScriptVariableDeclaration dec = extractVariableFromNode(target,
-					block, offset, initializer.getInitializer());
-			if (dec != null
-					&& initializer.getInitializer() != null
-					&& JavaScriptHelper.canResolveVariable(target, initializer
-							.getInitializer())) {
-				dec.setTypeDeclaration(initializer.getInitializer());
-			}
-			if (dec != null) {
-				if (canAddVariable(block)) {
-					// add declaration to resolver if one is found
-					if (preProcessingMode) {
-						block.setStartOffSet(0);
-					}
-
-					if (preProcessingMode) {
-						provider.getVariableResolver()
-								.addPreProcessingVariable(dec);
-					}
-					else {
-						provider.getVariableResolver().addLocalVariable(dec);
-					}
-				}
-			}
-
+			addVariableToResolver(target, initializer.getInitializer(), block, offset);
 		}
 	}
 
@@ -716,7 +727,10 @@ public class JavaScriptAstParser extends JavaScriptParser {
 					   func.typeNode = initializer;
 					   functions.add(func);
 					} 
-					block.addVariable(dec);
+					if(initializer == null || JavaScriptHelper.canResolveVariable(name, initializer))
+					{
+						block.addVariable(dec);
+					}
 					break;
 				default:
 					Logger.log("... Unknown var target type: "

@@ -11,6 +11,7 @@
 package org.fife.rsta.ac.js;
 
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.fife.rsta.ac.js.ast.type.ArrayTypeDeclaration;
@@ -202,7 +203,7 @@ public class JavaScriptHelper {
 			}
 
 			if (isInfixOnly(typeNode)) {
-				TypeDeclaration dec = getTypeFromInFixExpression(typeNode);
+				TypeDeclaration dec = getTypeFromInFixExpression(typeNode, provider);
 				if (dec != null) {
 					return dec;
 				}
@@ -335,29 +336,27 @@ public class JavaScriptHelper {
 	private static class InfixVisitor implements NodeVisitor {
 
 		private String type = null;
-
-
+		private SourceCompletionProvider provider;
+		
+		private InfixVisitor(SourceCompletionProvider provider) {
+			this.provider = provider;
+		}
+		
 		public boolean visit(AstNode node) {
 
 			if (!(node instanceof InfixExpression)) // ignore infix expression
 			{
-				switch (node.getType()) {
-					case Token.STRING:
-						type = TypeDeclarations.ECMA_STRING;
-						break;
-					case Token.NUMBER:
-						if (type == null) {
-							type = TypeDeclarations.ECMA_NUMBER;
-						}
-						break;
-					default:
-						if (type == null
-								|| !TypeDeclarations.ECMA_STRING
-										.equals(type)) {
-							type = TypeDeclarations.ANY;
-						}
-						break;
+				JavaScriptResolver resolver = provider.getJavaScriptEngine().getJavaScriptResolver(provider);
+				TypeDeclaration dec = resolver.resolveNode(node);
+				
+				boolean isNumber = TypeDeclarations.ECMA_NUMBER.equals(dec.getAPITypeName()) || TypeDeclarations.ECMA_BOOLEAN.equals(dec.getAPITypeName());
+				if(isNumber && (type == null || (isNumber && TypeDeclarations.ECMA_NUMBER.equals(type)))) {
+					type = TypeDeclarations.ECMA_NUMBER;
 				}
+				else {
+					type = TypeDeclarations.ECMA_STRING;
+				}
+					
 			}
 
 			return true;
@@ -372,8 +371,8 @@ public class JavaScriptHelper {
 	 * @param node
 	 * @return
 	 */
-	private static TypeDeclaration getTypeFromInFixExpression(AstNode node) {
-		InfixVisitor visitor = new InfixVisitor();
+	private static TypeDeclaration getTypeFromInFixExpression(AstNode node, SourceCompletionProvider provider) {
+		InfixVisitor visitor = new InfixVisitor(provider);
 		node.visit(visitor);
 		return getTypeDeclaration(visitor.type);
 	}
