@@ -16,6 +16,7 @@ import java.util.List;
 import org.fife.rsta.ac.java.rjc.lang.Modifiers;
 import org.fife.rsta.ac.java.rjc.lang.Type;
 import org.fife.rsta.ac.java.rjc.lexer.Offset;
+import org.fife.rsta.ac.java.rjc.lexer.TokenTypes;
 
 
 /**
@@ -154,15 +155,12 @@ public class CodeBlock extends AbstractMember {
 	}
 
 
-	/**
-	 * Always returns an empty modifiers instance, since blocks don't have
-	 * modifiers.
-	 *
-	 * @return An empty modifiers instance.
-	 */
 	public Modifiers getModifiers() {
-		// TODO: static is a modifier, right?
-		return new Modifiers();
+		Modifiers modifiers = new Modifiers();
+		if (isStatic) {
+			modifiers.addModifier(TokenTypes.KEYWORD_STATIC);
+		}
+		return modifiers;
 	}
 
 

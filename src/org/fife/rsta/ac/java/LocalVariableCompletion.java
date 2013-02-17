@@ -47,6 +47,11 @@ class LocalVariableCompletion extends AbstractJavaSourceCompletion {
 	}
 
 
+	public String getToolTipText() {
+		return localVar.getType() + " " + localVar.getName();
+	}
+
+
 	public int hashCode() {
 		return getReplacementText().hashCode(); // Match equals()
 	}

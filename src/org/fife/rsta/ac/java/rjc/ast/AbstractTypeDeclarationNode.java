@@ -23,6 +23,7 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 
 	private Package pkg;
 	private Modifiers modifiers;
+	private TypeDeclaration parentType;
 	private List childTypes;
 	private Offset bodyStartOffs;
 	private Offset bodyEndOffs;
@@ -55,6 +56,7 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 		if (childTypes==null) {
 			childTypes = new ArrayList(1); // Usually small
 		}
+		type.setParentType(this);
 		childTypes.add(type);
 	}
 
@@ -200,6 +202,14 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	}
 
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public TypeDeclaration getParentType() {
+		return parentType;
+	}
+
+
 	private void init() {
 		memberList = new ArrayList();
 	}
@@ -207,6 +217,14 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 
 	public boolean isDeprecated() {
 		return deprecated;
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean isStatic() {
+		return modifiers==null ? false : modifiers.isStatic();
 	}
 
 
@@ -244,6 +262,14 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	 */
 	public void setPackage(Package pkg) {
 		this.pkg = pkg;
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void setParentType(TypeDeclaration parentType) {
+		this.parentType = parentType;
 	}
 
 

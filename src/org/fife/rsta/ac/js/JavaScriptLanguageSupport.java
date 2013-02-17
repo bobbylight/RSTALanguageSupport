@@ -177,13 +177,14 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 		JavaScriptParser parser = new JavaScriptParser(this, textArea);
 		textArea.putClientProperty(PROPERTY_LANGUAGE_PARSER, parser);
 		textArea.addParser(parser);
+		textArea.setToolTipSupplier(p);
 
 		Info info = new Info(textArea, p, parser);
 		parserToInfoMap.put(parser, info);
 
 		installKeyboardShortcuts(textArea);
 		
-		//Set XML on JavascriptTokenMaker
+		// Set XML on JavascriptTokenMaker
 		JavaScriptTokenMaker.setE4xSupported(isXmlAvailable());
 
 	}
@@ -280,6 +281,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 		}
 		textArea.removeParser(parser);
 		textArea.putClientProperty(PROPERTY_LANGUAGE_PARSER, null);
+		textArea.setToolTipSupplier(null);
 
 		// Object listener = textArea.getClientProperty(PROPERTY_LISTENER);
 		// if (listener instanceof Listener) { // Should always be true

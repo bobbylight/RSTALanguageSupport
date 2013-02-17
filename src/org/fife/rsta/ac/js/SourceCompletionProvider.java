@@ -11,14 +11,21 @@
 package org.fife.rsta.ac.js;
 
 import java.awt.Cursor;
+import java.awt.Point;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.Element;
 import javax.swing.text.JTextComponent;
+import javax.swing.text.Segment;
 
 import org.fife.rsta.ac.ShorthandCompletionCache;
 import org.fife.rsta.ac.java.JarManager;
@@ -97,6 +104,72 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	public void setShorthandCache(ShorthandCompletionCache shorthandCache) {
 		this.shorthandCache = shorthandCache;
 	}
+
+
+private String lastCompletionsAtText = null;
+private List lastParameterizedCompletionsAt = null;
+	/**
+	 * {@inheritDoc}
+	 */
+	public List getCompletionsAt(JTextComponent tc, Point p) {
+
+		int offset = tc.viewToModel(p);
+		if (offset<0 || offset>=tc.getDocument().getLength()) {
+			lastCompletionsAtText = null;
+			return lastParameterizedCompletionsAt = null;
+		}
+
+		Segment s = new Segment();
+		Document doc = tc.getDocument();
+		Element root = doc.getDefaultRootElement();
+		int line = root.getElementIndex(offset);
+		Element elem = root.getElement(line);
+		int start = elem.getStartOffset();
+		int end = elem.getEndOffset() - 1;
+
+		try {
+
+			doc.getText(start, end-start, s);
+
+			// Get the valid chars before the specified offset.
+			int startOffs = s.offset + (offset-start) - 1;
+			while (startOffs>=s.offset && Character.isLetterOrDigit(s.array[startOffs])) {
+				startOffs--;
+			}
+
+			// Get the valid chars at and after the specified offset.
+			int endOffs = s.offset + (offset-start);
+			while (endOffs<s.offset+s.count && Character.isLetterOrDigit(s.array[endOffs])) {
+				endOffs++;
+			}
+
+			int len = endOffs - startOffs - 1;
+			if (len<=0) {
+				return lastParameterizedCompletionsAt = null;
+			}
+			String text = new String(s.array, startOffs+1, len);
+
+			if (text.equals(lastCompletionsAtText)) {
+				return lastParameterizedCompletionsAt;
+			}
+
+			// Get a list of all Completions matching the text.
+			AstRoot ast = this.parent.getASTRoot();
+			Set set = new HashSet();
+			CodeBlock block = iterateAstRoot(ast, set, text, tc.getCaretPosition(), false);
+			recursivelyAddLocalVars(set, block, dot, null, false, false);
+			lastCompletionsAtText = text;
+			return lastParameterizedCompletionsAt = new ArrayList(set);
+
+		} catch (BadLocationException ble) {
+			ble.printStackTrace(); // Never happens
+		}
+
+		lastCompletionsAtText = null;
+		return lastParameterizedCompletionsAt = null;
+
+	}
+
 
 	/**
 	 * {@inheritDoc}

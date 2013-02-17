@@ -10,6 +10,7 @@
  */
 package org.fife.rsta.ac.java.rjc.ast;
 
+import org.fife.rsta.ac.java.rjc.lang.Modifiers;
 import org.fife.rsta.ac.java.rjc.lexer.Offset;
 
 
@@ -36,6 +37,15 @@ abstract class AbstractMember extends AbstractASTNode implements Member {
 
 	public TypeDeclaration getParentTypeDeclaration() {
 		return parentTypeDec;
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean isStatic() {
+		Modifiers modifiers = getModifiers();
+		return modifiers!=null && modifiers.isStatic();
 	}
 
 

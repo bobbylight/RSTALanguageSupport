@@ -11,7 +11,6 @@
 package org.fife.rsta.ac.js;
 
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.fife.rsta.ac.js.ast.type.ArrayTypeDeclaration;

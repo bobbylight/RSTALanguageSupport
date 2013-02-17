@@ -153,11 +153,14 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		JavaParser parser = new JavaParser(textArea);
 		textArea.putClientProperty(PROPERTY_LANGUAGE_PARSER, parser);
 		textArea.addParser(parser);
+		textArea.setToolTipSupplier(p);
 
 		Info info = new Info(textArea, p, parser);
 		parserToInfoMap.put(parser, info);
 
 		installKeyboardShortcuts(textArea);
+
+		textArea.setLinkGenerator(new JavaLinkGenerator(this));
 
 	}
 
@@ -195,6 +198,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		}
 		textArea.removeParser(parser);
 		textArea.putClientProperty(PROPERTY_LANGUAGE_PARSER, null);
+		textArea.setToolTipSupplier(null);
 
 		Object listener = textArea.getClientProperty(PROPERTY_LISTENER);
 		if (listener instanceof Listener) { // Should always be true
@@ -203,6 +207,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		}
 
 		uninstallKeyboardShortcuts(textArea);
+		textArea.setLinkGenerator(null);
 
 	}
 

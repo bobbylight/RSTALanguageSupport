@@ -47,6 +47,16 @@ public interface Member extends ASTNode {
 	public boolean isDeprecated();
 
 
+	/**
+	 * Shortcut for <code>getModifiers().isStatic()</code>; useful since
+	 * <code>getModifiers()</code> may return <code>null</code>.
+	 *
+	 * @return Whether this member is static.
+	 * @see #getModifiers()
+	 */
+	public boolean isStatic();
+
+
 	public void setParentTypeDeclaration(TypeDeclaration dec);
 
 

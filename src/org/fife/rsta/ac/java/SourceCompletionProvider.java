@@ -11,6 +11,7 @@
 package org.fife.rsta.ac.java;
 
 import java.awt.Cursor;
+import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -492,6 +493,15 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
+	public List getCompletionsAt(JTextComponent tc, Point p) {
+		getCompletionsImpl(tc); // Force loading of completions
+		return super.getCompletionsAt(tc, p);
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
 	protected List getCompletionsImpl(JTextComponent comp) {
 
 		comp.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -833,7 +843,7 @@ public SourceLocation  getSourceLocForClass(String className) {
 				Field field = (Field)m;
 
 				if (field.getName().equals(prefix)) {
-					System.out.println("FOUND: " + prefix + " (" + pkg + ")");
+					//System.out.println("FOUND: " + prefix + " (" + pkg + ")");
 					Type type = field.getType();
 					if (type.isArray()) {
 						ClassFile cf = getClassFileFor(cu, "java.lang.Object");

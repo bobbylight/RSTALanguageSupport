@@ -92,6 +92,12 @@ public interface TypeDeclaration extends ASTNode, TypeDeclarationContainer {
 	public List getMethodsByName(String name);
 
 
+	/**
+	 * Returns the modifiers of this type declaration.
+	 *
+	 * @return The modifier list.  This may be <code>null</code> if no
+	 *         modifiers were specified.
+	 */
 	public Modifiers getModifiers();
 
 
@@ -123,13 +129,42 @@ public interface TypeDeclaration extends ASTNode, TypeDeclarationContainer {
 	public Package getPackage();
 
 
+	/**
+	 * Returns the parent type declaration.
+	 *
+	 * @return The parent type declaration, or <code>null</code> if there isn't
+	 *             one.
+	 * @see #setParentType(TypeDeclaration)
+	 */
+	public TypeDeclaration getParentType();
+
+
 	public String getTypeString();
 
 
 	public boolean isDeprecated();
 
 
+	/**
+	 * Shortcut for <code>getModifiers().isStatic()</code>; useful since
+	 * <code>getModifiers()</code> may return <code>null</code>.
+	 *
+	 * @return Whether this type declaration is static.
+	 * @see #getModifiers()
+	 */
+	public boolean isStatic();
+
+
 	public void setDocComment(String comment);
+
+
+	/**
+	 * Sets the parent type declaration for this type declaration.
+	 *
+	 * @param parentType The parent type declaration.
+	 * @see #getParentType()
+	 */
+	public void setParentType(TypeDeclaration parentType);
 
 
 }
