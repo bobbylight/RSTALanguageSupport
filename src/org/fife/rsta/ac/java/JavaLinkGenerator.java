@@ -10,12 +10,14 @@
  */
 package org.fife.rsta.ac.java;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.text.BadLocationException;
 
 import org.fife.rsta.ac.java.rjc.ast.CodeBlock;
 import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
+import org.fife.rsta.ac.java.rjc.ast.FormalParameter;
 import org.fife.rsta.ac.java.rjc.ast.LocalVariable;
 import org.fife.rsta.ac.java.rjc.ast.Member;
 import org.fife.rsta.ac.java.rjc.ast.Method;
@@ -85,7 +87,7 @@ class JavaLinkGenerator implements LinkGenerator {
 							prev = RSyntaxUtilities.getPreviousImportantToken(
 									textArea, line-1);
 						}
-						if (prev!=null && prev.isSingleChar(Token.SEPARATOR, '.')) {
+						if (prev!=null && prev.isSingleChar('.')) {
 							// Not a field or method defined in this class.
 							break;
 						}
@@ -101,7 +103,7 @@ class JavaLinkGenerator implements LinkGenerator {
 
 					}
 
-					else {
+					else if (!t.isCommentOrWhitespace()) {
 						prev = t;
 					}
 
@@ -145,37 +147,51 @@ class JavaLinkGenerator implements LinkGenerator {
 
 					// First, check for a local variable in methods/static blocks
 					if (!method && deepestTypeDec) {
-						OUTER:
+
 						for (Iterator i=td.getMemberIterator(); i.hasNext(); ) {
 	
+							Method m = null; // Nasty!  Clean this code up
 							Member member = (Member)i.next();
 							CodeBlock block = null;
 
+							// Check if a method or static block contains offs
 							if (member instanceof Method) {
-								Method m = (Method)member;
+								m = (Method)member;
 								if (m.getBodyContainsOffset(offs) && m.getBody()!=null) {
 									deepestContainingMemberStatic = m.isStatic();
 									block = m.getBody().getDeepestCodeBlockContaining(offs);
 								}
 							}
-
 							else if (member instanceof CodeBlock) {
 								block = (CodeBlock)member;
 								deepestContainingMemberStatic = block.isStatic();
 								block = block.getDeepestCodeBlockContaining(offs);
 							}
 
+							// If so, scan its locals
 							if (block!=null) {
 								String varName = t.getLexeme();
+								// Local variables first, in reverse order
 								List locals = block.getLocalVarsBefore(offs);
+								Collections.reverse(locals);
 								for (Iterator j=locals.iterator(); j.hasNext(); ) {
 									LocalVariable local = (LocalVariable)j.next();
 									if (varName.equals(local.getName())) {
 										start = local.getNameStartOffset();
 										end = local.getNameEndOffset();
-										break OUTER;
 									}
 								}
+								// Then arguments, if any.
+								if (start==-1 && m!=null) {
+									for (int j=0; j<m.getParameterCount(); j++) {
+										FormalParameter p = m.getParameter(j);
+										if (varName.equals(p.getName())) {
+											start = p.getNameStartOffset();
+											end = p.getNameEndOffset();
+										}
+									}
+								}
+								break; // No other code block will contain offs
 							}
 	
 						}
