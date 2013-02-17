@@ -425,13 +425,16 @@ case KEYWORD_WHILE:
 
 
 	private TypeDeclaration _getClassOrInterfaceDeclaration(CompilationUnit cu,
-			Scanner s, TypeDeclarationContainer addTo) throws IOException {
+			Scanner s, TypeDeclarationContainer addTo, Modifiers modList)
+					throws IOException {
 
 		log("Entering _getClassOrInterfaceDeclaration");
 		Token t = s.yyPeekNonNull(
 						"class, enum, interface or @interface expected");
 
-		Modifiers modList = _getModifierList(cu, s);
+		if (modList==null) { // Not yet read in
+			modList = _getModifierList(cu, s);
+		}
 		t = s.yylexNonNull("class, enum, interface or @interface expected");
 
 		TypeDeclaration td = null;
@@ -881,7 +884,7 @@ OUTER:
 				for (int i=tokenList.size()-1; i>=0; i--) {
 					s.yyPushback((Token)tokenList.get(i));
 				}
-				/*TypeDeclaration type = */_getClassOrInterfaceDeclaration(cu, s, iDec);
+				/*TypeDeclaration type = */_getClassOrInterfaceDeclaration(cu, s, iDec, modList);
 			}
 		}
 
@@ -1026,7 +1029,7 @@ OUTER:
 				for (int i=tokenList.size()-1; i>=0; i--) {
 					s.yyPushback((Token)tokenList.get(i));
 				}
-				/*TypeDeclaration type = */_getClassOrInterfaceDeclaration(cu, s, classDec);
+				/*TypeDeclaration type = */_getClassOrInterfaceDeclaration(cu, s, classDec, modList);
 			}
 		}
 
@@ -1397,7 +1400,7 @@ OUTER:
 		s.yyPushback(t); // Probably some modifier, e.g. "public"
 
 		String docComment = s.getLastDocComment();
-		TypeDeclaration td = _getClassOrInterfaceDeclaration(cu, s, cu);
+		TypeDeclaration td = _getClassOrInterfaceDeclaration(cu, s, cu, null);
 		td.setDocComment(docComment); // May be null
 		return td;
 
