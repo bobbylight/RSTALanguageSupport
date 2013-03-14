@@ -24,7 +24,12 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 
 /**
- * Language support for HTML.
+ * Language support for HTML.  This currently provides the following:
+ * 
+ * <ul>
+ *    <li>Code completion for HTML5 tags and attributes.</li>
+ *    <li>Automatic creation of closing tags for non-self-closing tags.</li>
+ * </ul>
  *
  * @author Robert Futrell
  * @version 1.0
