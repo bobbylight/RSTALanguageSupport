@@ -22,7 +22,6 @@ import org.fife.rsta.ac.java.rjc.ast.LocalVariable;
 import org.fife.rsta.ac.java.rjc.ast.Member;
 import org.fife.rsta.ac.java.rjc.ast.Method;
 import org.fife.rsta.ac.java.rjc.ast.TypeDeclaration;
-import org.fife.ui.rsyntaxtextarea.DefaultToken;
 import org.fife.ui.rsyntaxtextarea.LinkGenerator;
 import org.fife.ui.rsyntaxtextarea.LinkGeneratorResult;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -80,7 +79,7 @@ class JavaLinkGenerator implements LinkGenerator {
 
 						// RSTA's tokens are pooled and re-used, so we must
 						// defensively make a copy of the one we want to keep!
-						Token token = new DefaultToken(t);
+						Token token = new Token(t);
 						boolean isMethod = false;
 
 						if (prev==null) {
