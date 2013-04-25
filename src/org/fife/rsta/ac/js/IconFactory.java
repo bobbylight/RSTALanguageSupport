@@ -38,6 +38,7 @@ public class IconFactory {
 	public static final String STATIC_VAR_ICON = "static_var";
 	public static final String DEFAULT_VARIABLE_ICON = "default_variable";
 	public static final String DEFAULT_CLASS_ICON = "default_class";
+	public static final String JSDOC_ITEM_ICON		= "jsdoc_item";
 
 	private Map iconMap;
 
@@ -66,6 +67,8 @@ public class IconFactory {
 				loadIcon("org/fife/rsta/ac/js/img/field_default_obj.gif"));
 		iconMap.put(DEFAULT_CLASS_ICON,
 				loadIcon("org/fife/rsta/ac/js/img/class_obj.gif"));
+		iconMap.put(JSDOC_ITEM_ICON,
+				loadIcon("org/fife/rsta/ac/js/img/jdoc_tag_obj.gif"));
 		iconMap.put(EMPTY_ICON, new EmptyIcon(16));
 
 	}

@@ -43,20 +43,25 @@ public class JavaScriptCompletionProvider extends
 	private JavaScriptLanguageSupport languageSupport;
 
 
-	public JavaScriptCompletionProvider(JarManager jarManager, JavaScriptLanguageSupport languageSupport) {
-		this(new SourceCompletionProvider(languageSupport.isXmlAvailable()), jarManager, languageSupport);
+	public JavaScriptCompletionProvider(JarManager jarManager,
+									JavaScriptLanguageSupport languageSupport) {
+		this(new SourceCompletionProvider(languageSupport.isXmlAvailable()),
+				jarManager, languageSupport);
 	}
 
 
 	public JavaScriptCompletionProvider(SourceCompletionProvider provider,
-			JarManager jarManager, JavaScriptLanguageSupport languageSupport) {
+			JarManager jarManager, JavaScriptLanguageSupport ls) {
 		super(provider);
 		this.sourceProvider = (SourceCompletionProvider) getDefaultCompletionProvider();
 		this.sourceProvider.setJarManager(jarManager);
-		this.languageSupport = languageSupport;
+		this.languageSupport = ls;
 		
-		setShorthandCompletionCache(new JavaScriptShorthandCompletionCache(sourceProvider, new DefaultCompletionProvider(), languageSupport.isXmlAvailable()));
+		setShorthandCompletionCache(new JavaScriptShorthandCompletionCache(
+				sourceProvider, new DefaultCompletionProvider(), ls.isXmlAvailable()));
 		sourceProvider.setParent(this);
+
+		setDocCommentCompletionProvider(new JsDocCompletionProvider());
 	}
 
 
@@ -82,8 +87,8 @@ public class JavaScriptCompletionProvider extends
 	/**
 	 * Set short hand completion cache
 	 */
-	public void setShorthandCompletionCache(ShorthandCompletionCache shorthandCache)
-	{
+	public void setShorthandCompletionCache(
+							ShorthandCompletionCache shorthandCache) {
 		sourceProvider.setShorthandCache(shorthandCache);
 		//reset comment completions too
 		setCommentCompletions(shorthandCache);
@@ -93,8 +98,7 @@ public class JavaScriptCompletionProvider extends
 	 * load the comment completions from the short hand cache
 	 * @param shorthandCache
 	 */
-	private void setCommentCompletions(ShorthandCompletionCache shorthandCache)
-	{
+	private void setCommentCompletions(ShorthandCompletionCache shorthandCache){
 		AbstractCompletionProvider provider = shorthandCache.getCommentProvider();
 		if(provider != null) {
 			for(Iterator i = shorthandCache.getCommentCompletions().iterator(); i.hasNext();) {
