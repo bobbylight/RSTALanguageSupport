@@ -48,11 +48,11 @@ class JsDocCompletionProvider extends DefaultCompletionProvider {
 
 		// Parameterized (simple) tags
 		addCompletion(new JsDocParameterizedCompletion(this, "@param", "@param {type} varName",
-				"@param {${}} ${varName} ${cursor}", IconFactory.TEMPLATE_ICON));
+				"@param {${}} ${varName} ${cursor}"));
 		addCompletion(new JsDocParameterizedCompletion(this, "@return", "@return {type} description",
-				"@return {${type}} ${}", IconFactory.TEMPLATE_ICON));
+				"@return {${type}} ${}"));
 		addCompletion(new JsDocParameterizedCompletion(this, "@returns", "@returns {type} description",
-				"@returns {${type}} ${}", IconFactory.TEMPLATE_ICON));
+				"@returns {${type}} ${}"));
 		
 		// Inline tags
 		addCompletion(new JsDocParameterizedCompletion(this, "{@link}", "{@link}", "{@link ${}}${cursor}"));
