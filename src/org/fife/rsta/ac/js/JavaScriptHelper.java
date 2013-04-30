@@ -40,7 +40,7 @@ public class JavaScriptHelper {
 	private static final String INFIX = org.mozilla.javascript.ast.InfixExpression.class
 			.getName();
 
-
+	
 	/**
 	 * Test whether the start of the variable is the same name as the variable
 	 * being initialised. This is not possible.
@@ -371,9 +371,25 @@ public class JavaScriptHelper {
 	 * @return
 	 */
 	private static TypeDeclaration getTypeFromInFixExpression(AstNode node, SourceCompletionProvider provider) {
-		InfixVisitor visitor = new InfixVisitor(provider);
-		node.visit(visitor);
-		return getTypeDeclaration(visitor.type);
+		InfixExpression infix = (InfixExpression) node;
+		switch(infix.getType())
+		{
+			case Token.ADD:
+			case Token.SUB:
+			case Token.MOD:
+			case Token.MUL:
+			case Token.DIV:
+			{
+				InfixVisitor visitor = new InfixVisitor(provider);
+				infix.visit(visitor);
+				return getTypeDeclaration(visitor.type);
+			}
+		}
+		//else
+		AstNode rightExp = infix.getRight();
+		JavaScriptResolver resolver = provider.getJavaScriptEngine().getJavaScriptResolver(provider);
+		TypeDeclaration dec = resolver.resolveNode(rightExp);
+		return dec;
 	}
 	
 	
@@ -553,8 +569,8 @@ public class JavaScriptHelper {
 
 		return parseText.trim();
 	}
-
-
+	
+	
 	private static class ParseTextVisitor implements NodeVisitor {
 
 		private AstNode lastNode;
