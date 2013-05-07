@@ -6,6 +6,8 @@ import java.util.LinkedHashSet;
 
 import org.fife.rsta.ac.java.JarManager;
 import org.fife.rsta.ac.java.classreader.ClassFile;
+import org.fife.rsta.ac.js.JavaScriptHelper;
+import org.fife.rsta.ac.js.ast.parser.RhinoJavaScriptAstParser;
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
 import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 
@@ -119,17 +121,27 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 	 */
 	public ClassFile getClassFile(JarManager manager, TypeDeclaration type) {
 
-		ClassFile file = super.getClassFile(manager, type);
+		String qName = removePackagesFromType(type.getQualifiedName());
+		ClassFile file = super.getClassFile(manager, JavaScriptHelper.createNewTypeDeclaration(qName));
 		if (file == null) {
-			// try the class names
-			file = findFromClasses(manager, type.getAPITypeName());
 			if (file == null) {
-				file = findFromImport(manager, type.getAPITypeName());
+				file = findFromClasses(manager, qName);
+			}
+			if (file == null) {
+				file = findFromImport(manager, qName);
 			}
 		}
 		return file;
 	}
-
+	
+	private String removePackagesFromType(String type)
+	{
+		if(type.startsWith(RhinoJavaScriptAstParser.PACKAGES))
+		{
+			return RhinoJavaScriptAstParser.removePackages(type);
+		}
+		return type;
+	}
 
 	/**
 	 * Look for class file using imported classes

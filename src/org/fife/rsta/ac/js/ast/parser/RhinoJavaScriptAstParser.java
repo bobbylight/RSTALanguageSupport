@@ -21,6 +21,7 @@ import org.mozilla.javascript.ast.AstRoot;
  */
 public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 
+	public static final String PACKAGES = "Packages.";
 	
 	private LinkedHashSet importClasses = new LinkedHashSet();
 	private LinkedHashSet importPackages = new LinkedHashSet();
@@ -28,6 +29,7 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 	public RhinoJavaScriptAstParser(SourceCompletionProvider provider, int dot,
 			boolean preProcessingMode) {
 		super(provider, dot, preProcessingMode);
+		clearImportCache(provider);
 	}
 
 	/**
@@ -115,6 +117,32 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 		return false;
 	}
 	
+	public static  String removePackages(String src)
+	{
+		if(src.startsWith(PACKAGES))
+		{
+			String pkg = src.substring(PACKAGES.length());
+			if(pkg != null)
+			{
+				StringBuffer sb = new StringBuffer();
+				//remove any non java characters
+				char[] chars = pkg.toCharArray(); 
+				for(int i =0; i<chars.length; i++)
+				{
+					char ch = chars[i];
+					if(Character.isJavaIdentifierPart(ch) || ch == '.'){
+						sb.append(ch);
+					}
+				}
+				if(sb.length() > 0) {
+					return sb.toString();
+				}
+			}
+		}
+		return src;
+	}
+	
+	
 	/**
 	 * @param src String to extract name
 	 * @return import statement from withing the ( and ) 
@@ -128,9 +156,9 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 		int startIndex = src.indexOf("(");
 		int endIndex = src.indexOf(")");
 		if(startIndex != -1 && endIndex != -1) {
-			return src.substring(startIndex + 1, endIndex);
+			return removePackages(src.substring(startIndex + 1, endIndex));
 		}
-		return src;
+		return removePackages(src);
 	}
 	
 	/**
@@ -140,6 +168,7 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 	private void processImportPackage(String src) {
 		String pkg = extractNameFromSrc(src);
 		importPackages.add(pkg);
+		mergeImportCache(importPackages, importClasses);
 	}
 	
 	/**
@@ -149,6 +178,7 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 	private void processImportClass(String src) {
 		String cls = extractNameFromSrc(src);
 		importClasses.add(cls);
+		mergeImportCache(importPackages, importClasses);
 	}
 	
 	
