@@ -29,7 +29,6 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 	public RhinoJavaScriptAstParser(SourceCompletionProvider provider, int dot,
 			boolean preProcessingMode) {
 		super(provider, dot, preProcessingMode);
-		clearImportCache(provider);
 	}
 
 	/**
@@ -40,7 +39,7 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 	{
 		JavaScriptTypesFactory typesFactory = provider.getJavaScriptTypesFactory();
 		if(typesFactory instanceof RhinoJavaScriptTypesFactory) {
-			((RhinoJavaScriptTypesFactory) typesFactory).clearAllImports();
+			((RhinoJavaScriptTypesFactory) typesFactory).clearImportCache();
 		}
 	}
 	
@@ -168,7 +167,6 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 	private void processImportPackage(String src) {
 		String pkg = extractNameFromSrc(src);
 		importPackages.add(pkg);
-		mergeImportCache(importPackages, importClasses);
 	}
 	
 	/**
@@ -178,7 +176,6 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 	private void processImportClass(String src) {
 		String cls = extractNameFromSrc(src);
 		importClasses.add(cls);
-		mergeImportCache(importPackages, importClasses);
 	}
 	
 	

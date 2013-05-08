@@ -54,11 +54,9 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 				remove.add(obj);
 			}
 		}
-		//clear old imports
-		oldImports.clear();
-		oldImports.addAll(newImports);
-		//now iterate through the remove list and remove imports not needed
 		
+		
+		//now iterate through the remove list and remove imports not needed
 		if(!remove.isEmpty())
 		{
 			HashSet removeTypes = new HashSet();
@@ -77,12 +75,48 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 			cachedTypes.keySet().removeAll(removeTypes);
 		}
 		
+		if(canClearCache(newImports, oldImports))
+		{
+			//now clear and swap
+			oldImports.clear();
+			//remove types
+			clearAllImportTypes();
+			//add all imports to cached imports
+			oldImports.addAll(newImports);
+		}
 	}
 	
-	public void clearAllImports()
+	/**
+	 * Validate whether the newImports and old imports contain the same values
+	 * @param newImports
+	 * @param oldImports
+	 * @return
+	 */
+	private boolean canClearCache(HashSet newImports, LinkedHashSet oldImports) {
+		if(newImports.size() != oldImports.size()) {
+			return true;
+		}
+		
+		for(Iterator i = oldImports.iterator(); i.hasNext();)
+		{
+			String im = (String) i.next();
+			if(!newImports.contains(im)) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public void clearImportCache()
 	{
 		importClasses.clear();
 		importPackages.clear();
+		clearAllImportTypes();
+	}
+	
+	private void clearAllImportTypes()
+	{
 		HashSet removeTypes = new HashSet();
 		//clear all non ECMA (JavaScript types) for importPackage and importClass to work properly
 		for(Iterator i = cachedTypes.keySet().iterator(); i.hasNext();) {
