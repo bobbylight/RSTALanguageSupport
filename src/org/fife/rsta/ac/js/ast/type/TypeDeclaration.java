@@ -55,6 +55,11 @@ public class TypeDeclaration {
 		return pkg != null && pkg.length() > 0 ? (pkg + '.' + apiName) : apiName;
 	}
 	
+	public boolean isQualified()
+	{
+		return getQualifiedName().indexOf('.') != -1;
+	}
+	
 	public boolean isStaticsOnly() {
 		return staticsOnly;
 	}

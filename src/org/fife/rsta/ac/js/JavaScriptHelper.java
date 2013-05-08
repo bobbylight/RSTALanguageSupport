@@ -291,7 +291,13 @@ public class JavaScriptHelper {
 	private static TypeDeclaration processNewNode(AstNode typeNode) {
 		String newName = findNewExpressionString(typeNode);
 		if (newName != null) {
-			return findOrMakeTypeDeclaration(newName);
+			
+			TypeDeclaration newType = createNewTypeDeclaration(newName);
+			if(newType.isQualified()) {
+				return newType;
+			} else {
+				return findOrMakeTypeDeclaration(newName);
+			}
 		}
 		return null;
 	}
