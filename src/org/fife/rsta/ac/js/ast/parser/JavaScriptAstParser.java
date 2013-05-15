@@ -44,9 +44,9 @@ import org.mozilla.javascript.ast.WhileLoop;
 
 public class JavaScriptAstParser extends JavaScriptParser {
 
-
 	private ArrayList functions = new ArrayList();
-	
+
+
 	public JavaScriptAstParser(SourceCompletionProvider provider, int dot,
 			boolean preProcessingMode) {
 		super(provider, dot, preProcessingMode);
@@ -61,10 +61,11 @@ public class JavaScriptAstParser extends JavaScriptParser {
 		setFunctionValues();
 		return block;
 	}
-	
+
+
 	private void setFunctionValues() {
-		//iterate through any found functions and set their types
-		for(Iterator i = functions.iterator(); i.hasNext();) {
+		// iterate through any found functions and set their types
+		for (Iterator i = functions.iterator(); i.hasNext();) {
 			ProcessFunctionType type = (ProcessFunctionType) i.next();
 			type.dec.setTypeDeclaration(type.typeNode);
 		}
@@ -83,6 +84,10 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	 */
 	private void addCodeBlock(Node parent, Set set, String entered,
 			CodeBlock codeBlock, int offset) {
+		
+		if(parent == null)
+			return;
+		
 		Node child = parent.getFirstChild();
 
 		while (child != null) {
@@ -173,7 +178,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 				case Token.RETURN:
 				case Token.NEW:
 				case Token.GETPROP:
-				//xml support -- ignore these
+					// xml support -- ignore these
 				case Token.DEFAULTNAMESPACE:
 				case Token.XMLATTR:
 					break;
@@ -200,7 +205,8 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	}
 
 
-	private void reassignVariable(AstNode assign, CodeBlock block, int locationOffSet) {
+	private void reassignVariable(AstNode assign, CodeBlock block,
+			int locationOffSet) {
 		Assignment assignNode = (Assignment) assign;
 		// maybe a variable
 		AstNode leftNode = assignNode.getLeft();
@@ -223,23 +229,24 @@ public class JavaScriptAstParser extends JavaScriptParser {
 					// Set reference to new type
 					dec.setTypeDeclaration(rightNode, preProcessingMode);
 				}
-				else
-				{
-					//assume we can add variable as we are trying to assign to name
-					addVariableToResolver(leftNode, rightNode, block, locationOffSet);
+				else {
+					// assume we can add variable as we are trying to assign to
+					// name
+					addVariableToResolver(leftNode, rightNode, block,
+							locationOffSet);
 				}
 			}
 		}
 	}
-	
-	private void addVariableToResolver(AstNode name, AstNode target, CodeBlock block, int offset)
-	{
+
+
+	private void addVariableToResolver(AstNode name, AstNode target,
+			CodeBlock block, int offset) {
 		JavaScriptVariableDeclaration dec = extractVariableFromNode(name,
 				block, offset, target);
-		if (dec != null
-				&& target != null
+		if (dec != null && target != null
 				&& JavaScriptHelper.canResolveVariable(name, target)) {
-					dec.setTypeDeclaration(target);
+			dec.setTypeDeclaration(target);
 		}
 		else {
 			dec = null;
@@ -379,7 +386,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	 */
 	private void processExpressionNode(Node child, CodeBlock block, Set set,
 			String entered, int offset) {
-		if(child instanceof ExpressionStatement) {
+		if (child instanceof ExpressionStatement) {
 			ExpressionStatement expr = (ExpressionStatement) child;
 			iterateNode(expr.getExpression(), set, entered, block, offset);
 		}
@@ -440,7 +447,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 				provider, fn.getName(), returnType);
 		fc.setShortDescription(jsdoc);
 		offset = fn.getAbsolutePosition() + fn.getLength();
-		
+
 		if (fn.getParamCount() > 0) {
 			List fnParams = fn.getParams();
 			List params = new ArrayList();
@@ -463,20 +470,22 @@ public class JavaScriptAstParser extends JavaScriptParser {
 			}
 			fc.setParams(params);
 		}
-		
+
 		if (preProcessingMode) {
 			block.setStartOffSet(0);
 		}
 
 		if (preProcessingMode) {
-			provider.getVariableResolver().addPreProcessingFunction(new JavaScriptFunctionDeclaration(fc.getLookupName(), offset, block, returnType));
+			provider.getVariableResolver().addPreProcessingFunction(
+					new JavaScriptFunctionDeclaration(fc.getLookupName(),
+							offset, block, returnType));
 		}
-		else
-		{
-			provider.getVariableResolver().addLocalFunction(new JavaScriptFunctionDeclaration(fc.getLookupName(), offset, block, returnType));
+		else {
+			provider.getVariableResolver().addLocalFunction(
+					new JavaScriptFunctionDeclaration(fc.getLookupName(),
+							offset, block, returnType));
 		}
-		
-		
+
 		// get body
 		addCodeBlock(fn.getBody(), set, entered, block, offset);
 		// TODO need to add functions elsewhere for autocomplete
@@ -573,7 +582,8 @@ public class JavaScriptAstParser extends JavaScriptParser {
 		AstNode target = initializer.getTarget();
 
 		if (target != null) {
-			addVariableToResolver(target, initializer.getInitializer(), block, offset);
+			addVariableToResolver(target, initializer.getInitializer(), block,
+					offset);
 		}
 	}
 
@@ -686,7 +696,6 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	}
 
 
-
 	/**
 	 * Extract the variable from the Rhino node and add to the CodeBlock
 	 * 
@@ -698,14 +707,15 @@ public class JavaScriptAstParser extends JavaScriptParser {
 			CodeBlock block, int offset) {
 		return extractVariableFromNode(node, block, offset, null);
 	}
-	
+
+
 	/**
 	 * Extract the variable from the Rhino node and add to the CodeBlock
 	 * 
 	 * @param node AstNode node from which to extract the variable
 	 * @param block code block to add the variable too
 	 * @param offset position of the variable in code
-	 * @param initializer node associated with variable 
+	 * @param initializer node associated with variable
 	 */
 	private JavaScriptVariableDeclaration extractVariableFromNode(AstNode node,
 			CodeBlock block, int offset, AstNode initializer) {
@@ -719,16 +729,19 @@ public class JavaScriptAstParser extends JavaScriptParser {
 					Name name = (Name) node;
 					dec = new JavaScriptVariableDeclaration(name
 							.getIdentifier(), offset, provider, block);
-					if(initializer != null && initializer.getType() == Token.CALL) {
-						//set the type node later for functions as these sometimes cannot be resolved until
-						//after the entire document is parsed
-					   ProcessFunctionType func = new ProcessFunctionType();
-					   func.dec = dec;
-					   func.typeNode = initializer;
-					   functions.add(func);
-					} 
-					if(initializer == null || JavaScriptHelper.canResolveVariable(name, initializer))
-					{
+					if (initializer != null
+							&& initializer.getType() == Token.CALL) {
+						// set the type node later for functions as these
+						// sometimes cannot be resolved until
+						// after the entire document is parsed
+						ProcessFunctionType func = new ProcessFunctionType();
+						func.dec = dec;
+						func.typeNode = initializer;
+						functions.add(func);
+					}
+					if (initializer == null
+							|| JavaScriptHelper.canResolveVariable(name,
+									initializer)) {
 						block.addVariable(dec);
 					}
 					break;
@@ -804,9 +817,10 @@ public class JavaScriptAstParser extends JavaScriptParser {
 		}
 
 	}
-	
-	static class ProcessFunctionType
-	{
+
+
+	static class ProcessFunctionType {
+
 		AstNode typeNode;
 		JavaScriptVariableDeclaration dec;
 	}
