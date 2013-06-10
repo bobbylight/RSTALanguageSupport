@@ -30,7 +30,7 @@ public abstract class JSBoolean implements JSObjectFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSBoolean protype;
+    public JSBoolean prototype;
     
     /**
      * <b>property constructor</b>

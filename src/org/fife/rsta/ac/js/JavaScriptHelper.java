@@ -189,7 +189,12 @@ public class JavaScriptHelper {
 					break;
 				}
 				case Token.THIS : {
-					return getTypeDeclaration(TypeDeclarations.ECMA_GLOBAL);
+					//ask the provider for the base object
+					String self = provider.getSelf();
+					if(self == null)
+						self = TypeDeclarations.ECMA_GLOBAL;
+					
+					return getTypeDeclaration(self);
 				}
 				//xml support
 				case Token.XML : {

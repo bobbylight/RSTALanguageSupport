@@ -41,7 +41,7 @@ public abstract class JSString implements JSStringFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSString protype;
+    public JSString prototype;
     
     /**
      * <b>property constructor</b>

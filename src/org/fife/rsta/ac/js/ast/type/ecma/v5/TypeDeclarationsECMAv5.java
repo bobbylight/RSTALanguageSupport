@@ -6,8 +6,6 @@ import org.fife.rsta.ac.js.ast.type.ecma.v3.TypeDeclarationsECMAv3;
 
 public class TypeDeclarationsECMAv5 extends TypeDeclarationsECMAv3 {
 
-	public static final String ECMA_VERSION = "v5";
-	
 	protected void loadTypes() {
 		//load all v3 types because all these extend them
 		super.loadTypes();

@@ -12,12 +12,17 @@ public class EMCAJavaScriptEngine implements JavaScriptEngine {
 
 	public static final String EMCA_ENGINE = "EMCA";
 	
+	private JavaScriptTypesFactory jsFactory;
+	
 	public JavaScriptResolver getJavaScriptResolver(SourceCompletionProvider provider) {
 		return new JavaScriptCompletionResolver(provider);
 	}
 
 	public JavaScriptTypesFactory getJavaScriptTypesFactory(SourceCompletionProvider provider) {
-		return JavaScriptTypesFactory.getDefaultJavaScriptTypesFactory();
+		if(jsFactory == null)
+			jsFactory = JavaScriptTypesFactory.getDefaultJavaScriptTypesFactory();
+		
+		return jsFactory;
 	}
 
 

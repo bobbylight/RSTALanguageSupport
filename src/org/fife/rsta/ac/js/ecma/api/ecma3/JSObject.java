@@ -43,7 +43,7 @@ public abstract class JSObject implements JSObjectFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSObject protype;
+    public JSObject prototype;
     
     /**
      * <b>property constructor</b>

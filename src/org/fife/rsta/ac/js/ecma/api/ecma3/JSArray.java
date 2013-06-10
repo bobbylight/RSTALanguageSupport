@@ -67,7 +67,7 @@ public abstract class JSArray implements JSArrayFunctions {
     * @since Standard ECMA-262 3rd. Edition
     * @since Level 2 Document Object Model Core Definition.
     */
-   public JSArray protype;
+   public JSArray prototype;
    
    /**
     * <b>property constructor</b>

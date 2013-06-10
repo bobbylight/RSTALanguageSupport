@@ -60,6 +60,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	private Map parserToInfoMap;
 	private JarManager jarManager;
 	private boolean xmlAvailable;
+	private boolean client;
 	private boolean strictMode;
 	private int languageVersion;
 
@@ -93,7 +94,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	{
 		//load classes
 		try {
-			List classes = TypeDeclarationFactory.Instance().setTypeDeclarationVersion(version, isXmlAvailable());
+			List classes = TypeDeclarationFactory.Instance().setTypeDeclarationVersion(version, isXmlAvailable(), isClient());
 			if (classes!=null) {
 				LibraryInfo info = new ClasspathLibraryInfo(classes,
 											new ClasspathSourceLocation());
@@ -228,6 +229,23 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	public boolean isXmlAvailable() {
 		return xmlAvailable;
 	}
+	
+	/**
+    * @return Whether the JavaScript support supports client/browser objects
+    */
+	public boolean isClient() {
+		return client;
+	}
+	
+	/**
+    * Set whether the JavaScript support supports client/browser objects
+    * @param client - true if client mode is supported
+    */
+	public void setClient(boolean client)
+	{
+		this.client = client;
+	}
+	
 
 
 	/**

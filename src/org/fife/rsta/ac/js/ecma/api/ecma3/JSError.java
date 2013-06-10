@@ -45,7 +45,7 @@ public abstract class JSError implements JSObjectFunctions {
     * @since Standard ECMA-262 3rd. Edition
     * @since Level 2 Document Object Model Core Definition.
     */
-   public JSError protype;
+   public JSError prototype;
    
    /**
     * <b>property constructor

@@ -1,10 +1,11 @@
 package org.fife.rsta.ac.js.ast.type.ecma.e4x;
 
+import org.fife.rsta.ac.js.ast.type.ECMAAdditions;
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
 import org.fife.rsta.ac.js.ast.type.ecma.TypeDeclarations;
 
 
-public class ECMAvE4xAdditions  {
+public class ECMAvE4xAdditions implements ECMAAdditions {
 
 	public void addAdditionalTypes(TypeDeclarations typeDecs) {
 		typeDecs.addTypeDeclaration(TypeDeclarations.ECMA_GLOBAL, new TypeDeclaration(

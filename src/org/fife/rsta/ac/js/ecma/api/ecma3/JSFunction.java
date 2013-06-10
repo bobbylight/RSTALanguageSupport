@@ -41,7 +41,7 @@ public abstract class JSFunction implements JSFunctionFunctions {
     * @since Standard ECMA-262 3rd. Edition
     * @since Level 2 Document Object Model Core Definition.
     */
-   public JSFunction protype;
+   public JSFunction prototype;
    
    /**
     * <b>property constructor</b>

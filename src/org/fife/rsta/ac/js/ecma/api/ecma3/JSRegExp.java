@@ -31,7 +31,7 @@ public abstract class JSRegExp implements JSRegExpFunctions {
     * @since Standard ECMA-262 3rd. Edition
     * @since Level 2 Document Object Model Core Definition.
     */
-    public JSRegExp protype;
+    public JSRegExp prototype;
    
 	/**
     * <b>property constructor</b>

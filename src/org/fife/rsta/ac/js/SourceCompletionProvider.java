@@ -38,6 +38,7 @@ import org.fife.rsta.ac.js.ast.jsType.JavaScriptType;
 import org.fife.rsta.ac.js.ast.jsType.JavaScriptTypesFactory;
 import org.fife.rsta.ac.js.ast.parser.JavaScriptParser;
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
+import org.fife.rsta.ac.js.ast.type.ecma.TypeDeclarations;
 import org.fife.rsta.ac.js.completion.JSVariableCompletion;
 import org.fife.rsta.ac.js.engine.JavaScriptEngine;
 import org.fife.rsta.ac.js.engine.JavaScriptEngineFactory;
@@ -68,6 +69,8 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	private ShorthandCompletionCache shorthandCache;
 	
 	private boolean xmlSupported;
+	//The base class for the Completions
+	private String self;
 
 	public SourceCompletionProvider(boolean xmlSupported) {
 		this(null, xmlSupported);
@@ -81,6 +84,8 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 		setAutoActivationRules(false, "."); // Default - only activate after '.'
 		engine = JavaScriptEngineFactory.Instance().getEngineFromCache(javaScriptEngine);
 		javaScriptTypesFactory = engine.getJavaScriptTypesFactory(this);
+		//set default for self to Global
+		setSelf(TypeDeclarations.ECMA_GLOBAL);
 	}
 
 
@@ -106,8 +111,9 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	}
 
 
-private String lastCompletionsAtText = null;
-private List lastParameterizedCompletionsAt = null;
+	private String lastCompletionsAtText = null;
+	private List lastParameterizedCompletionsAt = null;
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -317,7 +323,8 @@ private List lastParameterizedCompletionsAt = null;
 			//iterate through the constructors
 			if(text.length() == 0)
 			{
-				set.add(type.getClassTypeCompletion());
+				if(type.getClassTypeCompletion() != null)
+					set.add(type.getClassTypeCompletion());
 			}
 			else
 			{
@@ -332,6 +339,16 @@ private List lastParameterizedCompletionsAt = null;
 			}
 			
 		}
+	}
+	
+	/**
+	 * returns the Base class for the source completion provider. This is represented by a class name or ECMA lookup name 
+	 * e.g set to 'Global' for server side or 'Window' for client JavaScript support  
+     * @return base class for the completion provider 
+     */
+	public String getSelf()
+	{
+		return self;
 	}
 	
 	/**
@@ -576,6 +593,12 @@ private List lastParameterizedCompletionsAt = null;
 	public boolean isXMLSupported()
 	{
 		return xmlSupported;
+	}
+	
+	
+	public void setSelf(String self)
+	{
+		this.self = self;
 	}
 	
 	// TODO remove

@@ -79,7 +79,7 @@ public abstract class JSDate implements JSDateFunctions {
     * @since Standard ECMA-262 3rd. Edition
     * @since Level 2 Document Object Model Core Definition.
     */
-   public JSDate protype;
+   public JSDate prototype;
    
    /**
     * <b>property constructor</b>

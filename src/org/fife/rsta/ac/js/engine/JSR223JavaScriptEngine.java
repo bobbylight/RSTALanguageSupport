@@ -14,13 +14,17 @@ public class JSR223JavaScriptEngine implements JavaScriptEngine {
 	
 public static final String JSR223_ENGINE = "JSR223";
 	
+	private JavaScriptTypesFactory jsFactory;
+	
 	public JavaScriptResolver getJavaScriptResolver(SourceCompletionProvider provider) {
 		return new JSR223JavaScriptCompletionResolver(provider);
 	}
 
 
 	public JavaScriptTypesFactory getJavaScriptTypesFactory(SourceCompletionProvider provider) {
-		return new JSR223JavaScriptTypesFactory();
+		if(jsFactory == null)
+			jsFactory = new JSR223JavaScriptTypesFactory();
+		return jsFactory;
 	}
 
 
