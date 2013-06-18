@@ -1,8 +1,11 @@
 package org.fife.rsta.ac.js.engine;
 
+import java.util.List;
+
 import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.rsta.ac.js.ast.jsType.JavaScriptTypesFactory;
 import org.fife.rsta.ac.js.ast.parser.JavaScriptParser;
+import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 import org.fife.rsta.ac.js.resolver.JavaScriptResolver;
 
 
@@ -14,21 +17,34 @@ import org.fife.rsta.ac.js.resolver.JavaScriptResolver;
  *  JavaScriptTypesFactory
  *  JavaScriptParser
  */
-public interface JavaScriptEngine {
+public abstract class JavaScriptEngine {
 
+	
+	private TypeDeclarationFactory typesFactory = new TypeDeclarationFactory();
+	
+	protected JavaScriptTypesFactory jsFactory;
+	
+	
+    public List setTypeDeclarationVersion(String ecmaVersion, boolean xmlSupported, boolean client) {
+    	return typesFactory.setTypeDeclarationVersion(ecmaVersion, xmlSupported, client);
+    }
+    
+    public TypeDeclarationFactory getTypesFactory() {
+    	return typesFactory;
+    }
 	
 	/**
 	 * @param provider SourceCompletionProvider
 	 * @return JavaScriptResolver used to resolve JavaScriptType and TypeDeclaration
 	 */
-	public JavaScriptResolver getJavaScriptResolver(SourceCompletionProvider provider);
+	public abstract JavaScriptResolver getJavaScriptResolver(SourceCompletionProvider provider);
 	
 	/**
 	 * 
 	 * @param provider SourceCompletionProvider
 	 * @return JavaScriptTypesFactory that holds a cache of JavaScriptType
 	 */
-	public JavaScriptTypesFactory getJavaScriptTypesFactory(SourceCompletionProvider provider);
+	public abstract JavaScriptTypesFactory getJavaScriptTypesFactory(SourceCompletionProvider provider);
 	
 	/**
 	 * 
@@ -37,6 +53,6 @@ public interface JavaScriptEngine {
 	 * @param preProcessingMode flag whether processing script before JTextComponent's text within SourceCompletionProvider  
 	 * @return JavaScriptParser that converts AstRoot to CodeBlock
 	 */
-	public JavaScriptParser getParser(SourceCompletionProvider provider, int dot, boolean preProcessingMode);
+	public abstract JavaScriptParser getParser(SourceCompletionProvider provider, int dot, boolean preProcessingMode);
 	
 }

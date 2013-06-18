@@ -17,7 +17,7 @@ public class JavaScriptFunctionType {
 	public static int CONVERSION_NONE = 999;
 	public static int CONVERSION_JS = 99;
 
-	public final static Class BooleanClass = Kit.classOrNull("java.lang.Boolean"), 
+	public static Class BooleanClass = Kit.classOrNull("java.lang.Boolean"), 
 							  ByteClass = Kit.classOrNull("java.lang.Byte"), 
 							  CharacterClass = Kit.classOrNull("java.lang.Character"), 
 							  ClassClass = Kit.classOrNull("java.lang.Class"), 
@@ -30,12 +30,12 @@ public class JavaScriptFunctionType {
 							  ShortClass = Kit.classOrNull("java.lang.Short"), 
 							  StringClass = Kit.classOrNull("java.lang.String"), 
 							  DateClass = Kit.classOrNull("java.util.Date"), 
-							  JSBooleanClass = Kit.classOrNull(TypeDeclarationFactory.getClassName(TypeDeclarations.ECMA_BOOLEAN)),
-							  JSStringClass = Kit.classOrNull(TypeDeclarationFactory.getClassName(TypeDeclarations.ECMA_STRING)),
-							  JSNumberClass = Kit.classOrNull(TypeDeclarationFactory.getClassName(TypeDeclarations.ECMA_NUMBER)),
-							  JSObjectClass = Kit.classOrNull(TypeDeclarationFactory.getClassName(TypeDeclarations.ECMA_OBJECT)),
-							  JSDateClass = Kit.classOrNull(TypeDeclarationFactory.getClassName(TypeDeclarations.ECMA_DATE)),
-							  JSArray = Kit.classOrNull(TypeDeclarationFactory.getClassName(TypeDeclarations.ECMA_ARRAY));
+							  JSBooleanClass = null,
+							  JSStringClass = null,
+							  JSNumberClass = null,
+							  JSObjectClass = null,
+							  JSDateClass = null,
+							  JSArray = null;
 
 	private String name;
 	private List arguments;
@@ -48,15 +48,20 @@ public class JavaScriptFunctionType {
 	private static final int JSTYPE_OBJECT = 5; // object
 
 
-	private JavaScriptFunctionType(String name) {
-		this.name = name;
-		this.arguments = new ArrayList();
+	private JavaScriptFunctionType(String name, SourceCompletionProvider provider) {
+		this(name, new ArrayList(), provider);
 	}
 
 
-	private JavaScriptFunctionType(String name, List arguments) {
+	private JavaScriptFunctionType(String name, List arguments, SourceCompletionProvider provider) {
 		this.name = name;
 		this.arguments = arguments;
+		JSBooleanClass = Kit.classOrNull(provider.getTypesFactory().getClassName(TypeDeclarations.ECMA_BOOLEAN));
+		JSStringClass = Kit.classOrNull(provider.getTypesFactory().getClassName(TypeDeclarations.ECMA_STRING));
+		JSNumberClass = Kit.classOrNull(provider.getTypesFactory().getClassName(TypeDeclarations.ECMA_NUMBER));
+		JSObjectClass = Kit.classOrNull(provider.getTypesFactory().getClassName(TypeDeclarations.ECMA_OBJECT));
+		JSDateClass = Kit.classOrNull(provider.getTypesFactory().getClassName(TypeDeclarations.ECMA_DATE));
+		JSArray = Kit.classOrNull(provider.getTypesFactory().getClassName(TypeDeclarations.ECMA_ARRAY));
 	}
 
 
@@ -162,9 +167,9 @@ public class JavaScriptFunctionType {
 		compareParam = convertParamType(compareParam, provider);
 
 		try {
-			int fromCode = getJSTypeCode(param.getQualifiedName());
-			Class to = convertClassToJavaClass(compareParam.getQualifiedName());
-			Class from = convertClassToJavaClass(param.getQualifiedName());
+			int fromCode = getJSTypeCode(param.getQualifiedName(), provider.getTypesFactory());
+			Class to = convertClassToJavaClass(compareParam.getQualifiedName(), provider.getTypesFactory());
+			Class from = convertClassToJavaClass(param.getQualifiedName(), provider.getTypesFactory());
 			switch (fromCode) {
 				case JSTYPE_UNDEFINED: {
 					if (to == StringClass || to == ObjectClass) {
@@ -279,11 +284,10 @@ public class JavaScriptFunctionType {
 		} catch (ClassNotFoundException cnfe) {
 		}
 
+		TypeDeclarationFactory typesFactory = provider.getTypesFactory();
 		// check js types
-		String paramJSType = TypeDeclarationFactory.
-				convertJavaScriptType(param.getQualifiedName(), true);
-		String compareParamJSType = TypeDeclarationFactory.
-				convertJavaScriptType(compareParam.getQualifiedName(), true);
+		String paramJSType = typesFactory.convertJavaScriptType(param.getQualifiedName(), true);
+		String compareParamJSType = typesFactory.convertJavaScriptType(compareParam.getQualifiedName(), true);
 
 		try {
 			Class paramClzz = Class.forName(paramJSType);
@@ -294,8 +298,7 @@ public class JavaScriptFunctionType {
 
 		}
 
-		if (compareParam.equals(TypeDeclarationFactory
-				.getDefaultTypeDeclaration())) {
+		if (compareParam.equals(typesFactory.getDefaultTypeDeclaration())) {
 			return 4;
 		}
 
@@ -309,15 +312,14 @@ public class JavaScriptFunctionType {
 	 * @return
 	 * @throws ClassNotFoundException
 	 */
-	private Class convertClassToJavaClass(String name)
+	private Class convertClassToJavaClass(String name, TypeDeclarationFactory typesFactory)
 			throws ClassNotFoundException {
 
 		if (name.equals("any"))
 			return ObjectClass;
 
 		// check type is converted properly
-		TypeDeclaration type = TypeDeclarationFactory.Instance()
-				.getTypeDeclaration(name);
+		TypeDeclaration type = typesFactory.getTypeDeclaration(name);
 
 		String clsName = type != null ? type.getQualifiedName() : name;
 
@@ -348,11 +350,11 @@ public class JavaScriptFunctionType {
 	 * @param function String to parse e.g convertValue(java.util.String val);
 	 * @return
 	 */
-	public static JavaScriptFunctionType parseFunction(String function) {
+	/*public static JavaScriptFunctionType parseFunction(String function, SourceCompletionProvider provider) {
 		int paramStartIndex = function.indexOf('(');
 		int paramEndIndex = function.indexOf(')');
 		JavaScriptFunctionType functionType = new JavaScriptFunctionType(
-				function.substring(0, paramStartIndex));
+				function.substring(0, paramStartIndex), provider);
 
 		if (paramStartIndex > -1 && paramEndIndex > -1) {
 			// strip parameters and resolve types
@@ -369,7 +371,7 @@ public class JavaScriptFunctionType {
 		}
 
 		return functionType;
-	}
+	}*/
 
 	/**
 	 * Convenience method to parse function string and converts to JavaScriptFunctionType
@@ -382,7 +384,7 @@ public class JavaScriptFunctionType {
 		int paramStartIndex = function.indexOf('(');
 		int paramEndIndex = function.indexOf(')');
 		JavaScriptFunctionType functionType = new JavaScriptFunctionType(
-				function.substring(0, paramStartIndex));
+				function.substring(0, paramStartIndex), provider);
 
 		if (paramStartIndex > -1 && paramEndIndex > -1) {
 			// strip parameters and resolve types (trim any whitespace)
@@ -392,10 +394,9 @@ public class JavaScriptFunctionType {
 			if(paramsStr.length() > 0) {
 				String[] params = paramsStr.split(",");
 				for (int i = 0; i < params.length; i++) {
-					String param = TypeDeclarationFactory.convertJavaScriptType(
+					String param = provider.getTypesFactory().convertJavaScriptType(
 							params[i], true);
-					TypeDeclaration type = TypeDeclarationFactory.Instance()
-							.getTypeDeclaration(param);
+					TypeDeclaration type = provider.getTypesFactory().getTypeDeclaration(param);
 					if (type != null) {
 						functionType.addArgument(type);
 					}
@@ -418,15 +419,14 @@ public class JavaScriptFunctionType {
 	 * @return
 	 * @throws ClassNotFoundException
 	 */
-	private static int getJSTypeCode(String clsName)
+	private static int getJSTypeCode(String clsName, TypeDeclarationFactory typesFactory)
 			throws ClassNotFoundException {
 
 		if (clsName.equals("any")) {
 			return JSTYPE_UNDEFINED;
 		}
 
-		TypeDeclaration dec = TypeDeclarationFactory.Instance()
-				.getTypeDeclaration(clsName);
+		TypeDeclaration dec = typesFactory.getTypeDeclaration(clsName);
 		clsName = dec != null ? dec.getQualifiedName() : clsName;
 
 		Class cls = Class.forName(clsName);

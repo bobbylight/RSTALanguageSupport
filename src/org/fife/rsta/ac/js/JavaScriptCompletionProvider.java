@@ -84,6 +84,11 @@ public class JavaScriptCompletionProvider extends
 		return languageSupport;
 	}
 	
+	public SourceCompletionProvider getProvider()
+	{
+		return sourceProvider;
+	}
+	
 	/**
 	 * Set short hand completion cache
 	 */
@@ -115,8 +120,9 @@ public class JavaScriptCompletionProvider extends
 	 * 
 	 * @param root The AST.
 	 */
-	public synchronized void setASTRoot(AstRoot root) {
+	public synchronized void setASTRoot(AstRoot root, int dotPosition) {
 		this.astRoot = root;
+		sourceProvider.parseDocument(dotPosition);
 	}
 
 

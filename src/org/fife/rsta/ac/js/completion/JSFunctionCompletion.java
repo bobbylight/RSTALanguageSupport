@@ -21,7 +21,6 @@ import org.fife.rsta.ac.java.rjc.ast.Method;
 import org.fife.rsta.ac.js.IconFactory;
 import org.fife.rsta.ac.js.JavaScriptHelper;
 import org.fife.rsta.ac.js.SourceCompletionProvider;
-import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.FunctionCompletion;
@@ -42,17 +41,17 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 
 	public JSFunctionCompletion(CompletionProvider provider,
 			MethodInfo methodInfo, boolean showParameterType) {
-		super(provider, getMethodName(methodInfo), null);
+		super(provider, getMethodName(methodInfo, provider), null);
 		this.methodData = new JSMethodData(methodInfo,
 				((SourceCompletionProvider) provider).getJarManager());
 		List params = populateParams(methodData, showParameterType);
 		setParams(params);
 	}
 	
-	private static String getMethodName(MethodInfo info)
+	private static String getMethodName(MethodInfo info, CompletionProvider provider)
 	{
 		if(info.isConstructor()){
-			return TypeDeclarationFactory.convertJavaScriptType(info.getClassFile().getClassName(true), false);
+			return ((SourceCompletionProvider) provider).getTypesFactory().convertJavaScriptType(info.getClassFile().getClassName(true), false);
 		} else {
 			return info.getName();
 		}
@@ -66,8 +65,8 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 		List params = new ArrayList(count);
 		for (int i = 0; i < count; i++) {
 			String name = methodData.getParameterName(i);
-			String type = methodData.getParameterType(paramTypes, i);
-			params.add(new JSFunctionParam(type, name, showParameterType));
+			String type = methodData.getParameterType(paramTypes, i, getProvider());
+			params.add(new JSFunctionParam(type, name, showParameterType, getProvider()));
 		}
 
 		return params;
@@ -218,12 +217,12 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 
 	public String getType() {
 		String value = getType(true);
-		return TypeDeclarationFactory.convertJavaScriptType(value, false);
+		return ((SourceCompletionProvider) getProvider()).getTypesFactory().convertJavaScriptType(value, false);
 	}
 
 
 	public String getType(boolean qualified) {
-		return TypeDeclarationFactory.convertJavaScriptType(methodData
+		return ((SourceCompletionProvider) getProvider()).getTypesFactory().convertJavaScriptType(methodData
 				.getType(qualified), qualified);
 	}
 
@@ -257,17 +256,18 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 			ParameterizedCompletion.Parameter {
 
 		private boolean showParameterType;
-
+		private CompletionProvider provider;
 
 		public JSFunctionParam(Object type, String name,
-				boolean showParameterType) {
+				boolean showParameterType, CompletionProvider provider) {
 			super(type, name);
 			this.showParameterType = showParameterType;
+			this.provider = provider;
 		}
 
 
 		public String getType() {
-			return showParameterType ? TypeDeclarationFactory
+			return showParameterType ? ((SourceCompletionProvider) provider).getTypesFactory()
 					.convertJavaScriptType(super.getType(), false) : null;
 		}
 

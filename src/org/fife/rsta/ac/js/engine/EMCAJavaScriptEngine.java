@@ -8,11 +8,9 @@ import org.fife.rsta.ac.js.resolver.JavaScriptCompletionResolver;
 import org.fife.rsta.ac.js.resolver.JavaScriptResolver;
 
 
-public class EMCAJavaScriptEngine implements JavaScriptEngine {
+public class EMCAJavaScriptEngine extends JavaScriptEngine {
 
 	public static final String EMCA_ENGINE = "EMCA";
-	
-	private JavaScriptTypesFactory jsFactory;
 	
 	public JavaScriptResolver getJavaScriptResolver(SourceCompletionProvider provider) {
 		return new JavaScriptCompletionResolver(provider);
@@ -20,7 +18,7 @@ public class EMCAJavaScriptEngine implements JavaScriptEngine {
 
 	public JavaScriptTypesFactory getJavaScriptTypesFactory(SourceCompletionProvider provider) {
 		if(jsFactory == null)
-			jsFactory = JavaScriptTypesFactory.getDefaultJavaScriptTypesFactory();
+			jsFactory = JavaScriptTypesFactory.getDefaultJavaScriptTypesFactory(provider.getTypesFactory());
 		
 		return jsFactory;
 	}

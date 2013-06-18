@@ -38,6 +38,7 @@ import org.fife.rsta.ac.js.ast.jsType.JavaScriptType;
 import org.fife.rsta.ac.js.ast.jsType.JavaScriptTypesFactory;
 import org.fife.rsta.ac.js.ast.parser.JavaScriptParser;
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
+import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 import org.fife.rsta.ac.js.ast.type.ecma.TypeDeclarations;
 import org.fife.rsta.ac.js.completion.JSVariableCompletion;
 import org.fife.rsta.ac.js.engine.JavaScriptEngine;
@@ -595,10 +596,27 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 		return xmlSupported;
 	}
 	
+	public void setXMLSupported(boolean xmlSupported)
+	{
+		this.xmlSupported = xmlSupported; 
+	}
+	
 	
 	public void setSelf(String self)
 	{
 		this.self = self;
+	}
+	
+	public void parseDocument(int dot)
+	{
+		AstRoot ast = this.parent.getASTRoot();
+		Set set = new HashSet();
+		iterateAstRoot(ast, set, "", dot, false);
+	}
+	
+	public TypeDeclarationFactory getTypesFactory()
+	{
+		return engine.getTypesFactory();
 	}
 	
 	// TODO remove

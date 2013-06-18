@@ -13,6 +13,8 @@ package org.fife.rsta.ac.js.ast;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.mozilla.javascript.ast.VariableDeclaration;
+
 
 /**
  * A block of code. This can be used to implement <em>very</em> simple parsing
@@ -183,5 +185,31 @@ public class CodeBlock {
 	public void setStartOffSet(int start)
 	{
 		this.start = start;
+	}
+	
+	
+	public void debug() {
+		StringBuffer sb = new StringBuffer();
+		outputChild(sb, this, 0);
+		System.out.println(sb.toString());
+	}
+	
+	private void outputChild(StringBuffer sb, CodeBlock block, int tab) {
+		String tabs = "";
+		for(int i=0; i<tab; i++)
+		{
+			tabs = tabs + "\t";
+		}
+		sb.append(tabs);
+		sb.append("start: " + block.getStartOffset() + "\n");
+		sb.append(tabs);
+		sb.append("end: " + block.getEndOffset() + "\n");
+		sb.append(tabs);
+		sb.append("var count: " + block.getVariableDeclarationCount()+ "\n"+ "\n");
+		for(int i = 0; i < block.getChildCodeBlockCount(); i++) {
+			CodeBlock childBlock = block.getChildCodeBlock(i);
+			outputChild(sb, childBlock, tab++);
+		}
+		
 	}
 }

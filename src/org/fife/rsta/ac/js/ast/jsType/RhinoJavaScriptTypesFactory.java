@@ -26,7 +26,11 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 
 	private LinkedHashSet importClasses = new LinkedHashSet();
 	private LinkedHashSet importPackages = new LinkedHashSet();
-
+	
+	public RhinoJavaScriptTypesFactory(TypeDeclarationFactory typesFactory)
+	{
+		super(typesFactory);
+	}
 
 	public void addImportClass(String qualifiedClass) {
 		importClasses.add(qualifiedClass);
@@ -121,7 +125,7 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 		//clear all non ECMA (JavaScript types) for importPackage and importClass to work properly
 		for(Iterator i = cachedTypes.keySet().iterator(); i.hasNext();) {
 			TypeDeclaration dec = (TypeDeclaration) i.next();
-			if(!TypeDeclarationFactory.Instance().isJavaScriptType(dec) && !dec.equals(TypeDeclarationFactory.getDefaultTypeDeclaration())) {
+			if(!typesFactory.isJavaScriptType(dec) && !dec.equals(typesFactory.getDefaultTypeDeclaration())) {
 				removeAllTypes((JavaScriptType) cachedTypes.get(dec));
 				removeTypes.add(dec);
 			}
@@ -137,7 +141,7 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 	{
 		if(type != null)
 		{
-			TypeDeclarationFactory.Instance().removeType(type.getType().getQualifiedName());
+			typesFactory.removeType(type.getType().getQualifiedName());
 			if(type.getExtendedClasses().size() > 0)
 			{
 				for(Iterator i = type.getExtendedClasses().iterator(); i.hasNext();)

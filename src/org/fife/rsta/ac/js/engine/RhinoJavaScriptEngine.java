@@ -9,11 +9,9 @@ import org.fife.rsta.ac.js.resolver.JSR223JavaScriptCompletionResolver;
 import org.fife.rsta.ac.js.resolver.JavaScriptResolver;
 
 
-public class RhinoJavaScriptEngine implements JavaScriptEngine {
+public class RhinoJavaScriptEngine extends JavaScriptEngine {
 
 	public static final String RHINO_ENGINE = "RHINO";
-	
-	private JavaScriptTypesFactory jsFactory;
 	
 	public JavaScriptResolver getJavaScriptResolver(SourceCompletionProvider provider) {
 		return new JSR223JavaScriptCompletionResolver(provider);
@@ -23,7 +21,7 @@ public class RhinoJavaScriptEngine implements JavaScriptEngine {
 	public JavaScriptTypesFactory getJavaScriptTypesFactory(SourceCompletionProvider provider) {
 		
 		if(jsFactory == null)
-			jsFactory = new RhinoJavaScriptTypesFactory();
+			jsFactory = new RhinoJavaScriptTypesFactory(provider.getTypesFactory());
 		
 		return jsFactory;
 	}

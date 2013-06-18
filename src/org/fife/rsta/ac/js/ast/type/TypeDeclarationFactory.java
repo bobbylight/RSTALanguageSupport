@@ -29,11 +29,9 @@ import org.fife.rsta.ac.js.ast.type.ecma.v3.TypeDeclarationsECMAv3;
 public class TypeDeclarationFactory {
 
 	
-	private static TypeDeclarationFactory instance;
-	
 	private TypeDeclarations ecma;
 	
-	private TypeDeclarationFactory()
+	public TypeDeclarationFactory()
 	{
 		setTypeDeclarationVersion(null, false, false);
 	}
@@ -81,17 +79,6 @@ public class TypeDeclarationFactory {
 	public List getAllJavaScriptTypes() {
 		return ecma.getAllJavaScriptTypeDeclarations();
 	}
-
-	/**
-	 * @return Instance of TypeDeclarationFactory
-	 */
-	public static TypeDeclarationFactory Instance() {
-		if (instance == null)
-			instance = new TypeDeclarationFactory();
-
-		return instance;
-	}
-
 
 	/**
 	 * Removes declaration type from type cache
@@ -143,7 +130,7 @@ public class TypeDeclarationFactory {
 	 * JavaScript types e.g JSString == String, JSNumber == Number
 	 */
 
-	public static String convertJavaScriptType(String lookupName, boolean qualified) {
+	public String convertJavaScriptType(String lookupName, boolean qualified) {
 		if (lookupName != null) {
 			if (TypeDeclarations.NULL_TYPE.equals(lookupName)) { // void has no type
 				return null;
@@ -155,8 +142,7 @@ public class TypeDeclarationFactory {
 				lookupName = lookupName.substring(0, lookupName.indexOf('<'));
 			}
 			
-			String lookup = !qualified ? TypeDeclarationFactory.Instance()
-					.getJSTypeDeclarationAsString(lookupName) : lookupName;
+			String lookup = !qualified ? getJSTypeDeclarationAsString(lookupName) : lookupName;
 			
 			lookupName = lookup != null ? lookup : lookupName;
 			if (!qualified) {
@@ -174,16 +160,16 @@ public class TypeDeclarationFactory {
 	/**
 	 * @return default type declaration - ANY
 	 */
-	public static TypeDeclaration getDefaultTypeDeclaration() {
-		return TypeDeclarationFactory.Instance().getTypeDeclaration(TypeDeclarations.ANY);
+	public TypeDeclaration getDefaultTypeDeclaration() {
+		return getTypeDeclaration(TypeDeclarations.ANY);
 	}
 	
 	public void addType(String name, TypeDeclaration dec) {
 		ecma.addTypeDeclaration(name, dec);
 	}
 	
-	public static String getClassName(String lookup) throws RuntimeException {
-		TypeDeclaration td = Instance().getTypeDeclaration(lookup);
+	public String getClassName(String lookup) throws RuntimeException {
+		TypeDeclaration td = getTypeDeclaration(lookup);
 		if(td != null) {
 			return td.getQualifiedName();
 		}

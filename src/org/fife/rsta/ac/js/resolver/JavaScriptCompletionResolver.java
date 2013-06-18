@@ -14,7 +14,6 @@ import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.rsta.ac.js.ast.JavaScriptFunctionDeclaration;
 import org.fife.rsta.ac.js.ast.jsType.JavaScriptType;
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
-import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 import org.fife.rsta.ac.js.completion.JSCompletion;
 import org.fife.rsta.ac.js.completion.JSMethodData;
 import org.mozilla.javascript.CompilerEnvirons;
@@ -99,7 +98,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 		}
 		
 		return lastJavaScriptType != null ? lastJavaScriptType.getType()
-				: TypeDeclarationFactory.getDefaultTypeDeclaration();
+				: ((SourceCompletionProvider) provider).getTypesFactory().getDefaultTypeDeclaration();
 	}
 	
 	/**
@@ -108,11 +107,11 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	 * @return TypeDeclaration for node or null if not found.
 	 */
 	public TypeDeclaration resolveNode(AstNode node) {
-		if(node == null) return TypeDeclarationFactory.getDefaultTypeDeclaration();
+		if(node == null) return ((SourceCompletionProvider) provider).getTypesFactory().getDefaultTypeDeclaration();
 		CompilerNodeVisitor visitor = new CompilerNodeVisitor(true);
 		node.visit(visitor);
 		return lastJavaScriptType != null ? lastJavaScriptType.getType()
-				: TypeDeclarationFactory.getDefaultTypeDeclaration();
+				: ((SourceCompletionProvider) provider).getTypesFactory().getDefaultTypeDeclaration();
 	}
 	
 	/**
@@ -433,7 +432,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 			if (completion != null) {
 				String type = completion.getType(true);
 				if (type != null) {
-					TypeDeclaration newType = TypeDeclarationFactory.Instance()
+					TypeDeclaration newType = ((SourceCompletionProvider) provider).getTypesFactory()
 							.getTypeDeclaration(type);
 					if (newType != null) {
 						javaScriptType = provider.getJavaScriptTypesFactory()

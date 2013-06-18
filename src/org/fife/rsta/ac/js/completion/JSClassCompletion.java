@@ -27,7 +27,7 @@ public class JSClassCompletion extends BasicCompletion implements JSCompletion {
 
 
 	public JSClassCompletion(CompletionProvider provider, ClassFile cf, boolean qualified) {
-		super(provider, TypeDeclarationFactory.convertJavaScriptType(cf.getClassName(true), qualified));
+		super(provider, ((SourceCompletionProvider) provider).getTypesFactory().convertJavaScriptType(cf.getClassName(true), qualified));
 		this.cf = cf;
 		this.qualified = qualified;
 		setRelevance(DEFAULT_CLASS_RELEVANCE);
@@ -83,7 +83,7 @@ public class JSClassCompletion extends BasicCompletion implements JSCompletion {
 	 * @see #getPackageName()
 	 */
 	public String getClassName(boolean fullyQualified){
-		return TypeDeclarationFactory.convertJavaScriptType(cf.getClassName(fullyQualified), fullyQualified);
+		return ((SourceCompletionProvider) getProvider()).getTypesFactory().convertJavaScriptType(cf.getClassName(fullyQualified), fullyQualified);
 	}
 
 
@@ -129,7 +129,7 @@ public class JSClassCompletion extends BasicCompletion implements JSCompletion {
 		}
 
 		// Default to the fully-qualified class name.
-		return TypeDeclarationFactory.convertJavaScriptType(cf.getClassName(true), qualified);
+		return ((SourceCompletionProvider) getProvider()).getTypesFactory().convertJavaScriptType(cf.getClassName(true), qualified);
 
 	}
 

@@ -13,7 +13,8 @@ import org.fife.rsta.ac.java.rjc.ast.FormalParameter;
 import org.fife.rsta.ac.java.rjc.ast.Member;
 import org.fife.rsta.ac.java.rjc.ast.Method;
 import org.fife.rsta.ac.java.rjc.ast.TypeDeclaration;
-import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
+import org.fife.rsta.ac.js.SourceCompletionProvider;
+import org.fife.ui.autocomplete.CompletionProvider;
 
 
 public class JSMethodData {
@@ -109,11 +110,11 @@ public class JSMethodData {
 
 	}
 	
-	public String getParameterType(String[] paramTypes, int index)
+	public String getParameterType(String[] paramTypes, int index, CompletionProvider provider)
 	{
 		if(paramTypes != null && index < paramTypes.length)
 		{
-			return TypeDeclarationFactory.convertJavaScriptType(paramTypes[index], true);
+			return ((SourceCompletionProvider) provider).getTypesFactory().convertJavaScriptType(paramTypes[index], true);
 		}
 		return null;
 	}

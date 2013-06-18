@@ -8,7 +8,7 @@ import org.fife.rsta.ac.java.classreader.MethodInfo;
 import org.fife.rsta.ac.java.rjc.ast.Method;
 import org.fife.rsta.ac.js.IconFactory;
 import org.fife.rsta.ac.js.JavaScriptHelper;
-import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
+import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.VariableCompletion;
@@ -53,12 +53,12 @@ public class JSBeanCompletion extends VariableCompletion implements
 
 	public String getType() {
 		String value = getType(true);
-		return TypeDeclarationFactory.convertJavaScriptType(value, false);
+		return ((SourceCompletionProvider) getProvider()).getTypesFactory().convertJavaScriptType(value, false);
 	}
 
 
 	public String getType(boolean qualified) {
-		return TypeDeclarationFactory.convertJavaScriptType(methodData
+		return ((SourceCompletionProvider) getProvider()).getTypesFactory().convertJavaScriptType(methodData
 				.getType(qualified), qualified);
 	}
 

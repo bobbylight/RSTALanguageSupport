@@ -12,7 +12,6 @@ package org.fife.rsta.ac.js.ast;
 
 import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
-import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 import org.mozilla.javascript.ast.AstNode;
 
 
@@ -29,7 +28,10 @@ public class JavaScriptVariableDeclaration {
 	private boolean reassigned;
 	private TypeDeclaration originalTypeDec;
 	private CodeBlock block;
-
+	
+	private int start;
+	private int end;
+	
 
 	/**
 	 * @param name of the variable
@@ -111,7 +113,7 @@ public class JavaScriptVariableDeclaration {
 	 */
 	public String getJavaScriptTypeName() {
 		TypeDeclaration dec = getTypeDeclaration();
-		return dec != null ? dec.getJSName() : TypeDeclarationFactory
+		return dec != null ? dec.getJSName() : provider.getTypesFactory()
 				.getDefaultTypeDeclaration().getJSName();
 	}
 
@@ -133,6 +135,47 @@ public class JavaScriptVariableDeclaration {
 	
 	public CodeBlock getCodeBlock() {
 		return block;
+	}
+	
+	/**
+	 * Gets the end offset of this variable.
+	 * 
+	 * @param end the end offset.
+	 */
+	public int getEndOffset() {
+		return end;
+	}
+	
+	/**
+	 * Sets the end offset of this variable.
+	 * 
+	 * @param end the end offset.
+	 * @see #getEndOffset()
+	 */
+	public void setEndOffset(int end) {
+		this.end = end;
+	}
+
+
+	/**
+	 * Sets the start offset of this variable.
+	 * @param start the start offset
+	 * @see #getStartOffset()
+	 */
+	public void setStartOffSet(int start)
+	{
+		this.start = start;
+	}
+
+
+	/**
+	 * Gets the start offset of this variable.
+	 * @param start the start offset
+	 * 
+	 */
+	public int getStartOffSet()
+	{
+		return start;
 	}
 
 }

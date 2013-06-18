@@ -31,7 +31,6 @@ import org.fife.rsta.ac.java.JarManager;
 import org.fife.rsta.ac.java.buildpath.ClasspathLibraryInfo;
 import org.fife.rsta.ac.java.buildpath.ClasspathSourceLocation;
 import org.fife.rsta.ac.java.buildpath.LibraryInfo;
-import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 import org.fife.rsta.ac.js.completion.JavaScriptShorthandCompletion;
 import org.fife.rsta.ac.js.tree.JavaScriptOutlineTree;
 import org.fife.ui.autocomplete.AutoCompletion;
@@ -63,11 +62,15 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	private boolean client;
 	private boolean strictMode;
 	private int languageVersion;
+	private JavaScriptParser parser;
+	private JavaScriptCompletionProvider provider;
 
 	
 	public JavaScriptLanguageSupport() {
 		parserToInfoMap = new HashMap();
 		jarManager = createJarManager();
+		provider = createJavaScriptCompletionProvider();
+		setECMAVersion(null, jarManager); //load default ecma 
 		setDefaultCompletionCellRenderer(new JavaScriptCellRenderer());
 		setAutoActivationEnabled(true);
 		setParameterAssistanceEnabled(true);
@@ -84,7 +87,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	protected JarManager createJarManager() {
 
 		JarManager jarManager = new JarManager();
-		setECMAVersion(null, jarManager); //load default ecma 
+		
 		
 		return jarManager;
 
@@ -94,7 +97,8 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	{
 		//load classes
 		try {
-			List classes = TypeDeclarationFactory.Instance().setTypeDeclarationVersion(version, isXmlAvailable(), isClient());
+			List classes = provider.getProvider().getTypesFactory().setTypeDeclarationVersion(version, isXmlAvailable(), isClient());
+			provider.getProvider().setXMLSupported(isXmlAvailable());
 			if (classes!=null) {
 				LibraryInfo info = new ClasspathLibraryInfo(classes,
 											new ClasspathSourceLocation());
@@ -158,10 +162,10 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 
 	public void install(RSyntaxTextArea textArea) {
 
-		JavaScriptCompletionProvider p = createJavaScriptCompletionProvider();
+		
 		// We use a custom auto-completion.
 		// AutoCompletion ac = createAutoCompletion(p);
-		AutoCompletion ac = new JavaScriptAutoCompletion(p, textArea);
+		AutoCompletion ac = new JavaScriptAutoCompletion(provider, textArea);
 		ac.setListCellRenderer(getDefaultCompletionCellRenderer());
 		ac.setAutoCompleteEnabled(isAutoCompleteEnabled());
 		ac.setAutoActivationEnabled(isAutoActivationEnabled());
@@ -175,12 +179,12 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 		// Listener listener = new Listener(textArea);
 		// textArea.putClientProperty(PROPERTY_LISTENER, listener);
 
-		JavaScriptParser parser = new JavaScriptParser(this, textArea);
+		parser = new JavaScriptParser(this, textArea);
 		textArea.putClientProperty(PROPERTY_LANGUAGE_PARSER, parser);
 		textArea.addParser(parser);
-		textArea.setToolTipSupplier(p);
+		textArea.setToolTipSupplier(provider);
 
-		Info info = new Info(textArea, p, parser);
+		Info info = new Info(textArea, provider, parser);
 		parserToInfoMap.put(parser, info);
 
 		installKeyboardShortcuts(textArea);
@@ -188,6 +192,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 		// Set XML on JavascriptTokenMaker
 		JavaScriptTokenMaker.setE4xSupported(isXmlAvailable());
 
+		textArea.setLinkGenerator(new JavaScriptLinkGenerator(this));
 	}
 
 
@@ -330,6 +335,11 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 		am.remove("GoToType");
 
 	}
+	
+	public JavaScriptParser getJavaScriptParser()
+	{
+		return parser;
+	}
 
 
 	/**
@@ -341,6 +351,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	private static class Info implements PropertyChangeListener {
 
 		public JavaScriptCompletionProvider provider;
+		private RSyntaxTextArea textArea;
 
 
 		// public JavaScriptParser parser;
@@ -348,6 +359,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 		public Info(RSyntaxTextArea textArea,
 				JavaScriptCompletionProvider provider, JavaScriptParser parser) {
 			this.provider = provider;
+			this.textArea = textArea;
 			// this.parser = parser;
 			parser.addPropertyChangeListener(JavaScriptParser.PROPERTY_AST,
 					this);
@@ -365,7 +377,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 
 			if (JavaScriptParser.PROPERTY_AST.equals(name)) {
 				AstRoot root = (AstRoot) e.getNewValue();
-				provider.setASTRoot(root);
+				provider.setASTRoot(root, textArea.getCaretPosition());
 			}
 
 		}

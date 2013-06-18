@@ -3,8 +3,8 @@ package org.fife.rsta.ac.js.completion;
 import javax.swing.Icon;
 
 import org.fife.rsta.ac.js.IconFactory;
+import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
-import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.FunctionCompletion;
@@ -58,13 +58,13 @@ public class JavaScriptInScriptFunctionCompletion extends FunctionCompletion
 
 	public String getType() {
 		String value = getType(true);
-		return TypeDeclarationFactory.convertJavaScriptType(value, false);
+		return ((SourceCompletionProvider) getProvider()).getTypesFactory().convertJavaScriptType(value, false);
 	}
 
 
 	public String getType(boolean qualified) {
 		String type = returnType != null ? returnType.getQualifiedName() : null;
-		return TypeDeclarationFactory.convertJavaScriptType(type, qualified);
+		return ((SourceCompletionProvider) getProvider()).getTypesFactory().convertJavaScriptType(type, qualified);
 	}
 	
 	

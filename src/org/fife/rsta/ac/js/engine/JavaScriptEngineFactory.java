@@ -6,7 +6,7 @@ import java.util.HashMap;
 public class JavaScriptEngineFactory {
 
 	
-	public static final String DEFAULT = JSR223JavaScriptEngine.JSR223_ENGINE;
+	public static final String DEFAULT = EMCAJavaScriptEngine.EMCA_ENGINE;
 	
 	private HashMap supportedEngines = new HashMap();
 

@@ -13,7 +13,6 @@ import org.fife.rsta.ac.js.ast.JavaScriptFunctionDeclaration;
 import org.fife.rsta.ac.js.ast.JavaScriptVariableDeclaration;
 import org.fife.rsta.ac.js.ast.type.ArrayTypeDeclaration;
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
-import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 import org.fife.rsta.ac.js.ast.type.ecma.TypeDeclarations;
 import org.fife.rsta.ac.js.completion.JavaScriptInScriptFunctionCompletion;
 import org.fife.rsta.ac.js.resolver.JavaScriptResolver;
@@ -45,8 +44,7 @@ import org.mozilla.javascript.ast.WhileLoop;
 public class JavaScriptAstParser extends JavaScriptParser {
 
 	private ArrayList functions = new ArrayList();
-
-
+	
 	public JavaScriptAstParser(SourceCompletionProvider provider, int dot,
 			boolean preProcessingMode) {
 		super(provider, dot, preProcessingMode);
@@ -59,6 +57,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 		CodeBlock block = new CodeBlock(0);
 		addCodeBlock(root, set, entered, block, Integer.MAX_VALUE);
 		setFunctionValues();
+		provider.getLanguageSupport().getJavaScriptParser().setVariablesAndFunctions(provider.getVariableResolver());
 		return block;
 	}
 
@@ -104,8 +103,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 		}
 	}
-
-
+	
 	protected void iterateNode(AstNode child, Set set, String entered,
 			CodeBlock block, int offset) {
 
@@ -249,7 +247,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 			dec.setTypeDeclaration(target);
 		}
 		else {
-			dec = null;
+			dec.setTypeDeclaration(provider.getTypesFactory().getDefaultTypeDeclaration());
 		}
 		if (dec != null) {
 			if (canAddVariable(block)) {
@@ -465,7 +463,8 @@ public class JavaScriptAstParser extends JavaScriptParser {
 				params.add(param);
 
 				if (!preProcessingMode && canProcessNode(fn)) {
-					extractVariableFromNode(node, block, offset);
+					JavaScriptVariableDeclaration dec = extractVariableFromNode(node, block, offset);
+					provider.getVariableResolver().addLocalVariable(dec);
 				}
 			}
 			fc.setParams(params);
@@ -476,14 +475,10 @@ public class JavaScriptAstParser extends JavaScriptParser {
 		}
 
 		if (preProcessingMode) {
-			provider.getVariableResolver().addPreProcessingFunction(
-					new JavaScriptFunctionDeclaration(fc.getLookupName(),
-							offset, block, returnType));
+			provider.getVariableResolver().addPreProcessingFunction(createJavaScriptFunction(fc.getLookupName(), offset, block, returnType, fn));
 		}
 		else {
-			provider.getVariableResolver().addLocalFunction(
-					new JavaScriptFunctionDeclaration(fc.getLookupName(),
-							offset, block, returnType));
+			provider.getVariableResolver().addLocalFunction(createJavaScriptFunction(fc.getLookupName(), offset, block, returnType, fn));
 		}
 
 		// get body
@@ -493,6 +488,19 @@ public class JavaScriptAstParser extends JavaScriptParser {
 			set.add(fc);
 		}
 
+	}
+	
+	private JavaScriptFunctionDeclaration createJavaScriptFunction(String lookupName, int offset, CodeBlock block, TypeDeclaration returnType, FunctionNode fn) {
+		Name name = fn.getFunctionName();
+		JavaScriptFunctionDeclaration function = new JavaScriptFunctionDeclaration(lookupName, offset, block, returnType);
+		if(name != null) {
+			int start = name.getAbsolutePosition();
+			int end = start + name.getLength();
+			function.setNameStartOffSet(start);
+			function.setNameEndOffSet(end);
+			function.setFunctionName(fn.getName());
+		}
+		return function;
 	}
 
 
@@ -663,12 +671,11 @@ public class JavaScriptAstParser extends JavaScriptParser {
 							.resolveNode(iteratedObject);
 					if (iteratorDec instanceof ArrayTypeDeclaration) {
 						// always assume a number for arrays
-						dec.setTypeDeclaration(TypeDeclarationFactory
-								.Instance().getTypeDeclaration(
+						dec.setTypeDeclaration(provider.getTypesFactory().getTypeDeclaration(
 										TypeDeclarations.ECMA_NUMBER));
 					}
 					else {
-						dec.setTypeDeclaration(TypeDeclarationFactory
+						dec.setTypeDeclaration(provider.getTypesFactory()
 								.getDefaultTypeDeclaration());
 					}
 
@@ -729,6 +736,8 @@ public class JavaScriptAstParser extends JavaScriptParser {
 					Name name = (Name) node;
 					dec = new JavaScriptVariableDeclaration(name
 							.getIdentifier(), offset, provider, block);
+					dec.setStartOffSet(name.getAbsolutePosition());
+					dec.setEndOffset(name.getAbsolutePosition() + name.getLength());
 					if (initializer != null
 							&& initializer.getType() == Token.CALL) {
 						// set the type node later for functions as these
@@ -769,8 +778,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	public boolean isPreProcessingMode() {
 		return preProcessingMode;
 	}
-
-
+	
 	private class FunctionReturnVisitor implements NodeVisitor {
 
 		private ArrayList returnStatements = new ArrayList();
@@ -806,7 +814,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 				}
 				else {
 					if (!commonType.equals(type)) {
-						commonType = TypeDeclarationFactory
+						commonType = provider.getTypesFactory()
 								.getDefaultTypeDeclaration();
 						break; // not matching
 					}
@@ -823,5 +831,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 		AstNode typeNode;
 		JavaScriptVariableDeclaration dec;
+		
 	}
+	
 }

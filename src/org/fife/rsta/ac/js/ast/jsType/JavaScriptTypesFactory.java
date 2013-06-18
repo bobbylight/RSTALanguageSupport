@@ -37,6 +37,7 @@ public abstract class JavaScriptTypesFactory {
 
 	protected HashMap cachedTypes = new HashMap();
 	private boolean useBeanproperties;
+	protected TypeDeclarationFactory typesFactory;
 	
 	private static ArrayList UNSUPPORTED_COMPLETIONS = new ArrayList();
 	private static String SPECIAL_METHOD = "<clinit>";
@@ -46,18 +47,22 @@ public abstract class JavaScriptTypesFactory {
 	{
 		UNSUPPORTED_COMPLETIONS.add("java.lang.Object");
 	}
+	
+	public JavaScriptTypesFactory(TypeDeclarationFactory typesFactory)
+	{
+		this.typesFactory = typesFactory;
+	}
 
+	private static class DefaultJavaScriptTypeFactory extends JavaScriptTypesFactory {
 
-	private static class DefaultJavaScriptTypeFactory extends
-			JavaScriptTypesFactory {
-
-		public DefaultJavaScriptTypeFactory() {
+		public DefaultJavaScriptTypeFactory(TypeDeclarationFactory typesFactory) {
+			super(typesFactory);
 		}
 	}
 
 
-	public static JavaScriptTypesFactory getDefaultJavaScriptTypesFactory() {
-		return new DefaultJavaScriptTypeFactory();
+	public static JavaScriptTypesFactory getDefaultJavaScriptTypesFactory(TypeDeclarationFactory typesFactory) {
+		return new DefaultJavaScriptTypeFactory(typesFactory);
 	}
 
 
@@ -157,7 +162,7 @@ public abstract class JavaScriptTypesFactory {
 
 		boolean staticOnly = cachedType.getType().isStaticsOnly();
 		boolean supportsBeanProperties = cachedType.getType().supportsBeanProperties();
-		boolean isJSType = TypeDeclarationFactory.Instance().isJavaScriptType(cachedType.getType());
+		boolean isJSType = typesFactory.isJavaScriptType(cachedType.getType());
 		
 		//set the class type only for JavaScript types for now
 		if(isJSType) {
@@ -184,7 +189,7 @@ public abstract class JavaScriptTypesFactory {
 			
 			//load constructors for JavaScript types only
 			if(isJSType && info.isConstructor() && !SPECIAL_METHOD.equals(info.getName())) {
-				if(TypeDeclarationFactory.Instance().canJavaScriptBeInstantiated(cachedType.getType().getQualifiedName()))
+				if(typesFactory.canJavaScriptBeInstantiated(cachedType.getType().getQualifiedName()))
 				{
 					JSConstructorCompletion completion = new JSConstructorCompletion(provider, info);
 					cachedType.addConstructor(completion);
@@ -284,13 +289,13 @@ public abstract class JavaScriptTypesFactory {
 		
 		String qualified = cf.getClassName(true);
 		//lookup type
-		TypeDeclaration td = TypeDeclarationFactory.Instance().getTypeDeclaration(qualified);
+		TypeDeclaration td = typesFactory.getTypeDeclaration(qualified);
 		if(td == null) {
 			td = new TypeDeclaration(packageName, className, cf
 					.getClassName(true), staticOnly);
 			// now add to types factory
 			if(addToCache)
-				TypeDeclarationFactory.Instance().addType(qualified, td);
+				typesFactory.addType(qualified, td);
 		}
 		
 		return td;
@@ -380,11 +385,11 @@ public abstract class JavaScriptTypesFactory {
 	public List getECMAObjectTypes(SourceCompletionProvider provider) {
 		ArrayList constructors = new ArrayList();
 		//no constructors... we'd better load them
-		Set types = TypeDeclarationFactory.Instance().getECMAScriptObjects();
+		Set types = typesFactory.getECMAScriptObjects();
 		JarManager manager = provider.getJarManager();
 		for(Iterator i = types.iterator(); i.hasNext();) {
 			JavaScriptObject object = (JavaScriptObject) i.next();
-			TypeDeclaration type = TypeDeclarationFactory.Instance().getTypeDeclaration(object.getName());
+			TypeDeclaration type = typesFactory.getTypeDeclaration(object.getName());
 			JavaScriptType js = getCachedType(type, manager, provider, null);
 			if(js != null) {
 				constructors.add(js);

@@ -11,9 +11,11 @@
 package org.fife.rsta.ac.js.completion;
 
 import java.util.Iterator;
+
 import javax.swing.Icon;
 import javax.swing.text.JTextComponent;
 
+import org.fife.rsta.ac.java.Util;
 import org.fife.rsta.ac.java.buildpath.SourceLocation;
 import org.fife.rsta.ac.java.classreader.ClassFile;
 import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
@@ -21,11 +23,9 @@ import org.fife.rsta.ac.js.IconFactory;
 import org.fife.rsta.ac.js.JavaScriptHelper;
 import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.rsta.ac.js.ast.JavaScriptVariableDeclaration;
-import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.VariableCompletion;
-import org.fife.rsta.ac.java.Util;
 
 
 public class JSVariableCompletion extends VariableCompletion implements
@@ -62,7 +62,7 @@ public class JSVariableCompletion extends VariableCompletion implements
 	 * @return the type name based on qualified
 	 */
 	public String getType(boolean qualified) {
-		return TypeDeclarationFactory.convertJavaScriptType(dec.getJavaScriptTypeName(),
+		return ((SourceCompletionProvider) getProvider()).getTypesFactory().convertJavaScriptType(dec.getJavaScriptTypeName(),
 				qualified);
 	}
 

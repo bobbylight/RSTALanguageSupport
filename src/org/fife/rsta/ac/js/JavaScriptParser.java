@@ -15,9 +15,11 @@ import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.swing.text.Element;
 
 import org.fife.io.DocumentReader;
+import org.fife.rsta.ac.js.ast.VariableResolver;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.parser.AbstractParser;
@@ -66,11 +68,12 @@ public class JavaScriptParser extends AbstractParser {
 	 * <code>org.mozilla.javascript.ast.AstRoot</code>.
 	 */
 	public static final String PROPERTY_AST = "AST";
-
+	
 	private AstRoot astRoot;
 	private JavaScriptLanguageSupport langSupport;
 	private PropertyChangeSupport support;
 	private DefaultParseResult result;
+	private VariableResolver variableResolver;
 
 	/**
 	 * Constructor.
@@ -196,6 +199,16 @@ public class JavaScriptParser extends AbstractParser {
 		support.firePropertyChange(PROPERTY_AST, null, astRoot);
 		return result;
 
+	}
+	
+	public void setVariablesAndFunctions(VariableResolver variableResolver)
+	{
+		this.variableResolver = variableResolver;
+	}
+	
+	public VariableResolver getVariablesAndFunctions()
+	{
+		return variableResolver;
 	}
 
 

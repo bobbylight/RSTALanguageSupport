@@ -7,7 +7,6 @@ import java.util.Map;
 import org.fife.rsta.ac.js.Logger;
 import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
-import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 import org.fife.rsta.ac.js.completion.JSCompletion;
 import org.fife.ui.autocomplete.FunctionCompletion;
 
@@ -33,7 +32,7 @@ public class JSR223Type extends JavaScriptType {
 		}
 		// else
 		if (completionLookup.indexOf('(') != -1) {
-			boolean isJavaScriptType = TypeDeclarationFactory.Instance().isJavaScriptType(getType());
+			boolean isJavaScriptType = provider.getTypesFactory().isJavaScriptType(getType());
 			// must be a function, so compare function strings
 			// get a list of best fit methods
 			Logger.log("Completion Lookup : " + completionLookup);
@@ -50,7 +49,7 @@ public class JSR223Type extends JavaScriptType {
 			for (int i = 0; i < matches.length; i++) {
 				Logger.log("Potential match : " + matches[i].getLookupName());
 				JavaScriptFunctionType matchFunctionType = JavaScriptFunctionType
-						.parseFunction(matches[i].getLookupName());
+						.parseFunction(matches[i].getLookupName(), provider);
 				Logger.log("Matching against completion: " + completionLookup);
 				int weight = matchFunctionType.compare(javaScriptFunctionType,
 						provider, isJavaScriptType);

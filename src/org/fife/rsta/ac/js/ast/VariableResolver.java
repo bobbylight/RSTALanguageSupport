@@ -220,6 +220,24 @@ public class VariableResolver {
 		return dec;	
 	}
 	
+	public JavaScriptFunctionDeclaration findFunctionDeclarationByFunctionName(String name) {
+		JavaScriptFunctionDeclaration func = findFirstFunction(name, localFunctions);
+		if(func == null) {
+			func = findFirstFunction(name, preProcessedFunctions);
+		}
+		return func;
+	}
+	
+	private JavaScriptFunctionDeclaration findFirstFunction(String name, HashMap functions) {
+		for(Iterator i = functions.values().iterator(); i.hasNext();) {
+			JavaScriptFunctionDeclaration func = (JavaScriptFunctionDeclaration) i.next();
+			if(name.equals(func.getFunctionName())) {
+				return func;
+			}
+		}
+		return null;
+	}
+	
 	/**
 	 * Add pre-processing scope function to cache.
 	 * 

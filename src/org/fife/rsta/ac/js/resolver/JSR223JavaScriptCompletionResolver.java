@@ -50,7 +50,7 @@ public class JSR223JavaScriptCompletionResolver extends
 		String[] parameterTypes = methodData.getMethodInfo()
 				.getParameterTypes();
 		for (int i = 0; i < count; i++) {
-			String paramName = methodData.getParameterType(parameterTypes, i);
+			String paramName = methodData.getParameterType(parameterTypes, i, provider);
 			sb.append(paramName);
 			if (i < count - 1) {
 				sb.append(",");
@@ -147,7 +147,7 @@ public class JSR223JavaScriptCompletionResolver extends
 		}
 
 		if (testName != null) {
-			TypeDeclaration dec = JavaScriptHelper.getTypeDeclaration(testName);
+			TypeDeclaration dec = JavaScriptHelper.getTypeDeclaration(testName, provider);
 			
 			if(dec == null)
 				dec = JavaScriptHelper.createNewTypeDeclaration(testName);

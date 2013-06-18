@@ -15,7 +15,6 @@ import java.util.Iterator;
 
 import org.fife.rsta.ac.js.ast.type.ArrayTypeDeclaration;
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
-import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 import org.fife.rsta.ac.js.ast.type.ecma.TypeDeclarations;
 import org.fife.rsta.ac.js.resolver.JavaScriptCompletionResolver;
 import org.fife.rsta.ac.js.resolver.JavaScriptResolver;
@@ -164,21 +163,21 @@ public class JavaScriptHelper {
 		if (typeNode != null) {
 			switch (typeNode.getType()) {
 				case Token.CATCH:
-					return getTypeDeclaration(TypeDeclarations.ECMA_ERROR);
+					return getTypeDeclaration(TypeDeclarations.ECMA_ERROR, provider);
 				case Token.NAME:
 					return provider.resolveTypeDeclation(((Name) typeNode)
 							.getIdentifier());
 				case Token.NEW:
-					return processNewNode(typeNode);
+					return processNewNode(typeNode, provider);
 				case Token.NUMBER:
-					return getTypeDeclaration(TypeDeclarations.ECMA_NUMBER);
+					return getTypeDeclaration(TypeDeclarations.ECMA_NUMBER, provider);
 				case Token.OBJECTLIT:
-					return getTypeDeclaration(TypeDeclarations.ECMA_OBJECT);
+					return getTypeDeclaration(TypeDeclarations.ECMA_OBJECT, provider);
 				case Token.STRING:
-					return getTypeDeclaration(TypeDeclarations.ECMA_STRING);
+					return getTypeDeclaration(TypeDeclarations.ECMA_STRING, provider);
 				case Token.TRUE:
 				case Token.FALSE:
-					return getTypeDeclaration(TypeDeclarations.ECMA_BOOLEAN);
+					return getTypeDeclaration(TypeDeclarations.ECMA_BOOLEAN, provider);
 				case Token.ARRAYLIT: 
 					return createArrayType(typeNode, provider);
 				case Token.GETELEM: {
@@ -194,13 +193,13 @@ public class JavaScriptHelper {
 					if(self == null)
 						self = TypeDeclarations.ECMA_GLOBAL;
 					
-					return getTypeDeclaration(self);
+					return getTypeDeclaration(self, provider);
 				}
 				//xml support
 				case Token.XML : {
 					if(provider.isXMLSupported())
 					{
-						return getTypeDeclaration(TypeDeclarations.ECMA_XML);
+						return getTypeDeclaration(TypeDeclarations.ECMA_XML, provider);
 					}
 				}
 
@@ -251,7 +250,7 @@ public class JavaScriptHelper {
 	 */
 	private static TypeDeclaration createArrayType(AstNode typeNode, SourceCompletionProvider provider)
 	{
-		TypeDeclaration array = getTypeDeclaration(TypeDeclarations.ECMA_ARRAY);
+		TypeDeclaration array = getTypeDeclaration(TypeDeclarations.ECMA_ARRAY, provider);
 		if(array != null) {
 			//create a new ArrayTypeDeclaration
 			ArrayTypeDeclaration arrayDec = new ArrayTypeDeclaration(array.getPackageName(), array.getAPITypeName(), array.getJSName());
@@ -284,16 +283,16 @@ public class JavaScriptHelper {
 			}
 			else {
 				if(elementType != null && !elementType.equals(dec)) {
-					dec = TypeDeclarationFactory.getDefaultTypeDeclaration();
+					dec = provider.getTypesFactory().getDefaultTypeDeclaration();
 					break;
 				}
 			}
 		}
-		return dec != null ? dec : TypeDeclarationFactory.getDefaultTypeDeclaration();
+		return dec != null ? dec : provider.getTypesFactory().getDefaultTypeDeclaration();
 	}
 
 
-	private static TypeDeclaration processNewNode(AstNode typeNode) {
+	private static TypeDeclaration processNewNode(AstNode typeNode, SourceCompletionProvider provider) {
 		String newName = findNewExpressionString(typeNode);
 		if (newName != null) {
 			
@@ -301,16 +300,16 @@ public class JavaScriptHelper {
 			if(newType.isQualified()) {
 				return newType;
 			} else {
-				return findOrMakeTypeDeclaration(newName);
+				return findOrMakeTypeDeclaration(newName, provider);
 			}
 		}
 		return null;
 	}
 	
 	
-	public static TypeDeclaration findOrMakeTypeDeclaration(String name)
+	public static TypeDeclaration findOrMakeTypeDeclaration(String name, SourceCompletionProvider provider)
 	{
-		TypeDeclaration newType = getTypeDeclaration(name);
+		TypeDeclaration newType = getTypeDeclaration(name, provider);
 		if (newType == null) {
 			newType = createNewTypeDeclaration(name);
 		}
@@ -393,7 +392,7 @@ public class JavaScriptHelper {
 			{
 				InfixVisitor visitor = new InfixVisitor(provider);
 				infix.visit(visitor);
-				return getTypeDeclaration(visitor.type);
+				return getTypeDeclaration(visitor.type, provider);
 			}
 		}
 		//else
@@ -498,8 +497,8 @@ public class JavaScriptHelper {
 	 * @param name
 	 * @return
 	 */
-	public static TypeDeclaration getTypeDeclaration(String name) {
-		return TypeDeclarationFactory.Instance().getTypeDeclaration(name);
+	public static TypeDeclaration getTypeDeclaration(String name, SourceCompletionProvider provider) {
+		return provider.getTypesFactory().getTypeDeclaration(name);
 	}
 
 

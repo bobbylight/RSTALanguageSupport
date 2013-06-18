@@ -8,7 +8,7 @@ import javax.swing.Icon;
 import org.fife.rsta.ac.java.rjc.ast.FormalParameter;
 import org.fife.rsta.ac.java.rjc.ast.Method;
 import org.fife.rsta.ac.js.IconFactory;
-import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
+import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.FunctionCompletion;
@@ -192,7 +192,7 @@ public class JavaScriptMethodCompletion extends FunctionCompletion implements
 	}
 	
 	public String getType(boolean qualified) {
-		return TypeDeclarationFactory.convertJavaScriptType("void", qualified);
+		return ((SourceCompletionProvider) getProvider()).getTypesFactory().convertJavaScriptType("void", qualified);
 	}
 	
 	public String getEnclosingClassName(boolean fullyQualified) {
