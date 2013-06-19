@@ -105,6 +105,14 @@ public class VariableResolver {
 				dot) : findDeclaration;
 	}
 	
+	public JavaScriptVariableDeclaration findDeclaration(String name, int dot, boolean local, boolean preProcessed, boolean system) {
+		JavaScriptVariableDeclaration findDeclaration = local ? findDeclaration(localVariables, name, dot) : null;
+		// test whether this was found and then try pre-processing variable
+		findDeclaration = findDeclaration == null ? preProcessed ? findDeclaration(preProcessedVariables, name, dot) : null : findDeclaration;
+		// last chance... look in system variables
+		return findDeclaration == null ? system ? findDeclaration(systemVariables, name, dot) : null : findDeclaration;
+	}
+	
 	/**
 	 * Find JSVariableDeclaration within pre-processed and system variable only. Also check is in scope of caret position
 	 * 
@@ -220,10 +228,19 @@ public class VariableResolver {
 		return dec;	
 	}
 	
-	public JavaScriptFunctionDeclaration findFunctionDeclarationByFunctionName(String name) {
-		JavaScriptFunctionDeclaration func = findFirstFunction(name, localFunctions);
+	public JavaScriptFunctionDeclaration findFunctionDeclaration(String name, boolean local, boolean preProcessed)
+	{
+		JavaScriptFunctionDeclaration dec = local ? (JavaScriptFunctionDeclaration) localFunctions.get(name) : null;
+		if(dec == null) {
+			dec = preProcessed ? (JavaScriptFunctionDeclaration)  preProcessedFunctions.get(name) : null;
+		}
+		return dec;	
+	}
+	
+	public JavaScriptFunctionDeclaration findFunctionDeclarationByFunctionName(String name, boolean local, boolean preprocessed) {
+		JavaScriptFunctionDeclaration func = local ? findFirstFunction(name, localFunctions) : null;
 		if(func == null) {
-			func = findFirstFunction(name, preProcessedFunctions);
+			func = preprocessed ? findFirstFunction(name, preProcessedFunctions) : null;
 		}
 		return func;
 	}
