@@ -51,8 +51,7 @@ public class VariableResolver {
 	 * 
 	 * @param declaration variable to add
 	 */
-	public void addPreProcessingVariable(
-			JavaScriptVariableDeclaration declaration) {
+	public void addPreProcessingVariable(JavaScriptVariableDeclaration declaration) {
 		preProcessedVariables.put(declaration.getName(), declaration);
 	}
 

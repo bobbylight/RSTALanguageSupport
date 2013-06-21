@@ -7,6 +7,7 @@ import java.util.Set;
 import org.fife.rsta.ac.js.JavaScriptHelper;
 import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.rsta.ac.js.ast.CodeBlock;
+import org.fife.rsta.ac.js.ast.TypeDeclarationOptions;
 import org.fife.rsta.ac.js.ast.jsType.JavaScriptTypesFactory;
 import org.fife.rsta.ac.js.ast.jsType.RhinoJavaScriptTypesFactory;
 import org.mozilla.javascript.Token;
@@ -27,16 +28,15 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 	private LinkedHashSet importPackages = new LinkedHashSet();
 	
 	public RhinoJavaScriptAstParser(SourceCompletionProvider provider, int dot,
-			boolean preProcessingMode) {
-		super(provider, dot, preProcessingMode);
+			TypeDeclarationOptions options) {
+		super(provider, dot, options);
 	}
 
 	/**
 	 * Clear the importPackage and importClass cache
 	 * @param provider SourceCompletionProvider
 	 */
-	public void clearImportCache(SourceCompletionProvider provider)
-	{
+	public void clearImportCache(SourceCompletionProvider provider) {
 		JavaScriptTypesFactory typesFactory = provider.getJavaScriptTypesFactory();
 		if(typesFactory instanceof RhinoJavaScriptTypesFactory) {
 			((RhinoJavaScriptTypesFactory) typesFactory).clearImportCache();
@@ -46,12 +46,10 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 	
 	public CodeBlock convertAstNodeToCodeBlock(AstRoot root, Set set,
 			String entered) {
-		try
-		{
+		try {
 			return super.convertAstNodeToCodeBlock(root, set, entered);
 		}
-		finally
-		{
+		finally {
 			//merge import packages
 			mergeImportCache(importPackages, importClasses);
 			//clear, as these are now merged
@@ -60,8 +58,7 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 		}
 	}
 	
-	private void mergeImportCache(HashSet packages, HashSet classes)
-	{
+	private void mergeImportCache(HashSet packages, HashSet classes) {
 		JavaScriptTypesFactory typesFactory = provider.getJavaScriptTypesFactory();
 		if(typesFactory instanceof RhinoJavaScriptTypesFactory) {
 			((RhinoJavaScriptTypesFactory) typesFactory).mergeImports(packages, classes);
@@ -121,13 +118,11 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 		if(src.startsWith(PACKAGES))
 		{
 			String pkg = src.substring(PACKAGES.length());
-			if(pkg != null)
-			{
+			if(pkg != null) {
 				StringBuffer sb = new StringBuffer();
 				//remove any non java characters
 				char[] chars = pkg.toCharArray(); 
-				for(int i =0; i<chars.length; i++)
-				{
+				for(int i =0; i<chars.length; i++) {
 					char ch = chars[i];
 					if(Character.isJavaIdentifierPart(ch) || ch == '.'){
 						sb.append(ch);
@@ -150,8 +145,7 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 	 * 
 	 * returns java.util or java.util.HashSet respectively 
 	 */
-	private String extractNameFromSrc(String src)
-	{
+	private String extractNameFromSrc(String src) {
 		int startIndex = src.indexOf("(");
 		int endIndex = src.indexOf(")");
 		if(startIndex != -1 && endIndex != -1) {

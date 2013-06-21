@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.rsta.ac.js.ast.CodeBlock;
+import org.fife.rsta.ac.js.ast.TypeDeclarationOptions;
 import org.mozilla.javascript.ast.AstRoot;
 
 
@@ -11,7 +12,7 @@ public abstract class JavaScriptParser {
 	
 	protected SourceCompletionProvider provider;
 	protected int dot;
-	protected boolean preProcessingMode;
+	protected TypeDeclarationOptions options;
 	
 	/**
 	 * JavaScriptParser constructor
@@ -20,10 +21,10 @@ public abstract class JavaScriptParser {
 	 * @param preProcessingMode
 	 */
 	public JavaScriptParser(SourceCompletionProvider provider, int dot,
-			boolean preProcessingMode) {
+			TypeDeclarationOptions options) {
 		this.provider = provider;
 		this.dot = dot;
-		this.preProcessingMode = preProcessingMode;
+		this.options = options;
 	}
 	
 	/**
@@ -34,4 +35,13 @@ public abstract class JavaScriptParser {
 	 * @return CodeBlock tree 
 	 */
 	public abstract CodeBlock convertAstNodeToCodeBlock(AstRoot root, Set set, String entered);
+	
+	/**
+	 * If options are null, then it is assumed that the main editor text is being parsed
+	 * @return whether options is not null and is in pre-processing mode.
+	 * 
+	 */
+	public boolean isPreProcessing() {
+		return options != null && options.isPreProcessing();
+	}
 }

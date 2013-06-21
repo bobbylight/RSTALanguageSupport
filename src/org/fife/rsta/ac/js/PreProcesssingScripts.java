@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.fife.rsta.ac.js.ast.CodeBlock;
+import org.fife.rsta.ac.js.ast.TypeDeclarationOptions;
 import org.mozilla.javascript.CompilerEnvirons;
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.ast.AstRoot;
@@ -30,7 +31,7 @@ public class PreProcesssingScripts {
 		this.provider = provider;
 	}
 	
-	public void parseScript(String scriptText)
+	public void parseScript(String scriptText, TypeDeclarationOptions options)
 	{
 		if(scriptText != null && scriptText.length() > 0)
 		{
@@ -39,7 +40,7 @@ public class PreProcesssingScripts {
 			StringReader r = new StringReader(scriptText);
 			try {
 				AstRoot root = parser.parse(r, null, 0);
-				CodeBlock block = provider.iterateAstRoot(root, preProcessingCompletions, "", Integer.MAX_VALUE, true);
+				CodeBlock block = provider.iterateAstRoot(root, preProcessingCompletions, "", Integer.MAX_VALUE, options);
 				provider.recursivelyAddLocalVars(preProcessingCompletions, block, 0, null, false, true);
 			}
 			catch(IOException io) {

@@ -11,6 +11,7 @@ import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.rsta.ac.js.ast.CodeBlock;
 import org.fife.rsta.ac.js.ast.JavaScriptFunctionDeclaration;
 import org.fife.rsta.ac.js.ast.JavaScriptVariableDeclaration;
+import org.fife.rsta.ac.js.ast.TypeDeclarationOptions;
 import org.fife.rsta.ac.js.ast.type.ArrayTypeDeclaration;
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
 import org.fife.rsta.ac.js.ast.type.ecma.TypeDeclarations;
@@ -46,8 +47,8 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	private ArrayList functions = new ArrayList();
 	
 	public JavaScriptAstParser(SourceCompletionProvider provider, int dot,
-			boolean preProcessingMode) {
-		super(provider, dot, preProcessingMode);
+			TypeDeclarationOptions options) {
+		super(provider, dot, options);
 	}
 
 
@@ -225,7 +226,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 						&& (dec.getCodeBlock() == null || dec.getCodeBlock()
 								.contains(dot))) {
 					// Set reference to new type
-					dec.setTypeDeclaration(rightNode, preProcessingMode);
+					dec.setTypeDeclaration(rightNode, isPreProcessing());
 				}
 				else {
 					// assume we can add variable as we are trying to assign to
@@ -252,13 +253,12 @@ public class JavaScriptAstParser extends JavaScriptParser {
 		if (dec != null) {
 			if (canAddVariable(block)) {
 				// add declaration to resolver if one is found
-				if (preProcessingMode) {
-					block.setStartOffSet(0);
-				}
 
-				if (preProcessingMode) {
-					provider.getVariableResolver()
-							.addPreProcessingVariable(dec);
+				if (isPreProcessing()) {
+					block.setStartOffSet(0);
+					//set the owner document
+					dec.setTypeDeclarationOptions(options);
+					provider.getVariableResolver().addPreProcessingVariable(dec);
 				}
 				else {
 					provider.getVariableResolver().addLocalVariable(dec);
@@ -277,11 +277,13 @@ public class JavaScriptAstParser extends JavaScriptParser {
 		if (canProcessNode(switchCase)) {
 			block = block.addChildCodeBlock(start);
 			block.setEndOffset(offset);
-			for (Iterator i = statements.iterator(); i.hasNext();) {
-				Object o = i.next();
-				if (o instanceof AstNode) {
-					AstNode node = (AstNode) o;
-					iterateNode(node, set, entered, block, offset);
+			if(statements != null) {
+				for (Iterator i = statements.iterator(); i.hasNext();) {
+					Object o = i.next();
+					if (o instanceof AstNode) {
+						AstNode node = (AstNode) o;
+						iterateNode(node, set, entered, block, offset);
+					}
 				}
 			}
 		}
@@ -294,10 +296,12 @@ public class JavaScriptAstParser extends JavaScriptParser {
 		SwitchStatement switchStatement = (SwitchStatement) child;
 		if (canProcessNode(switchStatement)) {
 			List cases = switchStatement.getCases();
-			for (Iterator i = cases.iterator(); i.hasNext();) {
-				Object o = i.next();
-				if (o instanceof AstNode) {
-					iterateNode((AstNode) o, set, entered, block, offset);
+			if(cases != null) {
+				for (Iterator i = cases.iterator(); i.hasNext();) {
+					Object o = i.next();
+					if (o instanceof AstNode) {
+						iterateNode((AstNode) o, set, entered, block, offset);
+					}
 				}
 			}
 		}
@@ -462,7 +466,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 				Parameter param = new Parameter(null, paramName);
 				params.add(param);
 
-				if (!preProcessingMode && canProcessNode(fn)) {
+				if (!isPreProcessing() && canProcessNode(fn)) {
 					JavaScriptVariableDeclaration dec = extractVariableFromNode(node, block, offset);
 					provider.getVariableResolver().addLocalVariable(dec);
 				}
@@ -470,12 +474,14 @@ public class JavaScriptAstParser extends JavaScriptParser {
 			fc.setParams(params);
 		}
 
-		if (preProcessingMode) {
+		if (isPreProcessing()) {
 			block.setStartOffSet(0);
 		}
 
-		if (preProcessingMode) {
-			provider.getVariableResolver().addPreProcessingFunction(createJavaScriptFunction(fc.getLookupName(), offset, block, returnType, fn));
+		if (isPreProcessing()) {
+			JavaScriptFunctionDeclaration function = createJavaScriptFunction(fc.getLookupName(), offset, block, returnType, fn);
+			function.setTypeDeclarationOptions(options);
+			provider.getVariableResolver().addPreProcessingFunction(function);
 		}
 		else {
 			provider.getVariableResolver().addLocalFunction(createJavaScriptFunction(fc.getLookupName(), offset, block, returnType, fn));
@@ -496,9 +502,10 @@ public class JavaScriptAstParser extends JavaScriptParser {
 		if(name != null) {
 			int start = name.getAbsolutePosition();
 			int end = start + name.getLength();
-			function.setNameStartOffSet(start);
-			function.setNameEndOffSet(end);
+			function.setStartOffset(start);
+			function.setEndOffset(end);
 			function.setFunctionName(fn.getName());
+			
 		}
 		return function;
 	}
@@ -690,19 +697,14 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 
 	private boolean canAddVariable(CodeBlock block) {
-		if (!preProcessingMode)
+		if (!isPreProcessing())
 			return true;
 		// else check parent is base block
 		CodeBlock parent = block.getParent();
 		return parent != null && parent.getStartOffset() == 0;
 	}
 
-
-	public void setPreProcessingMode(boolean preProcessingMode) {
-		this.preProcessingMode = preProcessingMode;
-	}
-
-
+	
 	/**
 	 * Extract the variable from the Rhino node and add to the CodeBlock
 	 * 
@@ -736,7 +738,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 					Name name = (Name) node;
 					dec = new JavaScriptVariableDeclaration(name
 							.getIdentifier(), offset, provider, block);
-					dec.setStartOffSet(name.getAbsolutePosition());
+					dec.setStartOffset(name.getAbsolutePosition());
 					dec.setEndOffset(name.getAbsolutePosition() + name.getLength());
 					if (initializer != null
 							&& initializer.getType() == Token.CALL) {
@@ -775,10 +777,6 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	}
 
 
-	public boolean isPreProcessingMode() {
-		return preProcessingMode;
-	}
-	
 	private class FunctionReturnVisitor implements NodeVisitor {
 
 		private ArrayList returnStatements = new ArrayList();

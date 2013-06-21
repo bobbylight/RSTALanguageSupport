@@ -2,8 +2,7 @@ package org.fife.rsta.ac.js;
 
 import javax.swing.text.BadLocationException;
 
-import org.fife.rsta.ac.js.ast.JavaScriptFunctionDeclaration;
-import org.fife.rsta.ac.js.ast.JavaScriptVariableDeclaration;
+import org.fife.rsta.ac.js.ast.JavaScriptDeclaration;
 import org.fife.rsta.ac.js.ast.VariableResolver;
 import org.fife.ui.rsyntaxtextarea.LinkGenerator;
 import org.fife.ui.rsyntaxtextarea.LinkGeneratorResult;
@@ -16,17 +15,22 @@ import org.fife.ui.rsyntaxtextarea.Token;
 public class JavaScriptLinkGenerator implements LinkGenerator {
 
 	private JavaScriptLanguageSupport language;
+	private boolean findLocal;
+	private boolean findPreprocessed;
+	private boolean findSystem;
 
 
 	public JavaScriptLinkGenerator(JavaScriptLanguageSupport language) {
 		this.language = language;
+		this.findLocal = true;
 	}
 
-
+	/**
+	 * {@inheritDoc}
+	 */
 	public LinkGeneratorResult isLinkAtOffset(RSyntaxTextArea textArea, int offs) {
-		int start = -1;
-		int end = -1;
-
+		
+		JavaScriptDeclaration dec = null;
 		IsLinkableCheckResult result = checkForLinkableToken(textArea, offs);
 		if (result != null) {
 			JavaScriptParser parser = language.getJavaScriptParser();
@@ -38,36 +42,69 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 			if (variableResolver != null) {
 				String name = t.getLexeme();
 				if (!function) { // must be a variable
-					JavaScriptVariableDeclaration dec = variableResolver.findDeclaration(name, offs, true, false, false);
-					if (dec != null) {
-						start = dec.getStartOffSet();
-						end = dec.getEndOffset();
-					}
+					dec = variableResolver.findDeclaration(name, offs, findLocal, findPreprocessed, findSystem);
 				}
 				else {
 					String lookup = getLookupNameForFunction(textArea, offs, name);
 					// lookup Function based on the name
-					JavaScriptFunctionDeclaration func = variableResolver.findFunctionDeclaration(lookup, true, false);
-					if(func == null) {
-						func = variableResolver.findFunctionDeclarationByFunctionName(name, true, false);
-					}
-					if (func != null) {
-						start = func.getNameStartOffset();
-						end = func.getNameEndOffset();
+					dec = variableResolver.findFunctionDeclaration(lookup, findLocal, findPreprocessed);
+					if(dec == null) {
+						dec = variableResolver.findFunctionDeclarationByFunctionName(name, findLocal, findPreprocessed);
 					}
 				}
 
 			}
 
-			if (start > -1) {
-				return new SelectRegionLinkGeneratorResult(textArea, t.offset,
-						start, end);
+			if (dec != null) {
+				return createSelectedRegionResult(textArea, t, dec);
 			}
 		}
 		return null;
 	}
+	
+	/**
+	 * @return LinkGeneratorResult based on the JavaScriptDeclaraton and the position 
+	 */
+	protected LinkGeneratorResult createSelectedRegionResult(RSyntaxTextArea textArea, Token t, JavaScriptDeclaration dec) {
+		if(dec.getTypeDeclarationOptions() != null && !dec.getTypeDeclarationOptions().isSupportsLinks()) {
+			return null;
+		}
+		return new SelectRegionLinkGeneratorResult(textArea, t.offset, dec.getStartOffSet(), dec.getEndOffset());
+	}
+	
+	/**
+	 * @param find flag to state whether to look in the RSTA editing script for variable/function completions
+	 */
+	public void setFindLocal(boolean find) {
+		this.findLocal = find;
+	}
+	
+	/**
+	 * @param find flag to state whether to look in the pre-processed scripts for variable/function completions
+	 */
+	public void setFindPreprocessed(boolean find) {
+		this.findPreprocessed = find;
+	}
+	
+	/**
+	 * @param find flag to state whether to look in the system scripts for variable/function completions
+	 */
+	public void setFindSystem(boolean find) {
+		this.findSystem = find;
+	}
 
 
+	/**
+	 * Convert the function Token to JavaScript variable resolver lookup name by replacing any parameters with 'p' and stripping any whitespace between the parameters:
+	 * e.g
+	 * Token may contain the function:
+	 * addTwoNumbers(num1, num2);
+	 * 
+	 * The return result will be:
+	 * addTwoNumbers(p,p);
+	 * 
+	 * @return converted function name to variable resolver lookup name
+	 */
 	private String getLookupNameForFunction(RSyntaxTextArea textArea, int offs, String name) {
 		
 		StringBuffer temp = new StringBuffer();
@@ -201,11 +238,23 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 
 	}
 
-
+	/**
+	 * Due to the Tokens being reused, this can cause problems when finding the next token associated with a token. 
+	 * Wrap the tokens to stop this problem
+	 * @param token to wrap
+	 * @return copy of the original token
+	 */
 	private Token wrapToken(Token token) {
 		if (token != null)
 			return new Token(token);
 		return token;
+	}
+	
+	/**
+	 * @return JavaScriptLanguage support
+	 */
+	public JavaScriptLanguageSupport getLanguage() {
+		return language;
 	}
 
 
@@ -222,7 +271,7 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 
 		/**
 		 * Whether the token is a function invocation (as opposed to a local
-		 * variable or field).
+		 * variable or object).
 		 */
 		private boolean function;
 

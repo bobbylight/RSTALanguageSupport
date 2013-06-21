@@ -1,6 +1,7 @@
 package org.fife.rsta.ac.js.engine;
 
 import org.fife.rsta.ac.js.SourceCompletionProvider;
+import org.fife.rsta.ac.js.ast.TypeDeclarationOptions;
 import org.fife.rsta.ac.js.ast.jsType.JavaScriptTypesFactory;
 import org.fife.rsta.ac.js.ast.jsType.RhinoJavaScriptTypesFactory;
 import org.fife.rsta.ac.js.ast.parser.JavaScriptParser;
@@ -27,8 +28,8 @@ public class RhinoJavaScriptEngine extends JavaScriptEngine {
 	}
 
 
-	public JavaScriptParser getParser(SourceCompletionProvider provider, int dot, boolean preProcessingMode) {
-		return new RhinoJavaScriptAstParser(provider, dot, preProcessingMode);
+	public JavaScriptParser getParser(SourceCompletionProvider provider, int dot, TypeDeclarationOptions options) {
+		return new RhinoJavaScriptAstParser(provider, dot, options);
 	}
 
 }

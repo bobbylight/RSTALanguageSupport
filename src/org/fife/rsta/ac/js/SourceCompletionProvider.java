@@ -33,6 +33,7 @@ import org.fife.rsta.ac.java.buildpath.SourceLocation;
 import org.fife.rsta.ac.js.JavaScriptHelper.ParseText;
 import org.fife.rsta.ac.js.ast.CodeBlock;
 import org.fife.rsta.ac.js.ast.JavaScriptVariableDeclaration;
+import org.fife.rsta.ac.js.ast.TypeDeclarationOptions;
 import org.fife.rsta.ac.js.ast.VariableResolver;
 import org.fife.rsta.ac.js.ast.jsType.JavaScriptType;
 import org.fife.rsta.ac.js.ast.jsType.JavaScriptTypesFactory;
@@ -72,6 +73,8 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	private boolean xmlSupported;
 	//The base class for the Completions
 	private String self;
+	
+	private TypeDeclarationOptions typeDeclarationOptions;
 
 	public SourceCompletionProvider(boolean xmlSupported) {
 		this(null, xmlSupported);
@@ -163,7 +166,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 			// Get a list of all Completions matching the text.
 			AstRoot ast = this.parent.getASTRoot();
 			Set set = new HashSet();
-			CodeBlock block = iterateAstRoot(ast, set, text, tc.getCaretPosition(), false);
+			CodeBlock block = iterateAstRoot(ast, set, text, tc.getCaretPosition(), typeDeclarationOptions);
 			recursivelyAddLocalVars(set, block, dot, null, false, false);
 			lastCompletionsAtText = text;
 			return lastParameterizedCompletionsAt = new ArrayList(set);
@@ -219,7 +222,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 			boolean noDotInText = text.indexOf('.') == -1;
 
 			// need to populate completions to work out all variables available
-			CodeBlock block = iterateAstRoot(astRoot, set, text, dot, false);
+			CodeBlock block = iterateAstRoot(astRoot, set, text, dot, typeDeclarationOptions);
 
 			boolean isNew = false;
 			if (noDotInText) {
@@ -415,8 +418,8 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	 * @return
 	 */
 	protected CodeBlock iterateAstRoot(AstRoot root, Set set, String entered,
-			int dot, boolean isPreProcessingMode) {
-		JavaScriptParser parser = engine.getParser(this, dot, isPreProcessingMode);
+			int dot, TypeDeclarationOptions options) {
+		JavaScriptParser parser = engine.getParser(this, dot, options);
 		return parser.convertAstNodeToCodeBlock(root, set, entered);
 	}
 
@@ -611,12 +614,21 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	{
 		AstRoot ast = this.parent.getASTRoot();
 		Set set = new HashSet();
-		iterateAstRoot(ast, set, "", dot, false);
+		variableResolver.resetLocalVariables();
+		iterateAstRoot(ast, set, "", dot, typeDeclarationOptions);
 	}
 	
 	public TypeDeclarationFactory getTypesFactory()
 	{
 		return engine.getTypesFactory();
+	}
+	
+	/**
+	 * Set type declaration options for parser
+	 * @param typeDeclarationOptions
+	 */
+	public void setTypeDeclationOptions(TypeDeclarationOptions typeDeclarationOptions) {
+		this.typeDeclarationOptions = typeDeclarationOptions;
 	}
 	
 	// TODO remove

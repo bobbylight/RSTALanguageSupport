@@ -18,19 +18,14 @@ import org.mozilla.javascript.ast.AstNode;
 /**
  * JavaScript Variable Declaration class <code>TypeDeclarations</code>
  */
-public class JavaScriptVariableDeclaration {
+public class JavaScriptVariableDeclaration extends JavaScriptDeclaration {
 
-	private String name;
-	private int offset;
+	
 	protected TypeDeclaration typeDec;
 	protected SourceCompletionProvider provider;
 
 	private boolean reassigned;
 	private TypeDeclaration originalTypeDec;
-	private CodeBlock block;
-	
-	private int start;
-	private int end;
 	
 
 	/**
@@ -40,10 +35,8 @@ public class JavaScriptVariableDeclaration {
 	 */
 	public JavaScriptVariableDeclaration(String name, int offset,
 			SourceCompletionProvider provider, CodeBlock block) {
-		this.name = name;
-		this.offset = offset;
+		super(name, offset, block);
 		this.provider = provider;
-		this.block = block;
 	}
 
 
@@ -116,66 +109,6 @@ public class JavaScriptVariableDeclaration {
 		return dec != null ? dec.getJSName() : provider.getTypesFactory()
 				.getDefaultTypeDeclaration().getJSName();
 	}
-
-
-	/**
-	 * @return Name of the variable
-	 */
-	public String getName() {
-		return name;
-	}
-
-
-	/**
-	 * @return variable position within the script
-	 */
-	public int getOffset() {
-		return offset;
-	}
 	
-	public CodeBlock getCodeBlock() {
-		return block;
-	}
-	
-	/**
-	 * Gets the end offset of this variable.
-	 * 
-	 * @param end the end offset.
-	 */
-	public int getEndOffset() {
-		return end;
-	}
-	
-	/**
-	 * Sets the end offset of this variable.
-	 * 
-	 * @param end the end offset.
-	 * @see #getEndOffset()
-	 */
-	public void setEndOffset(int end) {
-		this.end = end;
-	}
-
-
-	/**
-	 * Sets the start offset of this variable.
-	 * @param start the start offset
-	 * @see #getStartOffset()
-	 */
-	public void setStartOffSet(int start)
-	{
-		this.start = start;
-	}
-
-
-	/**
-	 * Gets the start offset of this variable.
-	 * @param start the start offset
-	 * 
-	 */
-	public int getStartOffSet()
-	{
-		return start;
-	}
 
 }

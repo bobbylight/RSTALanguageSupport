@@ -1,6 +1,7 @@
 package org.fife.rsta.ac.js.engine;
 
 import org.fife.rsta.ac.js.SourceCompletionProvider;
+import org.fife.rsta.ac.js.ast.TypeDeclarationOptions;
 import org.fife.rsta.ac.js.ast.jsType.JSR223JavaScriptTypesFactory;
 import org.fife.rsta.ac.js.ast.jsType.JavaScriptTypesFactory;
 import org.fife.rsta.ac.js.ast.parser.JavaScriptAstParser;
@@ -26,7 +27,7 @@ public static final String JSR223_ENGINE = "JSR223";
 	}
 
 
-	public JavaScriptParser getParser(SourceCompletionProvider provider, int dot, boolean preProcessingMode) {
-		return new JavaScriptAstParser(provider, dot, preProcessingMode);
+	public JavaScriptParser getParser(SourceCompletionProvider provider, int dot, TypeDeclarationOptions options) {
+		return new JavaScriptAstParser(provider, dot, options);
 	}
 }

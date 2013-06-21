@@ -3,6 +3,7 @@ package org.fife.rsta.ac.js.engine;
 import java.util.List;
 
 import org.fife.rsta.ac.js.SourceCompletionProvider;
+import org.fife.rsta.ac.js.ast.TypeDeclarationOptions;
 import org.fife.rsta.ac.js.ast.jsType.JavaScriptTypesFactory;
 import org.fife.rsta.ac.js.ast.parser.JavaScriptParser;
 import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
@@ -50,9 +51,10 @@ public abstract class JavaScriptEngine {
 	 * 
 	 * @param provider SourceCompletionProvider
 	 * @param dot caret position
-	 * @param preProcessingMode flag whether processing script before JTextComponent's text within SourceCompletionProvider  
+	 * @param options TypeDeclationsOption to allow configuration options for processing script before JTextComponent's text within SourceCompletionProvider
 	 * @return JavaScriptParser that converts AstRoot to CodeBlock
+	 * 
 	 */
-	public abstract JavaScriptParser getParser(SourceCompletionProvider provider, int dot, boolean preProcessingMode);
+	public abstract JavaScriptParser getParser(SourceCompletionProvider provider, int dot, TypeDeclarationOptions options);
 	
 }
