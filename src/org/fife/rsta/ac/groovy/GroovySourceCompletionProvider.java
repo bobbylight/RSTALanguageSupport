@@ -124,16 +124,16 @@ public class GroovySourceCompletionProvider extends DefaultCompletionProvider {
 		Token t = scanner.next();
 		while (t != null) {
 			if (t.isRightCurly()) {
-				block.setEndOffset(t.textOffset);
+				block.setEndOffset(t.getOffset());
 				return;
 			} else if (t.isLeftCurly()) {
-				CodeBlock child = block.addChildCodeBlock(t.textOffset);
+				CodeBlock child = block.addChildCodeBlock(t.getOffset());
 				parseCodeBlock(scanner, child);
 			} else if (t.is(Token.RESERVED_WORD, KEYWORD_DEF)) {
 				t = scanner.next();
 				if (t != null) {
 					VariableDeclaration varDec = new VariableDeclaration(t
-							.getLexeme(), t.textOffset);
+							.getLexeme(), t.getOffset());
 					block.addVariable(varDec);
 				}
 			}

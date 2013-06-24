@@ -10,6 +10,7 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
 import org.fife.ui.rsyntaxtextarea.SelectRegionLinkGeneratorResult;
 import org.fife.ui.rsyntaxtextarea.Token;
+import org.fife.ui.rsyntaxtextarea.TokenImpl;
 
 
 public class JavaScriptLinkGenerator implements LinkGenerator {
@@ -69,7 +70,7 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 		if(dec.getTypeDeclarationOptions() != null && !dec.getTypeDeclarationOptions().isSupportsLinks()) {
 			return null;
 		}
-		return new SelectRegionLinkGeneratorResult(textArea, t.offset, dec.getStartOffSet(), dec.getEndOffset());
+		return new SelectRegionLinkGeneratorResult(textArea, t.getOffset(), dec.getStartOffSet(), dec.getEndOffset());
 	}
 	
 	/**
@@ -117,10 +118,8 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 				for (Token t=first; t!=null && t.isPaintable(); t=wrapToken(t.getNextToken())) {
 					if (t.containsPosition(offs)) {
 						for (Token tt=t; tt!=null && tt.isPaintable(); tt=wrapToken(tt.getNextToken())) {
-							if (tt!=null) {
-								temp.append(tt.getLexeme());
-							}
-							if (tt!=null && tt.isSingleChar(Token.SEPARATOR, ')')) {
+							temp.append(tt.getLexeme());
+							if (tt.isSingleChar(Token.SEPARATOR, ')')) {
 								break;
 							}
 						}
@@ -239,14 +238,16 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 	}
 
 	/**
-	 * Due to the Tokens being reused, this can cause problems when finding the next token associated with a token. 
-	 * Wrap the tokens to stop this problem
+	 * Due to the Tokens being reused, this can cause problems when finding the
+	 * next token associated with a token.  Wrap the tokens to stop this
+	 * problem.
+	 * 
 	 * @param token to wrap
 	 * @return copy of the original token
 	 */
 	private Token wrapToken(Token token) {
 		if (token != null)
-			return new Token(token);
+			return new TokenImpl(token);
 		return token;
 	}
 	

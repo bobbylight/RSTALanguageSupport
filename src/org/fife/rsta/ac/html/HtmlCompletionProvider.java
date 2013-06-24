@@ -118,10 +118,10 @@ public class HtmlCompletionProvider extends DefaultCompletionProvider {
 			if (t.containsPosition(offs)) {
 				break;
 			}
-			else if (t.type==Token.MARKUP_TAG_NAME) {
+			else if (t.getType()==Token.MARKUP_TAG_NAME) {
 				lastTagName = t.getLexeme();
 			}
-			else if (t.type==Token.MARKUP_TAG_DELIMITER) {
+			else if (t.getType()==Token.MARKUP_TAG_DELIMITER) {
 				lastTagName = null;
 				foundOpenTag = t.isSingleChar('<');
 t = t.getNextToken();
@@ -140,10 +140,10 @@ if (t!=null && !t.isWhitespace()) {
 			while (prevLine>=0) {
 				tokenList = doc.getTokenListForLine(prevLine);
 				for (Token t=tokenList; t!=null; t=t.getNextToken()) {
-					if (t.type==Token.MARKUP_TAG_NAME) {
+					if (t.getType()==Token.MARKUP_TAG_NAME) {
 						lastTagName = t.getLexeme();
 					}
-					else if (t.type==Token.MARKUP_TAG_DELIMITER) {
+					else if (t.getType()==Token.MARKUP_TAG_DELIMITER) {
 						lastTagName = null;
 						foundOpenTag = t.isSingleChar('<');
 t = t.getNextToken();
@@ -200,7 +200,7 @@ if (t!=null && !t.isWhitespace()) {
 						// If we're completing just after a tag delimiter,
 						// only offer suggestions for the "inside" of tags,
 						// e.g. after "<" and "</".
-						else if (t.type==Token.MARKUP_TAG_DELIMITER) {
+						else if (t.getType()==Token.MARKUP_TAG_DELIMITER) {
 							if (!isTagOpeningToken(t)) {
 								text = null;
 							}
@@ -208,7 +208,7 @@ if (t!=null && !t.isWhitespace()) {
 
 						// If we're completing after whitespace, we must
 						// determine whether we're "inside" a tag.
-						else if (t.type==Token.WHITESPACE) {
+						else if (t.getType()==Token.WHITESPACE) {
 							if (!insideMarkupTag(textArea, list, line, dot)) {
 								text = null;
 							}
@@ -217,8 +217,8 @@ if (t!=null && !t.isWhitespace()) {
 						// Otherwise, only auto-complete if we're appending
 						// to text already recognized as a markup tag name or
 						// attribute (e.g. we know we're in a tag).
-						else if (t.type!=Token.MARKUP_TAG_ATTRIBUTE &&
-								t.type!=Token.MARKUP_TAG_NAME) {
+						else if (t.getType()!=Token.MARKUP_TAG_ATTRIBUTE &&
+								t.getType()!=Token.MARKUP_TAG_NAME) {
 
 							// We also have the case where "dot" was the start
 							// offset of the line, so the token list we got was
@@ -226,7 +226,7 @@ if (t!=null && !t.isWhitespace()) {
 							// also check for an EOL token that means "we're in
 							// a tag."
 							// HACK: Using knowledge of HTML/JSP/PHPTokenMaker!
-							if (t.type>-1 || t.type<-9) {
+							if (t.getType()>-1 || t.getType()<-9) {
 								text = null;
 							}
 
@@ -381,7 +381,7 @@ if (t!=null && !t.isWhitespace()) {
 			if (t.containsPosition(offs)) {
 				break;
 			}
-			switch (t.type) {
+			switch (t.getType()) {
 				case Token.MARKUP_TAG_NAME:
 				case Token.MARKUP_TAG_ATTRIBUTE:
 					inside = 1;
@@ -458,8 +458,8 @@ if (t!=null && !t.isWhitespace()) {
 	 */
 	private static final boolean isTagOpeningToken(Token t) {
 		return t.isSingleChar('<') ||
-			(t.textCount==2 && t.text[t.textOffset]=='<' &&
-					t.text[t.textOffset+1]=='/');
+			(t.length()==2 && t.charAt(0)=='<' &&
+					t.charAt(1)=='/');
 	}
 
 

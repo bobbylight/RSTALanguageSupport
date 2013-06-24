@@ -162,9 +162,7 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 		String qName = removePackagesFromType(type.getQualifiedName());
 		ClassFile file = super.getClassFile(manager, JavaScriptHelper.createNewTypeDeclaration(qName));
 		if (file == null) {
-			if (file == null) {
-				file = findFromClasses(manager, qName);
-			}
+			file = findFromClasses(manager, qName);
 			if (file == null) {
 				file = findFromImport(manager, qName);
 			}

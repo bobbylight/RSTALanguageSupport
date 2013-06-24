@@ -98,7 +98,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 		}
 		
 		return lastJavaScriptType != null ? lastJavaScriptType.getType()
-				: ((SourceCompletionProvider) provider).getTypesFactory().getDefaultTypeDeclaration();
+				: provider.getTypesFactory().getDefaultTypeDeclaration();
 	}
 	
 	/**
@@ -107,11 +107,11 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	 * @return TypeDeclaration for node or null if not found.
 	 */
 	public TypeDeclaration resolveNode(AstNode node) {
-		if(node == null) return ((SourceCompletionProvider) provider).getTypesFactory().getDefaultTypeDeclaration();
+		if(node == null) return provider.getTypesFactory().getDefaultTypeDeclaration();
 		CompilerNodeVisitor visitor = new CompilerNodeVisitor(true);
 		node.visit(visitor);
 		return lastJavaScriptType != null ? lastJavaScriptType.getType()
-				: ((SourceCompletionProvider) provider).getTypesFactory().getDefaultTypeDeclaration();
+				: provider.getTypesFactory().getDefaultTypeDeclaration();
 	}
 	
 	/**
@@ -432,7 +432,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 			if (completion != null) {
 				String type = completion.getType(true);
 				if (type != null) {
-					TypeDeclaration newType = ((SourceCompletionProvider) provider).getTypesFactory()
+					TypeDeclaration newType = provider.getTypesFactory()
 							.getTypeDeclaration(type);
 					if (newType != null) {
 						javaScriptType = provider.getJavaScriptTypesFactory()

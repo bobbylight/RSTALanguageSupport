@@ -226,16 +226,16 @@ private CaseInsensitiveComparator comparator = new CaseInsensitiveComparator();
 		Token t = scanner.next();
 		while (t != null) {
 			if (t.isRightCurly()) {
-				block.setEndOffset(t.textOffset);
+				block.setEndOffset(t.getOffset());
 				return;
 			}
 			else if (t.isLeftCurly()) {
-				CodeBlock child = block.addChildCodeBlock(t.textOffset);
+				CodeBlock child = block.addChildCodeBlock(t.getOffset());
 				parseCodeBlock(scanner, child);
 			}
-			else if (t.type==Token.VARIABLE) {
+			else if (t.getType()==Token.VARIABLE) {
 				VariableDeclaration varDec = new VariableDeclaration(
-						t.getLexeme(), t.textOffset);
+						t.getLexeme(), t.getOffset());
 				block.addVariable(varDec);
 			}
 			t = scanner.next();

@@ -424,7 +424,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 					Token list = textArea.getTokenListForLine(curLine);
 					Token prevToken = RSyntaxUtilities.getTokenAtOffset(list, offs);
 					if (prevToken!=null &&
-							prevToken.type==Token.LITERAL_STRING_DOUBLE_QUOTE) {
+							prevToken.getType()==Token.LITERAL_STRING_DOUBLE_QUOTE) {
 						ClassFile cf = getClassFileFor(cu, "java.lang.String");
 						addCompletionsForExtendedClass(set, cu, cf,
 													cu.getPackageName(), null);

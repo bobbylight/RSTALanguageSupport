@@ -211,10 +211,10 @@ public class PhpCompletionProvider extends HtmlCompletionProvider {
 
 		// Check previous tokens on this line.  We're looking to see if either
 		// "<?php" or "<?" comes after any "?>" (before our caret position).
-		while (token!=null && token.isPaintable() && token.offset<=dot) {
-			if (token.type==Token.SEPARATOR && token.textCount>=2) {
-				char ch1 = token.text[token.textOffset];
-				char ch2 = token.text[token.textOffset+1];
+		while (token!=null && token.isPaintable() && token.getOffset()<=dot) {
+			if (token.getType()==Token.SEPARATOR && token.length()>=2) {
+				char ch1 = token.charAt(0);
+				char ch2 = token.charAt(1);
 				if (ch1=='<' && ch2=='?') {
 					inPhp = true;
 				}

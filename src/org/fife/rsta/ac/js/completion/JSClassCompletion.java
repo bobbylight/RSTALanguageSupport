@@ -15,7 +15,6 @@ import org.fife.rsta.ac.java.rjc.ast.TypeDeclaration;
 import org.fife.rsta.ac.js.IconFactory;
 import org.fife.rsta.ac.js.JavaScriptHelper;
 import org.fife.rsta.ac.js.SourceCompletionProvider;
-import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 import org.fife.ui.autocomplete.BasicCompletion;
 import org.fife.ui.autocomplete.CompletionProvider;
 

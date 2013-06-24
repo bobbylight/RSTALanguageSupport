@@ -28,6 +28,7 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
 import org.fife.ui.rsyntaxtextarea.SelectRegionLinkGeneratorResult;
 import org.fife.ui.rsyntaxtextarea.Token;
+import org.fife.ui.rsyntaxtextarea.TokenImpl;
 
 
 /**
@@ -79,7 +80,7 @@ class JavaLinkGenerator implements LinkGenerator {
 
 						// RSTA's tokens are pooled and re-used, so we must
 						// defensively make a copy of the one we want to keep!
-						Token token = new Token(t);
+						Token token = new TokenImpl(t);
 						boolean isMethod = false;
 
 						if (prev==null) {
@@ -226,7 +227,7 @@ class JavaLinkGenerator implements LinkGenerator {
 			}
 
 			if (start>-1) {
-				return new SelectRegionLinkGeneratorResult(textArea, t.offset,
+				return new SelectRegionLinkGeneratorResult(textArea, t.getOffset(),
 						start, end);
 			}
 

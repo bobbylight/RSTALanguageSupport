@@ -191,7 +191,7 @@ public abstract class AbstractMarkupLanguageSupport
 			// simplicity.  Tags spanning multiple lines aren't common anyway.
 			Token t = doc.getTokenListForLine(curLine);
 			while (t!=null && t.isPaintable()) {
-				if (t.type==Token.MARKUP_TAG_DELIMITER) {
+				if (t.getType()==Token.MARKUP_TAG_DELIMITER) {
 					if (t.isSingleChar('<')) {
 						t = t.getNextToken();
 						if (t!=null && t.isPaintable()) {
@@ -199,7 +199,7 @@ public abstract class AbstractMarkupLanguageSupport
 						}
 					}
 					else if (t.isSingleChar('>')) {
-						if (t.offset==dot) {
+						if (t.getOffset()==dot) {
 							if (candidate==null ||
 									shouldAutoCloseTag(candidate)) {
 								return candidate;
