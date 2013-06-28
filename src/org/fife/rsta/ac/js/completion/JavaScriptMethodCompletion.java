@@ -2,7 +2,6 @@ package org.fife.rsta.ac.js.completion;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.Icon;
 
 import org.fife.rsta.ac.java.rjc.ast.FormalParameter;
@@ -21,6 +20,7 @@ public class JavaScriptMethodCompletion extends FunctionCompletion implements
 
 	private String compareString;
 	private boolean systemFunction;
+	private String nameAndParameters;
 
 
 	public JavaScriptMethodCompletion(CompletionProvider provider, Method method) {
@@ -34,6 +34,22 @@ public class JavaScriptMethodCompletion extends FunctionCompletion implements
 			params.add(new FunctionCompletion.Parameter(null, name));
 		}
 		setParams(params);
+	}
+
+
+	private String createNameAndParameters() {
+		StringBuffer sb = new StringBuffer(getName());
+		sb.append('(');
+		int count = method.getParameterCount();
+		for (int i = 0; i < count; i++) {
+			FormalParameter fp = method.getParameter(i);
+			sb.append(fp.getName());
+			if (i < count - 1) {
+				sb.append(", ");
+			}
+		}
+		sb.append(')');
+		return sb.toString();
 	}
 
 
@@ -71,23 +87,10 @@ public class JavaScriptMethodCompletion extends FunctionCompletion implements
 
 
 	public String getSignature() {
-		return getNameAndParameters();
-	}
-
-
-	private String getNameAndParameters() {
-		StringBuffer sb = new StringBuffer(getName());
-		sb.append('(');
-		int count = method.getParameterCount();
-		for (int i = 0; i < count; i++) {
-			FormalParameter fp = method.getParameter(i);
-			sb.append(fp.getName());
-			if (i < count - 1) {
-				sb.append(", ");
-			}
+		if (nameAndParameters==null) {
+			nameAndParameters = createNameAndParameters();
 		}
-		sb.append(')');
-		return sb.toString();
+		return nameAndParameters;
 	}
 
 

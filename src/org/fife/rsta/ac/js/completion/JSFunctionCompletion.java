@@ -12,7 +12,6 @@ package org.fife.rsta.ac.js.completion;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.Icon;
 import javax.swing.text.JTextComponent;
 
@@ -32,6 +31,7 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 
 	private JSMethodData methodData;
 	private String compareString;
+	private String nameAndParameters;
 
 
 	public JSFunctionCompletion(CompletionProvider provider, MethodInfo method) {
@@ -100,6 +100,7 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 		return rc;
 	}
 
+
 	public boolean equals(Object obj) {
 		return (obj instanceof JSCompletion)
 				&& ((JSCompletion) obj).getLookupName().equals(
@@ -166,7 +167,10 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 
 
 	private String getNameAndParameters() {
-		return formatMethodAtString(getName(), methodData);
+		if (nameAndParameters==null) {
+			nameAndParameters = formatMethodAtString(getName(), methodData);
+		}
+		return nameAndParameters;
 	}
 
 
