@@ -530,11 +530,14 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	 */
 	private void processVariableNode(Node child, CodeBlock block, Set set,
 			String entered, int offset) {
-		VariableDeclaration varDec = (VariableDeclaration) child;
-		List vars = varDec.getVariables();
-		for (Iterator i = vars.iterator(); i.hasNext();) {
-			VariableInitializer var = (VariableInitializer) i.next();
-			extractVariableFromNode(var, block, offset);
+		if(block.contains(dot))
+		{
+			VariableDeclaration varDec = (VariableDeclaration) child;
+			List vars = varDec.getVariables();
+			for (Iterator i = vars.iterator(); i.hasNext();) {
+				VariableInitializer var = (VariableInitializer) i.next();
+				extractVariableFromNode(var, block, offset);
+			}
 		}
 	}
 
