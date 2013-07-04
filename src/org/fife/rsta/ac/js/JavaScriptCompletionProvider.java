@@ -125,5 +125,9 @@ public class JavaScriptCompletionProvider extends
 		sourceProvider.parseDocument(dotPosition);
 	}
 
+	
+	protected synchronized void reparseDocument(int offset) {
+		sourceProvider.parseDocument(offset);
+	}
 
 }

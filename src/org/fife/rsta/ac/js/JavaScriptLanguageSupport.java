@@ -340,6 +340,11 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	{
 		return parser;
 	}
+	
+	protected void reparseDocument(int offset)
+	{
+		provider.reparseDocument(offset);
+	}
 
 
 	/**
