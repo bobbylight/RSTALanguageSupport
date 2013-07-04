@@ -530,7 +530,8 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	 */
 	private void processVariableNode(Node child, CodeBlock block, Set set,
 			String entered, int offset) {
-		if(block.contains(dot))
+		//check block can resolve variable or is pre-processing variables
+		if(block.contains(dot) || isPreProcessing())
 		{
 			VariableDeclaration varDec = (VariableDeclaration) child;
 			List vars = varDec.getVariables();
