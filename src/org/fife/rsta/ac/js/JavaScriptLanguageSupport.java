@@ -184,7 +184,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 		textArea.addParser(parser);
 		textArea.setToolTipSupplier(provider);
 
-		Info info = new Info(textArea, provider, parser);
+		Info info = new Info(provider, parser);
 		parserToInfoMap.put(parser, info);
 
 		installKeyboardShortcuts(textArea);
@@ -356,15 +356,12 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	private static class Info implements PropertyChangeListener {
 
 		public JavaScriptCompletionProvider provider;
-		private RSyntaxTextArea textArea;
-
+		
 
 		// public JavaScriptParser parser;
 
-		public Info(RSyntaxTextArea textArea,
-				JavaScriptCompletionProvider provider, JavaScriptParser parser) {
+		public Info(JavaScriptCompletionProvider provider, JavaScriptParser parser) {
 			this.provider = provider;
-			this.textArea = textArea;
 			// this.parser = parser;
 			parser.addPropertyChangeListener(JavaScriptParser.PROPERTY_AST,
 					this);
@@ -382,7 +379,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 
 			if (JavaScriptParser.PROPERTY_AST.equals(name)) {
 				AstRoot root = (AstRoot) e.getNewValue();
-				provider.setASTRoot(root, textArea.getCaretPosition());
+				provider.setASTRoot(root);
 			}
 
 		}

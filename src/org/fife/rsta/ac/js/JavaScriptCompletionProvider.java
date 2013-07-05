@@ -120,9 +120,8 @@ public class JavaScriptCompletionProvider extends
 	 * 
 	 * @param root The AST.
 	 */
-	public synchronized void setASTRoot(AstRoot root, int dotPosition) {
+	public synchronized void setASTRoot(AstRoot root) {
 		this.astRoot = root;
-		sourceProvider.parseDocument(dotPosition);
 	}
 
 	
