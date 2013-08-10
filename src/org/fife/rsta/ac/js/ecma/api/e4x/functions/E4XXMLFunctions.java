@@ -24,7 +24,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	public void addNamespace(E4XNamespace namespace);
 	
 	/**
-	 * <b>function appendChild(xml)</b> appends the given child to the end of this XML object’s properties and returns this XML object.
+	 * <b>function appendChild(xml)</b> appends the given child to the end of this XML object's properties and returns this XML object.
 	 * <p>
      * <strong>Example</strong>
 	 * <pre>
@@ -314,7 +314,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * <p>
      * <strong>Example</strong>
 	 * <pre>
-	 * // Get the parent element of the second name in "e". Returns {@code <employee id="1" …}
+	 * // Get the parent element of the second name in "e". Returns {@code <employee id="1" ...}
 	 * var firstNameParent = e..name[1].parent();
 	 * </pre> 
 	 * @returns the parent of this XML object
@@ -360,7 +360,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	public E4XXML removeNamespace(E4XNamespace namespace);
 	
 	/**
-	 * <b>function replace(propertyName, value)</b> replaces the XML properties of this XML object specified by propertyName with value and returns this XML object. If this XML object contains no properties that match propertyName, the replace method returns without modifying this XML object. The propertyName parameter may be a numeric property name, an unqualified name for a set of XML elements, a qualified name for a set of XML elements or the properties wildcard “*”. When the propertyName parameter is an unqualified name, it identifies XML elements in the default namespace. The value parameter may be an XML object, XMLList object or any value that may be converted to a String with ToString().
+	 * <b>function replace(propertyName, value)</b> replaces the XML properties of this XML object specified by propertyName with value and returns this XML object. If this XML object contains no properties that match propertyName, the replace method returns without modifying this XML object. The propertyName parameter may be a numeric property name, an unqualified name for a set of XML elements, a qualified name for a set of XML elements or the properties wildcard "*". When the propertyName parameter is an unqualified name, it identifies XML elements in the default namespace. The value parameter may be an XML object, XMLList object or any value that may be converted to a String with ToString().
 	 * <p>
      * <strong>Example</strong>
 	 * <pre>
@@ -379,7 +379,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	public E4XXML replace(JSString propertyName, JSObject value);
 	
 	/**
-	 * <b>function replace(propertyName, value)</b> replaces the XML properties of this XML object specified by propertyName with value and returns this XML object. If this XML object contains no properties that match propertyName, the replace method returns without modifying this XML object. The propertyName parameter may be a numeric property name, an unqualified name for a set of XML elements, a qualified name for a set of XML elements or the properties wildcard “*”. When the propertyName parameter is an unqualified name, it identifies XML elements in the default namespace. The value parameter may be an XML object, XMLList object or any value that may be converted to a String with ToString().
+	 * <b>function replace(propertyName, value)</b> replaces the XML properties of this XML object specified by propertyName with value and returns this XML object. If this XML object contains no properties that match propertyName, the replace method returns without modifying this XML object. The propertyName parameter may be a numeric property name, an unqualified name for a set of XML elements, a qualified name for a set of XML elements or the properties wildcard "*". When the propertyName parameter is an unqualified name, it identifies XML elements in the default namespace. The value parameter may be an XML object, XMLList object or any value that may be converted to a String with ToString().
 	 * <p>
      * <strong>Example</strong>
 	 * <pre>

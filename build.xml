@@ -63,7 +63,7 @@
 	<property name="doc-dir"          location="javadoc"/>
 	<property name="debug"            value="true"/>
 	<property name="debuglevel"       value="lines,vars,source"/>
-	<property name="java-level"       value="1.4"/>
+	<property name="java-level"       value="1.5"/>
 	<property name="autocomplete-jar" location="../AutoComplete/dist/autocomplete.jar"/>
 	<property name="rsta-jar"         location="../RSyntaxTextArea/dist/rsyntaxtextarea.jar"/>
 
