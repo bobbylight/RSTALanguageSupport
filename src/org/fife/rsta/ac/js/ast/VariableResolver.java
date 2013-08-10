@@ -11,7 +11,6 @@
 package org.fife.rsta.ac.js.ast;
 
 import java.util.HashMap;
-import java.util.Iterator;
 
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
 
@@ -24,16 +23,21 @@ import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
 public class VariableResolver {
 
 	// HashMap of local variables mapped Name --> JSVariableDeclaration
-	private HashMap localVariables = new HashMap();
+	private HashMap<String, JavaScriptVariableDeclaration> localVariables =
+			new HashMap<String, JavaScriptVariableDeclaration>();
 	// pre processing variables - these are set when pre-processing
-	private HashMap preProcessedVariables = new HashMap();
+	private HashMap<String, JavaScriptVariableDeclaration> preProcessedVariables =
+			new HashMap<String, JavaScriptVariableDeclaration>();
 	// HashMap of system variables mapped Name --> JSVariableDeclaration
 	// system variables do not get cleared as they are always available to the
 	// system
-	private HashMap systemVariables = new HashMap();
+	private HashMap<String, JavaScriptVariableDeclaration> systemVariables =
+			new HashMap<String, JavaScriptVariableDeclaration>();
 	
-	private HashMap localFunctions = new HashMap();
-	private HashMap preProcessedFunctions = new HashMap();
+	private HashMap<String, JavaScriptFunctionDeclaration> localFunctions =
+			new HashMap<String, JavaScriptFunctionDeclaration>();
+	private HashMap<String, JavaScriptFunctionDeclaration> preProcessedFunctions =
+			new HashMap<String, JavaScriptFunctionDeclaration>();
 
 
 	/**
@@ -136,10 +140,10 @@ public class VariableResolver {
 	 * @param dot
 	 * @return JSVariableDeclaration from the name
 	 */
-	private JavaScriptVariableDeclaration findDeclaration(HashMap variables,
+	private JavaScriptVariableDeclaration findDeclaration(
+			HashMap<String, JavaScriptVariableDeclaration> variables,
 			String name, int dot) {
-		JavaScriptVariableDeclaration dec = (JavaScriptVariableDeclaration) variables
-				.get(name);
+		JavaScriptVariableDeclaration dec = variables.get(name);
 
 		if (dec != null) {
 			if (dec.getCodeBlock() == null || dec.getCodeBlock().contains(dot)) {
@@ -182,10 +186,7 @@ public class VariableResolver {
 			preProcessedFunctions.clear();
 		}
 		else {
-			for (Iterator i = preProcessedVariables.values().iterator(); i
-					.hasNext();) {
-				JavaScriptVariableDeclaration dec = (JavaScriptVariableDeclaration) i
-						.next();
+			for (JavaScriptVariableDeclaration dec : preProcessedVariables.values()) {
 				dec.resetVariableToOriginalType();
 			}
 		}
@@ -220,9 +221,9 @@ public class VariableResolver {
 	
 	public JavaScriptFunctionDeclaration findFunctionDeclaration(String name)
 	{
-		JavaScriptFunctionDeclaration dec = (JavaScriptFunctionDeclaration) localFunctions.get(name);
+		JavaScriptFunctionDeclaration dec = localFunctions.get(name);
 		if(dec == null) {
-			dec = (JavaScriptFunctionDeclaration) preProcessedFunctions.get(name);
+			dec = preProcessedFunctions.get(name);
 		}
 		return dec;	
 	}
@@ -244,9 +245,9 @@ public class VariableResolver {
 		return func;
 	}
 	
-	private JavaScriptFunctionDeclaration findFirstFunction(String name, HashMap functions) {
-		for(Iterator i = functions.values().iterator(); i.hasNext();) {
-			JavaScriptFunctionDeclaration func = (JavaScriptFunctionDeclaration) i.next();
+	private JavaScriptFunctionDeclaration findFirstFunction(String name,
+			HashMap<String, JavaScriptFunctionDeclaration> functions) {
+		for (JavaScriptFunctionDeclaration func : functions.values()) {
 			if(name.equals(func.getFunctionName())) {
 				return func;
 			}

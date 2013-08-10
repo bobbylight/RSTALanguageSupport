@@ -95,7 +95,7 @@ public class ClassFile implements AccessFlags {
 	/**
 	 * Parameter types, such as "String" in <code>List&lt;String&gt;</code>.
 	 */
-	private List paramTypes;
+	private List<String> paramTypes;
 
 	/**
 	 * A mapping of type parameters to type arguments.  This is set via
@@ -355,7 +355,7 @@ public class ClassFile implements AccessFlags {
 	 *         if none.  This is a list of {@link MethodInfo}s.
 	 * @see #getMethodInfoByName(String, int)
 	 */
-	public List getMethodInfoByName(String name) {
+	public List<MethodInfo> getMethodInfoByName(String name) {
 		return getMethodInfoByName(name, -1);
 	}
 
@@ -372,14 +372,14 @@ public class ClassFile implements AccessFlags {
 	 *         {@link MethodInfo}s.
 	 * @see #getMethodInfoByName(String)
 	 */
-	public List getMethodInfoByName(String name, int argCount) {
-		List methods = null;
+	public List<MethodInfo> getMethodInfoByName(String name, int argCount) {
+		List<MethodInfo> methods = null;
 		for (int i=0; i<getMethodCount(); i++) {
 			MethodInfo info = this.methods[i];
 			if (name.equals(info.getName())) {
 				if (argCount<0 || argCount==info.getParameterCount()) {
 					if (methods==null) {
-						methods = new ArrayList(1); // Usually just 1
+						methods = new ArrayList<MethodInfo>(1); // Usually just 1
 					}
 					methods.add(info);
 				}
@@ -403,7 +403,7 @@ public class ClassFile implements AccessFlags {
 	}
 
 
-	public List getParamTypes() {
+	public List<String> getParamTypes() {
 		return paramTypes;
 	}
 

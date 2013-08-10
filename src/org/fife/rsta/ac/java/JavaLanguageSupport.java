@@ -53,7 +53,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 	/**
 	 * Maps <tt>JavaParser</tt>s to <tt>Info</tt> instances about them.
 	 */
-	private Map parserToInfoMap;
+	private Map<JavaParser, Info> parserToInfoMap;
 
 	/**
 	 * The shared jar manager to use with all {@link JavaCompletionProvider}s,
@@ -72,7 +72,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 	 * Constructor.
 	 */
 	public JavaLanguageSupport() {
-		parserToInfoMap = new HashMap();
+		parserToInfoMap = new HashMap<JavaParser, Info>();
 		jarManager = new JarManager();
 		setAutoActivationEnabled(true);
 		setParameterAssistanceEnabled(true);
@@ -191,7 +191,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		uninstallImpl(textArea);
 
 		JavaParser parser = getParser(textArea);
-		Info info = (Info)parserToInfoMap.remove(parser);
+		Info info = parserToInfoMap.remove(parser);
 		if (info!=null) { // Should always be true
 			parser.removePropertyChangeListener(
 				JavaParser.PROPERTY_COMPILATION_UNIT, info);
@@ -397,9 +397,10 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 				}
 
 				// Loop through all import statements.
-				for (Iterator i=cu.getImportIterator(); i.hasNext(); ) {
+				Iterator<ImportDeclaration> i = cu.getImportIterator();
+				for (; i.hasNext(); ) {
 
-					ImportDeclaration id = (ImportDeclaration)i.next();
+					ImportDeclaration id = i.next();
 					offset = id.getNameEndOffset() + 1;
 
 					// Pulling in static methods, etc. from a class - skip

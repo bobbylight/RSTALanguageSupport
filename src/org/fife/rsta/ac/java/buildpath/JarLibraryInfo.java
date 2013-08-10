@@ -99,9 +99,9 @@ public class JarLibraryInfo extends LibraryInfo {
 
 		try {
 
-			Enumeration e = jar.entries();
+			Enumeration<JarEntry> e = jar.entries();
 			while (e.hasMoreElements()) {
-				ZipEntry entry = (ZipEntry)e.nextElement();
+				ZipEntry entry = e.nextElement();
 				String entryName = entry.getName();
 				if (entryName.endsWith(".class")) {
 					entryName = entryName.substring(0, entryName.length()-6);

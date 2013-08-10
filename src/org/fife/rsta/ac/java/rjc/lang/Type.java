@@ -28,14 +28,14 @@ import java.util.List;
  */
 public class Type {
 
-	private List identifiers;
-	private List typeArguments;
+	private List<String> identifiers;
+	private List<List<TypeArgument>> typeArguments;
 	private int bracketPairCount;
 
 
 	public Type() {
-		identifiers = new ArrayList(1);
-		typeArguments = new ArrayList(1);
+		identifiers = new ArrayList<String>(1);
+		typeArguments = new ArrayList<List<TypeArgument>>(1);
 	}
 
 
@@ -59,7 +59,7 @@ public class Type {
 	 * @param typeArgs The type arguments for the identifier.  This may be
 	 *        <code>null</code> or an empty list if there are none.
 	 */
-	public void addIdentifier(String identifier, List typeArgs) {
+	public void addIdentifier(String identifier, List<TypeArgument> typeArgs) {
 		identifiers.add(identifier);
 		typeArguments.add(typeArgs);
 	}
@@ -103,12 +103,12 @@ public class Type {
 		for (int i=start; i<count; i++) {
 			sb.append(identifiers.get(i).toString());
 			if (addTypeArgs && typeArguments.get(i)!=null) {
-				List typeArgs = (List)typeArguments.get(i);
+				List<TypeArgument> typeArgs = typeArguments.get(i);
 				int typeArgCount = typeArgs.size();
 				if (typeArgCount>0) {
 					sb.append('<');
 					for (int j=0; j<typeArgCount; j++) {
-						TypeArgument typeArg = (TypeArgument)typeArgs.get(j);
+						TypeArgument typeArg = typeArgs.get(j);
 						//if (typeA)
 						sb.append(typeArg.toString());
 						if (j<typeArgCount-1) {
@@ -132,8 +132,8 @@ public class Type {
 	}
 
 
-	public List getTypeArguments(int index) {
-		return (List)typeArguments.get(index);
+	public List<TypeArgument> getTypeArguments(int index) {
+		return typeArguments.get(index);
 	}
 
 
@@ -159,7 +159,7 @@ public class Type {
 	public boolean isBasicType() {
 		boolean basicType = false;
 		if (!isArray() && identifiers.size()==1 && typeArguments.get(0)==null) {
-			String str = (String)identifiers.get(0);
+			String str = identifiers.get(0);
 			basicType = "byte".equals(str) ||
 						"float".equals(str) ||
 						"double".equals(str) ||

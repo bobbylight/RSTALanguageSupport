@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.fife.rsta.ac.java.rjc.lang.Annotation;
 import org.fife.rsta.ac.java.rjc.lexer.Offset;
 import org.fife.rsta.ac.java.rjc.lexer.Token;
 import org.fife.rsta.ac.java.rjc.notices.ParserNotice;
@@ -35,19 +36,19 @@ import org.fife.rsta.ac.java.rjc.notices.ParserNotice;
 public class CompilationUnit extends AbstractASTNode
 							implements TypeDeclarationContainer {
 
-	private List annotations;
+	private List<Annotation> annotations;
 	private Package pkg;
-	private List imports;
-	private List typeDeclarations;
-	private List notices;
+	private List<ImportDeclaration> imports;
+	private List<TypeDeclaration> typeDeclarations;
+	private List<ParserNotice> notices;
 
 	private static final Offset ZERO_OFFSET = new ZeroOffset();
 
 
 	public CompilationUnit(String name) {
 		super(name, ZERO_OFFSET);
-		imports = new ArrayList(3); // Usually not many,
-		typeDeclarations = new ArrayList(1); // Usually only 1
+		imports = new ArrayList<ImportDeclaration>(3); // Usually not many,
+		typeDeclarations = new ArrayList<TypeDeclaration>(1); // Usually only 1
 	}
 
 
@@ -69,7 +70,7 @@ public class CompilationUnit extends AbstractASTNode
 
 	public void addParserNotice(ParserNotice notice) {
 		if (notices==null) {
-			notices = new ArrayList();
+			notices = new ArrayList<ParserNotice>();
 			notices.add(notice);
 		}
 	}
@@ -85,7 +86,7 @@ public class CompilationUnit extends AbstractASTNode
 	}
 
 
-	public Iterator getAnnotationIterator() {
+	public Iterator<Annotation> getAnnotationIterator() {
 		return annotations.iterator();
 	}
 
@@ -128,9 +129,9 @@ public class CompilationUnit extends AbstractASTNode
 
 		Point range = null;
 
-		for (Iterator i=getTypeDeclarationIterator(); i.hasNext(); ) {
+		for (Iterator<TypeDeclaration> i=getTypeDeclarationIterator(); i.hasNext(); ) {
 
-			TypeDeclaration td = (TypeDeclaration)i.next();
+			TypeDeclaration td = i.next();
 			int start = td.getBodyStartOffset();
 			int end = td.getBodyEndOffset();
 
@@ -138,8 +139,8 @@ public class CompilationUnit extends AbstractASTNode
 
 				if (td instanceof NormalClassDeclaration) {
 					NormalClassDeclaration ncd = (NormalClassDeclaration)td;
-					for (Iterator j=ncd.getMemberIterator(); j.hasNext(); ) {
-						Member m = (Member)j.next();
+					for (Iterator<Member> j=ncd.getMemberIterator(); j.hasNext(); ) {
+						Member m = j.next();
 						if (m instanceof Method) {
 							Method method = (Method)m;
 							CodeBlock body = method.getBody();
@@ -182,12 +183,12 @@ public class CompilationUnit extends AbstractASTNode
 	 *
 	 * @return A list or imports, or an empty list if there are none.
 	 */
-	public List getImports() {
-		return new ArrayList(imports);
+	public List<ImportDeclaration> getImports() {
+		return new ArrayList<ImportDeclaration>(imports);
 	}
 
 
-	public Iterator getImportIterator() {
+	public Iterator<ImportDeclaration> getImportIterator() {
 		return imports.iterator();
 	}
 
@@ -220,7 +221,7 @@ public class CompilationUnit extends AbstractASTNode
 		if (notices==null) {
 			throw new IndexOutOfBoundsException("No parser notices available");
 		}
-		return (ParserNotice)notices.get(index);
+		return notices.get(index);
 	}
 
 
@@ -230,7 +231,7 @@ public class CompilationUnit extends AbstractASTNode
 
 
 	public TypeDeclaration getTypeDeclaration(int index) {
-		return (TypeDeclaration)typeDeclarations.get(index);
+		return typeDeclarations.get(index);
 	}
 
 
@@ -247,8 +248,7 @@ public class CompilationUnit extends AbstractASTNode
 
 		TypeDeclaration typeDec = null;
 
-		for (Iterator i=getTypeDeclarationIterator(); i.hasNext(); ) {
-			TypeDeclaration td = (TypeDeclaration)i.next();
+		for (TypeDeclaration td : typeDeclarations) {
 			if (td.getBodyContainsOffset(offs)) {
 				typeDec = td;
 				break;
@@ -265,7 +265,7 @@ public class CompilationUnit extends AbstractASTNode
 	}
 
 
-	public Iterator getTypeDeclarationIterator() {
+	public Iterator<TypeDeclaration> getTypeDeclarationIterator() {
 		return typeDeclarations.iterator();
 	}
 

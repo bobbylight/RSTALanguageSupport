@@ -141,7 +141,7 @@ public class JSBeanCompletion extends VariableCompletion implements
 	/**
 	 * {@inheritDoc}
 	 */
-	public int compareTo(Object o) {
+	public int compareTo(Completion o) {
 		if (o==this) {
 			return 0;
 		}
@@ -149,11 +149,7 @@ public class JSBeanCompletion extends VariableCompletion implements
 			JSBeanCompletion c2 = (JSBeanCompletion)o;
 			return getLookupName().compareTo(c2.getLookupName());
 		}
-		else if (o instanceof Completion) {
-			Completion c2 = (Completion)o;
-			return toString().compareTo(c2.toString());
-		}
-		return -1;
+		return super.compareTo(o);
 	}
 
 }

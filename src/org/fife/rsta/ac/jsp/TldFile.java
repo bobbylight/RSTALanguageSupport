@@ -16,6 +16,7 @@ import java.util.jar.*;
 import javax.xml.parsers.*;
 
 import org.fife.rsta.ac.jsp.TldAttribute.TldAttributeParam;
+import org.fife.ui.autocomplete.ParameterizedCompletion.Parameter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -33,7 +34,7 @@ public class TldFile {
 
 	private JspCompletionProvider provider;
 	private File jar;
-	private List tldElems;
+	private List<TldElement> tldElems;
 
 
 	public TldFile(JspCompletionProvider provider, File jar)
@@ -44,11 +45,9 @@ public class TldFile {
 	}
 
 
-	public List getAttributesForTag(String tagName) {
+	public List<Parameter> getAttributesForTag(String tagName) {
 
-		
-		for (int i=0; i<tldElems.size(); i++) {
-			TldElement elem = (TldElement)tldElems.get(i);
+		for (TldElement elem : tldElems) {
 			if (elem.getName().equals(tagName)) {
 				return elem.getAttributes();
 			}
@@ -71,7 +70,7 @@ public class TldFile {
 
 
 	public TldElement getElement(int index) {
-		return (TldElement)tldElems.get(index);
+		return tldElems.get(index);
 	}
 
 
@@ -80,14 +79,14 @@ public class TldFile {
 	}
 
 
-	private List loadTldElems() throws IOException {
+	private List<TldElement> loadTldElems() throws IOException {
 
 		JarFile jar = new JarFile(this.jar);
-		List elems = new ArrayList();
+		List<TldElement> elems = null;
 
-		Enumeration entries = jar.entries();
+		Enumeration<JarEntry> entries = jar.entries();
 		while (entries.hasMoreElements()) {
-			JarEntry entry = (JarEntry)entries.nextElement();
+			JarEntry entry = entries.nextElement();
 			if (entry.getName().endsWith("tld")) {
 				//System.out.println(entry.getName());
 				InputStream in = jar.getInputStream(entry);
@@ -107,9 +106,9 @@ public class TldFile {
 	}
 
 
-	private List parseTld(InputStream in) throws IOException {
+	private List<TldElement> parseTld(InputStream in) throws IOException {
 
-		List tldElems = new ArrayList();
+		List<TldElement> tldElems = new ArrayList<TldElement>();
 
 		BufferedInputStream bin = new BufferedInputStream(in);
 //BufferedReader r = new BufferedReader(new InputStreamReader(bin));
@@ -145,7 +144,8 @@ public class TldFile {
 			TldElement tldElem = new TldElement(provider, name, desc);
 			tldElems.add(tldElem);
 			NodeList attrNl = elem.getElementsByTagName("attribute");
-			List attrs = new ArrayList(attrNl.getLength());
+			List<TldAttributeParam> attrs =
+					new ArrayList<TldAttributeParam>(attrNl.getLength());
 			for (int j=0; j<attrNl.getLength(); j++) {
 				Element attrElem = (Element)attrNl.item(j);
 				name = getChildText(attrElem.getElementsByTagName("name").item(0));

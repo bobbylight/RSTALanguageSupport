@@ -40,14 +40,14 @@ public class IconFactory {
 	public static final String DEFAULT_CLASS_ICON = "default_class";
 	public static final String JSDOC_ITEM_ICON		= "jsdoc_item";
 
-	private Map iconMap;
+	private Map<String, Icon> iconMap;
 
 	private static final IconFactory INSTANCE = new IconFactory();
 
 
 	private IconFactory() {
 
-		iconMap = new HashMap();
+		iconMap = new HashMap<String, Icon>();
 
 		iconMap.put(FUNCTION_ICON,
 				loadIcon("org/fife/rsta/ac/js/img/methpub_obj.gif"));
@@ -75,7 +75,7 @@ public class IconFactory {
 
 
 	private Icon getIconImage(String name) {
-		return (Icon) iconMap.get(name);
+		return iconMap.get(name);
 	}
 
 

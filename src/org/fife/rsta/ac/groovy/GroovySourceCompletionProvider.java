@@ -19,6 +19,7 @@ import org.fife.rsta.ac.common.TokenScanner;
 import org.fife.rsta.ac.common.VariableDeclaration;
 import org.fife.rsta.ac.java.JarManager;
 import org.fife.ui.autocomplete.BasicCompletion;
+import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.Token;
@@ -77,7 +78,8 @@ public class GroovySourceCompletionProvider extends DefaultCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
-	protected List getCompletionsImpl(JTextComponent comp) {
+	@SuppressWarnings("unchecked")
+	protected List<Completion> getCompletionsImpl(JTextComponent comp) {
 
 		completions.clear();
 

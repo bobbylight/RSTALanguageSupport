@@ -44,7 +44,7 @@ public class HtmlLanguageSupport extends AbstractMarkupLanguageSupport {
 	/**
 	 * A cached set of tags that require closing tags.
 	 */
-	private static Set tagsToClose = new HashSet();
+	private static Set<String> tagsToClose = new HashSet<String>();
 
 
 	/**
@@ -79,7 +79,7 @@ public class HtmlLanguageSupport extends AbstractMarkupLanguageSupport {
 	 * 
 	 * @return The set of tags to close.
 	 */
-	public static Set getTagsToClose() {
+	public static Set<String> getTagsToClose() {
 		return tagsToClose;
 	}
 
@@ -91,8 +91,8 @@ public class HtmlLanguageSupport extends AbstractMarkupLanguageSupport {
 	 * @param res The resource.
 	 * @return The set of tags that require closing.
 	 */
-	private static final Set getTagsToClose(String res) {
-		Set tags = new HashSet();
+	private static final Set<String> getTagsToClose(String res) {
+		Set<String> tags = new HashSet<String>();
 		InputStream in = HtmlLanguageSupport.class.getResourceAsStream(res);
 		if (in!=null) { // Never happens
 			String line = null;

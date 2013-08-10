@@ -10,14 +10,10 @@
  */
 package org.fife.rsta.ac;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
-import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 
@@ -30,7 +26,7 @@ import java.util.Map;
  */
 public class IOUtil {
 
-	private static Map DEFAULT_ENV;
+	private static Map<String, String> DEFAULT_ENV;
 
 
 	/**
@@ -46,7 +42,7 @@ public class IOUtil {
 	 *
 	 * @return A mapping of environment variable names to values.
 	 */
-	private static Map getDefaultEnvMap() {
+	private static Map<String, String> getDefaultEnvMap() {
 
 		// If we've already created it...
 		if (DEFAULT_ENV!=null) {
@@ -55,50 +51,9 @@ public class IOUtil {
 
 		// In Java 5+, we can just get the environment directly
 		try {
-
-			Method m = System.class.getDeclaredMethod("getenv", null);
-			DEFAULT_ENV = (Map)m.invoke(null, null);
-
-		} catch (Exception e) { // Java 1.4
-
-			DEFAULT_ENV = new HashMap();
-			StringBuffer stdout = new StringBuffer();
-			String command = null;
-
-			// Windows
-			if (File.separatorChar=='\\') {
-				command = "cmd.exe /c set";
-			}
-
-			// Unix
-			else {
-				command = "/bin/sh -c env";
-			}
-
-			try {
-				Process p = Runtime.getRuntime().exec(command);
-				IOUtil.waitForProcess(p, stdout, null);
-			} catch (IOException ioe) {
-				ioe.printStackTrace();
-			}
-
-			String str = stdout.toString();
-			BufferedReader r = new BufferedReader(new StringReader(str));
-			String line = null;
-			try {
-				while ((line=r.readLine())!=null) {
-					int equals = line.indexOf('=');
-					if (equals>-1) { // Always true
-						String key = line.substring(0, equals);
-						String value = line.substring(equals+1);
-						DEFAULT_ENV.put(key, value);
-					}
-				}
-				r.close();
-			} catch (IOException ioe) { // Never happens
-				ioe.printStackTrace();
-			}
-
+			DEFAULT_ENV = System.getenv();
+		} catch (SecurityException e) { // In an applet perhaps?
+			DEFAULT_ENV = Collections.emptyMap();
 		}
 
 		return DEFAULT_ENV;
@@ -116,65 +71,13 @@ public class IOUtil {
 	 *         defined.
 	 */
 	public static String getEnvSafely(String var) {
-
 		String value = null;
-
 		try {
 			value = System.getenv(var);
-		} catch (java.lang.Error e) { // Throws exception in 1.4
-
-			// Windows
-			if (File.separatorChar=='\\') {
-				String command = "cmd.exe /c set " + var;
-				StringBuffer stdout = new StringBuffer();
-				try {
-					Process p = Runtime.getRuntime().exec(command);
-					IOUtil.waitForProcess(p, stdout, null);
-				} catch (IOException ioe) {
-					ioe.printStackTrace();
-				}
-				// set will return multiple matches if "var" is a prefix of
-				// other vars, but we'll just check the first line for "var=".
-				String str = stdout.toString();
-				int equals = str.indexOf('=');
-				int newline = str.indexOf('\n');
-				if (equals==var.length() && newline>equals) {
-					String test = str.substring(0, var.length());
-					// Be careful with casing - Windows doesn't always return
-					// the same casing as what you enter.
-					if (test.equalsIgnoreCase(var)) {
-						value = str.substring(var.length()+1, str.length()-1);
-					}
-				}
-			}
-
-			// Unix
-			else {
-				String command = "/bin/sh -c env | grep \"var\"=";
-				StringBuffer stdout = new StringBuffer();
-				try {
-					Process p = Runtime.getRuntime().exec(command);
-					IOUtil.waitForProcess(p, stdout, null);
-				} catch (IOException ioe) {
-					ioe.printStackTrace();
-				}
-				// env will return multiple matches if "var" is a prefix of
-				// other vars, but we'll just check the first line for "var=".
-				String str = stdout.toString();
-				int equals = str.indexOf('=');
-				int newline = str.indexOf('\n');
-				if (equals==var.length() && newline>equals) {
-					String test = str.substring(0, var.length());
-					if (test.equals(var)) {
-						value = str.substring(var.length()+1, str.length()-1);
-					}
-				}
-			}
-
+		} catch (SecurityException e) { // In an applet perhaps?
+			// Swallow
 		}
-
 		return value;
-
 	}
 
 
@@ -192,11 +95,11 @@ public class IOUtil {
 	 */
 	public static String[] getEnvironmentSafely(String[] toAdd) {
 
-		Map env = getDefaultEnvMap();
+		Map<String, String> env = getDefaultEnvMap();
 
 		// Put any vars they want to explicitly specify
 		if (toAdd!=null) {
-			Map temp = new HashMap(env);
+			Map<String, String> temp = new HashMap<String, String>(env);
 			for (int i=0; i<toAdd.length; i+=2) {
 				temp.put(toAdd[i], toAdd[i+1]);
 			}
@@ -207,8 +110,7 @@ public class IOUtil {
 		int count = env.size();
 		String[] vars = new String[count];
 		int i = 0;
-		for (Iterator j=env.entrySet().iterator(); j.hasNext(); ) {
-			Map.Entry entry = (Map.Entry)j.next();
+		for (Map.Entry<String, String> entry : env.entrySet()) {
 			vars[i++] = entry.getKey() + "=" + entry.getValue();
 		}
 

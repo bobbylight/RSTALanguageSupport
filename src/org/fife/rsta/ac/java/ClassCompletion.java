@@ -21,6 +21,7 @@ import org.fife.rsta.ac.java.classreader.AccessFlags;
 import org.fife.rsta.ac.java.classreader.ClassFile;
 import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
 import org.fife.rsta.ac.java.rjc.ast.TypeDeclaration;
+import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
 
 
@@ -46,18 +47,19 @@ class ClassCompletion extends AbstractJavaSourceCompletion {
 	 * classes with same name but different packages.
 	 * Thanks to Guilherme Joao Frantz and Jonatas Schuler for the patch!
 	 */
-	public int compareTo(Object o) {
-		if (o == this) {
+	@Override
+	public int compareTo(Completion c2) {
+		if (c2 == this) {
 			return 0;
 		}
 		// Check for classes with same name, but in different packages
-		else if(o.toString().equalsIgnoreCase(toString())) {
-			if (o instanceof ClassCompletion) {
-				ClassCompletion c2 = (ClassCompletion) o;
-				return getClassName(true).compareTo(c2.getClassName(true));
+		else if(c2.toString().equalsIgnoreCase(toString())) {
+			if (c2 instanceof ClassCompletion) {
+				ClassCompletion cc2 = (ClassCompletion)c2;
+				return getClassName(true).compareTo(cc2.getClassName(true));
 			}
 		}
-		return super.compareTo(o);
+		return super.compareTo(c2);
 	}
 
 
@@ -156,8 +158,9 @@ class ClassCompletion extends AbstractJavaSourceCompletion {
 
 			CompilationUnit cu = Util.getCompilationUnitFromDisk(loc, cf);
 			if (cu!=null) {
-				for (Iterator i=cu.getTypeDeclarationIterator(); i.hasNext(); ) {
-					TypeDeclaration td = (TypeDeclaration)i.next();
+				Iterator<TypeDeclaration> i=cu.getTypeDeclarationIterator();
+				for (; i.hasNext(); ) {
+					TypeDeclaration td = i.next();
 					String typeName = td.getName();
 					// Avoid inner classes, etc.
 					if (typeName.equals(cf.getClassName(false))) {

@@ -43,7 +43,7 @@ public class GoToMemberAction extends TextAction {
 	/**
 	 * The outline tree class appropriate for the current language.
 	 */
-	private Class outlineTreeClass;
+	private Class<?> outlineTreeClass;
 
 
 	/**
@@ -52,7 +52,7 @@ public class GoToMemberAction extends TextAction {
 	 * @param outlineTreeClass A class extending {@link AbstractSourceTree}.
 	 *        This class must have a no-argument constructor.
 	 */
-	public GoToMemberAction(Class outlineTreeClass) {
+	public GoToMemberAction(Class<?> outlineTreeClass) {
 		super("GoToType");
 		this.outlineTreeClass = outlineTreeClass;
 	}

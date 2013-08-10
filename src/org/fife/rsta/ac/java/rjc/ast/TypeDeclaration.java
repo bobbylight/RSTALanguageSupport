@@ -55,7 +55,7 @@ public interface TypeDeclaration extends ASTNode, TypeDeclarationContainer {
 	 * @see #getMethodIterator()
 	 * @see #getMemberIterator()
 	 */
-	public Iterator getFieldIterator();
+	public Iterator<Field> getFieldIterator();
 
 
 	public int getMemberCount();
@@ -69,7 +69,7 @@ public interface TypeDeclaration extends ASTNode, TypeDeclarationContainer {
 	 * @return The iterator.
 	 * @see #getMethodIterator()
 	 */
-	public Iterator getMemberIterator();
+	public Iterator<Member> getMemberIterator();
 
 
 	/**
@@ -79,7 +79,7 @@ public interface TypeDeclaration extends ASTNode, TypeDeclarationContainer {
 	 * @see #getFieldIterator()
 	 * @see #getMemberIterator()
 	 */
-	public Iterator getMethodIterator();
+	public Iterator<Method> getMethodIterator();
 
 
 	/**
@@ -89,7 +89,7 @@ public interface TypeDeclaration extends ASTNode, TypeDeclarationContainer {
 	 * @param name The name to check for.
 	 * @return Any method overloads with that name, or an empty list if none.
 	 */
-	public List getMethodsByName(String name);
+	public List<Method> getMethodsByName(String name);
 
 
 	/**

@@ -121,8 +121,9 @@ public class JavaOutlineTree extends AbstractSourceTree {
 		if (!getShowMajorElementsOnly()) {
 			JavaTreeNode importNode = new JavaTreeNode("Imports",
 											IconFactory.IMPORT_ROOT_ICON);
-			for (Iterator i=cu.getImportIterator(); i.hasNext(); ) {
-				ImportDeclaration idec = (ImportDeclaration)i.next();
+			Iterator<ImportDeclaration> i = cu.getImportIterator();
+			while (i.hasNext()) {
+				ImportDeclaration idec = i.next();
 				JavaTreeNode iNode = new JavaTreeNode(idec,
 											IconFactory.IMPORT_ICON);
 				importNode.add(iNode);
@@ -130,8 +131,9 @@ public class JavaOutlineTree extends AbstractSourceTree {
 			root.add(importNode);
 		}
 
-		for (Iterator i=cu.getTypeDeclarationIterator(); i.hasNext(); ) {
-			TypeDeclaration td = (TypeDeclaration)i.next();
+		Iterator<TypeDeclaration> i = cu.getTypeDeclarationIterator();
+		while (i.hasNext()) {
+			TypeDeclaration td = i.next();
 			TypeDeclarationTreeNode dmtn = createTypeDeclarationNode(td);
 			root.add(dmtn);
 		}
@@ -225,8 +227,9 @@ public class JavaOutlineTree extends AbstractSourceTree {
 				TypeDeclarationTreeNode tdn = createTypeDeclarationNode(td2);
 				dmtn.add(tdn);
 			}
-			for (Iterator j=ncd.getMemberIterator(); j.hasNext(); ) {
-				dmtn.add(createMemberNode((Member)j.next()));
+			Iterator<Member> i = ncd.getMemberIterator();
+			while (i.hasNext()) {
+				dmtn.add(createMemberNode(i.next()));
 			}
 		}
 
@@ -237,8 +240,9 @@ public class JavaOutlineTree extends AbstractSourceTree {
 				TypeDeclarationTreeNode tdn = createTypeDeclarationNode(td2);
 				dmtn.add(tdn);
 			}
-			for (Iterator j=nid.getMemberIterator(); j.hasNext(); ) {
-				dmtn.add(createMemberNode((Member)j.next()));
+			Iterator<Member> i = nid.getMemberIterator();
+			while (i.hasNext()) {
+				dmtn.add(createMemberNode(i.next()));
 			}
 		}
 

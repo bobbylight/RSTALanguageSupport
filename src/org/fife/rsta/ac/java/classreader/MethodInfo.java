@@ -57,7 +57,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 * All attributes of this method that aren't explicitly covered by the
 	 * private members {@link #signatureAttr} and {@link #codeAttr}.
 	 */
-	private List attributes;
+	private List<AttributeInfo> attributes;
 
 	/**
 	 * The type of all parameters to this method.  Note that this cache will
@@ -96,7 +96,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 		super(cf, accessFlags);
 		this.nameIndex = nameIndex;
 		this.descriptorIndex = descriptorIndex;
-		attributes = new ArrayList(1); // Usually only 0 or 1?
+		attributes = new ArrayList<AttributeInfo>(1); // Usually only 0 or 1?
 	}
 
 
@@ -175,7 +175,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 		String paramDescriptors = descriptor.substring(1, rparen);
 		//String returnDescriptor = descriptor.substring(rparen+1);
 
-		List paramTypeList = new ArrayList();
+		List<String> paramTypeList = new ArrayList<String>();
 		String type = null;
 
 		while (paramDescriptors.length()>0) {
@@ -250,7 +250,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 		}
 
 		String[] types = new String[paramTypeList.size()];
-		types = (String[])paramTypeList.toArray(types);
+		types = paramTypeList.toArray(types);
 		return types;
 
 	}
@@ -271,10 +271,11 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 		String[] params = null;
 
 		if (signatureAttr!=null) {
-			List paramTypes = signatureAttr.getMethodParamTypes(this, cf, false);
+			List<String> paramTypes = signatureAttr.
+					getMethodParamTypes(this, cf, false);
 			if (paramTypes!=null) {
 				params = new String[paramTypes.size()];
-				params = (String[])paramTypes.toArray(params);
+				params = paramTypes.toArray(params);
 			}
 		}
 
@@ -290,7 +291,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 * @return The attribute.
 	 */
 	public AttributeInfo getAttribute(int index) {
-		return (AttributeInfo)attributes.get(index);
+		return attributes.get(index);
 	}
 
 
@@ -428,7 +429,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 		if (paramTypes==null) {
 			paramTypes = createParamTypes();
 		}
-		return (String[])paramTypes.clone();
+		return paramTypes.clone();
 	}
 
 	/**
@@ -572,8 +573,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 		sb.append(')');
 
 		// "throws" clause.
-		for (int i=0; i<getAttributeCount(); i++) {
-			AttributeInfo ai = (AttributeInfo)attributes.get(i);
+		for (AttributeInfo ai : attributes) {
 			if (ai instanceof Exceptions) { // At most 1 Exceptions attribute
 				sb.append(" throws ");
 				Exceptions ex = (Exceptions)ai;

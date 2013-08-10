@@ -44,7 +44,7 @@ public class JspLanguageSupport extends AbstractMarkupLanguageSupport {
 	/**
 	 * A cached set of tags that require closing tags.
 	 */
-	private static Set tagsToClose = new HashSet();
+	private static Set<String> tagsToClose = new HashSet<String>();
 
 
 	/**

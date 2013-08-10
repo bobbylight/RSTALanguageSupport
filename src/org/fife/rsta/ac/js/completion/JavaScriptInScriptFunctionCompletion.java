@@ -91,25 +91,24 @@ public class JavaScriptInScriptFunctionCompletion extends FunctionCompletion
 		return getLookupName().hashCode();
 	}
 	
-	public String toString()
-	{
+	public String toString() {
 		return getLookupName();
 	}
 	
 	/**
 	 * {@inheritDoc}
 	 */
-	public int compareTo(Object o) {
-		if (o==this) {
+	@Override
+	public int compareTo(Completion other) {
+		if (other==this) {
 			return 0;
 		}
-		else if (o instanceof JSCompletion) {
-			JSCompletion c2 = (JSCompletion)o;
+		else if (other instanceof JSCompletion) {
+			JSCompletion c2 = (JSCompletion)other;
 			return getLookupName().compareTo(c2.getLookupName());
 		}
-		else if (o instanceof Completion) {
-			Completion c2 = (Completion)o;
-			return toString().compareTo(c2.toString());
+		else if (other != null) {
+			return toString().compareTo(other.toString());
 		}
 		return -1;
 	}

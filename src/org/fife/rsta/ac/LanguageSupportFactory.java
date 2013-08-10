@@ -29,15 +29,20 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
  */
 public class LanguageSupportFactory implements PropertyChangeListener {
 
-	private static LanguageSupportFactory INSTANCE =
+	private static final LanguageSupportFactory INSTANCE =
 										new LanguageSupportFactory();
 
 	/**
-	 * Maps syntax styles to supports.  We cheat and initially map styles to
-	 * class-names-for-supports, and lazily create the actual
-	 * <code>LanguageSupports</code> when necessary.
+	 * Maps styles to class-names-for-language-supports; this way we can lazily
+	 * create the <code>LanguageSupports</code> when necessary.
 	 */
-	private Map styleToSupport;
+	private Map<String, String> styleToSupportClass;
+
+	/**
+	 * Maps syntax styles to language supports for them.
+	 */
+	private Map<String, LanguageSupport> styleToSupport;
+
 
 	/**
 	 * Client property set on RSyntaxTextAreas that points to the current
@@ -65,7 +70,7 @@ public class LanguageSupportFactory implements PropertyChangeListener {
 	 * @param lsClassName The class name of the <code>LanguageSupport</code>.
 	 */
 	public void addLanguageSupport(String style, String lsClassName) {
-		styleToSupport.put(style,  lsClassName);
+		styleToSupportClass.put(style,  lsClassName);
 	}
 
 
@@ -74,7 +79,8 @@ public class LanguageSupportFactory implements PropertyChangeListener {
 	 */
 	private void createSupportMap() {
 
-		styleToSupport = new HashMap();
+		styleToSupport = new HashMap<String, LanguageSupport>();
+		styleToSupportClass = new HashMap<String, String>();
 
 		String prefix = "org.fife.rsta.ac.";
 
@@ -122,24 +128,26 @@ public class LanguageSupportFactory implements PropertyChangeListener {
 	 */
 	public LanguageSupport getSupportFor(String style) {
 
-		LanguageSupport support = null;
+		LanguageSupport support = styleToSupport.get(style);
 
-		Object obj = styleToSupport.get(style);
-		if (obj instanceof String) {
-			try {
-				Class clazz = Class.forName((String)obj);
-				support = (LanguageSupport)clazz.newInstance();
-			} catch (RuntimeException re) { // FindBugs
-				throw re;
-			} catch (Exception e) {
-				// Fall through with support==null, so we don't try again
-				e.printStackTrace();
+		if (support==null) {
+			String supportClazz = styleToSupportClass.get(style);
+			if (supportClazz!=null) {
+				try {
+					Class<?> clazz = Class.forName(supportClazz);
+					support = (LanguageSupport)clazz.newInstance();
+				} catch (RuntimeException re) { // FindBugs
+					throw re;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				styleToSupport.put(style, support);
+				// Always remove from classes to load, so we don't try again
+				styleToSupportClass.remove(style);
 			}
-			styleToSupport.put(style, support);
-			return support;
 		}
 
-		return (LanguageSupport)obj;
+		return support;
 
 	}
 

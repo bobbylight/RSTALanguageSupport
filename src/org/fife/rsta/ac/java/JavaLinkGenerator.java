@@ -148,10 +148,11 @@ class JavaLinkGenerator implements LinkGenerator {
 					// First, check for a local variable in methods/static blocks
 					if (!method && deepestTypeDec) {
 
-						for (Iterator i=td.getMemberIterator(); i.hasNext(); ) {
+						Iterator<Member> i = td.getMemberIterator();
+						while (i.hasNext()) {
 	
 							Method m = null; // Nasty!  Clean this code up
-							Member member = (Member)i.next();
+							Member member = i.next();
 							CodeBlock block = null;
 
 							// Check if a method or static block contains offs
@@ -172,10 +173,9 @@ class JavaLinkGenerator implements LinkGenerator {
 							if (block!=null) {
 								String varName = t.getLexeme();
 								// Local variables first, in reverse order
-								List locals = block.getLocalVarsBefore(offs);
+								List<LocalVariable> locals = block.getLocalVarsBefore(offs);
 								Collections.reverse(locals);
-								for (Iterator j=locals.iterator(); j.hasNext(); ) {
-									LocalVariable local = (LocalVariable)j.next();
+								for (LocalVariable local : locals) {
 									if (varName.equals(local.getName())) {
 										start = local.getNameStartOffset();
 										end = local.getNameEndOffset();
@@ -200,10 +200,10 @@ class JavaLinkGenerator implements LinkGenerator {
 					// If no local var match, check fields or methods.
 					if (start==-1) {
 						String varName = t.getLexeme();
-						Iterator i = method ? td.getMethodIterator() :
-							td.getFieldIterator();
+						Iterator<? extends Member> i = method ?
+								td.getMethodIterator() : td.getFieldIterator();
 						while (i.hasNext()) {
-							Member member = (Member)i.next();
+							Member member = i.next();
 							if (((!deepestContainingMemberStatic && !staticFieldsOnly) || member.isStatic()) &&
 									varName.equals(member.getName())) {
 								start = member.getNameStartOffset();

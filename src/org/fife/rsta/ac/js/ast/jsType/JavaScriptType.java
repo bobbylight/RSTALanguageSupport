@@ -33,21 +33,21 @@ public class JavaScriptType {
 	// base type
 	protected TypeDeclaration type;
 	// completions for base type String-->JSCompletion
-	protected HashMap methodFieldCompletions;
+	protected HashMap<String, JSCompletion> methodFieldCompletions;
 	//constructor completions
-	protected HashMap constructors;
+	protected HashMap<String, JSCompletion> constructors;
 	//class type
 	protected JSCompletion classType;
 
 	// extended cached types
-	private ArrayList extended;
+	private ArrayList<JavaScriptType> extended;
 
 
 	public JavaScriptType(TypeDeclaration type) {
 		this.type = type;
-		methodFieldCompletions = new HashMap();
-		constructors = new HashMap();
-		extended = new ArrayList();
+		methodFieldCompletions = new HashMap<String, JSCompletion>();
+		constructors = new HashMap<String, JSCompletion>();
+		extended = new ArrayList<JavaScriptType>();
 	}
 
 
@@ -81,8 +81,8 @@ public class JavaScriptType {
 			type.methodFieldCompletions.remove(completion.getLookupName());
 		}
 		//get extended classes and recursively remove method from them
-		for(Iterator i = type.extended.iterator(); i.hasNext();) {
-			removeCompletion((JavaScriptType) i.next(), completion);
+		for (JavaScriptType extendedType : type.extended) {
+			removeCompletion(extendedType, completion);
 		}
 	}
 	
@@ -131,7 +131,7 @@ public class JavaScriptType {
 	 * @see JSCompletion
 	 */
 	protected JSCompletion _getCompletion(String completionLookup, SourceCompletionProvider provider) {
-		return (JSCompletion) methodFieldCompletions.get(completionLookup);
+		return methodFieldCompletions.get(completionLookup);
 	}
 
 
@@ -165,11 +165,11 @@ public class JavaScriptType {
 	 * @return Map of completions String --> JSCompletion
 	 * @see JSCompletion
 	 */
-	public HashMap getMethodFieldCompletions() {
+	public HashMap<String, JSCompletion> getMethodFieldCompletions() {
 		return methodFieldCompletions;
 	}
 	
-	public HashMap getConstructorCompletions() {
+	public HashMap<String, JSCompletion> getConstructorCompletions() {
 		return constructors;
 	}
 
@@ -199,7 +199,7 @@ public class JavaScriptType {
 	 * 
 	 * @return list of CachedType extended classes
 	 */
-	public List getExtendedClasses() {
+	public List<JavaScriptType> getExtendedClasses() {
 		return extended;
 	}
 

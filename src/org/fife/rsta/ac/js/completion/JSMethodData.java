@@ -22,7 +22,7 @@ public class JSMethodData {
 	
 	private MethodInfo info;
 	private JarManager jarManager;
-	private ArrayList paramNames;
+	private ArrayList<String> paramNames;
 	
 	public JSMethodData(MethodInfo info, JarManager jarManager)
 	{
@@ -59,7 +59,7 @@ public class JSMethodData {
 			// Next, check the attached source, if any (lazily parsed).
 			if (paramNames==null) {
 
-				paramNames = new ArrayList(1);
+				paramNames = new ArrayList<String>(1);
 				int offs = 0;
 				String rawSummary = getSummary();
 
@@ -96,7 +96,7 @@ public class JSMethodData {
 			}
 
 			if (index<paramNames.size()) {
-				name = (String)paramNames.get(index);
+				name = paramNames.get(index);
 			}
 
 		}
@@ -185,9 +185,10 @@ public class JSMethodData {
 		// this method.
 		if (cu!=null) {
 
-			for (Iterator i=cu.getTypeDeclarationIterator(); i.hasNext(); ) {
+			Iterator<TypeDeclaration> i = cu.getTypeDeclarationIterator();
+			for (; i.hasNext(); ) {
 
-				TypeDeclaration td = (TypeDeclaration)i.next();
+				TypeDeclaration td = i.next();
 				String typeName = td.getName();
 
 				// Avoid inner classes, etc.
@@ -196,15 +197,15 @@ public class JSMethodData {
 					// Get all overloads of this method with the number of
 					// parameters we're looking for.  99% of the time, there
 					// will only be 1, the method we're looking for.
-					List contenders = null;
-					for (Iterator j=td.getMemberIterator(); j.hasNext(); ) {
-						Member member = (Member)j.next();
+					List<Method> contenders = null;
+					for (Iterator<Member> j=td.getMemberIterator(); j.hasNext(); ) {
+						Member member = j.next();
 						if (member instanceof Method &&
 								member.getName().equals(info.getName())) {
 							Method m2 = (Method)member;
 							if (m2.getParameterCount()==info.getParameterCount()) {
 								if (contenders==null) {
-									contenders = new ArrayList(1); // Usually just 1
+									contenders = new ArrayList<Method>(1); // Usually just 1
 								}
 								contenders.add(m2);
 							}
@@ -217,7 +218,7 @@ public class JSMethodData {
 						// Common case - only 1 overload with the desired
 						// number of parameters => it must be our method.
 						if (contenders.size()==1) {
-							res = (Method)contenders.get(0);
+							res = contenders.get(0);
 						}
 
 						// More than 1 overload with the same number of
@@ -227,7 +228,7 @@ public class JSMethodData {
 						else {
 							for (int j=0; j<contenders.size(); j++) {
 								boolean match = true;
-								Method method = (Method)contenders.get(j);
+								Method method = contenders.get(j);
 								for (int p=0; p<info.getParameterCount(); p++) {
 									String type1 = info.getParameterType(p, false);
 									FormalParameter fp = method.getParameter(p);

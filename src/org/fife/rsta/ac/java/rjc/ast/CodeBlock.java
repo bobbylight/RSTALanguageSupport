@@ -38,8 +38,8 @@ public class CodeBlock extends AbstractMember {
 	public static final String NAME		= "{...}";
 
 	private CodeBlock parent;
-	private List children;
-	private List localVars;
+	private List<CodeBlock> children;
+	private List<LocalVariable> localVars;
 	private boolean isStatic;
 
 
@@ -51,7 +51,7 @@ public class CodeBlock extends AbstractMember {
 
 	public void add(CodeBlock child) {
 		if (children==null) {
-			children = new ArrayList();
+			children = new ArrayList<CodeBlock>();
 		}
 		children.add(child);
 		child.setParent(this);
@@ -60,7 +60,7 @@ public class CodeBlock extends AbstractMember {
 
 	public void addLocalVariable(LocalVariable localVar) {
 		if (localVars==null) {
-			localVars = new ArrayList();
+			localVars = new ArrayList<LocalVariable>();
 		}
 		localVars.add(localVar);
 	}
@@ -74,7 +74,7 @@ public class CodeBlock extends AbstractMember {
 
 
 	public CodeBlock getChildBlock(int index) {
-		return (CodeBlock)children.get(index);
+		return children.get(index);
 	}
 
 
@@ -113,7 +113,7 @@ public class CodeBlock extends AbstractMember {
 
 
 	public LocalVariable getLocalVar(int index) {
-		return (LocalVariable)localVars.get(index);
+		return localVars.get(index);
 	}
 
 
@@ -130,9 +130,9 @@ public class CodeBlock extends AbstractMember {
 	 * @return The {@link LocalVariable}s, or an empty list of none were
 	 *         declared before the offset.
 	 */
-	public List getLocalVarsBefore(int offs) {
+	public List<LocalVariable> getLocalVarsBefore(int offs) {
 
-		List vars = new ArrayList();
+		List<LocalVariable> vars = new ArrayList<LocalVariable>();
 
 		if (localVars!=null) {
 			for (int i=0; i<getLocalVarCount(); i++) {

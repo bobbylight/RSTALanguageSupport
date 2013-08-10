@@ -40,7 +40,7 @@ public class FieldInfo extends MemberInfo {
 	/**
 	 * An array of attributes of this field.
 	 */
-	private List attributes;
+	private List<AttributeInfo> attributes;
 
 	public static final String CONSTANT_VALUE		= "ConstantValue";
 
@@ -55,7 +55,7 @@ public class FieldInfo extends MemberInfo {
 		super(cf, accessFlags);
 		this.nameIndex = nameIndex;
 		this.descriptorIndex = descriptorIndex;
-		attributes = new ArrayList(1); // Usually 0 or 1?
+		attributes = new ArrayList<AttributeInfo>(1); // Usually 0 or 1?
 	}
 
 
@@ -76,7 +76,7 @@ public class FieldInfo extends MemberInfo {
 	 * @return The attribute.
 	 */
 	public AttributeInfo getAttribute(int index) {
-		return (AttributeInfo)attributes.get(index);
+		return attributes.get(index);
 	}
 
 
@@ -104,7 +104,7 @@ public class FieldInfo extends MemberInfo {
 	 */
 	private ConstantValue getConstantValueAttributeInfo() {
 		for (int i=0; i<getAttributeCount(); i++) {
-			AttributeInfo ai = (AttributeInfo)attributes.get(i);
+			AttributeInfo ai = attributes.get(i);
 			if (ai instanceof ConstantValue) {
 				return (ConstantValue)ai;
 			}

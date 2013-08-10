@@ -701,7 +701,7 @@ System.out.println("Unmatched linkContent: " + linkContent);
 	 *         '<tt>.</tt>').
 	 */
 	public static final String[] splitOnChar(String str, int ch) {
-		List list = new ArrayList(3);
+		List<String> list = new ArrayList<String>(3);
 		int pos = 0;
 		int old = 0;
 		while ((pos=str.indexOf(ch, old))>-1) {
@@ -712,7 +712,7 @@ System.out.println("Unmatched linkContent: " + linkContent);
 		// This is what we want.
 		list.add(str.substring(old));
 		String[] array = new String[list.size()];
-		return (String[])list.toArray(array);
+		return list.toArray(array);
 	}
 
 

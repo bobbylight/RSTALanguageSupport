@@ -82,7 +82,7 @@ public class Code extends AttributeInfo {
 	/**
 	 * Attributes of this <code>Code</code> attribute.
 	 */
-	private List attributes;
+	private List<AttributeInfo> attributes;
 
 	private static final String LINE_NUMBER_TABLE			= "LineNumberTable";
 	private static final String LOCAL_VARIABLE_TABLE		= "LocalVariableTable";
@@ -199,7 +199,7 @@ public class Code extends AttributeInfo {
 
 		int attrCount = in.readUnsignedShort();
 		if (attrCount>0) {
-			code.attributes = new ArrayList(1); // Usually just 1 or 2
+			code.attributes = new ArrayList<AttributeInfo>(1); // Usually 1 or 2
 			for (int i=0; i<attrCount; i++) {
 				AttributeInfo ai = code.readAttribute(in);
 				if (ai!=null) { // Not one handled "custom"

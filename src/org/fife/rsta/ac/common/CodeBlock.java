@@ -29,8 +29,8 @@ public class CodeBlock {
 	private int start;
 	private int end;
 	private CodeBlock parent;
-	private List children;
-	private List varDecs;
+	private List<CodeBlock> children;
+	private List<VariableDeclaration> varDecs;
 
 
 	/**
@@ -54,7 +54,7 @@ public class CodeBlock {
 		CodeBlock child = new CodeBlock(start);
 		child.parent = this;
 		if (children==null) {
-			children = new ArrayList();
+			children = new ArrayList<CodeBlock>();
 		}
 		children.add(child);
 		return child;
@@ -68,7 +68,7 @@ public class CodeBlock {
 	 */
 	public void addVariable(VariableDeclaration varDec) {
 		if (varDecs==null) {
-			varDecs = new ArrayList();
+			varDecs = new ArrayList<VariableDeclaration>();
 		}
 		varDecs.add(varDec);
 	}
@@ -93,7 +93,7 @@ public class CodeBlock {
 	 * @see #getChildCodeBlockCount()
 	 */
 	public CodeBlock getChildCodeBlock(int index) {
-		return (CodeBlock)children.get(index);
+		return children.get(index);
 	}
 
 
@@ -172,7 +172,7 @@ public class CodeBlock {
 	 * @see #getVariableDeclarationCount()
 	 */
 	public VariableDeclaration getVariableDeclaration(int index) {
-		return (VariableDeclaration)varDecs.get(index);
+		return varDecs.get(index);
 	}
 
 
@@ -195,9 +195,9 @@ public class CodeBlock {
 	 * @return The {@link VariableDeclaration}s, or an empty list of none were
 	 *         declared before the offset.
 	 */
-	public List getVariableDeclarationsBefore(int offs) {
+	public List<VariableDeclaration> getVariableDeclarationsBefore(int offs) {
 
-		List vars = new ArrayList();
+		List<VariableDeclaration> vars = new ArrayList<VariableDeclaration>();
 
 		int varCount = getVariableDeclarationCount();
 		for (int i=0; i<varCount; i++) {

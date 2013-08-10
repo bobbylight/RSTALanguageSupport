@@ -133,7 +133,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	private class CompilerNodeVisitor implements NodeVisitor {
 
 		private boolean ignoreParams;
-		private HashSet paramNodes = new HashSet();
+		private HashSet<AstNode> paramNodes = new HashSet<AstNode>();
 		
 
 
@@ -238,7 +238,8 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 			}
 			sb.append(name);
 			sb.append("(");
-			for(Iterator i = fn.getArguments().iterator(); i.hasNext();)
+			Iterator<AstNode> i = fn.getArguments().iterator();
+			while (i.hasNext())
 			{
 				i.next();
 				sb.append("p");
@@ -293,9 +294,9 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 			if (node.getType() == Token.CALL) {
 				// collect all argument nodes
 				FunctionCall call = (FunctionCall) node;
-				for (Iterator args = call.getArguments().iterator(); args
-						.hasNext();) {
-					AstNode arg = (AstNode) args.next();
+				Iterator<AstNode> args = call.getArguments().iterator();
+				while (args.hasNext()) {
+					AstNode arg = args.next();
 					VisitorAll all = new VisitorAll();
 					arg.visit(all);
 					paramNodes.addAll(all.getAllNodes());
@@ -493,8 +494,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	 */
 	private class VisitorAll implements NodeVisitor {
 
-		private ArrayList all = new ArrayList();
-
+		private ArrayList<AstNode> all = new ArrayList<AstNode>();
 
 		public boolean visit(AstNode node) {
 			all.add(node);
@@ -502,9 +502,10 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 		}
 
 
-		public ArrayList getAllNodes() {
+		public ArrayList<AstNode> getAllNodes() {
 			return all;
 		}
+		
 	}
 
 }

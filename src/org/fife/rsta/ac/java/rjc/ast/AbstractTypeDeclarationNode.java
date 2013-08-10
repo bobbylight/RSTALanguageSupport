@@ -24,14 +24,14 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	private Package pkg;
 	private Modifiers modifiers;
 	private TypeDeclaration parentType;
-	private List childTypes;
+	private List<TypeDeclaration> childTypes;
 	private Offset bodyStartOffs;
 	private Offset bodyEndOffs;
 	private boolean deprecated;
 	private String docComment;
 
 	// --- "ClassBody"/"InterfaceBody"/EnumConstant fields ---
-	private List memberList;
+	private List<Member> memberList;
 
 
 	public AbstractTypeDeclarationNode(String name, Offset start) {
@@ -54,7 +54,7 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 
 	public void addTypeDeclaration(TypeDeclaration type) {
 		if (childTypes==null) {
-			childTypes = new ArrayList(1); // Usually small
+			childTypes = new ArrayList<TypeDeclaration>(1); // Usually small
 		}
 		type.setParentType(this);
 		childTypes.add(type);
@@ -77,7 +77,7 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 
 
 	public TypeDeclaration getChildType(int index) {
-		return (TypeDeclaration)childTypes.get(index);
+		return childTypes.get(index);
 	}
 
 
@@ -114,12 +114,12 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	/**
 	 * {@inheritDoc}
 	 */
-	public Iterator getFieldIterator() {
-		List fields = new ArrayList();
-		for (Iterator i=getMemberIterator(); i.hasNext(); ) {
-			Member member = (Member)i.next();
+	public Iterator<Field> getFieldIterator() {
+		List<Field> fields = new ArrayList<Field>();
+		for (Iterator<Member> i=getMemberIterator(); i.hasNext(); ) {
+			Member member = i.next();
 			if (member instanceof Field) {
-				fields.add(member);
+				fields.add((Field)member);
 			}
 		}
 		return fields.iterator();
@@ -127,7 +127,7 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 
 
 	public Member getMember(int index) {
-		return (Member)memberList.get(index);
+		return memberList.get(index);
 	}
 
 
@@ -139,7 +139,7 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	/**
 	 * {@inheritDoc}
 	 */
-	public Iterator getMemberIterator() {
+	public Iterator<Member> getMemberIterator() {
 		return memberList.iterator();
 	}
 
@@ -147,12 +147,12 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	/**
 	 * {@inheritDoc}
 	 */
-	public Iterator getMethodIterator() {
-		List methods = new ArrayList();
-		for (Iterator i=getMemberIterator(); i.hasNext(); ) {
-			Member member = (Member)i.next();
+	public Iterator<Method> getMethodIterator() {
+		List<Method> methods = new ArrayList<Method>();
+		for (Iterator<Member> i=getMemberIterator(); i.hasNext(); ) {
+			Member member = i.next();
 			if (member instanceof Method) {
-				methods.add(member);
+				methods.add((Method)member);
 			}
 		}
 		return methods.iterator();
@@ -162,12 +162,12 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	/**
 	 * {@inheritDoc}
 	 */
-	public List getMethodsByName(String name) {
-		List methods = new ArrayList();
-		for (Iterator i=getMemberIterator(); i.hasNext(); ) {
-			Member member = (Member)i.next();
+	public List<Method> getMethodsByName(String name) {
+		List<Method> methods = new ArrayList<Method>();
+		for (Iterator<Member> i=getMemberIterator(); i.hasNext(); ) {
+			Member member = i.next();
 			if (member instanceof Method && name.equals(member.getName())) {
-				methods.add(member);
+				methods.add((Method)member);
 			}
 		}
 		return methods;
@@ -211,7 +211,7 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 
 
 	private void init() {
-		memberList = new ArrayList();
+		memberList = new ArrayList<Member>();
 	}
 
 

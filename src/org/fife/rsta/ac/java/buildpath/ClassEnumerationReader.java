@@ -64,11 +64,11 @@ public class ClassEnumerationReader {
 	 * @return The list of class names read.
 	 * @throws IOException If an IO error occurs.
 	 */
-	public static List getClassNames(InputStream in) throws IOException {
+	public static List<String> getClassNames(InputStream in) throws IOException {
 
 		String lastPkg = null;
 		String line = null;
-		List classNames = new ArrayList();
+		List<String> classNames = new ArrayList<String>();
 
 		BufferedReader r = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 		try {

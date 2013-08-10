@@ -45,6 +45,7 @@ import org.fife.rsta.ac.java.rjc.ast.TypeDeclaration;
 import org.fife.rsta.ac.java.rjc.lang.Type;
 import org.fife.rsta.ac.java.rjc.lang.TypeArgument;
 import org.fife.rsta.ac.java.rjc.lang.TypeParameter;
+import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -108,7 +109,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	}
 
 
-	private void addCompletionsForStaticMembers(Set set,
+	private void addCompletionsForStaticMembers(Set<Completion> set,
 						CompilationUnit cu, ClassFile cf, String pkg) {
 
 		// Check us first, so if we override anything, we get the "newest"
@@ -153,7 +154,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	 *        for the object whose fields/methods/etc. are currently being
 	 *        code-completed.
 	 */
-	private void addCompletionsForExtendedClass(Set set,
+	private void addCompletionsForExtendedClass(Set<Completion> set,
 						CompilationUnit cu, ClassFile cf, String pkg,
 						Map typeParamMap) {
 
@@ -210,7 +211,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	 * @param retVal The set to add completions to.
 	 */
 	private void addCompletionsForLocalVarsMethods(CompilationUnit cu,
-			LocalVariable var, Set retVal) {
+			LocalVariable var, Set<Completion> retVal) {
 
 		Type type = var.getType();
 		String pkg = cu.getPackageName();
@@ -240,7 +241,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	 *
 	 * @param set The set to add to.
 	 */
-	private void addShorthandCompletions(Set set) {
+	private void addShorthandCompletions(Set<Completion> set) {
 		if(shorthandCache != null) {
 			set.addAll(shorthandCache.getShorthandCompletions());
 		}
@@ -285,8 +286,9 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 
 			// Next, go through the imports (order is important)
 			if (superClass==null) {
-				for (Iterator i=cu.getImportIterator(); i.hasNext(); ) {
-					ImportDeclaration id = (ImportDeclaration)i.next();
+				Iterator<ImportDeclaration> i = cu.getImportIterator();
+				while (i.hasNext()) {
+					ImportDeclaration id = i.next();
 					String imported = id.getName();
 					if (imported.endsWith(".*")) {
 						String temp = imported.substring(
@@ -328,7 +330,8 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	 * @param offs The caret's offset into the source.  This should be inside
 	 *        of <code>method</code>.
 	 */
-	private void addLocalVarCompletions(Set set, Method method, int offs) {
+	private void addLocalVarCompletions(Set<Completion> set, Method method,
+			int offs) {
 
 		for (int i=0; i<method.getParameterCount(); i++) {
 			FormalParameter param = method.getParameter(i);
@@ -351,7 +354,8 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	 * @param offs The caret's offset into the source. This should be inside
 	 *        of <code>block</code>.
 	 */
-	private void addLocalVarCompletions(Set set, CodeBlock block, int offs) {
+	private void addLocalVarCompletions(Set<Completion> set, CodeBlock block,
+			int offs) {
 
 		for (int i=0; i<block.getLocalVarCount(); i++) {
 			LocalVariable var = block.getLocalVar(i);
@@ -408,8 +412,8 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	 *         literal member.
 	 */
 	private boolean checkStringLiteralMember(JTextComponent comp,
-											String alreadyEntered,
-											CompilationUnit cu, Set set) {
+							String alreadyEntered,
+							CompilationUnit cu, Set<Completion> set) {
 
 		boolean stringLiteralMember = false;
 
@@ -493,7 +497,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
-	public List getCompletionsAt(JTextComponent tc, Point p) {
+	public List<Completion> getCompletionsAt(JTextComponent tc, Point p) {
 		getCompletionsImpl(tc); // Force loading of completions
 		return super.getCompletionsAt(tc, p);
 	}
@@ -502,7 +506,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
-	protected List getCompletionsImpl(JTextComponent comp) {
+	protected List<Completion> getCompletionsImpl(JTextComponent comp) {
 
 		comp.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
@@ -515,7 +519,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 			return completions; // empty
 		}
 
-		Set set = new TreeSet();
+		Set<Completion> set = new TreeSet<Completion>();
 
 		// Cut down the list to just those matching what we've typed.
 		// Note: getAlreadyEnteredText() never returns null
@@ -549,7 +553,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 		}
 
 		// Do a final sort of all of our completions and we're good to go!
-		completions = new ArrayList(set);
+		completions = new ArrayList<Completion>(set);
 		Collections.sort(completions);
 
 		// Only match based on stuff after the final '.', since that's what is
@@ -712,7 +716,7 @@ public SourceLocation  getSourceLocForClass(String className) {
 	 * @param retVal
 	 */
 	private void loadCompletionsForCaretPosition(CompilationUnit cu,
-			JTextComponent comp, String alreadyEntered, Set retVal,
+			JTextComponent comp, String alreadyEntered, Set<Completion> retVal,
 			TypeDeclaration td, String prefix, int caret) {
 
 		// Do any child types first, so if any vars, etc. have duplicate names,
@@ -725,13 +729,12 @@ public SourceLocation  getSourceLocForClass(String className) {
 
 		Method currentMethod = null;
 
-		Map typeParamMap = new HashMap();
+		Map<String, String> typeParamMap = new HashMap<String, String>();
 		if (td instanceof NormalClassDeclaration) {
 			NormalClassDeclaration ncd = (NormalClassDeclaration)td;
-			List typeParams = ncd.getTypeParameters();
+			List<TypeParameter> typeParams = ncd.getTypeParameters();
 			if (typeParams!=null) {
-				for (int i=0; i<typeParams.size(); i++) {
-					TypeParameter typeParam = (TypeParameter)typeParams.get(i);
+				for (TypeParameter typeParam : typeParams) {
 					String typeVar = typeParam.getName();
 					// For non-qualified completions, use type var name.
 					typeParamMap.put(typeVar, typeVar);
@@ -743,8 +746,9 @@ public SourceLocation  getSourceLocForClass(String className) {
 		// vars.  Do this before checking super classes so that, if
 		// we overrode anything, we get the "newest" version.
 		String pkg = cu.getPackageName();
-		for (Iterator j=td.getMemberIterator(); j.hasNext(); ) {
-			Member m = (Member)j.next();
+		Iterator<Member> j = td.getMemberIterator();
+		while (j.hasNext()) {
+			Member m = j.next();
 			if (m instanceof Method) {
 				Method method = (Method)m;
 				if (prefix==null || THIS.equals(prefix)) {
@@ -814,7 +818,7 @@ public SourceLocation  getSourceLocForClass(String className) {
 	 * @param offs The offset of the caret in the document.
 	 */
 	private void loadCompletionsForCaretPositionQualified(CompilationUnit cu,
-			String alreadyEntered, Set retVal,
+			String alreadyEntered, Set<Completion> retVal,
 			TypeDeclaration td, Method currentMethod, String prefix, int offs) {
 
 		// TODO: Remove this restriction.
@@ -924,7 +928,7 @@ public SourceLocation  getSourceLocForClass(String className) {
 
 
 	private void loadCompletionsForCaretPositionQualifiedCodeBlock(
-			CompilationUnit cu, Set retVal,
+			CompilationUnit cu, Set<Completion> retVal,
 			TypeDeclaration td, CodeBlock block, String prefix, int offs) {
 
 		boolean found = false;
@@ -971,7 +975,8 @@ public SourceLocation  getSourceLocForClass(String className) {
 	 * @param importStr The import statement.
 	 * @param pkgName The package of the source currently being parsed.
 	 */
-	private void loadCompletionsForImport(Set set, String importStr, String pkgName) {
+	private void loadCompletionsForImport(Set<Completion> set,
+			String importStr, String pkgName) {
 
 		if (importStr.endsWith(".*")) {
 			String pkg = importStr.substring(0, importStr.length()-2);

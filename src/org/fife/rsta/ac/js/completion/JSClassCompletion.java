@@ -16,6 +16,7 @@ import org.fife.rsta.ac.js.IconFactory;
 import org.fife.rsta.ac.js.JavaScriptHelper;
 import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.ui.autocomplete.BasicCompletion;
+import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
 
 
@@ -38,18 +39,18 @@ public class JSClassCompletion extends BasicCompletion implements JSCompletion {
 	 * classes with same name but different packages.
 	 * Thanks to Guilherme Joao Frantz and Jonatas Schuler for the patch!
 	 */
-	public int compareTo(Object o) {
-		if (o == this) {
+	public int compareTo(Completion c2) {
+		if (c2 == this) {
 			return 0;
 		}
 		// Check for classes with same name, but in different packages
-		else if(o.toString().equalsIgnoreCase(toString())) {
-			if (o instanceof JSClassCompletion) {
-				JSClassCompletion c2 = (JSClassCompletion) o;
-				return getReplacementText().compareTo(c2.getReplacementText());
+		else if(c2.toString().equalsIgnoreCase(toString())) {
+			if (c2 instanceof JSClassCompletion) {
+				JSClassCompletion jsc2 = (JSClassCompletion) c2;
+				return getReplacementText().compareTo(jsc2.getReplacementText());
 			}
 		}
-		return super.compareTo(o);
+		return super.compareTo(c2);
 	}
 
 
@@ -111,8 +112,9 @@ public class JSClassCompletion extends BasicCompletion implements JSCompletion {
 
 			CompilationUnit cu = Util.getCompilationUnitFromDisk(loc, cf);
 			if (cu!=null) {
-				for (Iterator i=cu.getTypeDeclarationIterator(); i.hasNext(); ) {
-					TypeDeclaration td = (TypeDeclaration)i.next();
+				Iterator<TypeDeclaration> i = cu.getTypeDeclarationIterator();
+				for (; i.hasNext(); ) {
+					TypeDeclaration td = i.next();
 					String typeName = td.getName();
 					// Avoid inner classes, etc.
 					if (typeName.equals(cf.getClassName(false))) {

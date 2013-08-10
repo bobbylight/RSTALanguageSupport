@@ -11,7 +11,6 @@
 package org.fife.rsta.ac;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import javax.swing.DefaultListCellRenderer;
@@ -40,7 +39,7 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	 * {@link #install(org.fife.ui.rsyntaxtextarea.RSyntaxTextArea)} and
 	 * {@link #uninstall(org.fife.ui.rsyntaxtextarea.RSyntaxTextArea)} methods.
 	 */
-	private Map textAreaToAutoCompletion;
+	private Map<RSyntaxTextArea, AutoCompletion> textAreaToAutoCompletion;
 
 	/**
 	 * Whether auto-completion is enabled for this language.
@@ -83,7 +82,7 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	 */
 	protected AbstractLanguageSupport() {
 		setDefaultCompletionCellRenderer(null); // Force default
-		textAreaToAutoCompletion = new HashMap();
+		textAreaToAutoCompletion = new HashMap<RSyntaxTextArea, AutoCompletion>();
 		autoCompleteEnabled = true;
 		autoActivationEnabled = false;
 		autoActivationDelay = 300;
@@ -152,7 +151,7 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	 *         is installed on the text area.
 	 */
 	protected AutoCompletion getAutoCompletionFor(RSyntaxTextArea textArea) {
-		return (AutoCompletion)textAreaToAutoCompletion.get(textArea);
+		return textAreaToAutoCompletion.get(textArea);
 	}
 
 
@@ -177,7 +176,7 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	 *
 	 * @return The text areas.
 	 */
-	protected Set getTextAreas() {
+	protected Set<RSyntaxTextArea> getTextAreas() {
 		return textAreaToAutoCompletion.keySet();
 	}
 
@@ -228,9 +227,7 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 		ms = Math.max(0, ms);
 		if (ms!=autoActivationDelay) {
 			autoActivationDelay = ms;
-			Iterator i=textAreaToAutoCompletion.values().iterator();
-			while (i.hasNext()) {
-				AutoCompletion ac = (AutoCompletion)i.next();
+			for (AutoCompletion ac : textAreaToAutoCompletion.values()) {
 				ac.setAutoActivationDelay(autoActivationDelay);
 			}
 		}
@@ -243,9 +240,7 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	public void setAutoActivationEnabled(boolean enabled) {
 		if (enabled!=autoActivationEnabled) {
 			autoActivationEnabled = enabled;
-			Iterator i=textAreaToAutoCompletion.values().iterator();
-			while (i.hasNext()) {
-				AutoCompletion ac = (AutoCompletion)i.next();
+			for (AutoCompletion ac : textAreaToAutoCompletion.values()) {
 				ac.setAutoActivationEnabled(enabled);
 			}
 		}
@@ -258,9 +253,7 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	public void setAutoCompleteEnabled(boolean enabled) {
 		if (enabled!=autoCompleteEnabled) {
 			autoCompleteEnabled = enabled;
-			Iterator i=textAreaToAutoCompletion.values().iterator();
-			while (i.hasNext()) {
-				AutoCompletion ac = (AutoCompletion)i.next();
+			for (AutoCompletion ac : textAreaToAutoCompletion.values()) {
 				ac.setAutoCompleteEnabled(enabled);
 			}
 		}
@@ -292,9 +285,7 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	public void setParameterAssistanceEnabled(boolean enabled) {
 		if (enabled!=parameterAssistanceEnabled) {
 			parameterAssistanceEnabled = enabled;
-			Iterator i=textAreaToAutoCompletion.values().iterator();
-			while (i.hasNext()) {
-				AutoCompletion ac = (AutoCompletion)i.next();
+			for (AutoCompletion ac : textAreaToAutoCompletion.values()) {
 				ac.setParameterAssistanceEnabled(enabled);
 			}
 		}
@@ -307,9 +298,7 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	public void setShowDescWindow(boolean show) {
 		if (show!=showDescWindow) {
 			showDescWindow = show;
-			Iterator i=textAreaToAutoCompletion.values().iterator();
-			while (i.hasNext()) {
-				AutoCompletion ac = (AutoCompletion)i.next();
+			for (AutoCompletion ac : textAreaToAutoCompletion.values()) {
 				ac.setShowDescWindow(show);
 			}
 		}

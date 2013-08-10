@@ -17,7 +17,7 @@ public class JavaScriptFunctionType {
 	public static int CONVERSION_NONE = 999;
 	public static int CONVERSION_JS = 99;
 
-	public static Class BooleanClass = Kit.classOrNull("java.lang.Boolean"), 
+	public static Class<?> BooleanClass = Kit.classOrNull("java.lang.Boolean"), 
 							  ByteClass = Kit.classOrNull("java.lang.Byte"), 
 							  CharacterClass = Kit.classOrNull("java.lang.Character"), 
 							  ClassClass = Kit.classOrNull("java.lang.Class"), 
@@ -38,7 +38,7 @@ public class JavaScriptFunctionType {
 							  JSArray = null;
 
 	private String name;
-	private List arguments;
+	private List<TypeDeclaration> arguments;
 
 	private static final int JSTYPE_UNDEFINED = 0; // undefined type
 	private static final int JSTYPE_BOOLEAN = 1; // boolean
@@ -49,11 +49,11 @@ public class JavaScriptFunctionType {
 
 
 	private JavaScriptFunctionType(String name, SourceCompletionProvider provider) {
-		this(name, new ArrayList(), provider);
+		this(name, new ArrayList<TypeDeclaration>(), provider);
 	}
 
 
-	private JavaScriptFunctionType(String name, List arguments, SourceCompletionProvider provider) {
+	private JavaScriptFunctionType(String name, List<TypeDeclaration> arguments, SourceCompletionProvider provider) {
 		this.name = name;
 		this.arguments = arguments;
 		JSBooleanClass = Kit.classOrNull(provider.getTypesFactory().getClassName(TypeDeclarations.ECMA_BOOLEAN));
@@ -70,14 +70,14 @@ public class JavaScriptFunctionType {
 	}
 
 
-	public List getArguments() {
+	public List<TypeDeclaration> getArguments() {
 		return arguments;
 	}
 
 
 	public void addArgument(TypeDeclaration type) {
 		if (arguments == null) {
-			arguments = new ArrayList();
+			arguments = new ArrayList<TypeDeclaration>();
 		}
 		arguments.add(type);
 	}
@@ -168,8 +168,8 @@ public class JavaScriptFunctionType {
 
 		try {
 			int fromCode = getJSTypeCode(param.getQualifiedName(), provider.getTypesFactory());
-			Class to = convertClassToJavaClass(compareParam.getQualifiedName(), provider.getTypesFactory());
-			Class from = convertClassToJavaClass(param.getQualifiedName(), provider.getTypesFactory());
+			Class<?> to = convertClassToJavaClass(compareParam.getQualifiedName(), provider.getTypesFactory());
+			Class<?> from = convertClassToJavaClass(param.getQualifiedName(), provider.getTypesFactory());
 			switch (fromCode) {
 				case JSTYPE_UNDEFINED: {
 					if (to == StringClass || to == ObjectClass) {
@@ -290,8 +290,8 @@ public class JavaScriptFunctionType {
 		String compareParamJSType = typesFactory.convertJavaScriptType(compareParam.getQualifiedName(), true);
 
 		try {
-			Class paramClzz = Class.forName(paramJSType);
-			Class compareParamClzz = Class.forName(compareParamJSType);
+			Class<?> paramClzz = Class.forName(paramJSType);
+			Class<?> compareParamClzz = Class.forName(compareParamJSType);
 			if (compareParamClzz.isAssignableFrom(paramClzz))
 				return 3;
 		} catch (ClassNotFoundException cnfe) {
@@ -312,7 +312,7 @@ public class JavaScriptFunctionType {
 	 * @return
 	 * @throws ClassNotFoundException
 	 */
-	private Class convertClassToJavaClass(String name, TypeDeclarationFactory typesFactory)
+	private Class<?> convertClassToJavaClass(String name, TypeDeclarationFactory typesFactory)
 			throws ClassNotFoundException {
 
 		if (name.equals("any"))
@@ -323,7 +323,7 @@ public class JavaScriptFunctionType {
 
 		String clsName = type != null ? type.getQualifiedName() : name;
 
-		Class cls = Class.forName(clsName);
+		Class<?> cls = Class.forName(clsName);
 
 		if (cls == JSStringClass) {
 			cls = StringClass;
@@ -429,7 +429,7 @@ public class JavaScriptFunctionType {
 		TypeDeclaration dec = typesFactory.getTypeDeclaration(clsName);
 		clsName = dec != null ? dec.getQualifiedName() : clsName;
 
-		Class cls = Class.forName(clsName);
+		Class<?> cls = Class.forName(clsName);
 
 		if (cls == BooleanClass || cls == JSBooleanClass) {
 			return JSTYPE_BOOLEAN;
@@ -452,7 +452,7 @@ public class JavaScriptFunctionType {
 	}
 
 
-	static int getSizeRank(Class aType) {
+	static int getSizeRank(Class<?> aType) {
 		if (aType == Double.TYPE) {
 			return 1;
 		}

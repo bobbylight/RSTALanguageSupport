@@ -42,14 +42,16 @@ import org.fife.ui.autocomplete.Completion;
  */
 public class ShorthandCompletionCache {
 	
-	private ArrayList shorthandCompletion = new ArrayList();
-	private ArrayList commentCompletion = new ArrayList();
+	private List<Completion> shorthandCompletion;
+	private List<Completion> commentCompletion;
 	
 	private AbstractCompletionProvider templateProvider, commentProvider;
 
 
 	public ShorthandCompletionCache(AbstractCompletionProvider templateProvider,
 			AbstractCompletionProvider commentProvider) {
+		shorthandCompletion = new ArrayList<Completion>();
+		commentCompletion = new ArrayList<Completion>();
 		this.templateProvider = templateProvider;
 		this.commentProvider = commentProvider;
 	}
@@ -59,7 +61,8 @@ public class ShorthandCompletionCache {
 	}
 
 
-	private static final void addSorted(List list, Completion completion) {
+	private static final void addSorted(List<Completion> list,
+			Completion completion) {
 		int index = Collections.binarySearch(list, completion);
 		if (index<0) {
 			// index = -insertion_point - 1
@@ -69,7 +72,7 @@ public class ShorthandCompletionCache {
 	}
 
 
-	public List getShorthandCompletions() {
+	public List<Completion> getShorthandCompletions() {
 		return shorthandCompletion;
 	}
 	
@@ -86,7 +89,7 @@ public class ShorthandCompletionCache {
 		addSorted(commentCompletion, completion);
 	}
 
-	public List getCommentCompletions() {
+	public List<Completion> getCommentCompletions() {
 		return commentCompletion;
 	}
 	

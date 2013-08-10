@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.fife.rsta.ac.js.ast.type.ecma.TypeDeclarations;
+import org.fife.rsta.ac.js.ast.type.ecma.TypeDeclarations.JavaScriptObject;
 import org.fife.rsta.ac.js.ast.type.ecma.client.ClientBrowserAdditions;
 import org.fife.rsta.ac.js.ast.type.ecma.client.DOMAddtions;
 import org.fife.rsta.ac.js.ast.type.ecma.client.HTMLDOMAdditions;
@@ -181,7 +182,7 @@ public class TypeDeclarationFactory {
 	 * 
 	 * @return a list of ECMA JavaScriptObjects
 	 */
-	public Set getECMAScriptObjects() {
+	public Set<JavaScriptObject> getECMAScriptObjects() {
 		return ecma.getJavaScriptObjects();
 	}
 	

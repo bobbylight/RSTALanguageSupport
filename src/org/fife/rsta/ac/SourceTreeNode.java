@@ -31,12 +31,12 @@ import org.fife.ui.autocomplete.Util;
  * @see AbstractSourceTree
  */
 public class SourceTreeNode extends DefaultMutableTreeNode
-		implements Cloneable, Comparable {
+		implements Comparable<SourceTreeNode> {
 
 	private boolean sortable;
 	private boolean sorted;
 	private Pattern pattern;
-	private Vector visibleChildren;
+	private Vector<TreeNode> visibleChildren;
 	private int sortPriority;
 
 
@@ -59,7 +59,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 	 */
 	public SourceTreeNode(Object userObject, boolean sorted) {
 		super(userObject);
-		visibleChildren = new Vector();
+		visibleChildren = new Vector<TreeNode>();
 		setSortable(true);
 		setSorted(sorted);
 	}
@@ -90,7 +90,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 	 *
 	 * @return The visible children.
 	 */
-	public Enumeration children() {
+	public Enumeration<TreeNode> children() {
 		return visibleChildren.elements();
 	}
 
@@ -102,10 +102,11 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 	 * @return The clone of this node.
 	 * @see #cloneWithChildren()
 	 */
+	@Override
 	public Object clone() {
 		SourceTreeNode node = (SourceTreeNode)super.clone();
 		// Not based off original, no children!
-		node.visibleChildren = new Vector();
+		node.visibleChildren = new Vector<TreeNode>();
 		return node;
 	}
 
@@ -132,13 +133,12 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 	 * string representations, ignoring case.  Subclasses can override this
 	 * method if they wish to do more intricate sorting.
 	 *
-	 * @param obj A tree node to compare to.
+	 * @param stn2 A tree node to compare to.
 	 * @return How these tree nodes compare relative to each other.
 	 */
-	public int compareTo(Object obj) {
+	public int compareTo(SourceTreeNode stn2) {
 		int res = -1;
-		if (obj instanceof SourceTreeNode) {
-			SourceTreeNode stn2 = (SourceTreeNode)obj;
+		if (stn2!=null) {
 			res = getSortPriority() - stn2.getSortPriority();
 			if (res==0 && ((SourceTreeNode)getParent()).isSorted()) {
 				res = toString().compareToIgnoreCase(stn2.toString());
@@ -193,7 +193,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 	 */
 	public TreeNode getChildAt(int index) {
 		//System.out.println(index);
-		return (TreeNode)visibleChildren.get(index);
+		return visibleChildren.get(index);
 	}
 
 
@@ -239,7 +239,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 			throw new IllegalArgumentException("child cannot be null");
 		}
 		for (int i=0; i<visibleChildren.size(); i++) {
-			TreeNode node = (TreeNode)visibleChildren.get(i);
+			TreeNode node = visibleChildren.get(i);
 			if (node.equals(child)) {
 				return i;
 			}
@@ -295,12 +295,13 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 	/**
 	 * Refreshes what children are visible in the tree.
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void refreshVisibleChildren() {
 		visibleChildren.clear();
 		if (children!=null) {
 			visibleChildren.addAll(children);
 			if (sortable && sorted) {
-				Collections.sort(visibleChildren);
+				Collections.sort((Vector)visibleChildren);
 			}
 			if (pattern!=null) {
 				for (Iterator i=visibleChildren.iterator(); i.hasNext(); ) {

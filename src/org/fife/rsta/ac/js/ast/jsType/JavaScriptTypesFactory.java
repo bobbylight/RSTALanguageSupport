@@ -35,16 +35,18 @@ import org.fife.ui.autocomplete.DefaultCompletionProvider;
 
 public abstract class JavaScriptTypesFactory {
 
-	protected HashMap cachedTypes = new HashMap();
+	protected HashMap<TypeDeclaration, JavaScriptType> cachedTypes =
+			new HashMap<TypeDeclaration, JavaScriptType>();
 	private boolean useBeanproperties;
 	protected TypeDeclarationFactory typesFactory;
 	
-	private static ArrayList UNSUPPORTED_COMPLETIONS = new ArrayList();
+	private static final List<String> UNSUPPORTED_COMPLETIONS;
 	private static String SPECIAL_METHOD = "<clinit>";
 	
 	//list of unsupported completions e.g java.lang.Object as JavaScript has it's own
 	static
 	{
+		UNSUPPORTED_COMPLETIONS = new ArrayList<String>();
 		UNSUPPORTED_COMPLETIONS.add("java.lang.Object");
 	}
 	
@@ -94,7 +96,7 @@ public abstract class JavaScriptTypesFactory {
 
 		// already processed type, so no need to do again
 		if (cachedTypes.containsKey(type))
-			return (JavaScriptType) cachedTypes.get(type);
+			return cachedTypes.get(type);
 
 		// now try to read the functions from the API
 		ClassFile cf = getClassFile(manager, type);
@@ -382,13 +384,12 @@ public abstract class JavaScriptTypesFactory {
 	 * @param provider SourceCompletionProvider
 	 * @return
 	 */
-	public List getECMAObjectTypes(SourceCompletionProvider provider) {
-		ArrayList constructors = new ArrayList();
+	public List<JavaScriptType> getECMAObjectTypes(SourceCompletionProvider provider) {
+		List<JavaScriptType> constructors = new ArrayList<JavaScriptType>();
 		//no constructors... we'd better load them
-		Set types = typesFactory.getECMAScriptObjects();
+		Set<JavaScriptObject> types = typesFactory.getECMAScriptObjects();
 		JarManager manager = provider.getJarManager();
-		for(Iterator i = types.iterator(); i.hasNext();) {
-			JavaScriptObject object = (JavaScriptObject) i.next();
+		for (JavaScriptObject object : types) {
 			TypeDeclaration type = typesFactory.getTypeDeclaration(object.getName());
 			JavaScriptType js = getCachedType(type, manager, provider, null);
 			if(js != null) {

@@ -71,7 +71,8 @@ class JavaTreeNode extends SourceTreeNode {
 	/**
 	 * Overridden to compare tree text without HTML.
 	 */
-	public int compareTo(Object obj) {
+	@Override
+	public int compareTo(SourceTreeNode obj) {
 		int res = -1;
 		if (obj instanceof JavaTreeNode) {
 			JavaTreeNode jtn2 = (JavaTreeNode)obj;

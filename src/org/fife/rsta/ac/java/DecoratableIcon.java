@@ -39,7 +39,7 @@ public class DecoratableIcon implements Icon {
 	/**
 	 * The "decoration" icons.
 	 */
-	private List decorations;
+	private List<Icon> decorations;
 
 	/**
 	 * Whether this icon is for a "deprecated" item.
@@ -86,7 +86,7 @@ public class DecoratableIcon implements Icon {
 			throw new IllegalArgumentException("decoration cannot be null");
 		}
 		if (decorations==null) {
-			decorations = new ArrayList(1); // Usually just 1
+			decorations = new ArrayList<Icon>(1); // Usually just 1
 		}
 		decorations.add(decoration);
 	}
@@ -120,7 +120,7 @@ public class DecoratableIcon implements Icon {
 		if (decorations!=null) {
 			x = x + getIconWidth() - 8;
 			for (int i=decorations.size()-1; i>=0; i--) {
-				Icon icon = (Icon)decorations.get(i);
+				Icon icon = decorations.get(i);
 				icon.paintIcon(c, g, x, y);
 				x -= 8;
 			}

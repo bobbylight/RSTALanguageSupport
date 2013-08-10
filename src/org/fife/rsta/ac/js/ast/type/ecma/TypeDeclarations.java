@@ -3,7 +3,6 @@ package org.fife.rsta.ac.js.ast.type.ecma;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -41,11 +40,11 @@ public abstract class TypeDeclarations {
 
 	public static String NULL_TYPE = "void";
 
-	private final HashMap types = new HashMap();
+	private final HashMap<String, TypeDeclaration> types = new HashMap<String, TypeDeclaration>();
 
 	// reverse lookup for Java types to Javascript types
-	private final HashMap javascriptReverseLookup = new HashMap();
-	private final HashSet ecmaObjects = new HashSet();
+	private final HashMap<String, String> javascriptReverseLookup = new HashMap<String, String>();
+	private final HashSet<JavaScriptObject> ecmaObjects = new HashSet<JavaScriptObject>();
 
 
 	public TypeDeclarations() {
@@ -132,17 +131,16 @@ public abstract class TypeDeclarations {
 
 
 	public String getClassName(String lookupType) {
-		TypeDeclaration dec = (TypeDeclaration) types.get(lookupType);
+		TypeDeclaration dec = types.get(lookupType);
 		return dec != null ? dec.getQualifiedName() : null;
 	}
 
 
-	public List getAllClasses() {
-		ArrayList classes = new ArrayList();
+	public List<String> getAllClasses() {
+		List<String> classes = new ArrayList<String>();
 
-		for (Iterator i = types.keySet().iterator(); i.hasNext();) {
-			String name = (String) i.next();
-			TypeDeclaration dec = (TypeDeclaration) types.get(name);
+		for (String name : types.keySet()) {
+			TypeDeclaration dec = types.get(name);
 			if (dec != null) {
 				classes.add(dec.getQualifiedName());
 			}
@@ -151,12 +149,11 @@ public abstract class TypeDeclarations {
 	}
 
 
-	public List getAllJavaScriptTypeDeclarations() {
-		ArrayList jsTypes = new ArrayList();
+	public List<TypeDeclaration> getAllJavaScriptTypeDeclarations() {
+		List<TypeDeclaration> jsTypes = new ArrayList<TypeDeclaration>();
 
-		for (Iterator i = types.keySet().iterator(); i.hasNext();) {
-			String name = (String) i.next();
-			TypeDeclaration dec = (TypeDeclaration) types.get(name);
+		for (String name : types.keySet()) {
+			TypeDeclaration dec = types.get(name);
 			if (isJavaScriptType(dec)) {
 				jsTypes.add(dec);
 			}
@@ -211,7 +208,7 @@ public abstract class TypeDeclarations {
 		if (name == null)
 			return null;
 
-		TypeDeclaration typeDeclation = (TypeDeclaration) types.get(name);
+		TypeDeclaration typeDeclation = types.get(name);
 		if (typeDeclation == null) {
 			typeDeclation = getJSType(name);
 		}
@@ -244,9 +241,9 @@ public abstract class TypeDeclarations {
 			return arrayDec;
 		}
 		else {
-			String name = (String) javascriptReverseLookup.get(lookupName);
+			String name = javascriptReverseLookup.get(lookupName);
 			if (name != null) {
-				return (TypeDeclaration) types.get(name);
+				return types.get(name);
 			}
 		}
 
@@ -254,7 +251,7 @@ public abstract class TypeDeclarations {
 	}
 
 
-	public Set getJavaScriptObjects() {
+	public Set<JavaScriptObject> getJavaScriptObjects() {
 		return ecmaObjects;
 	}
 	
@@ -266,13 +263,11 @@ public abstract class TypeDeclarations {
 	 */
 	public boolean canECMAObjectBeInstantiated(String name)
 	{
-		String tempName = (String) javascriptReverseLookup.get(name);
+		String tempName = javascriptReverseLookup.get(name);
 		if(tempName != null) {
 			name = tempName;
 		}
-		for(Iterator i = ecmaObjects.iterator(); i.hasNext();)
-		{
-			JavaScriptObject jo = (JavaScriptObject) i.next();
+		for (JavaScriptObject jo : ecmaObjects) {
 			if(jo.getName().equals(name)) {
 				return jo.canBeInstantiated();
 			}

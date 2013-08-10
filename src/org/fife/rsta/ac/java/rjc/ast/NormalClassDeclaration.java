@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.fife.rsta.ac.java.rjc.lang.Type;
+import org.fife.rsta.ac.java.rjc.lang.TypeParameter;
 import org.fife.rsta.ac.java.rjc.lexer.Scanner;
 
 
@@ -32,14 +33,14 @@ import org.fife.rsta.ac.java.rjc.lexer.Scanner;
 public class NormalClassDeclaration extends AbstractTypeDeclarationNode {
 
 	// --- "NormalClassDeclaration" fields ---
-	private List typeParams;
+	private List<TypeParameter> typeParams;
 	private Type extendedType;
-	private List implementedList;
+	private List<Type> implementedList;
 
 
 	public NormalClassDeclaration(Scanner s, int offs, String className) {
 		super(className, s.createOffset(offs), s.createOffset(offs+className.length()));
-		implementedList = new ArrayList(0); // Usually not many
+		implementedList = new ArrayList<Type>(0); // Usually not many
 		// If parsing java.lang.Object.java, setExtendedType(null) should be
 		// called.  This is here for all other classes without an explicit
 		// super class declared.
@@ -62,7 +63,7 @@ public class NormalClassDeclaration extends AbstractTypeDeclarationNode {
 	}
 
 
-	public Iterator getImplementedIterator() {
+	public Iterator<Type> getImplementedIterator() {
 		return implementedList.iterator();
 	}
 
@@ -75,8 +76,8 @@ public class NormalClassDeclaration extends AbstractTypeDeclarationNode {
 	 *         method in this class contains the offset.
 	 */
 	public Method getMethodContainingOffset(int offs) {
-		for (Iterator i=getMethodIterator(); i.hasNext(); ) {
-			Method method = (Method)i.next();
+		for (Iterator<Method> i=getMethodIterator(); i.hasNext(); ) {
+			Method method = i.next();
 			if (method.getBodyContainsOffset(offs)) {
 				return method;
 			}
@@ -85,7 +86,7 @@ public class NormalClassDeclaration extends AbstractTypeDeclarationNode {
 	}
 
 
-	public List getTypeParameters() {
+	public List<TypeParameter> getTypeParameters() {
 		return typeParams;
 	}
 
@@ -133,7 +134,7 @@ public class NormalClassDeclaration extends AbstractTypeDeclarationNode {
 	}
 
 
-	public void setTypeParameters(List typeParams) {
+	public void setTypeParameters(List<TypeParameter> typeParams) {
 		this.typeParams = typeParams;
 	}
 

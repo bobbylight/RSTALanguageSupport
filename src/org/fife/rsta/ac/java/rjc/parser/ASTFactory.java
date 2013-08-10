@@ -493,10 +493,10 @@ case KEYWORD_WHILE:
 try {
 
 		// Get annotations.
-		List initialAnnotations = null; // Usually none
+		List<Annotation> initialAnnotations = null; // Usually none
 		while (scanner.yyPeekCheckType()==ANNOTATION_START) {
 			if (initialAnnotations==null) {
-				initialAnnotations = new ArrayList(1);
+				initialAnnotations = new ArrayList<Annotation>(1);
 			}
 			initialAnnotations.add(_getAnnotation(cu, scanner));
 		}
@@ -638,7 +638,7 @@ return cu;
 		t = s.yylexNonNull("implements or '{' expected");
 
 		if (t.isType(KEYWORD_IMPLEMENTS)) {
-			List implemented = new ArrayList(1); // Usually small
+			List<Type> implemented = new ArrayList<Type>(1); // Usually small
 			do {
 				implemented.add(_getType(cu, s));
 				t = s.yylex();
@@ -661,10 +661,10 @@ return cu;
 	}
 
 
-	private List _getFormalParameters(CompilationUnit cu, List tokenList)
-										throws IOException {
+	private List<FormalParameter> _getFormalParameters(CompilationUnit cu,
+									List tokenList) throws IOException {
 
-		List list = new ArrayList(0);
+		List<FormalParameter> list = new ArrayList<FormalParameter>(0);
 
 		Scanner s = new Scanner(tokenList);
 		Token t = s.yylex();
@@ -678,7 +678,7 @@ return cu;
 				isFinal = true;
 				t = s.yylexNonNull("Type expected");
 			}
-			List annotations = null;
+			List<Annotation> annotations = null;
 			// TODO: Annotations
 			s.yyPushback(t);
 			Type type = _getType(cu, s);
@@ -775,9 +775,9 @@ return cu;
 
 		log("Entering _getInterfaceMemberDecl");
 
-		List tokenList = new ArrayList(1);
-		List methodNameAndTypeTokenList = null;
-		List methodParamsList = null;
+		List<Token> tokenList = new ArrayList<Token>(1);
+		List<Token> methodNameAndTypeTokenList = null;
+		List<Token> methodParamsList = null;
 		int bracketPairCount;
 		boolean methodDecl = false;
 		boolean blockDecl = false;
@@ -792,7 +792,7 @@ OUTER:
 			switch (t.getType()) {
 				case SEPARATOR_LPAREN:
 					methodNameAndTypeTokenList = tokenList;
-					methodParamsList = new ArrayList(1);
+					methodParamsList = new ArrayList<Token>(1);
 					methodDecl = true;
 					break OUTER;
 				case SEPARATOR_LBRACE:
@@ -848,14 +848,14 @@ OUTER:
 				}
 				methodParamsList.add(t);
 			}
-			List formalParams = _getFormalParameters(cu, methodParamsList);
+			List<FormalParameter> formalParams = _getFormalParameters(cu, methodParamsList);
 			if (s.yyPeekCheckType()==SEPARATOR_LBRACKET) {
 				if (type==null) {
 					throw new IOException("Constructors cannot return array types");
 				}
 				type.incrementBracketPairCount(s.skipBracketPairs());
 			}
-			List thrownTypeNames = getThrownTypeNames(cu, s);
+			List<String> thrownTypeNames = getThrownTypeNames(cu, s);
 			t = s.yylexNonNull("'{' or ';' expected");
 			if (t.getType() != SEPARATOR_SEMICOLON) {
 				throw new IOException("';' expected");
@@ -874,7 +874,7 @@ OUTER:
 			// or interface...
 			if (tokenList.size()<2) {
 				for (int i=tokenList.size()-1; i>=0; i--) {
-					s.yyPushback((Token)tokenList.get(i));
+					s.yyPushback(tokenList.get(i));
 				}
 				CodeBlock block = _getBlock(cu, null, null, s, false);
 				iDec.addMember(block);
@@ -882,7 +882,7 @@ OUTER:
 			else { // inner class, enum, or interface (?)
 				s.yyPushback(t); // The '{' token
 				for (int i=tokenList.size()-1; i>=0; i--) {
-					s.yyPushback((Token)tokenList.get(i));
+					s.yyPushback(tokenList.get(i));
 				}
 				/*TypeDeclaration type = */_getClassOrInterfaceDeclaration(cu, s, iDec, modList);
 			}
@@ -908,9 +908,9 @@ OUTER:
 
 		log("Entering _getMemberDecl");
 
-		List tokenList = new ArrayList(1);
-		List methodNameAndTypeTokenList = null;
-		List methodParamsList = null;
+		List<Token> tokenList = new ArrayList<Token>(1);
+		List<Token> methodNameAndTypeTokenList = null;
+		List<Token> methodParamsList = null;
 		int bracketPairCount;
 		boolean methodDecl = false;
 		boolean blockDecl = false;
@@ -925,7 +925,7 @@ OUTER:
 			switch (t.getType()) {
 				case SEPARATOR_LPAREN:
 					methodNameAndTypeTokenList = tokenList;
-					methodParamsList = new ArrayList(1);
+					methodParamsList = new ArrayList<Token>(1);
 					methodDecl = true;
 					break OUTER;
 				case SEPARATOR_LBRACE:
@@ -987,14 +987,14 @@ OUTER:
 				}
 				methodParamsList.add(t);
 			}
-			List formalParams = _getFormalParameters(cu, methodParamsList);
+			List<FormalParameter> formalParams = _getFormalParameters(cu, methodParamsList);
 			if (s.yyPeekCheckType()==SEPARATOR_LBRACKET) {
 				if (type==null) {
 					throw new IOException("Constructors cannot return array types");
 				}
 				type.incrementBracketPairCount(s.skipBracketPairs());
 			}
-			List thrownTypeNames = getThrownTypeNames(cu, s);
+			List<String> thrownTypeNames = getThrownTypeNames(cu, s);
 			Method m = new Method(s, modList, type, methodNameToken, formalParams,
 					thrownTypeNames);
 			m.setDeprecated(checkDeprecated());
@@ -1019,7 +1019,7 @@ OUTER:
 			nextMemberDeprecated = false;
 			if (tokenList.size()<2) {
 				for (int i=tokenList.size()-1; i>=0; i--) {
-					s.yyPushback((Token)tokenList.get(i));
+					s.yyPushback(tokenList.get(i));
 				}
 				CodeBlock block = _getBlock(cu, null, null, s, false);
 				classDec.addMember(block);
@@ -1027,7 +1027,7 @@ OUTER:
 			else { // inner class, enum, or interface (?)
 				s.yyPushback(t); // The '{' token
 				for (int i=tokenList.size()-1; i>=0; i--) {
-					s.yyPushback((Token)tokenList.get(i));
+					s.yyPushback(tokenList.get(i));
 				}
 				/*TypeDeclaration type = */_getClassOrInterfaceDeclaration(cu, s, classDec, modList);
 			}
@@ -1104,7 +1104,7 @@ OUTER:
 		t = s.yylexNonNull("TypeParameters, extends, implements or '{' expected");
 		if (t.isType(OPERATOR_LT)) {
 			s.yyPushback(t);
-			List typeParams = _getTypeParameters(cu, s);
+			List<TypeParameter> typeParams = _getTypeParameters(cu, s);
 			classDec.setTypeParameters(typeParams);
 			t = s.yylexNonNull("extends, implements or '{' expected");
 		}
@@ -1208,7 +1208,7 @@ OUTER:
 	}
 
 
-	private List getThrownTypeNames(CompilationUnit cu, Scanner s)
+	private List<String> getThrownTypeNames(CompilationUnit cu, Scanner s)
 									throws IOException {
 
 		if (s.yyPeekCheckType()!=KEYWORD_THROWS) {
@@ -1216,7 +1216,7 @@ OUTER:
 		}
 		s.yylex();
 
-		List list = new ArrayList(1); // Usually small
+		List<String> list = new ArrayList<String>(1); // Usually small
 
 		list.add(getQualifiedIdentifier(s));
 		while (s.yyPeekCheckType()==SEPARATOR_COMMA) {
@@ -1262,7 +1262,7 @@ OUTER:
 		while (true) {
 			switch (t.getType()) {
 				case IDENTIFIER:
-					List typeArgs = null;
+					List<TypeArgument> typeArgs = null;
 					if (s.yyPeekCheckType()==OPERATOR_LT) {
 						typeArgs = _getTypeArguments(cu, s);
 					}
@@ -1341,7 +1341,7 @@ OUTER:
 	}
 
 
-	private List _getTypeArguments(CompilationUnit cu, Scanner s)
+	private List<TypeArgument> _getTypeArguments(CompilationUnit cu, Scanner s)
 									throws IOException {
 
 		s.increaseTypeArgumentsLevel();
@@ -1350,7 +1350,7 @@ OUTER:
 		s.markResetPosition();
 		s.yylexNonNull(OPERATOR_LT, "'<' expected");
 
-		List typeArgs = new ArrayList(1);
+		List<TypeArgument> typeArgs = new ArrayList<TypeArgument>(1);
 
 		Token t = null;
 		do {
@@ -1428,8 +1428,8 @@ OUTER:
 	}
 
 
-	private List _getTypeParameters(CompilationUnit cu, Scanner s)
-										throws IOException {
+	private List<TypeParameter> _getTypeParameters(CompilationUnit cu,
+						Scanner s) throws IOException {
 
 		s.increaseTypeArgumentsLevel();
 		log("Entering _getTypeParameters() (" + s.getTypeArgumentsLevel() + ")");
@@ -1437,7 +1437,7 @@ OUTER:
 		s.markResetPosition();
 		Token t = s.yylexNonNull(OPERATOR_LT, "TypeParameters expected");
 
-		List typeParams = new ArrayList(1);
+		List<TypeParameter> typeParams = new ArrayList<TypeParameter>(1);
 
 		do {
 			TypeParameter typeParam = _getTypeParameter(cu, s);

@@ -14,7 +14,7 @@ import org.fife.ui.autocomplete.FunctionCompletion;
 
 
 public class JavaScriptMethodCompletion extends FunctionCompletion implements
-		JSCompletionUI, JSCompletion {
+		JSCompletion {
 
 	private Method method;
 
@@ -27,7 +27,7 @@ public class JavaScriptMethodCompletion extends FunctionCompletion implements
 		super(provider, method.getName(), null);
 		this.method = method;
 		int count = method.getParameterCount();
-		List params = new ArrayList(count);
+		List<Parameter> params = new ArrayList<Parameter>(count);
 		for (int i = 0; i < count; i++) {
 			FormalParameter param = method.getParameter(i);
 			String name = param.getName();
@@ -119,17 +119,17 @@ public class JavaScriptMethodCompletion extends FunctionCompletion implements
 	/**
 	 * {@inheritDoc}
 	 */
-	public int compareTo(Object o) {
+	public int compareTo(Completion other) {
 		int rc = -1;
-		if (o==this) {
+		if (other==this) {
 			rc = 0;
 		}
-		else if (o instanceof JSCompletion) {
-			JSCompletion c2 = (JSCompletion)o;
+		else if (other instanceof JSCompletion) {
+			JSCompletion c2 = (JSCompletion)other;
 			rc= getLookupName().compareTo(c2.getLookupName());
 		}
-		else if (o instanceof Completion) {
-			Completion c2 = (Completion) o;
+		else if (other!=null) {
+			Completion c2 = other;
 			rc = toString().compareTo(c2.toString());
 			if (rc == 0) { // Same text value
 				String clazz1 = getClass().getName();

@@ -39,13 +39,13 @@ public class Signature extends AttributeInfo {
 	}
 
 
-	public List getClassParamTypes() {
+	public List<String> getClassParamTypes() {
 
-		List types = null;
+		List<String> types = null;
 		
 		if (signature!=null && signature.startsWith("<")) {
 
-			types = new ArrayList(1); // Usually a small number
+			types = new ArrayList<String>(1); // Usually a small number
 			int afterMatchingGT = skipLtGt(signature, 1);
 
 			// We're assuming we don't come across corrupt signatures...
@@ -104,17 +104,18 @@ public class Signature extends AttributeInfo {
 	}
 
 
-	public List getMethodParamTypes(MethodInfo mi, ClassFile cf, boolean qualified) {
+	public List<String> getMethodParamTypes(MethodInfo mi, ClassFile cf,
+			boolean qualified) {
 
-		List paramTypeList = null;
+		List<String> paramTypeList = null;
 		String signature = this.signature; // Since we modify it
 
 		if (signature!=null) {
 
-			paramTypeList = new ArrayList();
+			paramTypeList = new ArrayList<String>();
 			
 			// Handle "<...>", which essentially defines extra type args
-			Map additionalTypeArgs = null;
+			Map<String, String> additionalTypeArgs = null;
 			if (signature.charAt(0)=='<') {
 				int afterMatchingGT = skipLtGt(signature, 1);
 				String typeParams = signature.substring(1, afterMatchingGT-1);
@@ -161,7 +162,7 @@ public class Signature extends AttributeInfo {
 		if (signature!=null) {
 
 			// Handle "<...>", which essentially defines extra type args
-			Map additionalTypeArgs = null;
+			Map<String, String> additionalTypeArgs = null;
 			if (signature.charAt(0)=='<') {
 				int afterMatchingGT = skipLtGt(signature, 1);
 				String typeParams = signature.substring(1, afterMatchingGT-1);
@@ -210,7 +211,7 @@ public class Signature extends AttributeInfo {
 	 *         parameter isn't defined.
 	 */
 	private String getTypeArgument(String typeVar, ClassFile cf,
-									Map additionalTypeArgs) {
+									Map<String, String> additionalTypeArgs) {
 		String type = cf.getTypeArgument(typeVar);
 		if (type==null && additionalTypeArgs!=null) {
 			//type = (String)additionalTypeArgs.get(typeVar);
@@ -220,9 +221,9 @@ public class Signature extends AttributeInfo {
 	}
 
 
-	private Map parseAdditionalTypeArgs(String typeParams) {
+	private Map<String, String> parseAdditionalTypeArgs(String typeParams) {
 
-		Map additionalTypeArgs = new HashMap();
+		Map<String, String> additionalTypeArgs = new HashMap<String, String>();
 		int offs = 0;
 		int colon = typeParams.indexOf(':', offs);
 
@@ -250,9 +251,9 @@ public class Signature extends AttributeInfo {
 
 
 	private ParamDescriptorResult parseParamDescriptor(String str,
-									ClassFile cf, Map additionalTypeArgs,
-									MethodInfo mi, String errorDesc,
-									ParamDescriptorResult res, boolean qualified) {
+						ClassFile cf, Map<String, String> additionalTypeArgs,
+						MethodInfo mi, String errorDesc,
+						ParamDescriptorResult res, boolean qualified) {
 
 		// Can't do lastIndexOf() as there may be > 1 array parameter
 		// in the descriptors.
@@ -320,7 +321,7 @@ public class Signature extends AttributeInfo {
 						// Get type parameters
 						String paramDescriptors = str.substring(lt+1, offs-1);
 						ParamDescriptorResult res2 = new ParamDescriptorResult();
-						List paramTypeList = new ArrayList();
+						List<String> paramTypeList = new ArrayList<String>();
 						// Recursively parse type parameters of this parameter
 						while (paramDescriptors.length()>0) {
 							parseParamDescriptor(paramDescriptors, cf, additionalTypeArgs,

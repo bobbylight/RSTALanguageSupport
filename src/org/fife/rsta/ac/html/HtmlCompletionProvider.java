@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.swing.text.BadLocationException;
@@ -43,7 +42,7 @@ public class HtmlCompletionProvider extends DefaultCompletionProvider {
 	/**
 	 * A mapping of tag names to their legal attributes.
 	 */
-	private Map tagToAttrs;
+	private Map<String, List<AttributeCompletion>> tagToAttrs;
 
 	/**
 	 * Whether the text last grabbed via
@@ -68,11 +67,11 @@ public class HtmlCompletionProvider extends DefaultCompletionProvider {
 
 		initCompletions();
 
-		tagToAttrs = new HashMap();
-		for (Iterator i=completions.iterator(); i.hasNext(); ) {
-			MarkupTagCompletion c = (MarkupTagCompletion)i.next();
+		tagToAttrs = new HashMap<String, List<AttributeCompletion>>();
+		for (Completion comp : completions) {
+			MarkupTagCompletion c = (MarkupTagCompletion)comp;
 			String tag = c.getInputText();
-			ArrayList attrs = new ArrayList();
+			List<AttributeCompletion> attrs = new ArrayList<AttributeCompletion>();
 			tagToAttrs.put(tag.toLowerCase(), attrs);
 			for (int j=0; j<c.getAttributeCount(); j++) {
 				Parameter param = c.getAttribute(j);
@@ -269,19 +268,20 @@ if (t!=null && !t.isWhitespace()) {
 	 * @return A list of attributes, or <code>null</code> if the tag is not
 	 *         recognized.
 	 */
-	protected List getAttributeCompletionsForTag(String tagName) {
-		return (List)tagToAttrs.get(lastTagName);
+	protected List<AttributeCompletion> getAttributeCompletionsForTag(
+			String tagName) {
+		return tagToAttrs.get(lastTagName);
 	}
 
 
 	/**
 	 * {@inheritDoc}
 	 */
-	protected List getCompletionsImpl(JTextComponent comp) {
+	protected List<Completion> getCompletionsImpl(JTextComponent comp) {
 
-		List retVal = new ArrayList();
+		List<Completion> retVal = new ArrayList<Completion>();
 		String text = getAlreadyEnteredText(comp);
-		List completions = getTagCompletions();
+		List<? extends Completion> completions = getTagCompletions();
 		if (lastTagName!=null) {
 			lastTagName = lastTagName.toLowerCase();
 			completions = getAttributeCompletionsForTag(lastTagName);
@@ -296,7 +296,7 @@ if (t!=null && !t.isWhitespace()) {
 			}
 
 			while (index<completions.size()) {
-				Completion c = (Completion)completions.get(index);
+				Completion c = completions.get(index);
 				if (Util.startsWithIgnoreCase(c.getInputText(), text)) {
 					retVal.add(c);
 					index++;
@@ -319,7 +319,7 @@ if (t!=null && !t.isWhitespace()) {
 	 *
 	 * @return The completions for the standard tag set.
 	 */
-	protected List getTagCompletions() {
+	protected List<Completion> getTagCompletions() {
 		return this.completions;
 	}
 

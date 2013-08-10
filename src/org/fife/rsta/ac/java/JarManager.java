@@ -254,16 +254,14 @@ TODO: Verify me!!!
 	 * @return A list of type declarations with the given name, or
 	 *         <code>null</code> if there are none.
 	 */
-	public List getClassesWithUnqualifiedName(String name,
-												List importDeclarations) {
+	public List<ClassFile> getClassesWithUnqualifiedName(String name,
+								List<ImportDeclaration> importDeclarations) {
 
 		// Might be more than one class/interface/enum with the same name.
-		List result = null;
+		List<ClassFile> result = null;
 
 		// Loop through all of our imports.
-		for (int i=0; i<importDeclarations.size(); i++) {
-
-			ImportDeclaration idec = (ImportDeclaration)importDeclarations.get(i);
+		for (ImportDeclaration idec : importDeclarations) {
 
 			// Static imports are for fields/methods, not classes
 			if (!idec.isStatic()) {
@@ -277,7 +275,7 @@ TODO: Verify me!!!
 					ClassFile entry = getClassEntry(qualified);
 					if (entry!=null) {
 						if (result==null) {
-							result = new ArrayList(1); // Usually small
+							result = new ArrayList<ClassFile>(1); // Usually small
 						}
 						result.add(entry);
 					}
@@ -292,7 +290,7 @@ TODO: Verify me!!!
 						ClassFile entry = getClassEntry(name2);
 						if (entry!=null) { // Should always be true
 							if (result==null) {
-								result = new ArrayList(1); // Usually small
+								result = new ArrayList<ClassFile>(1); // Usually small
 							}
 							result.add(entry);
 						}
@@ -311,7 +309,7 @@ TODO: Verify me!!!
 		ClassFile entry = getClassEntry(qualified);
 		if (entry!=null) {
 			if (result==null) {
-				result = new ArrayList(1); // Usually small
+				result = new ArrayList<ClassFile>(1); // Usually small
 			}
 			result.add(entry);
 		}

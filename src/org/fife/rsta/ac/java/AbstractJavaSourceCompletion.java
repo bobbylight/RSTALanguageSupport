@@ -39,19 +39,19 @@ public abstract class AbstractJavaSourceCompletion extends BasicCompletion
 	 * <code>Completion</code> as well, so, for example, a completion for the
 	 * "String" class won't clash with a completion for a "string" LocalVar.
 	 *
-	 * @param o Another completion instance.
+	 * @param c2 Another completion instance.
 	 * @return How this completion compares to the other one.
 	 */
-	public int compareTo(Object o) {
+	@Override
+	public int compareTo(Completion c2) {
 
 		int rc = -1;
 
-		if (o==this) {
+		if (c2==this) {
 			rc = 0;
 		}
 
-		else if (o instanceof Completion) {
-			Completion c2 = (Completion)o;
+		else if (c2!=null) {
 			rc = toString().compareToIgnoreCase(c2.toString());
 			if (rc==0) { // Same text value
 				String clazz1 = getClass().getName();

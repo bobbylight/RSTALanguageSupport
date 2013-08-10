@@ -31,8 +31,8 @@ public class CodeBlock {
 	private int start;
 	private int end;
 	private CodeBlock parent;
-	private List children;
-	private List varDecs;
+	private List<CodeBlock> children;
+	private List<JavaScriptVariableDeclaration> varDecs;
 
 
 	/**
@@ -56,7 +56,7 @@ public class CodeBlock {
 		CodeBlock child = new CodeBlock(start);
 		child.parent = this;
 		if (children == null) {
-			children = new ArrayList();
+			children = new ArrayList<CodeBlock>();
 		}
 		children.add(child);
 		return child;
@@ -70,7 +70,7 @@ public class CodeBlock {
 	 */
 	public void addVariable(JavaScriptVariableDeclaration varDec) {
 		if (varDecs == null) {
-			varDecs = new ArrayList();
+			varDecs = new ArrayList<JavaScriptVariableDeclaration>();
 		}
 		varDecs.add(varDec);
 	}
@@ -95,7 +95,7 @@ public class CodeBlock {
 	 * @see #getChildCodeBlockCount()
 	 */
 	public CodeBlock getChildCodeBlock(int index) {
-		return (CodeBlock) children.get(index);
+		return children.get(index);
 	}
 
 
@@ -151,7 +151,7 @@ public class CodeBlock {
 	 * @see #getVariableDeclarationCount()
 	 */
 	public JavaScriptVariableDeclaration getVariableDeclaration(int index) {
-		return (JavaScriptVariableDeclaration) varDecs.get(index);
+		return varDecs.get(index);
 	}
 
 

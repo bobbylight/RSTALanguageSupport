@@ -60,14 +60,14 @@ public class IconFactory {
 	public static final String FINAL_ICON				= "finalIcon";
 	public static final String STATIC_ICON				= "staticIcon";
 
-	private Map iconMap;
+	private Map<String, Icon> iconMap;
 
 	private static final IconFactory INSTANCE = new IconFactory();
 
 
 	private IconFactory() {
 
-		iconMap = new HashMap();
+		iconMap = new HashMap<String, Icon>();
 		iconMap.put(SOURCE_FILE_ICON, loadIcon("jcu_obj.gif"));
 		iconMap.put(PACKAGE_ICON, loadIcon("package_obj.gif"));
 		iconMap.put(IMPORT_ROOT_ICON, loadIcon("impc_obj.gif"));
@@ -111,7 +111,7 @@ public class IconFactory {
 
 
 	public Icon getIcon(String key, boolean deprecated) {
-		Icon icon = (Icon)iconMap.get(key);
+		Icon icon = iconMap.get(key);
 		if (deprecated) { // TODO: Optimize me
 			DecoratableIcon di = new DecoratableIcon(16, icon);
 			di.setDeprecated(deprecated);

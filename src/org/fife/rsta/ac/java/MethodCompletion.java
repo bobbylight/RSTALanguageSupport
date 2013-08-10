@@ -25,7 +25,7 @@ import org.fife.rsta.ac.java.rjc.lang.Type;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.FunctionCompletion;
-import org.fife.ui.autocomplete.ParameterizedCompletion;
+
 
 /**
  * A completion for a Java method.  This completion gets its information from
@@ -79,12 +79,12 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 		setRelevanceAppropriately();
 
 		int count = m.getParameterCount();
-		List params = new ArrayList(count);
+		List<Parameter> params = new ArrayList<Parameter>(count);
 		for (int i=0; i<count; i++) {
 			FormalParameter param = m.getParameter(i);
 			Type type = param.getType();
 			String name = param.getName();
-			params.add(new ParameterizedCompletion.Parameter(type, name));
+			params.add(new Parameter(type, name));
 		}
 		setParams(params);
 
@@ -106,11 +106,11 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 		setRelevanceAppropriately();
 
 		String[] paramTypes = info.getParameterTypes();
-		List params = new ArrayList(paramTypes.length);
+		List<Parameter> params = new ArrayList<Parameter>(paramTypes.length);
 		for (int i=0; i<paramTypes.length; i++) {
 			String name = ((MethodInfoData)data).getParameterName(i);
 			String type = paramTypes[i].substring(paramTypes[i].lastIndexOf('.')+1);
-			params.add(new ParameterizedCompletion.Parameter(type, name));
+			params.add(new Parameter(type, name));
 		}
 		setParams(params);
 
@@ -120,24 +120,24 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 	/**
 	 * Overridden to compare methods by their comparison strings.
 	 *
-	 * @param o A <code>Completion</code> to compare to.
+	 * @param c2 A <code>Completion</code> to compare to.
 	 * @return The sort order.
 	 */
-	public int compareTo(Object o) {
+	@Override
+	public int compareTo(Completion c2) {
 
 		int rc = -1;
 
-		if (o==this) {
+		if (c2==this) {
 			rc = 0;
 		}
 
-		else if (o instanceof MethodCompletion) {
+		else if (c2 instanceof MethodCompletion) {
 			rc = getCompareString().compareTo(
-					((MethodCompletion)o).getCompareString());
+					((MethodCompletion)c2).getCompareString());
 		}
 
-		else if (o instanceof Completion) {
-			Completion c2 = (Completion)o;
+		else if (c2!=null) {
 			rc = toString().compareToIgnoreCase(c2.toString());
 			if (rc==0) { // Same text value
 				String clazz1 = getClass().getName();

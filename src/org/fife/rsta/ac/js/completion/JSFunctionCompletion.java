@@ -44,7 +44,7 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 		super(provider, getMethodName(methodInfo, provider), null);
 		this.methodData = new JSMethodData(methodInfo,
 				((SourceCompletionProvider) provider).getJarManager());
-		List params = populateParams(methodData, showParameterType);
+		List<Parameter> params = populateParams(methodData, showParameterType);
 		setParams(params);
 	}
 	
@@ -57,12 +57,12 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 		}
 	}
 
-	private List populateParams(JSMethodData methodData,
+	private List<Parameter> populateParams(JSMethodData methodData,
 			boolean showParameterType) {
 		MethodInfo methodInfo = methodData.getMethodInfo();
 		int count = methodInfo.getParameterCount();
 		String[] paramTypes = methodInfo.getParameterTypes();
-		List params = new ArrayList(count);
+		List<Parameter> params = new ArrayList<Parameter>(count);
 		for (int i = 0; i < count; i++) {
 			String name = methodData.getParameterName(i);
 			String type = methodData.getParameterType(paramTypes, i, getProvider());
@@ -76,22 +76,22 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 	/**
 	 * {@inheritDoc}
 	 */
-	public int compareTo(Object o) {
+	@Override
+	public int compareTo(Completion other) {
 		int rc = -1;
-		if (o==this) {
+		if (other==this) {
 			rc = 0;
 		}
-		else if (o instanceof JSCompletion) {
-			JSCompletion c2 = (JSCompletion)o;
+		else if (other instanceof JSCompletion) {
+			JSCompletion c2 = (JSCompletion)other;
 			rc = getLookupName().compareTo(c2.getLookupName());
 		}
-		else if (o instanceof Completion) {
-			Completion c2 = (Completion) o;
-			rc = toString().compareTo(c2.toString());
+		else if (other!=null) {
+			rc = toString().compareTo(other.toString());
 			if (rc == 0) { // Same text value
 				String clazz1 = getClass().getName();
 				clazz1 = clazz1.substring(clazz1.lastIndexOf('.'));
-				String clazz2 = c2.getClass().getName();
+				String clazz2 = other.getClass().getName();
 				clazz2 = clazz2.substring(clazz2.lastIndexOf('.'));
 				rc = clazz1.compareTo(clazz2);
 			}

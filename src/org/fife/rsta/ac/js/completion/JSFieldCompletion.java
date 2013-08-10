@@ -103,7 +103,8 @@ public class JSFieldCompletion extends VariableCompletion implements
 	/**
 	 * {@inheritDoc}
 	 */
-	public int compareTo(Object o) {
+	@Override
+	public int compareTo(Completion o) {
 		if (o==this) {
 			return 0;
 		}
@@ -111,11 +112,7 @@ public class JSFieldCompletion extends VariableCompletion implements
 			JSFieldCompletion c2 = (JSFieldCompletion)o;
 			return getLookupName().compareTo(c2.getLookupName());
 		}
-		else if (o instanceof Completion) {
-			Completion c2 = (Completion)o;
-			return toString().compareTo(c2.toString());
-		}
-		return -1;
+		return super.compareTo(o);
 	}
 
 	public int hashCode() {

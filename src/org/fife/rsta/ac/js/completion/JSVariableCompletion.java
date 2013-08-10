@@ -19,6 +19,7 @@ import org.fife.rsta.ac.java.Util;
 import org.fife.rsta.ac.java.buildpath.SourceLocation;
 import org.fife.rsta.ac.java.classreader.ClassFile;
 import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
+import org.fife.rsta.ac.java.rjc.ast.TypeDeclaration;
 import org.fife.rsta.ac.js.IconFactory;
 import org.fife.rsta.ac.js.JavaScriptHelper;
 import org.fife.rsta.ac.js.SourceCompletionProvider;
@@ -102,15 +103,12 @@ public class JSVariableCompletion extends VariableCompletion implements
 		return super.equals(obj);
 	}
 	
-	public int compareTo(Object o) {
-		if (o==this) {
+	@Override
+	public int compareTo(Completion c2) {
+		if (c2==this) {
 			return 0;
 		}
-		else if (o instanceof Completion) {
-			Completion c2 = (Completion)o;
-			return toString().compareTo(c2.toString());
-		}
-		return -1;
+		return super.compareTo(c2);
 	}
 
 
@@ -130,8 +128,9 @@ public class JSVariableCompletion extends VariableCompletion implements
     
                 CompilationUnit cu = Util.getCompilationUnitFromDisk(loc, cf);
                 if (cu!=null) {
-                    for (Iterator i=cu.getTypeDeclarationIterator(); i.hasNext(); ) {
-                        org.fife.rsta.ac.java.rjc.ast.TypeDeclaration td = (org.fife.rsta.ac.java.rjc.ast.TypeDeclaration)i.next();
+                	Iterator<TypeDeclaration> i = cu.getTypeDeclarationIterator();
+                    while (i.hasNext()) {
+                        TypeDeclaration td = i.next();
                         String typeName = td.getName();
                         // Avoid inner classes, etc.
                         if (typeName.equals(cf.getClassName(false))) {

@@ -99,11 +99,11 @@ public class PerlCompletionProvider extends CCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
-	protected List getCompletionsImpl(JTextComponent comp) {
+	protected List<Completion> getCompletionsImpl(JTextComponent comp) {
 
-		List completions = super.getCompletionsImpl(comp);
+		List<Completion> completions = super.getCompletionsImpl(comp);
 
-		SortedSet varCompletions = getVariableCompletions(comp);
+		SortedSet<Completion> varCompletions = getVariableCompletions(comp);
 		if (varCompletions!=null) {
 			completions.addAll(varCompletions);
 			Collections.sort(completions);
@@ -161,13 +161,14 @@ public class PerlCompletionProvider extends CCompletionProvider {
 	 * @return The completions for variables, or <code>null</code> if there
 	 *         were none.
 	 */
-	private SortedSet getVariableCompletions(JTextComponent comp) {
+	private SortedSet<Completion> getVariableCompletions(JTextComponent comp) {
 
 		RSyntaxTextArea textArea = (RSyntaxTextArea)comp;
 		int dot = textArea.getCaretPosition();
-		SortedSet varCompletions = new TreeSet(comparator);
+		SortedSet<Completion> varCompletions = new TreeSet<Completion>(comparator);
 
-		String text = getDefaultCompletionProvider().getAlreadyEnteredText(comp);
+		CompletionProvider p = getDefaultCompletionProvider();
+		String text = p.getAlreadyEnteredText(comp);
 		char firstChar = text.length()==0 ? 0 : text.charAt(0);
 		if (firstChar!='$' && firstChar!='@' && firstChar!='%') {
 			System.out.println("DEBUG: No use matching variables, exiting");
@@ -181,7 +182,9 @@ public class PerlCompletionProvider extends CCompletionProvider {
 
 		// Get only those that match what's typed
 		if (varCompletions.size()>0) {
-			varCompletions = varCompletions.subSet(text, text+'{');
+			Completion from = new BasicCompletion(p, text);
+			Completion to = new BasicCompletion(p, text + '{');
+			varCompletions = varCompletions.subSet(from, to);
 		}
 
 		return varCompletions;
@@ -190,17 +193,15 @@ public class PerlCompletionProvider extends CCompletionProvider {
 
 private CaseInsensitiveComparator comparator = new CaseInsensitiveComparator();
 	/**
-	 * A comparator that compares the input text of a {@link Completion}
-	 * against a String lexicographically, ignoring case.
+	 * A comparator that compares the input text of two {@link Completion}s
+	 * lexicographically, ignoring case.
 	 */
-	private static class CaseInsensitiveComparator implements Comparator,
-														Serializable {
+	private static class CaseInsensitiveComparator
+			implements Comparator<Completion>, Serializable {
 
-		public int compare(Object o1, Object o2) {
-			String s1 = o1 instanceof String ? (String)o1 :
-							((Completion)o1).getInputText();
-			String s2 = o2 instanceof String ? (String)o2 :
-							((Completion)o2).getInputText();
+		public int compare(Completion c1, Completion c2) {
+			String s1 = c1.getInputText();
+			String s2 = c2.getInputText();
 			return String.CASE_INSENSITIVE_ORDER.compare(s1, s2);
 		}
 
@@ -252,8 +253,8 @@ private CaseInsensitiveComparator comparator = new CaseInsensitiveComparator();
 	 * @param block The code block to search through.
 	 * @param dot The caret position.
 	 */
-	private void recursivelyAddLocalVars(SortedSet completions, CodeBlock block,
-									int dot, int firstChar) {
+	private void recursivelyAddLocalVars(SortedSet<Completion> completions,
+			CodeBlock block, int dot, int firstChar) {
 
 		if (!block.contains(dot)) {
 			return;

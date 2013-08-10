@@ -44,11 +44,12 @@ import org.mozilla.javascript.ast.WhileLoop;
 
 public class JavaScriptAstParser extends JavaScriptParser {
 
-	private ArrayList functions = new ArrayList();
+	private ArrayList<ProcessFunctionType> functions;
 	
 	public JavaScriptAstParser(SourceCompletionProvider provider, int dot,
 			TypeDeclarationOptions options) {
 		super(provider, dot, options);
+		functions = new ArrayList<ProcessFunctionType>();
 	}
 
 
@@ -58,15 +59,15 @@ public class JavaScriptAstParser extends JavaScriptParser {
 		CodeBlock block = new CodeBlock(0);
 		addCodeBlock(root, set, entered, block, Integer.MAX_VALUE);
 		setFunctionValues();
-		provider.getLanguageSupport().getJavaScriptParser().setVariablesAndFunctions(provider.getVariableResolver());
+		provider.getLanguageSupport().getJavaScriptParser().
+				setVariablesAndFunctions(provider.getVariableResolver());
 		return block;
 	}
 
 
 	private void setFunctionValues() {
 		// iterate through any found functions and set their types
-		for (Iterator i = functions.iterator(); i.hasNext();) {
-			ProcessFunctionType type = (ProcessFunctionType) i.next();
+		for (ProcessFunctionType type : functions) {
 			type.dec.setTypeDeclaration(type.typeNode);
 		}
 	}
@@ -295,13 +296,10 @@ public class JavaScriptAstParser extends JavaScriptParser {
 			String entered, int offset) {
 		SwitchStatement switchStatement = (SwitchStatement) child;
 		if (canProcessNode(switchStatement)) {
-			List cases = switchStatement.getCases();
+			List<SwitchCase> cases = switchStatement.getCases();
 			if(cases != null) {
-				for (Iterator i = cases.iterator(); i.hasNext();) {
-					Object o = i.next();
-					if (o instanceof AstNode) {
-						iterateNode((AstNode) o, set, entered, block, offset);
-					}
+				for (SwitchCase switchCase : cases) {
+						iterateNode(switchCase, set, entered, block, offset);
 				}
 			}
 		}
@@ -322,8 +320,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 			// iterate catch
 			for (int i = 0; i < tryStatement.getCatchClauses().size(); i++) {
 
-				CatchClause clause = (CatchClause) tryStatement
-						.getCatchClauses().get(i);
+				CatchClause clause = tryStatement.getCatchClauses().get(i);
 				if (canProcessNode(clause)) {
 					offset = clause.getAbsolutePosition() + clause.getLength();
 					CodeBlock catchBlock = block.getParent().addChildCodeBlock(
@@ -451,11 +448,11 @@ public class JavaScriptAstParser extends JavaScriptParser {
 		offset = fn.getAbsolutePosition() + fn.getLength();
 
 		if (fn.getParamCount() > 0) {
-			List fnParams = fn.getParams();
-			List params = new ArrayList();
+			List<AstNode> fnParams = fn.getParams();
+			List<Parameter> params = new ArrayList<Parameter>();
 			for (int i = 0; i < fn.getParamCount(); i++) {
 				String paramName = null;
-				AstNode node = (AstNode) fnParams.get(i);
+				AstNode node = fnParams.get(i);
 				switch (node.getType()) {
 					case Token.NAME:
 						paramName = ((Name) node).getIdentifier();
@@ -534,9 +531,8 @@ public class JavaScriptAstParser extends JavaScriptParser {
 		if(block.contains(dot) || isPreProcessing())
 		{
 			VariableDeclaration varDec = (VariableDeclaration) child;
-			List vars = varDec.getVariables();
-			for (Iterator i = vars.iterator(); i.hasNext();) {
-				VariableInitializer var = (VariableInitializer) i.next();
+			List<VariableInitializer> vars = varDec.getVariables();
+			for (VariableInitializer var : vars) {
 				extractVariableFromNode(var, block, offset);
 			}
 		}
@@ -567,11 +563,10 @@ public class JavaScriptAstParser extends JavaScriptParser {
 					if (iterator.getType() == Token.VAR) // expected
 					{
 						VariableDeclaration vd = (VariableDeclaration) iterator;
-						List variables = vd.getVariables();
+						List<VariableInitializer> variables = vd.getVariables();
 						if (variables.size() == 1) // expected
 						{
-							VariableInitializer vi = (VariableInitializer) variables
-									.get(0);
+							VariableInitializer vi = variables.get(0);
 							if (loop.isForEach()) {
 								extractVariableForForEach(vi, block, offset,
 										iteratedObject);
@@ -783,13 +778,12 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 	private class FunctionReturnVisitor implements NodeVisitor {
 
-		private ArrayList returnStatements = new ArrayList();
-
+		private ArrayList<ReturnStatement> returnStatements = new ArrayList<ReturnStatement>();
 
 		public boolean visit(AstNode node) {
 			switch (node.getType()) {
 				case Token.RETURN:
-					returnStatements.add(node);
+					returnStatements.add((ReturnStatement)node);
 					break;
 			}
 			return true;
@@ -804,8 +798,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 		 */
 		public TypeDeclaration getCommonReturnType() {
 			TypeDeclaration commonType = null;
-			for (Iterator i = returnStatements.iterator(); i.hasNext();) {
-				ReturnStatement rs = (ReturnStatement) i.next();
+			for (ReturnStatement rs : returnStatements) {
 				AstNode returnValue = rs.getReturnValue();
 				// resolve the node
 				TypeDeclaration type = provider.getJavaScriptEngine()
