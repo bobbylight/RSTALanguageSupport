@@ -39,7 +39,7 @@ public class Scanner {
 	/**
 	 * Stack of tokens that have been "pushed back."
 	 */
-	private Stack stack;
+	private Stack<Token> stack;
 
 	/**
 	 * The depth in which we're in TypeArguments or TypeParameters.
@@ -73,8 +73,8 @@ public class Scanner {
 	 *
 	 * @param tokens Tokens to return.
 	 */
-	public Scanner(List tokens) {
-		stack = new Stack();
+	public Scanner(List<Token> tokens) {
+		stack = new Stack<Token>();
 		for (int i=tokens.size()-1; i>=0; i--) {
 			stack.push(tokens.get(i));
 		}
@@ -89,7 +89,7 @@ public class Scanner {
 	public Scanner(Reader r) {
 		s = r!=null ? new SourceCodeScanner(r) : null;
 		s.setKeepLastDocComment(true);
-		stack = new Stack();
+		stack = new Stack<Token>();
 	}
 
 
@@ -433,15 +433,15 @@ private void pushOntoStack(Token t) {
 	}
 
 
-private Stack resetPositions;
-private Stack currentResetTokenStack;
+private Stack<Stack<Token>> resetPositions;
+private Stack<Token> currentResetTokenStack;
 private int currentResetStartOffset;
 	public void markResetPosition() {
 		if (s!=null) { // Hack!  We should really do something for token-only scanners
 			if (resetPositions==null) {
-				resetPositions = new Stack();
+				resetPositions = new Stack<Stack<Token>>();
 			}
-			currentResetTokenStack = new Stack();
+			currentResetTokenStack = new Stack<Token>();
 			resetPositions.push(currentResetTokenStack);
 			currentResetStartOffset = s.getOffset();
 		}
@@ -453,7 +453,7 @@ private int currentResetStartOffset;
 			}
 			// Remove tokens off the standard stack within the "marked" range
 			while (!stack.isEmpty()) {
-				Token t = (Token)stack.peek();
+				Token t = stack.peek();
 				if (t.getOffset()>=currentResetStartOffset) {
 					stack.pop();
 				}
@@ -463,11 +463,11 @@ private int currentResetStartOffset;
 			}
 			// Add all tokens in the "marked" range to our stack
 			while (!currentResetTokenStack.isEmpty()) {
-				Token t = (Token)currentResetTokenStack.pop();
+				Token t = currentResetTokenStack.pop();
 				stack.push(t);
 			}
 			resetPositions.pop(); // Remote currentResetTokenStack
-			currentResetTokenStack = resetPositions.isEmpty() ? null : (Stack)resetPositions.peek();
+			currentResetTokenStack = resetPositions.isEmpty() ? null : (Stack<Token>)resetPositions.peek();
 			currentResetStartOffset = -1;
 		}
 	}
@@ -477,7 +477,7 @@ private int currentResetStartOffset;
 				throw new InternalError("No resetTokenStack!");
 			}
 			resetPositions.pop(); // Remote currentResetTokenStack
-			currentResetTokenStack = resetPositions.isEmpty() ? null : (Stack)resetPositions.peek();
+			currentResetTokenStack = resetPositions.isEmpty() ? null : (Stack<Token>)resetPositions.peek();
 			currentResetStartOffset = -1;
 		}
 	}
@@ -534,7 +534,7 @@ private int currentResetStartOffset;
 			t = s!=null ? s.yylex() : null;
 		}
 		else {
-			t = (Token)stack.pop();
+			t = stack.pop();
 		}
 
 		// If we have nested TypeArguments ("Set<Map.Entry<String,String>>"),
@@ -721,7 +721,7 @@ private int currentResetStartOffset;
 		if (depth<1) {
 			throw new IllegalArgumentException("depth must be >= 1");
 		}
-		Stack read = new Stack();
+		Stack<Token> read = new Stack<Token>();
 		for (int i=0; i<depth; i++) {
 			Token t = yylex();
 			if (t!=null) {
@@ -729,14 +729,14 @@ private int currentResetStartOffset;
 			}
 			else {
 				while (!read.isEmpty()) {
-					yyPushback((Token)read.pop());
+					yyPushback(read.pop());
 				}
 				return null;
 			}
 		}
-		Token t = (Token)read.peek();
+		Token t = read.peek();
 		while (!read.isEmpty()) {
-			yyPushback((Token)read.pop());
+			yyPushback(read.pop());
 		}
 		return t;
 	}

@@ -48,7 +48,7 @@ class MethodInfoData implements Data {
 	/**
 	 * Cached method parameter names.
 	 */
-	private List paramNames;
+	private List<String> paramNames;
 
 
 	/**
@@ -120,9 +120,10 @@ class MethodInfoData implements Data {
 		// this method.
 		if (cu!=null) {
 
-			for (Iterator i=cu.getTypeDeclarationIterator(); i.hasNext(); ) {
+			Iterator<TypeDeclaration> i = cu.getTypeDeclarationIterator();
+			while (i.hasNext()) {
 
-				TypeDeclaration td = (TypeDeclaration)i.next();
+				TypeDeclaration td = i.next();
 				String typeName = td.getName();
 
 				// Avoid inner classes, etc.
@@ -131,15 +132,15 @@ class MethodInfoData implements Data {
 					// Get all overloads of this method with the number of
 					// parameters we're looking for.  99% of the time, there
 					// will only be 1, the method we're looking for.
-					List contenders = null;
-					for (Iterator j=td.getMemberIterator(); j.hasNext(); ) {
-						Member member = (Member)j.next();
+					List<Method> contenders = null;
+					for (int j=0; j<td.getMemberCount(); j++) {
+						Member member = td.getMember(j);
 						if (member instanceof Method &&
 								member.getName().equals(info.getName())) {
 							Method m2 = (Method)member;
 							if (m2.getParameterCount()==info.getParameterCount()) {
 								if (contenders==null) {
-									contenders = new ArrayList(1); // Usually just 1
+									contenders = new ArrayList<Method>(1); // Usually just 1
 								}
 								contenders.add(m2);
 							}
@@ -152,7 +153,7 @@ class MethodInfoData implements Data {
 						// Common case - only 1 overload with the desired
 						// number of parameters => it must be our method.
 						if (contenders.size()==1) {
-							res = (Method)contenders.get(0);
+							res = contenders.get(0);
 						}
 
 						// More than 1 overload with the same number of
@@ -160,9 +161,8 @@ class MethodInfoData implements Data {
 						// we're looking for by checking each of its
 						// parameters' types and making sure they're correct.
 						else {
-							for (int j=0; j<contenders.size(); j++) {
+							for (Method method : contenders) {
 								boolean match = true;
-								Method method = (Method)contenders.get(j);
 								for (int p=0; p<info.getParameterCount(); p++) {
 									String type1 = info.getParameterType(p, false);
 									FormalParameter fp = method.getParameter(p);
@@ -216,7 +216,7 @@ class MethodInfoData implements Data {
 			// Next, check the attached source, if any (lazily parsed).
 			if (paramNames==null) {
 
-				paramNames = new ArrayList(1);
+				paramNames = new ArrayList<String>(1);
 				int offs = 0;
 				String rawSummary = getSummary();
 
@@ -252,7 +252,7 @@ class MethodInfoData implements Data {
 			}
 
 			if (index<paramNames.size()) {
-				name = (String)paramNames.get(index);
+				name = paramNames.get(index);
 			}
 
 		}

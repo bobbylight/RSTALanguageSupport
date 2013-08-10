@@ -100,7 +100,7 @@ class XmlTreeCellRenderer extends DefaultTreeCellRenderer {
 				int textX, int textY) {
 			XmlTreeCellRenderer r = (XmlTreeCellRenderer)l;
 			Graphics2D g2d = (Graphics2D)g;
-			Map hints = RSyntaxUtilities.getDesktopAntiAliasHints();
+			Map<?,?> hints = RSyntaxUtilities.getDesktopAntiAliasHints();
 			if (hints!=null) {
 				g2d.addRenderingHints(hints);
 			}

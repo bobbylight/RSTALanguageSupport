@@ -59,7 +59,7 @@ PrintStream oldErr = System.err;
 		ASTFactory fact = new ASTFactory();
 		//CompilationUnit cu = null;
 
-		List toDo = new ArrayList();
+		List<File> toDo = new ArrayList<File>();
 
 		if (args.length>0) {
 			toDo.add(new File(args[0]));
@@ -82,7 +82,7 @@ PrintStream oldErr = System.err;
 
 		for (int i=0; i<toDo.size(); i++) {
 
-			File file = (File)toDo.get(i);
+			File file = toDo.get(i);
 
 			if (file.isDirectory()) {
 				File[] contents = file.listFiles();

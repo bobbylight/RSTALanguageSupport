@@ -24,7 +24,7 @@ import org.fife.rsta.ac.java.classreader.attributes.Code;
  */
 public class Frame {
 
-	private Stack operandStack;
+	private Stack<String> operandStack;
 	private LocalVarInfo[] localVars;
 
 
@@ -35,7 +35,7 @@ public class Frame {
 	 */
 	public Frame(Code code) {
 
-		operandStack = new Stack();
+		operandStack = new Stack<String>();
 
 		localVars = new LocalVarInfo[code.getMaxLocals()];
 		int i = 0;
@@ -84,7 +84,7 @@ public class Frame {
 
 
 	public String pop() {
-		return (String)operandStack.pop();
+		return operandStack.pop();
 	}
 
 

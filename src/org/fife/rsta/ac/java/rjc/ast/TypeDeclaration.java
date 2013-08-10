@@ -58,6 +58,9 @@ public interface TypeDeclaration extends ASTNode, TypeDeclarationContainer {
 	public Iterator<Field> getFieldIterator();
 
 
+	public Member getMember(int index);
+
+
 	public int getMemberCount();
 
 

@@ -33,6 +33,7 @@ import org.fife.rsta.ac.java.rjc.ast.Package;
 import org.fife.rsta.ac.java.rjc.ast.TypeDeclaration;
 import org.fife.rsta.ac.java.rjc.lang.Type;
 import org.fife.ui.autocomplete.BasicCompletion;
+import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.EmptyIcon;
 import org.fife.ui.autocomplete.ParameterChoicesProvider;
@@ -85,10 +86,10 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 	 * @param offs The offset of the caret.
 	 * @return The list of stuff, or an empty list if none are found.
 	 */
-	public List getLocalVarsFieldsAndGetters(NormalClassDeclaration ncd,
-												String type, int offs) {
+	public List<Completion> getLocalVarsFieldsAndGetters(
+			NormalClassDeclaration ncd, String type, int offs) {
 
-		List members = new ArrayList();
+		List<Completion> members = new ArrayList<Completion>();
 
 		if (!ncd.getBodyContainsOffset(offs)) {
 			return members;
@@ -100,8 +101,9 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 		if (method!=null) {
 
 			// Parameters to the method
-			for (Iterator i=method.getParameterIterator(); i.hasNext(); ) {
-				FormalParameter param = (FormalParameter)i.next();
+			Iterator<FormalParameter> i = method.getParameterIterator();
+			while (i.hasNext()) {
+				FormalParameter param = i.next();
 				Type paramType = param.getType();
 				if (isTypeCompatible(paramType, type)) {
 					//members.add(param.getName());
@@ -113,9 +115,8 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 			CodeBlock body = method.getBody();
 			if (body!=null) { // Should always be true?
 				CodeBlock block = body.getDeepestCodeBlockContaining(offs);
-				List vars = block.getLocalVarsBefore(offs);
-				for (Iterator i=vars.iterator(); i.hasNext(); ) {
-					LocalVariable var = (LocalVariable)i.next();
+				List<LocalVariable> vars = block.getLocalVarsBefore(offs);
+				for (LocalVariable var : vars) {
 					Type varType = var.getType();
 					if (isTypeCompatible(varType, type)) {
 						//members.add(var.getName());
@@ -128,9 +129,9 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 
 		// Next, any fields/getters taking no parameters (for simplicity)
 		// in this class.
-		for (Iterator i=ncd.getMemberIterator(); i.hasNext(); ) {
+		for (Iterator<Member> i=ncd.getMemberIterator(); i.hasNext(); ) {
 
-			Member member = (Member)i.next();
+			Member member = i.next();
 
 			if (member instanceof Field) {
 				Type fieldType = member.getType();
@@ -159,7 +160,7 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 	/**
 	 * {@inheritDoc}
 	 */
-	public List getParameterChoices(JTextComponent tc,
+	public List<Completion> getParameterChoices(JTextComponent tc,
 								ParameterizedCompletion.Parameter param) {
 
 		// Get the language support for Java
@@ -186,7 +187,7 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 			return null;
 		}
 
-		List list = null;
+		List<Completion> list = null;
 		Package pkg = typeDec.getPackage();
 		provider = jls.getCompletionProvider(textArea);
 
@@ -205,8 +206,8 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 			}
 
 			// Get accessible members of any implemented interfaces.
-			for (Iterator i=ncd.getImplementedIterator(); i.hasNext(); ) {
-				Type implemented = (Type)i.next();
+			for (Iterator<Type> i=ncd.getImplementedIterator(); i.hasNext(); ) {
+				Type implemented = i.next();
 				addPublicAndProtectedFieldsAndGetters(implemented,jm,pkg,list);
 			}
 

@@ -33,7 +33,7 @@ import org.fife.rsta.ac.java.rjc.lexer.Token;
 public class TypeParameter {
 
 	private Token name;
-	private List bounds;
+	private List<Type> bounds;
 
 
 	public TypeParameter(Token name) {
@@ -43,7 +43,7 @@ public class TypeParameter {
 
 	public void addBound(Type bound) {
 		if (bounds==null) {
-			bounds = new ArrayList(1); // Usually just 1
+			bounds = new ArrayList<Type>(1); // Usually just 1
 		}
 		bounds.add(bound);
 	}

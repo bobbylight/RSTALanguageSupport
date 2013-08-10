@@ -40,11 +40,12 @@ public class Modifiers {
 	public static final Integer TRANSIENT			= new Integer(128);
 	public static final Integer VOLATILE			= new Integer(64);
 
-	private List modifiers;
-	private List annotations;
+	private List<Integer> modifiers;
+	private List<Annotation> annotations;
 
 
-	private static final Map MODIFIER_TEXT = new HashMap() {
+	private static final Map<Integer, String> MODIFIER_TEXT
+			= new HashMap<Integer, String>() {
 
 		private static final long serialVersionUID = 1L;
 
@@ -66,8 +67,8 @@ public class Modifiers {
 
 
 	public Modifiers() {
-		modifiers = new ArrayList(1); // Usually not many.
-		annotations = new ArrayList(0); // Often 0 or 1 (@Deprecated)
+		modifiers = new ArrayList<Integer>(1); // Usually not many.
+		annotations = new ArrayList<Annotation>(0); // Often 0 or 1 (@Deprecated)
 	}
 
 
@@ -178,7 +179,7 @@ public class Modifiers {
 			}
 		}
 		for (int i=0; i<modifiers.size(); i++) {
-			Integer modifier = (Integer)modifiers.get(i);
+			Integer modifier = modifiers.get(i);
 			sb.append(MODIFIER_TEXT.get(modifier));
 			if (i<modifiers.size()-1) {
 				sb.append(' ');

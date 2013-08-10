@@ -31,12 +31,12 @@ import org.fife.rsta.ac.java.rjc.lexer.Scanner;
  */
 public class NormalInterfaceDeclaration extends AbstractTypeDeclarationNode {
 
-	private List extendedList;
+	private List<Type> extendedList;
 
 
 	public NormalInterfaceDeclaration(Scanner s, int offs, String name) {
 		super(name, s.createOffset(offs), s.createOffset(offs+name.length()));
-		extendedList = new ArrayList(1); // Usually small
+		extendedList = new ArrayList<Type>(1); // Usually small
 	}
 
 
@@ -50,7 +50,7 @@ public class NormalInterfaceDeclaration extends AbstractTypeDeclarationNode {
 	}
 
 
-	public Iterator getExtendedIterator() {
+	public Iterator<Type> getExtendedIterator() {
 		return extendedList.iterator();
 	}
 

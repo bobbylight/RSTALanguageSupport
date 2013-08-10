@@ -156,7 +156,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	 */
 	private void addCompletionsForExtendedClass(Set<Completion> set,
 						CompilationUnit cu, ClassFile cf, String pkg,
-						Map typeParamMap) {
+						Map<String, String> typeParamMap) {
 
 		// Reset this class's type-arguments-to-type-parameters map, so that
 		// when methods and fields need to know type arguments, they can query
@@ -228,7 +228,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 			String typeStr = type.getName(true, false);
 			ClassFile cf = getClassFileFor(cu, typeStr);
 			if (cf!=null) {
-				Map typeParamMap = createTypeParamMap(type, cf);
+				Map<String, String> typeParamMap = createTypeParamMap(type, cf);
 				addCompletionsForExtendedClass(retVal, cu, cf, pkg, typeParamMap);
 			}
 		}
@@ -475,18 +475,18 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	 * @return A mapping of type parameter names to type arguments (both
 	 *         Strings).
 	 */
-	private Map createTypeParamMap(Type type, ClassFile cf) {
-		Map typeParamMap = null;
-		List typeArgs = type.getTypeArguments(type.getIdentifierCount()-1);
+	private Map<String, String> createTypeParamMap(Type type, ClassFile cf) {
+		Map<String, String> typeParamMap = null;
+		List<TypeArgument> typeArgs = type.getTypeArguments(type.getIdentifierCount()-1);
 		if (typeArgs!=null) {
-			typeParamMap = new HashMap();
-			List paramTypes = cf.getParamTypes();
+			typeParamMap = new HashMap<String, String>();
+			List<String> paramTypes = cf.getParamTypes();
 			// Should be the same size!  Otherwise, the source code has
 			// too many/too few type arguments listed for this type.
 			int min = Math.min(paramTypes==null ? 0 : paramTypes.size(),
 									typeArgs.size());
 			for (int i=0; i<min; i++) {
-				TypeArgument typeArg = (TypeArgument)typeArgs.get(i);
+				TypeArgument typeArg = typeArgs.get(i);
 				typeParamMap.put(paramTypes.get(i), typeArg.toString());
 			}
 		}
@@ -560,6 +560,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 		// displayed for all of our completions.
 		text = text.substring(text.lastIndexOf('.')+1);
 
+		@SuppressWarnings("unchecked")
 		int start = Collections.binarySearch(completions, text, comparator);
 		if (start<0) {
 			start = -(start+1);
@@ -572,6 +573,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 			}
 		}
 
+		@SuppressWarnings("unchecked")
 		int end = Collections.binarySearch(completions, text+'{', comparator);
 		end = -(end+1);
 
@@ -659,7 +661,7 @@ public SourceLocation  getSourceLocForClass(String className) {
 	 * @param retVal
 	 */
 	private void loadCompletionsForCaretPosition(CompilationUnit cu,
-			JTextComponent comp, String alreadyEntered, Set retVal) {
+		JTextComponent comp, String alreadyEntered, Set<Completion> retVal) {
 
 		// Get completions for all fields and methods of all type declarations.
 
@@ -672,9 +674,10 @@ public SourceLocation  getSourceLocForClass(String className) {
 		boolean qualified = lastDot>-1;
 		String prefix = qualified ? alreadyEntered.substring(0, lastDot) : null;
 
-		for (Iterator i=cu.getTypeDeclarationIterator(); i.hasNext(); ) {
+		Iterator<TypeDeclaration> i = cu.getTypeDeclarationIterator();
+		while (i.hasNext()) {
 
-			TypeDeclaration td = (TypeDeclaration)i.next();
+			TypeDeclaration td = i.next();
 			start = td.getBodyStartOffset();
 			end = td.getBodyEndOffset();
 
@@ -837,9 +840,9 @@ public SourceLocation  getSourceLocForClass(String className) {
 		String pkg = cu.getPackageName();
 		boolean matched = false;
 
-		for (Iterator j=td.getMemberIterator(); j.hasNext(); ) {
+		for (Iterator<Member> j=td.getMemberIterator(); j.hasNext(); ) {
 
-			Member m = (Member)j.next();
+			Member m = j.next();
 
 			// The prefix might be a field in the local class.
 			if (m instanceof Field) {
@@ -861,7 +864,7 @@ public SourceLocation  getSourceLocForClass(String className) {
 						ClassFile cf = getClassFileFor(cu, typeStr);
 						// Add completions for extended class type chain
 						if (cf!=null) {
-							Map typeParamMap = createTypeParamMap(type, cf);
+							Map<String, String> typeParamMap = createTypeParamMap(type, cf);
 							addCompletionsForExtendedClass(retVal, cu, cf, pkg, typeParamMap);
 							// Add completions for all implemented interfaces
 							// TODO: Only do this if type is abstract!
@@ -913,12 +916,12 @@ public SourceLocation  getSourceLocForClass(String className) {
 		// Could be a class name, in which case we'll need to add completions
 		// for static fields and methods.
 		if (!matched) {
-			List imports = cu.getImports();
-			List matches = jarManager.getClassesWithUnqualifiedName(
+			List<ImportDeclaration> imports = cu.getImports();
+			List<ClassFile> matches = jarManager.getClassesWithUnqualifiedName(
 															prefix, imports);
 			if (matches!=null) {
 				for (int i=0; i<matches.size(); i++) {
-					ClassFile cf = (ClassFile)matches.get(i);
+					ClassFile cf = matches.get(i);
 					addCompletionsForStaticMembers(retVal, cu, cf, pkg);
 				}
 			}
@@ -1003,7 +1006,7 @@ public SourceLocation  getSourceLocForClass(String className) {
 	 *
 	 * @param cu The compilation unit being parsed.
 	 */
-	private void loadImportCompletions(Set set, String text,
+	private void loadImportCompletions(Set<Completion> set, String text,
 									CompilationUnit cu) {
 
 		// Fully-qualified completions are handled elsewhere, so no need to
@@ -1016,8 +1019,8 @@ public SourceLocation  getSourceLocForClass(String className) {
 
 		String pkgName = cu.getPackageName();
 		loadCompletionsForImport(set, JAVA_LANG_PACKAGE, pkgName);
-		for (Iterator i=cu.getImportIterator(); i.hasNext(); ) {
-			ImportDeclaration id = (ImportDeclaration)i.next();
+		for (Iterator<ImportDeclaration> i=cu.getImportIterator(); i.hasNext(); ) {
+			ImportDeclaration id = i.next();
 			String name = id.getName();
 			if (!JAVA_LANG_PACKAGE.equals(name)) {
 				loadCompletionsForImport(set, name, pkgName);

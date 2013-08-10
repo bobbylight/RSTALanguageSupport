@@ -85,19 +85,19 @@ public class ClassAndLocalVariablesTest extends TestCase {
 
 		// Imports should be returned in the order in which they are
 		// found.
-		Iterator i = cu.getImportIterator();
+		Iterator<ImportDeclaration> i = cu.getImportIterator();
 
-		ImportDeclaration id = (ImportDeclaration)i.next();
+		ImportDeclaration id = i.next();
 		assertEquals("java.io.*", id.getName());
 		assertEquals(true, id.isWildcard());
 		assertEquals(false, id.isStatic());
 
-		id = (ImportDeclaration)i.next();
+		id = i.next();
 		assertEquals("java.util.List", id.getName());
 		assertEquals(false, id.isWildcard());
 		assertEquals(false, id.isStatic());
 
-		id = (ImportDeclaration)i.next();
+		id = i.next();
 		assertEquals("java.lang.Math.*", id.getName());
 		assertEquals(true, id.isWildcard());
 		assertEquals(true, id.isStatic());
@@ -111,7 +111,7 @@ public class ClassAndLocalVariablesTest extends TestCase {
 		assertEquals(1, cu.getTypeDeclarationCount());
 
 		// The class is named "SimpleClass"
-		TypeDeclaration typeDec = (TypeDeclaration)cu.getTypeDeclarationIterator().next();
+		TypeDeclaration typeDec = cu.getTypeDeclarationIterator().next();
 		assertEquals("SimpleClass", typeDec.getName());
 
 		// 4 fields, 1 constructor and 3 methods
@@ -120,9 +120,9 @@ public class ClassAndLocalVariablesTest extends TestCase {
 
 		// Iterate through members.  They should be returned in the
 		// order they are found in.
-		Iterator i = typeDec.getMemberIterator();
+		Iterator<Member> i = typeDec.getMemberIterator();
 
-		Member member = (Member)i.next();
+		Member member = i.next();
 		assertTrue(member instanceof Field);
 		Field field = (Field)member;
 		assertEquals("int", field.getType().toString());
@@ -131,7 +131,7 @@ public class ClassAndLocalVariablesTest extends TestCase {
 		assertTrue(field.getDocComment()!=null && 
 				field.getDocComment().indexOf("A member int variable.")>=0);
 
-		member = (Member)i.next();
+		member = i.next();
 		assertTrue(member instanceof Field);
 		field = (Field)member;
 		assertEquals("int", field.getType().toString());
@@ -139,7 +139,7 @@ public class ClassAndLocalVariablesTest extends TestCase {
 		assertTrue(field.getModifiers().isProtected());
 		assertEquals(null, field.getDocComment());
 
-		member = (Member)i.next();
+		member = i.next();
 		assertTrue(member instanceof Field);
 		field = (Field)member;
 		assertEquals("String", field.getType().toString());
@@ -148,7 +148,7 @@ public class ClassAndLocalVariablesTest extends TestCase {
 		assertTrue(field.getDocComment()!=null &&
 				field.getDocComment().indexOf("A string member variable.")>=0);
 
-		member = (Member)i.next();
+		member = i.next();
 		assertTrue(member instanceof Field);
 		field = (Field)member;
 		assertEquals("list", field.getName());
@@ -156,14 +156,14 @@ public class ClassAndLocalVariablesTest extends TestCase {
 		assertTrue(field.getModifiers().isPrivate());
 		assertEquals(field.getDocComment(), null);
 
-		member = (Member)i.next();
+		member = i.next();
 		assertTrue(member instanceof Method);
 		Method method = (Method)member;
 		assertEquals("SimpleClass", method.getName());
 		assertTrue(method.getModifiers().isPublic());
 		assertTrue(method.isConstructor());
 
-		member = (Member)i.next();
+		member = i.next();
 		assertTrue(member instanceof Method);
 		method = (Method)member;
 		assertEquals("getValue", method.getName());
@@ -171,7 +171,7 @@ public class ClassAndLocalVariablesTest extends TestCase {
 		assertTrue(method.getDocComment()!=null &&
 				method.getDocComment().indexOf("Returns a value.")>=0);
 
-		member = (Member)i.next();
+		member = i.next();
 		assertTrue(member instanceof Method);
 		method = (Method)member;
 		assertEquals("localVarsComplex", method.getName());
@@ -183,7 +183,7 @@ public class ClassAndLocalVariablesTest extends TestCase {
 		param = method.getParameter(1);
 		assertEquals("unused", param.getName());
 
-		member = (Member)i.next();
+		member = i.next();
 		assertTrue(member instanceof Method);
 		method = (Method)member;
 		assertEquals("localVarsSimple", method.getName());
@@ -195,9 +195,9 @@ public class ClassAndLocalVariablesTest extends TestCase {
 	public void testLocalVariablesComplex() {
 
 		TypeDeclaration td = cu.getTypeDeclaration(0);
-		List methods = td.getMethodsByName("localVarsComplex");
+		List<Method> methods = td.getMethodsByName("localVarsComplex");
 		assertEquals(1, methods.size());
-		Method method = (Method)methods.get(0);
+		Method method = methods.get(0);
 		CodeBlock body = method.getBody();
 		assertEquals(5, body.getLocalVarCount());
 
@@ -217,9 +217,9 @@ public class ClassAndLocalVariablesTest extends TestCase {
 	public void testLocalVariablesSimple() {
 
 		TypeDeclaration td = cu.getTypeDeclaration(0);
-		List methods = td.getMethodsByName("localVarsSimple");
+		List<Method> methods = td.getMethodsByName("localVarsSimple");
 		assertEquals(1, methods.size());
-		Method method = (Method)methods.get(0);
+		Method method = methods.get(0);
 		CodeBlock body = method.getBody();
 		assertEquals(2, body.getLocalVarCount());
 

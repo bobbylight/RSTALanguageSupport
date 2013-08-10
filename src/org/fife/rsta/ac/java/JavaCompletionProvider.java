@@ -13,7 +13,6 @@ package org.fife.rsta.ac.java;
 import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 import javax.swing.text.JTextComponent;
 
@@ -24,6 +23,7 @@ import org.fife.ui.autocomplete.AbstractCompletionProvider;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
 import org.fife.ui.autocomplete.LanguageAwareCompletionProvider;
+import org.fife.ui.autocomplete.ParameterizedCompletion;
 
 
 /**
@@ -119,7 +119,7 @@ public class JavaCompletionProvider extends LanguageAwareCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
-	public List getCompletionsAt(JTextComponent tc, Point p) {
+	public List<Completion> getCompletionsAt(JTextComponent tc, Point p) {
 		return sourceProvider.getCompletionsAt(tc, p);
 	}
 
@@ -142,7 +142,8 @@ public class JavaCompletionProvider extends LanguageAwareCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
-	public List getParameterizedCompletions(JTextComponent tc) {
+	public List<ParameterizedCompletion> getParameterizedCompletions(
+						JTextComponent tc) {
 		return null;
 	}
 
@@ -163,9 +164,7 @@ public class JavaCompletionProvider extends LanguageAwareCompletionProvider {
 	private void setCommentCompletions(ShorthandCompletionCache shorthandCache) {
 		AbstractCompletionProvider provider = shorthandCache.getCommentProvider();
 		if(provider != null) {
-			for(Iterator i = shorthandCache.getCommentCompletions().iterator();
-					i.hasNext();) {
-				Completion c = (Completion)i.next();
+			for (Completion c : shorthandCache.getCommentCompletions()) {
 				provider.addCompletion(c);
 			}
 			setCommentCompletionProvider(provider);

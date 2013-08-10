@@ -324,9 +324,9 @@ public class JavadocUrlHandler implements ExternalURLHandler {
 								memberCompletion = new FieldCompletion(c.getProvider(), fi);
 							}
 							else { // Try methods second
-								List miList = cf.getMethodInfoByName(member, -1);
+								List<MethodInfo> miList = cf.getMethodInfoByName(member, -1);
 								if (miList!=null && miList.size()>0) {
-									MethodInfo mi = (MethodInfo)miList.get(0);// Just show the first if multiple
+									MethodInfo mi = miList.get(0);// Just show the first if multiple
 									memberCompletion = new MethodCompletion(c.getProvider(), mi);
 								}
 							}
@@ -335,14 +335,14 @@ public class JavadocUrlHandler implements ExternalURLHandler {
 						else {
 							String[] args = getArgs(member);
 							String methodName = member.substring(0, lparen);
-							List miList = cf.getMethodInfoByName(methodName, args.length);
+							List<MethodInfo> miList = cf.getMethodInfoByName(methodName, args.length);
 							if (miList!=null && miList.size()>0) {
 								if (miList.size()>1) {
 									// TODO: Pick correct overload based on args
 									System.err.println("Multiple overload support not yet implemented");
 								}
 								else {
-									MethodInfo mi = (MethodInfo)miList.get(0);
+									MethodInfo mi = miList.get(0);
 									memberCompletion = new MethodCompletion(c.getProvider(), mi);
 								}
 							}

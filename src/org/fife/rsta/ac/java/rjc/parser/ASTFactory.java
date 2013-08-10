@@ -662,7 +662,7 @@ return cu;
 
 
 	private List<FormalParameter> _getFormalParameters(CompilationUnit cu,
-									List tokenList) throws IOException {
+									List<Token> tokenList) throws IOException {
 
 		List<FormalParameter> list = new ArrayList<FormalParameter>(0);
 

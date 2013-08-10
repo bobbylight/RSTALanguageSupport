@@ -131,17 +131,19 @@ class FieldInfoData implements Data {
 		// this method.
 		if (cu!=null) {
 
-			for (Iterator i=cu.getTypeDeclarationIterator(); i.hasNext(); ) {
+			Iterator<TypeDeclaration> i = cu.getTypeDeclarationIterator();
+			while (i.hasNext()) {
 
-				TypeDeclaration td = (TypeDeclaration)i.next();
+				TypeDeclaration td = i.next();
 				String typeName = td.getName();
 
 				// Avoid inner classes, etc.
 				if (typeName.equals(cf.getClassName(false))) {
 
 					// Locate our field!
-					for (Iterator j=td.getMemberIterator(); j.hasNext(); ) {
-						Member member = (Member)j.next();
+					Iterator<Member> j = td.getMemberIterator();
+					while (j.hasNext()) {
+						Member member = j.next();
 						if (member instanceof Field &&
 								member.getName().equals(info.getName())) {
 							Field f2 = (Field)member;

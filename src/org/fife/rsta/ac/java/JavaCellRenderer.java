@@ -119,7 +119,7 @@ public class JavaCellRenderer extends DefaultListCellRenderer {
 		Object old = null;
 
 		// First, try to use the rendering hint set that is "native".
-		Map hints = RSyntaxUtilities.getDesktopAntiAliasHints();
+		Map<?,?> hints = RSyntaxUtilities.getDesktopAntiAliasHints();
 		if (hints!=null) {
 			old = g2d.getRenderingHints();
 			g2d.addRenderingHints(hints);
@@ -168,7 +168,12 @@ public class JavaCellRenderer extends DefaultListCellRenderer {
 
 		// Restore rendering hints appropriately.
 		if (hints!=null) {
-			g2d.addRenderingHints((Map)old);
+			if (old instanceof Map) {
+				g2d.addRenderingHints((Map<?,?>)old);
+			}
+			else {
+				g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, old);
+			}
 		}
 		else {
 			g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, old);

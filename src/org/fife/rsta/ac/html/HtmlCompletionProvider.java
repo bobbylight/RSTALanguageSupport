@@ -290,6 +290,7 @@ if (t!=null && !t.isWhitespace()) {
 
 		if (text!=null && completions!=null) {
 
+			@SuppressWarnings("unchecked")
 			int index = Collections.binarySearch(completions, text, comparator);
 			if (index<0) {
 				index = -index - 1;

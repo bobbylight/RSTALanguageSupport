@@ -145,8 +145,8 @@ public class GroovySourceCompletionProvider extends DefaultCompletionProvider {
 	}
 
 
-	private void recursivelyAddLocalVars(List completions, CodeBlock block,
-										int dot) {
+	private void recursivelyAddLocalVars(List<Completion> completions,
+			CodeBlock block, int dot) {
 
 		if (!block.contains(dot)) {
 			return;

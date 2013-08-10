@@ -104,7 +104,7 @@ public class ClassFile implements AccessFlags {
 	 * <code>ClassFile</code> doesn't use this field itself; rather, it's there
 	 * for consumers (such as the Java code completion API) to use. 
 	 */
-	private Map typeMap;
+	private Map<String, String> typeMap;
 
 	public static final String DEPRECATED			= "Deprecated";
 	public static final String ENCLOSING_METHOD		= "EnclosingMethod";
@@ -738,7 +738,7 @@ public class ClassFile implements AccessFlags {
 	 *        <code>String</code>s).
 	 * @see #getTypeArgument(String)
 	 */
-	public void setTypeParamsToTypeArgs(Map typeMap) {
+	public void setTypeParamsToTypeArgs(Map<String, String> typeMap) {
 		this.typeMap = typeMap;
 		for (int i=0; i<getMethodCount(); i++) {
 			getMethodInfo(i).clearParamTypeInfo();

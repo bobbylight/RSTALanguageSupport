@@ -15,14 +15,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.fife.rsta.ac.html.AttributeCompletion;
 import org.fife.rsta.ac.html.HtmlCompletionProvider;
-import org.fife.rsta.ac.jsp.TldAttribute.TldAttributeParam;
+import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.MarkupTagCompletion;
+import org.fife.ui.autocomplete.ParameterizedCompletion.Parameter;
 
 
 /**
@@ -36,12 +36,12 @@ public class JspCompletionProvider extends HtmlCompletionProvider {
 	/**
 	 * Mapping of prefixes to TLD's.
 	 */
-	private Map prefixToTld;
+	private Map<String, TldFile> prefixToTld;
 
 
 	public JspCompletionProvider() {
 
-		prefixToTld = new HashMap();
+		prefixToTld = new HashMap<String, TldFile>();
 
 		String fileName = File.separatorChar=='/' ?
 				"/users/robert/struts-2.2.3/lib/struts2-core-2.2.3.jar" :
@@ -65,9 +65,11 @@ public class JspCompletionProvider extends HtmlCompletionProvider {
 	/**
 	 * Overridden to handle JSP tags on top of standard HTML tags.
 	 */
-	protected List getAttributeCompletionsForTag(String tagName) {
+	protected List<AttributeCompletion> getAttributeCompletionsForTag(
+			String tagName) {
 
-		List list = super.getAttributeCompletionsForTag(tagName);
+		List<AttributeCompletion> list = super.
+				getAttributeCompletionsForTag(tagName);
 
 		if (list==null) {
 
@@ -77,13 +79,12 @@ public class JspCompletionProvider extends HtmlCompletionProvider {
 				String prefix = tagName.substring(0, colon);
 				tagName = tagName.substring(colon+1);
 
-				TldFile tldFile = (TldFile)prefixToTld.get(prefix);
+				TldFile tldFile = prefixToTld.get(prefix);
 				if (tldFile!=null) {
-					List attrs = tldFile.getAttributesForTag(tagName);
+					List<Parameter> attrs = tldFile.getAttributesForTag(tagName);
 					if (attrs!=null && attrs.size()>-1) {
-						list = new ArrayList();
-						for (int i=0; i<attrs.size(); i++) {
-							TldAttributeParam param = (TldAttributeParam)attrs.get(i);
+						list = new ArrayList<AttributeCompletion>();
+						for (Parameter param : attrs) {
 							list.add(new AttributeCompletion(this, param));
 						}
 					}
@@ -104,14 +105,14 @@ public class JspCompletionProvider extends HtmlCompletionProvider {
 	 *
 	 * @return The list of tags.
 	 */
-	protected List getTagCompletions() {
+	protected List<Completion> getTagCompletions() {
 
-		List completions = new ArrayList(super.getTagCompletions());
+		List<Completion> completions = new ArrayList<Completion>(
+											super.getTagCompletions());
 
-		for (Iterator i=prefixToTld.entrySet().iterator(); i.hasNext(); ) {
-			Map.Entry entry = (Map.Entry)i.next();
-			String prefix = (String)entry.getKey();
-			TldFile tld = (TldFile)entry.getValue();
+		for (Map.Entry<String, TldFile> entry : prefixToTld.entrySet()) {
+			String prefix = entry.getKey();
+			TldFile tld = entry.getValue();
 			for (int j=0; j<tld.getElementCount(); j++) {
 				TldElement elem = tld.getElement(j);
 				MarkupTagCompletion mtc = new MarkupTagCompletion(this,
@@ -130,6 +131,7 @@ public class JspCompletionProvider extends HtmlCompletionProvider {
 	/**
 	 * Overridden to load <code>jsp:*</code> tags also.
 	 */
+	@SuppressWarnings("unchecked")
 	protected void initCompletions() {
 
 		super.initCompletions();

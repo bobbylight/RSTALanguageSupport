@@ -58,7 +58,7 @@ public class PhpCompletionProvider extends HtmlCompletionProvider {
 	/**
 	 * PHP function completions.
 	 */
-	private List phpCompletions;
+	private List<Completion> phpCompletions;
 
 
 	public PhpCompletionProvider() {
@@ -143,28 +143,29 @@ public class PhpCompletionProvider extends HtmlCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
-	protected List getCompletionsImpl(JTextComponent comp) {
+	protected List<Completion> getCompletionsImpl(JTextComponent comp) {
 
-		List list = null;
+		List<Completion> list = null;
 		String text = getAlreadyEnteredText(comp); // Sets phpCompletion
 
 		if (phpCompletion) {
 
 			if (text==null) {
-				list = new ArrayList(0);
+				list = new ArrayList<Completion>(0);
 			}
 
 			else {
 
-				list = new ArrayList();
+				list = new ArrayList<Completion>();
 
+				@SuppressWarnings("unchecked")
 				int index = Collections.binarySearch(phpCompletions, text, comparator);
 				if (index<0) {
 					index = -index - 1;
 				}
 
 				while (index<phpCompletions.size()) {
-					Completion c = (Completion)phpCompletions.get(index);
+					Completion c = phpCompletions.get(index);
 					if (Util.startsWithIgnoreCase(c.getInputText(), text)) {
 						list.add(c);
 						index++;

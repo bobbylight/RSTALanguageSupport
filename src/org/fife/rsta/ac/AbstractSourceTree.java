@@ -87,7 +87,7 @@ public abstract class AbstractSourceTree extends JTree {
 		TreeNode node = (TreeNode) parent.getLastPathComponent();
 		if (node.getChildCount() > 0) {
 			boolean childExpandCalled = false;
-			for (Enumeration e = node.children(); e.hasMoreElements();) {
+			for (Enumeration<?> e = node.children(); e.hasMoreElements();) {
 				TreeNode n = (TreeNode) e.nextElement();
 				TreePath path = parent.pathByAddingChild(n);
 				// The || order is important, don't let childExpand be first,
@@ -221,7 +221,7 @@ public abstract class AbstractSourceTree extends JTree {
 
 		DefaultTreeModel model = (DefaultTreeModel)getModel();
 		DefaultMutableTreeNode root = (DefaultMutableTreeNode)model.getRoot();
-		Enumeration en = root.depthFirstEnumeration();
+		Enumeration<?> en = root.depthFirstEnumeration();
 
 		while (en.hasMoreElements()) {
 			SourceTreeNode stn = (SourceTreeNode)en.nextElement();

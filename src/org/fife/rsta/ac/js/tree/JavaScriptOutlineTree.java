@@ -12,7 +12,6 @@ package org.fife.rsta.ac.js.tree;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Iterator;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.event.TreeSelectionEvent;
@@ -245,10 +244,10 @@ public class JavaScriptOutlineTree extends AbstractSourceTree {
 					StringBuffer sb = new StringBuffer(fn.getName()).append('(');
 					int paramCount = fn.getParamCount();
 					if (paramCount>0) {
-						List fnParams = fn.getParams();
+						List<AstNode> fnParams = fn.getParams();
 						for (int i=0; i<paramCount; i++) {
 							String paramName = null;
-							AstNode node = (AstNode)fnParams.get(i);
+							AstNode node = fnParams.get(i);
 							switch (node.getType()) {
 								case Token.NAME:
 									paramName = ((Name)node).getIdentifier();
@@ -280,11 +279,10 @@ public class JavaScriptOutlineTree extends AbstractSourceTree {
 
 				case Token.VAR:
 					VariableDeclaration varDec = (VariableDeclaration)child;
-					List vars = varDec.getVariables();
-					for (Iterator i=vars.iterator(); i.hasNext(); ) {
+					List<VariableInitializer> vars = varDec.getVariables();
+					for (VariableInitializer var : vars) {
 						Name varNameNode = null;
 						String varName = null;
-						VariableInitializer var = (VariableInitializer)i.next();
 						AstNode target = var.getTarget();
 						switch (target.getType()) {
 							case Token.NAME:

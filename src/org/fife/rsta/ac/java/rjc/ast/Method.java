@@ -24,15 +24,15 @@ public class Method extends AbstractMember {
 
 	private Modifiers modifiers;
 	private Type type;
-	private List parameters;
-	private List thrownTypeNames;
+	private List<FormalParameter> parameters;
+	private List<String> thrownTypeNames;
 	private CodeBlock body;
 	private boolean deprecated;
 	private String docComment;
 
 
 	public Method(Scanner s, Modifiers modifiers, Type type, Token nameToken,
-					List params, List thrownTypeNames) {
+					List<FormalParameter> params, List<String> thrownTypeNames) {
 		super(nameToken.getLexeme(),
 				s.createOffset(nameToken.getOffset()),
 				s.createOffset(nameToken.getOffset() + nameToken.getLength()));
@@ -96,7 +96,7 @@ public class Method extends AbstractMember {
 
 
 	public FormalParameter getParameter(int index) {
-		return (FormalParameter)parameters.get(index);
+		return parameters.get(index);
 	}
 
 
@@ -105,7 +105,7 @@ public class Method extends AbstractMember {
 	}
 
 
-	public Iterator getParameterIterator() {
+	public Iterator<FormalParameter> getParameterIterator() {
 		return parameters.iterator();
 	}
 
