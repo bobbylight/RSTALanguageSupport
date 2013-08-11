@@ -273,7 +273,7 @@ class MethodInfoData implements Data {
 		// names.
 		//return info.getNameAndParameters();
 
-		StringBuffer sb = new StringBuffer(info.getName());
+		StringBuilder sb = new StringBuilder(info.getName());
 
 		sb.append('(');
 		int paramCount = info.getParameterCount();

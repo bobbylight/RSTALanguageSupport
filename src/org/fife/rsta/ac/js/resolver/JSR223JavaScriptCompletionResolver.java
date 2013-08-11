@@ -44,7 +44,7 @@ public class JSR223JavaScriptCompletionResolver extends
 
 
 	public String getLookupText(JSMethodData methodData, String name) {
-		StringBuffer sb = new StringBuffer(name);
+		StringBuilder sb = new StringBuilder(name);
 		sb.append('(');
 		int count = methodData.getParameterCount();
 		String[] parameterTypes = methodData.getMethodInfo()
@@ -65,7 +65,7 @@ public class JSR223JavaScriptCompletionResolver extends
 
 	public String getFunctionNameLookup(FunctionCall call, SourceCompletionProvider provider) {
 		if (call != null) {
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			if (call.getTarget() instanceof PropertyGet) {
 				PropertyGet get = (PropertyGet) call.getTarget();
 				sb.append(get.getProperty().getIdentifier());
@@ -74,7 +74,7 @@ public class JSR223JavaScriptCompletionResolver extends
 			int count = call.getArguments().size();
 			
 			for (int i = 0; i < count; i++) {
-				AstNode paramNode = (AstNode) call.getArguments().get(i);
+				AstNode paramNode = call.getArguments().get(i);
 				JavaScriptResolver resolver = provider.getJavaScriptEngine().getJavaScriptResolver(provider);
 				Logger.log("PARAM: " + JavaScriptHelper.convertNodeToSource(paramNode));
 				try

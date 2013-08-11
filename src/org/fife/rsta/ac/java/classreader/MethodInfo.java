@@ -110,7 +110,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	}
 
 
-	private void appendParamDescriptors(StringBuffer sb) {
+	private void appendParamDescriptors(StringBuilder sb) {
 
 		String[] paramTypes = getParameterTypes();
 		for (int i=0; i<paramTypes.length; i++) {
@@ -335,7 +335,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 
 		if (nameAndParameters==null) {
 
-			StringBuffer sb = new StringBuffer(getName());
+			StringBuilder sb = new StringBuilder(getName());
 
 			sb.append('(');
 			int paramCount = getParameterCount();
@@ -473,7 +473,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 		String descriptor = getDescriptor();
 		int rparen = descriptor.indexOf(')');
 		descriptor = descriptor.substring(rparen+1); // return type desc.
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 
 		int braceCount = descriptor.lastIndexOf('[') + 1;
 
@@ -558,7 +558,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 */
 	public String getSignature() {
 
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 
 		// Return type.
 		if (!isConstructor()) { // Don't print "void" return type.

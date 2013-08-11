@@ -57,7 +57,7 @@ public class TldFile {
 
 
 	private String getChildText(Node elem) {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		NodeList children = elem.getChildNodes();
 		for (int i=0; i<children.getLength(); i++) {
 			Node child = children.item(i);

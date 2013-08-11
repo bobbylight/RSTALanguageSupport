@@ -189,12 +189,12 @@ public class CodeBlock {
 	
 	
 	public void debug() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		outputChild(sb, this, 0);
 		System.out.println(sb.toString());
 	}
 	
-	private void outputChild(StringBuffer sb, CodeBlock block, int tab) {
+	private void outputChild(StringBuilder sb, CodeBlock block, int tab) {
 		String tabs = "";
 		for(int i=0; i<tab; i++)
 		{

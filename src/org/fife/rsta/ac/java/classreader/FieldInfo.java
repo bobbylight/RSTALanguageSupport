@@ -149,7 +149,7 @@ public class FieldInfo extends MemberInfo {
 	 */
 	public String getTypeString(boolean qualified) {
 
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 
 		String descriptor = getDescriptor();
 		int braceCount = descriptor.lastIndexOf('[') + 1;

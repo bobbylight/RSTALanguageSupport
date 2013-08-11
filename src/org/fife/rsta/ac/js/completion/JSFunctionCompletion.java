@@ -175,7 +175,7 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 
 
 	private static String formatMethodAtString(String name, JSMethodData method) {
-		StringBuffer sb = new StringBuffer(name);
+		StringBuilder sb = new StringBuilder(name);
 		sb.append('(');
 		int count = method.getParameterCount();
 		for (int i = 0; i < count; i++) {

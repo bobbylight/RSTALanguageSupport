@@ -241,7 +241,7 @@ public class JavaScriptOutlineTree extends AbstractSourceTree {
 
 				case Token.FUNCTION:
 					FunctionNode fn = (FunctionNode)child;
-					StringBuffer sb = new StringBuffer(fn.getName()).append('(');
+					StringBuilder sb = new StringBuilder(fn.getName()).append('(');
 					int paramCount = fn.getParamCount();
 					if (paramCount>0) {
 						List<AstNode> fnParams = fn.getParams();

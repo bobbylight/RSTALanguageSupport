@@ -453,7 +453,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 				// import statement!
 				if (!alreadyImported) {
 
-					StringBuffer importToAdd = new StringBuffer();
+					StringBuilder importToAdd = new StringBuilder();
 
 					// If there are no previous imports, add the import
 					// statement after the package line (if any).

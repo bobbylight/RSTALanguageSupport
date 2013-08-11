@@ -96,7 +96,7 @@ public class Type {
 	 */
 	public String getName(boolean fullyQualified, boolean addTypeArgs) {
 
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 
 		int count = identifiers.size();
 		int start = fullyQualified ? 0 : count-1;

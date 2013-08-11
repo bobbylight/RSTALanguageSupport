@@ -38,7 +38,7 @@ public class JavaScriptMethodCompletion extends FunctionCompletion implements
 
 
 	private String createNameAndParameters() {
-		StringBuffer sb = new StringBuffer(getName());
+		StringBuilder sb = new StringBuilder(getName());
 		sb.append('(');
 		int count = method.getParameterCount();
 		for (int i = 0; i < count; i++) {
@@ -168,7 +168,7 @@ public class JavaScriptMethodCompletion extends FunctionCompletion implements
 		 */
 
 		if (compareString == null) {
-			StringBuffer sb = new StringBuffer(getName());
+			StringBuilder sb = new StringBuilder(getName());
 			// NOTE: This will fail if a method has > 99 parameters (!)
 			int paramCount = getParamCount();
 			if (paramCount < 10) {
@@ -204,7 +204,7 @@ public class JavaScriptMethodCompletion extends FunctionCompletion implements
 
 
 	public String getLookupName() {
-		StringBuffer sb = new StringBuffer(getName());
+		StringBuilder sb = new StringBuilder(getName());
 		sb.append('(');
 		int count = getParamCount();
 		for (int i = 0; i < count; i++) {

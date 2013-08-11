@@ -525,7 +525,7 @@ OUTER:
 		while (t!=null && t.isType(KEYWORD_IMPORT)) {
 
 			boolean isStatic = false;
-			StringBuffer buf = new StringBuffer();
+			StringBuilder buf = new StringBuilder();
 			t = scanner.yylexNonNull("Incomplete import statement");
 			Token temp = null;
 			int offs = 0;
@@ -1187,7 +1187,7 @@ OUTER:
 			throws IOException {
 
 		Token t = null;
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 
 		while ((t = scanner.yylex()).isIdentifier()) {
 			sb.append(t.getLexeme());

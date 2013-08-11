@@ -58,13 +58,11 @@ class LocalVariableCompletion extends AbstractJavaSourceCompletion {
 
 
 	public void rendererText(Graphics g, int x, int y, boolean selected) {
-
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append(localVar.getName());
 		sb.append(" : ");
 		sb.append(localVar.getType());
 		g.drawString(sb.toString(), x, y);
-
 	}
 
 

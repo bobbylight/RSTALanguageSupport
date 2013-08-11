@@ -90,7 +90,7 @@ public class ShellFunctionCompletion extends FunctionCompletion {
 			ie.printStackTrace();
 		}
 
-		StringBuffer output = null;
+		CharSequence output = null;
 		if (rc==0) {
 			output = stdout.getOutput();
 			if (output!=null && output.length()>0) {

@@ -171,7 +171,7 @@ public class Modifiers {
 
 
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		for (int i=0; i<annotations.size(); i++) {
 			sb.append(annotations.get(i).toString());
 			if (i<annotations.size()-1 || modifiers.size()>0) {

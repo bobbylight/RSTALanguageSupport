@@ -73,7 +73,7 @@ class MemberTreeNode extends JavaTreeNode {
 			icon = IconFactory.FIELD_DEFAULT_ICON;
 		}
 
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append("<html>");
 		sb.append(field.getName());
 		sb.append(" : ");
@@ -126,7 +126,7 @@ class MemberTreeNode extends JavaTreeNode {
 		else {
 			icon = IconFactory.METHOD_DEFAULT_ICON;
 		}
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append("<html>");
 		sb.append(method.getName());
 		sb.append('(');
@@ -174,7 +174,7 @@ class MemberTreeNode extends JavaTreeNode {
 	}
 
 
-	static void appendType(Type type, StringBuffer sb) {
+	static void appendType(Type type, StringBuilder sb) {
 		if (type!=null) {
 			String t = type.toString();
 			t = t.replaceAll("<", "&lt;");

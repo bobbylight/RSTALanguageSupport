@@ -50,7 +50,7 @@ public class ConstantUtf8Info extends ConstantPoolInfo {
 
 	private String createRepresentedString(byte[] bytes) {
 /*
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 
 		int pos = 0;
 		while (pos<bytes.length) {

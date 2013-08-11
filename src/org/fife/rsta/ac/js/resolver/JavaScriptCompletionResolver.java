@@ -229,7 +229,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 		
 		private String createLookupString(FunctionCall fn)
 		{
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			String name = "";
 			switch(fn.getTarget().getType())
 			{
@@ -385,7 +385,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 
 
 	public String getLookupText(JSMethodData method, String name) {
-		StringBuffer sb = new StringBuffer(name);
+		StringBuilder sb = new StringBuilder(name);
 		sb.append('(');
 		int count = method.getParameterCount();
 		for (int i = 0; i < count; i++) {
@@ -402,7 +402,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	public String getFunctionNameLookup(FunctionCall call,
 			SourceCompletionProvider provider) {
 		if (call != null) {
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			if (call.getTarget() instanceof PropertyGet) {
 				PropertyGet get = (PropertyGet) call.getTarget();
 				sb.append(get.getProperty().getIdentifier());

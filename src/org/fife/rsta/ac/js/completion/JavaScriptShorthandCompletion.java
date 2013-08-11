@@ -43,7 +43,7 @@ public class JavaScriptShorthandCompletion extends ShorthandCompletion implement
 
 
 	public String getShortDescriptionText() {
-		StringBuffer sb = new StringBuffer(PREFIX);
+		StringBuilder sb = new StringBuilder(PREFIX);
 		sb.append(getInputText());
 		sb.append(" - ");
 		sb.append(getShortDescription());

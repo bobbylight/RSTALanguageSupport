@@ -77,7 +77,7 @@ public class Method extends AbstractMember {
 
 
 	public String getNameAndParameters() {
-		StringBuffer sb = new StringBuffer(getName());
+		StringBuilder sb = new StringBuilder(getName());
 		sb.append('(');
 		int count = getParameterCount();
 		for (int i=0; i<count; i++) {

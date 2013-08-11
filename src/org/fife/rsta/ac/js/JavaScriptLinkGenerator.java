@@ -117,7 +117,7 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 	 */
 	private String getLookupNameForFunction(RSyntaxTextArea textArea, int offs, String name) {
 		
-		StringBuffer temp = new StringBuffer();
+		StringBuilder temp = new StringBuilder();
 		if (offs>=0) {
 			
 			try {
@@ -143,7 +143,7 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 		String function = temp.toString().replaceAll("\\s", ""); //remove all whitespace
 		boolean params = false;
 		int count = 0;
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		for(int i=0; i<function.length(); i++) {
 			char ch = function.charAt(i);
 			

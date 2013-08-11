@@ -80,18 +80,18 @@ public class Util {
 	}
 
 
-	private static final void appendDocCommentTail(StringBuffer sb,
-												StringBuffer tail) {
+	private static final void appendDocCommentTail(StringBuilder sb,
+			StringBuilder tail) {
 
-		StringBuffer params = null;
-		StringBuffer returns = null;
-		StringBuffer throwsItems = null;
-		StringBuffer see = null;
-		StringBuffer seeTemp = null;
-		StringBuffer since = null;
-		StringBuffer author = null;
-		StringBuffer version = null;
-		StringBuffer unknowns = null;
+		StringBuilder params = null;
+		StringBuilder returns = null;
+		StringBuilder throwsItems = null;
+		StringBuilder see = null;
+		StringBuilder seeTemp = null;
+		StringBuilder since = null;
+		StringBuilder author = null;
+		StringBuilder version = null;
+		StringBuilder unknowns = null;
 		boolean inParams = false, inThrows = false,
 				inReturns = false, inSeeAlso = false,
 				inSince = false, inAuthor = false,
@@ -105,7 +105,7 @@ public class Util {
 			if ("@param".equals(token) && i<st.length) {
 				token = st[i++]; // Actual parameter
 				if (params==null) {
-					params = new StringBuffer("<b>Parameters:</b><p class='indented'>");
+					params = new StringBuilder("<b>Parameters:</b><p class='indented'>");
 				}
 				else {
 					params.append("<br>");
@@ -122,7 +122,7 @@ public class Util {
 			}
 			else if ("@return".equals(token) && i<st.length) {
 				if (returns==null) {
-					returns = new StringBuffer("<b>Returns:</b><p class='indented'>");
+					returns = new StringBuilder("<b>Returns:</b><p class='indented'>");
 				}
 				inSeeAlso=false;
 				inReturns = true;
@@ -135,8 +135,8 @@ public class Util {
 			}
 			else if ("@see".equals(token) && i<st.length) {
 				if (see==null) {
-					see = new StringBuffer("<b>See Also:</b><p class='indented'>");
-					seeTemp = new StringBuffer();
+					see = new StringBuilder("<b>See Also:</b><p class='indented'>");
+					seeTemp = new StringBuilder();
 				}
 				else {
 					if (seeTemp.length()>0) {
@@ -161,7 +161,7 @@ public class Util {
 					("@exception".equals(token)) && i<st.length) {
 				token = st[i++]; // Actual throwable
 				if (throwsItems==null) {
-					throwsItems = new StringBuffer("<b>Throws:</b><p class='indented'>");
+					throwsItems = new StringBuilder("<b>Throws:</b><p class='indented'>");
 				}
 				else {
 					throwsItems.append("<br>");
@@ -178,7 +178,7 @@ public class Util {
 			}
 			else if ("@since".equals(token) && i<st.length) {
 				if (since==null) {
-					since = new StringBuffer("<b>Since:</b><p class='indented'>");
+					since = new StringBuilder("<b>Since:</b><p class='indented'>");
 				}
 				inSeeAlso=false;
 				inReturns = false;
@@ -191,7 +191,7 @@ public class Util {
 			}
 			else if ("@author".equals(token) && i<st.length) {
 				if (author==null) {
-					author = new StringBuffer("<b>Author:</b><p class='indented'>");
+					author = new StringBuilder("<b>Author:</b><p class='indented'>");
 				}
 				else {
 					author.append("<br>");
@@ -207,7 +207,7 @@ public class Util {
 			}
 			else if ("@version".equals(token) && i<st.length) {
 				if (version==null) {
-					version = new StringBuffer("<b>Version:</b><p class='indented'>");
+					version = new StringBuilder("<b>Version:</b><p class='indented'>");
 				}
 				else {
 					version.append("<br>");
@@ -223,7 +223,7 @@ public class Util {
 			}
 			else if (token.startsWith("@") && token.length()>1) {
 				if (unknowns==null) {
-					unknowns = new StringBuffer();
+					unknowns = new StringBuilder();
 				}
 				else {
 					unknowns.append("</p>");
@@ -309,7 +309,7 @@ public class Util {
 	 * @param appendTo The buffer to append to.
 	 * @param linkContent The content of a "link" or "linkplain" item.
 	 */
-	private static final void appendLinkTagText(StringBuffer appendTo,
+	private static final void appendLinkTagText(StringBuilder appendTo,
 										String linkContent) {
 		appendTo.append("<a href='");
 		linkContent = linkContent.trim(); // If "@link" and text on different lines
@@ -396,9 +396,9 @@ System.out.println("Unmatched linkContent: " + linkContent);
 		Matcher m = DOC_COMMENT_LINE_HEADER.matcher(dc);
 		dc = m.replaceAll("\n");
 
-		StringBuffer html = new StringBuffer(
+		StringBuilder html = new StringBuilder(
 			"<html><style> .indented { margin-top: 0px; padding-left: 30pt; } </style><body>");
-		StringBuffer tailBuf = null;
+		StringBuilder tailBuf = null;
 
 		BufferedReader r = new BufferedReader(new StringReader(dc));
 
@@ -424,7 +424,7 @@ System.out.println("Unmatched linkContent: " + linkContent);
 					tailBuf.append(line).append(' ');
 				}
 				else if (line.trim().startsWith("@")) {
-					tailBuf = new StringBuffer();
+					tailBuf = new StringBuilder();
 					tailBuf.append(line).append(' ');
 				}
 				else {
@@ -449,7 +449,7 @@ System.out.println("Unmatched linkContent: " + linkContent);
 	}
 	
 	public static String forXML(String aText){
-	    final StringBuffer result = new StringBuffer();
+	    final StringBuilder result = new StringBuilder();
 	    final StringCharacterIterator iterator = new StringCharacterIterator(aText);
 	    char character =  iterator.current();
 	    while (character != CharacterIterator.DONE ){
@@ -479,7 +479,7 @@ System.out.println("Unmatched linkContent: " + linkContent);
 	  }
 
 
-	private static final StringBuffer fixDocComment(StringBuffer text) {
+	private static final StringBuilder fixDocComment(StringBuilder text) {
 
 		// Nothing to do.
 		int index = text.indexOf("{@");
@@ -487,9 +487,7 @@ System.out.println("Unmatched linkContent: " + linkContent);
 			return text;
 		}
 
-		// TODO: In Java 5, replace "sb.append(sb2.substring(...))"
-		// calls with "sb.append(sb2, offs, len)".
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		int textOffs = 0;
 
 		do {
@@ -497,7 +495,7 @@ System.out.println("Unmatched linkContent: " + linkContent);
 			int closingBrace = indexOf('}', text, index+2);
 			if (closingBrace>-1) { // Should practically always be true
 
-				sb.append(text.substring(textOffs, index));
+				sb.append(text, textOffs, index);
 				String content = text.substring(index+2, closingBrace);
 				index = textOffs = closingBrace + 1;
 

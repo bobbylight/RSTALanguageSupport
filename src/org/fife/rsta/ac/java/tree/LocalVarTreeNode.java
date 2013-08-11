@@ -32,7 +32,7 @@ class LocalVarTreeNode extends JavaTreeNode {
 		setIcon(IconFactory.get().getIcon(IconFactory.LOCAL_VARIABLE_ICON));
 		setSortPriority(PRIORITY_LOCAL_VAR);
 
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		sb.append("<html>");
 		sb.append(var.getName());
 		sb.append(" : ");

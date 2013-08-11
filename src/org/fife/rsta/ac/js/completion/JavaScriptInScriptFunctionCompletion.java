@@ -42,7 +42,7 @@ public class JavaScriptInScriptFunctionCompletion extends FunctionCompletion
 
 
 	public String getLookupName() {
-		StringBuffer sb = new StringBuffer(getName());
+		StringBuilder sb = new StringBuilder(getName());
 		sb.append('(');
 		int count = getParamCount();
 		for (int i = 0; i < count; i++) {

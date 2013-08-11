@@ -187,7 +187,7 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 		 */
 
 		if (compareString==null) {
-			StringBuffer sb = new StringBuffer(getName());
+			StringBuilder sb = new StringBuilder(getName());
 			// NOTE: This will fail if a method has > 99 parameters (!)
 			int paramCount = getParamCount();
 			if (paramCount<10) {
@@ -296,7 +296,7 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 		x = newX;
 
 		// Append the return type
-		StringBuffer sb = new StringBuffer(" : ").append(shortType);
+		StringBuilder sb = new StringBuilder(" : ").append(shortType);
 		sb.append(" - ");
 		String s = sb.toString();
 		g.drawString(s, x, y);

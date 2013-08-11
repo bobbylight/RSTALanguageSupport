@@ -334,7 +334,7 @@ public class Signature extends AttributeInfo {
 							}
 								
 						}
-						StringBuffer sb = new StringBuffer(type).append('<');
+						StringBuilder sb = new StringBuilder(type).append('<');
 						for (int i=0; i<paramTypeList.size(); i++) {
 							sb.append(paramTypeList.get(i));
 							if (i<paramTypeList.size()-1) {

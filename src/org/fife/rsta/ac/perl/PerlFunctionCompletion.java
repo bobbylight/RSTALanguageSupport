@@ -11,12 +11,11 @@
 package org.fife.rsta.ac.perl;
 
 import java.awt.Font;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import javax.swing.UIManager;
 
+import org.fife.rsta.ac.OutputCollector;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.FunctionCompletion;
 
@@ -91,10 +90,8 @@ public class PerlFunctionCompletion extends FunctionCompletion {
 		}
 
 		// TODO: Launch waitFor() in a thread and interrupt after set time
-		BufferedReader r = new BufferedReader(new InputStreamReader(
-													p.getInputStream()));
-		OutputCollector outputCollector = new OutputCollector(r);
-		Thread t = new Thread(outputCollector);
+		OutputCollector oc = new OutputCollector(p.getInputStream());
+		Thread t = new Thread(oc);
 		t.start();
 		int rc = 0;
 		try {
@@ -105,9 +102,9 @@ public class PerlFunctionCompletion extends FunctionCompletion {
 			ie.printStackTrace();
 		}
 
-		StringBuffer output = null;
+		CharSequence output = null;
 		if (rc==0) {
-			output = outputCollector.getOutput();
+			output = oc.getOutput();
 			if (output!=null && output.length()>0) {
 				output = perldocToHtml(output);
 			}
@@ -118,51 +115,22 @@ public class PerlFunctionCompletion extends FunctionCompletion {
 	}
 
 
-	private static final StringBuffer perldocToHtml(StringBuffer text) {
+	private static final StringBuilder perldocToHtml(CharSequence text) {
 
-		StringBuffer sb = null;
+		StringBuilder sb = null;
 
 		Font font = UIManager.getFont("Label.font");
 		// Even Nimbus sets Label.font, but just to be safe...
 		if (font!=null) {
-			sb = new StringBuffer("<html><style>pre { font-family: ").
+			sb = new StringBuilder("<html><style>pre { font-family: ").
 						append(font.getFamily()).append("; }</style><pre>");
 		}
 		else { // Just use monospaced font
-			sb = new StringBuffer("<html><pre>");
+			sb = new StringBuilder("<html><pre>");
 		}
 
 		sb.append(text);
 		return sb;
-
-	}
-
-
-	private static class OutputCollector implements Runnable {
-
-		private BufferedReader r;
-		private StringBuffer sb;
-
-		public OutputCollector(BufferedReader r) {
-			this.r = r;
-			sb = new StringBuffer();
-		}
-
-		public StringBuffer getOutput() {
-			return sb;
-		}
-
-		public void run() {
-			String line = null;
-			try {
-				while ((line=r.readLine())!=null) {
-					sb.append(line).append('\n');
-					//System.out.println(line);
-				}
-			} catch (IOException ioe) {
-				ioe.printStackTrace();
-			}
-		}
 
 	}
 

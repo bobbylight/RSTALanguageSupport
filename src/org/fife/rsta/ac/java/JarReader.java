@@ -132,7 +132,7 @@ class JarReader {
 					}
 				}
 				else {
-					StringBuffer sb = new StringBuffer();
+					StringBuilder sb = new StringBuilder();
 					for (int j=0; j<pkgNames.length-1; j++) {
 						sb.append(pkgNames[j]).append('.');
 					}
@@ -262,7 +262,7 @@ class JarReader {
 			}
 			else { // A class, just no ClassFile cached yet
 				try {
-					StringBuffer name = new StringBuffer(items[0]);
+					StringBuilder name = new StringBuilder(items[0]);
 					for (int i=1; i<items.length; i++) {
 						name.append('/').append(items[i]);
 					}
@@ -308,7 +308,7 @@ class JarReader {
 			Map.Entry entry = (Map.Entry)i.next();
 			Object value = entry.getValue();
 			if (value==null) {
-				StringBuffer name = new StringBuffer(pkgs[0]);
+				StringBuilder name = new StringBuilder(pkgs[0]);
 				for (int j=1; j<pkgs.length; j++) {
 					name.append('/').append(pkgs[j]);
 				}

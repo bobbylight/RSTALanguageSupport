@@ -119,7 +119,7 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 		{
 			String pkg = src.substring(PACKAGES.length());
 			if(pkg != null) {
-				StringBuffer sb = new StringBuffer();
+				StringBuilder sb = new StringBuilder();
 				//remove any non java characters
 				char[] chars = pkg.toCharArray(); 
 				for(int i =0; i<chars.length; i++) {
