@@ -74,6 +74,7 @@ public class DirLibraryInfo extends LibraryInfo {
 	}
 
 
+	@Override
 	public ClassFile createClassFile(String entryName) throws IOException {
 		File file = new File(dir, entryName);
 		if (!file.isFile()) {
@@ -84,6 +85,7 @@ public class DirLibraryInfo extends LibraryInfo {
 	}
 
 
+	@Override
 	public TreeMap createPackageMap() throws IOException {
 		TreeMap map = new TreeMap();
 		getPackageMapImpl(dir, null, map);
@@ -91,11 +93,13 @@ public class DirLibraryInfo extends LibraryInfo {
 	}
 
 
+	@Override
 	public long getLastModified() {
 		return dir.lastModified();
 	}
 
 
+	@Override
 	public String getLocationAsString() {
 		return dir.getAbsolutePath();
 	}
@@ -158,6 +162,7 @@ public class DirLibraryInfo extends LibraryInfo {
 	}
 
 
+	@Override
 	public int hashCode() {
 		return dir.hashCode();
 	}
@@ -183,6 +188,7 @@ public class DirLibraryInfo extends LibraryInfo {
 	 *
 	 * @return A string representation of this object.
 	 */
+	@Override
 	public String toString() {
 		return "[DirLibraryInfo: " +
 			"jar=" + dir.getAbsolutePath() +

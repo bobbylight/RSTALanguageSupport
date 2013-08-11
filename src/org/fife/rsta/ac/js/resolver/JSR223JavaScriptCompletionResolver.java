@@ -31,6 +31,7 @@ public class JSR223JavaScriptCompletionResolver extends
 	/**
 	 * Try to resolve standard JavaScript type. If null, then look for static class
 	 */
+	@Override
 	protected TypeDeclaration resolveNativeType(AstNode node) {
 		TypeDeclaration dec = super.resolveNativeType(node);
 		if (dec == null) {
@@ -43,6 +44,7 @@ public class JSR223JavaScriptCompletionResolver extends
 	
 
 
+	@Override
 	public String getLookupText(JSMethodData methodData, String name) {
 		StringBuilder sb = new StringBuilder(name);
 		sb.append('(');
@@ -63,6 +65,7 @@ public class JSR223JavaScriptCompletionResolver extends
 	
 
 
+	@Override
 	public String getFunctionNameLookup(FunctionCall call, SourceCompletionProvider provider) {
 		if (call != null) {
 			StringBuilder sb = new StringBuilder();

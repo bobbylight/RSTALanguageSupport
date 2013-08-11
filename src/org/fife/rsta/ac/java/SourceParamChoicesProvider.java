@@ -323,6 +323,7 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 			setRelevance(-1);
 		}
 
+		@Override
 		public Icon getIcon() {
 			return ICON;
 		}

@@ -157,6 +157,7 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 	/**
 	 * Override getClassFile that checks the imported packages and classnames based on the TypeDeclaration.getAPITypeName()
 	 */
+	@Override
 	public ClassFile getClassFile(JarManager manager, TypeDeclaration type) {
 
 		String qName = removePackagesFromType(type.getQualifiedName());

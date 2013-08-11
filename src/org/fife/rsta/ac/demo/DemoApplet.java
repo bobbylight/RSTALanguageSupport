@@ -29,6 +29,7 @@ public class DemoApplet extends JApplet {
 	/**
 	 * Initializes this applet.
 	 */
+	@Override
 	public void init() {
 		super.init();
 		SwingUtilities.invokeLater(new Runnable() {
@@ -53,6 +54,7 @@ public class DemoApplet extends JApplet {
 	 *
 	 * @param visible Whether this applet should be visible.
 	 */
+	@Override
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
 		if (visible) {

@@ -30,17 +30,20 @@ public class JSBeanCompletion extends VariableCompletion implements
 	}
 
 
+	@Override
 	public boolean equals(Object obj) {
 		return (obj instanceof JSBeanCompletion)
 				&& ((JSBeanCompletion) obj).getName().equals(getName());
 	}
 
 
+	@Override
 	public Icon getIcon() {
 		return IconFactory.getIcon(IconFactory.GLOBAL_VARIABLE_ICON);
 	}
 
 
+	@Override
 	public String getAlreadyEntered(JTextComponent comp) {
 		String temp = getProvider().getAlreadyEnteredText(comp);
 		int lastDot = JavaScriptHelper
@@ -51,6 +54,7 @@ public class JSBeanCompletion extends VariableCompletion implements
 		return temp;
 	}
 
+	@Override
 	public String getType() {
 		String value = getType(true);
 		return ((SourceCompletionProvider) getProvider()).getTypesFactory().convertJavaScriptType(value, false);
@@ -70,6 +74,7 @@ public class JSBeanCompletion extends VariableCompletion implements
 	}
 
 
+	@Override
 	public String getSummary() {
 		String summary = getMethodSummary(); // Could be just the method name
 
@@ -134,6 +139,7 @@ public class JSBeanCompletion extends VariableCompletion implements
 	 * 
 	 * @return The hash code.
 	 */
+	@Override
 	public int hashCode() {
 		return getName().hashCode();
 	}
@@ -141,6 +147,7 @@ public class JSBeanCompletion extends VariableCompletion implements
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int compareTo(Completion o) {
 		if (o==this) {
 			return 0;

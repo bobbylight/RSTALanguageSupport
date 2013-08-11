@@ -105,6 +105,7 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected ListCellRenderer createDefaultCompletionCellRenderer() {
 		CompletionCellRenderer ccr = new CompletionCellRenderer();
 		ccr.setShowTypes(false);

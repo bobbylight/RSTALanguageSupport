@@ -76,6 +76,7 @@ public class TypeDeclaration {
 		return supportsBeanProperties;
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 
 		if (this == obj)
@@ -99,6 +100,7 @@ public class TypeDeclaration {
 	 *
 	 * @return The hash code.
 	 */
+	@Override
 	public int hashCode() {
 		int hash = 7;
 		hash = 31 * new Boolean(staticsOnly).hashCode();

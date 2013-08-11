@@ -23,6 +23,7 @@ public class JSR223Type extends JavaScriptType {
 	 * @return JSCompletion using lookup name
 	 * @see JSCompletion
 	 */
+	@Override
 	protected JSCompletion _getCompletion(String completionLookup,
 			SourceCompletionProvider provider) {
 		JSCompletion completion = (JSCompletion) methodFieldCompletions

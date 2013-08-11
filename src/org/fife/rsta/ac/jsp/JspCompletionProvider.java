@@ -65,6 +65,7 @@ public class JspCompletionProvider extends HtmlCompletionProvider {
 	/**
 	 * Overridden to handle JSP tags on top of standard HTML tags.
 	 */
+	@Override
 	protected List<AttributeCompletion> getAttributeCompletionsForTag(
 			String tagName) {
 
@@ -105,6 +106,7 @@ public class JspCompletionProvider extends HtmlCompletionProvider {
 	 *
 	 * @return The list of tags.
 	 */
+	@Override
 	protected List<Completion> getTagCompletions() {
 
 		List<Completion> completions = new ArrayList<Completion>(
@@ -131,6 +133,7 @@ public class JspCompletionProvider extends HtmlCompletionProvider {
 	/**
 	 * Overridden to load <code>jsp:*</code> tags also.
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	protected void initCompletions() {
 
@@ -150,6 +153,7 @@ public class JspCompletionProvider extends HtmlCompletionProvider {
 	}
 
 
+	@Override
 	protected boolean isValidChar(char ch) {
 		return super.isValidChar(ch) || ch==':';
 	}

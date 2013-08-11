@@ -29,11 +29,13 @@ class PerlCodeCompletionProvider extends DefaultCompletionProvider {
 	}
 
 
+	@Override
 	public char getParameterListEnd() {
 		return parent.getParameterListEnd();
 	}
 
 
+	@Override
 	public char getParameterListStart() {
 		return parent.getParameterListStart();
 	}
@@ -42,6 +44,7 @@ class PerlCodeCompletionProvider extends DefaultCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean isValidChar(char ch) {
 		return super.isValidChar(ch) || ch=='@' || ch=='$' || ch=='%';
 	}

@@ -39,6 +39,7 @@ public class JSClassCompletion extends BasicCompletion implements JSCompletion {
 	 * classes with same name but different packages.
 	 * Thanks to Guilherme Joao Frantz and Jonatas Schuler for the patch!
 	 */
+	@Override
 	public int compareTo(Completion c2) {
 		if (c2 == this) {
 			return 0;
@@ -54,11 +55,13 @@ public class JSClassCompletion extends BasicCompletion implements JSCompletion {
 	}
 
 
+	@Override
 	public boolean equals(Object obj) {
 		return (obj instanceof JSClassCompletion) &&
 			((JSClassCompletion)obj).getReplacementText().equals(getReplacementText());
 	}
 
+	@Override
 	public String getAlreadyEntered(JTextComponent comp) {
 		String temp = getProvider().getAlreadyEnteredText(comp);
 		int lastDot = JavaScriptHelper
@@ -87,6 +90,7 @@ public class JSClassCompletion extends BasicCompletion implements JSCompletion {
 	}
 
 
+	@Override
 	public Icon getIcon() {
 		return IconFactory.getIcon(IconFactory.DEFAULT_CLASS_ICON);
 	}
@@ -103,6 +107,7 @@ public class JSClassCompletion extends BasicCompletion implements JSCompletion {
 	}
 
 
+	@Override
 	public String getSummary() {
 
 		SourceCompletionProvider scp = (SourceCompletionProvider)getProvider();
@@ -135,11 +140,13 @@ public class JSClassCompletion extends BasicCompletion implements JSCompletion {
 	}
 
 
+	@Override
 	public String getToolTipText() {
 		return "type " + getReplacementText();
 	}
 
 
+	@Override
 	public int hashCode() {
 		return getReplacementText().hashCode();
 	}

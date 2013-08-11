@@ -331,6 +331,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		 * explicitly imported <code>org.w3c.dom.Document</code> - we need to
 		 * insert the fully qualified name in that case).
 		 */
+		@Override
 		protected String getReplacementText(Completion c, Document doc,
 											int start, int len) {
 			String text = super.getReplacementText(c, doc, start, len);
@@ -506,6 +507,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		 * completions will edit more in the source file than just the text
 		 * at the current caret position.
 		 */
+		@Override
 		protected void insertCompletion(Completion c,
 				boolean typedParamListStartChar) {
 
@@ -536,6 +538,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 
 		}
 
+		@Override
 		protected int refreshPopupWindow() {
 			// Force the parser to re-parse
 			JavaParser parser = getParser(textArea);

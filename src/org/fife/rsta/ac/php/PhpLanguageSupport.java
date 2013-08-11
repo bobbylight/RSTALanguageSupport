@@ -60,6 +60,7 @@ public class PhpLanguageSupport extends AbstractMarkupLanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected ListCellRenderer createDefaultCompletionCellRenderer() {
 		return new HtmlCellRenderer();
 	}
@@ -97,6 +98,7 @@ public class PhpLanguageSupport extends AbstractMarkupLanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected boolean shouldAutoCloseTag(String tag) {
 		return tagsToClose.contains(tag.toLowerCase());
 	}

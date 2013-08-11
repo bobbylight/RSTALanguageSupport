@@ -14,11 +14,13 @@ public class RhinoJavaScriptEngine extends JavaScriptEngine {
 
 	public static final String RHINO_ENGINE = "RHINO";
 	
+	@Override
 	public JavaScriptResolver getJavaScriptResolver(SourceCompletionProvider provider) {
 		return new JSR223JavaScriptCompletionResolver(provider);
 	}
 
 
+	@Override
 	public JavaScriptTypesFactory getJavaScriptTypesFactory(SourceCompletionProvider provider) {
 		
 		if(jsFactory == null)
@@ -28,6 +30,7 @@ public class RhinoJavaScriptEngine extends JavaScriptEngine {
 	}
 
 
+	@Override
 	public JavaScriptParser getParser(SourceCompletionProvider provider, int dot, TypeDeclarationOptions options) {
 		return new RhinoJavaScriptAstParser(provider, dot, options);
 	}

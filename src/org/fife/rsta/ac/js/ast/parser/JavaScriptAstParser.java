@@ -53,6 +53,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	}
 
 
+	@Override
 	public CodeBlock convertAstNodeToCodeBlock(AstRoot root, Set set,
 			String entered) {
 		functions.clear();

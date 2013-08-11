@@ -68,6 +68,7 @@ class FieldCompletion extends AbstractJavaSourceCompletion
 	}
 
 
+	@Override
 	public boolean equals(Object obj) {
 		return (obj instanceof FieldCompletion) &&
 			((FieldCompletion)obj).getSignature().equals(getSignature());
@@ -129,6 +130,7 @@ class FieldCompletion extends AbstractJavaSourceCompletion
 	}
 
 
+	@Override
 	public Icon getIcon() {
 		return IconFactory.get().getIcon(data);
 	}
@@ -139,6 +141,7 @@ class FieldCompletion extends AbstractJavaSourceCompletion
 	}
 
 
+	@Override
 	public String getSummary() {
 
 		String summary = data.getSummary(); // Could be just the method name
@@ -158,6 +161,7 @@ class FieldCompletion extends AbstractJavaSourceCompletion
 	}
 
 
+	@Override
 	public int hashCode() {
 		return getSignature().hashCode();
 	}

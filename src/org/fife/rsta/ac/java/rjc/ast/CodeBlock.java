@@ -189,6 +189,7 @@ public class CodeBlock extends AbstractMember {
 	 *
 	 * @return Whether this is a static code block.
 	 */
+	@Override
 	public boolean isStatic() {
 		return isStatic;
 	}

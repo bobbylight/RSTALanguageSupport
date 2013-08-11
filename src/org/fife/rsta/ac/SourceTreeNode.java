@@ -71,6 +71,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 	 *
 	 * @param child The child node to add.
 	 */
+	@Override
 	public void add(MutableTreeNode child) {
 		//super.add(child);
 		if(child!=null && child.getParent()==this) {
@@ -90,6 +91,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 	 *
 	 * @return The visible children.
 	 */
+	@Override
 	public Enumeration<TreeNode> children() {
 		return visibleChildren.elements();
 	}
@@ -173,6 +175,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 	 * @return The visible child after the specified node, or <code>null</code>
 	 *         if none.
 	 */
+	@Override
 	public TreeNode getChildAfter(TreeNode child) {
 		if (child==null) {
 			throw new IllegalArgumentException("child cannot be null");
@@ -191,6 +194,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 	 * @param index The index of the visible child to retrieve.
 	 * @return The visible child after the specified index.
 	 */
+	@Override
 	public TreeNode getChildAt(int index) {
 		//System.out.println(index);
 		return visibleChildren.get(index);
@@ -204,6 +208,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 	 * @return The visible child before the specified node, or <code>null</code>
 	 *         if none.
 	 */
+	@Override
 	public TreeNode getChildBefore(TreeNode child) {
 		if (child==null) {
 			throw new IllegalArgumentException("child cannot be null");
@@ -221,6 +226,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 	 *
 	 * @return The number of visible child nodes.
 	 */
+	@Override
 	public int getChildCount() {
 		return visibleChildren.size();
 	}
@@ -234,6 +240,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 	 *         not contained in this tree, or is simply not visible,
 	 *         <code>-1</code> is returned.
 	 */
+	@Override
 	public int getIndex(TreeNode child) {
 		if (child==null) {
 			throw new IllegalArgumentException("child cannot be null");

@@ -53,6 +53,7 @@ public class ConstantIntegerInfo extends ConstantPoolInfo {
 	 *
 	 * @return A string representation of this object.
 	 */
+	@Override
 	public String toString() {
 		return "[ConstantIntegerInfo: " +
 				"bytes=" + getBytes() +

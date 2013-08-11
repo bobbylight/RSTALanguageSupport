@@ -52,6 +52,7 @@ class XmlTreeCellRenderer extends DefaultTreeCellRenderer {
 	}
 
 
+	@Override
 	public Component getTreeCellRendererComponent(JTree tree, Object value,
 			boolean sel, boolean expanded, boolean leaf, int row,
 			boolean focused) {
@@ -72,6 +73,7 @@ class XmlTreeCellRenderer extends DefaultTreeCellRenderer {
 	}
 
 
+	@Override
 	public void updateUI() {
 		// We must call super.updateUI() since, as of Java 7, that's where
 		// DefaultTreeCellRenderer caches its fonts, colors, etc.
@@ -92,10 +94,12 @@ class XmlTreeCellRenderer extends DefaultTreeCellRenderer {
 	 */
 	private static class XmlTreeCellUI extends BasicLabelUI {
 
+		@Override
 		protected void installDefaults(JLabel label) {
 			// Do nothing
 		}
 
+		@Override
 		protected void paintEnabledText(JLabel l, Graphics g, String s, 
 				int textX, int textY) {
 			XmlTreeCellRenderer r = (XmlTreeCellRenderer)l;
@@ -116,6 +120,7 @@ class XmlTreeCellRenderer extends DefaultTreeCellRenderer {
 			g2d.dispose();
 		}
 
+		@Override
 		protected void uninstallDefaults(JLabel label) {
 			// Do nothing
 		}

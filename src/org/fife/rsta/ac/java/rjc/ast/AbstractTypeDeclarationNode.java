@@ -273,6 +273,7 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	}
 
 
+	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		if (modifiers!=null) {

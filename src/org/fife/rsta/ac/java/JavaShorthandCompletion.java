@@ -60,6 +60,7 @@ class JavaShorthandCompletion extends ShorthandCompletion implements
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Icon getIcon() {
 		return IconFactory.get().getIcon(IconFactory.TEMPLATE_ICON);
 	}

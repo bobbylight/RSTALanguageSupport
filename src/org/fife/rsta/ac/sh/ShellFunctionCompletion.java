@@ -44,6 +44,7 @@ public class ShellFunctionCompletion extends FunctionCompletion {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getSummary() {
 
 		String summary = null;

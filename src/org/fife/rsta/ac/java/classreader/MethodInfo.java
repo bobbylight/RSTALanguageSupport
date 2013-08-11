@@ -308,6 +308,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getDescriptor() {
 		return cf.getUtf8ValueFromConstantPool(descriptorIndex);
 	}
@@ -316,6 +317,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getName() {
 		String name = cf.getUtf8ValueFromConstantPool(nameIndex);
 		if (SPECIAL_NAME_CONSTRUCTOR.equals(name)) {
@@ -627,6 +629,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 *
 	 * @return Whether this method is static.
 	 */
+	@Override
 	public boolean isStatic() {
 		return (getAccessFlags()&ACC_STATIC)>0;
 	}

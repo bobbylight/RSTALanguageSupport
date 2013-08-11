@@ -42,6 +42,7 @@ public class UnsupportedAttribute extends AttributeInfo {
 	}
 */
 
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -53,6 +54,7 @@ public class UnsupportedAttribute extends AttributeInfo {
 	 *
 	 * @return A string representation of this attribute.
 	 */
+	@Override
 	public String toString() {
 		return "[UnsupportedAttribute: " +
 				"name=" + getName() +

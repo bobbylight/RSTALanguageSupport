@@ -121,6 +121,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public List getCompletionsAt(JTextComponent tc, Point p) {
 
 		int offset = tc.viewToModel(p);
@@ -184,6 +185,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected List getCompletionsImpl(JTextComponent comp) {
 
 		comp.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -387,6 +389,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 		return false;
 	}
 	
+	@Override
 	public String getAlreadyEnteredText(JTextComponent comp) {
 		String text = super.getAlreadyEnteredText(comp);
 		if(text != null) {
@@ -533,6 +536,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	}
 
 
+	@Override
 	protected boolean isValidChar(char ch) {
 		return Character.isJavaIdentifierPart(ch) || ch == ',' || ch == '.'
 				|| ch == getParameterListStart() || ch == getParameterListEnd()

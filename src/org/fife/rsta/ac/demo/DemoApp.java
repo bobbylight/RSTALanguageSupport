@@ -39,6 +39,7 @@ public class DemoApp extends JFrame {
 	 *
 	 * @param visible Whether this frame should be visible.
 	 */
+	@Override
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
 		if (visible) {

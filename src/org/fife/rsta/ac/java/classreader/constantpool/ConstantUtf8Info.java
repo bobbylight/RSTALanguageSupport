@@ -128,6 +128,7 @@ try {
 	 *
 	 * @return A string representation of this object.
 	 */
+	@Override
 	public String toString() {
 		return "[ConstantUtf8Info: " + representedString +
 				"]";

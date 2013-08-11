@@ -110,6 +110,7 @@ public class XmlLanguageSupport extends AbstractMarkupLanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void installKeyboardShortcuts(RSyntaxTextArea textArea) {
 
 		super.installKeyboardShortcuts(textArea);
@@ -139,6 +140,7 @@ public class XmlLanguageSupport extends AbstractMarkupLanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected boolean shouldAutoCloseTag(String tag) {
 		return true;
 	}
@@ -164,6 +166,7 @@ public class XmlLanguageSupport extends AbstractMarkupLanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void uninstallKeyboardShortcuts(RSyntaxTextArea textArea) {
 
 		super.uninstallKeyboardShortcuts(textArea);

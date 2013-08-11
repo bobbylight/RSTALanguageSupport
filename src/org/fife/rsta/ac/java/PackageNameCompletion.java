@@ -31,17 +31,20 @@ class PackageNameCompletion extends AbstractJavaSourceCompletion {
 	}
 
 
+	@Override
 	public boolean equals(Object obj) {
 		return (obj instanceof PackageNameCompletion) &&
 			((PackageNameCompletion)obj).getReplacementText().equals(getReplacementText());
 	}
 
 
+	@Override
 	public Icon getIcon() {
 		return IconFactory.get().getIcon(IconFactory.PACKAGE_ICON);
 	}
 
 
+	@Override
 	public int hashCode() {
 		return getReplacementText().hashCode();
 	}

@@ -76,6 +76,7 @@ class DocCommentCompletionProvider extends DefaultCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected boolean isValidChar(char ch) {
 		return Character.isLetterOrDigit(ch) || ch=='_' || ch=='@' ||
 					ch=='{' || ch=='}';
@@ -93,6 +94,7 @@ class DocCommentCompletionProvider extends DefaultCompletionProvider {
 			super(provider, replacementText);
 		}
 
+		@Override
 		public Icon getIcon() {
 			return IconFactory.get().getIcon(IconFactory.JAVADOC_ITEM_ICON);
 		}

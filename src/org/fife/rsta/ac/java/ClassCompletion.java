@@ -63,6 +63,7 @@ class ClassCompletion extends AbstractJavaSourceCompletion {
 	}
 
 
+	@Override
 	public boolean equals(Object obj) {
 		return (obj instanceof ClassCompletion) &&
 			((ClassCompletion)obj).getReplacementText().equals(getReplacementText());
@@ -85,6 +86,7 @@ class ClassCompletion extends AbstractJavaSourceCompletion {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Icon getIcon() {
 
 		// TODO: Add functionality to ClassFile to make this simpler.
@@ -149,6 +151,7 @@ class ClassCompletion extends AbstractJavaSourceCompletion {
 	}
 
 
+	@Override
 	public String getSummary() {
 
 		SourceCompletionProvider scp = (SourceCompletionProvider)getProvider();
@@ -181,11 +184,13 @@ class ClassCompletion extends AbstractJavaSourceCompletion {
 	}
 
 
+	@Override
 	public String getToolTipText() {
 		return "class " + getReplacementText();
 	}
 
 
+	@Override
 	public int hashCode() {
 		return getReplacementText().hashCode();
 	}

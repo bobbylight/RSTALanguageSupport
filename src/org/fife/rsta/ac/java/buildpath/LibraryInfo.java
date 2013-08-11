@@ -49,6 +49,7 @@ public abstract class LibraryInfo implements Comparable, Cloneable {
 	 *
 	 * @return A deep copy.
 	 */
+	@Override
 	public Object clone() {
 		try {
 			return super.clone();
@@ -89,6 +90,7 @@ public abstract class LibraryInfo implements Comparable, Cloneable {
 	 * @return Whether the specified instance represents the same class
 	 *         source as this one.
 	 */
+	@Override
 	public boolean equals(Object o) {
 		return compareTo(o)==0;
 	}
@@ -201,6 +203,7 @@ public abstract class LibraryInfo implements Comparable, Cloneable {
 	 *
 	 * @return The hash code for this library.
 	 */
+	@Override
 	public abstract int hashCode();
 
 

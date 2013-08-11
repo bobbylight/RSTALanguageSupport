@@ -73,6 +73,7 @@ class JsDocCompletionProvider extends DefaultCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected boolean isValidChar(char ch) {
 		return Character.isLetterOrDigit(ch) || ch=='_' || ch=='@' ||
 					ch=='{' || ch=='}';
@@ -102,10 +103,12 @@ class JsDocCompletionProvider extends DefaultCompletionProvider {
 			this.icon = icon;
 		}
 
+		@Override
 		public Icon getIcon() {
 			return IconFactory.getIcon(icon);
 		}
 
+		@Override
 		public String getInputText() {
 			return inputText;
 		}
@@ -130,6 +133,7 @@ class JsDocCompletionProvider extends DefaultCompletionProvider {
 			setIcon(icon);
 		}
 
+		@Override
 		public Icon getIcon() {
 			return IconFactory.getIcon(icon);
 		}

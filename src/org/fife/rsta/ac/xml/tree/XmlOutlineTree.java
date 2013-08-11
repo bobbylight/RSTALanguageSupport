@@ -120,6 +120,7 @@ public class XmlOutlineTree extends AbstractSourceTree {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void expandInitialNodes() {
 
 		//long start = System.currentTimeMillis();
@@ -144,6 +145,7 @@ public class XmlOutlineTree extends AbstractSourceTree {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean gotoSelectedElement() {
 		TreePath path = getLeadSelectionPath();//e.getNewLeadSelectionPath();
 		if (path != null) {
@@ -157,6 +159,7 @@ public class XmlOutlineTree extends AbstractSourceTree {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void listenTo(RSyntaxTextArea textArea) {
 
 		if (this.textArea!=null) {
@@ -181,6 +184,7 @@ public class XmlOutlineTree extends AbstractSourceTree {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void uninstall() {
 
 		if (parser!=null) {
@@ -212,6 +216,7 @@ public class XmlOutlineTree extends AbstractSourceTree {
 	/**
 	 * Overridden to update the cell renderer
 	 */
+	@Override
 	public void updateUI() {
 		super.updateUI();
 		xmlTreeCellRenderer = new XmlTreeCellRenderer();

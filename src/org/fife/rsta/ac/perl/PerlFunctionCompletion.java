@@ -45,6 +45,7 @@ public class PerlFunctionCompletion extends FunctionCompletion {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getSummary() {
 
 		String summary = null;

@@ -746,6 +746,7 @@ public class ClassFile implements AccessFlags {
 	}
 
 
+	@Override
 	public String toString() {
 		return "[ClassFile: " +
 			"accessFlags=" + accessFlags +

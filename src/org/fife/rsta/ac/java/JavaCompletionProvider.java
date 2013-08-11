@@ -106,6 +106,7 @@ public class JavaCompletionProvider extends LanguageAwareCompletionProvider {
 	 *
 	 * @return The already entered text.
 	 */
+	@Override
 	public String getAlreadyEnteredText(JTextComponent comp) {
 		return sourceProvider.getAlreadyEnteredText(comp);
 	}
@@ -119,6 +120,7 @@ public class JavaCompletionProvider extends LanguageAwareCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public List<Completion> getCompletionsAt(JTextComponent tc, Point p) {
 		return sourceProvider.getCompletionsAt(tc, p);
 	}
@@ -142,6 +144,7 @@ public class JavaCompletionProvider extends LanguageAwareCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public List<ParameterizedCompletion> getParameterizedCompletions(
 						JTextComponent tc) {
 		return null;

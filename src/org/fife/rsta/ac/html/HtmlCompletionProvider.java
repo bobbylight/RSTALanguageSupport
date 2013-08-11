@@ -169,6 +169,7 @@ if (t!=null && !t.isWhitespace()) {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getAlreadyEnteredText(JTextComponent comp) {
 
 		isTagName = true;
@@ -277,6 +278,7 @@ if (t!=null && !t.isWhitespace()) {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected List<Completion> getCompletionsImpl(JTextComponent comp) {
 
 		List<Completion> retVal = new ArrayList<Completion>();
@@ -422,6 +424,7 @@ if (t!=null && !t.isWhitespace()) {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean isAutoActivateOkay(JTextComponent tc) {
 
 		boolean okay = super.isAutoActivateOkay(tc);

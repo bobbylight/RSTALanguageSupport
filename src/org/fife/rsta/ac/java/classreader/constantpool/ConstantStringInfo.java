@@ -58,6 +58,7 @@ public class ConstantStringInfo extends ConstantPoolInfo {
 	 *
 	 * @return A string representation of this object.
 	 */
+	@Override
 	public String toString() {
 		return "[ConstantStringInfo: " +
 				"stringIndex=" + getStringIndex() +

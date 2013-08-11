@@ -118,6 +118,7 @@ public class FieldInfo extends MemberInfo {
 	 *
 	 * @return The field descriptor of this field.
 	 */
+	@Override
 	public String getDescriptor() {
 		return cf.getUtf8ValueFromConstantPool(descriptorIndex);
 	}
@@ -126,6 +127,7 @@ public class FieldInfo extends MemberInfo {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getName() {
 		return cf.getUtf8ValueFromConstantPool(nameIndex);
 	}

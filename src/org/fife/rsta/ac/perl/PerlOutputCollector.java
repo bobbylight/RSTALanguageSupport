@@ -53,6 +53,7 @@ class PerlOutputCollector extends OutputCollector {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void handleLineRead(String line) throws IOException {
 
 		Matcher m = ERROR_PATTERN.matcher(line);

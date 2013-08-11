@@ -184,6 +184,7 @@ class MemberTreeNode extends JavaTreeNode {
 	}
 
 
+	@Override
 	public String getText(boolean selected) {
 		// Strip out HTML tags
 		return selected ? Util.stripHtml(text).

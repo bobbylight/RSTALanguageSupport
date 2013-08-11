@@ -301,6 +301,7 @@ public abstract class TypeDeclarations {
 			return canBeInstantiated;
 		}
 		
+		@Override
 		public boolean equals(Object jsObj) {
 			if(jsObj == this)
 				return true;
@@ -314,6 +315,7 @@ public abstract class TypeDeclarations {
 		}
 
 
+		@Override
 		public int hashCode() {
 			return name.hashCode();
 		}

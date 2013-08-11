@@ -52,6 +52,7 @@ public class ConstantMethodrefInfo extends ConstantPoolInfo {
 	 *
 	 * @return A string representation of this object.
 	 */
+	@Override
 	public String toString() {
 		return "[ConstantMethodrefInfo: " +
 				"classIndex=" + getClassIndex() +

@@ -50,6 +50,7 @@ public class JavaTemplateCompletion extends TemplateCompletion
 	}
 
 
+	@Override
 	public Icon getIcon() {
 		return IconFactory.get().getIcon(icon);
 	}

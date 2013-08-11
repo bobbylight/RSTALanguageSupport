@@ -41,6 +41,7 @@ class ExtensionFileFilter extends FileFilter {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean accept(File f) {
 		return f.isDirectory() || f.getName().endsWith(ext);
 	}
@@ -49,6 +50,7 @@ class ExtensionFileFilter extends FileFilter {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getDescription() {
 		return desc + " (*." + ext + ")";
 	}

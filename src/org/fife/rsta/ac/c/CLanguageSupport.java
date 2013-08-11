@@ -43,6 +43,7 @@ public class CLanguageSupport extends AbstractLanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected ListCellRenderer createDefaultCompletionCellRenderer() {
 		return new CCellRenderer();
 	}

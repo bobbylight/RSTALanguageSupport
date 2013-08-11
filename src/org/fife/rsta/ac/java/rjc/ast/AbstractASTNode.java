@@ -85,6 +85,7 @@ abstract class AbstractASTNode implements ASTNode {
 	 *
 	 * @return A string representation of this node.
 	 */
+	@Override
 	public String toString() {
 		return getName();
 	}

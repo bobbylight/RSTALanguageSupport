@@ -117,6 +117,7 @@ public class JavaScriptTreeNode extends SourceTreeNode {
 	 *
 	 * @return The text of this tree node.
 	 */
+	@Override
 	public String toString() {
 		return getText(false);
 	}

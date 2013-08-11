@@ -204,6 +204,7 @@ public class JavaScriptType {
 	}
 
 
+	@Override
 	public boolean equals(Object o) {
 		if (o == this)
 			return true;
@@ -227,6 +228,7 @@ public class JavaScriptType {
 	 * 
 	 * @return The hash code.
 	 */
+	@Override
 	public int hashCode() {
 		return getType().hashCode();
 	}

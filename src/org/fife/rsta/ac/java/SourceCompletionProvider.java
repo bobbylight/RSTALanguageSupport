@@ -497,6 +497,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public List<Completion> getCompletionsAt(JTextComponent tc, Point p) {
 		getCompletionsImpl(tc); // Force loading of completions
 		return super.getCompletionsAt(tc, p);
@@ -506,6 +507,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected List<Completion> getCompletionsImpl(JTextComponent comp) {
 
 		comp.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -637,6 +639,7 @@ public SourceLocation  getSourceLocForClass(String className) {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected boolean isValidChar(char ch) {
 		return Character.isJavaIdentifierPart(ch) || ch=='.';
 	}

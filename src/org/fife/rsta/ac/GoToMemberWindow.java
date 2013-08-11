@@ -146,6 +146,7 @@ public class GoToMemberWindow extends JWindow {
 	}
 
 
+	@Override
 	public void dispose() {
 		listener.uninstall();
 		super.dispose();
@@ -213,6 +214,7 @@ public class GoToMemberWindow extends JWindow {
 		public void keyTyped(KeyEvent e) {
 		}
 
+		@Override
 		public void mouseClicked(MouseEvent e) {
 			if (e.getClickCount()==2) {
 				tree.gotoSelectedElement();

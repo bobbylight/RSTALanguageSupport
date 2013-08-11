@@ -184,6 +184,7 @@ public class Type {
 	 * @return A string representation of this type.
 	 * @see #getName(boolean)
 	 */
+	@Override
 	public String toString() {
 		return getName(true);
 	}

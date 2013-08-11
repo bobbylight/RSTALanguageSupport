@@ -78,6 +78,7 @@ public class GroovySourceCompletionProvider extends DefaultCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	protected List<Completion> getCompletionsImpl(JTextComponent comp) {
 
@@ -116,6 +117,7 @@ public class GroovySourceCompletionProvider extends DefaultCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected boolean isValidChar(char ch) {
 		return Character.isJavaIdentifierPart(ch) || ch=='.';
 	}

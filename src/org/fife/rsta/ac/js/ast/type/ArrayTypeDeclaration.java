@@ -39,6 +39,7 @@ public class ArrayTypeDeclaration extends TypeDeclaration {
 	}
 
 
+	@Override
 	public boolean equals(Object obj) {
 		boolean equals = super.equals(obj);
 

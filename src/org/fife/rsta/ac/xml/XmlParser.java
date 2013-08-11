@@ -238,16 +238,19 @@ public class XmlParser extends AbstractParser {
 		}
 
 
+		@Override
 		public void endElement(String uri, String localName, String qName) {
 			curElem = (XmlTreeNode)curElem.getParent();
 		}
 
 
+		@Override
 		public void error(SAXParseException e) throws SAXException {
 			doError(e, ParserNotice.ERROR);
 		}
 
 
+		@Override
 		public void fatalError(SAXParseException e) throws SAXException {
 			doError(e, ParserNotice.ERROR);
 		}
@@ -288,11 +291,13 @@ public class XmlParser extends AbstractParser {
 		}
 
 
+		@Override
 		public void setDocumentLocator(Locator l) {
 			locator = l;
 		}
 
 
+		@Override
 		public void startElement(String uri, String localName, String qName,
 								Attributes attributes) {
 
@@ -327,6 +332,7 @@ public class XmlParser extends AbstractParser {
 		}
 
 
+		@Override
 		public void warning(SAXParseException e) throws SAXException {
 			doError(e, ParserNotice.WARNING);
 		}

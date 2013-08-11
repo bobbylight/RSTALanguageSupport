@@ -254,6 +254,7 @@ public class JavaOutlineTree extends AbstractSourceTree {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void expandInitialNodes() {
 
 		// First, collapse all rows.
@@ -293,6 +294,7 @@ public class JavaOutlineTree extends AbstractSourceTree {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean gotoSelectedElement() {
 		TreePath path = getLeadSelectionPath();//e.getNewLeadSelectionPath();
 		if (path != null) {
@@ -306,6 +308,7 @@ public class JavaOutlineTree extends AbstractSourceTree {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void listenTo(RSyntaxTextArea textArea) {
 
 		if (this.textArea!=null) {
@@ -331,6 +334,7 @@ public class JavaOutlineTree extends AbstractSourceTree {
 	/**
 	 *{@inheritDoc}
 	 */
+	@Override
 	public void uninstall() {
 
 		if (parser!=null) {
@@ -351,6 +355,7 @@ public class JavaOutlineTree extends AbstractSourceTree {
 	/**
 	 * Overridden to also update the UI of the child cell renderer.
 	 */
+	@Override
 	public void updateUI() {
 		super.updateUI();
 		// DefaultTreeCellRenderer caches colors, so we can't just call

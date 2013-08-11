@@ -39,6 +39,7 @@ public class ShellCompletionProvider extends CCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void addShorthandCompletions(DefaultCompletionProvider codeCP) {
 		// Add nothing for now.
 	}
@@ -47,6 +48,7 @@ public class ShellCompletionProvider extends CCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected CompletionProvider createStringCompletionProvider() {
 		DefaultCompletionProvider cp = new DefaultCompletionProvider();
 		return cp;
@@ -56,6 +58,7 @@ public class ShellCompletionProvider extends CCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public char getParameterListEnd() {
 		return 0;
 	}
@@ -64,6 +67,7 @@ public class ShellCompletionProvider extends CCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public char getParameterListStart() {
 		return 0;
 	}
@@ -86,6 +90,7 @@ public class ShellCompletionProvider extends CCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected String getXmlResource() {
 		return "data/sh.xml";
 	}

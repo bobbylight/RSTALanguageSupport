@@ -15,11 +15,13 @@ public class JavaScriptFunctionTypeDeclaration extends
 		super(name, offset, provider, block);
 	}
 	
+	@Override
 	public void setTypeDeclaration(AstNode typeNode) {
 		this.typeNode = typeNode;
 	}
 	
 	
+	@Override
 	public TypeDeclaration getTypeDeclaration() {
 		return provider.getJavaScriptEngine().getJavaScriptResolver(provider).resolveNode(typeNode);
 	}

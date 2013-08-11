@@ -101,6 +101,7 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 	}
 
 
+	@Override
 	public boolean equals(Object obj) {
 		return (obj instanceof JSCompletion)
 				&& ((JSCompletion) obj).getLookupName().equals(
@@ -108,6 +109,7 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 	}
 
 
+	@Override
 	public String getAlreadyEntered(JTextComponent comp) {
 		String temp = getProvider().getAlreadyEnteredText(comp);
 		int lastDot = JavaScriptHelper
@@ -145,6 +147,7 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 	}
 
 
+	@Override
 	public String getDefinitionString() {
 		return getSignature();
 	}
@@ -194,6 +197,7 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 	}
 
 
+	@Override
 	public String getSummary() {
 		String summary = getMethodSummary(); // Could be just the method name
 
@@ -206,6 +210,7 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 	}
 
 
+	@Override
 	public int hashCode() {
 		return getCompareString().hashCode();
 	}
@@ -214,11 +219,13 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String toString() {
 		return getSignature();
 	}
 
 
+	@Override
 	public String getType() {
 		String value = getType(true);
 		return ((SourceCompletionProvider) getProvider()).getTypesFactory().convertJavaScriptType(value, false);
@@ -231,6 +238,7 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 	}
 
 
+	@Override
 	public Icon getIcon() {
 		return methodData.isStatic() ? IconFactory
 				.getIcon(IconFactory.PUBLIC_STATIC_FUNCTION_ICON) : IconFactory
@@ -238,6 +246,7 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 	}
 
 
+	@Override
 	public int getRelevance() {
 		return DEFAULT_FUNCTION_RELEVANCE;
 	}
@@ -270,6 +279,7 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 		}
 
 
+		@Override
 		public String getType() {
 			return showParameterType ? ((SourceCompletionProvider) provider).getTypesFactory()
 					.convertJavaScriptType(super.getType(), false) : null;

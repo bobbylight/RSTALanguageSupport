@@ -54,6 +54,7 @@ class ConstantInterfaceMethodrefInfo extends ConstantPoolInfo {
 	 *
 	 * @return A string representation of this object.
 	 */
+	@Override
 	public String toString() {
 		return "[ConstantInterfaceMethodrefInfo: " +
 		"classIndex=" + getClassIndex() +

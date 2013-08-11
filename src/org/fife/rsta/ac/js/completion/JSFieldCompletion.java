@@ -36,6 +36,7 @@ public class JSFieldCompletion extends VariableCompletion implements
 		}
 	}
 
+	@Override
 	public String getSummary() {
 
 		String summary = field != null ? field.getDocComment() : getName();
@@ -50,6 +51,7 @@ public class JSFieldCompletion extends VariableCompletion implements
 	}
 
 
+	@Override
 	public Icon getIcon() {
 		return fieldData.isStatic() ? IconFactory.getIcon(IconFactory.STATIC_VAR_ICON) : 
 			fieldData.isPublic() ? IconFactory.getIcon(IconFactory.GLOBAL_VARIABLE_ICON) : IconFactory.getIcon(IconFactory.DEFAULT_VARIABLE_ICON);
@@ -61,6 +63,7 @@ public class JSFieldCompletion extends VariableCompletion implements
 	}
 
 
+	@Override
 	public String getAlreadyEntered(JTextComponent comp) {
 		String temp = getProvider().getAlreadyEnteredText(comp);
 		int lastDot = JavaScriptHelper
@@ -77,6 +80,7 @@ public class JSFieldCompletion extends VariableCompletion implements
 	}
 
 
+	@Override
 	public String getType() {
 		return ((SourceCompletionProvider) getProvider()).getTypesFactory().convertJavaScriptType(fieldData.getType(true),
 				false);
@@ -88,6 +92,7 @@ public class JSFieldCompletion extends VariableCompletion implements
 				qualified);*/
 	}
 	
+	@Override
 	public boolean equals(Object obj) {
 		if(obj == this) {
 			return true;
@@ -115,6 +120,7 @@ public class JSFieldCompletion extends VariableCompletion implements
 		return super.compareTo(o);
 	}
 
+	@Override
 	public int hashCode() {
 		return getLookupName().hashCode();
 	}

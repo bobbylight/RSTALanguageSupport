@@ -40,6 +40,7 @@ public class JavaParamListCellRenderer extends JavaCellRenderer {
 	 * it doesn't use the cells to dictate the preferred size of the list, due
 	 * to the large number of completions it shows at a time.
 	 */
+	@Override
 	public Dimension getPreferredSize() {
 		Dimension d = super.getPreferredSize();
 		d.width += 32; // Looks better when less scrunched.
@@ -56,6 +57,7 @@ public class JavaParamListCellRenderer extends JavaCellRenderer {
 	 * @param selected Whether the item is selected.
 	 * @param hasFocus Whether the item has focus.
 	 */
+	@Override
 	public Component getListCellRendererComponent(JList list, Object value,
 						int index, boolean selected, boolean hasFocus) {
 		super.getListCellRendererComponent(list, value, index, selected,

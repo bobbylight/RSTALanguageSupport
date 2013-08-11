@@ -56,6 +56,7 @@ public class ConstantLongInfo extends ConstantPoolInfo {
 	 *
 	 * @return A string representation of this object.
 	 */
+	@Override
 	public String toString() {
 		return "[ConstantLongInfo: " +
 				"value=" + getLongValue() +

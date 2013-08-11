@@ -35,6 +35,7 @@ class LocalVariableCompletion extends AbstractJavaSourceCompletion {
 	}
 
 
+	@Override
 	public boolean equals(Object obj) {
 		return (obj instanceof LocalVariableCompletion) &&
 			((LocalVariableCompletion)obj).getReplacementText().
@@ -42,16 +43,19 @@ class LocalVariableCompletion extends AbstractJavaSourceCompletion {
 	}
 
 
+	@Override
 	public Icon getIcon() {
 		return IconFactory.get().getIcon(IconFactory.LOCAL_VARIABLE_ICON);
 	}
 
 
+	@Override
 	public String getToolTipText() {
 		return localVar.getType() + " " + localVar.getName();
 	}
 
 
+	@Override
 	public int hashCode() {
 		return getReplacementText().hashCode(); // Match equals()
 	}

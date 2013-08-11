@@ -132,6 +132,7 @@ public class ClasspathLibraryInfo extends LibraryInfo {
 	}
 
 
+	@Override
 	public ClassFile createClassFile(String entryName) throws IOException {
 		// NOTE: entryName always ends in ".class", so our map must account
 		// for this.
@@ -168,6 +169,7 @@ public class ClasspathLibraryInfo extends LibraryInfo {
 	}
 
 
+	@Override
 	public TreeMap createPackageMap() throws IOException {
 		TreeMap packageMap = new TreeMap();
 		for (Iterator i=classNameToClassFile.keySet().iterator(); i.hasNext(); ) {
@@ -199,16 +201,19 @@ public class ClasspathLibraryInfo extends LibraryInfo {
 	 *
 	 * @return <code>0</code> always.
 	 */
+	@Override
 	public long getLastModified() {
 		return 0;
 	}
 
 
+	@Override
 	public String getLocationAsString() {
 		return null;
 	}
 
 
+	@Override
 	public int hashCode() {
 		return classNameToClassFile.hashCode();
 	}

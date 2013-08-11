@@ -63,6 +63,7 @@ public class SourceFile extends AttributeInfo {
 	 *
 	 * @return A string representation of this attribute.
 	 */
+	@Override
 	public String toString() {
 		return "[SourceFile: " +
 				"file=" + getSourceFileName() +

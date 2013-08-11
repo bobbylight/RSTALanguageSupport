@@ -61,6 +61,7 @@ class CCellRenderer extends CompletionCellRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void prepareForOtherCompletion(JList list,
 			Completion c, int index, boolean selected, boolean hasFocus) {
 		super.prepareForOtherCompletion(list, c, index, selected, hasFocus);
@@ -71,6 +72,7 @@ class CCellRenderer extends CompletionCellRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void prepareForVariableCompletion(JList list,
 			VariableCompletion vc, int index, boolean selected,
 			boolean hasFocus) {
@@ -83,6 +85,7 @@ class CCellRenderer extends CompletionCellRenderer {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void prepareForFunctionCompletion(JList list,
 			FunctionCompletion fc, int index, boolean selected,
 			boolean hasFocus) {

@@ -67,6 +67,7 @@ public abstract class AbstractJavaSourceCompletion extends BasicCompletion
 	}
 
 
+	@Override
 	public String getAlreadyEntered(JTextComponent comp) {
 		String temp = getProvider().getAlreadyEnteredText(comp);
 		int lastDot = temp.lastIndexOf('.');

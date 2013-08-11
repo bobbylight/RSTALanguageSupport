@@ -80,6 +80,7 @@ public class XmlTreeNode extends SourceTreeNode {
 	 *
 	 * @return A string representation of this tree node.
 	 */
+	@Override
 	public String toString() {
 		String text = getElement();
 		if (mainAttr!=null) {

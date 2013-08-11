@@ -51,6 +51,7 @@ public class ConstantNameAndTypeInfo extends ConstantPoolInfo {
 	 *
 	 * @return A string representation of this object.
 	 */
+	@Override
 	public String toString() {
 		return "[ConstantNameAndTypeInfo: " +
 				"descriptorIndex=" + getDescriptorIndex() +

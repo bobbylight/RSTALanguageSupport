@@ -52,6 +52,7 @@ public class FormalParameter extends LocalVariable {
 	 *
 	 * @return This parameter, as a string.
 	 */
+	@Override
 	public String toString() {
 		return getType() + " " + getName();
 	}

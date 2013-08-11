@@ -15,11 +15,13 @@ public class JSR223JavaScriptEngine extends JavaScriptEngine {
 	
 public static final String JSR223_ENGINE = "JSR223";
 	
+	@Override
 	public JavaScriptResolver getJavaScriptResolver(SourceCompletionProvider provider) {
 		return new JSR223JavaScriptCompletionResolver(provider);
 	}
 
 
+	@Override
 	public JavaScriptTypesFactory getJavaScriptTypesFactory(SourceCompletionProvider provider) {
 		if(jsFactory == null)
 			jsFactory = new JSR223JavaScriptTypesFactory(provider.getTypesFactory());
@@ -27,6 +29,7 @@ public static final String JSR223_ENGINE = "JSR223";
 	}
 
 
+	@Override
 	public JavaScriptParser getParser(SourceCompletionProvider provider, int dot, TypeDeclarationOptions options) {
 		return new JavaScriptAstParser(provider, dot, options);
 	}

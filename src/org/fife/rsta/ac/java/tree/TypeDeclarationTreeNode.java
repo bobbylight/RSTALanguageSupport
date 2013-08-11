@@ -119,6 +119,7 @@ class TypeDeclarationTreeNode extends JavaTreeNode {
 	}
 
 
+	@Override
 	public String getText(boolean selected) {
 		TypeDeclaration typeDec = (TypeDeclaration)getUserObject();
 		//System.out.println("... " + typeDec);

@@ -53,6 +53,7 @@ public class JSVariableCompletion extends VariableCompletion implements
 	/**
 	 * @return the type name not qualified
 	 */
+	@Override
 	public String getType() {
 		return getType(false);
 	}
@@ -68,6 +69,7 @@ public class JSVariableCompletion extends VariableCompletion implements
 	}
 
 
+	@Override
 	public String getAlreadyEntered(JTextComponent comp) {
 		String temp = getProvider().getAlreadyEnteredText(comp);
 		int lastDot = JavaScriptHelper
@@ -79,6 +81,7 @@ public class JSVariableCompletion extends VariableCompletion implements
 	}
 
 
+	@Override
 	public Icon getIcon() {
 		return IconFactory
 				.getIcon(localVariable ? IconFactory.LOCAL_VARIABLE_ICON
@@ -86,11 +89,13 @@ public class JSVariableCompletion extends VariableCompletion implements
 	}
 
 
+	@Override
 	public int getRelevance() {
 		return localVariable ? LOCAL_VARIABLE_RELEVANCE : GLOBAL_VARIABLE_RELEVANCE;
 	}
 
 
+	@Override
 	public boolean equals(Object obj) {
 		if (obj == this)
 			return true;
@@ -112,10 +117,12 @@ public class JSVariableCompletion extends VariableCompletion implements
 	}
 
 
+	@Override
 	public int hashCode() {
 		return getName().hashCode();
 	}
 	
+	@Override
 	public String getSummary() {
 
         SourceCompletionProvider scp = (SourceCompletionProvider)getProvider();

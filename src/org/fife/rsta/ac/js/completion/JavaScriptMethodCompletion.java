@@ -53,12 +53,14 @@ public class JavaScriptMethodCompletion extends FunctionCompletion implements
 	}
 
 
+	@Override
 	public Icon getIcon() {
 		return IconFactory.getIcon(systemFunction ? IconFactory.FUNCTION_ICON
 				: IconFactory.DEFAULT_FUNCTION_ICON);
 	}
 
 
+	@Override
 	public int getRelevance() {
 		return systemFunction ? GLOBAL_FUNCTION_RELEVANCE : DEFAULT_FUNCTION_RELEVANCE;
 	}
@@ -74,6 +76,7 @@ public class JavaScriptMethodCompletion extends FunctionCompletion implements
 	}
 
 
+	@Override
 	public String getSummary() {
 		String summary = getMethodSummary(); // Could be just the method name
 
@@ -97,6 +100,7 @@ public class JavaScriptMethodCompletion extends FunctionCompletion implements
 	/**
 	 * Overridden since <code>equals()</code> is overridden.
 	 */
+	@Override
 	public int hashCode() {
 		return getCompareString().hashCode();
 	}
@@ -105,6 +109,7 @@ public class JavaScriptMethodCompletion extends FunctionCompletion implements
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String toString() {
 		return getSignature();
 	}
@@ -119,6 +124,7 @@ public class JavaScriptMethodCompletion extends FunctionCompletion implements
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int compareTo(Completion other) {
 		int rc = -1;
 		if (other==this) {
@@ -144,6 +150,7 @@ public class JavaScriptMethodCompletion extends FunctionCompletion implements
 	}
 
 
+	@Override
 	public boolean equals(Object obj) {
 		if(obj == this) {
 			return true;
@@ -190,6 +197,7 @@ public class JavaScriptMethodCompletion extends FunctionCompletion implements
 	}
 
 
+	@Override
 	public String getDefinitionString() {
 		return getSignature();
 	}

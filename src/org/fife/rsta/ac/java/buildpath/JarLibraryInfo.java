@@ -73,6 +73,7 @@ public class JarLibraryInfo extends LibraryInfo {
 	}
 
 
+	@Override
 	public ClassFile createClassFile(String entryName) throws IOException {
 		JarFile jar = new JarFile(jarFile);
 		try {
@@ -92,6 +93,7 @@ public class JarLibraryInfo extends LibraryInfo {
 	}
 
 
+	@Override
 	public TreeMap createPackageMap() throws IOException {
 
 		TreeMap packageMap = new TreeMap();
@@ -129,11 +131,13 @@ public class JarLibraryInfo extends LibraryInfo {
 	}
 
 
+	@Override
 	public long getLastModified() {
 		return jarFile.lastModified();
 	}
 
 
+	@Override
 	public String getLocationAsString() {
 		return jarFile.getAbsolutePath();
 	}
@@ -149,6 +153,7 @@ public class JarLibraryInfo extends LibraryInfo {
 	}
 
 
+	@Override
 	public int hashCode() {
 		return jarFile.hashCode();
 	}
@@ -174,6 +179,7 @@ public class JarLibraryInfo extends LibraryInfo {
 	 *
 	 * @return A string representation of this object.
 	 */
+	@Override
 	public String toString() {
 		return "[JarLibraryInfo: " +
 			"jar=" + jarFile.getAbsolutePath() +

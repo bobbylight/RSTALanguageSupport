@@ -6,6 +6,7 @@ import org.fife.rsta.ac.js.ast.type.ecma.TypeDeclarations;
 
 public class TypeDeclarationsECMAv3 extends TypeDeclarations {
 
+	@Override
 	protected void loadTypes() {
 		addTypeDeclaration(ECMA_ARRAY, new TypeDeclaration(
 				"org.fife.rsta.ac.js.ecma.api.ecma3", "JSArray", "Array", false, false));

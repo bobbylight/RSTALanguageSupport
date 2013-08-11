@@ -112,6 +112,7 @@ class JavaTreeNode extends SourceTreeNode {
 	 *
 	 * @return A string representation of this tree node.
 	 */
+	@Override
 	public String toString() {
 		return getText(false);
 	}

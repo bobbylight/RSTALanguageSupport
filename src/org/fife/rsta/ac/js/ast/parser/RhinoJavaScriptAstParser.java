@@ -44,6 +44,7 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 	}
 	
 	
+	@Override
 	public CodeBlock convertAstNodeToCodeBlock(AstRoot root, Set set,
 			String entered) {
 		try {
@@ -70,6 +71,7 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 	 * If found, then process them and extract the imports and add them to RhinoJavaScriptTypesFactory then return
 	 * otherwise call super.iterateNode() 
 	 */
+	@Override
 	protected void iterateNode(AstNode child, Set set, String entered,
 			CodeBlock block, int offset) {
 		

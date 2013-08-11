@@ -97,6 +97,7 @@ public class ParserNotice {
 	 *
 	 * @return This parser notice as a string.
 	 */
+	@Override
 	public String toString() {
 		return "(" + getLine() + ", " + getColumn() + ": " + getMessage();
 	}

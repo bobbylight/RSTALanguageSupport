@@ -396,6 +396,7 @@ public class Signature extends AttributeInfo {
 	}
 
 
+	@Override
 	public String toString() {
 		return "[Signature: signature=" + getSignature() + "]";
 	}

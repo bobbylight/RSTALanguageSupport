@@ -123,6 +123,7 @@ public class PhpCompletionProvider extends HtmlCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getAlreadyEnteredText(JTextComponent comp) {
 
 		phpCompletion = false;
@@ -143,6 +144,7 @@ public class PhpCompletionProvider extends HtmlCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected List<Completion> getCompletionsImpl(JTextComponent comp) {
 
 		List<Completion> list = null;
@@ -244,6 +246,7 @@ public class PhpCompletionProvider extends HtmlCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean isAutoActivateOkay(JTextComponent tc) {
 		return inPhpBlock(tc) ? false : super.isAutoActivateOkay(tc);
 	}

@@ -153,6 +153,7 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 	}
 
 
+	@Override
 	public boolean equals(Object obj) {
 		return (obj instanceof MethodCompletion) &&
 			//((MethodCompletion)obj).getSignature().equals(getSignature());
@@ -160,6 +161,7 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 	}
 
 
+	@Override
 	public String getAlreadyEntered(JTextComponent comp) {
 		String temp = getProvider().getAlreadyEnteredText(comp);
 		int lastDot = temp.lastIndexOf('.');
@@ -214,6 +216,7 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 	}
 
 
+	@Override
 	public Icon getIcon() {
 		return IconFactory.get().getIcon(data);
 	}
@@ -224,6 +227,7 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 	}
 
 
+	@Override
 	public String getSummary() {
 
 		String summary = data.getSummary(); // Could be just the method name
@@ -237,6 +241,7 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 	}
 
 
+	@Override
 	public int hashCode() {
 		return getCompareString().hashCode();
 	}
@@ -318,6 +323,7 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String toString() {
 		return getSignature();
 	}

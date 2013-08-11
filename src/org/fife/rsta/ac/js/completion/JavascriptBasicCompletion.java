@@ -32,11 +32,13 @@ public class JavascriptBasicCompletion extends BasicCompletion implements
 	}
 
 
+	@Override
 	public Icon getIcon() {
 		return IconFactory.getIcon(IconFactory.getEmptyIcon());
 	}
 
 
+	@Override
 	public int getRelevance() {
 		return BASIC_COMPLETION_RELEVANCE;
 	}

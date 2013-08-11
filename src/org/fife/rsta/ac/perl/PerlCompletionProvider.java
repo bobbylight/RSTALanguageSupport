@@ -55,6 +55,7 @@ public class PerlCompletionProvider extends CCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected void addShorthandCompletions(DefaultCompletionProvider codeCP) {
 		// Add nothing for now.
 	}
@@ -78,6 +79,7 @@ public class PerlCompletionProvider extends CCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected CompletionProvider createCodeCompletionProvider() {
 		DefaultCompletionProvider cp = new PerlCodeCompletionProvider(this);
 		loadCodeCompletionsFromXml(cp);
@@ -90,6 +92,7 @@ public class PerlCompletionProvider extends CCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected CompletionProvider createStringCompletionProvider() {
 		DefaultCompletionProvider cp = new DefaultCompletionProvider();
 		return cp;
@@ -99,6 +102,7 @@ public class PerlCompletionProvider extends CCompletionProvider {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected List<Completion> getCompletionsImpl(JTextComponent comp) {
 
 		List<Completion> completions = super.getCompletionsImpl(comp);
@@ -122,6 +126,7 @@ public class PerlCompletionProvider extends CCompletionProvider {
 	 *         none.
 	 * @see #getUseParensWithFunctions()
 	 */
+	@Override
 	public char getParameterListEnd() {
 		return getUseParensWithFunctions() ? ')' : 0;
 	}
@@ -135,6 +140,7 @@ public class PerlCompletionProvider extends CCompletionProvider {
 	 *         none.
 	 * @see #getUseParensWithFunctions()
 	 */
+	@Override
 	public char getParameterListStart() {
 		return getUseParensWithFunctions() ? '(' : ' ';
 	}
@@ -212,6 +218,7 @@ private CaseInsensitiveComparator comparator = new CaseInsensitiveComparator();
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	protected String getXmlResource() {
 		return "data/perl5.xml";
 	}

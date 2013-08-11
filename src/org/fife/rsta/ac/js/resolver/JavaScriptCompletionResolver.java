@@ -62,6 +62,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	 * 
 	 * @param text to compile and resolve  
 	 */
+	@Override
 	public JavaScriptType compileText(String text) throws IOException {
 		CompilerEnvirons env = JavaScriptParser.createCompilerEnvironment(new JavaScriptParser.JSErrorReporter(), provider.getLanguageSupport());
 		
@@ -82,6 +83,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	 * @param node AstNode to resolve
 	 * @return TypeDeclaration for node or null if not found.
 	 */
+	@Override
 	public TypeDeclaration resolveParamNode(String text) throws IOException {
 		
 		if(text != null) {
@@ -106,6 +108,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	 * @param node AstNode to resolve
 	 * @return TypeDeclaration for node or null if not found.
 	 */
+	@Override
 	public TypeDeclaration resolveNode(AstNode node) {
 		if(node == null) return provider.getTypesFactory().getDefaultTypeDeclaration();
 		CompilerNodeVisitor visitor = new CompilerNodeVisitor(true);
@@ -121,6 +124,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	 * @param node AstNode to resolve
 	 * @return TypeDeclaration for node or null if not found.
 	 */
+	@Override
 	protected TypeDeclaration resolveNativeType(AstNode node)
 	{
 		return JavaScriptHelper.tokenToNativeTypeDeclaration(node, provider);
@@ -384,6 +388,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	
 
 
+	@Override
 	public String getLookupText(JSMethodData method, String name) {
 		StringBuilder sb = new StringBuilder(name);
 		sb.append('(');
@@ -399,6 +404,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	}
 
 
+	@Override
 	public String getFunctionNameLookup(FunctionCall call,
 			SourceCompletionProvider provider) {
 		if (call != null) {

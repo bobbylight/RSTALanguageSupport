@@ -13,6 +13,7 @@ public class JSConstructorCompletion extends JSFunctionCompletion {
 		super(provider, method);
 	}
 
+	@Override
 	public Icon getIcon() {
 		return IconFactory.getIcon(IconFactory.FUNCTION_ICON);
 	}

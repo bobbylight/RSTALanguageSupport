@@ -32,11 +32,13 @@ public class JavaScriptShorthandCompletion extends ShorthandCompletion implement
 	}
 
 
+	@Override
 	public Icon getIcon() {
 		return IconFactory.getIcon(IconFactory.TEMPLATE_ICON);
 	}
 
 
+	@Override
 	public int getRelevance() {
 		return TEMPLATE_RELEVANCE;
 	}

@@ -404,6 +404,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 
 
 		
+		@Override
 		protected String getReplacementText(Completion c, Document doc,
 				int start, int len) {
 			
@@ -426,6 +427,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 
 
 
+		@Override
 		protected int refreshPopupWindow() {
 			// Force the parser to re-parse
 			JavaScriptParser parser = getParser(textArea);

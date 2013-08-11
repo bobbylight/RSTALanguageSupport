@@ -63,6 +63,7 @@ class TokenImpl implements Token {
 	}
 
 
+	@Override
 	public boolean equals(Object obj) {
 		if (obj==this) {
 			return true;
@@ -107,6 +108,7 @@ class TokenImpl implements Token {
 	}
 
 
+	@Override
 	public int hashCode() {
 		return lexeme.hashCode();
 	}
@@ -149,6 +151,7 @@ class TokenImpl implements Token {
 	}
 
 
+	@Override
 	public String toString() {
 		return "[TokenImpl: " +
 			"type=" + type +

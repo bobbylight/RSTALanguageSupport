@@ -23,6 +23,7 @@ public class JavaScriptInScriptFunctionCompletion extends FunctionCompletion
 	}
 
 
+	@Override
 	public String getSummary() {
 		String summary = super.getShortDescription(); // Could be just the
 														// method name
@@ -36,6 +37,7 @@ public class JavaScriptInScriptFunctionCompletion extends FunctionCompletion
 	}
 
 
+	@Override
 	public Icon getIcon() {
 		return IconFactory.getIcon(IconFactory.DEFAULT_FUNCTION_ICON);
 	}
@@ -56,6 +58,7 @@ public class JavaScriptInScriptFunctionCompletion extends FunctionCompletion
 	}
 
 
+	@Override
 	public String getType() {
 		String value = getType(true);
 		return ((SourceCompletionProvider) getProvider()).getTypesFactory().convertJavaScriptType(value, false);
@@ -74,6 +77,7 @@ public class JavaScriptInScriptFunctionCompletion extends FunctionCompletion
 	}
 
 
+	@Override
 	public boolean equals(Object obj) {
 		if(obj == this) {
 			return true;
@@ -87,10 +91,12 @@ public class JavaScriptInScriptFunctionCompletion extends FunctionCompletion
 	}
 
 
+	@Override
 	public int hashCode() {
 		return getLookupName().hashCode();
 	}
 	
+	@Override
 	public String toString() {
 		return getLookupName();
 	}
