@@ -233,10 +233,13 @@ the included Rhino.LICENSE.txt for details.
 If you use this library in your own projects, please let me know!  I like to
 know that my work is useful for others.
 
-Bugs and Feature requests can be sent directly to me, or posted on the
-RSyntaxTextArea forums:
+Bugs and Feature requests can be sent directly to me, posted on GitHub:
 
-http://forum.fifesoft.com
+   https://github.com/bobbylight/RSTALanguageSupport
+
+or posted on the RSyntaxTextArea forums:
+
+   http://forum.fifesoft.com
 
 
 ----------------------------------------
