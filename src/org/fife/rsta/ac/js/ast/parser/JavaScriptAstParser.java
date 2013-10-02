@@ -250,7 +250,9 @@ public class JavaScriptAstParser extends JavaScriptParser {
 			dec.setTypeDeclaration(target);
 		}
 		else {
-			dec.setTypeDeclaration(provider.getTypesFactory().getDefaultTypeDeclaration());
+			if(dec != null) {
+				dec.setTypeDeclaration(provider.getTypesFactory().getDefaultTypeDeclaration());
+			}
 		}
 		if (dec != null) {
 			if (canAddVariable(block)) {
