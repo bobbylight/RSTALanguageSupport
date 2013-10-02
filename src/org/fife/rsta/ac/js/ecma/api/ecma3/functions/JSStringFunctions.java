@@ -172,7 +172,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
 
 
     /**
-     * <b>function substring(from,to)</b> return a substring of a string.
+     * <b>function substring(from, to)</b> return a substring of a string.
      * 
      * @memberOf String
      * @param from The index where to start the extraction. First character is at index 0
@@ -182,7 +182,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSString substring(JSNumber from, JSNumber too);
+    public JSString substring(JSNumber from, JSNumber to);
 
     /**
      * <b>function toLowerCase()</b> Converts a string to lower case.
