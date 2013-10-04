@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -41,6 +40,8 @@ import org.fife.rsta.ac.js.ast.parser.JavaScriptParser;
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
 import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 import org.fife.rsta.ac.js.ast.type.ecma.TypeDeclarations;
+import org.fife.rsta.ac.js.completion.JSCompletion;
+import org.fife.rsta.ac.js.completion.JSCompletionUI;
 import org.fife.rsta.ac.js.completion.JSVariableCompletion;
 import org.fife.rsta.ac.js.engine.JavaScriptEngine;
 import org.fife.rsta.ac.js.engine.JavaScriptEngineFactory;
@@ -48,6 +49,7 @@ import org.fife.rsta.ac.js.resolver.JavaScriptResolver;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
 import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.AstRoot;
+
 
 /**
  * Completion provider for JavaScript source code (not comments or strings).
@@ -204,7 +206,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 				return completions; // empty
 			}
 
-			Set set = new TreeSet();
+			Set<JSCompletionUI> set = new TreeSet<JSCompletionUI>();
 
 			// Cut down the list to just those matching what we've typed.
 			// Note: getAlreadyEnteredText() never returns null
@@ -275,7 +277,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 	}
 	
-	private List handleNewFilter(Set set, String text)
+	private List handleNewFilter(Set<JSCompletionUI> set, String text)
 	{
 		set.clear(); //reset as just interested in the
 		//just load the constructors
@@ -283,7 +285,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 		return resolveCompletions(text, set);
 	}
 	
-	private List resolveCompletions(String text, Set set)
+	private List resolveCompletions(String text, Set<JSCompletionUI> set)
 	{
 		completions.addAll(set);
 
@@ -319,31 +321,25 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	 * @param set completion set
 	 * @param text
 	 */
-	private void loadECMAClasses(Set set, String text)
+	private void loadECMAClasses(Set<JSCompletionUI> set, String text)
 	{
 		//all the constructors
-		List list = engine.getJavaScriptTypesFactory(this).getECMAObjectTypes(this);
-		for(Iterator i = list.iterator(); i.hasNext();)
-		{
-			JavaScriptType type = (JavaScriptType) i.next();
+		List<JavaScriptType> list = engine.getJavaScriptTypesFactory(this).
+				getECMAObjectTypes(this);
+
+		for (JavaScriptType type : list) {
 			//iterate through the constructors
-			if(text.length() == 0)
-			{
+			if(text.length() == 0) {
 				if(type.getClassTypeCompletion() != null)
 					set.add(type.getClassTypeCompletion());
 			}
-			else
-			{
-				if(type.getType().getJSName().startsWith(text))
-				{
-					for(Iterator ii = type.getConstructorCompletions().values().iterator(); ii.hasNext();)
-					{
-						set.add(ii.next());
+			else {
+				if(type.getType().getJSName().startsWith(text)) {
+					for (JSCompletion jsc : type.getConstructorCompletions().values()) {
+						set.add(jsc);
 					}
 				}
-				
 			}
-			
 		}
 	}
 	
@@ -497,7 +493,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	 * @param text
 	 * @param findMatch
 	 */
-	protected void recursivelyAddLocalVars(Set completions, CodeBlock block,
+	protected void recursivelyAddLocalVars(Set<JSCompletionUI> completions, CodeBlock block,
 			int dot, String text, boolean findMatch, boolean isPreprocessing) {
 
 		if (!block.contains(dot)) {

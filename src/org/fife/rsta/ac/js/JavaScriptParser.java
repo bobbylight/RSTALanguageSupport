@@ -13,9 +13,7 @@ package org.fife.rsta.ac.js;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
-
 import javax.swing.text.Element;
 
 import org.fife.io.DocumentReader;
@@ -178,10 +176,9 @@ public class JavaScriptParser extends AbstractParser {
 		r.close();
 
 		// Get any parser errors.
-		List errors = errorHandler.getErrors();
+		List<ParseProblem> errors = errorHandler.getErrors();
 		if (errors != null && errors.size() > 0) {
-			for (Iterator i = errors.iterator(); i.hasNext();) {
-				ParseProblem problem = (ParseProblem) i.next();
+			for (ParseProblem problem : errors) {
 				int offs = problem.getFileOffset();
 				int len = problem.getLength();
 				int line = root.getElementIndex(offs);

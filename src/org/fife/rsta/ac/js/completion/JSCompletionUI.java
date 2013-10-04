@@ -1,7 +1,9 @@
 package org.fife.rsta.ac.js.completion;
 
+import org.fife.ui.autocomplete.Completion;
 
-public interface JSCompletionUI {
+
+public interface JSCompletionUI extends Completion {
 
 	static final int LOCAL_VARIABLE_RELEVANCE = 9;
 	static final int GLOBAL_VARIABLE_RELEVANCE = 8;

@@ -56,7 +56,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	 * Maps <code>JavaScriptParser</code>s to <code>Info</code> instances
 	 * about them.
 	 */
-	private Map parserToInfoMap;
+	private Map<JavaScriptParser, Info> parserToInfoMap;
 	private JarManager jarManager;
 	private boolean xmlAvailable;
 	private boolean client;
@@ -67,7 +67,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 
 	
 	public JavaScriptLanguageSupport() {
-		parserToInfoMap = new HashMap();
+		parserToInfoMap = new HashMap<JavaScriptParser, Info>();
 		jarManager = createJarManager();
 		provider = createJavaScriptCompletionProvider();
 		setECMAVersion(null, jarManager); //load default ecma 
@@ -297,7 +297,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 		uninstallImpl(textArea);
 
 		JavaScriptParser parser = getParser(textArea);
-		Info info = (Info) parserToInfoMap.remove(parser);
+		Info info = parserToInfoMap.remove(parser);
 		if (info != null) { // Should always be true
 			parser.removePropertyChangeListener(JavaScriptParser.PROPERTY_AST,
 					info);

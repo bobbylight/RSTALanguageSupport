@@ -44,7 +44,7 @@ public class TypeDeclarationFactory {
 		{
 			ecmaVersion = ecmaVersion == null ? getDefaultECMAVersion() : ecmaVersion;
 			//try to instantiate classes
-			Class ecmaClass = TypeDeclarationFactory.class.getClassLoader().loadClass(ecmaVersion);
+			Class<?> ecmaClass = TypeDeclarationFactory.class.getClassLoader().loadClass(ecmaVersion);
 		 	ecma = (TypeDeclarations) ecmaClass.newInstance();
 		}
 		catch(Exception e)

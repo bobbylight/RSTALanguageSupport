@@ -76,7 +76,7 @@ public class ClasspathLibraryInfo extends LibraryInfo {
 	 * @param classes A list of fully-qualified class names for classes you
 	 *        want added to the build path.
 	 */
-	public ClasspathLibraryInfo(List classes) {
+	public ClasspathLibraryInfo(List<String> classes) {
 		this(classes, null);
 	}
 
@@ -89,14 +89,14 @@ public class ClasspathLibraryInfo extends LibraryInfo {
 	 * @param sourceLoc The location of the source files for the classes given.
 	 *        This may be <code>null</code>.
 	 */
-	public ClasspathLibraryInfo(List classes, SourceLocation sourceLoc) {
+	public ClasspathLibraryInfo(List<String> classes, SourceLocation sourceLoc){
 		setSourceLocation(sourceLoc);
 		classNameToClassFile = new HashMap<String, ClassFile>();
 		int count = classes==null ? 0 : classes.size();
 		for (int i=0; i<count; i++) {
 			// Our internal map must have all entries ending in ".class", but
 			// the one we pass to client code must not.
-			String entryName = (String)classes.get(i);
+			String entryName = classes.get(i);
 			entryName = entryName.replace('.', '/') + ".class";
 			classNameToClassFile.put(entryName, null);
 		}
