@@ -591,14 +591,14 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	/**
 	 * Returns the jars on the "build path."
 	 *
-	 * @return A list of {@link JarInfo}s.  Modifying a <tt>JarInfo</tt> in
-	 *         this list will have no effect on this completion provider; in
-	 *         order to do that, you must re-add the jar via
-	 *         {@link #addClassFileSource(JarInfo)}. If there are no jars on the
-	 *         "build path," this will be an empty list.
-	 * @see #addClassFileSource(JarInfo)
+	 * @return A list of {@link LibraryInfo}s.  Modifying a
+	 *         <code>LibraryInfo</code> in this list will have no effect on
+	 *         this completion provider; in order to do that, you must re-add
+	 *         the jar via {@link #addJar(LibraryInfo)}. If there are
+	 *         no jars on the "build path," this will be an empty list.
+	 * @see #addJar(LibraryInfo)
 	 */
-	public List getJars() {
+	public List<LibraryInfo> getJars() {
 		return jarManager.getClassFileSources();
 	}
 
@@ -987,9 +987,8 @@ public SourceLocation  getSourceLocForClass(String className) {
 		if (importStr.endsWith(".*")) {
 			String pkg = importStr.substring(0, importStr.length()-2);
 			boolean inPkg = pkg.equals(pkgName);
-			List classes = jarManager.getClassesInPackage(pkg, inPkg);
-			for (Iterator i=classes.iterator(); i.hasNext(); ) {
-				ClassFile cf = (ClassFile)i.next();
+			List<ClassFile> classes= jarManager.getClassesInPackage(pkg, inPkg);
+			for (ClassFile cf : classes) {
 				set.add(new ClassCompletion(this, cf));
 			}
 		}

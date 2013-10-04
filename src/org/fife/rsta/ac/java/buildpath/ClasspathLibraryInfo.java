@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -57,7 +56,7 @@ public class ClasspathLibraryInfo extends LibraryInfo {
 	 * on the classpath.  This allows you to theoretically share a single
 	 * <code>ClasspathLibraryInfo</code> across several different jar managers.
 	 */
-	private Map classNameToClassFile;
+	private Map<String, ClassFile> classNameToClassFile;
 
 
 	/**
@@ -92,7 +91,7 @@ public class ClasspathLibraryInfo extends LibraryInfo {
 	 */
 	public ClasspathLibraryInfo(List classes, SourceLocation sourceLoc) {
 		setSourceLocation(sourceLoc);
-		classNameToClassFile = new HashMap();
+		classNameToClassFile = new HashMap<String, ClassFile>();
 		int count = classes==null ? 0 : classes.size();
 		for (int i=0; i<count; i++) {
 			// Our internal map must have all entries ending in ".class", but
@@ -116,9 +115,7 @@ public class ClasspathLibraryInfo extends LibraryInfo {
 			res = classNameToClassFile.size() -
 					other.classNameToClassFile.size();
 			if (res==0) {
-				for (Iterator i=classNameToClassFile.keySet().iterator();
-						i.hasNext(); ) {
-					String key = (String)i.next();
+				for (String key : classNameToClassFile.keySet()) {
 					if (!other.classNameToClassFile.containsKey(key)) {
 						res = -1;
 						break;
@@ -138,7 +135,7 @@ public class ClasspathLibraryInfo extends LibraryInfo {
 		// for this.
 		ClassFile cf = null;
 		if (classNameToClassFile.containsKey(entryName)) {
-			cf = (ClassFile)classNameToClassFile.get(entryName);
+			cf = classNameToClassFile.get(entryName);
 			if (cf==null) {
 				cf = createClassFileImpl(entryName);
 				classNameToClassFile.put(entryName, cf);
@@ -172,8 +169,7 @@ public class ClasspathLibraryInfo extends LibraryInfo {
 	@Override
 	public TreeMap createPackageMap() throws IOException {
 		TreeMap packageMap = new TreeMap();
-		for (Iterator i=classNameToClassFile.keySet().iterator(); i.hasNext(); ) {
-			String className = (String)i.next();
+		for (String className : classNameToClassFile.keySet()) {
 			String[] tokens = Util.splitOnChar(className, '/');
 			TreeMap temp = packageMap;
 			for (int j=0; j<tokens.length-1; j++) {

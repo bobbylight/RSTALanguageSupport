@@ -22,8 +22,8 @@ Languages supported in this library include:
     * The included parser can currently parse the JDK6uXX source, but has very poor error recovery, so generally only provides a single error message per file (unless errors are very basic).  It does not validate method bodies; only class structure, and extracts the names and types of members and local variables (e.g. it only does the stuff useful for code completion).
     * Auto-completion, driven from information from the Parser above.  This is advanced completion and currently offers suggestions from:
         * Imported classes
-	* Methods and fields.
-	* Local variables (when in a method body)
+        * Methods and fields.
+        * Local variables (when in a method body)
     * Method parameter assistance; that is, code-complete a method name, and any parameters will have a drop-downl ist of fields and local variables of the proper type for that parameter.  This feature is currently very limited.
     * Ctrl+Shift+O (Cmd+Shift+O on OS X) opens a "Go to Member" popup, a la Eclipse.
 * JavaScript

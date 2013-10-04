@@ -40,7 +40,7 @@ public class JarManager {
 	/**
 	 * Locations of class files to get completions from.
 	 */
-	private List classFileSources;
+	private List<JarReader> classFileSources;
 
 	/**
 	 * Whether to check datestamps on jars/directories when completion
@@ -53,7 +53,7 @@ public class JarManager {
 	 * Constructor.
 	 */
 	public JarManager() {
-		classFileSources = new ArrayList();
+		classFileSources = new ArrayList<JarReader>();
 		setCheckModifiedDatestamps(true);
 	}
 
@@ -86,7 +86,7 @@ TODO: Verify me!!!
 		if (text.indexOf('.')>-1) {
 			String[] pkgNames = Util.splitOnChar(text, '.');
 			for (int i=0; i<classFileSources.size(); i++) {
-				JarReader jar = (JarReader)classFileSources.get(i);
+				JarReader jar = classFileSources.get(i);
 				jar.addCompletions(p, pkgNames, addTo);
 			}
 		}
@@ -99,7 +99,7 @@ TODO: Verify me!!!
 		else {//if (text.indexOf('.')==-1) {
 			String lowerCaseText = text.toLowerCase();
 			for (int i=0; i<classFileSources.size(); i++) {
-				JarReader jar = (JarReader) classFileSources.get(i);
+				JarReader jar = classFileSources.get(i);
 				List classFiles = jar.getClassesWithNamesStartingWith(lowerCaseText);
 				if (classFiles!=null) {
 					for (Iterator j=classFiles.iterator(); j.hasNext(); ) {
@@ -160,7 +160,7 @@ TODO: Verify me!!!
 
 		// First see if this jar is already on the "build path."
 		for (int i=0; i<classFileSources.size(); i++) {
-			JarReader jar = (JarReader)classFileSources.get(i);
+			JarReader jar = classFileSources.get(i);
 			LibraryInfo info2 = jar.getLibraryInfo();
 			if (info2.equals(info)) {
 				// Only update if the source location is different.
@@ -233,7 +233,7 @@ TODO: Verify me!!!
 		String[] items = Util.splitOnChar(className, '.');
 
 		for (int i=0; i<classFileSources.size(); i++) {
-			JarReader jar = (JarReader)classFileSources.get(i);
+			JarReader jar = classFileSources.get(i);
 			ClassFile cf = jar.getClassEntry(items);
 			if (cf!=null) {
 				return cf;
@@ -324,13 +324,13 @@ TODO: Verify me!!!
 	 * @param pkgName A package name.
 	 * @return A list of all classes in that package.
 	 */
-	public List getClassesInPackage(String pkgName, boolean inPkg) {
+	public List<ClassFile> getClassesInPackage(String pkgName, boolean inPkg) {
 
-		List list = new ArrayList();
+		List<ClassFile> list = new ArrayList<ClassFile>();
 		String[] pkgs = Util.splitOnChar(pkgName, '.');
 
 		for (int i=0; i<classFileSources.size(); i++) {
-			JarReader jar = (JarReader)classFileSources.get(i);
+			JarReader jar = classFileSources.get(i);
 			jar.getClassesInPackage(list, pkgs, inPkg);
 		}
 
@@ -342,18 +342,18 @@ TODO: Verify me!!!
 	/**
 	 * Returns the jars on the "build path."
 	 *
-	 * @return A list of {@link ClassFileSource}s. Modifying a
-	 *         <tt>ClassFileSource</tt> in this list will have no effect on
+	 * @return A list of {@link LibraryInfo}s. Modifying a
+	 *         <code>LibraryInfo</code> in this list will have no effect on
 	 *         this completion provider; in order to do that, you must re-add
 	 *         the jar via {@link #addClassFileSource(LibraryInfo)}. If there
 	 *         are no jars on the "build path," this will be an empty list.
 	 * @see #addClassFileSource(LibraryInfo)
 	 */
-	public List getClassFileSources() {
-		List jarList = new ArrayList(classFileSources.size());
-		for (Iterator i=classFileSources.iterator(); i.hasNext(); ) {
-			JarReader reader = (JarReader)i.next();
-			jarList.add(reader.getLibraryInfo().clone());
+	public List<LibraryInfo> getClassFileSources() {
+		List<LibraryInfo> jarList =
+				new ArrayList<LibraryInfo>(classFileSources.size());
+		for (JarReader reader : classFileSources) {
+			jarList.add(reader.getLibraryInfo()); // Already cloned
 		}
 		return jarList;
 	}
@@ -366,7 +366,7 @@ TODO: Verify me!!!
 		SortedMap map = new TreeMap();
 
 		for (int i=0; i<classFileSources.size(); i++) {
-			JarReader jar = (JarReader)classFileSources.get(i);
+			JarReader jar = classFileSources.get(i);
 			SortedMap map2 = jar.getPackageEntry(pkgs);
 			if (map2!=null) {
 				mergeMaps(map, map2);
@@ -381,7 +381,7 @@ TODO: Verify me!!!
 public SourceLocation getSourceLocForClass(String className) {
 	SourceLocation  sourceLoc = null;
 	for (int i=0; i<classFileSources.size(); i++) {
-		JarReader jar = (JarReader)classFileSources.get(i);
+		JarReader jar = classFileSources.get(i);
 		if (jar.containsClass(className)) {
 			sourceLoc = jar.getLibraryInfo().getSourceLocation();
 			break;
@@ -442,8 +442,8 @@ public SourceLocation getSourceLocForClass(String className) {
 	 * @see #getClassFileSources()
 	 */
 	public boolean removeClassFileSource(LibraryInfo toRemove) {
-		for (Iterator i=classFileSources.iterator(); i.hasNext(); ) {
-			JarReader reader = (JarReader)i.next();
+		for (Iterator<JarReader> i=classFileSources.iterator(); i.hasNext(); ) {
+			JarReader reader = i.next();
 			LibraryInfo info = reader.getLibraryInfo();
 			if (info.equals(toRemove)) {
 				i.remove();

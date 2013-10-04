@@ -281,7 +281,8 @@ class JarReader {
 	}
 
 
-	public void getClassesInPackage(List addTo, String[] pkgs, boolean inPkg) {
+	public void getClassesInPackage(List<ClassFile> addTo, String[] pkgs,
+			boolean inPkg) {
 
 		SortedMap map = packageMap;
 
@@ -458,7 +459,7 @@ class JarReader {
 	}
 
 
-	private void possiblyAddTo(Collection addTo, ClassFile cf, boolean inPkg) {
+	private void possiblyAddTo(Collection<ClassFile> addTo, ClassFile cf, boolean inPkg) {
 		if (inPkg || org.fife.rsta.ac.java.classreader.Util.isPublic(cf.getAccessFlags())) {
 			addTo.add(cf);
 		}
