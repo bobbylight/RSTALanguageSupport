@@ -52,9 +52,10 @@ public class JSFieldData {
 		// this method.
 		if (cu!=null) {
 
-			for (Iterator i=cu.getTypeDeclarationIterator(); i.hasNext(); ) {
+			Iterator<TypeDeclaration> i = cu.getTypeDeclarationIterator();
+			while (i.hasNext()) {
 
-				TypeDeclaration td = (TypeDeclaration)i.next();
+				TypeDeclaration td = i.next();
 				String typeName = td.getName();
 
 				// Avoid inner classes, etc.
@@ -63,8 +64,9 @@ public class JSFieldData {
 					// Get all overloads of this method with the number of
 					// parameters we're looking for.  99% of the time, there
 					// will only be 1, the method we're looking for.
-					for (Iterator j=td.getMemberIterator(); j.hasNext(); ) {
-						Member member = (Member)j.next();
+					Iterator<Member> j = td.getMemberIterator();
+					while (j.hasNext()) {
+						Member member = j.next();
 						if (member instanceof Field &&
 								member.getName().equals(info.getName())) {
 							return (Field) member;

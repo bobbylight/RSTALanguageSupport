@@ -20,6 +20,9 @@ import org.fife.rsta.ac.AbstractMarkupLanguageSupport;
 import org.fife.rsta.ac.GoToMemberAction;
 import org.fife.rsta.ac.xml.tree.XmlOutlineTree;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+//import org.xml.sax.EntityResolver;
+//import org.xml.sax.InputSource;
+//import org.xml.sax.SAXException;
 
 
 /**
@@ -98,7 +101,22 @@ public class XmlLanguageSupport extends AbstractMarkupLanguageSupport {
 		// No code completion yet; this exists solely to support the tree
 		// view and identifying syntax errors.
 
+
 		XmlParser parser = new XmlParser(this);
+//EntityResolver resolver = new EntityResolver() {
+//	public InputSource resolveEntity(String publicId, String systemId)
+//			throws SAXException, IOException {
+//		InputStream in = getClass().getResourceAsStream("/theme.dtd");
+//		return new InputSource(in);
+//	}
+//};
+//parser.setValidationConfig(new DtdValidationConfig(resolver));
+//InputStream in = getClass().getResourceAsStream("/test.xsd");
+//try {
+//parser.setValidationConfig(new SchemaValidationConfig(XMLConstants.W3C_XML_SCHEMA_NS_URI, in));
+//} catch (IOException e) {
+//	e.printStackTrace();
+//}
 		textArea.addParser(parser);
 		textArea.putClientProperty(PROPERTY_LANGUAGE_PARSER, parser);
 

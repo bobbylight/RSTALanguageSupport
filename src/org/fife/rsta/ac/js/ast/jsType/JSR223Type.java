@@ -1,7 +1,6 @@
 package org.fife.rsta.ac.js.ast.jsType;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.fife.rsta.ac.js.Logger;
@@ -26,8 +25,7 @@ public class JSR223Type extends JavaScriptType {
 	@Override
 	protected JSCompletion _getCompletion(String completionLookup,
 			SourceCompletionProvider provider) {
-		JSCompletion completion = (JSCompletion) methodFieldCompletions
-				.get(completionLookup);
+		JSCompletion completion = methodFieldCompletions.get(completionLookup);
 		if (completion != null) {
 			return completion;
 		}
@@ -75,21 +73,20 @@ public class JSR223Type extends JavaScriptType {
 	private JSCompletion[] getPotentialLookupList(String name)
 	{
 		//get a list of all potential matches, including extended
-		HashSet completionMatches = new HashSet();
+		HashSet<JSCompletion> completionMatches = new HashSet<JSCompletion>();
 		getPotentialLookupList(name, completionMatches, this);
-		return (JSCompletion[]) completionMatches.toArray(new JSCompletion[completionMatches.size()]);
+		return completionMatches.toArray(new JSCompletion[completionMatches.size()]);
 	}
 
 	// get a list of all potential method matches
-	private void getPotentialLookupList(String name, HashSet completionMatches, JavaScriptType type) {
+	private void getPotentialLookupList(String name,
+			HashSet<JSCompletion> completionMatches, JavaScriptType type) {
 		
-		Map typeCompletions = type.methodFieldCompletions;
-		
-		for (Iterator i = typeCompletions.keySet().iterator(); i.hasNext();) {
-			String key = (String) i.next();
+		Map<String, JSCompletion> typeCompletions = type.methodFieldCompletions;
+
+		for (String key : typeCompletions.keySet()) {
 			if (key.startsWith(name)) {
-				JSCompletion completion = (JSCompletion) typeCompletions
-						.get(key);
+				JSCompletion completion = typeCompletions.get(key);
 				if (completion instanceof FunctionCompletion) {
 					completionMatches.add(completion);
 				}
@@ -97,8 +94,7 @@ public class JSR223Type extends JavaScriptType {
 		}
 		
 		//loop through extended and add it's methods too recursively
-		for(Iterator extended = type.getExtendedClasses().iterator(); extended.hasNext();) {
-			JavaScriptType extendedType = (JavaScriptType) extended.next();
+		for (JavaScriptType extendedType : type.getExtendedClasses()) {
 			getPotentialLookupList(name, completionMatches, extendedType);
 		}
 

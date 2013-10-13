@@ -270,7 +270,7 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 		if (r instanceof CompletionCellRenderer &&
 				Util.getUseSubstanceRenderers()) {
 			if (UIManager.getLookAndFeel().getClass().getName().
-					indexOf(".Substance")>-1) {
+					contains(".Substance")) {
 				CompletionCellRenderer ccr = (CompletionCellRenderer)r;
 				delegateToSubstanceRenderer(ccr);
 			}

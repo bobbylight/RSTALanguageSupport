@@ -12,9 +12,21 @@ package org.fife.rsta.ac.xml;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.IOException;
+
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
 import javax.swing.text.Segment;
+import javax.xml.parsers.FactoryConfigurationError;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import org.xml.sax.Attributes;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
+import org.xml.sax.Locator;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.helpers.DefaultHandler;
 
 import org.fife.io.DocumentReader;
 import org.fife.rsta.ac.xml.tree.XmlTreeNode;
@@ -24,14 +36,6 @@ import org.fife.ui.rsyntaxtextarea.parser.DefaultParseResult;
 import org.fife.ui.rsyntaxtextarea.parser.DefaultParserNotice;
 import org.fife.ui.rsyntaxtextarea.parser.ParseResult;
 import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.DefaultHandler;
-import org.xml.sax.helpers.XMLReaderFactory;
 
 
 /**
@@ -69,40 +73,32 @@ public class XmlParser extends AbstractParser {
 	private XmlTreeNode curElem;
 	private XmlTreeNode root;
 	private Locator locator;
+	private SAXParserFactory spf;
+	private SAXParser sp;
+	private ValidationConfig validationConfig;
 
 
 	public XmlParser(XmlLanguageSupport xls) {
 		this.xls = xls;
 		support = new PropertyChangeSupport(this);
-	}
-
-
-	public void addPropertyChangeListener(String prop, PropertyChangeListener l) {
-		 support.addPropertyChangeListener(prop, l);
+		try {
+			spf = SAXParserFactory.newInstance();
+		} catch (FactoryConfigurationError fce) {
+			fce.printStackTrace();
+		}
 	}
 
 
 	/**
-	 * Creates the XML reader to use.  Note that in 1.4 JRE's, the reader
-	 * class wasn't defined by default, but in 1.5+ it is.
+	 * Adds a listener to this parser.  Typically you'd want to register a
+	 * listener on the {@link #PROPERTY_AST} property.
 	 *
-	 * @return The XML reader to use.
+	 * @param prop The property to listen for changes on.
+	 * @param l The listener itself.
+	 * @see #removePropertyChangeListener(String, PropertyChangeListener)
 	 */
-	private XMLReader createReader() {
-		XMLReader reader = null;
-		try {
-			reader = XMLReaderFactory.createXMLReader();
-		} catch (SAXException e) {
-			// Happens in JRE 1.4.x; 1.5+ define the reader class properly
-			try {
-				reader = XMLReaderFactory.createXMLReader(
-						"org.apache.crimson.parser.XMLReaderImpl");
-			} catch (SAXException se) {
-				//owner.displayException(se);
-				se.printStackTrace();
-			}
-		}
-		return reader;
+	public void addPropertyChangeListener(String prop, PropertyChangeListener l) {
+		 support.addPropertyChangeListener(prop, l);
 	}
 
 
@@ -153,26 +149,38 @@ public class XmlParser extends AbstractParser {
 	}
 
 
+	public SAXParserFactory getSaxParserFactory() {
+		return spf;
+	}
+
+
 	/**
 	 * {@inheritDoc}
 	 */
 	public ParseResult parse(RSyntaxDocument doc, String style) {
 
+new ValidationConfigSniffer().sniff(doc);
+
 		DefaultParseResult result = new DefaultParseResult(this);
 		curElem = root = new XmlTreeNode("Root");
 
+		if (spf==null || doc.getLength()==0) {
+			return result;
+		}
+
 		//long start = System.currentTimeMillis();
 		try {
-			XMLReader xr = createReader();
-			if (xr==null) { // Couldn't create an XML reader.
-				return result;
+			if (sp==null) { // New or reset for different validation
+				sp = spf.newSAXParser();
 			}
 			Handler handler = new Handler(doc, result);
-			xr.setContentHandler(handler);
-			xr.setErrorHandler(handler);
-			InputSource is = new InputSource(new DocumentReader(doc));
-			//is.setEncoding("UTF-8");
-			xr.parse(is);
+			if (validationConfig!=null) {
+				validationConfig.configureHandler(handler);
+			}
+			DocumentReader r = new DocumentReader(doc);
+			InputSource input = new InputSource(r);
+			sp.parse(input, handler);
+			r.close();
 		} catch (Exception e) {
 			// Don't give an error; they likely just saved an incomplete XML
 			// file
@@ -196,8 +204,31 @@ public class XmlParser extends AbstractParser {
 	}
 
 
+	/**
+	 * Removes a listener on a specific property.
+	 *
+	 * @param prop The property being listened to.
+	 * @param l The listener to remove.
+	 * @see #addPropertyChangeListener(String, PropertyChangeListener)
+	 */
 	public void removePropertyChangeListener(String prop, PropertyChangeListener l) {
 		support.removePropertyChangeListener(prop, l);
+	}
+
+
+	/**
+	 * Sets how validation will be done by this parser.  This can be used to
+	 * set up either DTD or Schema validation.
+	 *
+	 * @param config Configuration information for validation.  If this is
+	 *        <code>null</code>, no validation will be done.
+	 */
+	public void setValidationConfig(ValidationConfig config) {
+		this.validationConfig = config;
+		if (validationConfig!=null) {
+			validationConfig.configureParser(this);
+		}
+		sp = null; // Force recreation for possible new validation params
 	}
 
 
@@ -205,11 +236,12 @@ public class XmlParser extends AbstractParser {
 	 * Callback for events when we're parsing the XML in the editor.  Creates
 	 * our model and records any parsing errors for squiggle underlining.
 	 */
-	private class Handler extends DefaultHandler {
+	public class Handler extends DefaultHandler {
 
 		private DefaultParseResult result;
 		private RSyntaxDocument doc;
 		private Segment s;
+		private EntityResolver entityResolver;
 
 		public Handler(RSyntaxDocument doc, DefaultParseResult result) {
 			this.doc = doc;
@@ -292,8 +324,23 @@ public class XmlParser extends AbstractParser {
 
 
 		@Override
+		public InputSource resolveEntity(String publicId, String systemId)
+								throws IOException, SAXException {
+			if (entityResolver!=null) {
+				return entityResolver.resolveEntity(publicId, systemId);
+			}
+			return super.resolveEntity(publicId, systemId);
+		}
+
+
+		@Override
 		public void setDocumentLocator(Locator l) {
 			locator = l;
+		}
+
+
+		public void setEntityResolver(EntityResolver resolver) {
+			this.entityResolver = resolver;
 		}
 
 

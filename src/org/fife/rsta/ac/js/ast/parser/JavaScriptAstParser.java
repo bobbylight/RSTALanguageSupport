@@ -1,7 +1,6 @@
 package org.fife.rsta.ac.js.ast.parser;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -275,19 +274,15 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	private void processCaseNode(Node child, CodeBlock block, Set set,
 			String entered, int offset) {
 		SwitchCase switchCase = (SwitchCase) child;
-		List statements = switchCase.getStatements();
+		List<AstNode> statements = switchCase.getStatements();
 		int start = switchCase.getAbsolutePosition();
 		offset = start + switchCase.getLength();
 		if (canProcessNode(switchCase)) {
 			block = block.addChildCodeBlock(start);
 			block.setEndOffset(offset);
 			if(statements != null) {
-				for (Iterator i = statements.iterator(); i.hasNext();) {
-					Object o = i.next();
-					if (o instanceof AstNode) {
-						AstNode node = (AstNode) o;
-						iterateNode(node, set, entered, block, offset);
-					}
+				for (AstNode node : statements) {
+					iterateNode(node, set, entered, block, offset);
 				}
 			}
 		}
