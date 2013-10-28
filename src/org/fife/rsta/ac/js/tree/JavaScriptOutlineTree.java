@@ -249,7 +249,6 @@ public class JavaScriptOutlineTree extends AbstractSourceTree {
 					// Happens with certain syntax errors, such as
 					// "function function foo() {".
 					if (funcName!=null) {
-						System.out.println("--- name: " + fn.getName());
 						StringBuilder sb = new StringBuilder(fn.getName()).append('(');
 						int paramCount = fn.getParamCount();
 						if (paramCount>0) {
