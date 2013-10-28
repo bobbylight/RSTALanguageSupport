@@ -245,40 +245,47 @@ public class JavaScriptOutlineTree extends AbstractSourceTree {
 
 				case Token.FUNCTION:
 					FunctionNode fn = (FunctionNode)child;
-					StringBuilder sb = new StringBuilder(fn.getName()).append('(');
-					int paramCount = fn.getParamCount();
-					if (paramCount>0) {
-						List<AstNode> fnParams = fn.getParams();
-						for (int i=0; i<paramCount; i++) {
-							String paramName = null;
-							AstNode node = fnParams.get(i);
-							switch (node.getType()) {
-								case Token.NAME:
-									paramName = ((Name)node).getIdentifier();
-									break;
-								default:
-									System.out.println("Unhandled class for param: " + node.getClass());
-									paramName = "?";
-									break;
-							}
-							sb.append(paramName);
-							if (i<paramCount-1) {
-								sb.append(", ");
+					Name funcName = fn.getFunctionName();
+					// Happens with certain syntax errors, such as
+					// "function function foo() {".
+					if (funcName!=null) {
+						System.out.println("--- name: " + fn.getName());
+						StringBuilder sb = new StringBuilder(fn.getName()).append('(');
+						int paramCount = fn.getParamCount();
+						if (paramCount>0) {
+							List<AstNode> fnParams = fn.getParams();
+							for (int i=0; i<paramCount; i++) {
+								String paramName = null;
+								AstNode node = fnParams.get(i);
+								switch (node.getType()) {
+									case Token.NAME:
+										paramName = ((Name)node).getIdentifier();
+										break;
+									default:
+										System.out.println("Unhandled class for param: " +
+												node.getClass());
+										paramName = "?";
+										break;
+								}
+								sb.append(paramName);
+								if (i<paramCount-1) {
+									sb.append(", ");
+								}
 							}
 						}
+						sb.append(')');
+						JavaScriptTreeNode tn = new JavaScriptTreeNode(funcName);
+						try {
+							int offs = funcName.getAbsolutePosition();
+							tn.setOffset(textArea.getDocument().createPosition(offs));
+						} catch (BadLocationException ble) { // Never happens
+							ble.printStackTrace();
+						}
+						tn.setText(sb.toString());
+						tn.setIcon(IconFactory.getIcon(IconFactory.DEFAULT_FUNCTION_ICON));
+						tn.setSortPriority(PRIORITY_FUNCTION);
+						root.add(tn);
 					}
-					sb.append(')');
-					JavaScriptTreeNode tn = new JavaScriptTreeNode(fn.getFunctionName());
-					try {
-						int offs = fn.getFunctionName().getAbsolutePosition();
-						tn.setOffset(textArea.getDocument().createPosition(offs));
-					} catch (BadLocationException ble) { // Never happens
-						ble.printStackTrace();
-					}
-					tn.setText(sb.toString());
-					tn.setIcon(IconFactory.getIcon(IconFactory.DEFAULT_FUNCTION_ICON));
-					tn.setSortPriority(PRIORITY_FUNCTION);
-					root.add(tn);
 					break;
 
 				case Token.VAR:
@@ -299,7 +306,7 @@ public class JavaScriptOutlineTree extends AbstractSourceTree {
 								varName = "?";
 								break;
 						}
-						tn = new JavaScriptTreeNode(varNameNode);
+						JavaScriptTreeNode tn = new JavaScriptTreeNode(varNameNode);
 						try {
 							int offs = varNameNode.getAbsolutePosition();
 							tn.setOffset(textArea.getDocument().createPosition(offs));
