@@ -168,7 +168,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 			// Get a list of all Completions matching the text.
 			AstRoot ast = this.parent.getASTRoot();
-			Set set = new HashSet();
+			Set<JSCompletionUI> set = new HashSet<JSCompletionUI>();
 			CodeBlock block = iterateAstRoot(ast, set, text, tc.getCaretPosition(), typeDeclarationOptions);
 			recursivelyAddLocalVars(set, block, dot, null, false, false);
 			lastCompletionsAtText = text;

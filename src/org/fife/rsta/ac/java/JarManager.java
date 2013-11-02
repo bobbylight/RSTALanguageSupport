@@ -15,16 +15,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
 import org.fife.rsta.ac.java.buildpath.JarLibraryInfo;
 import org.fife.rsta.ac.java.buildpath.LibraryInfo;
 import org.fife.rsta.ac.java.buildpath.SourceLocation;
 import org.fife.rsta.ac.java.classreader.ClassFile;
 import org.fife.rsta.ac.java.rjc.ast.ImportDeclaration;
+import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
 
 
@@ -65,7 +63,8 @@ public class JarManager {
 	 * @param text The text to match.
 	 * @param addTo The list to add completion choices to.
 	 */
-	public void addCompletions(CompletionProvider p, String text, Set addTo) {
+	public void addCompletions(CompletionProvider p, String text,
+			Set<Completion> addTo) {
 /*
  * The commented-out code below is probably replaced by the rest of the code
  * in this method...
@@ -100,10 +99,10 @@ TODO: Verify me!!!
 			String lowerCaseText = text.toLowerCase();
 			for (int i=0; i<classFileSources.size(); i++) {
 				JarReader jar = classFileSources.get(i);
-				List classFiles = jar.getClassesWithNamesStartingWith(lowerCaseText);
+				List<ClassFile> classFiles = jar.
+						getClassesWithNamesStartingWith(lowerCaseText);
 				if (classFiles!=null) {
-					for (Iterator j=classFiles.iterator(); j.hasNext(); ) {
-						ClassFile cf = (ClassFile)j.next();
+					for (ClassFile cf : classFiles) {
 						if (org.fife.rsta.ac.java.classreader.Util.isPublic(cf.getAccessFlags())) {
 							addTo.add(new ClassCompletion(p, cf));
 						}
@@ -359,25 +358,6 @@ TODO: Verify me!!!
 	}
 
 
-	public SortedMap getPackageEntry(String pkgName) {
-
-		String[] pkgs = Util.splitOnChar(pkgName, '.');
-
-		SortedMap map = new TreeMap();
-
-		for (int i=0; i<classFileSources.size(); i++) {
-			JarReader jar = classFileSources.get(i);
-			SortedMap map2 = jar.getPackageEntry(pkgs);
-			if (map2!=null) {
-				mergeMaps(map, map2);
-			}
-		}
-
-		return map;
-
-	}
-
-
 public SourceLocation getSourceLocForClass(String className) {
 	SourceLocation  sourceLoc = null;
 	for (int i=0; i<classFileSources.size(); i++) {
@@ -389,30 +369,6 @@ public SourceLocation getSourceLocForClass(String className) {
 	}
 	return sourceLoc;
 }
-
-
-	private void mergeMaps(SortedMap map, SortedMap toAdd) {
-
-		for (Iterator i=toAdd.entrySet().iterator(); i.hasNext(); ) {
-
-			Map.Entry entry = (Map.Entry)i.next();
-			Object key = entry.getKey();
-			Object value = entry.getValue();
-
-			if (map.containsKey(key)) {
-				if ((map.get(key) instanceof SortedMap) &&
-						(value instanceof SortedMap)) {
-					mergeMaps((SortedMap)map.get(key), (SortedMap)value);
-				}
-			}
-
-			else {
-				map.put(key, value);
-			}
-
-		}
-
-	}
 
 
 	/**

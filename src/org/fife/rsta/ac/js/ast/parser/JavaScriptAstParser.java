@@ -14,6 +14,7 @@ import org.fife.rsta.ac.js.ast.TypeDeclarationOptions;
 import org.fife.rsta.ac.js.ast.type.ArrayTypeDeclaration;
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
 import org.fife.rsta.ac.js.ast.type.ecma.TypeDeclarations;
+import org.fife.rsta.ac.js.completion.JSCompletionUI;
 import org.fife.rsta.ac.js.completion.JavaScriptInScriptFunctionCompletion;
 import org.fife.rsta.ac.js.resolver.JavaScriptResolver;
 import org.fife.ui.autocomplete.ParameterizedCompletion.Parameter;
@@ -435,8 +436,8 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	 * code block TODO: functions can have local scope, so add function to it's
 	 * own codeblock when applicable
 	 */
-	private void processFunctionNode(Node child, CodeBlock block, Set set,
-			String entered, int offset) {
+	private void processFunctionNode(Node child, CodeBlock block,
+			Set<JSCompletionUI> set, String entered, int offset) {
 		FunctionNode fn = (FunctionNode) child;
 		String jsdoc = fn.getJsDoc();
 		TypeDeclaration returnType = getFunctionType(fn);
@@ -523,8 +524,8 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	/**
 	 * Extract variable from node and add to code block
 	 */
-	private void processVariableNode(Node child, CodeBlock block, Set set,
-			String entered, int offset) {
+	private void processVariableNode(Node child, CodeBlock block,
+			Set<JSCompletionUI> set, String entered, int offset) {
 		//check block can resolve variable or is pre-processing variables
 		if(block.contains(dot) || isPreProcessing())
 		{

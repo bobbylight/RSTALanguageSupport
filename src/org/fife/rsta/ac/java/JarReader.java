@@ -351,8 +351,8 @@ class JarReader {
 	 *         This will never be <code>null</code>, but may of course be
 	 *         empty.
 	 */
-	public List getClassesWithNamesStartingWith(String prefix) {
-		List res = new ArrayList();
+	public List<ClassFile> getClassesWithNamesStartingWith(String prefix) {
+		List<ClassFile> res = new ArrayList<ClassFile>();
 		String currentPkg = ""; // Don't use null; we're appending to it
 		getClassesWithNamesStartingWithImpl(prefix, packageMap, currentPkg,
 												res);
@@ -373,7 +373,7 @@ class JarReader {
 	 * @param addTo The list to add any matching <code>ClassFile</code>s to.
 	 */
 	private void getClassesWithNamesStartingWithImpl(String prefix, Map map,
-											String currentPkg, List addTo) {
+							String currentPkg, List<ClassFile> addTo) {
 
 		final int prefixLen = prefix.length();
 
@@ -407,7 +407,7 @@ class JarReader {
 						}
 					}
 					if (value!=null) { // possibly null if IOException above
-						addTo.add(/*(ClassFile)*/value);
+						addTo.add((ClassFile)value);
 					}
 				}
 			}
@@ -428,28 +428,6 @@ class JarReader {
 	 */
 	public LibraryInfo getLibraryInfo() {
 		return (LibraryInfo)info.clone();
-	}
-
-
-	public SortedMap getPackageEntry(String[] pkgs) {
-
-		SortedMap map = packageMap;
-
-		for (int i=0; i<pkgs.length; i++) {
-			if (map.containsKey(pkgs[i])) {
-				Object value = map.get(pkgs[i]);
-				if (!(value instanceof SortedMap)) { // ClassFile or null
-					return null;
-				}
-				map = (SortedMap)value;
-			}
-			else {
-				return null;
-			}
-		}
-
-		return map;
-
 	}
 
 
