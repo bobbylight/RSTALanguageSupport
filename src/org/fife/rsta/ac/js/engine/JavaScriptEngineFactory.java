@@ -8,7 +8,8 @@ public class JavaScriptEngineFactory {
 	
 	public static final String DEFAULT = EMCAJavaScriptEngine.EMCA_ENGINE;
 	
-	private HashMap supportedEngines = new HashMap();
+	private HashMap<String, JavaScriptEngine> supportedEngines =
+			new HashMap<String, JavaScriptEngine>();
 
 	private static JavaScriptEngineFactory Instance = new JavaScriptEngineFactory();
 
@@ -32,7 +33,7 @@ public class JavaScriptEngineFactory {
 		if(name == null) {
 			name = DEFAULT;
 		}
-		return (JavaScriptEngine) supportedEngines.get(name);
+		return supportedEngines.get(name);
 	}
 
 

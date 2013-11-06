@@ -46,6 +46,7 @@ import org.fife.rsta.ac.js.completion.JSVariableCompletion;
 import org.fife.rsta.ac.js.engine.JavaScriptEngine;
 import org.fife.rsta.ac.js.engine.JavaScriptEngineFactory;
 import org.fife.rsta.ac.js.resolver.JavaScriptResolver;
+import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
 import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.AstRoot;
@@ -118,13 +119,13 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 
 	private String lastCompletionsAtText = null;
-	private List lastParameterizedCompletionsAt = null;
+	private List<Completion> lastParameterizedCompletionsAt = null;
 	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List getCompletionsAt(JTextComponent tc, Point p) {
+	public List<Completion> getCompletionsAt(JTextComponent tc, Point p) {
 
 		int offset = tc.viewToModel(p);
 		if (offset<0 || offset>=tc.getDocument().getLength()) {
@@ -172,7 +173,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 			CodeBlock block = iterateAstRoot(ast, set, text, tc.getCaretPosition(), typeDeclarationOptions);
 			recursivelyAddLocalVars(set, block, dot, null, false, false);
 			lastCompletionsAtText = text;
-			return lastParameterizedCompletionsAt = new ArrayList(set);
+			return lastParameterizedCompletionsAt = new ArrayList<Completion>(set);
 
 		} catch (BadLocationException ble) {
 			ble.printStackTrace(); // Never happens
@@ -188,7 +189,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected List getCompletionsImpl(JTextComponent comp) {
+	protected List<Completion> getCompletionsImpl(JTextComponent comp) {
 
 		comp.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 		try {
@@ -277,7 +278,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 	}
 	
-	private List handleNewFilter(Set<JSCompletionUI> set, String text)
+	private List<Completion> handleNewFilter(Set<JSCompletionUI> set, String text)
 	{
 		set.clear(); //reset as just interested in the
 		//just load the constructors
@@ -285,7 +286,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 		return resolveCompletions(text, set);
 	}
 	
-	private List resolveCompletions(String text, Set<JSCompletionUI> set)
+	private List<Completion> resolveCompletions(String text, Set<JSCompletionUI> set)
 	{
 		completions.addAll(set);
 
@@ -416,8 +417,8 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	 *        RSTA parsing
 	 * @return
 	 */
-	protected CodeBlock iterateAstRoot(AstRoot root, Set set, String entered,
-			int dot, TypeDeclarationOptions options) {
+	protected CodeBlock iterateAstRoot(AstRoot root, Set<JSCompletionUI> set,
+			String entered, int dot, TypeDeclarationOptions options) {
 		JavaScriptParser parser = engine.getParser(this, dot, options);
 		return parser.convertAstNodeToCodeBlock(root, set, entered);
 	}
@@ -613,7 +614,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	public void parseDocument(int dot)
 	{
 		AstRoot ast = this.parent.getASTRoot();
-		Set set = new HashSet();
+		Set<JSCompletionUI> set = new HashSet<JSCompletionUI>();
 		variableResolver.resetLocalVariables();
 		iterateAstRoot(ast, set, "", dot, typeDeclarationOptions);
 	}

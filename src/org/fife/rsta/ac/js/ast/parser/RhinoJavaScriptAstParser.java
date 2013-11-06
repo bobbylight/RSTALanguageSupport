@@ -24,8 +24,8 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 
 	public static final String PACKAGES = "Packages.";
 	
-	private LinkedHashSet importClasses = new LinkedHashSet();
-	private LinkedHashSet importPackages = new LinkedHashSet();
+	private LinkedHashSet<String> importClasses = new LinkedHashSet<String>();
+	private LinkedHashSet<String> importPackages = new LinkedHashSet<String>();
 	
 	public RhinoJavaScriptAstParser(SourceCompletionProvider provider, int dot,
 			TypeDeclarationOptions options) {
@@ -59,7 +59,7 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 		}
 	}
 	
-	private void mergeImportCache(HashSet packages, HashSet classes) {
+	private void mergeImportCache(HashSet<String> packages, HashSet<String> classes) {
 		JavaScriptTypesFactory typesFactory = provider.getJavaScriptTypesFactory();
 		if(typesFactory instanceof RhinoJavaScriptTypesFactory) {
 			((RhinoJavaScriptTypesFactory) typesFactory).mergeImports(packages, classes);

@@ -97,7 +97,8 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	{
 		//load classes
 		try {
-			List classes = provider.getProvider().getTypesFactory().setTypeDeclarationVersion(version, isXmlAvailable(), isClient());
+			List<String> classes = provider.getProvider().getTypesFactory().
+					setTypeDeclarationVersion(version, isXmlAvailable(), isClient());
 			provider.getProvider().setXMLSupported(isXmlAvailable());
 			if (classes!=null) {
 				LibraryInfo info = new ClasspathLibraryInfo(classes,

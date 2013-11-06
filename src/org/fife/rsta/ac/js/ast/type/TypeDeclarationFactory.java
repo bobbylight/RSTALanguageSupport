@@ -38,7 +38,8 @@ public class TypeDeclarationFactory {
 	}
 
 	
-	public List setTypeDeclarationVersion(String ecmaVersion, boolean xmlSupported, boolean client) {
+	public List<String> setTypeDeclarationVersion(String ecmaVersion,
+			boolean xmlSupported, boolean client) {
 		
 		try
 		{
@@ -77,7 +78,7 @@ public class TypeDeclarationFactory {
 		return TypeDeclarationsECMAv3.class.getName();
 	}
 	
-	public List getAllJavaScriptTypes() {
+	public List<TypeDeclaration> getAllJavaScriptTypes() {
 		return ecma.getAllJavaScriptTypeDeclarations();
 	}
 
@@ -87,8 +88,7 @@ public class TypeDeclarationFactory {
 	 * @param name name of type declaration
 	 * 
 	 */
-	public void removeType(String name)
-	{
+	public void removeType(String name) {
 		ecma.removeType(name);
 	}
 	

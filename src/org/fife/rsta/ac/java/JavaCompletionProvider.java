@@ -129,14 +129,14 @@ public class JavaCompletionProvider extends LanguageAwareCompletionProvider {
 	/**
 	 * Returns the jars on the "build path."
 	 *
-	 * @return A list of {@link JarInfo}s.  Modifying a <tt>JarInfo</tt> in
-	 *         this list will have no effect on this completion provider; in
-	 *         order to do that, you must re-add the jar via
-	 *         {@link #addClassFileSource(JarInfo)}. If there are no jars on the
-	 *         "build path," this will be an empty list.
-	 * @see #addClassFileSource(JarInfo)
+	 * @return A list of {@link LibraryInfo}s.  Modifying a
+	 *         <code>LibraryInfo</code> in this list will have no effect on
+	 *         this completion provider; in order to do that, you must re-add
+	 *         the jar via {@link #addJar(LibraryInfo)}.  If there are
+	 *         no jars on the "build path," this will be an empty list.
+	 * @see #addJar(LibraryInfo)
 	 */
-	public List getJars() {
+	public List<LibraryInfo> getJars() {
 		return sourceProvider.getJars();
 	}
 

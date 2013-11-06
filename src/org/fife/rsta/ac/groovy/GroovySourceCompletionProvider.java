@@ -33,7 +33,7 @@ import org.fife.ui.rsyntaxtextarea.Token;
  */
 public class GroovySourceCompletionProvider extends DefaultCompletionProvider {
 
-	private JarManager jarManager;
+	//private JarManager jarManager;
 
 	private static final char[] KEYWORD_DEF = { 'd', 'e', 'f' };
 
@@ -55,7 +55,7 @@ public class GroovySourceCompletionProvider extends DefaultCompletionProvider {
 		if (jarManager==null) {
 			jarManager = new JarManager();
 		}
-		this.jarManager = jarManager;
+		//this.jarManager = jarManager;
 		setParameterizedCompletionParams('(', ", ", ')');
 		setAutoActivationRules(false, "."); // Default - only activate after '.'
 	}

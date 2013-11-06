@@ -26,7 +26,8 @@ public abstract class JavaScriptEngine {
 	protected JavaScriptTypesFactory jsFactory;
 	
 	
-    public List setTypeDeclarationVersion(String ecmaVersion, boolean xmlSupported, boolean client) {
+    public List<String> setTypeDeclarationVersion(String ecmaVersion,
+    		boolean xmlSupported, boolean client) {
     	return typesFactory.setTypeDeclarationVersion(ecmaVersion, xmlSupported, client);
     }
     

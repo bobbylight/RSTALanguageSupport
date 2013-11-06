@@ -11,7 +11,6 @@
 package org.fife.rsta.ac.js;
 
 import java.io.StringReader;
-import java.util.Iterator;
 
 import org.fife.rsta.ac.js.ast.type.ArrayTypeDeclaration;
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
@@ -273,9 +272,8 @@ public class JavaScriptHelper {
 	private static TypeDeclaration findArrayType(ArrayLiteral arrayLit, SourceCompletionProvider provider) {
 		TypeDeclaration dec = null;
 		boolean first = true;
-		for(Iterator i = arrayLit.getElements().iterator(); i.hasNext();) {
-			JavaScriptResolver resolver = provider.getJavaScriptEngine().getJavaScriptResolver(provider);
-			AstNode element = (AstNode) i.next();
+		JavaScriptResolver resolver = provider.getJavaScriptEngine().getJavaScriptResolver(provider);
+		for (AstNode element : arrayLit.getElements()) {
 			TypeDeclaration elementType = resolver.resolveNode(element);
 			if(first) {
 				dec = elementType;

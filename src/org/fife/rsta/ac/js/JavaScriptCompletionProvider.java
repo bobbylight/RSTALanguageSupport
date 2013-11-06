@@ -10,8 +10,6 @@
  */
 package org.fife.rsta.ac.js;
 
-import java.util.Iterator;
-
 import org.fife.rsta.ac.ShorthandCompletionCache;
 import org.fife.rsta.ac.java.JarManager;
 import org.fife.ui.autocomplete.AbstractCompletionProvider;
@@ -106,8 +104,7 @@ public class JavaScriptCompletionProvider extends
 	private void setCommentCompletions(ShorthandCompletionCache shorthandCache){
 		AbstractCompletionProvider provider = shorthandCache.getCommentProvider();
 		if(provider != null) {
-			for(Iterator i = shorthandCache.getCommentCompletions().iterator(); i.hasNext();) {
-				Completion c = (Completion)i.next();
+			for (Completion c : shorthandCache.getCommentCompletions()) {
 				provider.addCompletion(c);
 			}
 			setCommentCompletionProvider(provider);
