@@ -1,7 +1,7 @@
 RSTALanguageSupport Readme
 --------------------------
-Version 0.9.4
-13aug2013
+Version 2.5.1
+08nov2013
 
 ----------------------------------------
 Contents

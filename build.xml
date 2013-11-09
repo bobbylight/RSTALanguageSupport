@@ -26,8 +26,8 @@
 	"RSyntaxTextArea" and "AutoComplete" checked out along-side this one.
 
 	Author:   Robert Futrell
-	Version:  0.9.3
-	Date:     11aug2013
+	Version:  2.5.1
+	Date:     08nov2013
 
 -->
 <project name="LanguageSupport" default="make-jar" basedir=".">
@@ -56,7 +56,7 @@
 
 	<!-- Set global properties for this build.         -->
 	<!-- You generally shouldn't have to change these. -->
-	<property name="version"          value="0.9.3"/>
+	<property name="version"          value="2.5.1"/>
 	<property name="source-dir"       location="src"/>
 	<property name="class-dir"        location="ant-classes"/>
 	<property name="dist-dir"         location="dist"/>
