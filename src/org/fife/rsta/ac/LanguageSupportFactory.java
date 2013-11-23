@@ -86,6 +86,8 @@ public class LanguageSupportFactory implements PropertyChangeListener {
 
 		addLanguageSupport(SyntaxConstants.SYNTAX_STYLE_C,
 				prefix + "c.CLanguageSupport");
+		addLanguageSupport(SyntaxConstants.SYNTAX_STYLE_CSS,
+				prefix + "css.CssLanguageSupport");
 		addLanguageSupport(SyntaxConstants.SYNTAX_STYLE_GROOVY,
 				prefix + "groovy.GroovyLanguageSupport");
 		addLanguageSupport(SyntaxConstants.SYNTAX_STYLE_HTML,
