@@ -10,12 +10,10 @@
  */
 package org.fife.rsta.ac.js;
 
-import javax.swing.Icon;
 import javax.swing.JList;
 
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionCellRenderer;
-import org.fife.ui.autocomplete.EmptyIcon;
 import org.fife.ui.autocomplete.FunctionCompletion;
 import org.fife.ui.autocomplete.TemplateCompletion;
 import org.fife.ui.autocomplete.VariableCompletion;
@@ -29,14 +27,11 @@ import org.fife.ui.autocomplete.VariableCompletion;
  */
 public class JavaScriptCellRenderer extends CompletionCellRenderer {
 
-	private Icon emptyIcon;
-
 
 	/**
 	 * Constructor.
 	 */
 	public JavaScriptCellRenderer() {
-		emptyIcon = new EmptyIcon(16);
 	}
 
 
@@ -47,7 +42,7 @@ public class JavaScriptCellRenderer extends CompletionCellRenderer {
 	protected void prepareForOtherCompletion(JList list, Completion c,
 			int index, boolean selected, boolean hasFocus) {
 		super.prepareForOtherCompletion(list, c, index, selected, hasFocus);
-		setIconWithDefault(c, emptyIcon);
+		setIconWithDefault(c);
 	}
 
 

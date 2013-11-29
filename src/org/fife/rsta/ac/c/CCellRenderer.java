@@ -10,14 +10,11 @@
  */
 package org.fife.rsta.ac.c;
 
-import java.net.URL;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JList;
 
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionCellRenderer;
-import org.fife.ui.autocomplete.EmptyIcon;
 import org.fife.ui.autocomplete.FunctionCompletion;
 import org.fife.ui.autocomplete.VariableCompletion;
 
@@ -32,29 +29,14 @@ class CCellRenderer extends CompletionCellRenderer {
 
 	private Icon variableIcon;
 	private Icon functionIcon;
-	private Icon emptyIcon;
 
 
 	/**
 	 * Constructor.
 	 */
 	public CCellRenderer() {
-		emptyIcon = new EmptyIcon(16); // Should be done first
 		variableIcon = getIcon("var.png");
 		functionIcon = getIcon("function.png");
-	}
-
-
-	/**
-	 * Returns an icon.
-	 *
-	 * @param resource The icon to retrieve.  This should either be a file,
-	 *        or a resource loadable by the current ClassLoader.
-	 * @return The icon.
-	 */
-	private Icon getIcon(String resource) {
-		URL url = getClass().getResource(resource); // Should never be null
-		return url!=null ? new ImageIcon(url) : emptyIcon;
 	}
 
 
@@ -65,7 +47,7 @@ class CCellRenderer extends CompletionCellRenderer {
 	protected void prepareForOtherCompletion(JList list,
 			Completion c, int index, boolean selected, boolean hasFocus) {
 		super.prepareForOtherCompletion(list, c, index, selected, hasFocus);
-		setIcon(emptyIcon);
+		setIcon(getEmptyIcon());
 	}
 
 

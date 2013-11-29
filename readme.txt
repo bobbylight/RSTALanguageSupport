@@ -45,6 +45,11 @@ Languages with support include:
    - Auto-completion for the C standard library.
    - Parameter assistance for the C standard library.
 
+2. CSS
+   - Auto-completion for selectors (HTML tags only).
+   - Auto-completion for CSS properties.
+   - Partial auto-completion for CSS property values.
+
 2. Groovy
    - Broken and not very useful at the moment.  Shouldn't be used.
 

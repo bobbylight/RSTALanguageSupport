@@ -10,6 +10,8 @@
  */
 package org.fife.rsta.ac.css;
 
+import javax.swing.ListCellRenderer;
+
 import org.fife.rsta.ac.AbstractLanguageSupport;
 import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -35,6 +37,12 @@ public class CssLanguageSupport extends AbstractLanguageSupport {
 	public CssLanguageSupport() {
 		setParameterAssistanceEnabled(true);
 		setShowDescWindow(true);
+	}
+
+
+	@Override
+	protected ListCellRenderer createDefaultCompletionCellRenderer() {
+		return new CssCellRenderer();
 	}
 
 

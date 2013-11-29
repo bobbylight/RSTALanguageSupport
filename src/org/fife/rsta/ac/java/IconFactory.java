@@ -105,6 +105,11 @@ public class IconFactory {
 	}
 
 
+	public static IconFactory get() {
+		return INSTANCE;
+	}
+
+
 	public Icon getIcon(String key) {
 		return getIcon(key, false);
 	}
@@ -135,11 +140,6 @@ public class IconFactory {
 			icon.addDecorationIcon(getIcon(FINAL_ICON));
 		}
 		return icon;
-	}
-
-
-	public static IconFactory get() {
-		return INSTANCE;
 	}
 
 

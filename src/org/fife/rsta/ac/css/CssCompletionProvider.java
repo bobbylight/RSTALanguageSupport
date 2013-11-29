@@ -1,5 +1,5 @@
 /*
- * 03/21/2010
+ * 11/28/2013
  *
  * Copyright (C) 2010 Robert Futrell
  * robert_futrell at users.sourceforge.net
@@ -30,7 +30,6 @@ public class CssCompletionProvider extends LanguageAwareCompletionProvider {
 	 */
 	public CssCompletionProvider() {
 		setDefaultCompletionProvider(createCodeCompletionProvider());
-		setStringCompletionProvider(createStringCompletionProvider());
 		setCommentCompletionProvider(createCommentCompletionProvider());
 	}
 
@@ -40,8 +39,6 @@ public class CssCompletionProvider extends LanguageAwareCompletionProvider {
 	 *
 	 * @return The provider.
 	 * @see #createCommentCompletionProvider()
-	 * @see #createStringCompletionProvider()
-	 * @see #loadCodeCompletionsFromXml(DefaultCompletionProvider)
 	 */
 	protected CompletionProvider createCodeCompletionProvider() {
 		return new PropertyValueCompletionProvider();
@@ -54,33 +51,12 @@ public class CssCompletionProvider extends LanguageAwareCompletionProvider {
 	 *
 	 * @return The provider.
 	 * @see #createCodeCompletionProvider()
-	 * @see #createStringCompletionProvider()
 	 */
 	protected CompletionProvider createCommentCompletionProvider() {
 		DefaultCompletionProvider cp = new DefaultCompletionProvider();
 		cp.addCompletion(new BasicCompletion(cp, "TODO:", "A to-do reminder"));
 		cp.addCompletion(new BasicCompletion(cp, "FIXME:", "A bug that needs to be fixed"));
 		return cp;
-	}
-
-
-	/**
-	 * Returns the completion provider to use when the caret is in a string.
-	 *
-	 * @return The provider.
-	 * @see #createCodeCompletionProvider()
-	 * @see #createCommentCompletionProvider()
-	 */
-	protected CompletionProvider createStringCompletionProvider() {
-//		DefaultCompletionProvider cp = new DefaultCompletionProvider();
-//		cp.addCompletion(new BasicCompletion(cp, "%c", "char", "Prints a character"));
-//		cp.addCompletion(new BasicCompletion(cp, "%i", "signed int", "Prints a signed integer"));
-//		cp.addCompletion(new BasicCompletion(cp, "%f", "float", "Prints a float"));
-//		cp.addCompletion(new BasicCompletion(cp, "%s", "string", "Prints a string"));
-//		cp.addCompletion(new BasicCompletion(cp, "%u", "unsigned int", "Prints an unsigned integer"));
-//		cp.addCompletion(new BasicCompletion(cp, "\\n", "Newline", "Prints a newline"));
-//		return cp;
-return null;
 	}
 
 

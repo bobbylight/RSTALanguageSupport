@@ -13,6 +13,10 @@ Languages supported in this library include:
 * C
     * Auto-completion for the C standard library.
     * Parameter assistance for the C standard library.
+* CSS
+    * Auto-completion for selectors (HTML tags only)
+    * Auto-completion for CSS properties
+    * Partial auto-completion for CSS values
 * Groovy
     * Broken and not very useful at the moment.
 * HTML

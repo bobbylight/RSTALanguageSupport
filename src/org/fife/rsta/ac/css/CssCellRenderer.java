@@ -1,5 +1,5 @@
 /*
- * 03/21/2010
+ * 11/28/2013
  *
  * Copyright (C) 2010 Robert Futrell
  * robert_futrell at users.sourceforge.net
@@ -8,7 +8,7 @@
  * This library is distributed under a modified BSD license.  See the included
  * RSTALanguageSupport.License.txt file for details.
  */
-package org.fife.rsta.ac.html;
+package org.fife.rsta.ac.css;
 
 import javax.swing.Icon;
 import javax.swing.JList;
@@ -21,23 +21,21 @@ import org.fife.ui.autocomplete.VariableCompletion;
 
 
 /**
- * The cell renderer used for HTML.
+ * The cell renderer used for CSS.
  *
  * @author Robert Futrell
  * @version 1.0
  */
-public class HtmlCellRenderer extends CompletionCellRenderer {
+class CssCellRenderer extends CompletionCellRenderer {
 
 	private Icon tagIcon;
-	private Icon attrIcon;
 
 
 	/**
 	 * Constructor.
 	 */
-	public HtmlCellRenderer() {
-		tagIcon = getIcon("tag.png");
-		attrIcon = getIcon("attribute.png");
+	public CssCellRenderer() {
+		tagIcon = getIcon("img/tag.png");
 	}
 
 
@@ -73,12 +71,7 @@ public class HtmlCellRenderer extends CompletionCellRenderer {
 			Completion c, int index, boolean selected,
 			boolean hasFocus) {
 		super.prepareForOtherCompletion(list, c, index, selected, hasFocus);
-		if (c instanceof AttributeCompletion) {
-			setIcon(attrIcon);
-		}
-		else {
-			setIcon(getEmptyIcon());
-		}
+		setIconWithDefault(c);
 	}
 
 

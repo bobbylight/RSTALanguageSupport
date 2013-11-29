@@ -7,6 +7,7 @@
 	following languages:
 	
 		- C
+		- CSS
 		- Groovy
 		- HTML
 		- Java
@@ -26,7 +27,7 @@
 	"RSyntaxTextArea" and "AutoComplete" checked out along-side this one.
 
 	Author:   Robert Futrell
-	Version:  2.5.1
+	Version:  2.5.2
 	Date:     08nov2013
 
 -->
@@ -39,6 +40,7 @@
 	<!-- Simply remove the properties for languages you don't need.     -->
 	<!-- You will have to modify LanguageSupportFactory.java though.    -->
 	<property name="c"                value="true"/>
+	<property name="css"              value="true"/>
 	<property name="groovy"           value="true"/>
 	<property name="html"             value="true"/>
 	<property name="java"             value="true"/>
@@ -56,7 +58,7 @@
 
 	<!-- Set global properties for this build.         -->
 	<!-- You generally shouldn't have to change these. -->
-	<property name="version"          value="2.5.1"/>
+	<property name="version"          value="2.5.2"/>
 	<property name="source-dir"       location="src"/>
 	<property name="class-dir"        location="ant-classes"/>
 	<property name="dist-dir"         location="dist"/>
@@ -86,6 +88,7 @@
 			<include             name="org/fife/rsta/ac/common/*"/>
 
 			<include if="c"      name="org/fife/rsta/ac/c/**"/>
+			<include if="css"    name="org/fife/rsta/ac/css/**"/>
 			<include if="groovy" name="org/fife/rsta/ac/groovy/**"/>
 			<include if="html"   name="org/fife/rsta/ac/html/**"/>
 			<include if="java"   name="org/fife/rsta/ac/java/**"/>
@@ -112,6 +115,7 @@
 			<fileset dir="${class-dir}"/>
 			<fileset dir=".">
 				<include if="c"    name="data/c.xml"/>
+				<include if="css"  name="data/css_properties.txt"/>
 				<include if="html" name="data/html.xml"/>
 				<include if="jsp"  name="data/jsp.xml"/>
 				<include if="perl" name="data/perl5.xml"/>
@@ -120,6 +124,8 @@
 			</fileset>
 			<fileset dir="src">
 				<include if="c"    name="org/fife/rsta/ac/c/**/*.png"/>
+				<include if="css"  name="org/fife/rsta/ac/css/**/*.png"/>
+				<include if="css"  name="org/fife/rsta/ac/css/**/*.gif"/>
 				<include if="html" name="org/fife/rsta/ac/html/**/*.png"/>
 				<include if="html" name="org/fife/rsta/ac/html/**/*.txt"/>
 				<include if="java" name="org/fife/rsta/ac/java/**/*.gif"/>
