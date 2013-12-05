@@ -46,7 +46,7 @@ break-after visual_props
 break-before visual_props
 break-inside visual_props
 caption-side table_props
-clear visual_props
+clear visual_props [ none left right both inherit ]
 clip visual_props
 color colback_props
 column-count visual_props
@@ -67,18 +67,18 @@ cue-after aural_props
 cue-before aural_props
 cursor ui_props
 direction visual_props
-display visual_props
+display visual_props [ none inline block list-item inline-block inline-table table table-cell table-column table-column-group table-footer-group table-header-group table-row table-row-group flex inline-flex grid inline-grid run-in ]
 elevation aural_props
 empty-cells table_props
-float visual_props
+float visual_props [ left right none inherit ]
 font font_props
 font-family font_props
 font-size font_props
 font-size-adjust font_props
 font-stretch font_props
-font-style font_props
+font-style font_props [ normal italic oblique inherit ]
 font-variant font_props
-font-weight font_props
+font-weight font_props [ normal bold bolder lighter 100 200 300 400 500 600 700 800 900 inherit ]
 height visual_props
 left visual_props
 letter-spacing text_props
@@ -86,7 +86,7 @@ line-height visual_props
 list-style content_props
 list-style-image content_props
 list-style-position content_props
-list-style-type content_props
+list-style-type content_props [ disc circle square decimal decimal-leading-zero lower-roman upper-roman lower-greek lower-latin upper-latin armenian georgian lower-alpha upper-alpha none inherit ]
 margin boxmodel_props
 margin-bottom boxmodel_props
 margin-left boxmodel_props
@@ -141,8 +141,12 @@ speak-punctuation aural_props
 speech-rate aural_props
 stress aural_props
 table-layout table_props
-text-align text_props
-text-decoration text_props
+text-align text_props [ start end left right center justify match-parent start end inherit ]
+text-align-last text_props [ auto start end left right center justify inherit ]
+text-decoration text_props [ none underline overline line-through blink -moz-anchor-decoration inherit ]
+text-decoration-color text_props
+text-decoration-style text_props [ solid double dotted dashed wavy inherit ]
+text-decoration-line text_props [ none underline overline line-through blink inherit ]
 text-indent text_props
 text-shadow text_props
 text-transform text_props

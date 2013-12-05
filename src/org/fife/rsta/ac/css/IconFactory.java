@@ -35,6 +35,7 @@ class IconFactory {
 		"boxmodel_props",
 		"colback_props",
 		"content_props",
+		"css_propertyvalue_identifier",
 		"font_props",
 		"pagedmedia_props",
 		"table_props",

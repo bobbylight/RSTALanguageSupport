@@ -35,6 +35,7 @@ public class CssLanguageSupport extends AbstractLanguageSupport {
 	 * Constructor.
 	 */
 	public CssLanguageSupport() {
+		setAutoActivationEnabled(true);
 		setParameterAssistanceEnabled(true);
 		setShowDescWindow(true);
 	}

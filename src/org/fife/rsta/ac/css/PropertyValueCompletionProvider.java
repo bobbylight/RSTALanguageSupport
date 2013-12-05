@@ -21,7 +21,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.Element;
@@ -32,13 +37,13 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.fife.ui.autocomplete.AbstractCompletionProvider;
-import org.fife.ui.autocomplete.BasicCompletion;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProviderBase;
 import org.fife.ui.autocomplete.CompletionXMLParser;
 import org.fife.ui.autocomplete.FunctionCompletion;
 import org.fife.ui.autocomplete.ParameterizedCompletion;
 import org.fife.ui.autocomplete.Util;
+import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.Token;
 import org.xml.sax.SAXException;
@@ -54,7 +59,7 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 
 	private List<Completion> htmlTagCompletions;
 	private List<Completion> propertyCompletions;
-	private List<Completion> valueCompletions;
+	private Map<String, List<Completion>> valueCompletions;
 	private Segment seg = new Segment();
 	private AbstractCompletionProvider.CaseInsensitiveComparator comparator;
 
@@ -64,16 +69,27 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 	 */
 	private String currentProperty;
 
+	/**
+	 * The most common vendor prefixes.  We ignore these.
+	 */
+	private static final Pattern VENDOR_PREFIXES =
+			Pattern.compile("^\\-(?:ms|moz|o|xv|webkit|khtml|apple)\\-");
+
 
 	public PropertyValueCompletionProvider() {
+
+		setAutoActivationRules(true, ": ");
+
 		try {
-			this.propertyCompletions = loadPropertyCompletions();
+			this.valueCompletions = new HashMap<String, List<Completion>>();
+			loadPropertyCompletions();
 			this.htmlTagCompletions = loadHtmlTagCompletions();
-			this.valueCompletions = loadValueCompletions();
 		} catch (IOException ioe) { // Never happens
 			throw new RuntimeException(ioe);
 		}
+
 		comparator = new AbstractCompletionProvider.CaseInsensitiveComparator();
+
 	}
 
 
@@ -102,8 +118,23 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 		start++;
 
 		len = segEnd - start;
-		return len==0 ? EMPTY_STRING : new String(seg.array, start, len);
+		if (len==0) {
+			return EMPTY_STRING;
+		}
 
+		String text = new String(seg.array, start, len);
+		return removeVendorPrefix(text);
+	}
+
+
+	private static final String removeVendorPrefix(String text) {
+		if (text.length()>0 && text.charAt(0)=='-') {
+			Matcher m = VENDOR_PREFIXES.matcher(text);
+			if (m.find()) {
+				text = text.substring(m.group().length());
+			}
+		}
+		return text;
 	}
 
 
@@ -115,7 +146,6 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 
 	public List<ParameterizedCompletion> getParameterizedCompletions(
 			JTextComponent tc) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -132,7 +162,7 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 			while (t!=null && t.isPaintable() && !t.containsPosition(dot)) {
 				if (t.getType()==Token.RESERVED_WORD) {
 					state = 1;
-					currentProperty = t.getLexeme();
+					currentProperty = removeVendorPrefix(t.getLexeme());
 					somethingFound = true;
 				}
 				else if (t.getType()==Token.ANNOTATION || t.getType()==Token.FUNCTION ||
@@ -189,7 +219,10 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 					choices = propertyCompletions;
 					break;
 				case 2:
-					choices = valueCompletions;
+					choices = valueCompletions.get(currentProperty);
+					if (choices==null) {
+						return retVal;
+					}
 					break;
 			}
 			int index = Collections.binarySearch(choices, text, comparator);
@@ -226,6 +259,36 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 
 	}
 
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean isAutoActivateOkay(JTextComponent tc) {
+
+		boolean ok = super.isAutoActivateOkay(tc);
+
+		// In our constructor, we set up auto-activation of the completion
+		// popup to occur on space chars.  This extra check makes it a little
+		// more sane, by only letting space auto-activate completion choices
+		// for property values.
+		if (ok) {
+			RSyntaxDocument doc = (RSyntaxDocument)tc.getDocument();
+			int dot = tc.getCaretPosition();
+			try {
+				if (dot>1 && doc.charAt(dot)==' ') { // Caret hasn't advanced (?)
+					ok = doc.charAt(dot-1)==':';
+				}
+			} catch (BadLocationException ble) {
+				ble.printStackTrace(); // Never happens
+			}
+		}
+
+		return ok;
+
+	}
+
+
 	public boolean isValidChar(char ch) {
 		return Character.isLetterOrDigit(ch) || ch=='-' || ch=='_' || ch=='#' ||
 				ch=='.';
@@ -241,9 +304,9 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 	}
 
 
-	private List<Completion> loadPropertyCompletions() throws IOException {
+	private void loadPropertyCompletions() throws IOException {
 
-		List<Completion> propertyCompletions = new ArrayList<Completion>();
+		propertyCompletions = new ArrayList<Completion>();
 
 		BufferedReader r = null;
 		ClassLoader cl = getClass().getClassLoader();
@@ -258,10 +321,7 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 		try {
 			while ((line=r.readLine())!=null) {
 				if (line.length()>0 && line.charAt(0)!='#') {
-					String[] nameAndIcon = line.split("\\s+");
-					String icon = nameAndIcon.length>1 ? nameAndIcon[1] : null;
-					propertyCompletions.add(
-							new PropertyCompletion(this, nameAndIcon[0], icon));
+					parsePropertyValueCompletionLine(line);
 				}
 			}
 		} finally {
@@ -269,21 +329,6 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 		}
 
 		Collections.sort(propertyCompletions);
-		return propertyCompletions;
-
-	}
-
-
-	private List<Completion> loadValueCompletions() throws IOException {
-
-		List<Completion> completions = new ArrayList<Completion>();
-
-		completions.add(new BasicCompletion(this, "black"));
-		completions.add(new BasicCompletion(this, "white"));
-		completions.add(new BasicCompletion(this, "#808080"));
-
-		Collections.sort(completions);
-		return completions;
 
 	}
 
@@ -352,6 +397,33 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 		} finally {
 			bin.close();
 		}
+	}
+
+
+	private void parsePropertyValueCompletionLine(String line)
+			throws IOException {
+
+		String[] tokens = line.split("\\s+");
+		String prop = tokens[0];
+		String icon = tokens.length>1 ? tokens[1] : null;
+		propertyCompletions.add(new PropertyCompletion(this, prop, icon));
+
+		if (tokens.length>2) {
+
+			// Format: display gifname [ none inline block ]
+			if (tokens[2].equals("[") &&
+					tokens[tokens.length-1].equals("]")) {
+				List<Completion> completions = new ArrayList<Completion>();
+				for (int i=3; i<tokens.length-1; i++) {
+					completions.add(new ValueCompletion(this,
+						tokens[i], "css_propertyvalue_identifier"));
+				}
+				Collections.sort(completions);
+				valueCompletions.put(prop, completions);
+			}
+
+		}
+
 	}
 
 
