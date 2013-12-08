@@ -60,6 +60,8 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 	private List<Completion> htmlTagCompletions;
 	private List<Completion> propertyCompletions;
 	private Map<String, List<Completion>> valueCompletions;
+	private Map<String, CompletionGenerator> valueCompletionGenerators;
+	
 	private Segment seg = new Segment();
 	private AbstractCompletionProvider.CaseInsensitiveComparator comparator;
 
@@ -75,6 +77,9 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 	private static final Pattern VENDOR_PREFIXES =
 			Pattern.compile("^\\-(?:ms|moz|o|xv|webkit|khtml|apple)\\-");
 
+	private final Completion INHERIT_COMPLETION =
+		new ValueCompletion(this, "inherit", "css_propertyvalue_identifier");
+
 
 	public PropertyValueCompletionProvider() {
 
@@ -82,6 +87,8 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 
 		try {
 			this.valueCompletions = new HashMap<String, List<Completion>>();
+			this.valueCompletionGenerators =
+					new HashMap<String, CompletionGenerator>();
 			loadPropertyCompletions();
 			this.htmlTagCompletions = loadHtmlTagCompletions();
 		} catch (IOException ioe) { // Never happens
@@ -210,7 +217,7 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 			RSyntaxTextArea textArea = (RSyntaxTextArea)comp;
 			int lexerState = getLexerState(textArea, textArea.getCaretLineNumber());
 
-			List<Completion> choices = null;
+			List<Completion> choices = new ArrayList<Completion>();
 			switch (lexerState) {
 				case 0:
 					choices = htmlTagCompletions;
@@ -220,6 +227,23 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 					break;
 				case 2:
 					choices = valueCompletions.get(currentProperty);
+					if (valueCompletionGenerators.get(currentProperty)!=null) {
+						List<Completion> toMerge = valueCompletionGenerators.
+								get(currentProperty).generate(this, text);
+						if (toMerge!=null) {
+							if (choices==null) {
+								choices = toMerge;
+							}
+							else {
+								// Clone choices array since we had a shallow
+								// copy of the "static" completions for this
+								// property
+								choices = new ArrayList<Completion>(choices);
+								choices.addAll(toMerge);
+							}
+							Collections.sort(choices);
+						}
+					}
 					if (choices==null) {
 						return retVal;
 					}
@@ -410,18 +434,42 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 
 		if (tokens.length>2) {
 
+			List<Completion> completions = new ArrayList<Completion>();
+			completions.add(INHERIT_COMPLETION);
+
 			// Format: display gifname [ none inline block ]
 			if (tokens[2].equals("[") &&
 					tokens[tokens.length-1].equals("]")) {
-				List<Completion> completions = new ArrayList<Completion>();
 				for (int i=3; i<tokens.length-1; i++) {
-					completions.add(new ValueCompletion(this,
-						tokens[i], "css_propertyvalue_identifier"));
+					String token = tokens[i];
+					Completion completion = null;
+					if ("*length*".equals(token)) {
+						valueCompletionGenerators.put(prop,
+							new PercentageOrLengthCompletionGenerator(false));
+					}
+					else if ("*percentage-or-length*".equals(token)) {
+						valueCompletionGenerators.put(prop,
+							new PercentageOrLengthCompletionGenerator(true));
+					}
+					else if ("*color*".equals(token)) {
+						valueCompletionGenerators.put(prop,
+							new ColorCompletionGenerator(this));
+					}
+					else if ("*time*".equals(token)) {
+						valueCompletionGenerators.put(prop,
+							new TimeCompletionGenerator());
+					}
+					else {
+						completion = new ValueCompletion(this,
+								tokens[i], "css_propertyvalue_identifier");
+					}
+					if (completion!=null) {
+						completions.add(completion);
+					}
 				}
-				Collections.sort(completions);
-				valueCompletions.put(prop, completions);
 			}
 
+			valueCompletions.put(prop, completions);
 		}
 
 	}

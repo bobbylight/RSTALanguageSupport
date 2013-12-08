@@ -1,18 +1,18 @@
 animation ui_props
-animation-delay ui_props
+animation-delay ui_props [ *time* ]
 animation-direction ui_props
-animation-duration ui_props
-animation-fill-mode ui_props
+animation-duration ui_props [ *time* ]
+animation-fill-mode ui_props [ none forwards backwards both ]
 animation-iteration-count ui_props
 animation-name ui_props
 animation-play-state ui_props
 animation-timing-function ui_props
 azimuth aural_props
 backface-visibility ui_props
-background colback_props
+background colback_props [ *color* ]
 background-attachment colback_props
 background-clip colback_props
-background-color colback_props
+background-color colback_props [ *color* ]
 background-image colback_props
 background-origin colback_props
 background-position colback_props
@@ -23,7 +23,7 @@ border-bottom boxmodel_props
 border-bottom-left-radius boxmodel_props
 border-bottom-right-radius boxmodel_props
 border-collapse table_props
-border-color boxmodel_props
+border-color boxmodel_props [ *color* ]
 border-image boxmodel_props
 border-image-outset boxmodel_props
 border-image-repeat boxmodel_props
@@ -33,27 +33,27 @@ border-image-width boxmodel_props
 border-left boxmodel_props
 border-radius boxmodel_props
 border-right boxmodel_props
-border-spacing table_props
+border-spacing table_props [ *length* ]
 border-style boxmodel_props
 border-top boxmodel_props
 border-top-left-radius boxmodel_props
 border-top-right-radius boxmodel_props
 border-width boxmodel_props
-bottom visual_props
+bottom visual_props [ *percentage-or-length* auto ]
 box-decoration-break visual_props
 box-shadow visual_props
 break-after visual_props
 break-before visual_props
 break-inside visual_props
 caption-side table_props
-clear visual_props [ none left right both inherit ]
+clear visual_props [ none left right both ]
 clip visual_props
-color colback_props
+color colback_props [ *color* ]
 column-count visual_props
 column-fill visual_props
 column-gap visual_props
 column-rule visual_props
-column-rule-color visual_props
+column-rule-color visual_props [ *color* ]
 column-rule-style visual_props
 column-rule-width visual_props
 column-span visual_props
@@ -70,23 +70,23 @@ direction visual_props
 display visual_props [ none inline block list-item inline-block inline-table table table-cell table-column table-column-group table-footer-group table-header-group table-row table-row-group flex inline-flex grid inline-grid run-in ]
 elevation aural_props
 empty-cells table_props
-float visual_props [ left right none inherit ]
+float visual_props [ left right none ]
 font font_props
 font-family font_props
 font-size font_props
 font-size-adjust font_props
 font-stretch font_props
-font-style font_props [ normal italic oblique inherit ]
+font-style font_props [ normal italic oblique ]
 font-variant font_props
-font-weight font_props [ normal bold bolder lighter 100 200 300 400 500 600 700 800 900 inherit ]
-height visual_props
-left visual_props
+font-weight font_props [ normal bold bolder lighter 100 200 300 400 500 600 700 800 900 ]
+height visual_props [ *percentage-or-length* auto ]
+left visual_props [ *percentage-or-length* auto ]
 letter-spacing text_props
 line-height visual_props
 list-style content_props
 list-style-image content_props
 list-style-position content_props
-list-style-type content_props [ disc circle square decimal decimal-leading-zero lower-roman upper-roman lower-greek lower-latin upper-latin armenian georgian lower-alpha upper-alpha none inherit ]
+list-style-type content_props [ disc circle square decimal decimal-leading-zero lower-roman upper-roman lower-greek lower-latin upper-latin armenian georgian lower-alpha upper-alpha none ]
 margin boxmodel_props
 margin-bottom boxmodel_props
 margin-left boxmodel_props
@@ -98,14 +98,14 @@ marquee-direction ui_props
 marquee-play-count ui_props
 marquee-speed ui_props
 marquee-style ui_props
-max-height visual_props
-max-width visual_props
-min-height visual_props
-min-width visual_props
+max-height visual_props [ *percentage-or-length* none max-content min-content fit-content fill-available ]
+max-width visual_props [ *percentage-or-length* none max-content min-content fit-content fill-available ]
+min-height visual_props [ *percentage-or-length* max-content min-content fit-content fill-available ]
+min-width visual_props [ *percentage-or-length* max-content min-content fit-content fill-available ]
 opacity ui_props
 orphans pagedmedia_props
 outline ui_props
-outline-color ui_props
+outline-color ui_props [ *color* invert ]
 outline-style ui_props
 outline-width ui_props
 overflow visual_props
@@ -132,7 +132,7 @@ play-during aural_props
 position visual_props
 quotes content_props
 richness aural_props
-right visual_props
+right visual_props [ *percentage-or-length* auto ]
 size pagedmedia_props
 speak aural_props
 speak-header table_props
@@ -140,17 +140,17 @@ speak-numeral aural_props
 speak-punctuation aural_props
 speech-rate aural_props
 stress aural_props
-table-layout table_props
-text-align text_props [ start end left right center justify match-parent start end inherit ]
-text-align-last text_props [ auto start end left right center justify inherit ]
-text-decoration text_props [ none underline overline line-through blink -moz-anchor-decoration inherit ]
-text-decoration-color text_props
-text-decoration-style text_props [ solid double dotted dashed wavy inherit ]
-text-decoration-line text_props [ none underline overline line-through blink inherit ]
-text-indent text_props
+table-layout table_props [ auto fixed ]
+text-align text_props [ start end left right center justify match-parent start end ]
+text-align-last text_props [ auto start end left right center justify ]
+text-decoration text_props [ none underline overline line-through blink -moz-anchor-decoration ]
+text-decoration-color text_props [ *color* ]
+text-decoration-style text_props [ solid double dotted dashed wavy ]
+text-decoration-line text_props [ none underline overline line-through blink ]
+text-indent text_props [ *percentage-or-length* ]
 text-shadow text_props
 text-transform text_props
-top visual_props
+top visual_props [ *percentage-or-length* auto ]
 transform visual_props
 transform-origin visual_props
 transform-style visual_props
@@ -160,12 +160,12 @@ transition-duration visual_props
 transition-property visual_props
 transition-timing-function visual_props
 unicode-bidi visual_props
-vertical-align visual_props
-visibility visual_props
+vertical-align visual_props [ baseline sub super text-top text-bottom middle top bottom *percentage-or-length* ]
+visibility visual_props [ visible hidden collapse ]
 voice-family aural_props
 volume aural_props
 white-space text_props
 widows pagedmedia_props
-width visual_props
-word-spacing text_props
+width visual_props [ *percentage-or-length* border-box content-box available min-content max-content fit-content auto ]
+word-spacing text_props [ normal *length* ]
 z-index visual_props
