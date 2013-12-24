@@ -37,6 +37,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.fife.ui.autocomplete.AbstractCompletionProvider;
+import org.fife.ui.autocomplete.BasicCompletion;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProviderBase;
 import org.fife.ui.autocomplete.CompletionXMLParser;
@@ -83,7 +84,7 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 
 	public PropertyValueCompletionProvider() {
 
-		setAutoActivationRules(true, ": ");
+		setAutoActivationRules(true, "@: ");
 
 		try {
 			this.valueCompletions = new HashMap<String, List<Completion>>();
@@ -97,6 +98,19 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 
 		comparator = new AbstractCompletionProvider.CaseInsensitiveComparator();
 
+	}
+
+
+	private void addAtRuleCompletions(List<Completion> completions) {
+		completions.add(new BasicCompletion(this, "@charset"));
+		completions.add(new BasicCompletion(this, "@import"));
+		completions.add(new BasicCompletion(this, "@namespace"));
+		completions.add(new BasicCompletion(this, "@media"));
+		completions.add(new BasicCompletion(this, "@page"));
+		completions.add(new BasicCompletion(this, "@font-face"));
+		completions.add(new BasicCompletion(this, "@keyframes"));
+		completions.add(new BasicCompletion(this, "@supports"));
+		completions.add(new BasicCompletion(this, "@document"));
 	}
 
 
@@ -314,17 +328,29 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 
 
 	public boolean isValidChar(char ch) {
-		return Character.isLetterOrDigit(ch) || ch=='-' || ch=='_' || ch=='#' ||
-				ch=='.';
+		switch (ch) {
+			case '-':
+			case '_':
+			case '#':
+			case '.':
+			case '@':
+				return true;
+		}
+		return Character.isLetterOrDigit(ch);
 	}
 
 
 	private List<Completion> loadHtmlTagCompletions() throws IOException {
+
 		// TODO: Share/grab this list directly from HtmlCompletionProvider?
 		List<Completion> completions = new ArrayList<Completion>();
 		completions = loadFromXML("data/html.xml");
+
+		addAtRuleCompletions(completions);
+		
 		Collections.sort(completions);
 		return completions;
+
 	}
 
 
