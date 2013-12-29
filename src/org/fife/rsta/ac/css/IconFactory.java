@@ -30,33 +30,19 @@ class IconFactory {
 	private Map<String, Icon> iconMap;
 
 
-	private static final String[] IMAGE_FILES = {
-		"aural_props",
-		"boxmodel_props",
-		"colback_props",
-		"content_props",
-		"css_propertyvalue_function",
-		"css_propertyvalue_identifier",
-		"css_propertyvalue_unit",
-		"font_props",
-		"pagedmedia_props",
-		"table_props",
-		"text_props",
-		"ui_props",
-		"visual_props",
-	};
-
-
+	/**
+	 * Private constructor to prevent instantiation.
+	 */
 	private IconFactory() {
-
 		iconMap = new HashMap<String, Icon>();
-		for (String imageFile : IMAGE_FILES) {
-			iconMap.put(imageFile, loadIcon(imageFile + ".gif"));
-		}
-
 	}
 
 
+	/**
+	 * Returns the singleton instance of this class.
+	 *
+	 * @return The singleton instance.
+	 */
 	public static IconFactory get() {
 		if (INSTANCE==null) {
 			INSTANCE = new IconFactory();
@@ -65,11 +51,28 @@ class IconFactory {
 	}
 
 
+	/**
+	 * Returns the icon requested.
+	 *
+	 * @param key The key for the icon.
+	 * @return The icon.
+	 */
 	public Icon getIcon(String key) {
-		return iconMap.get(key);
+		Icon icon = iconMap.get(key);
+		if (icon==null) {
+			icon = loadIcon(key + ".gif");
+			iconMap.put(key, icon);
+		}
+		return icon;
 	}
 
 
+	/**
+	 * Loads an icon by file name.
+	 *
+	 * @param name The icon file name.
+	 * @return The icon.
+	 */
 	private Icon loadIcon(String name) {
 		URL res = getClass().getResource("img/" + name);
 		if (res==null) {

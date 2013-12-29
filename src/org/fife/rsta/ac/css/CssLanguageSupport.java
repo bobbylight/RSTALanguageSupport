@@ -38,7 +38,7 @@ public class CssLanguageSupport extends AbstractLanguageSupport {
 		setAutoActivationEnabled(true);
 		setAutoActivationDelay(500);
 		setParameterAssistanceEnabled(true);
-		setShowDescWindow(true);
+		//setShowDescWindow(true);
 	}
 
 

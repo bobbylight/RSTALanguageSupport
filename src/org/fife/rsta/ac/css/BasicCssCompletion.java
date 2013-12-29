@@ -17,17 +17,18 @@ import org.fife.ui.autocomplete.CompletionProvider;
 
 
 /**
- * A completion for a CSS value.
+ * A basic completion type for CSS code completion.  Basically just a
+ * {@link BasicCompletion} with a key for the icon for this completion type.
  *
  * @author Robert Futrell
  * @version 1.0
  */
-class ValueCompletion extends BasicCompletion {
+class BasicCssCompletion extends BasicCompletion {
 
 	private String iconKey;
 
 
-	public ValueCompletion(CompletionProvider provider, String value,
+	public BasicCssCompletion(CompletionProvider provider, String value,
 			String iconKey) {
 		super(provider, value);
 		this.iconKey = iconKey;

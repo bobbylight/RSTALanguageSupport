@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.Element;
@@ -35,9 +34,9 @@ import javax.swing.text.Segment;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import org.xml.sax.SAXException;
 
 import org.fife.ui.autocomplete.AbstractCompletionProvider;
-import org.fife.ui.autocomplete.BasicCompletion;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProviderBase;
 import org.fife.ui.autocomplete.CompletionXMLParser;
@@ -47,7 +46,6 @@ import org.fife.ui.autocomplete.Util;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.Token;
-import org.xml.sax.SAXException;
 
 
 /**
@@ -79,7 +77,7 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 			Pattern.compile("^\\-(?:ms|moz|o|xv|webkit|khtml|apple)\\-");
 
 	private final Completion INHERIT_COMPLETION =
-		new ValueCompletion(this, "inherit", "css_propertyvalue_identifier");
+		new BasicCssCompletion(this, "inherit", "css_propertyvalue_identifier");
 
 
 	public PropertyValueCompletionProvider() {
@@ -102,15 +100,15 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 
 
 	private void addAtRuleCompletions(List<Completion> completions) {
-		completions.add(new BasicCompletion(this, "@charset"));
-		completions.add(new BasicCompletion(this, "@import"));
-		completions.add(new BasicCompletion(this, "@namespace"));
-		completions.add(new BasicCompletion(this, "@media"));
-		completions.add(new BasicCompletion(this, "@page"));
-		completions.add(new BasicCompletion(this, "@font-face"));
-		completions.add(new BasicCompletion(this, "@keyframes"));
-		completions.add(new BasicCompletion(this, "@supports"));
-		completions.add(new BasicCompletion(this, "@document"));
+		completions.add(new BasicCssCompletion(this, "@charset", "charset_rule"));
+		completions.add(new BasicCssCompletion(this, "@import", "link_rule"));
+		completions.add(new BasicCssCompletion(this, "@namespace", "charset_rule"));
+		completions.add(new BasicCssCompletion(this, "@media", "media_rule"));
+		completions.add(new BasicCssCompletion(this, "@page", "page_rule"));
+		completions.add(new BasicCssCompletion(this, "@font-face", "fontface_rule"));
+		completions.add(new BasicCssCompletion(this, "@keyframes", "charset_rule"));
+		completions.add(new BasicCssCompletion(this, "@supports", "charset_rule"));
+		completions.add(new BasicCssCompletion(this, "@document", "charset_rule"));
 	}
 
 
@@ -486,7 +484,7 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 							new TimeCompletionGenerator());
 					}
 					else {
-						completion = new ValueCompletion(this,
+						completion = new BasicCssCompletion(this,
 								tokens[i], "css_propertyvalue_identifier");
 					}
 					if (completion!=null) {
