@@ -214,7 +214,6 @@ class DemoRootPane extends JRootPane implements HyperlinkListener,
 
 		if (tree!=null) {
 			tree.uninstall();
-			treeSP.remove(tree);
 		}
 
 		String language = textArea.getSyntaxEditingStyle();
@@ -234,8 +233,12 @@ class DemoRootPane extends JRootPane implements HyperlinkListener,
 		if (tree!=null) {
 			tree.listenTo(textArea);
 			treeSP.setViewportView(tree);
-			treeSP.revalidate();
 		}
+		else {
+			JTree dummy = new JTree((TreeNode)null);
+			treeSP.setViewportView(dummy);
+		}
+		treeSP.revalidate();
 
 	}
 
