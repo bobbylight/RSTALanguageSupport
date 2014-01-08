@@ -63,16 +63,15 @@ class DemoRootPane extends JRootPane implements HyperlinkListener,
 			ioe.printStackTrace();
 		}
 		
+		// Dummy tree keeps JViewport's "background" looking right initially
+		JTree dummy = new JTree((TreeNode)null);
+		treeSP = new JScrollPane(dummy);
 
 		textArea = createTextArea();
 		setText("CExample.txt", SYNTAX_STYLE_C);
 		scrollPane = new RTextScrollPane(textArea, true);
 		scrollPane.setIconRowHeaderEnabled(true);
 		scrollPane.getGutter().setBookmarkingEnabled(true);
-
-		// Dummy tree keeps JViewport's "background" looking right initially
-		JTree dummy = new JTree((TreeNode)null);
-		treeSP = new JScrollPane(dummy);
 
 		final JSplitPane sp = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 										treeSP, scrollPane);
