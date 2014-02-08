@@ -203,8 +203,14 @@ class JsHinter {
 								Token t = RSyntaxUtilities.getTokenAtOffset(doc,
 										offs);
 								lineNum = root.getElementIndex(offs);
-								dpn = new DefaultParserNotice(parser, msg, lineNum,
-										t.getOffset(), t.length());
+								if (t!=null) {
+									dpn = new DefaultParserNotice(parser, msg,
+											lineNum, t.getOffset(), t.length());
+								}
+								else if (offs==doc.getLength()) {
+									dpn = new DefaultParserNotice(parser, msg,
+											lineNum, offs, 1);
+								}
 								break;
 							case MARK_PREV_NON_WS_TOKEN:
 								t = RSyntaxUtilities.
