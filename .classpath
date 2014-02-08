@@ -7,6 +7,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/AutoComplete"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/RSyntaxTextArea"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
-	<classpathentry kind="lib" path="lib/rhino/js-14.jar"/>
+	<classpathentry kind="lib" path="lib/rhino/js-14.jar" sourcepath="lib/rhino/js-14.src.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

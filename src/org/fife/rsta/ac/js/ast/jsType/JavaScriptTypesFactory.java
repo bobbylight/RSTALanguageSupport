@@ -12,8 +12,8 @@ package org.fife.rsta.ac.js.ast.jsType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.fife.rsta.ac.java.JarManager;
@@ -27,6 +27,8 @@ import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 import org.fife.rsta.ac.js.ast.type.ecma.TypeDeclarations.JavaScriptObject;
 import org.fife.rsta.ac.js.completion.JSBeanCompletion;
 import org.fife.rsta.ac.js.completion.JSClassCompletion;
+import org.fife.rsta.ac.js.completion.JSCompletion;
+import org.fife.rsta.ac.js.completion.JSCompletionUI;
 import org.fife.rsta.ac.js.completion.JSConstructorCompletion;
 import org.fife.rsta.ac.js.completion.JSFieldCompletion;
 import org.fife.rsta.ac.js.completion.JSFunctionCompletion;
@@ -347,19 +349,17 @@ public abstract class JavaScriptTypesFactory {
 	 * @param manager
 	 */
 	public void populateCompletionsForType(JavaScriptType cachedType,
-			Set completions) {
+			Set<JSCompletionUI> completions) {
 
 		if (cachedType != null) {
-			HashMap completionsForType = cachedType.getMethodFieldCompletions();
-			for (Iterator i = completionsForType.values().iterator(); i
-					.hasNext();) {
-				completions.add(i.next());
+			Map<String, JSCompletion> completionsForType = cachedType.getMethodFieldCompletions();
+			for (JSCompletion completion : completionsForType.values()) {
+				completions.add(completion);
 			}
 
-			// get any extended classes and recursivley populate
-			List extendedClasses = cachedType.getExtendedClasses();
-			for (Iterator i = extendedClasses.iterator(); i.hasNext();) {
-				JavaScriptType extendedType = (JavaScriptType) i.next();
+			// get any extended classes and recursively populate
+			List<JavaScriptType> extendedClasses = cachedType.getExtendedClasses();
+			for (JavaScriptType extendedType : extendedClasses) {
 				populateCompletionsForType(extendedType, completions);
 			}
 		}

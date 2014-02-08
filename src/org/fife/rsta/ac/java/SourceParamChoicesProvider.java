@@ -67,8 +67,8 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 	 * @param pkg
 	 * @param list
 	 */
-	private void addPublicAndProtectedFieldsAndGetters(Type type,
-										JarManager jm, Package pkg, List list) {
+	private void addPublicAndProtectedFieldsAndGetters(Type type, JarManager jm,
+			Package pkg, List<Completion> list) {
 
 		// TODO: Implement me.
 

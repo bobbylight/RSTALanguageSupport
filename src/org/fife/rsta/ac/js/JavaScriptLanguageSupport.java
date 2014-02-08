@@ -10,18 +10,23 @@
  */
 package org.fife.rsta.ac.js;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.KeyStroke;
+import javax.swing.Timer;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 
@@ -40,7 +45,10 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
 import org.fife.ui.rsyntaxtextarea.modes.JavaScriptTokenMaker;
 import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Token;
+import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.AstRoot;
+import org.mozilla.javascript.ast.NodeVisitor;
 
 
 /**
@@ -62,14 +70,24 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	private boolean client;
 	private boolean strictMode;
 	private int languageVersion;
+	private JsErrorParser errorParser;
 	private JavaScriptParser parser;
 	private JavaScriptCompletionProvider provider;
+	private File jshintrc;
 
-	
+	/**
+	 * Client property installed on text areas that points to a listener.
+	 */
+	private static final String PROPERTY_LISTENER =
+		"org.fife.rsta.ac.js.JavaScriptLanguageSupport.Listener";
+
+
 	public JavaScriptLanguageSupport() {
 		parserToInfoMap = new HashMap<JavaScriptParser, Info>();
 		jarManager = createJarManager();
 		provider = createJavaScriptCompletionProvider();
+		setErrorParser(JsErrorParser.JSHINT);
+setJsHintRCFile(new File("C:/temp/.jshintrc"));
 		setECMAVersion(null, jarManager); //load default ecma 
 		setDefaultCompletionCellRenderer(new JavaScriptCellRenderer());
 		setAutoActivationEnabled(true);
@@ -85,16 +103,11 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	 * @return The jar manager instance.
 	 */
 	protected JarManager createJarManager() {
-
 		JarManager jarManager = new JarManager();
-		
-		
 		return jarManager;
-
 	}
 	
-	public void setECMAVersion(String version, JarManager jarManager)
-	{
+	public void setECMAVersion(String version, JarManager jarManager) {
 		//load classes
 		try {
 			List<String> classes = provider.getProvider().getTypesFactory().
@@ -123,8 +136,41 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	}
 
 
+	/**
+	 * Returns the engine to use for checking for syntax errors in JavaScript
+	 * files.  Note that regardless of the value specified to this method,
+	 * Rhino is always used for code completion and the outline tree.
+	 *
+	 * @return The engine.
+	 * @see #setErrorParser(JsErrorParser)
+	 */
+	public JsErrorParser getErrorParser() {
+		return errorParser;
+	}
+
+
 	public JarManager getJarManager() {
 		return jarManager;
+	}
+
+
+	public JavaScriptParser getJavaScriptParser() {
+		return parser;
+	}
+
+
+	/**
+	 * Returns the location of the <code>.jshintrc</code> file to use if using
+	 * JsHint as your error parser.  This property is ignored if
+	 * {@link #getErrorParser()} does not return {@link JsErrorParser#JSHINT}.
+	 *
+	 * @return The <code>.jshintrc</code> file, or <code>null</code> if none;
+	 *         in that case, the JsHint defaults will be used.
+	 * @see #setJsHintRCFile(File)
+	 * @see #setErrorParser(JsErrorParser)
+	 */
+	public File getJsHintRCFile() {
+		return jshintrc;
 	}
 
 
@@ -163,7 +209,6 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 
 	public void install(RSyntaxTextArea textArea) {
 
-		
 		// We use a custom auto-completion.
 		// AutoCompletion ac = createAutoCompletion(p);
 		AutoCompletion ac = new JavaScriptAutoCompletion(provider, textArea);
@@ -177,8 +222,8 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 		ac.install(textArea);
 		installImpl(textArea, ac);
 
-		// Listener listener = new Listener(textArea);
-		// textArea.putClientProperty(PROPERTY_LISTENER, listener);
+		Listener listener = new Listener(textArea);
+		textArea.putClientProperty(PROPERTY_LISTENER, listener);
 
 		parser = new JavaScriptParser(this, textArea);
 		textArea.putClientProperty(PROPERTY_LANGUAGE_PARSER, parser);
@@ -235,23 +280,60 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	public boolean isXmlAvailable() {
 		return xmlAvailable;
 	}
-	
+
+
 	/**
-    * @return Whether the JavaScript support supports client/browser objects
-    */
+     * @return Whether the JavaScript support supports client/browser objects
+     */
 	public boolean isClient() {
 		return client;
 	}
-	
+
+
+	protected void reparseDocument(int offset) {
+		provider.reparseDocument(offset);
+	}
+
+
 	/**
-    * Set whether the JavaScript support supports client/browser objects
-    * @param client - true if client mode is supported
-    */
-	public void setClient(boolean client)
-	{
+     * Set whether the JavaScript support supports client/browser objects.
+     *
+     * @param client - true if client mode is supported
+     */
+	public void setClient(boolean client) {
 		this.client = client;
 	}
 	
+
+	/**
+	 * Sets the engine to use for identifying syntax errors in JavaScript
+	 * files.  Note that regardless of the value specified to this method,
+	 * Rhino is always used for code completion and the outline tree.
+	 *
+	 * @param errorParser The engine to use.  This cannot be <code>null</code>.
+	 * @see #getErrorParser()
+	 */
+	public void setErrorParser(JsErrorParser errorParser) {
+		if (errorParser==null) {
+			throw new IllegalArgumentException("errorParser cannot be null");
+		}
+		this.errorParser = errorParser;
+	}
+
+
+	/**
+	 * Sets the location of the <code>.jshintrc</code> file to use if using
+	 * JsHint as your error parser.  This property is ignored if
+	 * {@link #getErrorParser()} does not return {@link JsErrorParser#JSHINT}.
+	 *
+	 * @param file The <code>.jshintrc</code> file, or <code>null</code> if
+	 *        none; in that case, the JsHint defaults will be used.
+	 * @see #getJsHintRCFile()
+	 * @see #setErrorParser(JsErrorParser)
+	 */
+	public void setJsHintRCFile(File file) {
+		jshintrc = file;
+	}
 
 
 	/**
@@ -307,18 +389,16 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 		textArea.putClientProperty(PROPERTY_LANGUAGE_PARSER, null);
 		textArea.setToolTipSupplier(null);
 
-		// Object listener = textArea.getClientProperty(PROPERTY_LISTENER);
-		// if (listener instanceof Listener) { // Should always be true
-		// ((Listener)listener).uninstall();
-		// textArea.putClientProperty(PROPERTY_LISTENER, null);
-		// }
+		Object listener = textArea.getClientProperty(PROPERTY_LISTENER);
+		if (listener instanceof Listener) { // Should always be true
+			((Listener)listener).uninstall();
+			textArea.putClientProperty(PROPERTY_LISTENER, null);
+		}
 
 		uninstallKeyboardShortcuts(textArea);
 
 	}
 	
-	
-
 
 	/**
 	 * Uninstalls any keyboard shortcuts specific to this language support.
@@ -336,17 +416,6 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 		am.remove("GoToType");
 
 	}
-	
-	public JavaScriptParser getJavaScriptParser()
-	{
-		return parser;
-	}
-	
-	protected void reparseDocument(int offset)
-	{
-		provider.reparseDocument(offset);
-	}
-
 
 	/**
 	 * Manages information about the parsing/auto-completion for a single text
@@ -358,7 +427,6 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 
 		public JavaScriptCompletionProvider provider;
 		
-
 		// public JavaScriptParser parser;
 
 		public Info(JavaScriptCompletionProvider provider, JavaScriptParser parser) {
@@ -367,7 +435,6 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 			parser.addPropertyChangeListener(JavaScriptParser.PROPERTY_AST,
 					this);
 		}
-
 
 		/**
 		 * Called when a text area is re-parsed.
@@ -396,15 +463,12 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 
 		private RSyntaxTextArea textArea;
 
-
 		public JavaScriptAutoCompletion(JavaScriptCompletionProvider provider,
 				RSyntaxTextArea textArea) {
 			super(provider);
 			this.textArea = textArea;
 		}
 
-
-		
 		@Override
 		protected String getReplacementText(Completion c, Document doc,
 				int start, int len) {
@@ -426,8 +490,6 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 			return replacement;
 		}
 
-
-
 		@Override
 		protected int refreshPopupWindow() {
 			// Force the parser to re-parse
@@ -439,5 +501,148 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 		}
 
 	}
+
+
+	/**
+	 * Listens for various events in a text area editing Java (in particular,
+	 * caret events, so we can track the "active" code block).
+	 */
+	// TODO: This class shares a lot of code in common with
+	// JavaLanguageSupport's version, but is it worth factoring out?
+	private class Listener implements CaretListener, ActionListener {
+
+		private RSyntaxTextArea textArea;
+		private Timer t;
+		private DeepestScopeVisitor visitor;
+
+		public Listener(RSyntaxTextArea textArea) {
+			this.textArea = textArea;
+			textArea.addCaretListener(this);
+			t = new Timer(650, this);
+			t.setRepeats(false);
+			visitor = new DeepestScopeVisitor();
+		}
+
+		public void actionPerformed(ActionEvent e) {
+
+			JavaScriptParser parser = getParser(textArea);
+			if (parser==null) {
+				return; // Shouldn't happen
+			}
+			AstRoot astRoot = parser.getAstRoot();
+
+			if (astRoot!=null) {
+				int dot = textArea.getCaretPosition();
+				visitor.reset(dot);
+				astRoot.visit(visitor);
+				AstNode scope = visitor.getDeepestScope();
+				if (scope!=null && scope!=astRoot) {
+					int start = scope.getAbsolutePosition();
+					int end = start + scope.getLength() - 1;
+					try {
+						int startLine = textArea.getLineOfOffset(start);
+						int endLine = textArea.getLineOfOffset(end);
+						textArea.setActiveLineRange(startLine, endLine);
+					} catch (BadLocationException ble) {
+						ble.printStackTrace(); // Never happens
+					}
+				}
+				else {
+					textArea.setActiveLineRange(-1, -1);
+				}
+			}
+
+		}
+
+		public void caretUpdate(CaretEvent e) {
+			t.restart();
+		}
+
+//		private Scope getDeepestScope(Scope root, int offs) {
+//			for (Iterator<Node> i=root.iterator(); i.hasNext(); ) {
+//				Node child = i.next();
+//				if (child instanceof Scope) {
+//					Scope scope = (Scope)child;
+//					int childStart = scope.getAbsolutePosition();
+//					System.out.println("Checking " + scope.toString() + " at offs " + childStart);
+//					if (childStart<=offs && childStart+scope.getLength()>offs) {
+//						return getDeepestScope(scope, offs);
+//					}
+//				}
+//				else if (child instanceof ExpressionStatement) {
+//					ExpressionStatement es = (ExpressionStatement)child;
+//					es.get
+//				}
+//				else {
+//					System.out.println("... Skipping: " + child.toString());
+//				}
+//			}
+//			return root;
+////			List<Scope> children = root.getChildScopes();
+////			if (children!=null) {
+////				for (Scope child : children) {
+////					int childStart = child.getPosition();
+////					if (childStart<=offs && childStart+child.getLength()>offs) {
+////						return getDeepestScope(child, offs);
+////					}
+////				}
+////			}
+////			return root;
+//		}
+
+		/**
+		 * Should be called whenever Java language support is removed from a
+		 * text area.
+		 */
+		public void uninstall() {
+			textArea.removeCaretListener(this);
+		}
+
+	}
+
+
+	private class DeepestScopeVisitor implements NodeVisitor {
+
+		private int offs;
+		private AstNode deepestScope;
+
+		private boolean containsOffs(AstNode node) {
+			int start = node.getAbsolutePosition();
+			return start<=offs && start+node.getLength()>offs;
+		}
+
+		public AstNode getDeepestScope() {
+			return deepestScope;
+		}
+
+		public void reset(int offs) {
+			this.offs = offs;
+			deepestScope = null;
+		}
+
+		public boolean visit(AstNode node) {
+
+			switch (node.getType()) {
+				case Token.FUNCTION:
+					if (containsOffs(node)) {
+						deepestScope = node;
+						return true;
+					}
+					return false;
+				default:
+					return true;
+				case Token.BLOCK: // Get scope starting at e.g. "function", not "{"
+//					if (node.getParent().getType()==Token.FUNCTION) {
+//						System.out.println("Skipping block for function");
+//						return false;
+//					}
+//					System.out.println("Non-function block found");
+					return true;
+			}
+
+		}
+
+	}
+
 
 }

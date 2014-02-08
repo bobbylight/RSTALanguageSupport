@@ -12,11 +12,10 @@ package org.fife.rsta.ac.js.tree;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.List;
+
 import javax.swing.BorderFactory;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.text.BadLocationException;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
@@ -24,20 +23,12 @@ import javax.swing.tree.TreePath;
 import org.fife.rsta.ac.AbstractSourceTree;
 import org.fife.rsta.ac.LanguageSupport;
 import org.fife.rsta.ac.LanguageSupportFactory;
-import org.fife.rsta.ac.js.IconFactory;
 import org.fife.rsta.ac.js.JavaScriptLanguageSupport;
 import org.fife.rsta.ac.js.JavaScriptParser;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
-import org.mozilla.javascript.Node;
-import org.mozilla.javascript.Token;
-import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.AstRoot;
-import org.mozilla.javascript.ast.FunctionNode;
-import org.mozilla.javascript.ast.Name;
-import org.mozilla.javascript.ast.VariableDeclaration;
-import org.mozilla.javascript.ast.VariableInitializer;
 
 
 /**
@@ -61,8 +52,8 @@ public class JavaScriptOutlineTree extends AbstractSourceTree {
 	private JavaScriptParser parser;
 	private Listener listener;
 
-	private static final int PRIORITY_FUNCTION = 1;
-	private static final int PRIORITY_VARIABLE = 2;
+	static final int PRIORITY_FUNCTION = 1;
+	static final int PRIORITY_VARIABLE = 2;
 
 
 	/**
@@ -142,8 +133,17 @@ public class JavaScriptOutlineTree extends AbstractSourceTree {
 			collapseRow(j++);
 		}
 
-		// Expand only the root node
+		// Expand only functions
 		expandRow(0);
+		j = 1;
+		while (j<getRowCount()) {
+			TreePath path = getPathForRow(j);
+//			Object comp = path.getLastPathComponent();
+//			if (comp instanceof TypeDeclarationTreeNode) {
+				expandPath(path);
+//			}
+			j++;
+		}
 
 	}
 
@@ -229,106 +229,12 @@ public class JavaScriptOutlineTree extends AbstractSourceTree {
 	 *        cleared.
 	 */
 	private void update(AstRoot ast) {
-
-		JavaScriptTreeNode root = new JavaScriptTreeNode(null);
-		if (ast==null) {
-			model.setRoot(root);
-			return;
-		}
-
-		// Loop through all children and add tree nodes for functions and
-		// variables
-		Node child = ast.getFirstChild();
-		while (child!=null) {
-
-			switch (child.getType()) {
-
-				case Token.FUNCTION:
-					FunctionNode fn = (FunctionNode)child;
-					Name funcName = fn.getFunctionName();
-					// Happens with certain syntax errors, such as
-					// "function function foo() {".
-					if (funcName!=null) {
-						StringBuilder sb = new StringBuilder(fn.getName()).append('(');
-						int paramCount = fn.getParamCount();
-						if (paramCount>0) {
-							List<AstNode> fnParams = fn.getParams();
-							for (int i=0; i<paramCount; i++) {
-								String paramName = null;
-								AstNode node = fnParams.get(i);
-								switch (node.getType()) {
-									case Token.NAME:
-										paramName = ((Name)node).getIdentifier();
-										break;
-									default:
-										System.out.println("Unhandled class for param: " +
-												node.getClass());
-										paramName = "?";
-										break;
-								}
-								sb.append(paramName);
-								if (i<paramCount-1) {
-									sb.append(", ");
-								}
-							}
-						}
-						sb.append(')');
-						JavaScriptTreeNode tn = new JavaScriptTreeNode(funcName);
-						try {
-							int offs = funcName.getAbsolutePosition();
-							tn.setOffset(textArea.getDocument().createPosition(offs));
-						} catch (BadLocationException ble) { // Never happens
-							ble.printStackTrace();
-						}
-						tn.setText(sb.toString());
-						tn.setIcon(IconFactory.getIcon(IconFactory.DEFAULT_FUNCTION_ICON));
-						tn.setSortPriority(PRIORITY_FUNCTION);
-						root.add(tn);
-					}
-					break;
-
-				case Token.VAR:
-					VariableDeclaration varDec = (VariableDeclaration)child;
-					List<VariableInitializer> vars = varDec.getVariables();
-					for (VariableInitializer var : vars) {
-						Name varNameNode = null;
-						String varName = null;
-						AstNode target = var.getTarget();
-						switch (target.getType()) {
-							case Token.NAME:
-								varNameNode = (Name)target;
-								//System.out.println("... Variable: " + name.getIdentifier());
-								varName = varNameNode.getIdentifier();
-								break;
-							default:
-								System.out.println("... Unknown var target type: " + target.getClass());
-								varName = "?";
-								break;
-						}
-						JavaScriptTreeNode tn = new JavaScriptTreeNode(varNameNode);
-						try {
-							int offs = varNameNode.getAbsolutePosition();
-							tn.setOffset(textArea.getDocument().createPosition(offs));
-						} catch (BadLocationException ble) { // Never happens
-							ble.printStackTrace();
-						}
-						tn.setText(varName);
-						tn.setIcon(IconFactory.getIcon(IconFactory.LOCAL_VARIABLE_ICON));
-						tn.setSortPriority(PRIORITY_VARIABLE);
-						root.add(tn);
-					}
-					break;
-
-			}
-
-			child = child.getNext();
-
-		}
-
+		JavaScriptOutlineTreeGenerator generator =
+				new JavaScriptOutlineTreeGenerator(textArea, ast);
+		JavaScriptTreeNode root = generator.getTreeRoot();
 		model.setRoot(root);
 		root.setSorted(isSorted());
 		refresh();
-
 	}
 
 

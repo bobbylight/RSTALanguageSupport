@@ -288,7 +288,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 	}
 
 
-	protected void refresh() {
+	public void refresh() {
 		refreshVisibleChildren();
 		for (int i=0; i<getChildCount(); i++) {
 			TreeNode child = getChildAt(i);

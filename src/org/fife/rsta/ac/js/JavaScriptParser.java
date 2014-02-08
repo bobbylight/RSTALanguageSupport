@@ -12,6 +12,7 @@ package org.fife.rsta.ac.js;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import javax.swing.text.Element;
@@ -103,7 +104,8 @@ public class JavaScriptParser extends AbstractParser {
 	 * @param errorHandler The container for errors found while parsing.
 	 * @return The properties for the JS compiler to use.
 	 */
-	public static CompilerEnvirons createCompilerEnvironment(ErrorReporter errorHandler, JavaScriptLanguageSupport langSupport) {
+	public static CompilerEnvirons createCompilerEnvironment(ErrorReporter
+			errorHandler, JavaScriptLanguageSupport langSupport) {
 		CompilerEnvirons env = new CompilerEnvirons();
 		env.setErrorReporter(errorHandler);
 		env.setIdeMode(true);
@@ -124,6 +126,59 @@ public class JavaScriptParser extends AbstractParser {
 
 
 	/**
+	 * Launches jshint as an external process, and gathers syntax errors from
+	 * it.
+	 *
+	 * @param doc the document to parse.
+	 * @see #gatherParserErrorsRhino(ErrorCollector, Element)
+	 */
+	private void gatherParserErrorsJsHint(RSyntaxDocument doc) {
+		try {
+			JsHinter.parse(this, doc, result);
+		} catch (IOException ioe) {
+			// TODO: Localize me?
+			String msg = "Error launching jshint: " + ioe.getMessage();
+			result.addNotice(new DefaultParserNotice(this, msg, 0));
+			ioe.printStackTrace();
+		}
+	}
+
+
+	/**
+	 * Gathers the syntax errors found by Rhino in-process when parsing the
+	 * document.
+	 *
+	 * @param errorHandler The errors found by Rhino.
+	 * @param root The root element of the document parsed.
+	 * @see #gatherParserErrorsJsHint(RSyntaxDocument)
+	 */
+	private void gatherParserErrorsRhino(ErrorCollector errorHandler,
+			Element root) {
+
+		List<ParseProblem> errors = errorHandler.getErrors();
+		if (errors != null && errors.size() > 0) {
+
+			for (ParseProblem problem : errors) {
+
+				int offs = problem.getFileOffset();
+				int len = problem.getLength();
+				int line = root.getElementIndex(offs);
+				String desc = problem.getMessage();
+				DefaultParserNotice notice = new DefaultParserNotice(this,
+						desc, line, offs, len);
+				if (problem.getType() == ParseProblem.Type.Warning) {
+					notice.setLevel(ParserNotice.WARNING);
+				}
+				result.addNotice(notice);
+
+			}
+
+		}
+
+	}
+
+
+	/**
 	 * Returns the AST, or <code>null</code> if the editor's content has not
 	 * yet been parsed.
 	 * 
@@ -134,7 +189,21 @@ public class JavaScriptParser extends AbstractParser {
 	}
 
 
-	
+	/**
+	 * Returns the location of the <code>.jshintrc</code> file to use if using
+	 * JsHint as your error parser.  This property is ignored if
+	 * {@link #getErrorParser()} does not return {@link JsErrorParser#JSHINT}.
+	 *
+	 * @return The <code>.jshintrc</code> file, or <code>null</code> if none;
+	 *         in that case, the JsHint defaults will be used.
+	 * @see #setJsHintRCFile(File)
+	 * @see #setErrorParser(JsErrorParser)
+	 */
+	public File getJsHintRCFile() {
+		return langSupport.getJsHintRCFile();
+	}
+
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -176,35 +245,28 @@ public class JavaScriptParser extends AbstractParser {
 		r.close();
 
 		// Get any parser errors.
-		List<ParseProblem> errors = errorHandler.getErrors();
-		if (errors != null && errors.size() > 0) {
-			for (ParseProblem problem : errors) {
-				int offs = problem.getFileOffset();
-				int len = problem.getLength();
-				int line = root.getElementIndex(offs);
-				String desc = problem.getMessage();
-				DefaultParserNotice notice = new DefaultParserNotice(this,
-						desc, line, offs, len);
-				if (problem.getType() == ParseProblem.Type.Warning) {
-					notice.setLevel(ParserNotice.WARNING);
-				}
-				result.addNotice(notice);
-			}
+		switch (langSupport.getErrorParser()) {
+			default:
+			case RHINO:
+				gatherParserErrorsRhino(errorHandler, root);
+				break;
+			case JSHINT:
+				gatherParserErrorsJsHint(doc);
+				break;
 		}
 
 		// addNotices(doc);
 		support.firePropertyChange(PROPERTY_AST, null, astRoot);
+
 		return result;
 
 	}
 	
-	public void setVariablesAndFunctions(VariableResolver variableResolver)
-	{
+	public void setVariablesAndFunctions(VariableResolver variableResolver) {
 		this.variableResolver = variableResolver;
 	}
 	
-	public VariableResolver getVariablesAndFunctions()
-	{
+	public VariableResolver getVariablesAndFunctions() {
 		return variableResolver;
 	}
 
@@ -219,20 +281,22 @@ public class JavaScriptParser extends AbstractParser {
 	public void removePropertyChangeListener(String prop, PropertyChangeListener l) {
 		support.removePropertyChangeListener(prop, l);
 	}
-	
+
+
+	/**
+	 * Error reporter for Rhino-based parsing.
+	 */
 	public static class JSErrorReporter implements ErrorReporter {
 
 		public void error(String message, String sourceName, int line,
 				String lineSource, int lineOffset) {
 		}
 
-
 		public EvaluatorException runtimeError(String message,
 				String sourceName, int line, String lineSource,
 				int lineOffset) {
 			return null;
 		}
-
 
 		public void warning(String message, String sourceName, int line,
 				String lineSource, int lineOffset) {

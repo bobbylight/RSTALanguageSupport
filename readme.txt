@@ -1,7 +1,7 @@
 RSTALanguageSupport Readme
 --------------------------
-Version 2.5.1
-08nov2013
+Version 2.6.0
+30jan2014
 
 ----------------------------------------
 Contents
@@ -78,13 +78,20 @@ Languages with support include:
      This will be improved in the next release.
    - Generics support is implemented, but may be buggy.
    - Ctrl+Shift+O (Cmd+Shift+O on OS X) opens "Go to Member" popup.
+   - JavaOutlineTree component provides a tree view of a Java file that is
+     updated live with edits.
 
 5. JavaScript
-   - Embedded Rhino parser (v1.7R3) for squiggle underlining syntax errors.
+   - Embedded Rhino parser (v1.7R4) for squiggle underlining syntax errors.
    - Auto-completion for variables and functions in the current source file,
      derived from the parser above.  Completion choices are based on the
      type of the variable.  Scope is honored.
    - Ctrl+Shift+O (Cmd+Shift+O on OS X) opens "Go to Member" popup.
+   - JavaScriptOutlineTree class provides a tree view of a JavaScript file.
+   - Optional JSHint integration.  If JSHint is installed on your machine, you
+     can configure this library to use it for squiggle-underlining of syntax
+     errors instead of Rhino.  Point to your own .jshintrc and have full
+     control over what issues are flagged.
 
 6. JSP
    - Auto-completion for standard JSP tags.
@@ -112,6 +119,8 @@ Languages with support include:
 
 10. XML
    - Ctrl+Shift+O (Cmd+Shift+O on OS X) opens "Go to Member" popup.
+   - XmlOutlineTree component provides a tree view of an XML file that is
+     updated live with edits.
 
 
 

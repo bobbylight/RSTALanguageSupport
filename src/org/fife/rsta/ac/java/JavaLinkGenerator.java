@@ -24,6 +24,7 @@ import org.fife.rsta.ac.java.rjc.ast.Method;
 import org.fife.rsta.ac.java.rjc.ast.TypeDeclaration;
 import org.fife.ui.rsyntaxtextarea.LinkGenerator;
 import org.fife.ui.rsyntaxtextarea.LinkGeneratorResult;
+import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
 import org.fife.ui.rsyntaxtextarea.SelectRegionLinkGeneratorResult;
@@ -72,6 +73,7 @@ class JavaLinkGenerator implements LinkGenerator {
 
 				int line = textArea.getLineOfOffset(offs);
 				Token first = textArea.getTokenListForLine(line);
+				RSyntaxDocument doc = (RSyntaxDocument)textArea.getDocument();
 				Token prev = null;
 
 				for (Token t=first; t!=null && t.isPaintable(); t=t.getNextToken()) {
@@ -85,7 +87,7 @@ class JavaLinkGenerator implements LinkGenerator {
 
 						if (prev==null) {
 							prev = RSyntaxUtilities.getPreviousImportantToken(
-									textArea, line-1);
+									doc, line-1);
 						}
 						if (prev!=null && prev.isSingleChar('.')) {
 							// Not a field or method defined in this class.

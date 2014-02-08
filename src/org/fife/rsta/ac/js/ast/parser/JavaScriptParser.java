@@ -5,6 +5,7 @@ import java.util.Set;
 import org.fife.rsta.ac.js.SourceCompletionProvider;
 import org.fife.rsta.ac.js.ast.CodeBlock;
 import org.fife.rsta.ac.js.ast.TypeDeclarationOptions;
+import org.fife.rsta.ac.js.completion.JSCompletionUI;
 import org.mozilla.javascript.ast.AstRoot;
 
 
@@ -34,7 +35,8 @@ public abstract class JavaScriptParser {
 	 * @param entered text entered by user
 	 * @return CodeBlock tree 
 	 */
-	public abstract CodeBlock convertAstNodeToCodeBlock(AstRoot root, Set set, String entered);
+	public abstract CodeBlock convertAstNodeToCodeBlock(AstRoot root,
+			Set<JSCompletionUI> set, String entered);
 	
 	/**
 	 * If options are null, then it is assumed that the main editor text is being parsed

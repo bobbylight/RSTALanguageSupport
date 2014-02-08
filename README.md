@@ -30,10 +30,14 @@ Languages supported in this library include:
         * Local variables (when in a method body)
     * Method parameter assistance; that is, code-complete a method name, and any parameters will have a drop-downl ist of fields and local variables of the proper type for that parameter.  This feature is currently very limited.
     * Ctrl+Shift+O (Cmd+Shift+O on OS X) opens a "Go to Member" popup, a la Eclipse.
+    * JavaOutlineTree component provides a tree view of a Java file that is updated live with edits.
 * JavaScript
     * Squiggle-underlining of syntax errors, thanks to Rhino.
-    * Code competion for variables and functions in the current source file, derived from the parser above.  Completion choices are based on the type of the variable.  Scope is honored.
+    * Code completion for variables and functions in the current source file, derived from the parser above.  Completion choices are based on the type of the variable.  Scope is honored.
     * Ctrl+Shift+O (Cmd+Shift+O on OS X) opens a "Go to Member" popup, a la Eclipse.
+    * JavaScriptOutlineTree component provides a tree view of a JavaScript file that is updated live with edits.
+    * Optional JSHint integration.  If JSHint is installed on your machine, you can configure this library
+      to use it for squiggle-underlining of syntax errors instead of Rhino.  Point to your own .jshintrc and have full control over what issues are flagged.
 * JSP
     * Auto-completion for standard JSP tags as well as HTML 5 tags.
 * Perl
@@ -49,8 +53,8 @@ Languages supported in this library include:
 * Unix Shell
     * Possibly broken at the moment.  Should attempt to use the local man pages for descriptions of standard shell commands if the local host is *nix, otherwise (on Windows) it defaults to short, generic descriptions.  The location of the man pages that are used is configurable.
 * XML
-    * Ctrl+Shift+O (Cmd+Shift+O on OS X) opens a "Go to Member" popup, a la Ecli
-pse.
+    * Ctrl+Shift+O (Cmd+Shift+O on OS X) opens a "Go to Member" popup, a la Eclipse.
+    * XmlOutlineTree component provides a tree view of an XML file that is updated live with edits.
 
 # Sister Projects
 
