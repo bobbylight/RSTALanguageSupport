@@ -15,7 +15,7 @@ public class ValidationConfigSniffer {
 		for (Token token : doc) {
 			switch (token.getType()) {
 				case TokenTypes.MARKUP_DTD:
-					System.out.println("DTD: " + token.getLexeme());
+					//System.out.println("DTD: " + token.getLexeme());
 					break OUTER;
 				case TokenTypes.MARKUP_TAG_NAME:
 					// We only care about the first element

@@ -329,7 +329,9 @@ new ValidationConfigSniffer().sniff(doc);
 			if (entityResolver!=null) {
 				return entityResolver.resolveEntity(publicId, systemId);
 			}
-			return super.resolveEntity(publicId, systemId);
+			// Override default behavior and return empty DTD contents
+			return new InputSource(new java.io.StringReader(" "));
+			//return super.resolveEntity(publicId, systemId);
 		}
 
 
