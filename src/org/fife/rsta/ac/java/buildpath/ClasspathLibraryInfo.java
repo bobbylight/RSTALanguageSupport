@@ -103,6 +103,18 @@ public class ClasspathLibraryInfo extends LibraryInfo {
 	}
 
 
+	@Override
+	public void bulkClassFileCreationEnd() {
+		// Do nothing
+	}
+
+
+	@Override
+	public void bulkClassFileCreationStart() {
+		// Do nothing
+	}
+
+
 	public int compareTo(Object o) {
 
 		if (o==this) {
@@ -131,6 +143,12 @@ public class ClasspathLibraryInfo extends LibraryInfo {
 
 	@Override
 	public ClassFile createClassFile(String entryName) throws IOException {
+		return createClassFileBulk(entryName);
+	}
+
+
+	@Override
+	public ClassFile createClassFileBulk(String entryName) throws IOException {
 		// NOTE: entryName always ends in ".class", so our map must account
 		// for this.
 		ClassFile cf = null;

@@ -45,6 +45,41 @@ public abstract class LibraryInfo implements Comparable, Cloneable {
 
 
 	/**
+	 * Does any cleanup necessary after a call to
+	 * {@link #bulkClassFileCreationStart()}.
+	 * 
+	 * @throws IOException If an IO error occurs.
+	 * @see #bulkClassFileCreationStart()
+	 * @see #createClassFileBulk(String)
+	 */
+	public abstract void bulkClassFileCreationEnd() throws IOException;
+
+
+	/**
+	 * Readies this library for many class files being fetched via
+	 * {@link #createClassFileBulk(String)}.  After calling this method,
+	 * the actual class file fetching should be done in a try/finally block
+	 * that ensures a call to {@link #bulkClassFileCreationEnd()}; e.g.
+	 * 
+	 * <pre>
+	 * libInfo.bulkClassFileCreationStart();
+	 * try {
+	 *    String entryName = ...;
+	 *    ClassFile cf = createClassFileBulk(entryName);
+	 *    ...
+	 * } finally {
+	 *    libInfo.bulkClassFileCreationEnd();
+	 * }
+	 * </pre>
+	 * 
+	 * @throws IOException If an IO error occurs.
+	 * @see #bulkClassFileCreationEnd()
+	 * @see #createClassFileBulk(String)
+	 */
+	public abstract void bulkClassFileCreationStart() throws IOException;
+
+
+	/**
 	 * Returns a deep copy of this library.
 	 *
 	 * @return A deep copy.
@@ -64,13 +99,39 @@ public abstract class LibraryInfo implements Comparable, Cloneable {
 	 * Returns the class file information for the specified class.  Instances
 	 * of <code>JarReader</code> can call this method to lazily load
 	 * information on individual classes and shove it into their package maps.
+	 * <p>
+	 * If many class files will be fetched at a time, you should prefer using
+	 * {@link #bulkClassFileCreationStart()} and
+	 * {@link #createClassFileBulk(String)} over this method, for performance
+	 * reasons.
 	 *
 	 * @param entryName The fully qualified name of the class file.
 	 * @return The class file, or <code>null</code> if it isn't found in this
 	 *         library.
 	 * @throws IOException If an IO error occurs.
+	 * @see #createClassFileBulk(String)
 	 */
 	public abstract ClassFile createClassFile(String entryName) throws IOException;
+
+
+	/**
+	 * Returns the class file information for the specified class.  Instances
+	 * of <code>JarReader</code> can call this method to lazily load
+	 * information on individual classes and shove it into their package maps.
+	 * <p>
+	 * This method should be used when multiple classes will be fetched from
+	 * this library at the same time.  It should only be called after a call to
+	 * {@link #bulkClassFileCreationStart()}.  If only a single class file is
+	 * being fetched, it is simpler to call {@link #createClassFile(String)}.
+	 *
+	 * @param entryName The fully qualified name of the class file.
+	 * @return The class file, or <code>null</code> if it isn't found in this
+	 *         library.
+	 * @throws IOException If an IO error occurs.
+	 * @see #createClassFile(String)
+	 */
+	public abstract ClassFile createClassFileBulk(String entryName)
+			throws IOException;
 
 
 	/**
