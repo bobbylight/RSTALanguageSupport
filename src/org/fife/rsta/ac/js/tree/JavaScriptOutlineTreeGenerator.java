@@ -145,72 +145,94 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 			case Token.BLOCK:
 				return true;
 
-case Token.EXPR_RESULT:
-	// Check for "foo.prototype.xyz = ..."
-	ExpressionStatement exprStmt = (ExpressionStatement)node;
-	AstNode expr = exprStmt.getExpression();
-	if (expr instanceof Assignment) {
-		Assignment assignment = (Assignment)expr;
-		AstNode left = assignment.getLeft();
-		if (left instanceof PropertyGet) {
-			PropertyGet pg = (PropertyGet)left;
-			if (pg.getLeft() instanceof PropertyGet) {
-				PropertyGet pg2 = (PropertyGet)pg.getLeft();
-				if (pg2.getLeft() instanceof Name && pg2.getRight() instanceof Name) {
-					Name temp = (Name)pg2.getRight();
-					if (temp.getIdentifier().equals("prototype")) {
-						
-						String clazz = ((Name)pg2.getLeft()).getIdentifier();
-						String member = ((Name)pg.getRight()).getIdentifier();
+			case Token.EXPR_RESULT:
+				ExpressionStatement exprStmt = (ExpressionStatement)node;
+				return visitExpressionStatement(exprStmt);
 
-						JavaScriptTreeNode tn = new JavaScriptTreeNode(pg.getRight());
-						try {
-							int offs = pg.getRight().getAbsolutePosition();
-							tn.setOffset(textArea.getDocument().createPosition(offs));
-						} catch (BadLocationException ble) { // Never happens
-							ble.printStackTrace();
-						}
-
-						boolean isFunction = assignment.getRight() instanceof FunctionNode;
-						String text = member;
-						if (isFunction) {
-							FunctionNode func = (FunctionNode)assignment.getRight();
-							text += getFunctionArgsString(func);
-						}
-						tn.setText(text);
-						tn.setIcon(IconFactory.getIcon(IconFactory.DEFAULT_FUNCTION_ICON));
-						tn.setSortPriority(JavaScriptOutlineTree.PRIORITY_FUNCTION);
-						if (prototypeAdditions==null) {
-							prototypeAdditions = new HashMap<String,
-												List<JavaScriptTreeNode>>();
-						}
-						List<JavaScriptTreeNode> list = prototypeAdditions.get(clazz);
-						if (list==null) {
-							list = new ArrayList<JavaScriptTreeNode>();
-							prototypeAdditions.put(clazz, list);
-						}
-						list.add(tn);
-						if (isFunction) {
-//							curScopeNode = func;
-							JavaScriptTreeNode prevScopeTreeNode = curScopeTreeNode;
-							curScopeTreeNode = tn;
-							FunctionNode func = (FunctionNode)assignment.getRight();
-							func.getBody().visit(this);
-//							curScopeNode = curScopeNode.getParentScope();
-							curScopeTreeNode = prevScopeTreeNode;
-						}
-					}
-				}
-			}
-		}
-	}
-	break;
-default:
-	System.out.println("Unhandled node: " + node);
-	break;
 		}
 
 		return false; // Unhandled node type
+
+	}
+
+
+	private boolean visitExpressionStatement(ExpressionStatement exprStmt) {
+
+		// NOTE: We currently only check for expressions of the form
+		// "Foo.prototype.xyz = ..."
+
+		AstNode expr = exprStmt.getExpression();
+
+		// Check for "Foo.prototype.xyz = ..."
+		if (expr instanceof Assignment) {
+
+			Assignment assignment = (Assignment)expr;
+			AstNode left = assignment.getLeft();
+
+			if (left instanceof PropertyGet) {
+
+				PropertyGet pg = (PropertyGet)left;
+				if (pg.getLeft() instanceof PropertyGet) {
+
+					PropertyGet pg2 = (PropertyGet)pg.getLeft();
+					if (pg2.getLeft() instanceof Name && pg2.getRight() instanceof Name) {
+
+						Name temp = (Name)pg2.getRight();
+						if (temp.getIdentifier().equals("prototype")) {
+							
+							String clazz = ((Name)pg2.getLeft()).getIdentifier();
+							String member = ((Name)pg.getRight()).getIdentifier();
+
+							JavaScriptTreeNode tn = new JavaScriptTreeNode(pg.getRight());
+							try {
+								int offs = pg.getRight().getAbsolutePosition();
+								tn.setOffset(textArea.getDocument().createPosition(offs));
+							} catch (BadLocationException ble) { // Never happens
+								ble.printStackTrace();
+							}
+
+							boolean isFunction = assignment.getRight() instanceof FunctionNode;
+							String text = member;
+							if (isFunction) {
+								FunctionNode func = (FunctionNode)assignment.getRight();
+								text += getFunctionArgsString(func);
+							}
+
+							tn.setText(text);
+							tn.setIcon(IconFactory.getIcon(IconFactory.DEFAULT_FUNCTION_ICON));
+							tn.setSortPriority(JavaScriptOutlineTree.PRIORITY_FUNCTION);
+							if (prototypeAdditions==null) {
+								prototypeAdditions = new HashMap<String,
+													List<JavaScriptTreeNode>>();
+							}
+							List<JavaScriptTreeNode> list = prototypeAdditions.get(clazz);
+							if (list==null) {
+								list = new ArrayList<JavaScriptTreeNode>();
+								prototypeAdditions.put(clazz, list);
+							}
+							list.add(tn);
+
+							if (isFunction) {
+//								curScopeNode = func;
+								JavaScriptTreeNode prevScopeTreeNode = curScopeTreeNode;
+								curScopeTreeNode = tn;
+								FunctionNode func = (FunctionNode)assignment.getRight();
+								func.getBody().visit(this);
+//								curScopeNode = curScopeNode.getParentScope();
+								curScopeTreeNode = prevScopeTreeNode;
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+
+		return false;
 
 	}
 

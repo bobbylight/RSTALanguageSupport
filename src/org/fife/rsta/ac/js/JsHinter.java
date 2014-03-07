@@ -21,12 +21,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.text.BadLocationException;
-import javax.swing.text.Element;
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
-import org.fife.ui.rsyntaxtextarea.Token;
 import org.fife.ui.rsyntaxtextarea.parser.DefaultParseResult;
 import org.fife.ui.rsyntaxtextarea.parser.DefaultParserNotice;
 import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
@@ -44,7 +41,7 @@ import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
 class JsHinter {
 
 	private JavaScriptParser parser;
-	private RSyntaxDocument doc;
+//	private RSyntaxDocument doc;
 	private DefaultParseResult result;
 
 	private static final Map<String, MarkStrategy> MARK_STRATEGIES;
@@ -52,19 +49,25 @@ class JsHinter {
 		MARK_STRATEGIES = new HashMap<String, MarkStrategy>();
 		MARK_STRATEGIES.put("E015", MarkStrategy.MARK_CUR_TOKEN); // Unclosed regular expression.
 		MARK_STRATEGIES.put("E019", MarkStrategy.MARK_CUR_TOKEN); // Unmatched '{a}'
-		MARK_STRATEGIES.put("W033", MarkStrategy.MARK_PREV_TOKEN); // Missing semicolon.
-		MARK_STRATEGIES.put("W015", MarkStrategy.MARK_CUR_TOKEN); // Expected {a} to have an indentation of {b} instead at {c}.
+		MARK_STRATEGIES.put("E030", MarkStrategy.MARK_CUR_TOKEN); // Expected an identifier and instead saw '{a}'.
 		MARK_STRATEGIES.put("E041", MarkStrategy.STOP_PARSING); // Unrecoverable syntax error.
 		MARK_STRATEGIES.put("E042", MarkStrategy.STOP_PARSING); // Stopping.
 		MARK_STRATEGIES.put("E043", MarkStrategy.STOP_PARSING); // Too many errors.
 		MARK_STRATEGIES.put("W004", MarkStrategy.MARK_PREV_NON_WS_TOKEN); // '{a}' is already defined.
+		MARK_STRATEGIES.put("W015", MarkStrategy.MARK_CUR_TOKEN); // Expected {a} to have an indentation of {b} instead at {c}.
+		MARK_STRATEGIES.put("W032", MarkStrategy.MARK_PREV_TOKEN); // Unnecessary semicolon.
+		MARK_STRATEGIES.put("W033", MarkStrategy.MARK_PREV_TOKEN); // Missing semicolon.
+		MARK_STRATEGIES.put("W060", MarkStrategy.MARK_CUR_TOKEN); // document.write can be a form of eval.
 		MARK_STRATEGIES.put("W098", MarkStrategy.MARK_PREV_TOKEN); // '{a}' is defined but never used.
+		MARK_STRATEGIES.put("W116", MarkStrategy.MARK_PREV_TOKEN); // Expected '{a}' and instead saw '{b}'.
+		MARK_STRATEGIES.put("W117", MarkStrategy.MARK_CUR_TOKEN); // '{a}' is not defined.
 	}
+
 
 	private JsHinter(JavaScriptParser parser, RSyntaxDocument doc,
 			DefaultParseResult result) {
 		this.parser = parser;
-		this.doc = doc;
+//		this.doc = doc;
 		this.result = result;
 	}
 
@@ -151,12 +154,15 @@ class JsHinter {
 		// Line format:
 		// stdin: line xx, col yy, error-or-warning-text. (Ennn)
 
-		Element root = doc.getDefaultRootElement();
+//		Element root = doc.getDefaultRootElement();
+//		int indent = parser.getJsHintIndent();
 
 		String[] lines = output.split("\r?\n");
-		OUTER:
+//		OUTER:
 		for (String line : lines) {
 
+			String origLine = line;
+//			System.out.println(line);
 			if (line.startsWith("stdin: line ")) {
 				line = line.substring("stdin: line ".length());
 				int end = 0;
@@ -164,6 +170,15 @@ class JsHinter {
 					end++;
 				}
 				int lineNum = Integer.parseInt(line.substring(0, end)) - 1;
+				if (lineNum==-1) {
+					// Probably bad option to jshint, e.g.
+					// stdin: line 0, col 0, Bad option: 'ender'. (E001)
+					// Just give them the entire error
+					DefaultParserNotice dpn = new DefaultParserNotice(parser,
+							origLine, 0);
+					result.addNotice(dpn);
+					continue;
+				}
 				line = line.substring(end);
 				if (line.startsWith(", col ")) {
 					line = line.substring(", col ".length());
@@ -171,12 +186,12 @@ class JsHinter {
 					while (Character.isDigit(line.charAt(end))) {
 						end++;
 					}
-					int col = Integer.parseInt(line.substring(0, end)) - 1;
+//					int col = Integer.parseInt(line.substring(0, end)) - 1;
 					line = line.substring(end);
 					if (line.startsWith(", ")) {
 
-						int lineOffs = getLineOffset(lineNum);
-						int offs = lineOffs + col;
+//						int lineOffs = getLineOffset(lineNum);
+//						int offs = lineOffs + col;
 
 						String msg = line.substring(", ".length());
 						String errorCode = null;
@@ -196,40 +211,45 @@ class JsHinter {
 						DefaultParserNotice dpn = null;
 						MarkStrategy markStrategy = getMarkStrategy(errorCode);
 						switch (markStrategy) {
-							case MARK_PREV_TOKEN:
-								offs--;
-								// Fall through
-							case MARK_CUR_TOKEN:
-								Token t = RSyntaxUtilities.getTokenAtOffset(doc,
-										offs);
-								lineNum = root.getElementIndex(offs);
-								if (t!=null) {
-									dpn = new DefaultParserNotice(parser, msg,
-											lineNum, t.getOffset(), t.length());
-								}
-								else if (offs==doc.getLength()) {
-									dpn = new DefaultParserNotice(parser, msg,
-											lineNum, offs, 1);
-								}
-								break;
-							case MARK_PREV_NON_WS_TOKEN:
-								t = RSyntaxUtilities.
-									getPreviousImportantTokenFromOffs(doc, offs-1);
-								lineNum = root.getElementIndex(offs-1);
-								dpn = new DefaultParserNotice(parser, msg, lineNum,
-										t.getOffset(), t.length());
-								break;
+//							case MARK_PREV_TOKEN:
+//								offs--;
+//								// Fall through
+//							case MARK_CUR_TOKEN:
+//								lineNum = root.getElementIndex(offs);
+//								offs = adjustOffset(doc, lineNum, offs, indent);
+//								Token t = RSyntaxUtilities.getTokenAtOffset(doc,
+//										offs);
+//								if (t!=null) {
+//									dpn = createNotice(doc, msg, lineNum,
+//											t.getOffset(), t.length(), indent);
+//								}
+//								else if (offs==doc.getLength()) {
+//									dpn = createNotice(doc, msg, lineNum,
+//											offs, 1, indent);
+//								}
+//								break;
+//							case MARK_PREV_NON_WS_TOKEN:
+//								t = RSyntaxUtilities.
+//									getPreviousImportantTokenFromOffs(doc, offs-1);
+//								lineNum = root.getElementIndex(offs-1);
+//								dpn = createNotice(doc, msg, lineNum,
+//										t.getOffset(), t.length(), indent);
+//								break;
+//							case IGNORE:
+//								break; // No ParserNotice
+//							case STOP_PARSING:
+//								break OUTER;
 							default:
 							case MARK_LINE:
 								// Just mark the whole line, as the offset returned
 								// by JSHint can vary.
 								dpn = new DefaultParserNotice(parser, msg, lineNum);
 								break;
-							case STOP_PARSING:
-								break OUTER;
 						}
-						dpn.setLevel(noticeType);
-						result.addNotice(dpn);
+//						if (dpn!=null) {
+							dpn.setLevel(noticeType);
+							result.addNotice(dpn);
+//						}
 
 					}
 				}
@@ -240,10 +260,53 @@ class JsHinter {
 	}
 
 
-	private final int getLineOffset(int line) {
-		Element root = doc.getDefaultRootElement();
-		return root.getElement(line).getStartOffset();
-	}
+//	private final int adjustOffset(RSyntaxDocument doc, int line, int offs,
+//			int indent) {
+//		if (indent>-1) {
+//			Element root = doc.getDefaultRootElement();
+//			Element elem = root.getElement(line);
+//			if (elem!=null) {
+//				int start = elem.getStartOffset();
+//				int cur = start;
+//				try {
+//					while ((start-cur)<offs) {
+//						char ch = doc.charAt(cur);
+//						if (ch=='\t') {
+//							offs -= indent - 1;
+//						}
+//						else {
+//							break;
+//						}
+//						cur++;
+//					}
+//				} catch (BadLocationException ble) {
+//					ble.printStackTrace(); // Never happens
+//				}
+//			}
+//		}
+//		return offs;
+//	}
+//
+//
+//	/*
+//	 * Creates a parser notice for a specific region of text in the document.
+//	 * This method attempts to work around JSHint's annoying behavior of
+//	 * converting tabs to spaces when calculating the "offset" into the line of
+//	 * errors.
+//	 * NOTE: We can't do this here because we don't know the tab size that
+//	 * JSHint is using!  Our only hope is to disable these warnings; the user
+//	 * just can't get indentation-related warnings unfortunately.
+//	 */
+//	private final DefaultParserNotice createNotice(RSyntaxDocument doc,
+//			String msg, int line, int offs, int len, int indent) {
+//		return new DefaultParserNotice(parser, msg, line, offs, len);
+//	}
+//
+//
+//	private final int getLineOffset(int line) {
+//		Element root = doc.getDefaultRootElement();
+//		return root.getElement(line).getStartOffset();
+//	}
 
 
 	private static final MarkStrategy getMarkStrategy(String msgCode) {
@@ -296,7 +359,7 @@ class JsHinter {
 			try {
 				while ((line=r.readLine())!=null) {
 					buffer.append(line).append('\n');
-					System.out.println(line);
+					//System.out.println(line);
 				}
 			} catch (IOException ioe) {
 				buffer.append("IOException occurred: " + ioe.getMessage());
@@ -312,7 +375,7 @@ class JsHinter {
 	 */
 	private enum MarkStrategy {
 		MARK_LINE, MARK_CUR_TOKEN, MARK_PREV_TOKEN, MARK_PREV_NON_WS_TOKEN,
-		STOP_PARSING;
+		IGNORE, STOP_PARSING;
 	}
 
 

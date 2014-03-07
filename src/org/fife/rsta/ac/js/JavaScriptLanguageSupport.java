@@ -74,6 +74,8 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	private JavaScriptParser parser;
 	private JavaScriptCompletionProvider provider;
 	private File jshintrc;
+//	private int jshintIndent;
+//	private long jshintrcLastModified;
 
 	/**
 	 * Client property installed on text areas that points to a listener.
@@ -86,8 +88,9 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 		parserToInfoMap = new HashMap<JavaScriptParser, Info>();
 		jarManager = createJarManager();
 		provider = createJavaScriptCompletionProvider();
-		setErrorParser(JsErrorParser.JSHINT);
-setJsHintRCFile(new File("C:/temp/.jshintrc"));
+		setErrorParser(JsErrorParser.RHINO);
+//setErrorParser(JsErrorParser.JSHINT);
+//setJsHintRCFile(new File("D:/users/robert/.jshintrc"));
 		setECMAVersion(null, jarManager); //load default ecma 
 		setDefaultCompletionCellRenderer(new JavaScriptCellRenderer());
 		setAutoActivationEnabled(true);
@@ -174,6 +177,60 @@ setJsHintRCFile(new File("C:/temp/.jshintrc"));
 	}
 
 
+	public int getJsHintIndent() {
+		final int DEFAULT = 4;
+/*
+		if (jshintrc==null) {
+			return DEFAULT;
+		}
+		long lastModified = jshintrc.lastModified();
+		if (lastModified!=jshintrcLastModified) {
+			RSyntaxDocument doc = new RSyntaxDocument(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
+			try {
+				jshintIndent = DEFAULT;
+				loadFile(jshintrc, doc);
+				for (org.fife.ui.rsyntaxtextarea.Token t : doc) {
+					if (t.is(TokenTypes.LITERAL_STRING_DOUBLE_QUOTE, "\"indent\"") ||
+							t.is(TokenTypes.LITERAL_CHAR, "'indent'")) {
+						t = t.getNextToken();
+						while (t!=null && (t.isWhitespace() || t.isSingleChar(':'))) {
+							t = t.getNextToken();
+						}
+						if (t!=null && t.getType()==TokenTypes.LITERAL_NUMBER_DECIMAL_INT) {
+							try {
+								jshintIndent = Integer.parseInt(t.getLexeme());
+								System.out.println("Reloading jshint indent: " + jshintIndent);
+							} catch (NumberFormatException nfe) {
+								jshintIndent = DEFAULT;
+							}
+						}
+						break;
+					}
+				}
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+				jshintIndent = DEFAULT;
+			}
+			jshintrcLastModified = lastModified;
+		}
+		return jshintIndent;
+*/
+return DEFAULT;
+	}
+
+/*
+	private void loadFile(File file, RSyntaxDocument doc) throws IOException {
+		BufferedReader r = new BufferedReader(new FileReader(file));
+		try {
+			new RSyntaxTextAreaEditorKit().read(r, doc, 0);
+		} catch (BadLocationException ble) {
+			throw new IOException(ble.getMessage()); // Never happens
+		} finally {
+			r.close();
+		}
+	}
+*/
+
 	/**
 	 * Sets the JS version to use when parsing the code.
 	 *
@@ -228,7 +285,7 @@ setJsHintRCFile(new File("C:/temp/.jshintrc"));
 		parser = new JavaScriptParser(this, textArea);
 		textArea.putClientProperty(PROPERTY_LANGUAGE_PARSER, parser);
 		textArea.addParser(parser);
-		textArea.setToolTipSupplier(provider);
+		//textArea.setToolTipSupplier(provider);
 
 		Info info = new Info(provider, parser);
 		parserToInfoMap.put(parser, info);
@@ -311,13 +368,18 @@ setJsHintRCFile(new File("C:/temp/.jshintrc"));
 	 * Rhino is always used for code completion and the outline tree.
 	 *
 	 * @param errorParser The engine to use.  This cannot be <code>null</code>.
+	 * @return Whether this was actually a new error parser.
 	 * @see #getErrorParser()
 	 */
-	public void setErrorParser(JsErrorParser errorParser) {
+	public boolean setErrorParser(JsErrorParser errorParser) {
 		if (errorParser==null) {
 			throw new IllegalArgumentException("errorParser cannot be null");
 		}
-		this.errorParser = errorParser;
+		if (errorParser!=this.errorParser) {
+			this.errorParser = errorParser;
+			return true;
+		}
+		return false;
 	}
 
 
@@ -328,11 +390,18 @@ setJsHintRCFile(new File("C:/temp/.jshintrc"));
 	 *
 	 * @param file The <code>.jshintrc</code> file, or <code>null</code> if
 	 *        none; in that case, the JsHint defaults will be used.
+	 * @return Whether the new .jshintrc file is different than the original
+	 *         one.
 	 * @see #getJsHintRCFile()
 	 * @see #setErrorParser(JsErrorParser)
 	 */
-	public void setJsHintRCFile(File file) {
-		jshintrc = file;
+	public boolean setJsHintRCFile(File file) {
+		if ((file==null && jshintrc!=null) || (file!=null && jshintrc==null) ||
+				(file!=null && !file.equals(jshintrc))) {
+			jshintrc = file;
+			return true;
+		}
+		return false;
 	}
 
 
@@ -357,10 +426,15 @@ setJsHintRCFile(new File("C:/temp/.jshintrc"));
 	 * Sets whether strict mode (more warnings are detected) is enabled.
 	 * 
 	 * @param strict Whether strict mode is enabled.
+	 * @return Whether a new value was actually set for this property.
 	 * @see #isStrictMode()
 	 */
-	public void setStrictMode(boolean strict) {
-		strictMode = strict;
+	public boolean setStrictMode(boolean strict) {
+		if (strict!=strictMode) {
+			strictMode = strict;
+			return true;
+		}
+		return false;
 	}
 
 
@@ -368,10 +442,15 @@ setJsHintRCFile(new File("C:/temp/.jshintrc"));
 	 * Sets whether E4X is supported in parsed JavaScript.
 	 * 
 	 * @param available Whether E4X is supported.
+	 * @return Whether a new value was actually set for this property.
 	 * @see #isXmlAvailable()
 	 */
-	public void setXmlAvailable(boolean available) {
-		this.xmlAvailable = available;
+	public boolean setXmlAvailable(boolean available) {
+		if (available!=this.xmlAvailable) {
+			this.xmlAvailable = available;
+			return true;
+		}
+		return false;
 	}
 
 
@@ -538,10 +617,12 @@ setJsHintRCFile(new File("C:/temp/.jshintrc"));
 				AstNode scope = visitor.getDeepestScope();
 				if (scope!=null && scope!=astRoot) {
 					int start = scope.getAbsolutePosition();
-					int end = start + scope.getLength() - 1;
+					int end = Math.min(start + scope.getLength() - 1,
+										textArea.getDocument().getLength());
 					try {
 						int startLine = textArea.getLineOfOffset(start);
-						int endLine = textArea.getLineOfOffset(end);
+						int endLine = end<0 ? textArea.getLineCount() :
+										textArea.getLineOfOffset(end);
 						textArea.setActiveLineRange(startLine, endLine);
 					} catch (BadLocationException ble) {
 						ble.printStackTrace(); // Never happens

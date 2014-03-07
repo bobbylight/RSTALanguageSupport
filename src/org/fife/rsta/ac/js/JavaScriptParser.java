@@ -133,6 +133,7 @@ public class JavaScriptParser extends AbstractParser {
 	 * @see #gatherParserErrorsRhino(ErrorCollector, Element)
 	 */
 	private void gatherParserErrorsJsHint(RSyntaxDocument doc) {
+
 		try {
 			JsHinter.parse(this, doc, result);
 		} catch (IOException ioe) {
@@ -186,6 +187,11 @@ public class JavaScriptParser extends AbstractParser {
 	 */
 	public AstRoot getAstRoot() {
 		return astRoot;
+	}
+
+
+	public int getJsHintIndent() {
+		return langSupport.getJsHintIndent();
 	}
 
 
