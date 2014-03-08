@@ -514,7 +514,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 
 		try {
 
-		completions.clear();
+		completions = new ArrayList<Completion>();//completions.clear();
 
 		CompilationUnit cu = javaProvider.getCompilationUnit();
 		if (cu==null) {
