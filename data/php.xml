@@ -8621,6 +8621,11 @@
 		<param type="string" name="classname"/>
 	</params>
 </keyword>
+<keyword name="is_array" type="function" returnType="bool">
+	<params>
+		<param type="mixed" name="var"/>
+	</params>
+</keyword>
 <keyword name="is_binary" type="function" returnType="bool">
 	<params>
 		<param type="mixed" name="var"/>
