@@ -197,13 +197,13 @@ class JsHinter {
 						String errorCode = null;
 
 						// Ends in "(E0xxx)" or "(W0xxx)"
-						int noticeType = ParserNotice.ERROR;
+						ParserNotice.Level noticeType= ParserNotice.Level.ERROR;
 						if (msg.charAt(msg.length()-1)==')') {
 							int openParen = msg.lastIndexOf('(');
 							errorCode = msg.substring(openParen+1,
 									msg.length()-1);
 							if (msg.charAt(openParen+1)=='W') {
-								noticeType = ParserNotice.WARNING;
+								noticeType = ParserNotice.Level.WARNING;
 							}
 							msg = msg.substring(0, openParen-1);
 						}

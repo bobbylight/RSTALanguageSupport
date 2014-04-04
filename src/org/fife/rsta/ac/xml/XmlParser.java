@@ -250,7 +250,7 @@ new ValidationConfigSniffer().sniff(doc);
 		}
 
 
-		private void doError(SAXParseException e, int level) {
+		private void doError(SAXParseException e, ParserNotice.Level level) {
 			if (!xls.getShowSyntaxErrors()) {
 				return;
 			}
@@ -278,13 +278,13 @@ new ValidationConfigSniffer().sniff(doc);
 
 		@Override
 		public void error(SAXParseException e) throws SAXException {
-			doError(e, ParserNotice.ERROR);
+			doError(e, ParserNotice.Level.ERROR);
 		}
 
 
 		@Override
 		public void fatalError(SAXParseException e) throws SAXException {
-			doError(e, ParserNotice.ERROR);
+			doError(e, ParserNotice.Level.ERROR);
 		}
 
 
@@ -383,7 +383,7 @@ new ValidationConfigSniffer().sniff(doc);
 
 		@Override
 		public void warning(SAXParseException e) throws SAXException {
-			doError(e, ParserNotice.WARNING);
+			doError(e, ParserNotice.Level.WARNING);
 		}
 
 
