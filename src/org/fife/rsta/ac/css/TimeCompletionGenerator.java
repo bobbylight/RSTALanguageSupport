@@ -14,9 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import javax.swing.Icon;
-
-import org.fife.ui.autocomplete.BasicCompletion;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
 
@@ -54,15 +51,10 @@ class TimeCompletionGenerator implements CompletionGenerator {
 	 * The type of completion returned by this generator.
 	 * TODO: Get rid of this class and share code with someone else.
 	 */
-	private static class TimeCompletion extends BasicCompletion {
+	private static class TimeCompletion extends BasicCssCompletion {
 
 		public TimeCompletion(CompletionProvider provider, String value) {
-			super(provider, value);
-		}
-
-		@Override
-		public Icon getIcon() {
-			return IconFactory.get().getIcon(ICON_KEY);
+			super(provider, value, ICON_KEY);
 		}
 
 	}

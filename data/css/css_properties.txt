@@ -14,31 +14,35 @@ background-attachment colback_props
 background-clip colback_props
 background-color colback_props [ *color* ]
 background-image colback_props
-background-origin colback_props
+background-origin colback_props [ border-box padding-box content-box ]
 background-position colback_props
-background-repeat colback_props
+background-repeat colback_props [ repeat repeat-x repeat-y space round no-repeat ]
 background-size colback_props
-border boxmodel_props
-border-bottom boxmodel_props
+border boxmodel_props [ *length* thin medium thick *border-style* *color* ]
+border-bottom boxmodel_props [ *length* thin medium thick *border-style* *color* ]
 border-bottom-left-radius boxmodel_props
 border-bottom-right-radius boxmodel_props
+border-bottom-style boxmodel_props [ *border-style* ]
 border-collapse table_props
 border-color boxmodel_props [ *color* ]
 border-image boxmodel_props
 border-image-outset boxmodel_props
-border-image-repeat boxmodel_props
+border-image-repeat boxmodel_props [ stretch repeat round ]
 border-image-slice boxmodel_props
 border-image-source boxmodel_props
 border-image-width boxmodel_props
-border-left boxmodel_props
-border-radius boxmodel_props
-border-right boxmodel_props
+border-left boxmodel_props [ *length* thin medium thick *border-style* *color* ]
+border-left-style boxmodel_props [ *border-style* ]
+border-radius boxmodel_props [ *percentage-or-length* / ]
+border-right boxmodel_props [ *length* thin medium thick *border-style* *color* ]
+border-right-style boxmodel_props [ *border-style* ]
 border-spacing table_props [ *length* ]
-border-style boxmodel_props
-border-top boxmodel_props
+border-style boxmodel_props [ *border-style* ]
+border-top boxmodel_props [ *length* thin medium thick *border-style* *color* ]
 border-top-left-radius boxmodel_props
 border-top-right-radius boxmodel_props
-border-width boxmodel_props
+border-top-style boxmodel_props [ *border-style* ]
+border-width boxmodel_props [ *length* thin medium thick ]
 bottom visual_props [ *percentage-or-length* auto ]
 box-decoration-break visual_props
 box-shadow visual_props
@@ -87,11 +91,11 @@ list-style content_props
 list-style-image content_props
 list-style-position content_props
 list-style-type content_props [ disc circle square decimal decimal-leading-zero lower-roman upper-roman lower-greek lower-latin upper-latin armenian georgian lower-alpha upper-alpha none ]
-margin boxmodel_props
-margin-bottom boxmodel_props
-margin-left boxmodel_props
-margin-right boxmodel_props
-margin-top boxmodel_props
+margin boxmodel_props [ *percentage-or-length* auto ]
+margin-bottom boxmodel_props [ *percentage-or-length* auto ]
+margin-left boxmodel_props [ *percentage-or-length* auto ]
+margin-right boxmodel_props [ *percentage-or-length* auto ]
+margin-top boxmodel_props [ *percentage-or-length* auto ]
 marker-offset content_props
 marks pagedmedia_props
 marquee-direction ui_props

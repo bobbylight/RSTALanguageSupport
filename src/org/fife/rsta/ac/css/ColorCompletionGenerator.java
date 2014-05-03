@@ -13,9 +13,7 @@ package org.fife.rsta.ac.css;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-import javax.swing.Icon;
 
-import org.fife.ui.autocomplete.BasicCompletion;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.TemplateCompletion;
@@ -119,17 +117,11 @@ class ColorCompletionGenerator implements CompletionGenerator {
 
 	/**
 	 * The type of completion returned by this generator.
-	 * TODO: Get rid of this class and share code with someone else.
 	 */
-	private static class ColorCompletion extends BasicCompletion {
+	private static class ColorCompletion extends BasicCssCompletion {
 
 		public ColorCompletion(CompletionProvider provider, String value) {
-			super(provider, value);
-		}
-
-		@Override
-		public Icon getIcon() {
-			return IconFactory.get().getIcon(ICON_KEY);
+			super(provider, value, ICON_KEY);
 		}
 
 	}

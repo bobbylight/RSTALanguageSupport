@@ -59,7 +59,7 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 	private List<Completion> htmlTagCompletions;
 	private List<Completion> propertyCompletions;
 	private Map<String, List<Completion>> valueCompletions;
-	private Map<String, CompletionGenerator> valueCompletionGenerators;
+	private Map<String, List<CompletionGenerator>> valueCompletionGenerators;
 	
 	private Segment seg = new Segment();
 	private AbstractCompletionProvider.CaseInsensitiveComparator comparator;
@@ -87,7 +87,7 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 		try {
 			this.valueCompletions = new HashMap<String, List<Completion>>();
 			this.valueCompletionGenerators =
-					new HashMap<String, CompletionGenerator>();
+					new HashMap<String, List<CompletionGenerator>>();
 			loadPropertyCompletions();
 			this.htmlTagCompletions = loadHtmlTagCompletions();
 		} catch (IOException ioe) { // Never happens
@@ -239,26 +239,30 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 					break;
 				case 2:
 					choices = valueCompletions.get(currentProperty);
-					if (valueCompletionGenerators.get(currentProperty)!=null) {
-						List<Completion> toMerge = valueCompletionGenerators.
-								get(currentProperty).generate(this, text);
-						if (toMerge!=null) {
-							if (choices==null) {
-								choices = toMerge;
+					List<CompletionGenerator> generators =
+							valueCompletionGenerators.get(currentProperty);
+					if (generators!=null) {
+						for (CompletionGenerator generator : generators) {
+							List<Completion> toMerge = generator.
+													generate(this, text);
+							if (toMerge!=null) {
+								if (choices==null) {
+									choices = toMerge;
+								}
+								else {
+									// Clone choices array since we had a shallow
+									// copy of the "static" completions for this
+									// property
+									choices = new ArrayList<Completion>(choices);
+									choices.addAll(toMerge);
+								}
 							}
-							else {
-								// Clone choices array since we had a shallow
-								// copy of the "static" completions for this
-								// property
-								choices = new ArrayList<Completion>(choices);
-								choices.addAll(toMerge);
-							}
-							Collections.sort(choices);
 						}
 					}
 					if (choices==null) {
 						return retVal;
 					}
+					Collections.sort(choices);
 					break;
 			}
 			int index = Collections.binarySearch(choices, text, comparator);
@@ -448,6 +452,21 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 	}
 
 
+	/**
+	 * Adds a completion generator for a specific property.
+	 */
+	private static final void add(
+			Map<String, List<CompletionGenerator>> generatorMap,
+			String prop, CompletionGenerator generator) {
+		List<CompletionGenerator> generators = generatorMap.get(prop);
+		if (generators==null) {
+			generators = new ArrayList<CompletionGenerator>();
+			generatorMap.put(prop, generators);
+		}
+		generators.add(generator);
+	}
+
+
 	private void parsePropertyValueCompletionLine(String line)
 			throws IOException {
 
@@ -468,19 +487,23 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 					String token = tokens[i];
 					Completion completion = null;
 					if ("*length*".equals(token)) {
-						valueCompletionGenerators.put(prop,
+						add(valueCompletionGenerators, prop,
 							new PercentageOrLengthCompletionGenerator(false));
 					}
 					else if ("*percentage-or-length*".equals(token)) {
-						valueCompletionGenerators.put(prop,
+						add(valueCompletionGenerators, prop,
 							new PercentageOrLengthCompletionGenerator(true));
 					}
 					else if ("*color*".equals(token)) {
-						valueCompletionGenerators.put(prop,
+						add(valueCompletionGenerators, prop,
 							new ColorCompletionGenerator(this));
 					}
+					else if ("*border-style*".equals(token)) {
+						add(valueCompletionGenerators, prop,
+							new BorderStyleCompletionGenerator());
+					}
 					else if ("*time*".equals(token)) {
-						valueCompletionGenerators.put(prop,
+						add(valueCompletionGenerators, prop,
 							new TimeCompletionGenerator());
 					}
 					else {

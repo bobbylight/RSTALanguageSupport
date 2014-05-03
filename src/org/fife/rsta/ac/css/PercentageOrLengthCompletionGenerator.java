@@ -14,9 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import javax.swing.Icon;
-
-import org.fife.ui.autocomplete.BasicCompletion;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
 
@@ -83,15 +80,10 @@ class PercentageOrLengthCompletionGenerator implements CompletionGenerator {
 	/**
 	 * The type of completion returned by this generator.
 	 */
-	private static class POrLCompletion extends BasicCompletion {
+	private static class POrLCompletion extends BasicCssCompletion {
 
 		public POrLCompletion(CompletionProvider provider, String value) {
-			super(provider, value);
-		}
-
-		@Override
-		public Icon getIcon() {
-			return IconFactory.get().getIcon(ICON_KEY);
+			super(provider, value, ICON_KEY);
 		}
 
 	}
