@@ -1,5 +1,6 @@
 Skip these first lines!
 Tab-delimited, copied from http://www.w3schools.com/tags/html5.asp on 10/7/2009
+Modified to include new HTML5 elements from https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5/HTML5_element_list
 Mapping of tag name to short desc, then if it's supported in HTML 4 and/or 5
 
 a 	Defines a hyperlink 	4 	5
@@ -14,6 +15,7 @@ audio 	Defines sound content 	  	5
 b 	Defines bold text 	4 	5
 base 	Defines a base URL for all the links in a page 	4 	5
 basefont 	Not supported. Use CSS instead 	4 	 
+bdi	Represents text that must be isolated from its surrounding for bidirectional text formatting	 	5
 bdo 	Defines the direction of text display 	4 	5
 big 	Not supported. Defines big text 	4 	 
 blockquote 	Defines a long quotation 	4 	5
@@ -44,6 +46,7 @@ em 	Defines emphasized text  	4 	5
 embed 	Defines external interactive content or plugin 	  	5
 eventsource 	Defines a target for events sent by a server 	  	5
 fieldset 	Defines a fieldset 	4 	5
+figcaption	Represents the legend of a figure	 	5
 figure 	Defines a group of media content, and their caption 	  	5
 font 	Deprecated. Defines text font, size, and color 	4 	 
 footer 	Defines a footer for a section or page 	  	5
@@ -71,8 +74,10 @@ label 	Defines a label for a form control 	4 	5
 legend 	Defines a title in a fieldset 	4 	5
 li 	Defines a list item 	4 	5
 link 	Defines a resource reference 	4 	5
+main	The main or important part of the document.  There should be only one main element in the document	 	5
 mark 	Defines marked text 	  	5
 map 	Defines an image map  	4 	5
+math	Defines a mathematical formula	 	5
 menu 	Defines a menu list 	4 	5
 meta 	Defines meta information 	4 	5
 meter 	Defines measurement within a predefined range 	  	5
@@ -90,6 +95,9 @@ param 	Defines a parameter for an object 	4 	5
 pre 	Defines preformatted text 	4 	5
 progress 	Defines progress of a task of any kind 	  	5
 q 	Defines a short quotation 	4 	5
+rp	Represents parenthesis around a ruby annotation	 	5
+rt	Represents the text of a ruby annotation	 	5
+ruby	Represents content to be marked with ruby annotations, short runs of text presented alongside the text.	 	5
 rule 	Defines the rules for updating a template 	  	5
 s 	Not supported. Defines strikethrough text 	4 	 
 samp 	Defines sample computer code 	4 	5
@@ -104,9 +112,11 @@ strong 	Defines strong text 	4 	5
 style 	Defines a style definition 	4 	5
 sub 	Defines subscripted text 	4 	5
 sup 	Defines superscripted text 	4 	5
+svg	Defines an embedded vectorial image	 	5
 table 	Defines a table 	4 	5
 tbody 	Defines a table body 	4 	5
 td 	Defines a table cell 	4 	5
+template	Container for client-side content instantiated during runtime using JavaScript	 	5
 textarea 	Defines a text area 	4 	5
 tfoot 	Defines a table footer 	4 	5
 th 	Defines a table header 	4 	5
@@ -114,9 +124,11 @@ thead 	Defines a table header 	4 	5
 time 	Defines a date/time 	  	5
 title 	Defines the document title 	4 	5
 tr 	Defines a table row 	4 	5
+track	Allows authors to specify a timed text track for media elements like video or audio	 	5
 tt 	Not supported. Defines teletype text 	4 	 
 u 	Not supported. Defines underlined text 	4 	 
 ul 	Defines an unordered list 	4 	5
 var 	Defines a variable 	4 	5
 video 	Defines a video 	  	5
+wbr		Defines a line break opportunity, i.e. a suggested point for wrapping text to improve readability	 	5
 xmp 	Not supported. Defines preformatted text 	4 	 

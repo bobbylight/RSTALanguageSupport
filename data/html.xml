@@ -9,8 +9,8 @@
    Author:         Robert Futrell
    Version:        0.1
 
-   This file was generated from: C:\dev\rsta\RSTALanguageSupport\data\html\create_html_xml.pl
-   on date: 2013-01-29 23:06:26
+   This file was generated from: D:\dev\rsta\RSTALanguageSupport\data\html\create_html_xml.pl
+   on date: 2014-05-04 01:22:19
 
 
  -->
@@ -355,8 +355,8 @@
 			<param name="vspace" type="%Pixels; ">
 				<desc>vertical gutter</desc>
 			</param>
-			<param name="width" type="%MultiLength; ">
-				<desc>default width for enclosed COLs</desc>
+			<param name="width" type="NUMBER ">
+				<desc>The width of the element</desc>
 			</param>
 		</params>
 	</keyword>
@@ -767,6 +767,59 @@
 			</param>
 			<param name="size" type="NUMBER ">
 				<desc>rows visible</desc>
+			</param>
+			<param name="style" type="%StyleSheet; ">
+				<desc>associated style info</desc>
+			</param>
+			<param name="title" type="%Text; ">
+				<desc>advisory title</desc>
+			</param>
+		</params>
+	</keyword>
+	<keyword name="bdi" type="tag" definedIn="HTML 5">
+		<desc>Represents text that must be isolated from its surrounding for bidirectional text formatting</desc>
+		<params>
+			<param name="class" type="CDATA ">
+				<desc>space-separated list of classes</desc>
+			</param>
+			<param name="dir" type="(ltr | rtl) ">
+				<desc>directionality</desc>
+			</param>
+			<param name="id" type="ID ">
+				<desc>document-wide unique id</desc>
+			</param>
+			<param name="lang" type="%LanguageCode; ">
+				<desc>language code</desc>
+			</param>
+			<param name="onclick" type="%Script; ">
+				<desc>a pointer button was clicked</desc>
+			</param>
+			<param name="ondblclick" type="%Script; ">
+				<desc>a pointer button was double clicked</desc>
+			</param>
+			<param name="onkeydown" type="%Script; ">
+				<desc>a key was pressed down</desc>
+			</param>
+			<param name="onkeypress" type="%Script; ">
+				<desc>a key was pressed and released</desc>
+			</param>
+			<param name="onkeyup" type="%Script; ">
+				<desc>a key was released</desc>
+			</param>
+			<param name="onmousedown" type="%Script; ">
+				<desc>a pointer button was pressed down</desc>
+			</param>
+			<param name="onmousemove" type="%Script; ">
+				<desc>a pointer was moved within</desc>
+			</param>
+			<param name="onmouseout" type="%Script; ">
+				<desc>a pointer was moved away</desc>
+			</param>
+			<param name="onmouseover" type="%Script; ">
+				<desc>a pointer was moved onto</desc>
+			</param>
+			<param name="onmouseup" type="%Script; ">
+				<desc>a pointer button was released</desc>
 			</param>
 			<param name="style" type="%StyleSheet; ">
 				<desc>associated style info</desc>
@@ -1485,8 +1538,8 @@
 			<param name="valign" type="(top | middle | bottom | baseline) ">
 				<desc>vertical alignment in cells</desc>
 			</param>
-			<param name="width" type="%MultiLength; ">
-				<desc>default width for enclosed COLs</desc>
+			<param name="width" type="NUMBER ">
+				<desc>The width of the element</desc>
 			</param>
 		</params>
 	</keyword>
@@ -1556,8 +1609,8 @@
 			<param name="valign" type="(top | middle | bottom | baseline) ">
 				<desc>vertical alignment in cells</desc>
 			</param>
-			<param name="width" type="%MultiLength; ">
-				<desc>default width for enclosed COLs</desc>
+			<param name="width" type="NUMBER ">
+				<desc>The width of the element</desc>
 			</param>
 		</params>
 	</keyword>
@@ -2477,6 +2530,59 @@
 			</param>
 		</params>
 	</keyword>
+	<keyword name="figcaption" type="tag" definedIn="HTML 5">
+		<desc>Represents the legend of a figure</desc>
+		<params>
+			<param name="class" type="CDATA ">
+				<desc>space-separated list of classes</desc>
+			</param>
+			<param name="dir" type="(ltr | rtl) ">
+				<desc>directionality</desc>
+			</param>
+			<param name="id" type="ID ">
+				<desc>document-wide unique id</desc>
+			</param>
+			<param name="lang" type="%LanguageCode; ">
+				<desc>language code</desc>
+			</param>
+			<param name="onclick" type="%Script; ">
+				<desc>a pointer button was clicked</desc>
+			</param>
+			<param name="ondblclick" type="%Script; ">
+				<desc>a pointer button was double clicked</desc>
+			</param>
+			<param name="onkeydown" type="%Script; ">
+				<desc>a key was pressed down</desc>
+			</param>
+			<param name="onkeypress" type="%Script; ">
+				<desc>a key was pressed and released</desc>
+			</param>
+			<param name="onkeyup" type="%Script; ">
+				<desc>a key was released</desc>
+			</param>
+			<param name="onmousedown" type="%Script; ">
+				<desc>a pointer button was pressed down</desc>
+			</param>
+			<param name="onmousemove" type="%Script; ">
+				<desc>a pointer was moved within</desc>
+			</param>
+			<param name="onmouseout" type="%Script; ">
+				<desc>a pointer was moved away</desc>
+			</param>
+			<param name="onmouseover" type="%Script; ">
+				<desc>a pointer was moved onto</desc>
+			</param>
+			<param name="onmouseup" type="%Script; ">
+				<desc>a pointer button was released</desc>
+			</param>
+			<param name="style" type="%StyleSheet; ">
+				<desc>associated style info</desc>
+			</param>
+			<param name="title" type="%Text; ">
+				<desc>advisory title</desc>
+			</param>
+		</params>
+	</keyword>
 	<keyword name="figure" type="tag" definedIn="HTML 5">
 		<desc>Defines a group of media content, and their caption</desc>
 		<params>
@@ -2676,6 +2782,9 @@
 			</param>
 			<param name="name" type="NAME ">
 				<desc>metainformation name</desc>
+			</param>
+			<param name="novalidate" type="CDATA ">
+				<desc>Whether or not the form should be validated when it is submitted.  Default if omitted is false.</desc>
 			</param>
 			<param name="onclick" type="%Script; ">
 				<desc>a pointer button was clicked</desc>
@@ -3370,8 +3479,8 @@
 			<param name="title" type="%Text; ">
 				<desc>advisory title</desc>
 			</param>
-			<param name="width" type="%MultiLength; ">
-				<desc>default width for enclosed COLs</desc>
+			<param name="width" type="NUMBER ">
+				<desc>The width of the element</desc>
 			</param>
 		</params>
 	</keyword>
@@ -3562,8 +3671,8 @@
 			<param name="title" type="%Text; ">
 				<desc>advisory title</desc>
 			</param>
-			<param name="width" type="%MultiLength; ">
-				<desc>default width for enclosed COLs</desc>
+			<param name="width" type="NUMBER ">
+				<desc>The width of the element</desc>
 			</param>
 		</params>
 	</keyword>
@@ -3651,8 +3760,8 @@
 			<param name="vspace" type="%Pixels; ">
 				<desc>vertical gutter</desc>
 			</param>
-			<param name="width" type="%MultiLength; ">
-				<desc>default width for enclosed COLs</desc>
+			<param name="width" type="NUMBER ">
+				<desc>The width of the element</desc>
 			</param>
 		</params>
 	</keyword>
@@ -3740,8 +3849,17 @@
 			<param name="onselect" type="%Script; ">
 				<desc>some text was selected</desc>
 			</param>
+			<param name="pattern" type="CDATA ">
+				<desc>A regular expression that the control's value is checked against.  Only used when type is text, search, tel, url, or email.</desc>
+			</param>
+			<param name="placeholder" type="CDATA ">
+				<desc>A hint to the user of what can be entered in the control.  Only used when type is text, search, tel, url, or email.</desc>
+			</param>
 			<param name="readonly" type="(readonly) ">
 				<desc>for text and passwd</desc>
+			</param>
+			<param name="required" type="CDATA ">
+				<desc>Marks this input as required before the form can be submitted.  Ignored when type is hidden, image, or a button type.</desc>
 			</param>
 			<param name="size" type="NUMBER ">
 				<desc>rows visible</desc>
@@ -4197,6 +4315,59 @@
 			</param>
 		</params>
 	</keyword>
+	<keyword name="main" type="tag" definedIn="HTML 5">
+		<desc>The main or important part of the document.  There should be only one main element in the document</desc>
+		<params>
+			<param name="class" type="CDATA ">
+				<desc>space-separated list of classes</desc>
+			</param>
+			<param name="dir" type="(ltr | rtl) ">
+				<desc>directionality</desc>
+			</param>
+			<param name="id" type="ID ">
+				<desc>document-wide unique id</desc>
+			</param>
+			<param name="lang" type="%LanguageCode; ">
+				<desc>language code</desc>
+			</param>
+			<param name="onclick" type="%Script; ">
+				<desc>a pointer button was clicked</desc>
+			</param>
+			<param name="ondblclick" type="%Script; ">
+				<desc>a pointer button was double clicked</desc>
+			</param>
+			<param name="onkeydown" type="%Script; ">
+				<desc>a key was pressed down</desc>
+			</param>
+			<param name="onkeypress" type="%Script; ">
+				<desc>a key was pressed and released</desc>
+			</param>
+			<param name="onkeyup" type="%Script; ">
+				<desc>a key was released</desc>
+			</param>
+			<param name="onmousedown" type="%Script; ">
+				<desc>a pointer button was pressed down</desc>
+			</param>
+			<param name="onmousemove" type="%Script; ">
+				<desc>a pointer was moved within</desc>
+			</param>
+			<param name="onmouseout" type="%Script; ">
+				<desc>a pointer was moved away</desc>
+			</param>
+			<param name="onmouseover" type="%Script; ">
+				<desc>a pointer was moved onto</desc>
+			</param>
+			<param name="onmouseup" type="%Script; ">
+				<desc>a pointer button was released</desc>
+			</param>
+			<param name="style" type="%StyleSheet; ">
+				<desc>associated style info</desc>
+			</param>
+			<param name="title" type="%Text; ">
+				<desc>advisory title</desc>
+			</param>
+		</params>
+	</keyword>
 	<keyword name="map" type="tag" definedIn="HTML 4, 5">
 		<desc>Defines an image map</desc>
 		<params>
@@ -4255,6 +4426,59 @@
 	</keyword>
 	<keyword name="mark" type="tag" definedIn="HTML 5">
 		<desc>Defines marked text</desc>
+		<params>
+			<param name="class" type="CDATA ">
+				<desc>space-separated list of classes</desc>
+			</param>
+			<param name="dir" type="(ltr | rtl) ">
+				<desc>directionality</desc>
+			</param>
+			<param name="id" type="ID ">
+				<desc>document-wide unique id</desc>
+			</param>
+			<param name="lang" type="%LanguageCode; ">
+				<desc>language code</desc>
+			</param>
+			<param name="onclick" type="%Script; ">
+				<desc>a pointer button was clicked</desc>
+			</param>
+			<param name="ondblclick" type="%Script; ">
+				<desc>a pointer button was double clicked</desc>
+			</param>
+			<param name="onkeydown" type="%Script; ">
+				<desc>a key was pressed down</desc>
+			</param>
+			<param name="onkeypress" type="%Script; ">
+				<desc>a key was pressed and released</desc>
+			</param>
+			<param name="onkeyup" type="%Script; ">
+				<desc>a key was released</desc>
+			</param>
+			<param name="onmousedown" type="%Script; ">
+				<desc>a pointer button was pressed down</desc>
+			</param>
+			<param name="onmousemove" type="%Script; ">
+				<desc>a pointer was moved within</desc>
+			</param>
+			<param name="onmouseout" type="%Script; ">
+				<desc>a pointer was moved away</desc>
+			</param>
+			<param name="onmouseover" type="%Script; ">
+				<desc>a pointer was moved onto</desc>
+			</param>
+			<param name="onmouseup" type="%Script; ">
+				<desc>a pointer button was released</desc>
+			</param>
+			<param name="style" type="%StyleSheet; ">
+				<desc>associated style info</desc>
+			</param>
+			<param name="title" type="%Text; ">
+				<desc>advisory title</desc>
+			</param>
+		</params>
+	</keyword>
+	<keyword name="math" type="tag" definedIn="HTML 5">
+		<desc>Defines a mathematical formula</desc>
 		<params>
 			<param name="class" type="CDATA ">
 				<desc>space-separated list of classes</desc>
@@ -4791,8 +5015,8 @@
 			<param name="vspace" type="%Pixels; ">
 				<desc>vertical gutter</desc>
 			</param>
-			<param name="width" type="%MultiLength; ">
-				<desc>default width for enclosed COLs</desc>
+			<param name="width" type="NUMBER ">
+				<desc>The width of the element</desc>
 			</param>
 		</params>
 	</keyword>
@@ -5206,6 +5430,9 @@
 			<param name="title" type="%Text; ">
 				<desc>advisory title</desc>
 			</param>
+			<param name="width" type="NUMBER ">
+				<desc>The width of the element</desc>
+			</param>
 		</params>
 	</keyword>
 	<keyword name="progress" type="tag" definedIn="HTML 5">
@@ -5267,6 +5494,165 @@
 			<param name="cite" type="%URI; ">
 				<desc>info on reason for change</desc>
 			</param>
+			<param name="class" type="CDATA ">
+				<desc>space-separated list of classes</desc>
+			</param>
+			<param name="dir" type="(ltr | rtl) ">
+				<desc>directionality</desc>
+			</param>
+			<param name="id" type="ID ">
+				<desc>document-wide unique id</desc>
+			</param>
+			<param name="lang" type="%LanguageCode; ">
+				<desc>language code</desc>
+			</param>
+			<param name="onclick" type="%Script; ">
+				<desc>a pointer button was clicked</desc>
+			</param>
+			<param name="ondblclick" type="%Script; ">
+				<desc>a pointer button was double clicked</desc>
+			</param>
+			<param name="onkeydown" type="%Script; ">
+				<desc>a key was pressed down</desc>
+			</param>
+			<param name="onkeypress" type="%Script; ">
+				<desc>a key was pressed and released</desc>
+			</param>
+			<param name="onkeyup" type="%Script; ">
+				<desc>a key was released</desc>
+			</param>
+			<param name="onmousedown" type="%Script; ">
+				<desc>a pointer button was pressed down</desc>
+			</param>
+			<param name="onmousemove" type="%Script; ">
+				<desc>a pointer was moved within</desc>
+			</param>
+			<param name="onmouseout" type="%Script; ">
+				<desc>a pointer was moved away</desc>
+			</param>
+			<param name="onmouseover" type="%Script; ">
+				<desc>a pointer was moved onto</desc>
+			</param>
+			<param name="onmouseup" type="%Script; ">
+				<desc>a pointer button was released</desc>
+			</param>
+			<param name="style" type="%StyleSheet; ">
+				<desc>associated style info</desc>
+			</param>
+			<param name="title" type="%Text; ">
+				<desc>advisory title</desc>
+			</param>
+		</params>
+	</keyword>
+	<keyword name="rp" type="tag" definedIn="HTML 5">
+		<desc>Represents parenthesis around a ruby annotation</desc>
+		<params>
+			<param name="class" type="CDATA ">
+				<desc>space-separated list of classes</desc>
+			</param>
+			<param name="dir" type="(ltr | rtl) ">
+				<desc>directionality</desc>
+			</param>
+			<param name="id" type="ID ">
+				<desc>document-wide unique id</desc>
+			</param>
+			<param name="lang" type="%LanguageCode; ">
+				<desc>language code</desc>
+			</param>
+			<param name="onclick" type="%Script; ">
+				<desc>a pointer button was clicked</desc>
+			</param>
+			<param name="ondblclick" type="%Script; ">
+				<desc>a pointer button was double clicked</desc>
+			</param>
+			<param name="onkeydown" type="%Script; ">
+				<desc>a key was pressed down</desc>
+			</param>
+			<param name="onkeypress" type="%Script; ">
+				<desc>a key was pressed and released</desc>
+			</param>
+			<param name="onkeyup" type="%Script; ">
+				<desc>a key was released</desc>
+			</param>
+			<param name="onmousedown" type="%Script; ">
+				<desc>a pointer button was pressed down</desc>
+			</param>
+			<param name="onmousemove" type="%Script; ">
+				<desc>a pointer was moved within</desc>
+			</param>
+			<param name="onmouseout" type="%Script; ">
+				<desc>a pointer was moved away</desc>
+			</param>
+			<param name="onmouseover" type="%Script; ">
+				<desc>a pointer was moved onto</desc>
+			</param>
+			<param name="onmouseup" type="%Script; ">
+				<desc>a pointer button was released</desc>
+			</param>
+			<param name="style" type="%StyleSheet; ">
+				<desc>associated style info</desc>
+			</param>
+			<param name="title" type="%Text; ">
+				<desc>advisory title</desc>
+			</param>
+		</params>
+	</keyword>
+	<keyword name="rt" type="tag" definedIn="HTML 5">
+		<desc>Represents the text of a ruby annotation</desc>
+		<params>
+			<param name="class" type="CDATA ">
+				<desc>space-separated list of classes</desc>
+			</param>
+			<param name="dir" type="(ltr | rtl) ">
+				<desc>directionality</desc>
+			</param>
+			<param name="id" type="ID ">
+				<desc>document-wide unique id</desc>
+			</param>
+			<param name="lang" type="%LanguageCode; ">
+				<desc>language code</desc>
+			</param>
+			<param name="onclick" type="%Script; ">
+				<desc>a pointer button was clicked</desc>
+			</param>
+			<param name="ondblclick" type="%Script; ">
+				<desc>a pointer button was double clicked</desc>
+			</param>
+			<param name="onkeydown" type="%Script; ">
+				<desc>a key was pressed down</desc>
+			</param>
+			<param name="onkeypress" type="%Script; ">
+				<desc>a key was pressed and released</desc>
+			</param>
+			<param name="onkeyup" type="%Script; ">
+				<desc>a key was released</desc>
+			</param>
+			<param name="onmousedown" type="%Script; ">
+				<desc>a pointer button was pressed down</desc>
+			</param>
+			<param name="onmousemove" type="%Script; ">
+				<desc>a pointer was moved within</desc>
+			</param>
+			<param name="onmouseout" type="%Script; ">
+				<desc>a pointer was moved away</desc>
+			</param>
+			<param name="onmouseover" type="%Script; ">
+				<desc>a pointer was moved onto</desc>
+			</param>
+			<param name="onmouseup" type="%Script; ">
+				<desc>a pointer button was released</desc>
+			</param>
+			<param name="style" type="%StyleSheet; ">
+				<desc>associated style info</desc>
+			</param>
+			<param name="title" type="%Text; ">
+				<desc>advisory title</desc>
+			</param>
+		</params>
+	</keyword>
+	<keyword name="ruby" type="tag" definedIn="HTML 5">
+		<desc>Represents content to be marked with ruby annotations, short runs of text presented alongside the text.</desc>
+		<params>
 			<param name="class" type="CDATA ">
 				<desc>space-separated list of classes</desc>
 			</param>
@@ -6104,6 +6490,59 @@
 			</param>
 		</params>
 	</keyword>
+	<keyword name="svg" type="tag" definedIn="HTML 5">
+		<desc>Defines an embedded vectorial image</desc>
+		<params>
+			<param name="class" type="CDATA ">
+				<desc>space-separated list of classes</desc>
+			</param>
+			<param name="dir" type="(ltr | rtl) ">
+				<desc>directionality</desc>
+			</param>
+			<param name="id" type="ID ">
+				<desc>document-wide unique id</desc>
+			</param>
+			<param name="lang" type="%LanguageCode; ">
+				<desc>language code</desc>
+			</param>
+			<param name="onclick" type="%Script; ">
+				<desc>a pointer button was clicked</desc>
+			</param>
+			<param name="ondblclick" type="%Script; ">
+				<desc>a pointer button was double clicked</desc>
+			</param>
+			<param name="onkeydown" type="%Script; ">
+				<desc>a key was pressed down</desc>
+			</param>
+			<param name="onkeypress" type="%Script; ">
+				<desc>a key was pressed and released</desc>
+			</param>
+			<param name="onkeyup" type="%Script; ">
+				<desc>a key was released</desc>
+			</param>
+			<param name="onmousedown" type="%Script; ">
+				<desc>a pointer button was pressed down</desc>
+			</param>
+			<param name="onmousemove" type="%Script; ">
+				<desc>a pointer was moved within</desc>
+			</param>
+			<param name="onmouseout" type="%Script; ">
+				<desc>a pointer was moved away</desc>
+			</param>
+			<param name="onmouseover" type="%Script; ">
+				<desc>a pointer was moved onto</desc>
+			</param>
+			<param name="onmouseup" type="%Script; ">
+				<desc>a pointer button was released</desc>
+			</param>
+			<param name="style" type="%StyleSheet; ">
+				<desc>associated style info</desc>
+			</param>
+			<param name="title" type="%Text; ">
+				<desc>advisory title</desc>
+			</param>
+		</params>
+	</keyword>
 	<keyword name="table" type="tag" definedIn="HTML 4, 5">
 		<desc>Defines a table</desc>
 		<params>
@@ -6179,8 +6618,8 @@
 			<param name="title" type="%Text; ">
 				<desc>advisory title</desc>
 			</param>
-			<param name="width" type="%MultiLength; ">
-				<desc>default width for enclosed COLs</desc>
+			<param name="width" type="NUMBER ">
+				<desc>The width of the element</desc>
 			</param>
 		</params>
 	</keyword>
@@ -6339,8 +6778,61 @@
 			<param name="valign" type="(top | middle | bottom | baseline) ">
 				<desc>vertical alignment in cells</desc>
 			</param>
-			<param name="width" type="%MultiLength; ">
-				<desc>default width for enclosed COLs</desc>
+			<param name="width" type="NUMBER ">
+				<desc>The width of the element</desc>
+			</param>
+		</params>
+	</keyword>
+	<keyword name="template" type="tag" definedIn="HTML 5">
+		<desc>Container for client-side content instantiated during runtime using JavaScript</desc>
+		<params>
+			<param name="class" type="CDATA ">
+				<desc>space-separated list of classes</desc>
+			</param>
+			<param name="dir" type="(ltr | rtl) ">
+				<desc>directionality</desc>
+			</param>
+			<param name="id" type="ID ">
+				<desc>document-wide unique id</desc>
+			</param>
+			<param name="lang" type="%LanguageCode; ">
+				<desc>language code</desc>
+			</param>
+			<param name="onclick" type="%Script; ">
+				<desc>a pointer button was clicked</desc>
+			</param>
+			<param name="ondblclick" type="%Script; ">
+				<desc>a pointer button was double clicked</desc>
+			</param>
+			<param name="onkeydown" type="%Script; ">
+				<desc>a key was pressed down</desc>
+			</param>
+			<param name="onkeypress" type="%Script; ">
+				<desc>a key was pressed and released</desc>
+			</param>
+			<param name="onkeyup" type="%Script; ">
+				<desc>a key was released</desc>
+			</param>
+			<param name="onmousedown" type="%Script; ">
+				<desc>a pointer button was pressed down</desc>
+			</param>
+			<param name="onmousemove" type="%Script; ">
+				<desc>a pointer was moved within</desc>
+			</param>
+			<param name="onmouseout" type="%Script; ">
+				<desc>a pointer was moved away</desc>
+			</param>
+			<param name="onmouseover" type="%Script; ">
+				<desc>a pointer was moved onto</desc>
+			</param>
+			<param name="onmouseup" type="%Script; ">
+				<desc>a pointer button was released</desc>
+			</param>
+			<param name="style" type="%StyleSheet; ">
+				<desc>associated style info</desc>
+			</param>
+			<param name="title" type="%Text; ">
+				<desc>advisory title</desc>
 			</param>
 		</params>
 	</keyword>
@@ -6585,8 +7077,8 @@
 			<param name="valign" type="(top | middle | bottom | baseline) ">
 				<desc>vertical alignment in cells</desc>
 			</param>
-			<param name="width" type="%MultiLength; ">
-				<desc>default width for enclosed COLs</desc>
+			<param name="width" type="NUMBER ">
+				<desc>The width of the element</desc>
 			</param>
 		</params>
 	</keyword>
@@ -6829,6 +7321,59 @@
 			</param>
 		</params>
 	</keyword>
+	<keyword name="track" type="tag" definedIn="HTML 5">
+		<desc>Allows authors to specify a timed text track for media elements like video or audio</desc>
+		<params>
+			<param name="class" type="CDATA ">
+				<desc>space-separated list of classes</desc>
+			</param>
+			<param name="dir" type="(ltr | rtl) ">
+				<desc>directionality</desc>
+			</param>
+			<param name="id" type="ID ">
+				<desc>document-wide unique id</desc>
+			</param>
+			<param name="lang" type="%LanguageCode; ">
+				<desc>language code</desc>
+			</param>
+			<param name="onclick" type="%Script; ">
+				<desc>a pointer button was clicked</desc>
+			</param>
+			<param name="ondblclick" type="%Script; ">
+				<desc>a pointer button was double clicked</desc>
+			</param>
+			<param name="onkeydown" type="%Script; ">
+				<desc>a key was pressed down</desc>
+			</param>
+			<param name="onkeypress" type="%Script; ">
+				<desc>a key was pressed and released</desc>
+			</param>
+			<param name="onkeyup" type="%Script; ">
+				<desc>a key was released</desc>
+			</param>
+			<param name="onmousedown" type="%Script; ">
+				<desc>a pointer button was pressed down</desc>
+			</param>
+			<param name="onmousemove" type="%Script; ">
+				<desc>a pointer was moved within</desc>
+			</param>
+			<param name="onmouseout" type="%Script; ">
+				<desc>a pointer was moved away</desc>
+			</param>
+			<param name="onmouseover" type="%Script; ">
+				<desc>a pointer was moved onto</desc>
+			</param>
+			<param name="onmouseup" type="%Script; ">
+				<desc>a pointer button was released</desc>
+			</param>
+			<param name="style" type="%StyleSheet; ">
+				<desc>associated style info</desc>
+			</param>
+			<param name="title" type="%Text; ">
+				<desc>advisory title</desc>
+			</param>
+		</params>
+	</keyword>
 	<keyword name="tt" type="tag" definedIn="HTML 4">
 		<desc>Not supported. Defines teletype text</desc>
 		<params>
@@ -7049,6 +7594,59 @@
 	</keyword>
 	<keyword name="video" type="tag" definedIn="HTML 5">
 		<desc>Defines a video</desc>
+		<params>
+			<param name="class" type="CDATA ">
+				<desc>space-separated list of classes</desc>
+			</param>
+			<param name="dir" type="(ltr | rtl) ">
+				<desc>directionality</desc>
+			</param>
+			<param name="id" type="ID ">
+				<desc>document-wide unique id</desc>
+			</param>
+			<param name="lang" type="%LanguageCode; ">
+				<desc>language code</desc>
+			</param>
+			<param name="onclick" type="%Script; ">
+				<desc>a pointer button was clicked</desc>
+			</param>
+			<param name="ondblclick" type="%Script; ">
+				<desc>a pointer button was double clicked</desc>
+			</param>
+			<param name="onkeydown" type="%Script; ">
+				<desc>a key was pressed down</desc>
+			</param>
+			<param name="onkeypress" type="%Script; ">
+				<desc>a key was pressed and released</desc>
+			</param>
+			<param name="onkeyup" type="%Script; ">
+				<desc>a key was released</desc>
+			</param>
+			<param name="onmousedown" type="%Script; ">
+				<desc>a pointer button was pressed down</desc>
+			</param>
+			<param name="onmousemove" type="%Script; ">
+				<desc>a pointer was moved within</desc>
+			</param>
+			<param name="onmouseout" type="%Script; ">
+				<desc>a pointer was moved away</desc>
+			</param>
+			<param name="onmouseover" type="%Script; ">
+				<desc>a pointer was moved onto</desc>
+			</param>
+			<param name="onmouseup" type="%Script; ">
+				<desc>a pointer button was released</desc>
+			</param>
+			<param name="style" type="%StyleSheet; ">
+				<desc>associated style info</desc>
+			</param>
+			<param name="title" type="%Text; ">
+				<desc>advisory title</desc>
+			</param>
+		</params>
+	</keyword>
+	<keyword name="wbr" type="tag" definedIn="HTML 5">
+		<desc>Defines a line break opportunity, i.e. a suggested point for wrapping text to improve readability</desc>
 		<params>
 			<param name="class" type="CDATA ">
 				<desc>space-separated list of classes</desc>

@@ -190,5 +190,10 @@ width 	TABLE 	%Length; 	#IMPLIED 	  	  	table width
 width 	TD, TH 	%Length; 	#IMPLIED 	D 	L 	width for cell
 width 	APPLET 	%Length; 	#REQUIRED 	D 	L 	initial width
 width 	COL 	%MultiLength; 	#IMPLIED 	  	  	column width specification
-width 	COLGROUP 	%MultiLength; 	#IMPLIED 	  	  	default width for enclosed COLs
+width 	COLGROUP 	%MultiLength; 	#IMPLIED 	  	  	The width of the element
 width 	PRE 	NUMBER 	#IMPLIED 	D 	L 	 
+pattern	INPUT 	CDATA 	#IMPLIED 	  	  	A regular expression that the control's value is checked against.  Only used when type is text, search, tel, url, or email.
+placeholder	INPUT 	CDATA 	#IMPLIED 	  	  	A hint to the user of what can be entered in the control.  Only used when type is text, search, tel, url, or email.
+required	INPUT 	CDATA 	#IMPLIED 	  	  	Marks this input as required before the form can be submitted.  Ignored when type is hidden, image, or a button type.
+novalidate	FORM 	CDATA 	#IMPLIED 	  	  	Whether or not the form should be validated when it is submitted.  Default if omitted is false.
+
