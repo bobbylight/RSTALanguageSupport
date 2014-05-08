@@ -8,8 +8,8 @@
    Author:         Robert Futrell
    Version:        0.1
 
-   This file was generated from: C:/dev/rsta/RSTALanguageSupport/data/php/php.txt
-   on date: 2012-04-29 00:21:13
+   This file was generated from: D:/dev/rsta/RSTALanguageSupport/data/php/php.txt
+   on date: 2014-05-07 23:55:55
 
 -->
 <api language="PHP">
@@ -6503,6 +6503,15 @@
 		<param type="mixed" name="formdata"/>
 	</params>
 </keyword>
+<keyword name="http_response_code" type="function" returnType="int">
+	<params>
+		<param type="int" name="response_code"/>
+	</params>
+</keyword>
+<keyword name="http_response_code" type="function" returnType="int">
+	<params>
+	</params>
+</keyword>
 <keyword name="hypot" type="function" returnType="float">
 	<params>
 		<param type="float" name="num1"/>
@@ -8631,7 +8640,22 @@
 		<param type="mixed" name="var"/>
 	</params>
 </keyword>
+<keyword name="is_bool" type="function" returnType="bool">
+	<params>
+		<param type="mixed" name="var"/>
+	</params>
+</keyword>
 <keyword name="is_buffer" type="function" returnType="bool">
+	<params>
+		<param type="mixed" name="var"/>
+	</params>
+</keyword>
+<keyword name="is_double" type="function" returnType="bool">
+	<params>
+		<param type="mixed" name="var"/>
+	</params>
+</keyword>
+<keyword name="is_float" type="function" returnType="bool">
 	<params>
 		<param type="mixed" name="var"/>
 	</params>
@@ -8641,7 +8665,17 @@
 		<param type="float" name="val"/>
 	</params>
 </keyword>
+<keyword name="is_int" type="function" returnType="bool">
+	<params>
+		<param type="mixed" name="var"/>
+	</params>
+</keyword>
 <keyword name="is_long" type="function" returnType="bool">
+	<params>
+		<param type="mixed" name="var"/>
+	</params>
+</keyword>
+<keyword name="is_nan" type="function" returnType="bool">
 	<params>
 		<param type="mixed" name="var"/>
 	</params>
@@ -8674,6 +8708,11 @@
 <keyword name="is_scalar" type="function" returnType="bool">
 	<params>
 		<param type="mixed" name="value"/>
+	</params>
+</keyword>
+<keyword name="is_string" type="function" returnType="bool">
+	<params>
+		<param type="mixed" name="var"/>
 	</params>
 </keyword>
 <keyword name="is_subclass_of" type="function" returnType="bool">
@@ -8807,7 +8846,22 @@
 <keyword name="json_decode" type="function" returnType="mixed">
 	<params>
 		<param type="string" name="json"/>
-		<param type="bool" name="assoc]"/>
+		<param type="bool" name="assoc"/>
+		<param type="int" name="depth"/>
+		<param type="int" name="options"/>
+	</params>
+</keyword>
+<keyword name="json_decode" type="function" returnType="mixed">
+	<params>
+		<param type="string" name="json"/>
+		<param type="bool" name="assoc"/>
+		<param type="int" name="depth"/>
+	</params>
+</keyword>
+<keyword name="json_decode" type="function" returnType="mixed">
+	<params>
+		<param type="string" name="json"/>
+		<param type="bool" name="assoc"/>
 	</params>
 </keyword>
 <keyword name="json_decode" type="function" returnType="mixed">
@@ -8817,7 +8871,20 @@
 </keyword>
 <keyword name="json_encode" type="function" returnType="string">
 	<params>
-		<param type="mixed" name="data"/>
+		<param type="mixed" name="value"/>
+		<param type="int" name="options"/>
+		<param type="int" name="depth"/>
+	</params>
+</keyword>
+<keyword name="json_encode" type="function" returnType="string">
+	<params>
+		<param type="mixed" name="value"/>
+		<param type="int" name="options"/>
+	</params>
+</keyword>
+<keyword name="json_encode" type="function" returnType="string">
+	<params>
+		<param type="mixed" name="value"/>
 	</params>
 </keyword>
 <keyword name="juliantojd" type="function" returnType="int">

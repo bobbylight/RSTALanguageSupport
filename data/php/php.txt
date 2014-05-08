@@ -5860,6 +5860,10 @@ mixed formdata|
 [ string arg_separator]]|
 
 
+http_response_code function
+int|
+[ int response_code|
+
 #TODO: <KeyWord name="hwapi_hgcsp" />
 
 
@@ -7939,7 +7943,9 @@ string classname|
 #TODO: <KeyWord name="is_a" />
 
 
-#TODO: <KeyWord name="is_array" />
+is_array function
+bool|
+mixed var|
 
 
 is_binary function
@@ -7947,7 +7953,9 @@ bool|
 mixed var|
 
 
-#TODO: <KeyWord name="is_bool" />
+is_bool function
+bool|
+mixed var|
 
 
 is_buffer function
@@ -7961,7 +7969,9 @@ mixed var|
 #TODO: <KeyWord name="is_dir" />
 
 
-#TODO: <KeyWord name="is_double" />
+is_double function
+bool|
+mixed var|
 
 
 #TODO: <KeyWord name="is_executable" />
@@ -7973,7 +7983,9 @@ mixed var|
 #TODO: <KeyWord name="is_finite" />
 
 
-#TODO: <KeyWord name="is_float" />
+is_float function
+bool|
+mixed var|
 
 
 is_infinite function
@@ -7981,7 +7993,9 @@ bool|
 float val|
 
 
-#TODO: <KeyWord name="is_int" />
+is_int function
+bool|
+mixed var|
 
 
 #TODO: <KeyWord name="is_integer" />
@@ -7995,7 +8009,9 @@ bool|
 mixed var|
 
 
-#TODO: <KeyWord name="is_nan" />
+is_nan function
+bool|
+mixed var|
 
 
 is_null function
@@ -8031,7 +8047,9 @@ bool|
 mixed value|
 
 
-#TODO: <KeyWord name="is_string" />
+is_string function
+bool|
+mixed var|
 
 
 is_subclass_of function
@@ -8150,12 +8168,16 @@ array pieces|
 json_decode function
 mixed|
 string json|
-[ bool assoc]|
+[ bool assoc|
+[ int depth|
+[ int options|
 
 
 json_encode function
 string|
-mixed data|
+mixed value|
+[ int options|
+[ int depth|
 
 
 juliantojd function
