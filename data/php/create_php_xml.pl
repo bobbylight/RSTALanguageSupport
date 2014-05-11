@@ -75,13 +75,18 @@ while (length($line)>0) {
 		next;
 	}
 
-	# A Perl function or "constant" (pre-defined variable).
-	if ($line =~ m/^([\w\:\s]+) (function|constant)/) {
+	# A PHP function or "constant" (pre-defined variable).
+	if ($line =~ m/^([\w\:\s]+) (function|constant)(\|.+)?/) {
 
 		my $name = $1;
 		my $returnValDesc;
 		push(@names, $name);
 		$item = "<keyword name=\"$name\" type=\"$2\"";
+      
+      my $mainDesc = 0;
+      if ($#+ == 3) {
+         $mainDesc = $3;
+      }
 
 		# Functions have a line containing the return type and optional description
 		if ($2 eq "function") {
@@ -97,6 +102,9 @@ while (length($line)>0) {
 
 		# Close tag and add return value desc tag if necessary.
 		$item .= ">\n";
+      if (length($mainDesc)>1) {
+         $item .= "\t<desc>" . fixDesc(substr($mainDesc, 1)) . "</desc>\n";
+      }
 		if (length($returnValDesc)>0) {
 			$item .= "\t<returnValDesc>" . fixDesc($returnValDesc) . "</returnValDesc>\n";
 		}
