@@ -22,6 +22,7 @@ import java.util.TreeMap;
 
 import org.fife.rsta.ac.java.buildpath.LibraryInfo;
 import org.fife.rsta.ac.java.classreader.ClassFile;
+import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
 
 
@@ -84,7 +85,7 @@ class JarReader {
 	 * @param addTo The list to add completion choices to.
 	 */
 	public void addCompletions(CompletionProvider provider, String[] pkgNames,
-								Set addTo) {
+								Set<Completion> addTo) {
 
 		checkLastModified();
 

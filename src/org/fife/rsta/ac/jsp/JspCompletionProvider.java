@@ -10,7 +10,6 @@
  */
 package org.fife.rsta.ac.jsp;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,7 +41,7 @@ public class JspCompletionProvider extends HtmlCompletionProvider {
 	public JspCompletionProvider() {
 
 		prefixToTld = new HashMap<String, TldFile>();
-
+/*
 		String fileName = File.separatorChar=='/' ?
 				"/users/robert/struts-2.2.3/lib/struts2-core-2.2.3.jar" :
 				"c:/dev/struts/struts-2.2.3/lib/struts2-core-2.2.3.jar";
@@ -56,7 +55,7 @@ public class JspCompletionProvider extends HtmlCompletionProvider {
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
-
+*/
 		setAutoActivationRules(false, "<:");
 
 	}
