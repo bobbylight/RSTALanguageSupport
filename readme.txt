@@ -27,7 +27,7 @@ of errors in the source code).
 Documentation is sparse at the moment, but should improve over time.
 
 Like all RSyntaxTextArea-related projects (AutoComplete, SpellChecker), this
-project targets Java 1.4 and beyond.
+project targets Java 5 and beyond.
 
 This library itself relies on the following other libraries (besides
 RSyntaxTextArea and AutoComplete):
@@ -87,7 +87,8 @@ Languages with support include:
      derived from the parser above.  Completion choices are based on the
      type of the variable.  Scope is honored.
    - Ctrl+Shift+O (Cmd+Shift+O on OS X) opens "Go to Member" popup.
-   - JavaScriptOutlineTree class provides a tree view of a JavaScript file.
+   - JavaScriptOutlineTree class provides a tree view of a JavaScript file that
+     is updated live with edits.
    - Optional JSHint integration.  If JSHint is installed on your machine, you
      can configure this library to use it for squiggle-underlining of syntax
      errors instead of Rhino.  Point to your own .jshintrc and have full

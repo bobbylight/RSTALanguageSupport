@@ -47,6 +47,7 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
  *
  * @author Robert Futrell
  * @version 1.0
+ * @see JavaOutlineTree
  */
 public class JavaLanguageSupport extends AbstractLanguageSupport {
 

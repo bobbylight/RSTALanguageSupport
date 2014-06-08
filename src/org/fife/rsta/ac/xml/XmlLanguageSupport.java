@@ -44,6 +44,7 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
  *
  * @author Robert Futrell
  * @version 1.0
+ * @see XmlOutlineTree
  */
 public class XmlLanguageSupport extends AbstractMarkupLanguageSupport {
 

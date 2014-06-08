@@ -57,6 +57,7 @@ import org.mozilla.javascript.ast.NodeVisitor;
  * 
  * @author Robert Futrell
  * @version 1.0
+ * @see JavaScriptOutlineTree
  */
 public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 
