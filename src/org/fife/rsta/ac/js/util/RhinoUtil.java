@@ -10,6 +10,7 @@
  */
 package org.fife.rsta.ac.js.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.mozilla.javascript.Token;
@@ -90,6 +91,27 @@ public class RhinoUtil {
 	}
 
 
+	public static final String getPrototypeClazz(List<AstNode> nodes) {
+		return getPrototypeClazz(nodes, -1);
+	}
+
+
+	public static final String getPrototypeClazz(List<AstNode> nodes,
+			int depth) {
+		if (depth<0) {
+			depth = nodes.size();
+		}
+		StringBuilder sb = new StringBuilder();
+		for (int i=0; i<depth; i++) {
+			sb.append(((Name)nodes.get(i)).getIdentifier());
+			if (i<depth-1) {
+				sb.append('.');
+			}
+		}
+		return sb.toString();
+	}
+
+
 	/**
 	 * Returns whether an AST node is a <code>Name</code> with the specified
 	 * value.
@@ -104,10 +126,15 @@ public class RhinoUtil {
 	}
 
 
+	public static final boolean isPrototypeNameNode(AstNode node) {
+		return node instanceof Name &&
+				"prototype".equals(((Name)node).getIdentifier());
+	}
+
+
 	public static final boolean isPrototypePropertyGet(PropertyGet pg) {
 		return pg!=null && pg.getLeft() instanceof Name &&
-				pg.getRight() instanceof Name &&
-				"prototype".equals(((Name)pg.getRight()).getIdentifier());
+				isPrototypeNameNode(pg.getRight());
 	}
 
 
@@ -124,6 +151,15 @@ public class RhinoUtil {
 			String expectedObj, String expectedField) {
 		return pg!=null && isName(pg.getLeft(), expectedObj) &&
 				isName(pg.getRight(), expectedField);
+	}
+
+
+	public static final List<AstNode> toList(AstNode... nodes) {
+		List<AstNode> list = new ArrayList<AstNode>();
+		for (AstNode node : nodes) {
+			list.add(node);
+		}
+		return list;
 	}
 
 

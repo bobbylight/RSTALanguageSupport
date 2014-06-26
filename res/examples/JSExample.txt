@@ -29,7 +29,7 @@ Klass.prototype.getName = function() {
 };
 
 // Another simple Java-style OO class design
-var Klass2 = function() {
+var Klass2 = function(a, b, c) {
    this.name = 'Fred';
 }
 Klass2.prototype.getName = function() {
@@ -75,4 +75,4 @@ Klass4.prototype = Object.create(a, {
    }
 });
 
-var frozen = Object.freeze({ a: 'a', b: 'b' });
+foobar.frozen = Object.freeze({ a: 'a', b: 'b' });

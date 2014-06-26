@@ -10,10 +10,13 @@
  */
 package org.fife.rsta.ac.js.tree;
 
+import java.util.List;
 import javax.swing.Icon;
 import javax.swing.text.Position;
 
 import org.fife.rsta.ac.SourceTreeNode;
+import org.fife.rsta.ac.js.util.RhinoUtil;
+
 import org.mozilla.javascript.ast.AstNode;
 
 
@@ -41,13 +44,18 @@ public class JavaScriptTreeNode extends SourceTreeNode {
 	private Icon icon;
 
 
-	public JavaScriptTreeNode(AstNode userObject) {
+	public JavaScriptTreeNode(List<AstNode> userObject) {
 		super(userObject);
 	}
 
 
+	public JavaScriptTreeNode(AstNode userObject) {
+		this(RhinoUtil.toList(userObject));
+	}
+
+
 	public JavaScriptTreeNode(AstNode userObject, boolean sorted) {
-		super(userObject, sorted);
+		super(RhinoUtil.toList(userObject), sorted);
 	}
 
 
@@ -62,8 +70,15 @@ public class JavaScriptTreeNode extends SourceTreeNode {
 	 * @return The length of this element.
 	 * @see #getOffset()
 	 */
+	@SuppressWarnings("unchecked")
 	public int getLength() {
-		return ((AstNode)getUserObject()).getLength();
+		int length = 0;
+		List<AstNode> nodes = (List<AstNode>)getUserObject();
+		for (AstNode node : nodes) {
+			length += node.getLength();
+		}
+		length += nodes.size() - 1;
+		return length;
 	}
 
 

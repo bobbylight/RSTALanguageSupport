@@ -161,6 +161,13 @@ public class JavaScriptHelper {
 			AstNode typeNode, SourceCompletionProvider provider) {
 		if (typeNode != null) {
 			switch (typeNode.getType()) {
+case Token.EXPR_RESULT:
+	AstNode expr = ((org.mozilla.javascript.ast.ExpressionStatement)typeNode).getExpression();
+	if (expr.getType()==Token.NAME) {
+		return provider.resolveTypeDeclation(((Name) expr)
+				.getIdentifier());
+	}
+	break;
 				case Token.CATCH:
 					return getTypeDeclaration(TypeDeclarations.ECMA_ERROR, provider);
 				case Token.NAME:
