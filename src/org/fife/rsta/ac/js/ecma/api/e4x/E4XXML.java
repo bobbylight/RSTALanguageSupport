@@ -19,7 +19,7 @@ public abstract class E4XXML implements E4XXMLFunctions {
      * Object XML(xml)
      * 
      * @constructor
-     * @param XML definition 
+     * @param xml The XML definition 
      * @extends Object
      * @since Standard ECMA-357 2nd. Edition
      * @since Level 3 Document Object Model Core Definition.

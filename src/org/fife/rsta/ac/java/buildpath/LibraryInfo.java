@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.TreeMap;
 
-import org.fife.rsta.ac.java.JarManager;
 import org.fife.rsta.ac.java.classreader.ClassFile;
 
 

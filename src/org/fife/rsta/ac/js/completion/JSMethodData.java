@@ -279,9 +279,6 @@ public class JSMethodData {
 		return info.isStatic();
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 */
 	public String getEnclosingClassName(boolean fullyQualified) {
 		return info.getClassFile().getClassName(fullyQualified);
 	}

@@ -248,8 +248,9 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	}
 	
 	/**
-	 * Set template completion cache for source completion provider
-	 * @param templateCache
+	 * Set template completion cache for source completion provider.
+	 *
+	 * @param shorthandCache The new cache.
 	 */
 	public void setShorthandCache(ShorthandCompletionCache shorthandCache) {
 		this.shorthandCache = shorthandCache;
@@ -452,7 +453,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	 * Removes all jars from the "build path."
 	 *
 	 * @see #removeJar(File)
-	 * @see #addClassFileSource(JarInfo)
+	 * @see #addJar(LibraryInfo)
 	 * @see #getJars()
 	 */
 	public void clearJars() {
@@ -1042,7 +1043,7 @@ public SourceLocation  getSourceLocForClass(String className) {
 	 * @param jar The jar to remove.
 	 * @return Whether the jar was removed.  This will be <code>false</code>
 	 *         if the jar was not on the build path.
-	 * @see #addClassFileSource(JarInfo)
+	 * @see #addJar(LibraryInfo)
 	 * @see #getJars()
 	 * @see #clearJars()
 	 */

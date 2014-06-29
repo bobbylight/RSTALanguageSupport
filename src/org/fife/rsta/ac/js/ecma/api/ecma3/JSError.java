@@ -28,7 +28,7 @@ public abstract class JSError implements JSObjectFunctions {
 	* 
 	* @super Object
 	* @constructor
-	* @param <i>message</i> An optional error message that provides details about the exception
+	* @param message An optional error message that provides details about the exception
 	* @memberOf Error
 	* @since Standard ECMA-262 3rd. Edition
 	* @since Level 2 Document Object Model Core Definition.

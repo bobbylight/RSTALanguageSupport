@@ -34,7 +34,7 @@ public interface JSFunctionFunctions extends JSObjectFunctions {
 	 * Object.prototype.toString().call(o);
 	 * </pre> 
      *  @param thisObject The object to which the <b><i>function</i></b> is applied.
-     *  @param argArray An array of arguments to be passed to <b><i>function</i></b>
+     *  @param args An array of arguments to be passed to <b><i>function</i></b>
      *  @returns Whatever value is returned by <b><i>function</i></b>
       * @see  org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction Function
       * @since   Standard ECMA-262 3rd. Edition 

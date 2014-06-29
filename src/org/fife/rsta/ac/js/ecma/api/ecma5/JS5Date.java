@@ -59,10 +59,10 @@ public abstract class JS5Date extends JSDate implements JS5DateFunctions {
 	 * @param year The year in a four digit format. e.g 2011 for the year 2011
 	 * @param month The month specified as a single integer from 0 (January) to 11 (December)
 	 * @param day The day of the month as an integer between 1 to 31.
-	 * @param <i>hours<i> Optional hour value, specified as an integer from 0 (midnight) to 23 (11pm).
-	 * @param <i>minutes<i> Optional minute value, specified as an integer from 0 to 59.
-	 * @param <i>seconds<i> Optional second value, specified as an integer from 0 to 59.
-	 * @param <i>ms<i> Optional milliseconds value, specified as an integer from 0 to 999.
+	 * @param hours Optional hour value, specified as an integer from 0 (midnight) to 23 (11pm).
+	 * @param minutes Optional minute value, specified as an integer from 0 to 59.
+	 * @param seconds Optional second value, specified as an integer from 0 to 59.
+	 * @param ms Optional milliseconds value, specified as an integer from 0 to 999.
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */

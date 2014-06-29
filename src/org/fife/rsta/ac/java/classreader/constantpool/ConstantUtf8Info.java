@@ -27,9 +27,6 @@ public class ConstantUtf8Info extends ConstantPoolInfo {
 
 	/**
 	 * Constructor.
-	 *
-	 * @param nameIndex
-	 * @param descriptorIndex
 	 */
 	public ConstantUtf8Info(byte[] bytes) {
 		super(CONSTANT_Utf8);

@@ -20,7 +20,7 @@ public interface JSArrayFunctions extends JSObjectFunctions {
 	 * c.concat(4,[5,[6, 7]]); //Returns [1,2,3,4,5, [6,7]]
 	 * </pre> 
 	 * 
-	 * @param args... Any number of values to be concatenated to an <b>array</b>.
+	 * @param args Any number of values to be concatenated to an <b>array</b>.
 	 * @returns A new <b>array</b>
 	 * @memberOf Array
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSArray Array
@@ -39,14 +39,14 @@ public interface JSArrayFunctions extends JSObjectFunctions {
 	 * var s = a.join("|"); //s is the string "1|2|3"
 	 * </pre> 
 	 * 
-	 * @param <i>separator</i> An optional character or string used to separate each element with the string.  
+	 * @param separator An optional character or string used to separate each element with the string.  
 	 * @returns A string representing the result of all the elements in the <b>array</b> concatenated together, separated by the separator. 
 	 * @memberOf Array
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSArray Array
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSString join(String seperator);
+	public JSString join(String separator);
 
 
 	/**
@@ -77,7 +77,7 @@ public interface JSArrayFunctions extends JSObjectFunctions {
 	 * var vals = [];
 	 * vals.push(1,2,3); // returns new array [1,2,3]
 	 * </pre> 
-	 * @param args One or more values to be appended to the end of the <b>array</b>.
+	 * @param array One or more values to be appended to the end of the <b>array</b>.
 	 * @memberOf Array
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSArray Array
 	 * @see #pop()
@@ -156,7 +156,7 @@ public interface JSArrayFunctions extends JSObjectFunctions {
 	 * s.sort(); //Alphabetical order : 1111,22,33,4,55
 	 * s.sort(numbersort); //Numerical order : 4, 22, 33, 55, 1111
 	 * </pre> 
-	 * @param <i>function</i> an optional function used to specify the sorting order
+	 * @param function an optional function used to specify the sorting order
 	 * @returns A reference to the <b>array</b>
 	 * @memberOf Array
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSArray Array
@@ -177,7 +177,7 @@ public interface JSArrayFunctions extends JSObjectFunctions {
 	 * s.splice(1,0,2,3); //Returns []; s is [1 2 3]
 	 * </pre> 
 	 * @param start the <b>array</b> element at which the insertion and/or deletion is to begin
-	 * @param <i>deletecount</i> The number of elements starting with and including <i><b>start</b></i>. 
+	 * @param deletecount The number of elements starting with and including <i><b>start</b></i>. 
 	 * @param items zero or more items to be inserted into the <b>array</b>
 	 * @returns An <b>array</b> containing the elements, if any, deleted from the <b>array</b>
 	 * @memberOf Array

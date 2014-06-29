@@ -14,8 +14,6 @@ import javax.swing.JApplet;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-
 
 /**
  * An applet version of the autocompletion demo.

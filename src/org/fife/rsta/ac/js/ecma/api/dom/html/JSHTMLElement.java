@@ -25,7 +25,6 @@ public abstract class JSHTMLElement implements HTMLElement, JS5ObjectFunctions {
 	 * 
 	 * @type HTMLElement
 	 * @memberOf HTMLElement
-	 * @see org.fife.rsta.ac.js.ecma.api.dom.JSHTMLElement HTMLElement
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */

@@ -9,21 +9,21 @@ public interface LocationFunctions extends JS5ObjectFunctions {
 	
 	/**
 	 * function assign(newURL) method loads a new document
-	 * @param {String} newURL
+	 * @param newURL
 	 * @memberOf Location
 	 */
 	public void assign(JSString newURL);
 	
 	/**
 	 * function reload(optionalArg) - Reload the current document
-	 * @param <i>optionalArg</i> - default <i><b>false</b></i> which reloads the page from the cache. Set this paramter to true if you want to force the browser to get the page from the server
+	 * @param optionalArg - default <i><b>false</b></i> which reloads the page from the cache. Set this paramter to true if you want to force the browser to get the page from the server
 	 * @memberOf Location
 	 */
 	public void reload(JSBoolean optionalArg);
 	
 	/**
 	 * function replace(newURL) - method replaces the current document with a new one
-	 * @param {String} newURL
+	 * @param newURL
 	 * @memberOf Location
 	 */
 	public void replace(JSString arg);

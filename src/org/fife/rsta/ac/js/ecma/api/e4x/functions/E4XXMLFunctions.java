@@ -183,7 +183,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	/**
 	 * <b>function descendants(name)</b> returns all the XML valued descendants (children, grandchildren, great-grandchildren, etc.)
 	 * @returns all the XML valued descendants (children, grandchildren, great-grandchildren, etc.) of this XML object with the given name. If the name parameter is omitted, it returns all descendants of this XML object.
-	 * @param <i>name</i> optional parameter to identity the decendants. If omitted all decendants are returned.  
+	 * @param name optional parameter to identity the decendants. If omitted all decendants are returned.  
 	 * @memberOf XML
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
@@ -193,7 +193,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	/**
 	 * <b>function elements(name)</b> returns the child elements.
 	 * @returns an XMLList containing all the children of this XML object that are XML elements with the given name. When the elements method is called with no parameters, it returns an XMLList containing all the children of this XML object that are XML elements regardless of their name.
-	 * @param <i>name</i> optional parameter to identity the element. If omitted all children are returned.  
+	 * @param name optional parameter to identity the element. If omitted all children are returned.  
 	 * @memberOf XML
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
@@ -274,7 +274,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	
 	/**
 	 * <b>function namespace(prefix)</b> returns the namespace associated with this object.
-	 * @param <i>prefix</i> optional prefix identifier
+	 * @param prefix optional prefix identifier
 	 * @returns the namespace associated with this object, or if a prefix is specified, an in-scope namespace with that prefix.
 	 * @memberOf XML
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
@@ -326,7 +326,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	
 	/**
 	 * <b>function processingInstructions(name)</b> A list of all processing instructions that are children of this element.
-	 * @param <i>name</i> optional node name filter. 
+	 * @param name optional node name filter. 
 	 * @returns an XMLList containing all the children of this XML object that are processing-instructions with the given <b><i>name</i></b>. When the processingInstructions method is called with no parameters, it returns an XMLList containing all the children of this XML object that are processing-instructions regardless of their name.
 	 * @memberOf XML
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML

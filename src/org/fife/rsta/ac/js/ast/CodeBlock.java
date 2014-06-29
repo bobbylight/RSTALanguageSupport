@@ -13,8 +13,6 @@ package org.fife.rsta.ac.js.ast;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.mozilla.javascript.ast.VariableDeclaration;
-
 
 /**
  * A block of code. This can be used to implement <em>very</em> simple parsing

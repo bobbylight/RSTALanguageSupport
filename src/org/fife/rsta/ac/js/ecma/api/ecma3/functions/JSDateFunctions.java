@@ -341,7 +341,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * 
 	 * @memberOf Date
 	 * @param sec The second field expressed in local time, to be set in <b></i>date</i></b>.
-	 * @param <i>ms</i> Optional millisecond field expressed in local time, to be set in <b></i>date</i></b>.
+	 * @param ms Optional millisecond field expressed in local time, to be set in <b></i>date</i></b>.
 	 * @returns The millisecond representation of the adjusted date.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
@@ -355,7 +355,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * 
 	 * @memberOf Date
 	 * @param sec The second field expressed in universal time, to be set in <b></i>date</i></b>.
-	 * @param <i>ms</i> Optional millisecond field expressed in universal time, to be set in <b></i>date</i></b>.
+	 * @param ms Optional millisecond field expressed in universal time, to be set in <b></i>date</i></b>.
 	 * @returns The millisecond representation of the adjusted date.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
@@ -369,8 +369,8 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * 
 	 * @memberOf Date
 	 * @param min The minute field expressed in local time, to be set in <b></i>date</i></b>.
-	 * @param <i>sec</i> Optional second field expressed in local time, to be set in <b></i>date</i></b>.
-	 * @param <i>ms</i> Optional millisecond field expressed in local time, to be set in <b></i>date</i></b>.
+	 * @param sec Optional second field expressed in local time, to be set in <b></i>date</i></b>.
+	 * @param ms Optional millisecond field expressed in local time, to be set in <b></i>date</i></b>.
 	 * @returns {Number} The millisecond representation of the adjusted date.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
@@ -384,8 +384,8 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * 
 	 * @memberOf Date
 	 * @param min The minute field expressed in universal time, to be set in <b></i>date</i></b>.
-	 * @param <i>sec</i> Optional second field expressed in universal time, to be set in <b></i>date</i></b>.
-	 * @param <i>ms</i> Optional millisecond field expressed in universal time, to be set in <b></i>date</i></b>.
+	 * @param sec Optional second field expressed in universal time, to be set in <b></i>date</i></b>.
+	 * @param ms Optional millisecond field expressed in universal time, to be set in <b></i>date</i></b>.
 	 * @returns {Number} The millisecond representation of the adjusted date.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
@@ -399,9 +399,9 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * 
 	 * @memberOf Date
 	 * @param hour The hour field expressed in local time, to be set in <b></i>date</i></b>.
-	 * @param <i>min</i> Optional minute field expressed in local time, to be set in <b></i>date</i></b>.
-	 * @param <i>sec</i> Optional second field expressed in local time, to be set in <b></i>date</i></b>.
-	 * @param <i>ms</i> Optional millisecond field expressed in local time, to be set in <b></i>date</i></b>.
+	 * @param min Optional minute field expressed in local time, to be set in <b></i>date</i></b>.
+	 * @param sec Optional second field expressed in local time, to be set in <b></i>date</i></b>.
+	 * @param ms Optional millisecond field expressed in local time, to be set in <b></i>date</i></b>.
 	 * @returns {The millisecond representation of the adjusted date.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
@@ -415,9 +415,9 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * 
 	 * @memberOf Date
 	 * @param hour The hour field expressed in universal time, to be set in <b></i>date</i></b>.
-	 * @param <i>min</i> Optional minute field expressed in universal time, to be set in <b></i>date</i></b>.
-	 * @param <i>sec</i> Optional second field expressed in universal time, to be set in <b></i>date</i></b>.
-	 * @param <i>ms</i> Optional millisecond field expressed in universal time, to be set in <b></i>date</i></b>.
+	 * @param min Optional minute field expressed in universal time, to be set in <b></i>date</i></b>.
+	 * @param sec Optional second field expressed in universal time, to be set in <b></i>date</i></b>.
+	 * @param ms Optional millisecond field expressed in universal time, to be set in <b></i>date</i></b>.
 	 * @returns The millisecond representation of the adjusted date.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
@@ -457,7 +457,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * 
 	 * @memberOf Date
 	 * @param month An integer between 0 (January) and 11 (December) representing the month field expressed in local time, to be set in <b></i>date</i></b>.
-	 * @param <i>date</i> Optional day of the month field expressed in local time, to be set in <b></i>date</i></b>.
+	 * @param date Optional day of the month field expressed in local time, to be set in <b></i>date</i></b>.
 	 * @returns The millisecond representation of the adjusted date.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
@@ -471,7 +471,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * 
 	 * @memberOf Date
 	 * @param month An integer between 0 (January) and 11 (December) representing the month field expressed in universal time, to be set in <b></i>date</i></b>.
-	 * @param <i>date</i> Optional day of the month field expressed in universal time, to be set in <b></i>date</i></b>.
+	 * @param date Optional day of the month field expressed in universal time, to be set in <b></i>date</i></b>.
 	 * @returns The millisecond representation of the adjusted date.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
@@ -485,8 +485,8 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * 
 	 * @memberOf Date
 	 * @param year The year field expressed in local time, to be set in <b></i>date</i></b>.
-	 * @param <i>month</i> Optional integer between 0 (January) and 11 (December) representing the month field expressed in local time, to be set in <b></i>date</i></b>.
-	 * @param <i>date</i> Optional day of the month field expressed in local time, to be set in <b></i>date</i></b>.
+	 * @param month Optional integer between 0 (January) and 11 (December) representing the month field expressed in local time, to be set in <b></i>date</i></b>.
+	 * @param date Optional day of the month field expressed in local time, to be set in <b></i>date</i></b>.
 	 * @returns The millisecond representation of the adjusted date.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
@@ -500,8 +500,8 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * 
 	 * @memberOf Date
 	 * @param year The year field expressed in universal time, to be set in <b></i>date</i></b>.
-	 * @param <i>month</i> Optional integer between 0 (January) and 11 (December) representing the month field expressed in universal time, to be set in <b></i>date</i></b>.
-	 * @param <i>date</i> Optional day of the month field expressed in universal time, to be set in <b></i>date</i></b>.
+	 * @param month Optional integer between 0 (January) and 11 (December) representing the month field expressed in universal time, to be set in <b></i>date</i></b>.
+	 * @param date Optional day of the month field expressed in universal time, to be set in <b></i>date</i></b>.
 	 * @returns The millisecond representation of the adjusted date.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition

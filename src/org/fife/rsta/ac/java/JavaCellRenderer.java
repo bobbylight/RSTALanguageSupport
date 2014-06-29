@@ -20,7 +20,6 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 
 import org.fife.ui.autocomplete.Completion;
-import org.fife.ui.autocomplete.CompletionCellRenderer;
 import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
 
 

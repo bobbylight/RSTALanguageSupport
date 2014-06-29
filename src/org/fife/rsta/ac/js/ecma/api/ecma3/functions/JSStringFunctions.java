@@ -16,8 +16,8 @@ public interface JSStringFunctions extends JSObjectFunctions {
      * @returns The <i>nth</i> character of <b><i>string</i></b>.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @see #charCodeAt(JSNumber) charCodeAt()
-     * @see #indexOf(JSNumber, JSNumber) indexOf()
-     * @see #lastIndexOf(JSNumber, JSNumber) lastIndexOf()
+     * @see #indexOf(JSString, JSNumber) indexOf()
+     * @see #lastIndexOf(JSString, JSNumber) lastIndexOf()
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
@@ -40,7 +40,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
      * <b>function concat(value1, ...)</b> concatenate strings
      * 
      * @memberOf String
-     * @param one or more values to be concatenated to <b><i>string</i></b>.
+     * @param value one or more values to be concatenated to <b><i>string</i></b>.
      * @returns A new string that results from concatenating each argument to a <b><i>string</i></b>.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
@@ -144,7 +144,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
 	 * </pre> 
      * @memberOf String
      * @param start The start index where the slice if to begin.
-     * @param <i>end<i> Optional end index where the slice is to end.
+     * @param end Optional end index where the slice is to end.
      * @returns A new string that contains all the characters of <b><i>string</i></b> from and including <b><i>start</i></b> up to the <b><i>end</i></b>.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
@@ -191,8 +191,8 @@ public interface JSStringFunctions extends JSObjectFunctions {
      * @returns A copy of <b><i>string</i></b> converted to lower case.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @see #charAt(JSNumber) charAt()
-     * @see #indexOf(JSNumber, JSNumber) indexOf()
-     * @see #lastIndexOf(JSNumber, JSNumber) lastIndexOf()
+     * @see #indexOf(JSString, JSNumber) indexOf()
+     * @see #lastIndexOf(JSString, JSNumber) lastIndexOf()
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */

@@ -12,9 +12,6 @@ package org.fife.rsta.ac.java.classreader;
 
 import java.io.*;
 
-import org.fife.rsta.ac.java.classreader.attributes.Code;
-import org.fife.rsta.ac.java.classreader.constantpool.ConstantClassInfo;
-
 
 /**
  * An entry in the exception table of a {@link Code} attribute.  This denotes

@@ -37,7 +37,7 @@ public abstract class E4XNamespace implements JSObjectFunctions {
      * Object Namespace(prefixValue, uriValue)
      * 
      * @constructor
-     * @param <i>prefixValue</i> Optional prefix part of Namespace
+     * @param prefixValue Optional prefix part of Namespace
      * @param uriValue uri part of Namespace
      * @extends Object
      * @since Standard ECMA-357 2nd. Edition

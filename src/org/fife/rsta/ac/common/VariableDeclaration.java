@@ -10,8 +10,6 @@
  */
 package org.fife.rsta.ac.common;
 
-import org.fife.rsta.ac.LanguageSupport;
-
 
 /**
  * A marker for a variable declaration.  This can be used by

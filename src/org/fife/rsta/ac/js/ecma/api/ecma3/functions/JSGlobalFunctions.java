@@ -94,7 +94,7 @@ public interface JSGlobalFunctions extends JSObjectFunctions {
 	 * <pre>
 	 * eval("2+5"); //Returns 7
 	 * </pre> 
-	 * @param s A string that contains the JavaScript expression to be evaluated or the statements to be executed. 
+	 * @param code A string that contains the JavaScript expression to be evaluated or the statements to be executed. 
 	 * @returns The value of the evaluated <b><i>code</i></b>, if any.
 	 * @memberOf Global
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSGlobal Global
@@ -149,7 +149,7 @@ public interface JSGlobalFunctions extends JSObjectFunctions {
 	 * @returns The parsed number or <b><i>NaN</i></b> if <b><i>s</i></b> does not begin with a valid number.
 	 * @memberOf Global
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSGlobal Global
-	 * @see #isNan(JSNumber) isNan()
+	 * @see #isNaN(JSNumber) isNan()
 	 * @see #parseInt(JSString,JSNumber) parseInt()
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
@@ -159,11 +159,11 @@ public interface JSGlobalFunctions extends JSObjectFunctions {
 	/**
 	 * <b>function parseInt(s, radix)</b> convert a string to an integer.
 	 * @param s The string to be parsed and converted to an integer
-	 * @param <i>radix</i> An optional integer argument that represents the radix (i.e base) of the number to be parsed. If omitted or 0, the number is parsed in base 10.
+	 * @param radix An optional integer argument that represents the radix (i.e base) of the number to be parsed. If omitted or 0, the number is parsed in base 10.
 	 * @returns The parsed number or <b><i>NaN</i></b> if <b><i>s</i></b> does not begin with a valid number.
 	 * @memberOf Global
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSGlobal Global
-	 * @see #isNan(JSNumber) isNan()
+	 * @see #isNaN(JSNumber) isNan()
 	 * @see #parseFloat(JSString) parseFloat()
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.

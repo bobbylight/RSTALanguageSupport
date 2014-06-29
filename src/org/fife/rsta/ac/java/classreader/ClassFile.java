@@ -65,7 +65,7 @@ public class ClassFile implements AccessFlags {
 	private int superClass; // u2
 
 	/**
-	 * Indices into {@link #constantPool} for <code>ConstantClassInfo</code>s
+	 * Indices into {@code constantPool} for <code>ConstantClassInfo</code>s
 	 * representing the implemented interfaces of this class or interface.
 	 */
 	int[] interfaces; // u2[]

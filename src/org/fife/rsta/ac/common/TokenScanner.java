@@ -12,7 +12,6 @@ package org.fife.rsta.ac.common;
 
 import javax.swing.text.Element;
 
-import org.fife.rsta.ac.LanguageSupport;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.Token;

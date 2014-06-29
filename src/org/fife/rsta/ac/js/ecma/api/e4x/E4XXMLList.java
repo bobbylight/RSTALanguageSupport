@@ -16,7 +16,7 @@ public abstract class E4XXMLList implements E4XXMLListFunctions {
      * Object E4XXMLList(xml)
      * 
      * @constructor
-     * @param XML definition 
+     * @param xml The XML definition 
      * @extends Object
      * @since Standard ECMA-357 2nd. Edition
      * @since Level 3 Document Object Model Core Definition.

@@ -35,7 +35,7 @@ public abstract class E4XQName implements JSObjectFunctions {
 	/**
      * Object QName(namespace, name)
      * @constructor
-     * @param <i>namespace</i> optional namespace part of QName
+     * @param namespace optional namespace part of QName
      * @param name localname of the QName
      * @extends Object
      * @since Standard ECMA-357 2nd. Edition

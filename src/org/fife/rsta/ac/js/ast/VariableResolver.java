@@ -258,7 +258,7 @@ public class VariableResolver {
 	/**
 	 * Add pre-processing scope function to cache.
 	 * 
-	 * @param function variable to add
+	 * @param func variable to add
 	 */
 	public void addPreProcessingFunction(
 			JavaScriptFunctionDeclaration func) {

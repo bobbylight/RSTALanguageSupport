@@ -28,7 +28,7 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
      * 
      * 
      * @constructor
-     * @param <i>value</i> optional argument specifies a primitive JavaScript value - a number, boolean etc...
+     * @param value optional argument specifies a primitive JavaScript value - a number, boolean etc...
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
@@ -46,7 +46,7 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
 	 * });
 	 * </pre> 
      * @param proto The prototype of the newly created object, or null.
-     * @param <i>descriptors</i> An optional object that maps property names to property descriptors.
+     * @param descriptors An optional object that maps property names to property descriptors.
      * @returns A newly created object that inherits from <b><i>proto</b></i> and has properties described by <b><i>descriptors</i></b>
      * @see  org.fife.rsta.ac.js.ecma.api.ecma5.JS5Object Object
      * @see #defineProperty(JS5Object, JS5String, JS5Object) defineProperty()

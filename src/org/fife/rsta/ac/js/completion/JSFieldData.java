@@ -9,7 +9,6 @@ import org.fife.rsta.ac.java.classreader.FieldInfo;
 import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
 import org.fife.rsta.ac.java.rjc.ast.Field;
 import org.fife.rsta.ac.java.rjc.ast.Member;
-import org.fife.rsta.ac.java.rjc.ast.Method;
 import org.fife.rsta.ac.java.rjc.ast.TypeDeclaration;
 
 
@@ -99,9 +98,6 @@ public class JSFieldData {
 		return org.fife.rsta.ac.java.classreader.Util.isPublic(access);
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 */
 	public String getEnclosingClassName(boolean fullyQualified) {
 		return info.getClassFile().getClassName(fullyQualified);
 	}

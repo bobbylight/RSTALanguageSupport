@@ -157,7 +157,6 @@ public abstract class JavaScriptTypesFactory {
 	 * @param provider CompletionsProvider to bind to <code>Completion</code>
 	 * @param cu CompilationUnit that binds source to class
 	 * @param jarManager JarManager containing source and classes
-	 * @return map of all completions
 	 */
 	private void readMethodsAndFieldsFromTypeDeclaration(
 			JavaScriptType cachedType,

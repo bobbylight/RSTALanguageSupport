@@ -15,8 +15,8 @@ public abstract class JSRegExp implements JSRegExpFunctions {
 	* @super Object
 	* @constructor
 	* @memberOf RegExp
-	* @param pattern, a string that specifies the pattern of the regular expression.
-	* @param <i>attributes</i>, an optional string containing and of the "g", "i" an "m" attributes that specify global, case-insensitive, and multiline matches respectively. 
+	* @param pattern a string that specifies the pattern of the regular expression.
+	* @param attributes an optional string containing and of the "g", "i" an "m" attributes that specify global, case-insensitive, and multiline matches respectively. 
 	* @since Standard ECMA-262 3rd. Edition
 	* @since Level 2 Document Object Model Core Definition.
 	*/

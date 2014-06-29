@@ -13,8 +13,6 @@ package org.fife.rsta.ac.demo;
 import java.awt.Toolkit;
 import javax.swing.*;
 
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-
 
 /**
  * Stand-alone version of the demo.
