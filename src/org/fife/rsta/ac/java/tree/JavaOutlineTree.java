@@ -38,7 +38,9 @@ import org.fife.rsta.ac.java.rjc.ast.Package;
 import org.fife.rsta.ac.java.rjc.ast.NormalClassDeclaration;
 import org.fife.rsta.ac.java.rjc.ast.NormalInterfaceDeclaration;
 import org.fife.rsta.ac.java.rjc.ast.TypeDeclaration;
+import org.fife.ui.rsyntaxtextarea.DocumentRange;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
@@ -286,7 +288,8 @@ public class JavaOutlineTree extends AbstractSourceTree {
 			ASTNode astNode = (ASTNode)obj;
 			int start = astNode.getNameStartOffset();
 			int end = astNode.getNameEndOffset();
-			textArea.select(start, end);
+			DocumentRange range = new DocumentRange(start, end);
+			RSyntaxUtilities.selectAndPossiblyCenter(textArea, range, true);
 		}
 	}
 

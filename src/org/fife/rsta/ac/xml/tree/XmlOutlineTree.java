@@ -23,7 +23,9 @@ import org.fife.rsta.ac.LanguageSupport;
 import org.fife.rsta.ac.LanguageSupportFactory;
 import org.fife.rsta.ac.xml.XmlLanguageSupport;
 import org.fife.rsta.ac.xml.XmlParser;
+import org.fife.ui.rsyntaxtextarea.DocumentRange;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
 
@@ -137,7 +139,9 @@ public class XmlOutlineTree extends AbstractSourceTree {
 		Object node = path.getLastPathComponent();
 		if (node instanceof XmlTreeNode) {
 			XmlTreeNode xtn = (XmlTreeNode)node;
-			textArea.select(xtn.getStartOffset(), xtn.getEndOffset());
+			DocumentRange range = new DocumentRange(xtn.getStartOffset(),
+					xtn.getEndOffset());
+			RSyntaxUtilities.selectAndPossiblyCenter(textArea, range, true);
 		}
 	}
 
