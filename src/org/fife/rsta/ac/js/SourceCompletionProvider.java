@@ -41,7 +41,6 @@ import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
 import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 import org.fife.rsta.ac.js.ast.type.ecma.TypeDeclarations;
 import org.fife.rsta.ac.js.completion.JSCompletion;
-import org.fife.rsta.ac.js.completion.JSCompletionUI;
 import org.fife.rsta.ac.js.completion.JSVariableCompletion;
 import org.fife.rsta.ac.js.engine.JavaScriptEngine;
 import org.fife.rsta.ac.js.engine.JavaScriptEngineFactory;
@@ -102,7 +101,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	 * @param set The set to add to.
 	 * @see ShorthandCompletionCache
 	 */
-	private void addShorthandCompletions(Set set) {
+	private void addShorthandCompletions(Set<Completion> set) {
 
 		if(shorthandCache != null) {
 			set.addAll(shorthandCache.getShorthandCompletions());
@@ -169,7 +168,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 			// Get a list of all Completions matching the text.
 			AstRoot ast = this.parent.getASTRoot();
-			Set<JSCompletionUI> set = new HashSet<JSCompletionUI>();
+			Set<Completion> set = new HashSet<Completion>();
 			CodeBlock block = iterateAstRoot(ast, set, text, tc.getCaretPosition(), typeDeclarationOptions);
 			recursivelyAddLocalVars(set, block, dot, null, false, false);
 			lastCompletionsAtText = text;
@@ -207,7 +206,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 				return completions; // empty
 			}
 
-			Set<JSCompletionUI> set = new TreeSet<JSCompletionUI>();
+			Set<Completion> set = new TreeSet<Completion>();
 
 			// Cut down the list to just those matching what we've typed.
 			// Note: getAlreadyEnteredText() never returns null
@@ -278,7 +277,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 	}
 	
-	private List<Completion> handleNewFilter(Set<JSCompletionUI> set, String text)
+	private List<Completion> handleNewFilter(Set<Completion> set, String text)
 	{
 		set.clear(); //reset as just interested in the
 		//just load the constructors
@@ -286,7 +285,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 		return resolveCompletions(text, set);
 	}
 	
-	private List<Completion> resolveCompletions(String text, Set<JSCompletionUI> set)
+	private List<Completion> resolveCompletions(String text, Set<Completion> set)
 	{
 		completions.addAll(set);
 
@@ -322,7 +321,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	 * @param set completion set
 	 * @param text
 	 */
-	private void loadECMAClasses(Set<JSCompletionUI> set, String text)
+	private void loadECMAClasses(Set<Completion> set, String text)
 	{
 		//all the constructors
 		List<JavaScriptType> list = engine.getJavaScriptTypesFactory(this).
@@ -357,7 +356,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	/**
 	 * Parse Text and add completions to set
 	 */
-	private void parseTextAndResolve(Set set, String text)
+	private void parseTextAndResolve(Set<Completion> set, String text)
 	{
 		// Compile the entered text and resolve the variables/function
 		JavaScriptResolver compiler = engine.getJavaScriptResolver(this);
@@ -378,7 +377,8 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	 * Populate Set of completions if JavaScriptType is not null and return true, 
 	 * otherwise return false
 	 */
-	private boolean populateCompletionsFromType(JavaScriptType type, Set set) {
+	private boolean populateCompletionsFromType(JavaScriptType type,
+			Set<Completion> set) {
 		if (type != null) {
 			javaScriptTypesFactory.populateCompletionsForType(type, set);
 			return true;
@@ -417,7 +417,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	 *        RSTA parsing
 	 * @return
 	 */
-	protected CodeBlock iterateAstRoot(AstRoot root, Set<JSCompletionUI> set,
+	protected CodeBlock iterateAstRoot(AstRoot root, Set<Completion> set,
 			String entered, int dot, TypeDeclarationOptions options) {
 		JavaScriptParser parser = engine.getParser(this, dot, options);
 		return parser.convertAstNodeToCodeBlock(root, set, entered);
@@ -494,7 +494,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	 * @param text
 	 * @param findMatch
 	 */
-	protected void recursivelyAddLocalVars(Set<JSCompletionUI> completions, CodeBlock block,
+	protected void recursivelyAddLocalVars(Set<Completion> completions, CodeBlock block,
 			int dot, String text, boolean findMatch, boolean isPreprocessing) {
 
 		if (!block.contains(dot)) {
@@ -614,7 +614,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	public void parseDocument(int dot)
 	{
 		AstRoot ast = this.parent.getASTRoot();
-		Set<JSCompletionUI> set = new HashSet<JSCompletionUI>();
+		Set<Completion> set = new HashSet<Completion>();
 		variableResolver.resetLocalVariables();
 		iterateAstRoot(ast, set, "", dot, typeDeclarationOptions);
 	}

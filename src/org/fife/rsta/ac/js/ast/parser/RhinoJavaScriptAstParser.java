@@ -10,7 +10,7 @@ import org.fife.rsta.ac.js.ast.CodeBlock;
 import org.fife.rsta.ac.js.ast.TypeDeclarationOptions;
 import org.fife.rsta.ac.js.ast.jsType.JavaScriptTypesFactory;
 import org.fife.rsta.ac.js.ast.jsType.RhinoJavaScriptTypesFactory;
-import org.fife.rsta.ac.js.completion.JSCompletionUI;
+import org.fife.ui.autocomplete.Completion;
 import org.mozilla.javascript.Token;
 import org.mozilla.javascript.ast.AstNode;
 import org.mozilla.javascript.ast.AstRoot;
@@ -47,7 +47,7 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 	
 	@Override
 	public CodeBlock convertAstNodeToCodeBlock(AstRoot root,
-			Set<JSCompletionUI> set, String entered) {
+			Set<Completion> set, String entered) {
 		try {
 			return super.convertAstNodeToCodeBlock(root, set, entered);
 		} finally {
@@ -72,7 +72,7 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 	 * otherwise call super.iterateNode() 
 	 */
 	@Override
-	protected void iterateNode(AstNode child, Set <JSCompletionUI>set,
+	protected void iterateNode(AstNode child, Set <Completion>set,
 			String entered, CodeBlock block, int offset) {
 		
 		//look for importPackage and importClass
@@ -97,7 +97,7 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 	 * @return true if either importPackage or importClass is found
 	 */
 	private boolean processImportNode(AstNode child,
-			Set<JSCompletionUI> set, String entered, CodeBlock block,
+			Set<Completion> set, String entered, CodeBlock block,
 			int offset) {
 		
 		String src = JavaScriptHelper.convertNodeToSource(child);

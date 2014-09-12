@@ -28,10 +28,10 @@ import org.fife.rsta.ac.js.ast.type.ecma.TypeDeclarations.JavaScriptObject;
 import org.fife.rsta.ac.js.completion.JSBeanCompletion;
 import org.fife.rsta.ac.js.completion.JSClassCompletion;
 import org.fife.rsta.ac.js.completion.JSCompletion;
-import org.fife.rsta.ac.js.completion.JSCompletionUI;
 import org.fife.rsta.ac.js.completion.JSConstructorCompletion;
 import org.fife.rsta.ac.js.completion.JSFieldCompletion;
 import org.fife.rsta.ac.js.completion.JSFunctionCompletion;
+import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
 
 
@@ -348,7 +348,7 @@ public abstract class JavaScriptTypesFactory {
 	 * @param manager
 	 */
 	public void populateCompletionsForType(JavaScriptType cachedType,
-			Set<JSCompletionUI> completions) {
+			Set<Completion> completions) {
 
 		if (cachedType != null) {
 			Map<String, JSCompletion> completionsForType = cachedType.getMethodFieldCompletions();
