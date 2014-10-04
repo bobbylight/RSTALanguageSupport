@@ -14,9 +14,9 @@ import org.fife.rsta.ac.js.ast.TypeDeclarationOptions;
 import org.fife.rsta.ac.js.ast.type.ArrayTypeDeclaration;
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
 import org.fife.rsta.ac.js.ast.type.ecma.TypeDeclarations;
-import org.fife.rsta.ac.js.completion.JSCompletionUI;
 import org.fife.rsta.ac.js.completion.JavaScriptInScriptFunctionCompletion;
 import org.fife.rsta.ac.js.resolver.JavaScriptResolver;
+import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.ParameterizedCompletion.Parameter;
 import org.mozilla.javascript.Node;
 import org.mozilla.javascript.Token;
@@ -55,7 +55,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 	@Override
 	public CodeBlock convertAstNodeToCodeBlock(AstRoot root,
-			Set<JSCompletionUI> set, String entered) {
+			Set<Completion> set, String entered) {
 		functions.clear();
 		CodeBlock block = new CodeBlock(0);
 		addCodeBlock(root, set, entered, block, Integer.MAX_VALUE);
@@ -84,7 +84,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	 * @param codeBlock parent CodeBlock
 	 * @param offset codeblock offset
 	 */
-	private void addCodeBlock(Node parent, Set<JSCompletionUI> set,
+	private void addCodeBlock(Node parent, Set<Completion> set,
 			String entered, CodeBlock codeBlock, int offset) {
 		
 		if(parent == null)
@@ -107,7 +107,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 		}
 	}
 	
-	protected void iterateNode(AstNode child, Set<JSCompletionUI> set,
+	protected void iterateNode(AstNode child, Set<Completion> set,
 			String entered, CodeBlock block, int offset) {
 
 		if (child == null)
@@ -198,7 +198,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 
 	private void processExpressionStatement(Node child, CodeBlock block,
-			Set<JSCompletionUI> set, String entered, int offset) {
+			Set<Completion> set, String entered, int offset) {
 		ExpressionStatement exp = (ExpressionStatement) child;
 
 		AstNode expNode = exp.getExpression();
@@ -273,7 +273,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 
 	private void processCaseNode(Node child, CodeBlock block,
-			Set<JSCompletionUI> set, String entered, int offset) {
+			Set<Completion> set, String entered, int offset) {
 		SwitchCase switchCase = (SwitchCase) child;
 		List<AstNode> statements = switchCase.getStatements();
 		int start = switchCase.getAbsolutePosition();
@@ -292,7 +292,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 	/** Extract local variables from switch node* */
 	private void processSwitchNode(Node child, CodeBlock block,
-			Set<JSCompletionUI> set, String entered, int offset) {
+			Set<Completion> set, String entered, int offset) {
 		SwitchStatement switchStatement = (SwitchStatement) child;
 		if (canProcessNode(switchStatement)) {
 			List<SwitchCase> cases = switchStatement.getCases();
@@ -309,7 +309,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	 * Extract variables from try/catch node(s)
 	 */
 	private void processTryCatchNode(Node child, CodeBlock block,
-			Set<JSCompletionUI> set, String entered, int offset) {
+			Set<Completion> set, String entered, int offset) {
 		TryStatement tryStatement = (TryStatement) child;
 		if (canProcessNode(tryStatement)) {
 			offset = tryStatement.getTryBlock().getAbsolutePosition()
@@ -360,7 +360,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	 * Extract variables from if/else node(s)
 	 */
 	private void processIfThenElse(Node child, CodeBlock block,
-			Set<JSCompletionUI> set, String entered, int offset) {
+			Set<Completion> set, String entered, int offset) {
 		IfStatement ifStatement = (IfStatement) child;
 		if (canProcessNode(ifStatement)) {
 			offset = ifStatement.getAbsolutePosition()
@@ -383,7 +383,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	 * Extract completions from expression node
 	 */
 	private void processExpressionNode(Node child, CodeBlock block,
-			Set<JSCompletionUI> set, String entered, int offset) {
+			Set<Completion> set, String entered, int offset) {
 		if (child instanceof ExpressionStatement) {
 			ExpressionStatement expr = (ExpressionStatement) child;
 			iterateNode(expr.getExpression(), set, entered, block, offset);
@@ -395,7 +395,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	 * Extract while loop from node and add new code block
 	 */
 	private void processWhileNode(Node child, CodeBlock block,
-			Set<JSCompletionUI> set, String entered, int offset) {
+			Set<Completion> set, String entered, int offset) {
 		WhileLoop loop = (WhileLoop) child;
 		if (canProcessNode(loop)) {
 			offset = loop.getAbsolutePosition() + loop.getLength();
@@ -408,7 +408,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	 * Extract while loop from node and add new code block
 	 */
 	private void processDoNode(Node child, CodeBlock block,
-			Set<JSCompletionUI> set, String entered, int offset) {
+			Set<Completion> set, String entered, int offset) {
 		DoLoop loop = (DoLoop) child;
 		if (canProcessNode(loop)) {
 			offset = loop.getAbsolutePosition() + loop.getLength();
@@ -421,7 +421,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	 * Extract variable from binary operator e.g <, >, = etc...
 	 */
 	private void processInfix(Node child, CodeBlock block,
-			Set<JSCompletionUI> set, String entered, int offset) {
+			Set<Completion> set, String entered, int offset) {
 		InfixExpression epre = (InfixExpression) child;
 		AstNode target = epre.getLeft();
 		if (canProcessNode(target)) {
@@ -437,7 +437,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	 * own codeblock when applicable
 	 */
 	private void processFunctionNode(Node child, CodeBlock block,
-			Set<JSCompletionUI> set, String entered, int offset) {
+			Set<Completion> set, String entered, int offset) {
 		FunctionNode fn = (FunctionNode) child;
 		String jsdoc = fn.getJsDoc();
 		TypeDeclaration returnType = getFunctionType(fn);
@@ -525,7 +525,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	 * Extract variable from node and add to code block
 	 */
 	private void processVariableNode(Node child, CodeBlock block,
-			Set<JSCompletionUI> set, String entered, int offset) {
+			Set<Completion> set, String entered, int offset) {
 		//check block can resolve variable or is pre-processing variables
 		if(block.contains(dot) || isPreProcessing())
 		{
@@ -543,7 +543,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	 * loop
 	 */
 	private void processForNode(Node child, CodeBlock block,
-			Set<JSCompletionUI> set, String entered, int offset) {
+			Set<Completion> set, String entered, int offset) {
 		if (child instanceof ForLoop) {
 			ForLoop loop = (ForLoop) child;
 			offset = loop.getAbsolutePosition() + loop.getLength();

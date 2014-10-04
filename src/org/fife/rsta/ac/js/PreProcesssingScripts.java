@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.fife.rsta.ac.js.ast.CodeBlock;
 import org.fife.rsta.ac.js.ast.TypeDeclarationOptions;
-import org.fife.rsta.ac.js.completion.JSCompletionUI;
+import org.fife.ui.autocomplete.Completion;
 import org.mozilla.javascript.CompilerEnvirons;
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.ast.AstRoot;
@@ -24,7 +24,7 @@ public class PreProcesssingScripts {
 	
 	private SourceCompletionProvider provider;
 	
-	private Set<JSCompletionUI> preProcessingCompletions = new HashSet<JSCompletionUI>();
+	private Set<Completion> preProcessingCompletions = new HashSet<Completion>();
 	
 	
 	public PreProcesssingScripts(SourceCompletionProvider provider)
@@ -58,7 +58,7 @@ public class PreProcesssingScripts {
 		provider.getVariableResolver().resetPreProcessingVariables(true);
 	}
 	
-	public Set<JSCompletionUI> getCompletions()
+	public Set<Completion> getCompletions()
 	{
 		return preProcessingCompletions;
 	}

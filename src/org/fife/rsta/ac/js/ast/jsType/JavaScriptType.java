@@ -149,10 +149,9 @@ public class JavaScriptType {
 				provider);
 		if (completion == null) {
 			// try the extended types
-			for (Iterator i = cachedType.getExtendedClasses().iterator(); i
+			for (Iterator<JavaScriptType> i = cachedType.getExtendedClasses().iterator(); i
 					.hasNext();) {
-				completion = getCompletion((JavaScriptType) i.next(),
-						completionLookup, provider);
+				completion = getCompletion(i.next(), completionLookup, provider);
 				if (completion != null)
 					break;
 			}
