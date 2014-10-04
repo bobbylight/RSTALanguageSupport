@@ -70,7 +70,7 @@ public class HtmlCompletionProvider extends DefaultCompletionProvider {
 		tagToAttrs = new HashMap<String, List<AttributeCompletion>>();
 		for (Completion comp : completions) {
 			MarkupTagCompletion c = (MarkupTagCompletion)comp;
-			String tag = c.getInputText();
+			String tag = c.getName();
 			List<AttributeCompletion> attrs = new ArrayList<AttributeCompletion>();
 			tagToAttrs.put(tag.toLowerCase(), attrs);
 			for (int j=0; j<c.getAttributeCount(); j++) {

@@ -12,13 +12,17 @@ package org.fife.rsta.ac.xml;
 
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.KeyStroke;
+import javax.swing.ListCellRenderer;
 
 import org.fife.rsta.ac.AbstractMarkupLanguageSupport;
 import org.fife.rsta.ac.GoToMemberAction;
+import org.fife.rsta.ac.html.HtmlCellRenderer;
 import org.fife.rsta.ac.xml.tree.XmlOutlineTree;
+import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 //import org.xml.sax.EntityResolver;
 //import org.xml.sax.InputSource;
@@ -49,6 +53,11 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 public class XmlLanguageSupport extends AbstractMarkupLanguageSupport {
 
 	/**
+	 * The shared completion provider instance for all XML editors.
+	 */
+	private XmlCompletionProvider provider;
+
+	/**
 	 * Whether syntax errors are squiggle-underlined in the editor.
 	 */
 	private boolean showSyntaxErrors;
@@ -58,10 +67,31 @@ public class XmlLanguageSupport extends AbstractMarkupLanguageSupport {
 	 * Constructor.
 	 */
 	public XmlLanguageSupport() {
-		setAutoCompleteEnabled(false);
 		setParameterAssistanceEnabled(false);
 		setShowDescWindow(false);
 		setShowSyntaxErrors(true);
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected ListCellRenderer createDefaultCompletionCellRenderer() {
+		return new HtmlCellRenderer();
+	}
+
+
+	/**
+	 * Lazily creates the shared completion provider instance for XML.
+	 *
+	 * @return The completion provider.
+	 */
+	private XmlCompletionProvider getProvider() {
+		if (provider==null) {
+			provider = new XmlCompletionProvider();
+		}
+		return provider;
 	}
 
 
@@ -99,9 +129,12 @@ public class XmlLanguageSupport extends AbstractMarkupLanguageSupport {
 	 */
 	public void install(RSyntaxTextArea textArea) {
 
-		// No code completion yet; this exists solely to support the tree
-		// view and identifying syntax errors.
-
+		// Code completion currently only completes words found elsewhere in
+		// the editor.
+		XmlCompletionProvider provider = getProvider();
+		AutoCompletion ac = createAutoCompletion(provider);
+		ac.install(textArea);
+		installImpl(textArea, ac);
 
 		XmlParser parser = new XmlParser(this);
 //EntityResolver resolver = new EntityResolver() {
