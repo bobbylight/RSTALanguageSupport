@@ -25,6 +25,7 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
 import org.fife.ui.rsyntaxtextarea.Token;
+import org.fife.ui.rsyntaxtextarea.TokenImpl;
 import org.fife.ui.rsyntaxtextarea.TokenTypes;
 
 
@@ -83,52 +84,71 @@ class XmlCompletionProvider extends DefaultCompletionProvider {
 	 * a given tag.
 	 *
 	 * @param doc The document being parsed.
-	 * @param desiredTagName The XML tag whose attribute is being completed.
+	 * @param inTag The XML tag whose attribute is being completed.
 	 * @param currentWordStart The start of the current word.
 	 * @return The set of completion choices.  This will never be
 	 *         <code>null</code>.
 	 */
 	private Set<String> collectCompletionWordsAttribute(RSyntaxDocument doc,
-			String desiredTagName, int currentWordStart) {
+			Token inTag, int currentWordStart) {
 
-		Set<String> words = new HashSet<String>();
-		Set<String> curTagWords = new HashSet<String>();
-		String curTagName = null;
+		Set<String> possibleAttrs = new HashSet<String>();
+		Set<String> attrs = new HashSet<String>();
+		Set<String> attrsAlreadySpecified = new HashSet<String>();
+		String desiredTagName = inTag.getLexeme();
+		boolean collectAttrs = false;
+		boolean inCurTag = false;
 
 		for (Token t2 : doc) {
 			int type = t2.getType();
 			if (type==TokenTypes.MARKUP_TAG_NAME) {
-				curTagName = t2.getLexeme();
-				if (!curTagWords.isEmpty()) {
-					words.addAll(curTagWords);
-					curTagWords.clear();
+				collectAttrs = desiredTagName.equals(t2.getLexeme());
+				inCurTag = t2.getOffset()==inTag.getOffset();
+				if (!attrs.isEmpty()) {
+					possibleAttrs.addAll(attrs);
+					attrs.clear();
 				}
 			}
-			else if (type==TokenTypes.MARKUP_TAG_ATTRIBUTE &&
-					desiredTagName.equals(curTagName)) {
+			else if (type==TokenTypes.MARKUP_TAG_ATTRIBUTE && collectAttrs) {
 				if (t2.getOffset()!=currentWordStart) {
 					String word = t2.getLexeme();
-					// This is a hack to work around the fact that RSTA will
-					// identify e.g. "<book" as a single attribute token if the
-					// user has entered an unclosed tag above it.  We don't
-					// want "<book" offered as an attribute possibility in this
-					// case.
-					if (word.indexOf('<')>-1) {
-						// Prevent other attributes from being added
-						curTagName = null;
-						curTagWords.clear();
+					if (inCurTag) {
+						if (word.indexOf('<')>-1) {
+							collectAttrs = false;
+							attrs.clear();
+							// Keep attrs already specified up to the element
+							// start
+							//attrsAlreadySpecified.clear();
+						}
+						else {
+							attrsAlreadySpecified.add(word);
+						}
 					}
 					else {
-						words.add(word);
+						// This is a hack to work around the fact that RSTA will
+						// identify e.g. "<book" as a single attribute token if the
+						// user has entered an unclosed tag above it.  We don't
+						// want "<book" offered as an attribute possibility in this
+						// case.
+						if (word.indexOf('<')>-1) {
+							// Prevent other attributes from being added
+							collectAttrs = false;
+							attrs.clear();
+							attrsAlreadySpecified.clear();
+						}
+						else {
+							attrs.add(word);
+						}
 					}
 				}
 			}
 		}
 
-		if (!curTagWords.isEmpty()) {
-			words.addAll(curTagWords);
+		if (!attrs.isEmpty()) {
+			possibleAttrs.addAll(attrs);
 		}
-		return words;
+		possibleAttrs.removeAll(attrsAlreadySpecified);
+		return possibleAttrs;
 
 	}
 
@@ -187,8 +207,9 @@ class XmlCompletionProvider extends DefaultCompletionProvider {
 		else {
 			Token tagNameToken = getTagNameTokenForCaretOffset(textArea);
 			if (tagNameToken!=null) {
+				tagNameToken = new TokenImpl(tagNameToken);
 				words = collectCompletionWordsAttribute(doc,
-						tagNameToken.getLexeme(), currentWordStart);
+						tagNameToken, currentWordStart);
 			}
 			else {
 				UIManager.getLookAndFeel().provideErrorFeedback(textArea);

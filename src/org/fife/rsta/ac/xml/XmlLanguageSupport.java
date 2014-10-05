@@ -12,7 +12,6 @@ package org.fife.rsta.ac.xml;
 
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.KeyStroke;
@@ -67,6 +66,7 @@ public class XmlLanguageSupport extends AbstractMarkupLanguageSupport {
 	 * Constructor.
 	 */
 	public XmlLanguageSupport() {
+		setAutoActivationEnabled(true);
 		setParameterAssistanceEnabled(false);
 		setShowDescWindow(false);
 		setShowSyntaxErrors(true);
