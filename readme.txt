@@ -1,7 +1,7 @@
 RSTALanguageSupport Readme
 --------------------------
-Version 2.5.3
-15feb2014
+Version 2.5.4
+26nov2014
 
 ----------------------------------------
 Contents
@@ -133,7 +133,7 @@ This project assumes it is checked out along-side its sister projects
 properly.
 
    RSTALanguageSupport/
-      src/                              Source tree
+      src/main/java/                    Source tree
          org/fife/rsta/ac/              Any classes common to all languages
          org/fife/rsta/ac/c             Code completion for C
          org/fife/rsta/ac/demo          Demo app/applet code
@@ -145,15 +145,16 @@ properly.
          org/fife/rsta/ac/php           Code completion for PHP
          org/fife/rsta/ac/sh            Code completion fro Unix shell
          org/fife/rsta/ac/xml           Code completion fro XML
-      res/                              Source snippets used in the demo
+      src/main/resources/               Images and resources
       data/                             Input XML for some languages
       dist/                             Where Ant places the built jar
       lib/                              Libraries used by this library
          rhino/                         Rhino, for JS support
       test/                             (Very) small amount of unit tests
-      build.xml                         Ant script to build the library
-      license.txt                       License for this library (BSD)
+      build.gradle                      Gradle build script
+      README.md                         Markdown readme for Git repository
       readme.txt                        This file
+      RSTALanguageSupport.License.txt   License for this library (modified BSD)
 
 Sub-directories of "data/" contain Perl scripts and input files for generating
 the XML files used by various languages for code completion.  If you want to
@@ -168,34 +169,20 @@ IV.  Building the Jar
 ----------------------------------------
 Use Apache Ant (http://ant.apache.org).  This project depends on the sister
 RSyntaxTextArea and AutoComplete projects.  It is recommended that you check
-all three projects out side by side.  Then, to build:
-
+all three projects out side by side.  Thus, to build:
+   
+   git clone https://github.com/bobbylight/RSyntaxTextArea.git
+   git clone https://github.com/bobbylight/AutoComplete.git
+   git clone https://github.com/bobbylight/RSTALanguageSupport.git
    cd RSyntaxTextArea
-   ant
+   gradle wrapper
+   gradlew build
    cd ../AutoComplete
-   ant
-   cd ../RSTALanguageSuppport
-   ant
-
-At the top of build.xml is a list of properties, one per language with code
-completion implemented in this library.  If you wish to build a version of this
-library with support for only some of the languages, simply remove the property
-definitions for languages you don't want.  For example, with the current set of
-supported languages, the properties look like this:
-
-   <property name="c"              value="true"/>
-   <property name="groovy"         value="true"/>
-   <property name="html"           value="true"/>
-   <property name="java"           value="true"/>
-   <property name="js"             value="true"/>
-   <property name="jsp"            value="true"/>
-   <property name="perl"           value="true"/>
-   <property name="php"            value="true"/>
-   <property name="sh"             value="true"/>
-   <property name="xml"            value="true"/>
-
-Removing the "java" property line will cause the jar to be built without the
-Java-related code completion classes.
+   gradle wrapper
+   gradlew build
+   cd ../RSTALanguageSupport
+   gradle wrapper
+   gradlew build
 
 
 

@@ -1,0 +1,213 @@
+['java', 'distribution', 'maven', 'signing'].each { apply plugin: it }
+
+archivesBaseName = 'languagesupport'
+
+dependencies {
+	testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+// Regenerate local gradlew
+task wrapper(type: Wrapper) {
+	gradleVersion = '2.0'
+}
+
+compileJava {
+	sourceCompatibility javaVersion
+	targetCompatibility javaVersion
+	classpath += files("${projectDir.absolutePath}/../RSyntaxTextArea/build/classes/main",
+		"${projectDir.absolutePath}/../AutoComplete/build/classes/main",
+		"${projectDir.absolutePath}/lib/rhino/js-14.jar")
+	options.debug = true
+	options.debugOptions.debugLevel = 'source,vars,lines'
+	// Most folks will compile with the latest JDK available, but official builds
+	// use a Java 5 JDK.  Add this property to gradle.properties for boot classpath
+	if (project.hasProperty('java5CompileBootClasspath')) {
+		if (new File(java5CompileBootClasspath).isFile()) {
+			println "Bootstrap classpath when compiling Java: ${java5CompileBootClasspath}"
+			options.bootClasspath = java5CompileBootClasspath
+		}
+		else {
+			println "Warning: Specified java5CompileBootClasspath does not exist: ${java5CompileBootClasspath}"
+		}
+	}
+	options.compilerArgs << "-Xlint:deprecation" //<< '-Xlint:unchecked'
+}
+
+ext.sharedManifest = manifest {
+	attributes('Main-Class': 'org.fife.rsta.ac.demo.DemoApp',
+		'Class-Path': 'rsyntaxtextarea.jar autocomplete.jar js-14.jar',
+		'Specification-Title': 'RSyntaxTextArea Language Support',
+		'Specification-Version': version,
+		'Implementation-Title': 'org.fife.ui',
+		'Implementation-Version': version)
+
+}
+jar {
+	manifest { from sharedManifest }
+}
+
+// We use "distributions" to create the zip files uploaded to SourceForge
+distributions {
+	main {
+		baseName = 'language_support'
+		contents {
+			from { [ 'build/libs', 'lib/rhino', 'distfiles',
+				     '../RSyntaxTextArea/build/libs/RSyntaxTextArea-2.5.4.jar',
+					 '../AutoComplete/build/libs/AutoComplete-2.5.4.jar',
+				     'RSTALanguageSupport.License.txt', 'readme.txt' ] }
+			rename 'build-date', 'Rhino.build-date'
+			rename 'LICENSE.txt', 'Rhino.LICENSE.txt'
+			rename 'RSyntaxTextArea-.*\\.jar', 'rsyntaxtextarea.jar'
+			rename 'AutoComplete-.*\\.jar', 'autocomplete.jar'
+			rename 'languagesupport-.*\\.jar', 'language_support.jar'
+		}
+	}
+	src {
+		baseName = 'language_support'
+	}
+}
+distZip.classifier = null
+distZip.dependsOn jar
+srcDistZip.classifier = 'src'
+srcDistZip {
+	from projectDir
+	include 'src/**/*'
+	include 'build.gradle'
+	include '.classpath'
+	include '.project'
+	include 'gradle.properties'
+	include 'README.md'
+	include '.settings/**'
+}
+
+task buildSourceForgeZips << {
+	println "Building zip files for SourceForge"
+}
+buildSourceForgeZips.dependsOn clean, jar, distZip, srcDistZip
+
+// Stuff to generate and upload Maven artifacts
+task javadocJar (type: Jar, dependsOn: javadoc) {
+	manifest { from sharedManifest }
+	classifier = 'javadoc'
+	from javadoc.destinationDir
+}
+task sourceJar (type: Jar) {
+	manifest { from sharedManifest }
+	classifier = 'sources'
+	from sourceSets.main.allSource
+}
+artifacts {
+	archives jar, javadocJar, sourceJar
+}
+signing {
+	sign configurations.archives
+}
+repositories {
+	mavenCentral()
+}
+uploadArchives {
+	repositories {
+		mavenDeployer {
+			repository(url: 'file:///' + projectDir + '/../localMavenRepo')
+			beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+			pom {
+				groupId = 'com.fifesoft'
+				name = 'languagesupport'
+				project {
+					parent {
+						groupId 'org.sonatype.oss'
+						artifactId 'oss-parent'
+						version '7'
+						relativePath ''
+					}
+					
+					groupId 'com.fifesoft'
+					artifactId 'languagesupport'
+					packaging 'jar'
+					
+					name 'LanguageSupport'
+					description 'A library adding code completion and other advanced features for Java, JavaScript, Perl, and other languages to RSyntaxTextArea.'
+					
+					inceptionYear '2003'
+					url 'http://www.fifesoft.com/rsyntaxtextarea/'
+					licenses {
+						license {
+							name 'Modified BSD License'
+							url 'https://github.com/bobbylight/RSTALanguageSupport/blob/master/RSTALanguageSupport.License.txt'
+							distribution 'repo'
+						}
+					}
+					
+					scm {
+						url 'https://github.com/bobbylight/RSTALanguageSupport'
+						connection 'scm:git:git://github.com/bobbylight/RSTALanguageSupport'
+						developerConnection 'scm:git:git@github.com:bobbylight/RSTALanguageSupport'
+						tag '2.5.1'
+					}
+					
+					developers {
+						developer {
+							name 'Robert Futrell'
+							url 'http://www.fifesoft.com'
+							organization = 'Fifesoft' /* https://issues.gradle.org/browse/GRADLE-1200 */
+							organizationUrl 'http://www.fifesoft.com/'
+							roles {
+								role 'architect'
+								role 'developer'
+							}
+							timezone '0'
+						}
+					}
+					
+					// Manually add runtime dependencies since we don't have
+					// a multi-project build set up properly
+					dependencies {
+						dependency {
+							groupId 'com.fifesoft'
+							artifactId 'rsyntaxtextarea'
+							version project.version
+						}
+						dependency {
+							groupId 'com.fifesoft'
+							artifactId 'autocomplete'
+							version project.version
+						}
+					}
+					
+					// Says to enforce 1.5 compatibility when building
+					// Doesn't work as of Gradle 2.0 due to a Groovy bug; see
+					// http://jira.codehaus.org/browse/GROOVY-7023
+					// For now, append it via XML directly
+					/*
+					build {
+						plugins {
+							plugin {
+								artifactId 'maven-compiler-plugin'
+								version '2.3.2'
+								executions {
+									execution {
+										id 'default-compile'
+										configuration {
+											source '1.5'
+											target '1.5'
+										}
+									}
+								}
+							}
+						}
+					}
+					*/
+					withXml {
+						def pluginNode = asNode().appendNode('build').appendNode('plugins').appendNode('plugin')
+						pluginNode.appendNode('artifactId', 'maven-compiler-plugin')
+						pluginNode.appendNode('version', '2.3.2')
+						def executionNode = pluginNode.appendNode('executions').appendNode('execution')
+						executionNode.appendNode('id', 'default-compile')
+						executionNode.appendNode('configuration').appendNode('source', '1.5').
+						      parent().appendNode('target', '1.5')
+					}
+				}
+			}
+		}
+	}
+}
