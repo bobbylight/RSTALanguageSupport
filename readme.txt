@@ -175,13 +175,10 @@ all three projects out side by side.  Thus, to build:
    git clone https://github.com/bobbylight/AutoComplete.git
    git clone https://github.com/bobbylight/RSTALanguageSupport.git
    cd RSyntaxTextArea
-   gradle wrapper
    gradlew build
    cd ../AutoComplete
-   gradle wrapper
    gradlew build
    cd ../RSTALanguageSupport
-   gradle wrapper
    gradlew build
 
 
