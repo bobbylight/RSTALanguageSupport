@@ -145,7 +145,7 @@ uploadArchives {
 						url 'https://github.com/bobbylight/RSTALanguageSupport'
 						connection 'scm:git:git://github.com/bobbylight/RSTALanguageSupport'
 						developerConnection 'scm:git:git@github.com:bobbylight/RSTALanguageSupport'
-						tag '2.5.1'
+						tag '2.5.4'
 					}
 					
 					developers {
