@@ -145,7 +145,7 @@ uploadArchives {
 						url 'https://github.com/bobbylight/RSTALanguageSupport'
 						connection 'scm:git:git://github.com/bobbylight/RSTALanguageSupport'
 						developerConnection 'scm:git:git@github.com:bobbylight/RSTALanguageSupport'
-						tag '2.5.4'
+						tag project.version
 					}
 					
 					developers {
@@ -168,12 +168,12 @@ uploadArchives {
 						dependency {
 							groupId 'com.fifesoft'
 							artifactId 'rsyntaxtextarea'
-							version project.version
+							version '2.5.4'
 						}
 						dependency {
 							groupId 'com.fifesoft'
 							artifactId 'autocomplete'
-							version project.version
+							version '2.5.4'
 						}
 					}
 					
