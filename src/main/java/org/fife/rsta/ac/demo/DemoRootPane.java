@@ -16,6 +16,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+
 import javax.swing.*;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.event.*;
@@ -129,6 +130,10 @@ class DemoRootPane extends JRootPane implements HyperlinkListener,
 		}
 		mb.add(menu);
 
+		menu = new JMenu("View");
+		menu.add(new JCheckBoxMenuItem(new ToggleLayeredHighlightsAction(this)));
+		mb.add(menu);
+		
 		menu = new JMenu("Help");
 		menu.add(new JMenuItem(new AboutAction(this)));
 		mb.add(menu);
@@ -153,6 +158,9 @@ class DemoRootPane extends JRootPane implements HyperlinkListener,
 		textArea.setCodeFoldingEnabled(true);
 		textArea.setTabsEmulated(true);
 		textArea.setTabSize(3);
+textArea.setBackground(new java.awt.Color(224, 255, 224));
+//textArea.setUseSelectedTextColor(true);
+//textArea.setLineWrap(true);
 		ToolTipManager.sharedInstance().registerComponent(textArea);
 		return textArea;
 	}
@@ -163,6 +171,11 @@ class DemoRootPane extends JRootPane implements HyperlinkListener,
 	 */
 	void focusTextArea() {
 		textArea.requestFocusInWindow();
+	}
+
+
+	RSyntaxTextArea getTextArea() {
+		return textArea;
 	}
 
 
