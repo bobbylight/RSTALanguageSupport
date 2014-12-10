@@ -103,8 +103,8 @@ public class RhinoUtil {
 		}
 		StringBuilder sb = new StringBuilder();
 		for (int i=0; i<depth; i++) {
-			// I *think* these should always be Names, but to be safe and
-			// prevent ClassCastExceptions...
+			// These are not always Names, can sometimes be KeywordLiterals...
+			// I think that's only in the case of syntax errors?
 			sb.append(nodes.get(i).toSource());
 			if (i<depth-1) {
 				sb.append('.');
