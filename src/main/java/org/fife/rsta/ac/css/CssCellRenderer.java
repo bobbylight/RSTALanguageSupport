@@ -35,7 +35,7 @@ class CssCellRenderer extends CompletionCellRenderer {
 	 * Constructor.
 	 */
 	public CssCellRenderer() {
-		tagIcon = getIcon("img/tag.png");
+		tagIcon = getIcon("../html/tag.png");
 	}
 
 
