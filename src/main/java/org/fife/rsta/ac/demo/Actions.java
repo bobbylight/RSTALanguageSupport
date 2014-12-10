@@ -12,12 +12,16 @@ package org.fife.rsta.ac.demo;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+
 import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.text.DefaultHighlighter;
+
+import org.fife.ui.rtextarea.ConfigurableCaret;
 
 
 /**
@@ -155,5 +159,22 @@ interface Actions {
 
 	}
 
+
+	static class ToggleLayeredHighlightsAction extends AbstractAction {
+
+		private DemoRootPane demo;
+
+		public ToggleLayeredHighlightsAction(DemoRootPane demo) {
+			this.demo = demo;
+			putValue(NAME, "Layered Selection Highlights");
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			DefaultHighlighter h = (DefaultHighlighter)demo.getTextArea().
+					getHighlighter();
+			h.setDrawsLayeredHighlights(!h.getDrawsLayeredHighlights());
+		}
+
+	}
 
 }
