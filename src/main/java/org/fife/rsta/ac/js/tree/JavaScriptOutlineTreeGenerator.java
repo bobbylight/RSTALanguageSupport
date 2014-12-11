@@ -77,13 +77,30 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 				String clazz = entry.getKey();
 				for (int i=0; i<root.getChildCount(); i++) {
 					JavaScriptTreeNode childNode = (JavaScriptTreeNode)root.getChildAt(i);
-					if (childNode.getText(true).startsWith(clazz + "(")) {
+					String text = childNode.getText(true);
+					if (text!=null && text.startsWith(clazz + "(")) {
 						for (JavaScriptTreeNode memberNode : entry.getValue()) {
 							childNode.add(memberNode);
 						}
 						childNode.setIcon(IconFactory.getIcon(IconFactory.DEFAULT_CLASS_ICON));
 						break;
 					}
+					/*
+					 * Not sure why this happens, but it happens in *some* instances like this:
+					 * 
+					 * ... js code ...
+					 * Foo = function() {
+					 *   ... foo body ...
+					 * };
+					 * Foo.prototype = Object.create(Bar.prototype, {
+					 *    ...
+					 * });
+					 * The "Foo" global variable is complained about.  Note that this does not
+					 * occur if there is not JS code *before* and *after* the Foo stuff (?)...
+					else {
+						System.out.println("Node with null text: " + ((AstNode)((java.util.List)childNode.getUserObject()).get(0)).toSource());
+					}
+					*/
 				}
 			}
 

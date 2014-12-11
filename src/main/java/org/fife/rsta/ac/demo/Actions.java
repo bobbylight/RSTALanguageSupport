@@ -21,8 +21,6 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.text.DefaultHighlighter;
 
-import org.fife.ui.rtextarea.ConfigurableCaret;
-
 
 /**
  * Container for all actions used by the demo.
