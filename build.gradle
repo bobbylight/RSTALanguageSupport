@@ -168,7 +168,7 @@ uploadArchives {
 						dependency {
 							groupId 'com.fifesoft'
 							artifactId 'rsyntaxtextarea'
-							version '2.5.4'
+							version '2.5.6'
 						}
 						dependency {
 							groupId 'com.fifesoft'
