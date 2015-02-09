@@ -15,12 +15,14 @@ import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+
 import javax.swing.text.Element;
 
 import org.fife.io.DocumentReader;
 import org.fife.rsta.ac.js.ast.VariableResolver;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.TextEditorPane;
 import org.fife.ui.rsyntaxtextarea.parser.AbstractParser;
 import org.fife.ui.rsyntaxtextarea.parser.DefaultParseResult;
 import org.fife.ui.rsyntaxtextarea.parser.DefaultParserNotice;
@@ -68,6 +70,7 @@ public class JavaScriptParser extends AbstractParser {
 	 */
 	public static final String PROPERTY_AST = "AST";
 	
+	private RSyntaxTextArea textArea;
 	private AstRoot astRoot;
 	private JavaScriptLanguageSupport langSupport;
 	private PropertyChangeSupport support;
@@ -79,6 +82,7 @@ public class JavaScriptParser extends AbstractParser {
 	 */
 	public JavaScriptParser(JavaScriptLanguageSupport langSupport,
 			RSyntaxTextArea textArea) {
+		this.textArea = textArea;
 		this.langSupport = langSupport;
 		support = new PropertyChangeSupport(this);
 		result = new DefaultParseResult(this);
@@ -135,7 +139,7 @@ public class JavaScriptParser extends AbstractParser {
 	private void gatherParserErrorsJsHint(RSyntaxDocument doc) {
 
 		try {
-			JsHinter.parse(this, doc, result);
+			JsHinter.parse(this, textArea, result);
 		} catch (IOException ioe) {
 			// TODO: Localize me?
 			String msg = "Error launching jshint: " + ioe.getMessage();
@@ -200,13 +204,32 @@ public class JavaScriptParser extends AbstractParser {
 	 * JsHint as your error parser.  This property is ignored if
 	 * {@link #getErrorParser()} does not return {@link JsErrorParser#JSHINT}.
 	 *
+	 * @param textArea The text component.
 	 * @return The <code>.jshintrc</code> file, or <code>null</code> if none;
 	 *         in that case, the JsHint defaults will be used.
 	 * @see #setJsHintRCFile(File)
 	 * @see #setErrorParser(JsErrorParser)
 	 */
-	public File getJsHintRCFile() {
-		return langSupport.getJsHintRCFile();
+	public File getJsHintRCFile(RSyntaxTextArea textArea) {
+
+		// First, get the .jshintrc file in the current file's folder
+		// hierarchy, if it exists.
+		if (textArea instanceof TextEditorPane) {
+			TextEditorPane tep = (TextEditorPane)textArea;
+			File file = new File(tep.getFileFullPath());
+			File parent = file.getParentFile();
+			while (parent != null) {
+				File possibleJsHintRc = new File(parent, ".jshintrc");
+				if (possibleJsHintRc.isFile()) {
+					return possibleJsHintRc;
+				}
+				parent = parent.getParentFile();
+			}
+		}
+
+		// If no .jshintrc is found, use the specified fallback.
+		return langSupport.getDefaultJsHintRCFile();
+
 	}
 
 

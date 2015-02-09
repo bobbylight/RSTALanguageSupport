@@ -20,9 +20,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.swing.text.BadLocationException;
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.parser.DefaultParseResult;
 import org.fife.ui.rsyntaxtextarea.parser.DefaultParserNotice;
 import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
@@ -71,10 +73,11 @@ class JsHinter {
 	}
 
 
-	public static void parse(JavaScriptParser parser, RSyntaxDocument doc,
+	public static void parse(JavaScriptParser parser, RSyntaxTextArea textArea,
 			DefaultParseResult result) throws IOException {
 
 		String stdout = null;
+		RSyntaxDocument doc = (RSyntaxDocument)textArea.getDocument();
 
 		List<String> command = new ArrayList<String>();
 		if (File.separatorChar=='\\') {
@@ -86,9 +89,10 @@ class JsHinter {
 			command.add("-c");
 		}
 		command.add("jshint");
-		if (parser.getJsHintRCFile()!=null) {
+		File jshintrc = parser.getJsHintRCFile(textArea);
+		if (jshintrc!=null) {
 			command.add("--config");
-			command.add(parser.getJsHintRCFile().getAbsolutePath());
+			command.add(jshintrc.getAbsolutePath());
 		}
 		command.add("--verbose"); // Allows to decide error vs. warning
 		command.add("-");

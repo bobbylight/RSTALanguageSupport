@@ -74,7 +74,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	private JsErrorParser errorParser;
 	private JavaScriptParser parser;
 	private JavaScriptCompletionProvider provider;
-	private File jshintrc;
+	private File defaultJshintrc;
 //	private int jshintIndent;
 //	private long jshintrcLastModified;
 
@@ -141,6 +141,22 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 
 
 	/**
+	 * Returns the location of the <code>.jshintrc</code> file to use if using
+	 * JsHint as your error parser, and no .jshintrc file is found in the
+	 * current file's folder hierarchy.  This property is ignored if
+	 * {@link #getErrorParser()} does not return {@link JsErrorParser#JSHINT}.
+	 *
+	 * @return The <code>.jshintrc</code> file, or <code>null</code> if none;
+	 *         in that case, the JsHint defaults will be used.
+	 * @see #setJsHintRCFile(File)
+	 * @see #setErrorParser(JsErrorParser)
+	 */
+	public File getDefaultJsHintRCFile() {
+		return defaultJshintrc;
+	}
+
+
+	/**
 	 * Returns the engine to use for checking for syntax errors in JavaScript
 	 * files.  Note that regardless of the value specified to this method,
 	 * Rhino is always used for code completion and the outline tree.
@@ -160,21 +176,6 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 
 	public JavaScriptParser getJavaScriptParser() {
 		return parser;
-	}
-
-
-	/**
-	 * Returns the location of the <code>.jshintrc</code> file to use if using
-	 * JsHint as your error parser.  This property is ignored if
-	 * {@link #getErrorParser()} does not return {@link JsErrorParser#JSHINT}.
-	 *
-	 * @return The <code>.jshintrc</code> file, or <code>null</code> if none;
-	 *         in that case, the JsHint defaults will be used.
-	 * @see #setJsHintRCFile(File)
-	 * @see #setErrorParser(JsErrorParser)
-	 */
-	public File getJsHintRCFile() {
-		return jshintrc;
 	}
 
 
@@ -234,6 +235,8 @@ return DEFAULT;
 
 	/**
 	 * Sets the JS version to use when parsing the code.
+     * This parameter is ignored if the error parser is set to
+     * {@link JsErrorParser#RHINO}.
 	 *
 	 * @return The JS version.  This should be one of the
 	 *        <code>VERSION_xxx</code> constants in Rhino's {@link Context}
@@ -320,6 +323,8 @@ return DEFAULT;
 
 	/**
 	 * Returns whether strict mode (more warnings are detected) is enabled.
+     * This parameter is ignored if the error parser is set to
+     * {@link JsErrorParser#RHINO}.
 	 * 
 	 * @return Whether strict mode is enabled.
 	 * @see #setStrictMode(boolean)
@@ -331,6 +336,8 @@ return DEFAULT;
 
 	/**
 	 * Returns whether E4X is supported in parsed JavaScript.
+     * This parameter is ignored if the error parser is set to
+     * {@link JsErrorParser#RHINO}.
 	 * 
 	 * @return Whether E4X is supported.
 	 * @see #setXmlAvailable(boolean)
@@ -341,7 +348,12 @@ return DEFAULT;
 
 
 	/**
-     * @return Whether the JavaScript support supports client/browser objects
+     * Returns whether this JavaScript support supports client/browser objects.
+     * This parameter is ignored if the error parser is set to
+     * {@link JsErrorParser#RHINO}.
+     * 
+     * @return Whether the JavaScript support supports client/browser objects.
+     * @see #setClient(boolean)
      */
 	public boolean isClient() {
 		return client;
@@ -355,13 +367,39 @@ return DEFAULT;
 
 	/**
      * Set whether the JavaScript support supports client/browser objects.
+     * This parameter is ignored if the error parser is set to
+     * {@link JsErrorParser#RHINO}.
      *
-     * @param client - true if client mode is supported
+     * @param client True if client mode is supported.
+     * @return {@link #isClient()}
      */
 	public void setClient(boolean client) {
 		this.client = client;
 	}
 	
+
+	/**
+	 * Sets the location of the <code>.jshintrc</code> file to use if using
+	 * JsHint as your error parser, and no .jshintrc file is found in the
+	 * current file's folder hierarchy.  This property is ignored if
+	 * {@link #getErrorParser()} does not return {@link JsErrorParser#JSHINT}.
+	 *
+	 * @param file The <code>.jshintrc</code> file, or <code>null</code> if
+	 *        none; in that case, the JsHint defaults will be used.
+	 * @return Whether the new .jshintrc file is different than the original
+	 *         one.
+	 * @see #getDefaultJsHintRCFile()
+	 * @see #setErrorParser(JsErrorParser)
+	 */
+	public boolean setDefaultJsHintRCFile(File file) {
+		if ((file==null && defaultJshintrc!=null) || (file!=null && defaultJshintrc==null) ||
+				(file!=null && !file.equals(defaultJshintrc))) {
+			defaultJshintrc = file;
+			return true;
+		}
+		return false;
+	}
+
 
 	/**
 	 * Sets the engine to use for identifying syntax errors in JavaScript
@@ -385,29 +423,9 @@ return DEFAULT;
 
 
 	/**
-	 * Sets the location of the <code>.jshintrc</code> file to use if using
-	 * JsHint as your error parser.  This property is ignored if
-	 * {@link #getErrorParser()} does not return {@link JsErrorParser#JSHINT}.
-	 *
-	 * @param file The <code>.jshintrc</code> file, or <code>null</code> if
-	 *        none; in that case, the JsHint defaults will be used.
-	 * @return Whether the new .jshintrc file is different than the original
-	 *         one.
-	 * @see #getJsHintRCFile()
-	 * @see #setErrorParser(JsErrorParser)
-	 */
-	public boolean setJsHintRCFile(File file) {
-		if ((file==null && jshintrc!=null) || (file!=null && jshintrc==null) ||
-				(file!=null && !file.equals(jshintrc))) {
-			jshintrc = file;
-			return true;
-		}
-		return false;
-	}
-
-
-	/**
 	 * Sets the JS version to use when parsing the code.
+     * This parameter is ignored if the error parser is set to
+     * {@link JsErrorParser#RHINO}.
 	 *
 	 * @param languageVersion  The JS version.  This should be one of the
 	 *        <code>VERSION_xxx</code> constants in Rhino's {@link Context}
@@ -425,6 +443,8 @@ return DEFAULT;
 
 	/**
 	 * Sets whether strict mode (more warnings are detected) is enabled.
+     * This parameter is ignored if the error parser is set to
+     * {@link JsErrorParser#RHINO}.
 	 * 
 	 * @param strict Whether strict mode is enabled.
 	 * @return Whether a new value was actually set for this property.
@@ -441,6 +461,8 @@ return DEFAULT;
 
 	/**
 	 * Sets whether E4X is supported in parsed JavaScript.
+     * This parameter is ignored if the error parser is set to
+     * {@link JsErrorParser#RHINO}.
 	 * 
 	 * @param available Whether E4X is supported.
 	 * @return Whether a new value was actually set for this property.
