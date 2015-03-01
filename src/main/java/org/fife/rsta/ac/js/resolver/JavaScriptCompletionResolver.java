@@ -127,8 +127,54 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	@Override
 	protected TypeDeclaration resolveNativeType(AstNode node)
 	{
-		return JavaScriptHelper.tokenToNativeTypeDeclaration(node, provider);
+		TypeDeclaration dec = JavaScriptHelper.tokenToNativeTypeDeclaration(node, provider);
+		if(dec == null) {
+			dec = testJavaStaticType(node);
+		}
+		
+		return dec;
 	}
+	
+	/**
+	 * Test whether the node can be resolved as a static Java class.
+	 * Only looks for Token.NAME nodes to test
+	 * @param node node to test
+	 * @return
+	 */
+	protected TypeDeclaration testJavaStaticType(AstNode node) {
+		switch (node.getType()) {
+			case Token.NAME:
+				return findJavaStaticType(node);
+		}
+		return null;
+	}
+	
+	/**
+	 * Try to resolve the Token.NAME AstNode and return a TypeDeclaration
+	 * @param node node to resolve
+	 * @return TypeDeclaration if the name can be resolved as a Java Class else null
+	 */
+	protected TypeDeclaration findJavaStaticType(AstNode node) {
+		// check parent is of type property get
+		String testName = node.toSource();
+		
+		if (testName != null) {
+			TypeDeclaration dec = JavaScriptHelper.getTypeDeclaration(testName, provider);
+			
+			if(dec != null)
+			{
+				ClassFile cf = provider.getJavaScriptTypesFactory().getClassFile(
+						provider.getJarManager(), dec);
+				if (cf != null) {
+					TypeDeclaration returnDec = provider.getJavaScriptTypesFactory()
+							.createNewTypeDeclaration(cf, true, false);
+					return returnDec;
+				}
+			}
+		}
+		return null;
+	}
+
 
 
 	// TODO not sure how right this is, but is very tricky problem resolving

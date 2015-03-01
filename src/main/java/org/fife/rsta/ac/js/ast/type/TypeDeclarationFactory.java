@@ -19,7 +19,7 @@ import org.fife.rsta.ac.js.ast.type.ecma.client.ClientBrowserAdditions;
 import org.fife.rsta.ac.js.ast.type.ecma.client.DOMAddtions;
 import org.fife.rsta.ac.js.ast.type.ecma.client.HTMLDOMAdditions;
 import org.fife.rsta.ac.js.ast.type.ecma.e4x.ECMAvE4xAdditions;
-import org.fife.rsta.ac.js.ast.type.ecma.v3.TypeDeclarationsECMAv3;
+import org.fife.rsta.ac.js.ast.type.ecma.v5.TypeDeclarationsECMAv5;
 
 
 
@@ -52,7 +52,7 @@ public class TypeDeclarationFactory {
 		{
 			//TODO log error?
 			//ignore this
-			ecma = new TypeDeclarationsECMAv3();
+			ecma = new TypeDeclarationsECMAv5();
 		}
 		
 		if(xmlSupported) { //add E4X API
@@ -75,7 +75,7 @@ public class TypeDeclarationFactory {
 	 */
 	protected String getDefaultECMAVersion()
 	{
-		return TypeDeclarationsECMAv3.class.getName();
+		return TypeDeclarationsECMAv5.class.getName();
 	}
 	
 	public List<TypeDeclaration> getAllJavaScriptTypes() {

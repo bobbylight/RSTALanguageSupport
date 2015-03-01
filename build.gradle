@@ -180,12 +180,12 @@ uploadArchives {
 						dependency {
 							groupId 'com.fifesoft'
 							artifactId 'rsyntaxtextarea'
-							version '2.5.6'
+							version project.version
 						}
 						dependency {
 							groupId 'com.fifesoft'
 							artifactId 'autocomplete'
-							version '2.5.4'
+							version project.version
 						}
 					}
 					
