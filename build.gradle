@@ -1,5 +1,6 @@
 ['java', 'distribution', 'maven', 'signing'].each { apply plugin: it }
 
+group = 'com.fifesoft'
 archivesBaseName = 'languagesupport'
 
 dependencies {
@@ -103,6 +104,8 @@ artifacts {
 	archives jar, javadocJar, sourceJar
 }
 signing {
+	// Don't require signing for e.g. ./gradlew install
+	required { gradle.taskGraph.hasTask("uploadArchives") }
 	sign configurations.archives
 }
 repositories {
