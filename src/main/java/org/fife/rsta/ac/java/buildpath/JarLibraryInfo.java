@@ -15,13 +15,11 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
-import java.util.Map;
-import java.util.TreeMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
-import org.fife.rsta.ac.java.Util;
+import org.fife.rsta.ac.java.PackageMapNode;
 import org.fife.rsta.ac.java.classreader.ClassFile;
 
 
@@ -82,13 +80,13 @@ public class JarLibraryInfo extends LibraryInfo {
 	 *
 	 * @return The sort order of these two library infos.
 	 */
-	public int compareTo(Object o) {
-		if (o==this) {
+	public int compareTo(LibraryInfo info) {
+		if (info==this) {
 			return 0;
 		}
 		int result = -1;
-		if (o instanceof JarLibraryInfo) {
-			result = jarFile.compareTo(((JarLibraryInfo)o).jarFile);
+		if (info instanceof JarLibraryInfo) {
+			result = jarFile.compareTo(((JarLibraryInfo)info).jarFile);
 		}
 		return result;
 	}
@@ -131,9 +129,9 @@ public class JarLibraryInfo extends LibraryInfo {
 
 
 	@Override
-	public TreeMap createPackageMap() throws IOException {
+	public PackageMapNode createPackageMap() throws IOException {
 
-		TreeMap packageMap = new TreeMap();
+		PackageMapNode root = new PackageMapNode();
 		JarFile jar = new JarFile(jarFile);
 
 		try {
@@ -143,19 +141,7 @@ public class JarLibraryInfo extends LibraryInfo {
 				ZipEntry entry = e.nextElement();
 				String entryName = entry.getName();
 				if (entryName.endsWith(".class")) {
-					entryName = entryName.substring(0, entryName.length()-6);
-					String[] items = Util.splitOnChar(entryName, '/');
-					Map m = packageMap;
-					for (int i=0; i<items.length-1; i++) {
-						TreeMap submap = (TreeMap)m.get(items[i]);
-						if (submap==null) {
-							submap = new TreeMap();
-							m.put(items[i], submap);
-						}
-						m = submap;
-					}
-					String className = items[items.length-1];
-					m.put(className, null); // Lazily set value to ClassFile later
+					root.add(entryName);
 				}
 			}
 
@@ -163,7 +149,7 @@ public class JarLibraryInfo extends LibraryInfo {
 			jar.close();
 		}
 
-		return packageMap;
+		return root;
 
 	}
 

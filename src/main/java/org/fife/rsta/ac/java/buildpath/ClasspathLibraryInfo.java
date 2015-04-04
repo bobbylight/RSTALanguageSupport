@@ -18,9 +18,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
-import org.fife.rsta.ac.java.Util;
+import org.fife.rsta.ac.java.PackageMapNode;
 import org.fife.rsta.ac.java.classreader.ClassFile;
 
 
@@ -115,15 +114,15 @@ public class ClasspathLibraryInfo extends LibraryInfo {
 	}
 
 
-	public int compareTo(Object o) {
+	public int compareTo(LibraryInfo info) {
 
-		if (o==this) {
+		if (info==this) {
 			return 0;
 		}
 		int res = -1;
 
-		if (o instanceof ClasspathLibraryInfo) {
-			ClasspathLibraryInfo other = (ClasspathLibraryInfo)o;
+		if (info instanceof ClasspathLibraryInfo) {
+			ClasspathLibraryInfo other = (ClasspathLibraryInfo)info;
 			res = classNameToClassFile.size() -
 					other.classNameToClassFile.size();
 			if (res==0) {
@@ -185,27 +184,12 @@ public class ClasspathLibraryInfo extends LibraryInfo {
 
 
 	@Override
-	public TreeMap createPackageMap() throws IOException {
-		TreeMap packageMap = new TreeMap();
+	public PackageMapNode createPackageMap() throws IOException {
+		PackageMapNode root = new PackageMapNode();
 		for (String className : classNameToClassFile.keySet()) {
-			String[] tokens = Util.splitOnChar(className, '/');
-			TreeMap temp = packageMap;
-			for (int j=0; j<tokens.length-1; j++) {
-				String pkg = tokens[j];
-				TreeMap submap = (TreeMap)temp.get(pkg);
-				if (submap==null) {
-					submap = new TreeMap();
-					temp.put(pkg, submap);
-				}
-				temp = submap;
-			}
-			className = tokens[tokens.length-1];
-			// Our internal map must have all entries ending in ".class", but
-			// the one we pass to client code must not.
-			className = className.substring(0, className.length()-6);
-			temp.put(className, null); // Lazily set value to ClassFile later
+			root.add(className);
 		}
-		return packageMap;
+		return root;
 	}
 
 

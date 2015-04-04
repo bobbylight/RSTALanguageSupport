@@ -12,8 +12,8 @@ package org.fife.rsta.ac.java.buildpath;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.TreeMap;
 
+import org.fife.rsta.ac.java.PackageMapNode;
 import org.fife.rsta.ac.java.classreader.ClassFile;
 
 
@@ -34,7 +34,8 @@ import org.fife.rsta.ac.java.classreader.ClassFile;
  * @see JarLibraryInfo
  * @see ClasspathLibraryInfo
  */
-public abstract class LibraryInfo implements Comparable, Cloneable {
+public abstract class LibraryInfo implements Comparable<LibraryInfo>,
+		Cloneable {
 
 	/**
 	 * The location of the source files corresponding to this library.  This
@@ -140,7 +141,7 @@ public abstract class LibraryInfo implements Comparable, Cloneable {
 	 * @return The package structure in this library.
 	 * @throws IOException If an IO error occurs.
 	 */
-	public abstract TreeMap createPackageMap() throws IOException;
+	public abstract PackageMapNode createPackageMap() throws IOException;
 
 
 	/**
@@ -152,7 +153,8 @@ public abstract class LibraryInfo implements Comparable, Cloneable {
 	 */
 	@Override
 	public boolean equals(Object o) {
-		return compareTo(o)==0;
+		return o instanceof LibraryInfo &&
+				compareTo((LibraryInfo)o)==0;
 	}
 
 
