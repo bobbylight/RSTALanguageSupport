@@ -55,9 +55,14 @@ public class Signature extends AttributeInfo {
 			int colon = temp.indexOf(':', offs);
 			while (offs<temp.length() && colon>-1) {
 				String ident = temp.substring(offs, colon);
-				char ch = temp.charAt(colon+1);
+				int colonCount = 1;
+				char ch = temp.charAt(colon+colonCount);
+				if (ch==':') { // sometimes, there is another ':'
+				    colonCount++;
+				    ch = temp.charAt(colon+colonCount);
+				}
 				if (ch=='L') { // A ClassTypeSignature
-					int semicolon = temp.indexOf(';', colon+2);
+					int semicolon = temp.indexOf(';', colon+colonCount+1);
 					if (semicolon>-1) {
 						//String type = temp.substring(colon+2, semicolon);
 						// TODO: ...
