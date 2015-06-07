@@ -4,7 +4,7 @@ Documentation is sparse for the moment, but should improve over time.
 
 Besides RSyntaxTextArea and AutoComplete, this library depends on [Rhino](http://www.mozilla.org/rhino/).  Rhino is used to implement the code completion and syntax checking for JavaScript.
 
-RSTALanguageSupport is available under a [modified BSD license](https://github.com/bobbylight/RSTALanguageSupport/blob/master/RSTALanguageSupport.License.txt).  For more information, visit [http://fifesoft.com/rsyntaxtextarea](http://fifesoft.com/rsyntaxtextarea).
+RSTALanguageSupport is available under a [modified BSD license](https://github.com/bobbylight/RSTALanguageSupport/blob/master/RSTALanguageSupport.License.txt).  For more information, visit [http://bobbylight.github.io/RSyntaxTextArea](http://bobbylight.github.io/RSyntaxTextArea).
 
 # Supported Languages and Status
 
@@ -67,5 +67,4 @@ Languages supported in this library include:
 
 * Add an issue on GitHub
 * Ask in the [project forum](http://fifesoft.com/forum/)
-* Check the project's [home page](http://fifesoft.com/rsyntaxtextarea)
 
