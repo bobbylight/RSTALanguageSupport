@@ -158,7 +158,7 @@ class DemoRootPane extends JRootPane implements HyperlinkListener,
 		textArea.setCodeFoldingEnabled(true);
 		textArea.setTabsEmulated(true);
 		textArea.setTabSize(3);
-textArea.setBackground(new java.awt.Color(224, 255, 224));
+//textArea.setBackground(new java.awt.Color(224, 255, 224));
 //textArea.setUseSelectedTextColor(true);
 //textArea.setLineWrap(true);
 		ToolTipManager.sharedInstance().registerComponent(textArea);

@@ -505,6 +505,10 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 						add(valueCompletionGenerators, prop,
 							new TimeCompletionGenerator());
 					}
+					else if ("*common-fonts*".equals(token)) {
+						add(valueCompletionGenerators, prop,
+								new CommonFontCompletionGenerator());
+					}
 					else {
 						completion = new BasicCssCompletion(this,
 								tokens[i], "css_propertyvalue_identifier");

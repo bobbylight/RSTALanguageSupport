@@ -69,17 +69,17 @@ counter-reset content_props
 cue aural_props
 cue-after aural_props
 cue-before aural_props
-cursor ui_props
-direction visual_props
+cursor ui_props [ auto default none context-menu help pointer progress wait cell crosshair text vertical-text alias copy move no-drop not-allowed all-scroll col-resize row-resize n-resize e-resize s-resize w-resize ne-resize nw-resize se-resize sw-resize ew-resize ns-resize nesw-resize nwse-resize zoom-in zoom-out grab grabbing ]
+direction visual_props [ ltr rtl ]
 display visual_props [ none inline block list-item inline-block inline-table table table-cell table-column table-column-group table-footer-group table-header-group table-row table-row-group flex inline-flex grid inline-grid run-in ]
 elevation aural_props
 empty-cells table_props
 float visual_props [ left right none ]
 font font_props
-font-family font_props
-font-size font_props
-font-size-adjust font_props
-font-stretch font_props
+font-family font_props [ *common-fonts* serif sans-serif monospace cursive fantasy ]
+font-size font_props [ *percentage-or-length* xx-small x-small small medium large x-large xx-large larger smaller ]
+font-size-adjust font_props [ none ]
+font-stretch font_props [ normal ultra-condensed extra-condensed condensed semi-condensed semi-expanded expanded extra-expanded ultra-expanded ]
 font-style font_props [ normal italic oblique ]
 font-variant font_props
 font-weight font_props [ normal bold bolder lighter 100 200 300 400 500 600 700 800 900 ]
@@ -112,15 +112,15 @@ outline ui_props
 outline-color ui_props [ *color* invert ]
 outline-style ui_props
 outline-width ui_props
-overflow visual_props
+overflow visual_props [ visible hidden scroll auto ]
 overflow-style visual_props
-overflow-x visual_props
-overflow-y visual_props
-padding boxmodel_props
-padding-bottom boxmodel_props
-padding-left boxmodel_props
-padding-right boxmodel_props
-padding-top boxmodel_props
+overflow-x visual_props [ visible hidden scroll auto ]
+overflow-y visual_props [ visible hidden scroll auto ]
+padding boxmodel_props [ *percentage-or-length* ]
+padding-bottom boxmodel_props [ *percentage-or-length* ]
+padding-left boxmodel_props [ *percentage-or-length* ]
+padding-right boxmodel_props [ *percentage-or-length* ]
+padding-top boxmodel_props [ *percentage-or-length* ]
 page pagedmedia_props
 page-break-after pagedmedia_props
 page-break-before pagedmedia_props
@@ -133,7 +133,7 @@ perspective-origin visual_props
 pitch aural_props
 pitch-range aural_props
 play-during aural_props
-position visual_props
+position visual_props [ static relative absolute fixed sticky inherit ]
 quotes content_props
 richness aural_props
 right visual_props [ *percentage-or-length* auto ]
