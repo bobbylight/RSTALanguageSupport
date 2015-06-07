@@ -12,9 +12,8 @@ package org.fife.rsta.ac.java.buildpath;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.TreeMap;
 
-import org.fife.rsta.ac.java.Util;
+import org.fife.rsta.ac.java.PackageMapNode;
 import org.fife.rsta.ac.java.classreader.ClassFile;
 
 
@@ -74,13 +73,13 @@ public class DirLibraryInfo extends LibraryInfo {
 	 *
 	 * @return The sort order of these two library infos.
 	 */
-	public int compareTo(Object o) {
-		if (o==this) {
+	public int compareTo(LibraryInfo info) {
+		if (info==this) {
 			return 0;
 		}
 		int result = -1;
-		if (o instanceof DirLibraryInfo) {
-			return dir.compareTo(((DirLibraryInfo)o).dir);
+		if (info instanceof DirLibraryInfo) {
+			return dir.compareTo(((DirLibraryInfo)info).dir);
 		}
 		return result;
 	}
@@ -104,10 +103,10 @@ public class DirLibraryInfo extends LibraryInfo {
 
 
 	@Override
-	public TreeMap createPackageMap() throws IOException {
-		TreeMap map = new TreeMap();
-		getPackageMapImpl(dir, null, map);
-		return map;
+	public PackageMapNode createPackageMap() throws IOException {
+		PackageMapNode root = new PackageMapNode();
+		getPackageMapImpl(dir, null, root);
+		return root;
 	}
 
 
@@ -131,49 +130,27 @@ public class DirLibraryInfo extends LibraryInfo {
 	 *        "<code>com/company/pkgname</code>"...
 	 * @throws IOException If an IO error occurs.
 	 */
-	private void getPackageMapImpl(File dir, String pkg, TreeMap retVal)
+	private void getPackageMapImpl(File dir, String pkg, PackageMapNode root)
 			throws IOException {
 
 		File[] children = dir.listFiles();
-		TreeMap m = retVal;
-		boolean firstTimeThrough = true;
 
 		for (int i=0; i<children.length; i++) {
 			File child = children[i];
 			if (child.isFile() && child.getName().endsWith(".class")) {
 				if (pkg!=null) { // will be null the first time through
-					if (firstTimeThrough) { // Lazily drill down to pkg map node
-						firstTimeThrough = false;
-						String[] items = Util.splitOnChar(pkg, '/');
-						for (int j=0; j<items.length; j++) {
-							Object temp = m.get(items[j]);
-							if (temp instanceof TreeMap) {
-								m = (TreeMap)temp;
-							}
-							else if (temp==null) {
-								TreeMap submap = new TreeMap();
-								m.put(items[j], submap);
-								m = submap;
-							}
-							else { // e.g. a ClassFile
-								// A class with the same name as a package
-								// name - very unlikely, but could happen.  In
-								// this case, all peer classes/directories will
-								// share this package/class name conflict, so
-								// might as well bail now.
-								return;
-							}
-						}
-					}
+					// TODO: Split pkg here to prevent repeated splits
+					// for performance
+					root.add(pkg + "/" + child.getName());
 				}
-				String className = child.getName().
-								substring(0, child.getName().length()-6);
-				m.put(className, null);
+				else {
+					root.add(child.getName());
+				}
 			}
 			else if (child.isDirectory()) {
 				String subpkg = pkg==null ? child.getName() :
 										(pkg + "/" + child.getName());
-				getPackageMapImpl(child, subpkg, retVal);
+				getPackageMapImpl(child, subpkg, root);
 			}
 		}
 

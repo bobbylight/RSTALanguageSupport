@@ -285,6 +285,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 		return resolveCompletions(text, set);
 	}
 	
+	@SuppressWarnings("unchecked")
 	private List<Completion> resolveCompletions(String text, Set<Completion> set)
 	{
 		completions.addAll(set);
