@@ -4,7 +4,7 @@ group = 'com.fifesoft'
 archivesBaseName = 'languagesupport'
 
 dependencies {
-	compile group: 'org.mozilla', name: 'rhino', version: '1.7R4'
+	compile group: 'org.mozilla', name: 'rhino', version: '1.7.6'
 	testCompile group: 'junit', name: 'junit', version: '4.11'
 }
 
@@ -36,7 +36,7 @@ compileJava {
 
 ext.sharedManifest = manifest {
 	attributes('Main-Class': 'org.fife.rsta.ac.demo.DemoApp',
-		'Class-Path': 'rsyntaxtextarea.jar autocomplete.jar rhino-1.7R4.jar',
+		'Class-Path': 'rsyntaxtextarea.jar autocomplete.jar rhino-1.7.6.jar',
 		'Specification-Title': 'RSyntaxTextArea Language Support',
 		'Specification-Version': version,
 		'Implementation-Title': 'org.fife.ui',

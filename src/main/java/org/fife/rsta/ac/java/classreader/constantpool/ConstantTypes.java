@@ -41,4 +41,10 @@ interface ConstantTypes {
 
 	public static final int CONSTANT_Utf8				= 1;
 
+	public static final int CONSTANT_MethodHandle		= 15;
+
+	public static final int CONSTANT_MethodType			= 16;
+
+	public static final int CONSTANT_InvokeDynamic		= 18;
+
 }
