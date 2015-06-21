@@ -112,6 +112,7 @@ public class ClassFile implements AccessFlags {
 	public static final String RUNTIME_VISIBLE_ANNOTATIONS = "RuntimeVisibleAnnotations";
 	public static final String SIGNATURE			= "Signature";
 	public static final String SOURCE_FILE			= "SourceFile";
+	public static final String BOOTSTRAP_METHODS    = "BootstrapMethods";
 
 	/**
 	 * The 4-byte class file header, "<code>CAFEBABE</code>".
@@ -541,6 +542,13 @@ public class ClassFile implements AccessFlags {
 			SourceFile sf = new SourceFile(this, sourceFileIndex);
 			ai = sf;
 		}
+
+		else if (BOOTSTRAP_METHODS.equals(attrName)) { // 4.7.23
+            //String name = getClassFile().getClassName(false) + "." + getName();
+            //System.out.println(name + ": Attribute " + attrName + " not supported");
+            Util.skipBytes(in, attributeLength);
+            //ai = null;
+        }
 
 		else if (SIGNATURE.equals(attrName)) { // 4.8.8
 			int signatureIndex = in.readUnsignedShort();

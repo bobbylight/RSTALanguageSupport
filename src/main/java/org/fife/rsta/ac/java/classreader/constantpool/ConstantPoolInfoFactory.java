@@ -97,6 +97,23 @@ public class ConstantPoolInfoFactory implements ConstantTypes {
 				cpi = new ConstantUtf8Info(byteArray);
 				break;
 
+			case CONSTANT_MethodHandle:
+			    int referenceKind = in.read();
+			    int referenceIndex = in.readUnsignedShort();
+			    cpi = new ConstantMethodHandleInfo(referenceKind, referenceIndex);
+			    break;
+
+			case CONSTANT_MethodType:
+			    descriptorIndex = in.readUnsignedShort();
+			    cpi = new ConstantMethodTypeInfo(descriptorIndex);
+			    break;
+
+			case CONSTANT_InvokeDynamic:
+			    int bootstrapMethodAttrIndex = in.readUnsignedShort();
+			    nameAndTypeIndex = in.readUnsignedShort();
+			    cpi = new ConstantInvokeDynamicInfo(bootstrapMethodAttrIndex, nameAndTypeIndex);
+				break;
+
 			default:
 				throw new IOException("Unknown tag for constant pool info: " + tag);
 
