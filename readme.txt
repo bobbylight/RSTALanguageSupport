@@ -1,7 +1,7 @@
 RSTALanguageSupport Readme
 --------------------------
-Version 2.5.5
-27nov2014
+Version 2.5.7
+23jun2015
 
 ----------------------------------------
 Contents
@@ -32,7 +32,7 @@ project targets Java 5 and beyond.
 This library itself relies on the following other libraries (besides
 RSyntaxTextArea and AutoComplete):
 
-1. Mozilla Rhino v1.7R4 (http://www.mozilla.org/rhino/)
+1. Mozilla Rhino v1.7.6 (http://www.mozilla.org/rhino/)
    Used to implement code completion and syntax checking for JavaScript.
 
 
@@ -146,12 +146,13 @@ properly.
          org/fife/rsta/ac/sh            Code completion fro Unix shell
          org/fife/rsta/ac/xml           Code completion fro XML
       src/main/resources/               Images and resources
+      src/test/java/                    Unit tests
+      src/test/resources                Resources for unit tests
+      build/                            Where gradle generates build artifacts
       data/                             Input XML for some languages
-      dist/                             Where Ant places the built jar
-      lib/                              Libraries used by this library
-         rhino/                         Rhino, for JS support
-      test/                             (Very) small amount of unit tests
+      gradle/                           Gradle wrapper stuff
       build.gradle                      Gradle build script
+      gradle.properties                 Properties for the build.
       README.md                         Markdown readme for Git repository
       readme.txt                        This file
       RSTALanguageSupport.License.txt   License for this library (modified BSD)
@@ -167,9 +168,9 @@ the method and parameter descriptions, is welcome.
 ----------------------------------------
 IV.  Building the Jar
 ----------------------------------------
-Use Apache Ant (http://ant.apache.org).  This project depends on the sister
-RSyntaxTextArea and AutoComplete projects.  It is recommended that you check
-all three projects out side by side.  Thus, to build:
+This library uses Gradle for builds.  It depends on the sister RSyntaxTextArea
+and AutoComplete projects.  It is recommended that you check out all three
+projects out side by side.  Thus, to build:
    
    git clone https://github.com/bobbylight/RSyntaxTextArea.git
    git clone https://github.com/bobbylight/AutoComplete.git

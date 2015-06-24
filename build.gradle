@@ -54,8 +54,8 @@ distributions {
 		contents {
 			from { [ 'build/libs', // The built jar
 				     configurations.runtime, // all runtime dependencies (e.g. rhino)
-				     '../RSyntaxTextArea/build/libs/RSyntaxTextArea-2.5.5.jar',
-					 '../AutoComplete/build/libs/AutoComplete-2.5.4.jar',
+				     '../RSyntaxTextArea/build/libs/RSyntaxTextArea-2.5.7.jar',
+					 '../AutoComplete/build/libs/AutoComplete-2.5.7.jar',
 				     'RSTALanguageSupport.License.txt', 'readme.txt' ] }
 			rename 'RSyntaxTextArea-.*\\.jar', 'rsyntaxtextarea.jar'
 			rename 'AutoComplete-.*\\.jar', 'autocomplete.jar'

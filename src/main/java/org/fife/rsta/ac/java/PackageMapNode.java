@@ -304,7 +304,7 @@ public class PackageMapNode {
 							name.append('/').append(pkgs[j]);
 						}
 						name.append('/');
-						name.append((String)entry.getKey()).append(".class");
+						name.append(entry.getKey()).append(".class");
 						cf = info.createClassFileBulk(name.toString());
 						map.classFiles.put(entry.getKey(), cf);
 						possiblyAddTo(addTo, cf, inPkg);
