@@ -48,7 +48,7 @@ class CssCellRenderer extends CompletionCellRenderer {
 			boolean hasFocus) {
 		super.prepareForFunctionCompletion(list, fc, index, selected,
 										hasFocus);
-		setIcon(getEmptyIcon());
+		setIconWithDefault(fc);
 	}
 
 

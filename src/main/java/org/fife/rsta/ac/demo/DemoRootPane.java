@@ -10,6 +10,7 @@
  */
 package org.fife.rsta.ac.demo;
 
+import java.awt.BorderLayout;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -29,6 +30,7 @@ import org.fife.rsta.ac.java.JavaLanguageSupport;
 import org.fife.rsta.ac.java.tree.JavaOutlineTree;
 import org.fife.rsta.ac.js.tree.JavaScriptOutlineTree;
 import org.fife.rsta.ac.xml.tree.XmlOutlineTree;
+import org.fife.ui.rsyntaxtextarea.ErrorStrip;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rtextarea.RTextScrollPane;
@@ -82,10 +84,16 @@ class DemoRootPane extends JRootPane implements HyperlinkListener,
 			}
 		});
 		sp.setContinuousLayout(true);
-		setContentPane(sp);
+//		setContentPane(sp);
 
 		setJMenuBar(createMenuBar());
 
+		ErrorStrip errorStrip = new ErrorStrip(textArea);
+//errorStrip.setBackground(java.awt.Color.blue);
+JPanel cp = new JPanel(new BorderLayout());
+cp.add(sp);
+cp.add(errorStrip, BorderLayout.LINE_END);
+setContentPane(cp);
 	}
 
 
@@ -114,6 +122,7 @@ class DemoRootPane extends JRootPane implements HyperlinkListener,
 		addItem(new StyleAction(this, "Java",       "JavaExample.txt",   SYNTAX_STYLE_JAVA), bg, menu);
 		addItem(new StyleAction(this, "JavaScript", "JSExample.txt",     SYNTAX_STYLE_JAVASCRIPT), bg, menu);
 		addItem(new StyleAction(this, "JSP",        "JspExample.txt",    SYNTAX_STYLE_JSP), bg, menu);
+		addItem(new StyleAction(this, "Less",       "LessExample.txt",   SYNTAX_STYLE_LESS), bg, menu);
 		addItem(new StyleAction(this, "Perl",       "PerlExample.txt",   SYNTAX_STYLE_PERL), bg, menu);
 		addItem(new StyleAction(this, "HTML",       "HtmlExample.txt",   SYNTAX_STYLE_HTML), bg, menu);
 		addItem(new StyleAction(this, "PHP",        "PhpExample.txt",    SYNTAX_STYLE_PHP), bg, menu);

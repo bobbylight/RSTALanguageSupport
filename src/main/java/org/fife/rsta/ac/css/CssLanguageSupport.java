@@ -48,9 +48,20 @@ public class CssLanguageSupport extends AbstractLanguageSupport {
 	}
 
 
+	/**
+	 * Creates a completion provider for this language.  Subclasses can
+	 * override.
+	 *
+	 * @return A completion provider to use for this language.
+	 */
+	protected CssCompletionProvider createProvider() {
+		return new CssCompletionProvider();
+	}
+
+
 	private CssCompletionProvider getProvider() {
 		if (provider==null) {
-			provider = new CssCompletionProvider();
+			provider = createProvider();
 		}
 		return provider;
 	}

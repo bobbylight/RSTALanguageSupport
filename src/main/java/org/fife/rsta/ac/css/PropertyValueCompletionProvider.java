@@ -53,7 +53,7 @@ import org.fife.ui.rsyntaxtextarea.Token;
  * @author Robert Futrell
  * @version 1.0
  */
-class PropertyValueCompletionProvider extends CompletionProviderBase {
+public class PropertyValueCompletionProvider extends CompletionProviderBase {
 
 	private List<Completion> htmlTagCompletions;
 	private List<Completion> propertyCompletions;
@@ -69,6 +69,9 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 	 */
 	private String currentProperty;
 
+	private boolean isLess;
+
+
 	/**
 	 * The most common vendor prefixes.  We ignore these.
 	 */
@@ -79,9 +82,12 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 		new BasicCssCompletion(this, "inherit", "css_propertyvalue_identifier");
 
 
-	public PropertyValueCompletionProvider() {
+	public PropertyValueCompletionProvider(boolean isLess) {
 
 		setAutoActivationRules(true, "@: ");
+		// While we don't have functions per-se in CSS, we do in Less
+		setParameterizedCompletionParams('(', ", ", ')');
+		this.isLess = isLess;
 
 		try {
 			this.valueCompletions = new HashMap<String, List<Completion>>();
@@ -168,10 +174,10 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 	}
 
 
-	public int getLexerState(RSyntaxTextArea textArea, int line) {
+	private LexerState getLexerState(RSyntaxTextArea textArea, int line) {
 
 		int dot = textArea.getCaretPosition();
-		int state = 0; // 0==selector, 1==property, 2==value
+		LexerState state = LexerState.SELECTOR;
 		boolean somethingFound = false;
 		currentProperty = null;
 
@@ -179,30 +185,37 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 			Token t = textArea.getTokenListForLine(line--);
 			while (t!=null && t.isPaintable() && !t.containsPosition(dot)) {
 				if (t.getType()==Token.RESERVED_WORD) {
-					state = 1;
+					state = LexerState.PROPERTY;
 					currentProperty = removeVendorPrefix(t.getLexeme());
 					somethingFound = true;
 				}
-				else if (t.getType()==Token.ANNOTATION || t.getType()==Token.FUNCTION ||
+				else if (!isLess && t.getType() == Token.VARIABLE) {
+					// TokenTypes.VARIABLE == IDs in CSS, variables in Less
+					state = LexerState.SELECTOR;
+					currentProperty = null;
+					somethingFound = true;
+				}
+				else if (t.getType()==Token.PREPROCESSOR ||
+						t.getType()==Token.FUNCTION ||
 						t.getType()==Token.LITERAL_NUMBER_DECIMAL_INT) {
-					state = 2;
+					state = LexerState.VALUE;
 					somethingFound = true;
 				}
 				else if (t.isLeftCurly()) {
-					state = 1;
+					state = LexerState.PROPERTY;
 					somethingFound = true;
 				}
 				else if (t.isRightCurly()) {
-					state = 0;
+					state = LexerState.SELECTOR;
 					currentProperty = null;
 					somethingFound = true;
 				}
 				else if (t.isSingleChar(Token.OPERATOR, ':')) {
-					state = 2;
+					state = LexerState.VALUE;
 					somethingFound = true;
 				}
 				else if (t.isSingleChar(Token.OPERATOR, ';')) {
-					state = 1;
+					state = LexerState.PROPERTY;
 					currentProperty = null;
 					somethingFound = true;
 				}
@@ -226,17 +239,18 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 
 			// Our completion choices depend on where we are in the CSS
 			RSyntaxTextArea textArea = (RSyntaxTextArea)comp;
-			int lexerState = getLexerState(textArea, textArea.getCaretLineNumber());
+			LexerState lexerState = getLexerState(textArea,
+					textArea.getCaretLineNumber());
 
 			List<Completion> choices = new ArrayList<Completion>();
 			switch (lexerState) {
-				case 0:
+				case SELECTOR:
 					choices = htmlTagCompletions;
 					break;
-				case 1:
+				case PROPERTY:
 					choices = propertyCompletions;
 					break;
-				case 2:
+				case VALUE:
 					choices = valueCompletions.get(currentProperty);
 					List<CompletionGenerator> generators =
 							valueCompletionGenerators.get(currentProperty);
@@ -259,11 +273,18 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 						}
 					}
 					if (choices==null) {
-						return retVal;
+						choices = new ArrayList<Completion>();
 					}
 					Collections.sort(choices);
 					break;
 			}
+
+			if (isLess) {
+				if (addLessCompletions(choices, lexerState, comp, text)) {
+					Collections.sort(choices);
+				}
+			}
+
 			int index = Collections.binarySearch(choices, text, comparator);
 			if (index<0) { // No exact match
 				index = -index - 1;
@@ -296,6 +317,22 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 
 		return retVal;
 
+	}
+
+
+	/**
+	 * Adds completions specific to Less.  The default implementation does
+	 * nothing; subclasses can override.
+	 *
+	 * @param completions The completion set to add to.
+	 * @param state The current lexer state.
+	 * @param comp The text component whose content is being parsed.
+	 * @param alreadyEntered The text already entered by the user.
+	 * @return Whether any completions were added.
+	 */
+	protected boolean addLessCompletions(List<Completion> completions,
+			LexerState state, JTextComponent comp, String alreadyEntered) {
+		return false;
 	}
 
 
@@ -395,7 +432,8 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 	 *        custom completions are defined in the XML.
 	 * @throws IOException If an IO error occurs.
 	 */
-	private List<Completion> loadFromXML(InputStream in, ClassLoader cl) throws IOException {
+	private List<Completion> loadFromXML(InputStream in, ClassLoader cl)
+			throws IOException {
 
 		//long start = System.currentTimeMillis();
 		List<Completion> completions = null;
@@ -430,7 +468,7 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 	 * @param resource A resource the current ClassLoader can get to.
 	 * @throws IOException If an IO error occurs.
 	 */
-	private List<Completion> loadFromXML(String resource) throws IOException {
+	protected List<Completion> loadFromXML(String resource) throws IOException {
 		ClassLoader cl = getClass().getClassLoader();
 		InputStream in = cl.getResourceAsStream(resource);
 		if (in==null) {
@@ -522,6 +560,15 @@ class PropertyValueCompletionProvider extends CompletionProviderBase {
 			valueCompletions.put(prop, completions);
 		}
 
+	}
+
+
+	/**
+	 * A simple enum to keep track of what "state" we're in at a specific
+	 * location in a CSS file.
+	 */
+	protected static enum LexerState {
+		SELECTOR, PROPERTY, VALUE;
 	}
 
 

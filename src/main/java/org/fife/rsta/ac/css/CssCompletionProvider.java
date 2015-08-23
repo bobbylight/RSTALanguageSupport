@@ -41,8 +41,7 @@ public class CssCompletionProvider extends LanguageAwareCompletionProvider {
 	 * @see #createCommentCompletionProvider()
 	 */
 	protected CompletionProvider createCodeCompletionProvider() {
-		return new PropertyValueCompletionProvider();
-
+		return new PropertyValueCompletionProvider(false);
 	}
 
 

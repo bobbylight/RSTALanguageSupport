@@ -98,6 +98,8 @@ public class LanguageSupportFactory implements PropertyChangeListener {
 				prefix + "js.JavaScriptLanguageSupport");
 		addLanguageSupport(SyntaxConstants.SYNTAX_STYLE_JSP,
 				prefix + "jsp.JspLanguageSupport");
+		addLanguageSupport(SyntaxConstants.SYNTAX_STYLE_LESS,
+				prefix + "less.LessLanguageSupport");
 		addLanguageSupport(SyntaxConstants.SYNTAX_STYLE_PERL,
 				prefix + "perl.PerlLanguageSupport");
 		addLanguageSupport(SyntaxConstants.SYNTAX_STYLE_PHP,

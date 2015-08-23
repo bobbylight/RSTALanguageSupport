@@ -1,0 +1,567 @@
+### From http://lesscss.org/functions/#functions-overview ###
+
+### Misc. Functions ###
+
+name: color
+desc: Parses a color, so a string representing a color becomes a color.
+param: string: a string of the specified color.
+Returns: color
+
+name: image-size
+desc: Gets the image dimensions from a file.
+param: string: the file to get the dimensions for.
+Returns: dimension
+Added in: v2.2.0
+
+name: image-width
+desc: Gets the image width from a file.
+param: string: the file to get the dimensions for.
+Returns: dimension
+Added in: v2.2.0
+
+name: image-height
+desc: Gets the image height from a file.
+param: string: the file to get the dimensions for.
+Returns: dimension
+Added in: v2.2.0
+
+name: convert
+desc: Convert a number from one unit into another.
+   The first argument contains a number with units and second argument contains units. If the units are compatible, the number is converted. If they are not compatible, the first argument is returned unmodified.
+   See unit for changing the unit without conversion.
+   Compatible unit groups:
+   <ul>
+      <li>lengths: m, cm, mm, in, pt and pc,
+      <li>time: s and ms,
+      <li>angle: rad, deg, grad and turn.
+   </ul>
+param: number: a floating point number with units.
+param: units: an identifier, string or escaped value.
+Returns: number
+
+name: data-uri
+desc: Inlines a resource and falls back to url() if the ieCompat option is on and the resource is too large, or if you use the function in the browser. If the MIME type is not given then node uses the mime package to determine the correct mime type.
+param: mimetype: (Optional) A MIME type string.
+param: url: The URL of the file to inline.
+
+name: default
+desc: Available only inside guard conditions and returns true only if no other mixin matches, false otherwise.
+param: dimension: A number, with or without a dimension.
+param: unit: (Optional) the unit to change to, or if omitted it will remove the unit.
+
+name: get-unit
+desc: Returns units of a number.  If the argument contains a number with units, the function returns its units. The argument without units results in an empty return value.
+param: number: a number with or without units.
+
+name: svg-gradient
+desc: Generates multi-stop svg gradients.
+   Svg-gradient function generates multi-stop svg gradients. It must have at least three parameters. First parameter specifies gradient type and direction and remaining parameters list colors and their positions. The position of first and last specified color are optional, remaining colors must have positions specified.
+   The direction must be one of to bottom, to right, to bottom right, to top right, ellipse or ellipse at center. The direction can be specified as both escaped value ~'to bottom' and space separated list of words to bottom.
+   The direction must be followed by two or more color stops. They can be supplied either inside a list or you can specify each color stops in separate argument.
+param: direction: escaped value or list of identifiers
+param: color-percentage-pair: One or more of the first color and its relative position (position is optional)
+Returns: url with "URI-Encoded" svg gradient.
+
+
+
+### String functions ###
+
+name: escape
+desc: Applies URL-encoding to special characters found in the input string.
+   These characters are not encoded: ,, /, ?, @, &, +, ', ~, ! and $.
+   Most common encoded characters are: \<space\>, #, ^, (, ), {, }, |, :, >, <, ;, ], [ and =.
+param: string: a string to escape.
+Returns: escaped string content without quotes.
+
+name: e
+desc: CSS escaping, replaced with ~"value" syntax.
+   It expects string as a parameter and return its content as is, but without quotes. It can be used to output CSS value which is either not valid CSS syntax, or uses proprietary syntax which Less doesn't recognize.
+param: string: a string to escape.
+Returns: string: the escaped string, without quotes.
+
+name: %
+desc: The function %(string, arguments ...) formats a string.
+   The first argument is string with placeholders. All placeholders start with percentage symbol % followed by letter s,S,d,D,a, or A. Remaining arguments contain expressions to replace placeholders. If you need to print the percentage symbol, escape it by another percentage %%.
+   Use uppercase placeholders if you need to escape special characters into their utf-8 escape codes. The function escapes all special characters except ()'~!. Space is encoded as %20. Lowercase placeholders leave special characters as they are.
+   
+   Placeholders:
+   <ul>
+      <li>d, D, a, A - can be replaced by any kind of argument (color, number, escaped value, expression, ...). If you use them in combination with string, the whole string will be used - including its quotes. However, the quotes are placed into the string as they are, they are not escaped by "/" nor anything similar.
+      <li>s, S - can be replaced by any expression. If you use it with string, only the string value is used - quotes are omitted.
+   </ul>
+param: string: format string with placeholders,
+param: anything: values to replace placeholders.
+Returns: formatted string.
+
+name: replace
+desc: Replaces a text within a string.
+param: string: The string to search and replace in.
+param: pattern: A string or regular expression pattern to search for.
+param: replacement: The string to replace the matched pattern with.
+param: flags: (Optional) regular expression flags.
+Returns: a string with the replaced values.
+Added in: v1.7.0
+
+
+### List functions ###
+
+
+name: length
+desc: Returns the number of elements in a value list.
+param: list: a comma or space separated list of values.
+Returns: an integer number of elements in a list
+
+name: extract
+desc: Returns the value at a specified position in a list.
+param: list: a comma or space separated list of values. index - an integer that specifies a position of a list element to return. Returns: a value at the specified position in a list.
+
+
+
+### Math functions ###
+
+
+name: ceil
+desc: Rounds up to the next highest integer.
+param: number: a floating point number.
+Returns: integer
+
+name: floor
+desc: Rounds down to the next lowest integer.
+param: number: a floating point number.
+Returns: integer
+
+name: percentage
+desc: Converts a floating point number into a percentage string.
+param: number: a floating point number.
+Returns: string
+
+name: round
+desc: Applies rounding.
+param: number: A floating point number.
+param: decimalPlaces: Optional: The number of decimal places to round to. Defaults to 0.
+Returns: number
+
+name: sqrt
+desc: Calculates square root of a number. Keeps units as they are.
+param: number: floating point number.
+Returns: number
+
+name: abs
+desc: Calculates absolute value of a number. Keeps units as they are.
+param: number: a floating point number.
+Returns: number
+
+name: sin
+desc: Calculates sine function.  Assumes radians on numbers without units.
+param: number: a floating point number.
+Returns: number
+
+name: asin
+desc: Calculates arcsine (inverse of sine) function.  Returns number in radians e.g. a number between -&pi;/2 and &pi;/2.
+param: number: floating point number from [-1, 1] interval.
+Returns: number
+
+name: cos
+desc: Calculates cosine function.  Assumes radians on numbers without units.
+param: number: a floating point number.
+Returns: number
+
+name: acos
+desc: Calculates arccosine (inverse of cosine) function.  Returns number in radians e.g. a number between 0 and &pi;.
+param: number: a floating point number from [-1, 1] interval.
+Returns: number
+
+name: tan
+desc: Calculates tangent function. Assumes radians on numbers without units.
+param: number: a floating point number.
+Returns: number
+
+name: atan
+desc: Calculates arctangent (inverse of tangent) function. Returns number in radians e.g. a number between -&pi;/2 and &pi;/2.
+param: number: a floating point number.
+Returns: number
+
+name: pi
+desc: Returns &#960; (pi);
+Returns: number
+
+name: pow
+desc: Returns the value of the first argument raised to the power of the second argument.
+   Returned value has the same dimension as the first parameter and the dimension of the second parameter is ignored.
+param: base: a floating point number.
+param: exponent: a floating point number.
+Returns: number
+
+name: mod
+desc: Returns the value of the first argument modulus second argument. Returned value has the same dimension as the first parameter, the dimension of the second parameter is ignored. The function is able to handle also negative and floating point numbers.
+param: number: a floating point number.
+param: number: a floating point number.
+Returns: number
+
+name: min
+desc: Returns the lowest of one or more values.
+param: value1, ..., valueN: one or more values to compare.
+Returns: the lowest value.
+
+name: max
+desc: Returns the highest of one or more values.
+param: value1, ..., valueN: one or more values to compare.
+Returns: the highest value.
+
+
+### Type functions ###
+
+name: isnumber
+desc: Returns true if a value is a number, false otherwise.
+param: value: a value or variable being evaluated.
+Returns: true if value is a number, false otherwise.
+
+name: isstring
+desc: Returns true if a value is a string, false otherwise.
+param: value: a value or variable being evaluated.
+Returns: true if value is a string, false otherwise.
+
+name: iscolor
+desc: Returns true if a value is a color, false otherwise.
+param: value: a value or variable being evaluated.
+Returns: true if value is a color, false otherwise.
+
+name: iskeyword
+desc: Returns true if a value is a keyword, false otherwise.
+param: value: a value or variable being evaluated.
+Returns: true if value is a keyword, false otherwise.
+
+name: isurl
+desc: Returns true if a value is a url, false otherwise.
+param: value: a value or variable being evaluated.
+Returns: true if value is a url, false otherwise.
+
+name: ispixel
+desc: Returns true if a value is a number in pixels, false otherwise.
+param: value: a value or variable being evaluated.
+Returns: true if value is a pixel, false otherwise.
+
+name: isem
+desc: Returns true if a value is an em value, false otherwise.
+param: value: a value or variable being evaluated.
+Returns: true if value is an em value, false otherwise.
+
+name: ispercentage
+desc: Returns true if a value is a percentage value, false otherwise.
+param: value: a value or variable being evaluated.
+Returns: true if value is a percentage value, false otherwise.
+
+name: isunit
+desc: Returns true if a value is a number in specified units, false otherwise.
+param: value: a value or variable being evaluated.
+param: unit: a unit identifier (optionally quoted) to test for.
+Returns: true if value is a number in specified units, false otherwise.
+
+name: isruleset
+desc: Returns true if a value is a ruleset, false otherwise.
+param: value: a variable being evaluated.
+Returns: true if value is a ruleset, false otherwise.
+
+
+
+### Color Definition functions ###
+
+name: rgb
+desc: Creates an opaque color object from decimal red, green and blue (RGB) values.
+   Literal color values in standard HTML/CSS formats may also be used to define colors, for example #ff0000.
+param: red: An integer 0-255 or percentage 0-100%.
+param: green: An integer 0-255 or percentage 0-100%.
+param: blue: An integer 0-255 or percentage 0-100%.
+Returns: color
+
+name: rgba
+desc: Creates a transparent color object from decimal red, green, blue and alpha (RGBA) values.
+param: red: An integer 0-255 or percentage 0-100%.
+param: green: An integer 0-255 or percentage 0-100%.
+param: blue: An integer 0-255 or percentage 0-100%.
+param: alpha: A number 0-1 or percentage 0-100%.
+Returns: color
+
+name: argb
+desc: Creates a hex representation of a color in #AARRGGBB format (NOT #RRGGBBAA!).
+   This format is used in Internet Explorer, and .NET and Android development.
+param: color: The (rgba) color to convert to argb)
+Returns: string
+
+name: hsl
+desc: Creates an opaque color object from hue, saturation and lightness (HSL) values.
+param: hue: An integer 0-360 representing degrees.
+param: saturation: A percentage 0-100% or number 0-1.
+param: lightness: A percentage 0-100% or number 0-1.
+Returns: color
+
+name: hsla
+desc: Creates a transparent color object from hue, saturation, lightness and alpha (HSLA) values.
+param: hue: An integer 0-360 representing degrees.
+param: saturation: A percentage 0-100% or number 0-1.
+param: lightness: A percentage 0-100% or number 0-1.
+param: alpha: A percentage 0-100% or number 0-1.
+Returns: color
+
+name: hsv
+desc: Creates an opaque color object from hue, saturation and value (HSV) values.
+   Note that this is a color space available in Photoshop, and is not the same as hsl.
+param: hue: An integer 0-360 representing degrees.
+param: saturation: A percentage 0-100% or number 0-1.
+param: value: A percentage 0-100% or number 0-1.
+Returns: color
+
+name: hsva
+desc: Creates a transparent color object from hue, saturation, value and alpha (HSVA) values.
+   Note that this is not the same as hsla, and is a color space available in Photoshop.
+param: hue: An integer 0-360 representing degrees.
+param: saturation: A percentage 0-100% or number 0-1.
+param: value: A percentage 0-100% or number 0-1.
+param: alpha: A percentage 0-100% or number 0-1.
+Returns: color
+
+
+### Color channel functions ###
+
+name: hue
+desc: Extracts the hue channel of a color object in the HSL color space.
+param: color: a color object.
+Returns: integer 0-360
+
+name: saturation
+desc: Extracts the saturation channel of a color object in the HSL color space.
+param: color: a color object.
+Returns: percentage 0-100
+
+name: lightness
+desc: Extracts the lightness channel of a color object in the HSL color space.
+param: color: a color object.
+Returns: percentage 0-100
+
+name: hsvhue
+desc: Extracts the hue channel of a color object in the HSV color space.
+param: color: a color object.
+Returns: integer 0-360
+
+name: hsvsaturation
+desc: Extracts the saturation channel of a color object in the HSV color space.
+param: color: a color object.
+Returns: percentage 0-100
+
+name: hsvvalue
+desc: Extracts the value channel of a color object in the HSV color space.
+param: color: a color object.
+Returns: percentage 0-100
+
+name: red
+desc: Extracts the red channel of a color object.
+param: color: a color object.
+Returns: float 0-255
+
+name: green
+desc: Extracts the green channel of a color object.
+param: color: a color object.
+Returns: float 0-255
+
+name: blue
+desc: Extracts the blue channel of a color object.
+param: color: a color object.
+Returns: float 0-255
+
+name: alpha
+desc: Extracts the alpha channel of a color object.
+param: color: a color object.
+Returns: float 0-1
+
+name: luma
+desc: Calculates the luma (perceptual brightness) of a color object.
+   Uses SMPTE C / Rec. 709 coefficients, as recommended in WCAG 2.0. This calculation is also used in the contrast function.
+   Before v1.7.0 the luma was calculated without gamma correction, use the luminance function to calculate these "old" values.
+param: color: a color object.
+Returns: percentage 0-100%
+
+name: luminance
+desc: Calculates the value of the luma without gamma correction (this function was named luma before v1.7.0)
+param: color: a color object.
+Returns: percentage 0-100%
+
+
+### Color operation functions ###
+
+name: saturate
+desc: Increase the saturation of a color in the HSL color space by an absolute amount.
+param: color: A color object.
+param: amount: A percentage 0-100%.
+Returns: color
+
+name: saturate
+desc: Increase the saturation of a color in the HSL color space by an absolute amount.
+param: color: A color object.
+param: amount: A percentage 0-100%.
+param: method: Optional, set to relative for the adjustment to be relative to the current value.
+Returns: color
+
+name: desaturate
+desc: Decrease the saturation of a color in the HSL color space by an absolute amount.
+param: color: A color object.
+param: amount: A percentage 0-100%.
+Returns: color
+
+name: desaturate
+desc: Decrease the saturation of a color in the HSL color space by an absolute amount.
+param: color: A color object.
+param: amount: A percentage 0-100%.
+param: method: Optional, set to relative for the adjustment to be relative to the current value.
+Returns: color
+
+name: lighten
+desc: Increase the lightness of a color in the HSL color space by an absolute amount.
+param: color: A color object.
+param: amount: A percentage 0-100%.
+Returns: color
+
+name: lighten
+desc: Increase the lightness of a color in the HSL color space by an absolute amount.
+param: color: A color object.
+param: amount: A percentage 0-100%.
+param: method: Optional, set to relative for the adjustment to be relative to the current value.
+Returns: color
+
+name: darken
+desc: Decrease the lightness of a color in the HSL color space by an absolute amount.
+param: color: A color object.
+param: amount: A percentage 0-100%.
+Returns: color
+
+name: darken
+desc: Decrease the lightness of a color in the HSL color space by an absolute amount.
+param: color: A color object.
+param: amount: A percentage 0-100%.
+param: method: Optional, set to relative for the adjustment to be relative to the current value.
+Returns: color
+
+name: fadein
+desc: Decrease the transparency (or increase the opacity) of a color, making it more opaque.
+   Has no effect on opaque colors. To fade in the other direction use fadeout.
+param: color: A color object.
+param: amount: A percentage 0-100%.
+Returns: color
+
+name: fadein
+desc: Decrease the transparency (or increase the opacity) of a color, making it more opaque.
+   Has no effect on opaque colors. To fade in the other direction use fadeout.
+param: color: A color object.
+param: amount: A percentage 0-100%.
+param: method: Optional, set to relative for the adjustment to be relative to the current value.
+Returns: color
+
+name: fadeout
+desc: Increase the transparency (or decrease the opacity) of a color, making it less opaque. To fade in the other direction use fadein.
+param: color: A color object.
+param: amount: A percentage 0-100%.
+Returns: color
+
+name: fadeout
+desc: Increase the transparency (or decrease the opacity) of a color, making it less opaque. To fade in the other direction use fadein.
+param: color: A color object.
+param: amount: A percentage 0-100%.
+param: method: Optional, set to relative for the adjustment to be relative to the current value.
+Returns: color
+
+name: fade
+desc: Set the absolute transparency of a color. Can be applied to colors whether they already have an opacity value or not.
+param: color: A color object.
+param: amount: A percentage 0-100%.
+Returns: color
+
+name: spin
+desc: Rotate the hue angle of a color in either direction.
+   While the angle range is 0-360, it applies a mod 360 operation, so you can pass in much larger (or negative) values and they will wrap around e.g. angles of 360 and 720 will produce the same result. Note that colors are passed through an RGB conversion, which doesn't retain hue value for greys (because hue has no meaning when there is no saturation), so make sure you apply functions in a way that preserves hue, for example don't do this:
+   <pre>@c: saturate(spin(#aaaaaa, 10), 10%);</pre>
+   Do this instead:
+   <pre>@c: spin(saturate(#aaaaaa, 10%), 10);</pre>
+   Colors are always returned as RGB values, so applying spin to a grey value will do nothing.
+param: color: A color object.
+param: angle: A number of degrees to rotate (+ or -).
+Returns: color
+
+name: mix
+desc: Mix two colors together in variable proportion. Opacity is included in the calculations.
+param: color1: A color object.
+param: color2: A color object.
+param: weight: Optional, a percentage balance point between the two colors, defaults to 50%.
+Returns: color
+
+name: greyscale
+desc: Remove all saturation from a color in the HSL color space; the same as calling desaturate(@color, 100%).
+   Because the saturation is not affected by hue, the resulting color mapping may be somewhat dull or muddy; luma may provide a better result as it extracts perceptual rather than linear brightness, for example greyscale('#0000ff') will return the same value as greyscale('#00ff00'), though they appear quite different in brightness to the human eye.
+param: color: A color object.
+Returns: color
+
+name: contrast
+desc: Choose which of two colors provides the greatest contrast with another.
+   This is useful for ensuring that a color is readable against a background, which is also useful for accessibility compliance. This function works the same way as the contrast function in Compass for SASS. In accordance with WCAG 2.0, colors are compared using their gamma-corrected luma value, not their lightness.
+   The light and dark parameters can be supplied in either order - the function will calculate their luma values and assign light and dark automatically, which means you can't use this function to select the least contrasting color by reversing the order.
+param: color: A color object to compare against.
+param: dark: optional - A designated dark color (defaults to black).
+param: light: optional - A designated light color (defaults to white).
+param: threshold: optional - A percentage 0-100% specifying where the transition from "dark" to "light" is (defaults to 43%, matching SASS). This is used to bias the contrast one way or another, for example to allow you to decide whether a 50% grey background should result in black or white text. You would generally set this lower for 'lighter' palettes, higher for 'darker' ones.
+Returns: color
+
+
+### Color blending functions ###
+
+name: multiply
+desc: Multiply two colors. Corresponding RGB channels from each of the two colors are multiplied together then divided by 255. The result is a darker color.
+param: color1: A color object.
+param: color2: A color object.
+Returns: color
+
+name: screen
+desc: Do the opposite of multiply. The result is a brighter color.
+param: color1: A color object.
+param: color2: A color object.
+Returns: color
+
+name: overlay
+desc: Combines the effects of both multiply and screen. Conditionally make light channels lighter and dark channels darker. Note: The results of the conditions are determined by the first color parameter.
+param: color1: A base color object. Also the determinant color to make the result lighter or darker.
+param: color2: A color object to overlay.
+Returns: color
+
+name: softlight
+desc: Similar to overlay but avoids pure black resulting in pure black, and pure white resulting in pure white.
+param: color1: A color object to soft light another.
+param: color2: A color object to be soft lighten.
+Returns: color
+
+name: hardlight
+desc: The same as overlay but with the color roles reversed.
+param: color1: A color object to overlay.
+param: color2: A base color object. Also the determinant color to make the result lighter or darker.
+Returns: color
+
+name: difference
+desc: Subtracts the second color from the first color on a channel-by-channel basis. Negative values are inverted. Subtracting black results in no change; subtracting white results in color inversion.
+param: color1: A color object to act as the minuend.
+param: color2: A color object to act as the subtrahend.
+Returns: color
+
+name: exclusion
+desc: A similar effect to difference with lower contrast.
+param: color1: A color object to act as the minuend.
+param: color2: A color object to act as the subtrahend.
+Returns: color
+
+name: average
+desc: Compute the average of two colors on a per-channel (RGB) basis.
+param: color1: A color object.
+param: color2: A color object.
+Returns: color
+
+name: negation
+desc: Do the opposite effect to difference.
+   The result is a brighter color. Note: The opposite effect doesn't mean the inverted effect as resulting from an addition operation.
+param: color1: A color object to act as the minuend.
+param: color2: A color object to act as the subtrahend.
+Returns: color
