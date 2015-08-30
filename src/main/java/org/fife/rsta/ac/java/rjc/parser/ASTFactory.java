@@ -597,7 +597,7 @@ OUTER:
 		}
 
 } catch (IOException ioe) {
-	if (!(ioe instanceof EOFException)) { // Not just "end of file"
+	if (DEBUG && !(ioe instanceof EOFException)) { // Not just "end of file"
 		ioe.printStackTrace();
 	}
 	ParserNotice notice = null;
