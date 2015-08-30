@@ -1,7 +1,7 @@
 RSTALanguageSupport Readme
 --------------------------
-Version 2.5.7
-23jun2015
+Version 2.5.8
+30aug2015
 
 ----------------------------------------
 Contents
@@ -97,7 +97,10 @@ Languages with support include:
 6. JSP
    - Auto-completion for standard JSP tags.
 
-7. Perl
+7. Less
+   - Auto-completion for standard less functions as well as CSS constructs.
+
+8. Perl
    - Error checking (squiggle underlining) via using "perl -c ..." on the local
      system.  You can toggle taint mode, etc.
    - Auto-completion for built-in function names.
@@ -106,19 +109,19 @@ Languages with support include:
      scope at the current caret position).
    - Can specify/override PERL5LIB when syntax checking.
 
-8. PHP
+9. PHP
    - Auto-completion for HTML 5 tags and attributes.  This is inherited
      directly from the HTML support, so improvements there will show up here.
    - Auto-completion for PHP functions.
    - Parameter assistance for PHP functions.
 
-9. Unix Shell
+10. Unix Shell
    - Possibly broken at the moment.  Should attempt to use the local man pages
      for descriptions of standard shell commands if the local host is *nix,
      otherwise (on Windows) it defaults to short, generic descriptions.
      Whether local man pages are used is configurable.
 
-10. XML
+11. XML
    - Ctrl+Shift+O (Cmd+Shift+O on OS X) opens "Go to Member" popup.
    - XmlOutlineTree component provides a tree view of an XML file that is
      updated live with edits.
@@ -141,6 +144,7 @@ properly.
          org/fife/rsta/ac/html          Code completion for HTML
          org/fife/rsta/ac/java/**       Code completion for Java
          org/fife/rsta/ac/js/**         Code completion for JavaScript
+         org/fife/rsta/ac/less/**       Code completion for Less
          org/fife/rsta/ac/perl          Code completion for Perl
          org/fife/rsta/ac/php           Code completion for PHP
          org/fife/rsta/ac/sh            Code completion fro Unix shell
