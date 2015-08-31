@@ -597,7 +597,7 @@ OUTER:
 		}
 
 } catch (IOException ioe) {
-	if (DEBUG && !(ioe instanceof EOFException)) { // Not just "end of file"
+	if (isDebug() && !(ioe instanceof EOFException)) { // Not just "end of file"
 		ioe.printStackTrace();
 	}
 	ParserNotice notice = null;
@@ -1450,6 +1450,11 @@ OUTER:
 
 		return typeParams;
 
+	}
+
+
+	private static final boolean isDebug() {
+		return DEBUG;
 	}
 
 
