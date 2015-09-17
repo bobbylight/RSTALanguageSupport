@@ -4,7 +4,6 @@ org.fife.rsta.ac.groovy.GroovyLanguageRegistration
 org.fife.rsta.ac.jsp.JspLanguageRegistration
 org.fife.rsta.ac.less.LessLanguageRegistration
 org.fife.rsta.ac.js.JavaScriptLanguageRegistration
-org.fife.rsta.ac.bsh.JavaLanguageRegistration
 org.fife.rsta.ac.c.CLanguageRegistration
 org.fife.rsta.ac.html.HtmlLanguageRegistration
 org.fife.rsta.ac.php.PhpLanguageRegistration
