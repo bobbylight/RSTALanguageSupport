@@ -11,7 +11,7 @@ package org.fife.rsta.ac;
  */
 public interface LanguageSupportRegistration {
 
-    public String getLanguage();
+    String getLanguage();
 
-    public String getLanguageSupportType();
+    String getLanguageSupportType();
 }
