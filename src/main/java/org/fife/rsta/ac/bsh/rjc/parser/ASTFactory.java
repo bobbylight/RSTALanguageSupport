@@ -1,0 +1,888 @@
+/*
+ * 03/21/2010
+ *
+ * Copyright (C) 2010 Robert Futrell
+ * robert_futrell at users.sourceforge.net
+ * http://fifesoft.com/rsyntaxtextarea
+ *
+ * This library is distributed under a modified BSD license.  See the included
+ * RSTALanguageSupport.License.txt file for details.
+ */
+package org.fife.rsta.ac.bsh.rjc.parser;
+
+import org.fife.rsta.ac.bsh.rjc.lexer.Token;
+import org.fife.rsta.ac.bsh.rjc.lexer.Scanner;
+import org.fife.rsta.ac.bsh.rjc.lexer.TokenTypes;
+import java.io.EOFException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.fife.rsta.ac.bsh.rjc.ast.CodeBlock;
+import org.fife.rsta.ac.bsh.rjc.ast.CompilationUnit;
+import org.fife.rsta.ac.bsh.rjc.ast.FormalParameter;
+import org.fife.rsta.ac.bsh.rjc.ast.ImportDeclaration;
+import org.fife.rsta.ac.bsh.rjc.ast.LocalVariable;
+import org.fife.rsta.ac.bsh.rjc.ast.Method;
+import org.fife.rsta.ac.bsh.rjc.ast.NormalClassDeclaration;
+import org.fife.rsta.ac.bsh.rjc.ast.Package;
+import org.fife.rsta.ac.bsh.rjc.ast.TypeDeclaration;
+import org.fife.rsta.ac.bsh.rjc.ast.TypeDeclarationContainer;
+import org.fife.rsta.ac.bsh.rjc.lang.Annotation;
+import org.fife.rsta.ac.bsh.rjc.lang.Modifiers;
+import org.fife.rsta.ac.bsh.rjc.lang.Type;
+import org.fife.rsta.ac.bsh.rjc.lang.TypeArgument;
+import org.fife.rsta.ac.bsh.rjc.notices.ParserNotice;
+
+/**
+ * Generates an abstract syntax tree for a Java source file.
+ *
+ * @author Robert Futrell
+ * @version 1.0
+ */
+public class ASTFactory implements TokenTypes {
+
+    private static final boolean DEBUG = false;
+
+    public ASTFactory() {
+    }
+
+    /**
+     * Checks whether a local variable's name collides with a local variable
+     * defined earlier. Note that this method assumes that it is called
+     * immediately whenever a variable is parsed, thus any other variables
+     * declared in a code block were declared before the one being checked.
+     *
+     * @param cu The compilation unit.
+     * @param lVar The just-scanned local variable.
+     * @param block The code block the variable is in.
+     * @param m The method the (possibly nested) code block <code>block</code>
+     * is in, or <code>null</code> for none.
+     */
+    private void checkForDuplicateLocalVarNames(CompilationUnit cu,
+            Token lVar, CodeBlock block, Method m) {
+
+        String name = lVar.getLexeme();
+        boolean found = false;
+
+        // See if a local variable defined previously in this block has the
+        // same name.
+        for (int i = 0; i < block.getLocalVarCount(); i++) {
+            LocalVariable otherLocal = block.getLocalVar(i);
+            if (name.equals(otherLocal.getName())) {
+                cu.addParserNotice(lVar, "Duplicate local variable: " + name);
+                found = true;
+                break;
+            }
+        }
+
+        // If not...
+        if (!found) {
+
+            // If this was a nested code block, check previously-defined
+            // variables in the parent block.
+            if (block.getParent() != null) {
+                checkForDuplicateLocalVarNames(cu, lVar, block.getParent(), m);
+            } // If this was the highest-level code block, if we're in the body
+            // of a method, check the method's parameters.
+            else if (m != null) {
+                for (int i = 0; i < m.getParameterCount(); i++) {
+                    FormalParameter param = m.getParameter(i);
+                    if (name.equals(param.getName())) {
+                        cu.addParserNotice(lVar, "Duplicate local variable: " + name);
+                        break;
+                    }
+                }
+            }
+
+        }
+
+    }
+
+    /**
+     * Assumes <tt>t</tt> is the actual '<tt>@foobar</tt>' annotation token.
+     *
+     * @param cu
+     * @param s
+     * @return
+     * @throws IOException
+     */
+    private Annotation _getAnnotation(CompilationUnit cu, Scanner s)
+            throws IOException {
+
+        s.yylexNonNull(ANNOTATION_START, "Annotation expected");
+        Type type = _getType(cu, s);
+
+        if (s.yyPeekCheckType() == SEPARATOR_LPAREN) {
+            s.yylex();
+            // TODO: Read rest of Annotation stuff
+            s.eatThroughNextSkippingBlocks(SEPARATOR_RPAREN);
+        }
+
+        Annotation a = new Annotation(type);
+        return a;
+
+    }
+
+    private CodeBlock _getScript(CompilationUnit cu, CodeBlock parent, Method m,
+            Scanner s, boolean isStatic) throws IOException {
+        return _getScript(cu, parent, m, s, isStatic, 1);
+    }
+
+    /**
+     * Parses a block of code. This should not be called.
+     *
+     * @param parent The parent code block, or <code>null</code> if none (i.e.
+     * this is the body of a method, a static initializer block, etc.).
+     * @param m The method containing this block, or <code>null</code> if this
+     * block is not part of a method.
+     * @param s The scanner.
+     * @param isStatic Whether this is a static code block.
+     * @param depth The nested depth of this code block.
+     */
+    private CodeBlock _getBlock(CompilationUnit cu, CodeBlock parent,
+            Method m, Scanner s,
+            boolean isStatic, int depth) throws IOException {
+
+        log("Entering _getBlock() (" + depth + ")");
+
+        // TODO: Implement me to get variable declarations.
+        Token t = s.yylexNonNull(SEPARATOR_LBRACE, "'{' expected");
+        CodeBlock block = new CodeBlock(isStatic, s.createOffset(t.getOffset()));
+        block.setParent(parent);
+        boolean atStatementStart = true;
+
+        OUTER:
+        while (true) {
+
+            // Don't bail if they have unmatched parens (for example), just
+            // return the current status of the block.
+            //t = s.yylexNonNull("Unexpected end of input");
+            if ((t = s.yylex()) == null) {
+                log("Exiting _getBlock() - eos (" + depth + ")");
+                block.setDeclarationEndOffset(s.createOffset(s.getOffset()));
+                return block;
+            }
+
+            int type = t.getType();
+            boolean isFinal = false;
+
+            switch (type) {
+
+                case SEPARATOR_LBRACE:
+                    s.yyPushback(t);
+                    CodeBlock child = _getBlock(cu, block, m, s, isStatic, depth + 1);
+                    block.add(child);
+                    atStatementStart = true;
+                    break;
+
+                case SEPARATOR_RBRACE:
+                    block.setDeclarationEndOffset(s.createOffset(t.getOffset()));
+                    break OUTER;
+
+                case KEYWORD_TRY:
+                    t = s.yyPeekNonNull(SEPARATOR_LBRACE, SEPARATOR_LPAREN, "'{' or '(' expected");
+                    if (t.getType() == SEPARATOR_LPAREN) { // Auto-closeable stuff
+                        // TODO: Get block-scoped var(s)
+                        s.eatParenPairs();
+                    }
+                    s.yyPeekNonNull(SEPARATOR_LBRACE, "'{' expected");
+                    CodeBlock tryBlock = _getBlock(cu, block, m, s, isStatic, depth + 1);
+                    block.add(tryBlock);
+                    while (s.yyPeekCheckType() == KEYWORD_CATCH
+                            && s.yyPeekCheckType(2) == SEPARATOR_LPAREN) {
+                        s.yylex(); // catch
+                        s.yylex(); // lparen
+                        Type exType = null;
+                        Token var = null;
+                        boolean multiCatch = false;
+                        do {
+                            isFinal = false;
+                            Token temp = s.yyPeekNonNull(IDENTIFIER, KEYWORD_FINAL, "Throwable type expected");
+                            if (temp.isType(KEYWORD_FINAL)) {
+                                isFinal = true;
+                                s.yylex();
+                            }
+                            s.yyPeekNonNull(IDENTIFIER, "Variable declarator expected");
+                            exType = _getType(cu, s); // Not good for multi-catch!
+                            var = s.yylexNonNull(IDENTIFIER, OPERATOR_BITWISE_OR, "Variable declarator expected");
+                            multiCatch |= var.isType(OPERATOR_BITWISE_OR);
+                        } while (var.isType(OPERATOR_BITWISE_OR));
+                        s.yylexNonNull(SEPARATOR_RPAREN, "')' expected");
+                        s.yyPeekNonNull(SEPARATOR_LBRACE, "'{' expected");
+                        CodeBlock catchBlock = _getBlock(cu, block, m, s, false, depth);
+                        int offs = var.getOffset(); // Not actually in block!
+                        if (multiCatch) {
+                            // TODO: With Java 7's multi-catch, calculate
+                            // least upper bound for exception type:
+                            // http://cr.openjdk.java.net/~darcy/ProjectCoin/ProjectCoin-Documentation-v0.83.html#multi_catch
+                            exType = new Type("java");
+                            exType.addIdentifier("lang", null);
+                            exType.addIdentifier("Throwable", null);
+                        }
+                        LocalVariable localVar = new LocalVariable(s, isFinal, exType, offs, var.getLexeme());
+                        checkForDuplicateLocalVarNames(cu, var, block, m);
+                        catchBlock.addLocalVariable(localVar);
+                        block.add(catchBlock);
+                    }
+                    break;
+
+                case KEYWORD_FOR:
+                // TODO: Get local var (e.g. "int i", "Iterator i", etc.)
+                // Fall through
+                case KEYWORD_WHILE:
+                    int nextType = s.yyPeekCheckType();
+                    while (nextType != -1 && nextType != SEPARATOR_LPAREN) {
+                        t = s.yylex(); // Grab the (unexpected) token
+                        if (t != null) { // Should always be true
+                            ParserNotice pn = new ParserNotice(t, "Unexpected token");
+                            cu.addParserNotice(pn);
+                        }
+                        nextType = s.yyPeekCheckType();
+                    }
+                    if (nextType == SEPARATOR_LPAREN) {
+                        s.eatParenPairs();
+                    }
+                    nextType = s.yyPeekCheckType();
+                    if (nextType == SEPARATOR_LBRACE) {
+                        child = _getBlock(cu, block, m, s, isStatic, depth + 1);
+                        block.add(child);
+                        atStatementStart = true;
+                    }
+                    break;
+
+// NOTE: The code below is supposed to try to parse code blocks and identify
+// variable declarations.  This does work somewhat, but the problem is that
+// our parsing of type parameters isn't good enough, and lines like:
+//    for (int i=0; i<foo; i++) {
+// get incorrectly parsed as a type "i<foo>" (even though the closing '>' isn't
+// there, but that's not the big problem really!).  We should be able to check
+// whether our type parameters are well-formed, and if they aren't, then assume
+// push all tokens back, and assume that the '<' was a less-than operator.
+// It's the "push all tokens back" that's tough for us at the moment, as we've
+// lost most of the tokens (there may be an arbitrary number that have been
+// parsed and discarded).
+                case KEYWORD_FINAL:
+                    isFinal = true;
+                    t = s.yylexNonNull("Unexpected end of file");
+                // Fall through
+
+                default:
+                    if (t.isType(SEPARATOR_SEMICOLON)) {
+                        atStatementStart = true;
+                        break;
+                    } else if (atStatementStart && (t.isBasicType() || (t.isIdentifier()))) {
+                        s.yyPushback(t);
+                        // TODO: This is very inefficient
+                        Type varType = null;
+                        try {
+                            varType = _getType(cu, s, true);
+                        } catch (IOException ioe) { // Not a var declaration
+                            s.eatUntilNext(SEPARATOR_SEMICOLON, SEPARATOR_LBRACE, SEPARATOR_RBRACE);
+                            // Only needed if ended on ';' or '}', but...
+                            atStatementStart = true;
+                            break;
+                        }
+                        if (s.yyPeekCheckType() == IDENTIFIER) {
+                            while ((t = s.yylexNonNull(IDENTIFIER, "Variable name expected (type==" + varType.toString() + ")")) != null) {
+                                int arrayDepth = s.skipBracketPairs();
+                                varType.incrementBracketPairCount(arrayDepth);
+                                String varDec = varType.toString() + " " + t.getLexeme();
+                                log(">>> Variable -- " + varDec + " (line " + t.getLine() + ")");
+                                int offs = t.getOffset();
+                                String name = t.getLexeme();
+                                LocalVariable lVar = new LocalVariable(s, isFinal, varType, offs, name);
+                                checkForDuplicateLocalVarNames(cu, t, block, m);
+                                block.addLocalVariable(lVar);
+                                nextType = s.yyPeekCheckType();
+                                // A "valid" nextType would be '=', ',' or ';'.
+                                // If it's an '=', skip past the assignment.
+                                if (nextType == OPERATOR_EQUALS) {
+                                    Token temp = s.eatThroughNextSkippingBlocksAndStuffInParens(SEPARATOR_COMMA, SEPARATOR_SEMICOLON);
+                                    if (temp != null) {
+                                        s.yyPushback(temp);
+                                    }
+                                    nextType = s.yyPeekCheckType();
+                                }
+                                // If next is a comma, loop to read the next local
+                                // var.  Otherwise, whether or not it's valid,
+                                // eat until the end of the statement.
+                                if (nextType != SEPARATOR_COMMA) {
+                                    s.eatThroughNextSkippingBlocks(SEPARATOR_SEMICOLON);
+                                    break;
+                                }
+                                s.yylex(); // Eat the comma (does nothing if EOS)
+                            }
+                        }
+                    } else {
+                        atStatementStart = false;
+                    }
+                    break;
+
+            }
+
+        }
+
+        log("Exiting _getBlock() (" + depth + ")");
+        return block;
+
+    }
+
+    private CodeBlock _getScript(CompilationUnit cu, CodeBlock parent,
+            Method m, Scanner s,
+            boolean isStatic, int depth) throws IOException {
+
+        log("Entering _getScript() (" + depth + ")");
+
+        // TODO: Implement me to get variable declarations.
+        Token t = s.yyPeek();
+        CodeBlock block = new CodeBlock(isStatic, s.createOffset(t.getOffset()));
+        block.setParent(parent);
+        boolean atStatementStart = true;
+
+        OUTER:
+        while (true) {
+
+            // Don't bail if they have unmatched parens (for example), just
+            // return the current status of the block.
+            //t = s.yylexNonNull("Unexpected end of input");
+            if ((t = s.yylex()) == null) {
+                log("Exiting _getScript() - eos (" + depth + ")");
+                block.setDeclarationEndOffset(s.createOffset(s.getOffset()));
+                return block;
+            }
+
+            int type = t.getType();
+            boolean isFinal = false;
+
+            switch (type) {
+
+                case SEPARATOR_LBRACE:
+                    s.yyPushback(t);
+                    CodeBlock child = _getBlock(cu, block, m, s, isStatic, depth + 1);
+                    block.add(child);
+                    atStatementStart = true;
+                    break;
+
+                case SEPARATOR_RBRACE:
+                    block.setDeclarationEndOffset(s.createOffset(t.getOffset()));
+                    break OUTER;
+
+                case KEYWORD_TRY:
+                    t = s.yyPeekNonNull(SEPARATOR_LBRACE, SEPARATOR_LPAREN, "'{' or '(' expected");
+                    if (t.getType() == SEPARATOR_LPAREN) { // Auto-closeable stuff
+                        // TODO: Get block-scoped var(s)
+                        s.eatParenPairs();
+                    }
+                    s.yyPeekNonNull(SEPARATOR_LBRACE, "'{' expected");
+                    CodeBlock tryBlock = _getBlock(cu, block, m, s, isStatic, depth + 1);
+                    block.add(tryBlock);
+                    while (s.yyPeekCheckType() == KEYWORD_CATCH
+                            && s.yyPeekCheckType(2) == SEPARATOR_LPAREN) {
+                        s.yylex(); // catch
+                        s.yylex(); // lparen
+                        Type exType = null;
+                        Token var = null;
+                        boolean multiCatch = false;
+                        do {
+                            isFinal = false;
+                            Token temp = s.yyPeekNonNull(IDENTIFIER, KEYWORD_FINAL, "Throwable type expected");
+                            if (temp.isType(KEYWORD_FINAL)) {
+                                isFinal = true;
+                                s.yylex();
+                            }
+                            s.yyPeekNonNull(IDENTIFIER, "Variable declarator expected");
+                            exType = _getType(cu, s); // Not good for multi-catch!
+                            var = s.yylexNonNull(IDENTIFIER, OPERATOR_BITWISE_OR, "Variable declarator expected");
+                            multiCatch |= var.isType(OPERATOR_BITWISE_OR);
+                        } while (var.isType(OPERATOR_BITWISE_OR));
+                        s.yylexNonNull(SEPARATOR_RPAREN, "')' expected");
+                        s.yyPeekNonNull(SEPARATOR_LBRACE, "'{' expected");
+                        CodeBlock catchBlock = _getBlock(cu, block, m, s, false, depth);
+                        int offs = var.getOffset(); // Not actually in block!
+                        if (multiCatch) {
+                            // TODO: With Java 7's multi-catch, calculate
+                            // least upper bound for exception type:
+                            // http://cr.openjdk.java.net/~darcy/ProjectCoin/ProjectCoin-Documentation-v0.83.html#multi_catch
+                            exType = new Type("java");
+                            exType.addIdentifier("lang", null);
+                            exType.addIdentifier("Throwable", null);
+                        }
+                        LocalVariable localVar = new LocalVariable(s, isFinal, exType, offs, var.getLexeme());
+                        checkForDuplicateLocalVarNames(cu, var, block, m);
+                        catchBlock.addLocalVariable(localVar);
+                        block.add(catchBlock);
+                    }
+                    break;
+
+                case KEYWORD_FOR:
+                // TODO: Get local var (e.g. "int i", "Iterator i", etc.)
+                // Fall through
+                case KEYWORD_WHILE:
+                    int nextType = s.yyPeekCheckType();
+                    while (nextType != -1 && nextType != SEPARATOR_LPAREN) {
+                        t = s.yylex(); // Grab the (unexpected) token
+                        if (t != null) { // Should always be true
+                            ParserNotice pn = new ParserNotice(t, "Unexpected token");
+                            cu.addParserNotice(pn);
+                        }
+                        nextType = s.yyPeekCheckType();
+                    }
+                    if (nextType == SEPARATOR_LPAREN) {
+                        s.eatParenPairs();
+                    }
+                    nextType = s.yyPeekCheckType();
+                    if (nextType == SEPARATOR_LBRACE) {
+                        child = _getBlock(cu, block, m, s, isStatic, depth + 1);
+                        block.add(child);
+                        atStatementStart = true;
+                    }
+                    break;
+
+// NOTE: The code below is supposed to try to parse code blocks and identify
+// variable declarations.  This does work somewhat, but the problem is that
+// our parsing of type parameters isn't good enough, and lines like:
+//    for (int i=0; i<foo; i++) {
+// get incorrectly parsed as a type "i<foo>" (even though the closing '>' isn't
+// there, but that's not the big problem really!).  We should be able to check
+// whether our type parameters are well-formed, and if they aren't, then assume
+// push all tokens back, and assume that the '<' was a less-than operator.
+// It's the "push all tokens back" that's tough for us at the moment, as we've
+// lost most of the tokens (there may be an arbitrary number that have been
+// parsed and discarded).
+                case KEYWORD_FINAL:
+                    isFinal = true;
+                    t = s.yylexNonNull("Unexpected end of file");
+                // Fall through
+
+                default:
+                    if (t.isType(SEPARATOR_SEMICOLON)) {
+                        atStatementStart = true;
+                        break;
+                    } else if (atStatementStart && (t.isBasicType() || (t.isIdentifier()))) {
+                        s.yyPushback(t);
+                        // TODO: This is very inefficient
+                        Type varType = null;
+                        try {
+                            varType = _getType(cu, s, true);
+                        } catch (IOException ioe) { // Not a var declaration
+                            s.eatUntilNext(SEPARATOR_SEMICOLON, SEPARATOR_LBRACE, SEPARATOR_RBRACE);
+                            // Only needed if ended on ';' or '}', but...
+                            atStatementStart = true;
+                            break;
+                        }
+                        if (s.yyPeekCheckType() == IDENTIFIER) {
+                            while ((t = s.yylexNonNull(IDENTIFIER, "Variable name expected (type==" + varType.toString() + ")")) != null) {
+                                int arrayDepth = s.skipBracketPairs();
+                                varType.incrementBracketPairCount(arrayDepth);
+                                String varDec = varType.toString() + " " + t.getLexeme();
+                                log(">>> Variable -- " + varDec + " (line " + t.getLine() + ")");
+                                int offs = t.getOffset();
+                                String name = t.getLexeme();
+                                LocalVariable lVar = new LocalVariable(s, isFinal, varType, offs, name);
+                                checkForDuplicateLocalVarNames(cu, t, block, m);
+                                block.addLocalVariable(lVar);
+                                nextType = s.yyPeekCheckType();
+                                // A "valid" nextType would be '=', ',' or ';'.
+                                // If it's an '=', skip past the assignment.
+                                if (nextType == OPERATOR_EQUALS) {
+                                    Token temp = s.eatThroughNextSkippingBlocksAndStuffInParens(SEPARATOR_COMMA, SEPARATOR_SEMICOLON);
+                                    if (temp != null) {
+                                        s.yyPushback(temp);
+                                    }
+                                    nextType = s.yyPeekCheckType();
+                                }
+                                // If next is a comma, loop to read the next local
+                                // var.  Otherwise, whether or not it's valid,
+                                // eat until the end of the statement.
+                                if (nextType != SEPARATOR_COMMA) {
+                                    s.eatThroughNextSkippingBlocks(SEPARATOR_SEMICOLON);
+                                    break;
+                                }
+                                s.yylex(); // Eat the comma (does nothing if EOS)
+                            }
+                        }
+                    } else {
+                        atStatementStart = false;
+                    }
+                    break;
+
+            }
+
+        }
+
+        log("Exiting _getScript() (" + depth + ")");
+        return block;
+
+    }
+
+    private TypeDeclaration _getClassOrInterfaceDeclaration(CompilationUnit cu,
+            Scanner s, TypeDeclarationContainer addTo, Modifiers modList)
+            throws IOException {
+
+        log("Entering _getClassOrInterfaceDeclaration");
+
+        TypeDeclaration td = _getNormalClassDeclaration(cu, s, addTo);
+
+        log("Exiting _getClassOrInterfaceDeclaration");
+        return td;
+
+    }
+
+    /**
+     * Reads tokens for a Java source file from the specified lexer and returns
+     * the structure of the source as an AST.
+     *
+     * @param scanner The scanner to read from.
+     * @return The root node of the AST.
+     */
+    public CompilationUnit getCompilationUnit(String name, Scanner scanner)
+            throws IOException {
+
+        CompilationUnit cu = new CompilationUnit(name);
+
+        try {
+
+            // Get annotations.
+            List<Annotation> initialAnnotations = null; // Usually none
+            while (scanner.yyPeekCheckType() == ANNOTATION_START) {
+                if (initialAnnotations == null) {
+                    initialAnnotations = new ArrayList<Annotation>(1);
+                }
+                initialAnnotations.add(_getAnnotation(cu, scanner));
+            }
+
+            // Get possible "package" line.
+            Token t = scanner.yylex();
+            if (t == null) {
+                return cu;
+            }
+            if (t.isType(KEYWORD_PACKAGE)) {
+                t = scanner.yyPeekNonNull("Identifier expected");
+                int offs = t.getOffset();
+                String qualifiedID = getQualifiedIdentifier(scanner);
+                Package pkg = new Package(scanner, offs, qualifiedID);
+                if (initialAnnotations != null) {
+                    //	pkg.setAnnotations(initialAnnotations);
+                    initialAnnotations = null;
+                }
+                cu.setPackage(pkg);
+                scanner.yylexNonNull(SEPARATOR_SEMICOLON, "Semicolon expected");
+                t = scanner.yylex();
+            }
+
+            // Go through any import statements.
+            OUTER:
+            while (t != null && t.isType(KEYWORD_IMPORT)) {
+
+                boolean isStatic = false;
+                StringBuilder buf = new StringBuilder();
+                t = scanner.yylexNonNull("Incomplete import statement");
+                Token temp = null;
+                int offs = 0;
+
+                if (t.isType(KEYWORD_STATIC)) {
+                    isStatic = true;
+                    t = scanner.yylexNonNull("Incomplete import statement");
+                }
+
+                if (!t.isIdentifier()) {
+                    cu.addParserNotice(t, "Expected identifier, found: \""
+                            + t.getLexeme() + "\"");
+                    scanner.eatThroughNextSkippingBlocks(SEPARATOR_SEMICOLON);
+                    // We expect "t" to be the semicolon below
+                    t = scanner.getMostRecentToken();
+                } else {
+                    offs = t.getOffset();
+                    buf.append(t.getLexeme());
+                    temp = scanner.yylexNonNull(SEPARATOR_DOT, SEPARATOR_SEMICOLON,
+                            "'.' or ';' expected");
+                    while (temp.isType(SEPARATOR_DOT)) {
+                        temp = scanner.yylexNonNull(IDENTIFIER, OPERATOR_TIMES,
+                                "Identifier or '*' expected");
+                        if (temp.isIdentifier()) {
+                            buf.append('.').append(temp.getLexeme());
+                        } else {//if (temp.getLexeme().equals("*")) {
+                            buf.append(".*");
+                            temp = scanner.yylex(); // We're bailing, so scan here
+                            break;
+                        }
+                        temp = scanner.yylexNonNull(KEYWORD_IMPORT, SEPARATOR_DOT,
+                                SEPARATOR_SEMICOLON, "'.' or ';' expected");
+                        if (temp.isType(KEYWORD_IMPORT)) {
+                            cu.addParserNotice(temp, "';' expected");
+                            t = temp;
+                            continue OUTER;
+                        }
+                    }
+                    t = temp;
+                }
+
+                if (temp == null || !t.isType(SEPARATOR_SEMICOLON)) {
+                    throw new IOException("Semicolon expected, found " + t);
+                }
+
+                ImportDeclaration id = new ImportDeclaration(scanner, offs,
+                        buf.toString(), isStatic);
+                cu.addImportDeclaration(id);
+                t = scanner.yylex();
+
+            }
+
+            // class files aren't required to have TypeDeclarations.
+            if (t == null) {
+                return cu;
+            }
+
+            scanner.yyPushback(t);
+            //TypeDeclaration td = null;
+            while ((/*td = */_getTypeDeclaration(cu, scanner)) != null) {
+                if (initialAnnotations != null) {
+                    //	td.addAnnotations(initialAnnotations);
+                    initialAnnotations = null;
+                }
+//			cu.addTypeDeclaration(td);
+// Done when the type declarations are created.
+            }
+
+        } catch (IOException ioe) {
+            if (isDebug() && !(ioe instanceof EOFException)) { // Not just "end of file"
+                ioe.printStackTrace();
+            }
+            ParserNotice notice = null;
+            Token lastTokenLexed = scanner.getMostRecentToken();
+            if (lastTokenLexed == null) {
+                notice = new ParserNotice(0, 0, 5, ioe.getMessage());
+            } else {
+                notice = new ParserNotice(lastTokenLexed, ioe.getMessage());
+            }
+            cu.addParserNotice(notice);
+//throw ioe; // Un-comment me to get the AnnotationTypeDeclaration error count in "Main" test
+        }
+
+        return cu;
+
+    }
+
+    private NormalClassDeclaration _getNormalClassDeclaration(
+            CompilationUnit cu, Scanner s, TypeDeclarationContainer addTo)
+            throws IOException {
+
+        log("Entering _getNormalClassDeclaration");
+
+        Token t = s.yylexNonNull("Identifier expected");
+        s.yyPushback(t);
+
+        NormalClassDeclaration classDec = new NormalClassDeclaration(s,
+                t.getOffset(), "BSH_SCRIPT");
+        classDec.setPackage(cu.getPackage());
+        addTo.addTypeDeclaration(classDec);
+        CodeBlock block = _getScript(cu, null, null, s, true);
+        classDec.addMember(block);
+
+        log("Exiting _getNormalClassDeclaration");
+        return classDec;
+
+    }
+
+    private String getQualifiedIdentifier(Scanner scanner)
+            throws IOException {
+
+        Token t = null;
+        StringBuilder sb = new StringBuilder();
+
+        while ((t = scanner.yylex()).isIdentifier()) {
+            sb.append(t.getLexeme());
+            t = scanner.yylex();
+            if (t.isType(SEPARATOR_DOT)) {
+                sb.append('.');
+            } else {
+                break;
+            }
+        }
+
+        // QualifiedIdentifier has ended.
+        scanner.yyPushback(t);
+
+        return sb.toString();
+
+    }
+
+    // For "backwards compatibility," don't know if "false" is usually
+    // correct or not
+    private Type _getType(CompilationUnit cu, Scanner s) throws IOException {
+        return _getType(cu, s, false);
+    }
+
+    private Type _getType(CompilationUnit cu, Scanner s,
+            boolean pushbackOnUnexpected) throws IOException {
+
+        log("Entering _getType()");
+        Type type = new Type();
+
+        Token t = s.yylexNonNull("Type expected");
+
+        // TODO: "void" checking is NOT in the JLS for type!  Remove me
+        if (t.isType(KEYWORD_VOID)) {
+            type.addIdentifier(t.getLexeme(), null);
+            log("Exiting _getType(): " + type.toString());
+            return type;
+        } else if (t.isBasicType()) {
+            int arrayDepth = s.skipBracketPairs();
+            type.addIdentifier(t.getLexeme(), null);
+            type.setBracketPairCount(arrayDepth);
+            log("Exiting _getType(): " + type.toString());
+            return type;
+        }
+
+        OUTER:
+        while (true) {
+            switch (t.getType()) {
+                case IDENTIFIER:
+                    List<TypeArgument> typeArgs = null;
+                    if (s.yyPeekCheckType() == OPERATOR_LT) {
+                        typeArgs = _getTypeArguments(cu, s);
+                    }
+                    type.addIdentifier(t.getLexeme(), typeArgs);
+                    t = s.yylexNonNull("Unexpected end of input");
+                    if (t.isType(SEPARATOR_DOT)) {
+                        t = s.yylexNonNull("Unexpected end of input");
+                        continue;
+                    } else if (t.isType(SEPARATOR_LBRACKET)) {
+                        s.yyPushback(t);
+                        type.setBracketPairCount(s.skipBracketPairs());
+                        break OUTER;
+                    } else {
+                        s.yyPushback(t);
+                        break OUTER;
+                    }
+                default:
+                    if (pushbackOnUnexpected) {
+                        s.yyPushback(t);
+                    }
+                    throw new IOException("Expected identifier, found: " + t);
+            }
+        }
+
+        log("Exiting _getType(): " + type.toString());
+        return type;
+
+    }
+
+    private TypeArgument _getTypeArgument(CompilationUnit cu, Scanner s)
+            throws IOException {
+
+        log("Entering _getTypeArgument()");
+
+        TypeArgument typeArg = null;
+
+        Token t = s.yyPeekNonNull("Type or '?' expected");
+
+        if (t.isType(OPERATOR_QUESTION)) {
+            s.yylex(); // Pop the '?' off the stream.
+            t = s.yyPeek();
+            if (t.getType() != OPERATOR_GT) {
+                t = s.yylexNonNull(SEPARATOR_COMMA, KEYWORD_EXTENDS,
+                        KEYWORD_SUPER,
+                        "',', super or extends expected");
+                switch (t.getType()) {
+                    case SEPARATOR_COMMA:
+                        typeArg = new TypeArgument(null, 0, null);
+                        s.yyPushback(t);
+                        break;
+                    case KEYWORD_EXTENDS:
+                        Type otherType = _getType(cu, s);
+                        typeArg = new TypeArgument(null, TypeArgument.EXTENDS, otherType);
+                        break;
+                    default: // KEYWORD_SUPER:
+                        otherType = _getType(cu, s);
+                        typeArg = new TypeArgument(null, TypeArgument.SUPER, otherType);
+                        break;
+                }
+            } else {
+                typeArg = new TypeArgument(null, 0, null);
+            }
+        } else {
+            Type type = _getType(cu, s);
+            typeArg = new TypeArgument(type);
+        }
+
+        log("Exiting _getTypeArgument() : " + typeArg);
+        return typeArg;
+
+    }
+
+    private List<TypeArgument> _getTypeArguments(CompilationUnit cu, Scanner s)
+            throws IOException {
+
+        s.increaseTypeArgumentsLevel();
+        log("Entering _getTypeArguments() (" + s.getTypeArgumentsLevel() + ")");
+
+        s.markResetPosition();
+        s.yylexNonNull(OPERATOR_LT, "'<' expected");
+
+        List<TypeArgument> typeArgs = new ArrayList<TypeArgument>(1);
+
+        Token t = null;
+        do {
+            typeArgs.add(_getTypeArgument(cu, s));
+            t = s.yylexNonNull("',' or '>' expected");
+            if (t.getType() != SEPARATOR_COMMA && t.getType() != OPERATOR_GT) {
+                // Assume we're in a code block, and are simply at the (much
+                // more common) case of e.g. "if (i < 7) ...".
+                s.resetToLastMarkedPosition();
+                log("Exiting _getTypeArguments() (" + s.getTypeArgumentsLevel() + ") - NOT TYPE ARGUMENTS (" + t.getLexeme() + ")");
+                s.decreaseTypeArgumentsLevel();
+                return null;
+            }
+        } while (t.isType(SEPARATOR_COMMA));
+
+        log("Exiting _getTypeArguments() (" + s.getTypeArgumentsLevel() + ")");
+        s.decreaseTypeArgumentsLevel();
+
+        s.clearResetPosition();
+        return typeArgs;
+
+    }
+
+    private TypeDeclaration _getTypeDeclaration(CompilationUnit cu,
+            Scanner s) throws IOException {
+
+        /*
+		 * TypeDeclaration:
+		 *    ClassOrInterfaceDeclaration
+		 *    ';'
+         */
+        Token t = s.yylex();
+        if (t == null) {
+            return null; // End of source file.
+        }
+
+        // Skip any semicolons.
+        while (t.isType(SEPARATOR_SEMICOLON)) {
+            t = s.yylex();
+            if (t == null) {
+                return null; // End of source file
+            }
+        }
+
+        s.yyPushback(t); // Probably some modifier, e.g. "public"
+
+        String docComment = s.getLastDocComment();
+        TypeDeclaration td = _getClassOrInterfaceDeclaration(cu, s, cu, null);
+        td.setDocComment(docComment); // May be null
+        return td;
+
+    }
+
+    private static final boolean isDebug() {
+        return DEBUG;
+    }
+
+    private static final void log(String msg) {
+        if (DEBUG) {
+            System.out.println(msg);
+        }
+    }
+
+}

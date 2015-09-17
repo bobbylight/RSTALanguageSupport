@@ -33,6 +33,18 @@ import org.fife.rsta.ac.xml.tree.XmlOutlineTree;
 import org.fife.ui.rsyntaxtextarea.ErrorStrip;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.modes.CSSTokenRegistration;
+import org.fife.ui.rsyntaxtextarea.modes.CTokenRegistration;
+import org.fife.ui.rsyntaxtextarea.modes.GroovyTokenRegistration;
+import org.fife.ui.rsyntaxtextarea.modes.HTMLTokenRegistration;
+import org.fife.ui.rsyntaxtextarea.modes.JSPTokenRegistration;
+import org.fife.ui.rsyntaxtextarea.modes.JavaScriptTokenRegistration;
+import org.fife.ui.rsyntaxtextarea.modes.JavaTokenRegistration;
+import org.fife.ui.rsyntaxtextarea.modes.LessTokenRegistration;
+import org.fife.ui.rsyntaxtextarea.modes.PHPTokenRegistration;
+import org.fife.ui.rsyntaxtextarea.modes.PerlTokenRegistration;
+import org.fife.ui.rsyntaxtextarea.modes.UnixShellTokenRegistration;
+import org.fife.ui.rsyntaxtextarea.modes.XMLTokenRegistration;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 
@@ -55,7 +67,7 @@ class DemoRootPane extends JRootPane implements HyperlinkListener,
 	public DemoRootPane() {
 
 		LanguageSupportFactory lsf = LanguageSupportFactory.get();
-		LanguageSupport support = lsf.getSupportFor(SYNTAX_STYLE_JAVA);
+		LanguageSupport support = lsf.getSupportFor(JavaTokenRegistration.SYNTAX_STYLE);
 		JavaLanguageSupport jls = (JavaLanguageSupport)support;
 		// TODO: This API will change!  It will be easier to do per-editor
 		// changes to the build path.
@@ -71,7 +83,7 @@ class DemoRootPane extends JRootPane implements HyperlinkListener,
 		treeSP = new JScrollPane(dummy);
 
 		textArea = createTextArea();
-		setText("CExample.txt", SYNTAX_STYLE_C);
+		setText("CExample.txt", CTokenRegistration.SYNTAX_STYLE);
 		scrollPane = new RTextScrollPane(textArea, true);
 		scrollPane.setIconRowHeaderEnabled(true);
 		scrollPane.getGutter().setBookmarkingEnabled(true);
@@ -116,18 +128,18 @@ setContentPane(cp);
 
 		menu = new JMenu("Language");
 		ButtonGroup bg = new ButtonGroup();
-		addItem(new StyleAction(this, "C",          "CExample.txt",      SYNTAX_STYLE_C), bg, menu);
-		addItem(new StyleAction(this, "CSS",        "CssExample.txt",    SYNTAX_STYLE_CSS), bg, menu);
-		addItem(new StyleAction(this, "Groovy",     "GroovyExample.txt", SYNTAX_STYLE_GROOVY), bg, menu);
-		addItem(new StyleAction(this, "Java",       "JavaExample.txt",   SYNTAX_STYLE_JAVA), bg, menu);
-		addItem(new StyleAction(this, "JavaScript", "JSExample.txt",     SYNTAX_STYLE_JAVASCRIPT), bg, menu);
-		addItem(new StyleAction(this, "JSP",        "JspExample.txt",    SYNTAX_STYLE_JSP), bg, menu);
-		addItem(new StyleAction(this, "Less",       "LessExample.txt",   SYNTAX_STYLE_LESS), bg, menu);
-		addItem(new StyleAction(this, "Perl",       "PerlExample.txt",   SYNTAX_STYLE_PERL), bg, menu);
-		addItem(new StyleAction(this, "HTML",       "HtmlExample.txt",   SYNTAX_STYLE_HTML), bg, menu);
-		addItem(new StyleAction(this, "PHP",        "PhpExample.txt",    SYNTAX_STYLE_PHP), bg, menu);
-		addItem(new StyleAction(this, "sh",         "ShellExample.txt",  SYNTAX_STYLE_UNIX_SHELL), bg, menu);
-		addItem(new StyleAction(this, "XML",        "XMLExample.txt",    SYNTAX_STYLE_XML), bg, menu);
+		addItem(new StyleAction(this, "C",          "CExample.txt",      CTokenRegistration.SYNTAX_STYLE), bg, menu);
+		addItem(new StyleAction(this, "CSS",        "CssExample.txt",    CSSTokenRegistration.SYNTAX_STYLE), bg, menu);
+		addItem(new StyleAction(this, "Groovy",     "GroovyExample.txt", GroovyTokenRegistration.SYNTAX_STYLE), bg, menu);
+		addItem(new StyleAction(this, "Java",       "JavaExample.txt",   JavaTokenRegistration.SYNTAX_STYLE), bg, menu);
+		addItem(new StyleAction(this, "JavaScript", "JSExample.txt",     JavaScriptTokenRegistration.SYNTAX_STYLE), bg, menu);
+		addItem(new StyleAction(this, "JSP",        "JspExample.txt",    JSPTokenRegistration.SYNTAX_STYLE), bg, menu);
+		addItem(new StyleAction(this, "Less",       "LessExample.txt",   LessTokenRegistration.SYNTAX_STYLE), bg, menu);
+		addItem(new StyleAction(this, "Perl",       "PerlExample.txt",   PerlTokenRegistration.SYNTAX_STYLE), bg, menu);
+		addItem(new StyleAction(this, "HTML",       "HtmlExample.txt",   HTMLTokenRegistration.SYNTAX_STYLE), bg, menu);
+		addItem(new StyleAction(this, "PHP",        "PhpExample.txt",    PHPTokenRegistration.SYNTAX_STYLE), bg, menu);
+		addItem(new StyleAction(this, "sh",         "ShellExample.txt",  UnixShellTokenRegistration.SYNTAX_STYLE), bg, menu);
+		addItem(new StyleAction(this, "XML",        "XMLExample.txt",    XMLTokenRegistration.SYNTAX_STYLE), bg, menu);
 		menu.getItem(0).setSelected(true);
 		mb.add(menu);
 
@@ -238,13 +250,13 @@ setContentPane(cp);
 		}
 
 		String language = textArea.getSyntaxEditingStyle();
-		if (SyntaxConstants.SYNTAX_STYLE_JAVA.equals(language)) {
+		if (JavaTokenRegistration.SYNTAX_STYLE.equals(language)) {
 			tree = new JavaOutlineTree();
 		}
-		else if (SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT.equals(language)) {
+		else if (JavaScriptTokenRegistration.SYNTAX_STYLE.equals(language)) {
 			tree = new JavaScriptOutlineTree();
 		}
-		else if (SyntaxConstants.SYNTAX_STYLE_XML.equals(language)) {
+		else if (XMLTokenRegistration.SYNTAX_STYLE.equals(language)) {
 			tree = new XmlOutlineTree();
 		}
 		else {

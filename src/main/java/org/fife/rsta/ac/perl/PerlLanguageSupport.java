@@ -15,7 +15,6 @@ import javax.swing.ListCellRenderer;
 
 import org.fife.rsta.ac.AbstractLanguageSupport;
 import org.fife.rsta.ac.IOUtil;
-import org.fife.rsta.ac.perl.PerlCompletionProvider;
 import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.autocomplete.CompletionCellRenderer;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -100,7 +99,6 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 		setParameterAssistanceEnabled(true);
 		setShowDescWindow(true);
 	}
-
 
 	/**
 	 * {@inheritDoc}

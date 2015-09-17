@@ -39,7 +39,6 @@ public class GroovyLanguageSupport extends AbstractLanguageSupport {
 		setShowDescWindow(true);
 	}
 
-
 //	/**
 //	 * {@inheritDoc}
 //	 */

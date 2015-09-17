@@ -38,7 +38,6 @@ public interface LanguageSupport {
 	public static final String PROPERTY_LANGUAGE_PARSER =
 		"org.fife.rsta.ac.LanguageSupport.LanguageParser";
 
-
 	/**
 	 * Returns the delay between when the user types a character and when the
 	 * code completion popup should automatically appear (if applicable).

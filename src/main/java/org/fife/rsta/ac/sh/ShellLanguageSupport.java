@@ -48,6 +48,7 @@ public class ShellLanguageSupport extends AbstractLanguageSupport {
 	}
 
 
+
 	/**
 	 * {@inheritDoc}
 	 */

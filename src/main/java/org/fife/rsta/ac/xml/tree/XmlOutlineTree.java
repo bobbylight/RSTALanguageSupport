@@ -26,7 +26,7 @@ import org.fife.rsta.ac.xml.XmlParser;
 import org.fife.ui.rsyntaxtextarea.DocumentRange;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
-import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rsyntaxtextarea.modes.XMLTokenRegistration;
 
 
 /**
@@ -99,8 +99,7 @@ public class XmlOutlineTree extends AbstractSourceTree {
 		// Get the Java language support (shared by all RSTA instances editing
 		// Java that were registered with the LanguageSupportFactory).
 		LanguageSupportFactory lsf = LanguageSupportFactory.get();
-		LanguageSupport support = lsf.getSupportFor(SyntaxConstants.
-													SYNTAX_STYLE_XML);
+		LanguageSupport support = lsf.getSupportFor(XMLTokenRegistration.SYNTAX_STYLE);
 		XmlLanguageSupport xls = (XmlLanguageSupport)support;
 
 		// Listen for re-parsing of the editor, and update the tree accordingly

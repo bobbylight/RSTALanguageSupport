@@ -41,7 +41,6 @@ public class CssLanguageSupport extends AbstractLanguageSupport {
 		//setShowDescWindow(true);
 	}
 
-
 	@Override
 	protected ListCellRenderer createDefaultCompletionCellRenderer() {
 		return new CssCellRenderer();

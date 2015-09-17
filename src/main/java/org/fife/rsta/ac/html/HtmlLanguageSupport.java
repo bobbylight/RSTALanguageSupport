@@ -56,7 +56,6 @@ public class HtmlLanguageSupport extends AbstractMarkupLanguageSupport {
 		setShowDescWindow(true);
 	}
 
-
 	/**
 	 * {@inheritDoc}
 	 */

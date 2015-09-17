@@ -13,7 +13,6 @@ package org.fife.rsta.ac.less;
 import org.fife.rsta.ac.css.CssCompletionProvider;
 import org.fife.rsta.ac.css.CssLanguageSupport;
 
-
 /**
  * Language support for Less.
  *
@@ -22,24 +21,21 @@ import org.fife.rsta.ac.css.CssLanguageSupport;
  */
 public class LessLanguageSupport extends CssLanguageSupport {
 
+    /**
+     * Constructor.
+     */
+    public LessLanguageSupport() {
+        setShowDescWindow(true);
+    }
 
-	/**
-	 * Constructor.
-	 */
-	public LessLanguageSupport() {
-		setShowDescWindow(true);
-	}
-
-
-	/**
-	 * Overridden to return a completion provider that understands Less.
-	 *
-	 * @return A completion provider to use for this language.
-	 */
-	@Override
-	protected CssCompletionProvider createProvider() {
-		return new LessCompletionProvider();
-	}
-
+    /**
+     * Overridden to return a completion provider that understands Less.
+     *
+     * @return A completion provider to use for this language.
+     */
+    @Override
+    protected CssCompletionProvider createProvider() {
+        return new LessCompletionProvider();
+    }
 
 }
