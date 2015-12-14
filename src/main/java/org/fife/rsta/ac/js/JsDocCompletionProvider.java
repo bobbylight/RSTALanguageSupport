@@ -24,7 +24,7 @@ import org.fife.ui.autocomplete.TemplateCompletion;
  * @author Robert Futrell
  * @version 1.0
  */
-class JsDocCompletionProvider extends DefaultCompletionProvider {
+public class JsDocCompletionProvider extends DefaultCompletionProvider {
 
 
 	public JsDocCompletionProvider() {

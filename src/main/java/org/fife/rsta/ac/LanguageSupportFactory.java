@@ -104,6 +104,8 @@ public class LanguageSupportFactory implements PropertyChangeListener {
 				prefix + "perl.PerlLanguageSupport");
 		addLanguageSupport(SyntaxConstants.SYNTAX_STYLE_PHP,
 				prefix + "php.PhpLanguageSupport");
+		addLanguageSupport(SyntaxConstants.SYNTAX_STYLE_TYPESCRIPT,
+				prefix + "ts.TypeScriptLanguageSupport");
 		addLanguageSupport(SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL,
 				prefix + "sh.ShellLanguageSupport");
 		addLanguageSupport(SyntaxConstants.SYNTAX_STYLE_XML,

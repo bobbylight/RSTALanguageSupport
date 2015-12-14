@@ -127,6 +127,7 @@ setContentPane(cp);
 		addItem(new StyleAction(this, "HTML",       "HtmlExample.txt",   SYNTAX_STYLE_HTML), bg, menu);
 		addItem(new StyleAction(this, "PHP",        "PhpExample.txt",    SYNTAX_STYLE_PHP), bg, menu);
 		addItem(new StyleAction(this, "sh",         "ShellExample.txt",  SYNTAX_STYLE_UNIX_SHELL), bg, menu);
+		addItem(new StyleAction(this, "TypeScript", "TypeScriptExample.txt",  SYNTAX_STYLE_TYPESCRIPT), bg, menu);
 		addItem(new StyleAction(this, "XML",        "XMLExample.txt",    SYNTAX_STYLE_XML), bg, menu);
 		menu.getItem(0).setSelected(true);
 		mb.add(menu);
