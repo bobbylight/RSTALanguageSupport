@@ -62,7 +62,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 * The type of all parameters to this method.  Note that this cache will
 	 * be short-lived, as classes that take type parameters will pass their
 	 * type arguments down to individual <code>MethodInfo</code>s when doing
-	 * completions, to ensure types are as correct as possible. 
+	 * completions, to ensure types are as correct as possible.
 	 */
 	private String[] paramTypes;
 
@@ -71,6 +71,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 */
 	private String returnType;
 
+	private String returnTypeQualified;
 	/**
 	 * Cached string representing the name and parameters for this method.
 	 */
@@ -118,7 +119,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 				sb.append(", ");
 			}
 		}
-		
+
 	}
 
 
@@ -129,7 +130,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 * lazily recomputed the next time they are needed.  This allows this
 	 * <code>MethodInfo</code> to be used for code completion for instances
 	 * of the same class initialized with different type arguments.<p>
-	 * 
+	 *
 	 * Note that if this method does not have parameterized arguments or
 	 * return type, calling this method won't affect its behavior.
 	 */
@@ -448,10 +449,19 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 		if(!fullyQualified)
 		{
 			if(returnType != null && returnType.indexOf(".") > -1) {
-				return returnType.substring(returnType.lastIndexOf(".") +1, returnType.length());  
+				return returnType.substring(returnType.lastIndexOf(".") +1, returnType.length());
 			}
 		}
 		return returnType;
+	}
+	public String getReturnTypeFull() {
+		if (returnTypeQualified==null) {
+			returnTypeQualified = getReturnTypeStringFromTypeSignature(true);
+			if (returnTypeQualified==null) {
+				returnTypeQualified = getReturnTypeStringFromDescriptor(true);
+			}
+		}
+		return returnTypeQualified;
 	}
 
 

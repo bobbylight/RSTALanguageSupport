@@ -5,6 +5,8 @@ archivesBaseName = 'languagesupport'
 
 dependencies {
 	compile group: 'org.mozilla', name: 'rhino', version: '1.7.6'
+	compile 'com.fifesoft:autocomplete:2.5.8'
+	    // compile 'org.javassist:javassist:3.20.0-GA'
 	testCompile group: 'junit', name: 'junit', version: '4.11'
 }
 

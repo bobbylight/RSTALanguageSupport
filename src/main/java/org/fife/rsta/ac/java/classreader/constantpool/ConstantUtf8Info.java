@@ -97,7 +97,8 @@ try {
 	representedString = new String(bytes, "UTF-8");
 } catch (UnsupportedEncodingException uee) { // Never happens.
 	uee.printStackTrace();
-	System.exit(0);
+	// System.exit(0);
+	throw new Error(uee);
 }
 		return representedString;
 

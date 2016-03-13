@@ -20,8 +20,11 @@ import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
+import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
+import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 import javax.swing.Timer;
 import javax.swing.event.CaretEvent;
@@ -30,6 +33,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.Element;
 
+import org.apache.log4j.Logger;
 import org.fife.rsta.ac.AbstractLanguageSupport;
 import org.fife.rsta.ac.GoToMemberAction;
 import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
@@ -41,6 +45,8 @@ import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
+import sun.reflect.Reflection;
+
 
 /**
  * Language support for Java.
@@ -50,6 +56,9 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
  * @see JavaOutlineTree
  */
 public class JavaLanguageSupport extends AbstractLanguageSupport {
+
+	private static final Logger log = Logger.getLogger(Reflection.getCallerClass(1));
+
 
 	/**
 	 * Maps <tt>JavaParser</tt>s to <tt>Info</tt> instances about them.
@@ -160,11 +169,53 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		parserToInfoMap.put(parser, info);
 
 		installKeyboardShortcuts(textArea);
-
-		textArea.setLinkGenerator(new JavaLinkGenerator(this));
+		log.info("lang support installed");
+		textArea.setLinkGenerator(new JavaLinkGenerator(this,p));
 
 	}
 
+	protected void installCreateLocalVarButton(RSyntaxTextArea textArea) {
+		// textArea.re
+		Action action = null;
+		KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_F6, 0);
+		InputMap im = textArea.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+		im.put(ks, ks);
+		action = new Action() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+			}
+
+			@Override
+			public void setEnabled(boolean b) {
+			}
+
+			@Override
+			public void removePropertyChangeListener(PropertyChangeListener listener) {
+			}
+
+			@Override
+			public void putValue(String key, Object value) {
+			}
+
+			@Override
+			public boolean isEnabled() {
+				return true;
+			}
+
+			@Override
+			public Object getValue(String key) {
+				return null;
+			}
+
+			@Override
+			public void addPropertyChangeListener(PropertyChangeListener listener) {
+
+			}
+		};
+		textArea.getActionMap().put(ks, action);
+	}
 
 	/**
 	 * Installs extra keyboard shortcuts supported by this language support.
@@ -350,7 +401,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		 * class with the same (unqualified) name HAS been imported, this
 		 * method sets things up so the fully-qualified version of this class's
 		 * name is inserted.<p>
-		 * 
+		 *
 		 * Thanks to Guilherme Joao Frantz and Jonatas Schuler for helping
 		 * with the patch!
 		 *

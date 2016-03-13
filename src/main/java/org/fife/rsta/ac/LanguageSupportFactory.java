@@ -66,7 +66,7 @@ public class LanguageSupportFactory implements PropertyChangeListener {
 	 *
 	 * @param style The language to add support for.  This should be one of
 	 *        the values defined in {@link SyntaxConstants}.  Any previous
-	 *        language support for this language is removed. 
+	 *        language support for this language is removed.
 	 * @param lsClassName The class name of the <code>LanguageSupport</code>.
 	 */
 	public void addLanguageSupport(String style, String lsClassName) {
@@ -104,8 +104,8 @@ public class LanguageSupportFactory implements PropertyChangeListener {
 				prefix + "perl.PerlLanguageSupport");
 		addLanguageSupport(SyntaxConstants.SYNTAX_STYLE_PHP,
 				prefix + "php.PhpLanguageSupport");
-		addLanguageSupport(SyntaxConstants.SYNTAX_STYLE_TYPESCRIPT,
-				prefix + "ts.TypeScriptLanguageSupport");
+//		addLanguageSupport(SyntaxConstants.SYNTAX_STYLE_TYPESCRIPT,
+//				prefix + "ts.TypeScriptLanguageSupport");
 		addLanguageSupport(SyntaxConstants.SYNTAX_STYLE_UNIX_SHELL,
 				prefix + "sh.ShellLanguageSupport");
 		addLanguageSupport(SyntaxConstants.SYNTAX_STYLE_XML,

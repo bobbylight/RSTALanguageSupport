@@ -21,6 +21,7 @@ import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -38,12 +39,10 @@ import javax.swing.border.Border;
 
 import org.fife.rsta.ac.java.buildpath.JarLibraryInfo;
 import org.fife.rsta.ac.java.buildpath.LibraryInfo;
-import org.fife.rsta.ac.perl.PerlLanguageSupport;
-
 
 /**
  * The "About" dialog for the demo application.
- * 
+ *
  * @author Robert Futrell
  * @version 1.0
  */
@@ -51,13 +50,12 @@ public class AboutDialog extends JDialog {
 
 	private final Border empty5Border = BorderFactory.createEmptyBorder(5, 5, 5, 5);
 
-
 	public AboutDialog(DemoApp parent) {
 
 		super(parent);
 
 		JPanel cp = new JPanel(new BorderLayout());
-//		cp.setBorder(empty5Border);
+		// cp.setBorder(empty5Border);
 
 		Box box = Box.createVerticalBox();
 
@@ -80,12 +78,10 @@ public class AboutDialog extends JDialog {
 		JTextArea textArea = new JTextArea(6, 60);
 		// Windows LAF picks a bad font for text areas, for some reason.
 		textArea.setFont(labelFont);
-		textArea.setText("Version 0.2\n\n" + 
-			"Demonstrates basic features of the RSTALanguageSupport library.\n" +
-			"Note that some features for some languages may not work unless your system " +
-			"is set up properly.\nFor example, Java code completion requries a JRE on " +
-			"your PATH, and Perl completion requires the Perl executable to be on your " +
-			"PATH.");
+		textArea.setText("Version 0.2\n\n" + "Demonstrates basic features of the RSTALanguageSupport library.\n"
+				+ "Note that some features for some languages may not work unless your system "
+				+ "is set up properly.\nFor example, Java code completion requries a JRE on "
+				+ "your PATH, and Perl completion requires the Perl executable to be on your " + "PATH.");
 		textArea.setEditable(false);
 		textArea.setBackground(Color.white);
 		textArea.setLineWrap(true);
@@ -99,27 +95,30 @@ public class AboutDialog extends JDialog {
 		SpringLayout sl = new SpringLayout();
 		JPanel temp = new JPanel(sl);
 		JLabel perlLabel = new JLabel("Perl install location:");
-		File loc = PerlLanguageSupport.getDefaultPerlInstallLocation();
-		String text = loc==null ? null : loc.getAbsolutePath();
+		// File loc = PerlLanguageSupport.getDefaultPerlInstallLocation();
+		String text = null;
 		JTextField perlField = createTextField(text);
 		JLabel javaLabel = new JLabel("Java home:");
 		String jre = null;
 		LibraryInfo info = LibraryInfo.getMainJreJarInfo();
-		if (info!=null) { // Should always be true
-			File jarFile = ((JarLibraryInfo)info).getJarFile();
+		if (info != null) { // Should always be true
+			File jarFile = ((JarLibraryInfo) info).getJarFile();
 			jre = jarFile.getParentFile().getParentFile().getAbsolutePath();
 		}
 		JTextField javaField = createTextField(jre);
 
 		if (getComponentOrientation().isLeftToRight()) {
-			temp.add(perlLabel);        temp.add(perlField);
-			temp.add(javaLabel);        temp.add(javaField);
+			temp.add(perlLabel);
+			temp.add(perlField);
+			temp.add(javaLabel);
+			temp.add(javaField);
+		} else {
+			temp.add(perlField);
+			temp.add(perlLabel);
+			temp.add(javaField);
+			temp.add(javaLabel);
 		}
-		else {
-			temp.add(perlField);        temp.add(perlLabel);
-			temp.add(javaField);        temp.add(javaLabel);
-		}
-		makeSpringCompactGrid(temp, 2, 2, 5,5, 15,5);
+		makeSpringCompactGrid(temp, 2, 2, 5, 5, 15, 5);
 		box.add(temp);
 
 		box.add(Box.createVerticalGlue());
@@ -146,7 +145,6 @@ public class AboutDialog extends JDialog {
 
 	}
 
-
 	private JPanel addLeftAligned(Component toAdd, Container addTo) {
 		JPanel temp = new JPanel(new BorderLayout());
 		temp.setOpaque(false); // For ones on white background.
@@ -154,7 +152,6 @@ public class AboutDialog extends JDialog {
 		addTo.add(temp);
 		return temp;
 	}
-
 
 	private JTextField createTextField(String text) {
 		JTextField field = new JTextField(text);
@@ -164,99 +161,94 @@ public class AboutDialog extends JDialog {
 		return field;
 	}
 
-
 	/**
-	 * Used by makeSpringCompactGrid.  This is ripped off directly from
+	 * Used by makeSpringCompactGrid. This is ripped off directly from
 	 * <code>SpringUtilities.java</code> in the Sun Java Tutorial.
 	 *
-	 * @param parent The container whose layout must be an instance of
-	 *        <code>SpringLayout</code>.
-	 * @return The spring constraints for the specified component contained
-	 *         in <code>parent</code>.
+	 * @param parent
+	 *            The container whose layout must be an instance of
+	 *            <code>SpringLayout</code>.
+	 * @return The spring constraints for the specified component contained in
+	 *         <code>parent</code>.
 	 */
-	private static final SpringLayout.Constraints getConstraintsForCell(
-										int row, int col,
-										Container parent, int cols) {
+	private static final SpringLayout.Constraints getConstraintsForCell(int row, int col, Container parent, int cols) {
 		SpringLayout layout = (SpringLayout) parent.getLayout();
 		Component c = parent.getComponent(row * cols + col);
 		return layout.getConstraints(c);
 	}
 
-
 	/**
-	 * This method is ripped off from <code>SpringUtilities.java</code> found
-	 * on Sun's Java Tutorial pages.  It takes a component whose layout is
-	 * <code>SpringLayout</code> and organizes the components it contains into
-	 * a nice grid.
-	 * Aligns the first <code>rows</code> * <code>cols</code> components of
-	 * <code>parent</code> in a grid. Each component in a column is as wide as
-	 * the maximum preferred width of the components in that column; height is
-	 * similarly determined for each row.  The parent is made just big enough
-	 * to fit them all.
+	 * This method is ripped off from <code>SpringUtilities.java</code> found on
+	 * Sun's Java Tutorial pages. It takes a component whose layout is
+	 * <code>SpringLayout</code> and organizes the components it contains into a
+	 * nice grid. Aligns the first <code>rows</code> * <code>cols</code>
+	 * components of <code>parent</code> in a grid. Each component in a column
+	 * is as wide as the maximum preferred width of the components in that
+	 * column; height is similarly determined for each row. The parent is made
+	 * just big enough to fit them all.
 	 *
-	 * @param parent The container whose layout is <code>SpringLayout</code>.
-	 * @param rows The number of rows of components to make in the container.
-	 * @param cols The umber of columns of components to make.
-	 * @param initialX The x-location to start the grid at.
-	 * @param initialY The y-location to start the grid at.
-	 * @param xPad The x-padding between cells.
-	 * @param yPad The y-padding between cells.
+	 * @param parent
+	 *            The container whose layout is <code>SpringLayout</code>.
+	 * @param rows
+	 *            The number of rows of components to make in the container.
+	 * @param cols
+	 *            The umber of columns of components to make.
+	 * @param initialX
+	 *            The x-location to start the grid at.
+	 * @param initialY
+	 *            The y-location to start the grid at.
+	 * @param xPad
+	 *            The x-padding between cells.
+	 * @param yPad
+	 *            The y-padding between cells.
 	 */
-	public static final void makeSpringCompactGrid(Container parent, int rows,
-								int cols, int initialX, int initialY,
-								int xPad, int yPad) {
+	public static final void makeSpringCompactGrid(Container parent, int rows, int cols, int initialX, int initialY,
+			int xPad, int yPad) {
 
 		SpringLayout layout;
 		try {
-			layout = (SpringLayout)parent.getLayout();
+			layout = (SpringLayout) parent.getLayout();
 		} catch (ClassCastException cce) {
-			System.err.println("The first argument to makeCompactGrid " +
-							"must use SpringLayout.");
+			System.err.println("The first argument to makeCompactGrid " + "must use SpringLayout.");
 			return;
 		}
 
-		//Align all cells in each column and make them the same width.
+		// Align all cells in each column and make them the same width.
 		Spring x = Spring.constant(initialX);
 		for (int c = 0; c < cols; c++) {
 			Spring width = Spring.constant(0);
 			for (int r = 0; r < rows; r++) {
-				width = Spring.max(width,
-						getConstraintsForCell(
-									r, c, parent, cols).getWidth());
+				width = Spring.max(width, getConstraintsForCell(r, c, parent, cols).getWidth());
 			}
 			for (int r = 0; r < rows; r++) {
-				SpringLayout.Constraints constraints =
-							getConstraintsForCell(r, c, parent, cols);
+				SpringLayout.Constraints constraints = getConstraintsForCell(r, c, parent, cols);
 				constraints.setX(x);
 				constraints.setWidth(width);
 			}
 			x = Spring.sum(x, Spring.sum(width, Spring.constant(xPad)));
 		}
 
-		//Align all cells in each row and make them the same height.
+		// Align all cells in each row and make them the same height.
 		Spring y = Spring.constant(initialY);
 		for (int r = 0; r < rows; r++) {
 			Spring height = Spring.constant(0);
 			for (int c = 0; c < cols; c++) {
-				height = Spring.max(height,
-					getConstraintsForCell(r, c, parent, cols).getHeight());
+				height = Spring.max(height, getConstraintsForCell(r, c, parent, cols).getHeight());
 			}
 			for (int c = 0; c < cols; c++) {
-				SpringLayout.Constraints constraints =
-							getConstraintsForCell(r, c, parent, cols);
+				SpringLayout.Constraints constraints = getConstraintsForCell(r, c, parent, cols);
 				constraints.setY(y);
 				constraints.setHeight(height);
 			}
 			y = Spring.sum(y, Spring.sum(height, Spring.constant(yPad)));
 		}
 
-		//Set the parent's size.
+		// Set the parent's size.
 		SpringLayout.Constraints pCons = layout.getConstraints(parent);
 		pCons.setConstraint(SpringLayout.SOUTH, y);
 		pCons.setConstraint(SpringLayout.EAST, x);
 
 	}
-
 
 	/**
 	 * The border of the "top section" of the About dialog.
@@ -264,7 +256,7 @@ public class AboutDialog extends JDialog {
 	private static class TopBorder extends AbstractBorder {
 
 		@Override
-		public Insets getBorderInsets(Component c) { 
+		public Insets getBorderInsets(Component c) {
 			return getBorderInsets(c, new Insets(0, 0, 0, 0));
 		}
 
@@ -276,17 +268,15 @@ public class AboutDialog extends JDialog {
 		}
 
 		@Override
-		public void paintBorder(Component c, Graphics g, int x, int y,
-								int width, int height) {
+		public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
 			Color color = UIManager.getColor("controlShadow");
-			if (color==null) {
+			if (color == null) {
 				color = SystemColor.controlShadow;
 			}
 			g.setColor(color);
-			g.drawLine(x,y+height-1, x+width,y+height-1);
+			g.drawLine(x, y + height - 1, x + width, y + height - 1);
 		}
 
 	}
-
 
 }

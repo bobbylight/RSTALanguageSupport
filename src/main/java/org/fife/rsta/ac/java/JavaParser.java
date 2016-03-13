@@ -15,6 +15,7 @@ import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import javax.swing.text.Element;
 
+import org.apache.log4j.Logger;
 import org.fife.io.DocumentReader;
 import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
 import org.fife.rsta.ac.java.rjc.lexer.Scanner;
@@ -26,6 +27,8 @@ import org.fife.ui.rsyntaxtextarea.parser.AbstractParser;
 import org.fife.ui.rsyntaxtextarea.parser.DefaultParseResult;
 import org.fife.ui.rsyntaxtextarea.parser.DefaultParserNotice;
 import org.fife.ui.rsyntaxtextarea.parser.ParseResult;
+
+import sun.reflect.Reflection;
 
 
 /**
@@ -45,11 +48,14 @@ import org.fife.ui.rsyntaxtextarea.parser.ParseResult;
  * <tt>RSyntaxTextArea</tt>.<p>
  *
  * Please keep in mind that this class is a work-in-progress!
- * 
+ *
  * @author Robert Futrell
  * @version 0.5
  */
 public class JavaParser extends AbstractParser {
+
+
+	private static final Logger log = Logger.getLogger(Reflection.getCallerClass(1));
 
 	/**
 	 * The property change event that's fired when the document is re-parsed.
@@ -117,6 +123,10 @@ public class JavaParser extends AbstractParser {
 	public int getOffset(RSyntaxDocument doc, ParserNotice notice) {
 		Element root = doc.getDefaultRootElement();
 		Element elem = root.getElement(notice.getLine());
+		if (elem == null) {
+			log.info("NPE " + notice.getLine() + " " + notice);
+			return -1;
+		}
 		int offs = elem.getStartOffset() + notice.getColumn();
 		return offs>=elem.getEndOffset() ? -1 : offs;
 	}

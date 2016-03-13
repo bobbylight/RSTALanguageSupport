@@ -1,12 +1,22 @@
+import javax.swing.JComponent;
+import java.util.Arrays;
+
 public class ExampleCode {
 
    private String strField;
    protected int aaa;
    protected int abb;
    public float foo;
+   java.util.ArrayList al;
+   JComponent jc;
 
    public ExampleCode(int value) {
       this.value = value;
+      Object aaa = jc.actionMap;
+      jc.getColorModel();
+
+      Object yy = Arrays.clone();
+      yy.
    }
 
    public String getX() {
@@ -27,31 +37,31 @@ public class ExampleCode {
 
    /** Ctrl+click my stuff! */
    private class Inner1 {
-   
+
       private int aaa;
       private double d;
       private String strField;
-      
+
       public void doSomething(double newVal) {
          d = newVal;
          aaa = abb = clickable;
          strField = getX(); // getX() clickable
       }
-      
+
    }
-   
+
    /** Ctrl+click my stuff also! */
    private static class Inner2 {
-   
+
       private double d;
       private String strField;
-      
+
       public void doSomething(double newVal) {
          d = newVal;
          aaa = abb = notClickable;
          strField = getX(); // getX() not clickable
       }
-      
+
    }
-   
-}   
+
+}
