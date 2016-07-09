@@ -12,7 +12,7 @@ package org.fife.rsta.ac.java;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.IOException;
+
 import javax.swing.text.Element;
 
 import org.fife.io.DocumentReader;
@@ -45,7 +45,7 @@ import org.fife.ui.rsyntaxtextarea.parser.ParseResult;
  * <tt>RSyntaxTextArea</tt>.<p>
  *
  * Please keep in mind that this class is a work-in-progress!
- * 
+ *
  * @author Robert Futrell
  * @version 0.5
  */
@@ -142,12 +142,9 @@ public class JavaParser extends AbstractParser {
 			cu = fact.getCompilationUnit("SomeFile.java", scanner); // TODO: Real name?
 			long time = System.currentTimeMillis() - start;
 			result.setParseTime(time);
-		} catch (IOException ioe) {
-			result.setError(ioe);
-//			ioe.printStackTrace();
+		} finally {
+			r.close();
 		}
-
-		r.close();
 
 		addNotices(doc);
 		support.firePropertyChange(PROPERTY_COMPILATION_UNIT, null, cu);

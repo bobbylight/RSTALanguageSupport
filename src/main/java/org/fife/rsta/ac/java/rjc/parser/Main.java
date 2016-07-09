@@ -10,11 +10,15 @@
  */
 package org.fife.rsta.ac.java.rjc.parser;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.fife.rsta.ac.java.rjc.lexer.*;
+import org.fife.rsta.ac.java.rjc.lexer.Scanner;
 
 
 /**
@@ -107,21 +111,6 @@ PrintStream oldErr = System.err;
 				System.err.println(file.getAbsolutePath());
 				ie.printStackTrace();
 				System.exit(1);
-			} catch (IOException ioe) {
-				String msg = ioe.getMessage();
-				if (msg.startsWith("TypeParameters")) {
-					log(file.getName() + ": ****** TYPEPARAMETERS ******");
-					typeParamCount++;
-				}
-				else if (msg.startsWith("AnnotationTypeDeclaration")) {
-					log(file.getName() + ": ****** AnnotationTypeDeclaration ******");
-					annotationTypeDecCount++;
-				}
-				else {
-					System.err.println(file.getAbsolutePath());
-					ioe.printStackTrace();
-					System.exit(1);
-				}
 			}
 			count++;
 			r.close();

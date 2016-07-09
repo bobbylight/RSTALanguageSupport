@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.Element;
@@ -34,7 +35,6 @@ import javax.swing.text.Segment;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import org.xml.sax.SAXException;
 
 import org.fife.ui.autocomplete.AbstractCompletionProvider;
 import org.fife.ui.autocomplete.Completion;
@@ -45,6 +45,7 @@ import org.fife.ui.autocomplete.Util;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.Token;
+import org.xml.sax.SAXException;
 
 
 /**
@@ -59,7 +60,7 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 	private List<Completion> propertyCompletions;
 	private Map<String, List<Completion>> valueCompletions;
 	private Map<String, List<CompletionGenerator>> valueCompletionGenerators;
-	
+
 	private Segment seg = new Segment();
 	private AbstractCompletionProvider.CaseInsensitiveComparator comparator;
 
@@ -385,7 +386,7 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 		completions = loadFromXML("data/html.xml");
 
 		addAtRuleCompletions(completions);
-		
+
 		Collections.sort(completions);
 		return completions;
 
@@ -504,8 +505,7 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 	}
 
 
-	private void parsePropertyValueCompletionLine(String line)
-			throws IOException {
+	private void parsePropertyValueCompletionLine(String line) {
 
 		String[] tokens = line.split("\\s+");
 		String prop = tokens[0];

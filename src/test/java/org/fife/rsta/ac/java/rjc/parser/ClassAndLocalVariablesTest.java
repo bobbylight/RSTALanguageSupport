@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
+import junit.framework.TestCase;
+
 import org.fife.rsta.ac.java.rjc.ast.CodeBlock;
 import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
 import org.fife.rsta.ac.java.rjc.ast.Field;
@@ -26,14 +28,11 @@ import org.fife.rsta.ac.java.rjc.ast.Member;
 import org.fife.rsta.ac.java.rjc.ast.Method;
 import org.fife.rsta.ac.java.rjc.ast.TypeDeclaration;
 import org.fife.rsta.ac.java.rjc.lexer.Scanner;
-import org.fife.rsta.ac.java.rjc.parser.ASTFactory;
-
-import junit.framework.TestCase;
 
 
 /**
  * Simple test case verifying parsing common cases of:
- * 
+ *
  * <ul>
  *    <li>Class members (methods and fields)
  *    <li>Local variables
@@ -81,7 +80,7 @@ public class ClassAndLocalVariablesTest extends TestCase {
 	}
 
 
-	public void testImports() throws IOException {
+	public void testImports() {
 
 		assertEquals(4, cu.getImportCount());
 
@@ -112,7 +111,7 @@ public class ClassAndLocalVariablesTest extends TestCase {
 	}
 
 
-	public void testMembers() throws IOException {
+	public void testMembers() {
 
 		// A single class is defined
 		assertEquals(1, cu.getTypeDeclarationCount());
@@ -135,7 +134,7 @@ public class ClassAndLocalVariablesTest extends TestCase {
 		assertEquals("int", field.getType().toString());
 		assertEquals("classInt1", field.getName());
 		assertTrue(field.getModifiers().isPublic());
-		assertTrue(field.getDocComment()!=null && 
+		assertTrue(field.getDocComment()!=null &&
 				field.getDocComment().indexOf("A member int variable.")>=0);
 
 		member = i.next();

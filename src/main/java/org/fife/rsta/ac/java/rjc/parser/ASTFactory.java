@@ -35,13 +35,15 @@ import org.fife.rsta.ac.java.rjc.lang.Modifiers;
 import org.fife.rsta.ac.java.rjc.lang.Type;
 import org.fife.rsta.ac.java.rjc.lang.TypeArgument;
 import org.fife.rsta.ac.java.rjc.lang.TypeParameter;
-import org.fife.rsta.ac.java.rjc.lexer.*;
+import org.fife.rsta.ac.java.rjc.lexer.Scanner;
+import org.fife.rsta.ac.java.rjc.lexer.Token;
+import org.fife.rsta.ac.java.rjc.lexer.TokenTypes;
 import org.fife.rsta.ac.java.rjc.notices.ParserNotice;
 
 
 /**
  * Generates an abstract syntax tree for a Java source file.
- * 
+ *
  * @author Robert Futrell
  * @version 1.0
  */
@@ -481,12 +483,11 @@ case KEYWORD_WHILE:
 	/**
 	 * Reads tokens for a Java source file from the specified lexer and returns
 	 * the structure of the source as an AST.
-	 * 
+	 *
 	 * @param scanner The scanner to read from.
 	 * @return The root node of the AST.
 	 */
-	public CompilationUnit getCompilationUnit(String name, Scanner scanner)
-												throws IOException {
+	public CompilationUnit getCompilationUnit(String name, Scanner scanner) {
 
 		CompilationUnit cu = new CompilationUnit(name);
 
