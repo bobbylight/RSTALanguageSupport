@@ -106,6 +106,7 @@ public class CodeBlock extends AbstractMember {
 	}
 
 
+	@Override
 	public String getDocComment() {
 		// TODO: Can static blocks have doc comments?
 		return null;
@@ -155,6 +156,7 @@ public class CodeBlock extends AbstractMember {
 	}
 
 
+	@Override
 	public Modifiers getModifiers() {
 		Modifiers modifiers = new Modifiers();
 		if (isStatic) {
@@ -174,11 +176,13 @@ public class CodeBlock extends AbstractMember {
 	 *
 	 * @return <code>null</code> always.
 	 */
+	@Override
 	public Type getType() {
 		return null;
 	}
 
 
+	@Override
 	public boolean isDeprecated() {
 		return false;
 	}

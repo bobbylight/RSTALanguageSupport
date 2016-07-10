@@ -130,6 +130,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void install(RSyntaxTextArea textArea) {
 
 		JavaCompletionProvider p = new JavaCompletionProvider(jarManager);
@@ -187,6 +188,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void uninstall(RSyntaxTextArea textArea) {
 
 		uninstallImpl(textArea);
@@ -273,6 +275,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		 *
 		 * @param e The event.
 		 */
+		@Override
 		public void propertyChange(PropertyChangeEvent e) {
 
 			String name = e.getPropertyName();
@@ -568,6 +571,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 			t.setRepeats(false);
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			JavaParser parser = getParser(textArea);
@@ -600,6 +604,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 
 		}
 
+		@Override
 		public void caretUpdate(CaretEvent e) {
 			t.restart();
 		}

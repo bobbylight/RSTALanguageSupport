@@ -202,15 +202,18 @@ public class JavaScriptMethodCompletion extends FunctionCompletion implements
 		return getSignature();
 	}
 	
+	@Override
 	public String getType(boolean qualified) {
 		return ((SourceCompletionProvider) getProvider()).getTypesFactory().convertJavaScriptType("void", qualified);
 	}
 	
+	@Override
 	public String getEnclosingClassName(boolean fullyQualified) {
 		return null;
 	}
 
 
+	@Override
 	public String getLookupName() {
 		StringBuilder sb = new StringBuilder(getName());
 		sb.append('(');

@@ -55,6 +55,7 @@ public class NormalInterfaceDeclaration extends AbstractTypeDeclarationNode {
 	}
 
 
+	@Override
 	public String getTypeString() {
 		return "interface";
 	}

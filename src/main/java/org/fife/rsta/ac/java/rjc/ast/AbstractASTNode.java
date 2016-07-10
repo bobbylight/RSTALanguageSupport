@@ -41,6 +41,7 @@ abstract class AbstractASTNode implements ASTNode {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -49,6 +50,7 @@ abstract class AbstractASTNode implements ASTNode {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getNameEndOffset() {
 		return endOffs!=null ? endOffs.getOffset() : Integer.MAX_VALUE;
 	}
@@ -57,6 +59,7 @@ abstract class AbstractASTNode implements ASTNode {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getNameStartOffset() {
 		return startOffs!=null ? startOffs.getOffset() : 0;
 	}

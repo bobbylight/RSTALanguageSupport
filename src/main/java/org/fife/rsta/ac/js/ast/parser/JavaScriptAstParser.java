@@ -779,6 +779,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 		private ArrayList<ReturnStatement> returnStatements = new ArrayList<ReturnStatement>();
 
+		@Override
 		public boolean visit(AstNode node) {
 			switch (node.getType()) {
 				case Token.RETURN:

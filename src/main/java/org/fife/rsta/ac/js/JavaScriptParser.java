@@ -236,6 +236,7 @@ public class JavaScriptParser extends AbstractParser {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public ParseResult parse(RSyntaxDocument doc, String style) {
 
 		astRoot = null;
@@ -317,16 +318,19 @@ public class JavaScriptParser extends AbstractParser {
 	 */
 	public static class JSErrorReporter implements ErrorReporter {
 
+		@Override
 		public void error(String message, String sourceName, int line,
 				String lineSource, int lineOffset) {
 		}
 
+		@Override
 		public EvaluatorException runtimeError(String message,
 				String sourceName, int line, String lineSource,
 				int lineOffset) {
 			return null;
 		}
 
+		@Override
 		public void warning(String message, String sourceName, int line,
 				String lineSource, int lineOffset) {
 

@@ -7,6 +7,7 @@ import org.fife.rsta.ac.js.ast.type.ecma.TypeDeclarations;
 
 public class ECMAvE4xAdditions implements ECMAAdditions {
 
+	@Override
 	public void addAdditionalTypes(TypeDeclarations typeDecs) {
 		typeDecs.addTypeDeclaration(TypeDeclarations.ECMA_GLOBAL, new TypeDeclaration(
 				"org.fife.rsta.ac.js.ecma.api.e4x", "E4XGlobal", "Global", false, false));

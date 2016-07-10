@@ -180,6 +180,7 @@ public class LanguageSupportFactory implements PropertyChangeListener {
 	 *
 	 * @param e The event.
 	 */
+	@Override
 	public void propertyChange(PropertyChangeEvent e) {
 
 		RSyntaxTextArea source = (RSyntaxTextArea)e.getSource();

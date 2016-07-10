@@ -91,6 +91,7 @@ public class NormalClassDeclaration extends AbstractTypeDeclarationNode {
 	}
 
 
+	@Override
 	public String getTypeString() {
 		return "class";
 	}

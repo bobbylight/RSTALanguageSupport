@@ -45,6 +45,7 @@ class FieldInfoData implements Data {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getEnclosingClassName(boolean fullyQualified) {
 		return info.getClassFile().getClassName(fullyQualified);
 	}
@@ -53,6 +54,7 @@ class FieldInfoData implements Data {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getIcon() {
 
 		String key = null;
@@ -82,6 +84,7 @@ class FieldInfoData implements Data {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getSignature() {
 		return info.getName();
 	}
@@ -90,6 +93,7 @@ class FieldInfoData implements Data {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getSummary() {
 
 		ClassFile cf = info.getClassFile();;
@@ -166,6 +170,7 @@ class FieldInfoData implements Data {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getType() {
 		return info.getTypeString(false);
 	}
@@ -176,6 +181,7 @@ class FieldInfoData implements Data {
 	 *
 	 * @return <code>false</code> always.
 	 */
+	@Override
 	public boolean isAbstract() {
 		return false; // Fields cannot be abstract
 	}
@@ -186,6 +192,7 @@ class FieldInfoData implements Data {
 	 *
 	 * @return <code>false</code> always.
 	 */
+	@Override
 	public boolean isConstructor() {
 		return false;
 	}
@@ -194,16 +201,19 @@ class FieldInfoData implements Data {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean isDeprecated() {
 		return info.isDeprecated();
 	}
 
 
+	@Override
 	public boolean isFinal() {
 		return info.isFinal();
 	}
 
 
+	@Override
 	public boolean isStatic() {
 		return info.isStatic();
 	}

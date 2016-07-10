@@ -60,6 +60,7 @@ public class CLanguageSupport extends AbstractLanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void install(RSyntaxTextArea textArea) {
 
 		CCompletionProvider provider = getProvider();
@@ -75,6 +76,7 @@ public class CLanguageSupport extends AbstractLanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void uninstall(RSyntaxTextArea textArea) {
 		uninstallImpl(textArea);
 		textArea.setToolTipSupplier(null);

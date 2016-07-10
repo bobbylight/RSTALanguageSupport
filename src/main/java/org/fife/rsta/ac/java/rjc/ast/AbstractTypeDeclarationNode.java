@@ -52,6 +52,7 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	}
 
 
+	@Override
 	public void addTypeDeclaration(TypeDeclaration type) {
 		if (childTypes==null) {
 			childTypes = new ArrayList<TypeDeclaration>(1); // Usually small
@@ -61,21 +62,25 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	}
 
 
+	@Override
 	public boolean getBodyContainsOffset(int offs) {
 		return offs>=getBodyStartOffset() && offs<getBodyEndOffset();
 	}
 
 
+	@Override
 	public int getBodyEndOffset() {
 		return bodyEndOffs!=null ? bodyEndOffs.getOffset() : Integer.MAX_VALUE;
 	}
 
 
+	@Override
 	public int getBodyStartOffset() {
 		return bodyStartOffs==null ? 0 : bodyStartOffs.getOffset();
 	}
 
 
+	@Override
 	public TypeDeclaration getChildType(int index) {
 		return childTypes.get(index);
 	}
@@ -84,6 +89,7 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public TypeDeclaration getChildTypeAtOffset(int offs) {
 
 		TypeDeclaration typeDec = null;
@@ -101,11 +107,13 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	}
 
 
+	@Override
 	public int getChildTypeCount() {
 		return childTypes==null ? 0 : childTypes.size();
 	}
 
 
+	@Override
 	public String getDocComment() {
 		return docComment;
 	}
@@ -114,6 +122,7 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Iterator<Field> getFieldIterator() {
 		List<Field> fields = new ArrayList<Field>();
 		for (Iterator<Member> i=getMemberIterator(); i.hasNext(); ) {
@@ -126,11 +135,13 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	}
 
 
+	@Override
 	public Member getMember(int index) {
 		return memberList.get(index);
 	}
 
 
+	@Override
 	public int getMemberCount() {
 		return memberList.size();
 	}
@@ -139,6 +150,7 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Iterator<Member> getMemberIterator() {
 		return memberList.iterator();
 	}
@@ -147,6 +159,7 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Iterator<Method> getMethodIterator() {
 		List<Method> methods = new ArrayList<Method>();
 		for (Iterator<Member> i=getMemberIterator(); i.hasNext(); ) {
@@ -162,6 +175,7 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public List<Method> getMethodsByName(String name) {
 		List<Method> methods = new ArrayList<Method>();
 		for (Iterator<Member> i=getMemberIterator(); i.hasNext(); ) {
@@ -174,6 +188,7 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	}
 
 
+	@Override
 	public Modifiers getModifiers() {
 		return modifiers;
 	}
@@ -182,6 +197,7 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getName(boolean fullyQualified) {
 		String name = getName();
 		if (fullyQualified) {
@@ -197,6 +213,7 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public Package getPackage() {
 		return pkg;
 	}
@@ -205,6 +222,7 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public TypeDeclaration getParentType() {
 		return parentType;
 	}
@@ -215,6 +233,7 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	}
 
 
+	@Override
 	public boolean isDeprecated() {
 		return deprecated;
 	}
@@ -223,6 +242,7 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean isStatic() {
 		return modifiers==null ? false : modifiers.isStatic();
 	}
@@ -243,6 +263,7 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	}
 
 
+	@Override
 	public void setDocComment(String comment) {
 		docComment = comment;
 	}
@@ -268,6 +289,7 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setParentType(TypeDeclaration parentType) {
 		this.parentType = parentType;
 	}

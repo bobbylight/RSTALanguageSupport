@@ -75,11 +75,13 @@ public class JavaScriptHelper {
 		env.setIdeMode(true);
 		env.setErrorReporter(new ErrorReporter() {
 
+			@Override
 			public void error(String message, String sourceName, int line,
 					String lineSource, int lineOffset) {
 			}
 
 
+			@Override
 			public EvaluatorException runtimeError(String message,
 					String sourceName, int line, String lineSource,
 					int lineOffset) {
@@ -87,6 +89,7 @@ public class JavaScriptHelper {
 			}
 
 
+			@Override
 			public void warning(String message, String sourceName, int line,
 					String lineSource, int lineOffset) {
 
@@ -356,6 +359,7 @@ case Token.EXPR_RESULT:
 			this.provider = provider;
 		}
 		
+		@Override
 		public boolean visit(AstNode node) {
 
 			if (!(node instanceof InfixExpression)) // ignore infix expression
@@ -597,6 +601,7 @@ case Token.EXPR_RESULT:
 		}
 		
 
+		@Override
 		public boolean visit(AstNode node) {
 			switch (node.getType()) {
 				case Token.NAME:

@@ -76,6 +76,7 @@ public class CompilationUnit extends AbstractASTNode
 	}
 
 
+	@Override
 	public void addTypeDeclaration(TypeDeclaration typeDec) {
 		typeDeclarations.add(typeDec);
 	}
@@ -280,6 +281,7 @@ public class CompilationUnit extends AbstractASTNode
 	 */
 	private static class ZeroOffset implements Offset {
 
+		@Override
 		public int getOffset() {
 			return 0;
 		}

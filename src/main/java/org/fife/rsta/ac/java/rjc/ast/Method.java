@@ -66,11 +66,13 @@ public class Method extends AbstractMember {
 	}
 
 
+	@Override
 	public String getDocComment() {
 		return docComment;
 	}
 
 
+	@Override
 	public Modifiers getModifiers() {
 		return modifiers;
 	}
@@ -115,6 +117,7 @@ public class Method extends AbstractMember {
 	}
 
 
+	@Override
 	public Type getType() {
 		return type;
 	}
@@ -125,6 +128,7 @@ public class Method extends AbstractMember {
 	}
 
 
+	@Override
 	public boolean isDeprecated() {
 		return deprecated;
 	}

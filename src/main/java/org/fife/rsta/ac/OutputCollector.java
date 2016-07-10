@@ -92,6 +92,7 @@ public class OutputCollector implements Runnable {
 	}
 
 
+	@Override
 	public void run() {
 
 		String line = null;

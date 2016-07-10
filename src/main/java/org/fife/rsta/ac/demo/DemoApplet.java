@@ -31,6 +31,7 @@ public class DemoApplet extends JApplet {
 	public void init() {
 		super.init();
 		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				String laf = UIManager.getSystemLookAndFeelClassName();
 				try {

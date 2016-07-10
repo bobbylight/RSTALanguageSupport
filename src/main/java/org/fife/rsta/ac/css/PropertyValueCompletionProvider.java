@@ -118,6 +118,7 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 	}
 
 
+	@Override
 	public String getAlreadyEnteredText(JTextComponent comp) {
 
 		Document doc = comp.getDocument();
@@ -163,12 +164,14 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 	}
 
 
+	@Override
 	public List<Completion> getCompletionsAt(JTextComponent comp, Point p) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 
+	@Override
 	public List<ParameterizedCompletion> getParameterizedCompletions(
 			JTextComponent tc) {
 		return null;

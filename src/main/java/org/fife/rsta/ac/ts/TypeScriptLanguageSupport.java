@@ -31,6 +31,7 @@ public class TypeScriptLanguageSupport extends AbstractLanguageSupport {
 		return ac;
 	}
 	
+	@Override
 	public void install(RSyntaxTextArea textArea) {
 
 		// We use a custom auto-completion.
@@ -55,6 +56,7 @@ public class TypeScriptLanguageSupport extends AbstractLanguageSupport {
 	}
 
 
+	@Override
 	public void uninstall(RSyntaxTextArea textArea) {
 		uninstallImpl(textArea);
 	}

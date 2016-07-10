@@ -28,6 +28,7 @@ public interface JavaSourceCompletion extends Completion {
 	 * Force subclasses to override equals().
 	 * TODO: Remove me
 	 */
+	@Override
 	public boolean equals(Object obj);
 
 

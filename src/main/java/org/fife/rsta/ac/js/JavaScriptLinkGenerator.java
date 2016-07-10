@@ -29,6 +29,7 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public LinkGeneratorResult isLinkAtOffset(RSyntaxTextArea textArea, int offs) {
 		
 		JavaScriptDeclaration dec = null;

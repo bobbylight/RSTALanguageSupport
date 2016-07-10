@@ -56,6 +56,7 @@ public class JavaTemplateCompletion extends TemplateCompletion
 	}
 
 
+	@Override
 	public void rendererText(Graphics g, int x, int y, boolean selected) {
 		JavaShorthandCompletion.renderText(g, getInputText(),
 				getShortDescription(), x, y, selected);

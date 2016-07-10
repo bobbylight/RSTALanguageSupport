@@ -70,6 +70,7 @@ public class CssLanguageSupport extends AbstractLanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void install(RSyntaxTextArea textArea) {
 
 		CssCompletionProvider provider = getProvider();
@@ -85,6 +86,7 @@ public class CssLanguageSupport extends AbstractLanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void uninstall(RSyntaxTextArea textArea) {
 		uninstallImpl(textArea);
 		textArea.setToolTipSupplier(null);

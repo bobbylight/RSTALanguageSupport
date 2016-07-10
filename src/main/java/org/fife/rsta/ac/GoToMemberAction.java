@@ -58,6 +58,7 @@ public class GoToMemberAction extends TextAction {
 	}
 
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		AbstractSourceTree tree = createTree();
 		if (tree==null) {

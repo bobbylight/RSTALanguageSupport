@@ -268,6 +268,7 @@ return DEFAULT;
 	}
 
 
+	@Override
 	public void install(RSyntaxTextArea textArea) {
 
 		// We use a custom auto-completion.
@@ -477,6 +478,7 @@ return DEFAULT;
 	}
 
 
+	@Override
 	public void uninstall(RSyntaxTextArea textArea) {
 
 		uninstallImpl(textArea);
@@ -543,6 +545,7 @@ return DEFAULT;
 		 * 
 		 * @param e The event.
 		 */
+		@Override
 		public void propertyChange(PropertyChangeEvent e) {
 
 			String name = e.getPropertyName();
@@ -625,6 +628,7 @@ return DEFAULT;
 			visitor = new DeepestScopeVisitor();
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			JavaScriptParser parser = getParser(textArea);
@@ -658,6 +662,7 @@ return DEFAULT;
 
 		}
 
+		@Override
 		public void caretUpdate(CaretEvent e) {
 			t.restart();
 		}
@@ -724,6 +729,7 @@ return DEFAULT;
 			deepestScope = null;
 		}
 
+		@Override
 		public boolean visit(AstNode node) {
 
 			switch (node.getType()) {

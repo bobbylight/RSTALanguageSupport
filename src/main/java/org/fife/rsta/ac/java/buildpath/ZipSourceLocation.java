@@ -61,6 +61,7 @@ public class ZipSourceLocation implements SourceLocation {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public CompilationUnit getCompilationUnit(ClassFile cf) throws IOException {
 
 		CompilationUnit cu = null;
@@ -96,6 +97,7 @@ public class ZipSourceLocation implements SourceLocation {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getLocationAsString() {
 		return archive.getAbsolutePath();
 	}

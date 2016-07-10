@@ -43,6 +43,7 @@ interface Actions {
 			putValue(NAME, "About RSTALanguageSupport...");
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			AboutDialog ad = new AboutDialog((DemoApp)SwingUtilities.
 					getWindowAncestor(demo));
@@ -65,6 +66,7 @@ interface Actions {
 			putValue(MNEMONIC_KEY, new Integer('x'));
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			System.exit(0);
 		}
@@ -91,6 +93,7 @@ interface Actions {
 			putValue(ACCELERATOR_KEY, ks);
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (chooser == null) {
 				chooser = new JFileChooser();
@@ -120,6 +123,7 @@ interface Actions {
 			this.info = info;
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			try {
 				UIManager.setLookAndFeel(info.getClassName());
@@ -151,6 +155,7 @@ interface Actions {
 			this.style = style;
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			demo.setText(res, style);
 		}
@@ -167,6 +172,7 @@ interface Actions {
 			putValue(NAME, "Layered Selection Highlights");
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			DefaultHighlighter h = (DefaultHighlighter)demo.getTextArea().
 					getHighlighter();

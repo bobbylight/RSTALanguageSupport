@@ -49,6 +49,7 @@ public class SchemaValidationConfig implements ValidationConfig {
 	}
 
 
+	@Override
 	public void configureParser(XmlParser parser) {
 		SAXParserFactory spf = parser.getSaxParserFactory();
 		spf.setValidating(false); // Not using a DTD
@@ -58,6 +59,7 @@ public class SchemaValidationConfig implements ValidationConfig {
 	}
 
 
+	@Override
 	public void configureHandler(XmlParser.Handler handler) {
 		handler.setEntityResolver(null); // Not used in schema validation
 	}

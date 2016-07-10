@@ -138,6 +138,7 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getAutoActivationDelay() {
 		return autoActivationDelay;
 	}
@@ -158,6 +159,7 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public ListCellRenderer getDefaultCompletionCellRenderer() {
 		return renderer;
 	}
@@ -166,6 +168,7 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean getShowDescWindow() {
 		return showDescWindow;
 	}
@@ -199,6 +202,7 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean isAutoActivationEnabled() {
 		return autoActivationEnabled;
 	}
@@ -207,6 +211,7 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean isAutoCompleteEnabled() {
 		return autoCompleteEnabled;
 	}
@@ -215,6 +220,7 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean isParameterAssistanceEnabled() {
 		return parameterAssistanceEnabled;
 	}
@@ -223,6 +229,7 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setAutoActivationDelay(int ms) {
 		ms = Math.max(0, ms);
 		if (ms!=autoActivationDelay) {
@@ -237,6 +244,7 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setAutoActivationEnabled(boolean enabled) {
 		if (enabled!=autoActivationEnabled) {
 			autoActivationEnabled = enabled;
@@ -250,6 +258,7 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setAutoCompleteEnabled(boolean enabled) {
 		if (enabled!=autoCompleteEnabled) {
 			autoCompleteEnabled = enabled;
@@ -263,6 +272,7 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setDefaultCompletionCellRenderer(ListCellRenderer r) {
 		if (r==null) {
 			r = createDefaultCompletionCellRenderer();
@@ -282,6 +292,7 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setParameterAssistanceEnabled(boolean enabled) {
 		if (enabled!=parameterAssistanceEnabled) {
 			parameterAssistanceEnabled = enabled;
@@ -295,6 +306,7 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setShowDescWindow(boolean show) {
 		if (show!=showDescWindow) {
 			showDescWindow = show;

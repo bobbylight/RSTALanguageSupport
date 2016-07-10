@@ -110,6 +110,7 @@ public interface TypeDeclaration extends ASTNode, TypeDeclarationContainer {
 	 * @return The name of this type.
 	 * @see #getName(boolean)
 	 */
+	@Override
 	public String getName();
 
 

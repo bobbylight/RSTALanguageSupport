@@ -211,6 +211,7 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 	}
 
 
+	@Override
 	public String getEnclosingClassName(boolean fullyQualified) {
 		return data.getEnclosingClassName(fullyQualified);
 	}
@@ -222,6 +223,7 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 	}
 
 
+	@Override
 	public String getSignature() {
 		return data.getSignature();
 	}
@@ -247,6 +249,7 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 	}
 
 
+	@Override
 	public boolean isDeprecated() {
 		return data.isDeprecated();
 	}
@@ -255,6 +258,7 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void rendererText(Graphics g, int x, int y, boolean selected) {
 		rendererText(this, g, x, y, selected);
 	}

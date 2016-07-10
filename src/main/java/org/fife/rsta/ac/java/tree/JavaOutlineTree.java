@@ -378,6 +378,7 @@ public class JavaOutlineTree extends AbstractSourceTree {
 		 * Called whenever the text area's syntax style changes, as well as
 		 * when it is re-parsed.
 		 */
+		@Override
 		public void propertyChange(PropertyChangeEvent e) {
 
 			String name = e.getPropertyName();
@@ -398,6 +399,7 @@ public class JavaOutlineTree extends AbstractSourceTree {
 		 * Selects the corresponding element in the text editor when a user
 		 * clicks on a node in this tree.
 		 */
+		@Override
 		public void valueChanged(TreeSelectionEvent e) {
 			if (getGotoSelectedElementOnClick()) {
 				//gotoSelectedElement();

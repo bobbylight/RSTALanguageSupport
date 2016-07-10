@@ -23,6 +23,7 @@ public class EnumDeclaration extends AbstractTypeDeclarationNode {
 	}
 
 
+	@Override
 	public String getTypeString() {
 		return "enum";
 	}

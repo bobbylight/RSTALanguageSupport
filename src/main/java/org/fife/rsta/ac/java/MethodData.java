@@ -37,6 +37,7 @@ class MethodData implements Data {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getEnclosingClassName(boolean fullyQualified) {
 		// NOTE: This check isn't really necessary, but is here just in case
 		// there's a bug in the parsing code.
@@ -50,6 +51,7 @@ class MethodData implements Data {
 	}
 
 
+	@Override
 	public String getIcon() {
 
 		String key = null;
@@ -76,43 +78,51 @@ class MethodData implements Data {
 	}
 
 
+	@Override
 	public String getSignature() {
 		return method.getNameAndParameters();
 	}
 
 
+	@Override
 	public String getSummary() {
 		String docComment = method.getDocComment();
 		return docComment!=null ? docComment : method.toString();
 	}
 
 
+	@Override
 	public String getType() {
 		Type type = method.getType();
 		return type==null ? "void" : type.toString();
 	}
 
 
+	@Override
 	public boolean isAbstract() {
 		return method.getModifiers().isAbstract();
 	}
 
 
+	@Override
 	public boolean isConstructor() {
 		return method.isConstructor();
 	}
 
 
+	@Override
 	public boolean isDeprecated() {
 		return method.isDeprecated();
 	}
 
 
+	@Override
 	public boolean isFinal() {
 		return method.getModifiers().isFinal();
 	}
 
 
+	@Override
 	public boolean isStatic() {
 		return method.getModifiers().isStatic();
 	}

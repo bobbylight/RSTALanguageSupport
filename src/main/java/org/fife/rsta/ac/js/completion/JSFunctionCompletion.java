@@ -141,6 +141,7 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 	}
 
 
+	@Override
 	public String getLookupName() {
 		SourceCompletionProvider provider = (SourceCompletionProvider) getProvider();
 		return provider.getJavaScriptEngine().getJavaScriptResolver(provider).getLookupText(methodData, getName());
@@ -232,6 +233,7 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 	}
 
 
+	@Override
 	public String getType(boolean qualified) {
 		return ((SourceCompletionProvider) getProvider()).getTypesFactory().convertJavaScriptType(methodData
 				.getType(qualified), qualified);
@@ -252,6 +254,7 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 	}
 
 
+	@Override
 	public String getEnclosingClassName(boolean fullyQualified) {
 		return methodData.getEnclosingClassName(fullyQualified);
 	}

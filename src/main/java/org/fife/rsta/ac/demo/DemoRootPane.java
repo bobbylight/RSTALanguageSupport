@@ -79,6 +79,7 @@ class DemoRootPane extends JRootPane implements HyperlinkListener,
 		final JSplitPane sp = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 										treeSP, scrollPane);
 		SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				sp.setDividerLocation(0.25);
 			}
@@ -194,6 +195,7 @@ setContentPane(cp);
 	 *
 	 * @param e The event.
 	 */
+	@Override
 	public void hyperlinkUpdate(HyperlinkEvent e) {
 		if (e.getEventType()==HyperlinkEvent.EventType.ACTIVATED) {
 			URL url = e.getURL();

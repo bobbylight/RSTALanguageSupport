@@ -125,6 +125,7 @@ public class JavaParser extends AbstractParser {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public ParseResult parse(RSyntaxDocument doc, String style) {
 
 		cu = null;

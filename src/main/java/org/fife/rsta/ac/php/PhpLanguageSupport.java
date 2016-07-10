@@ -82,6 +82,7 @@ public class PhpLanguageSupport extends AbstractMarkupLanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void install(RSyntaxTextArea textArea) {
 
 		PhpCompletionProvider provider = getProvider();
@@ -107,6 +108,7 @@ public class PhpLanguageSupport extends AbstractMarkupLanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void uninstall(RSyntaxTextArea textArea) {
 		uninstallImpl(textArea);
 		uninstallKeyboardShortcuts(textArea);

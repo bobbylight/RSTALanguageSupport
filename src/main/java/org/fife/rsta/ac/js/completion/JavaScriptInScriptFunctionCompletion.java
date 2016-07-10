@@ -43,6 +43,7 @@ public class JavaScriptInScriptFunctionCompletion extends FunctionCompletion
 	}
 
 
+	@Override
 	public String getLookupName() {
 		StringBuilder sb = new StringBuilder(getName());
 		sb.append('(');
@@ -65,6 +66,7 @@ public class JavaScriptInScriptFunctionCompletion extends FunctionCompletion
 	}
 
 
+	@Override
 	public String getType(boolean qualified) {
 		String type = returnType != null ? returnType.getQualifiedName() : null;
 		return ((SourceCompletionProvider) getProvider()).getTypesFactory().convertJavaScriptType(type, qualified);
@@ -72,6 +74,7 @@ public class JavaScriptInScriptFunctionCompletion extends FunctionCompletion
 	
 	
 	
+	@Override
 	public String getEnclosingClassName(boolean fullyQualified) {
 		return null;
 	}

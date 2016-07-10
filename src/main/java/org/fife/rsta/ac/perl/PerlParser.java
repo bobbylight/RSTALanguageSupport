@@ -124,6 +124,7 @@ public class PerlParser extends AbstractParser {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public ParseResult parse(RSyntaxDocument doc, String style) {
 
 		result.clearNotices();
