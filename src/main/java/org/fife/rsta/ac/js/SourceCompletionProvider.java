@@ -67,7 +67,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 	private VariableResolver variableResolver;
 	
-	private PreProcesssingScripts preProcessing;
+	private PreProcessingScripts preProcessing;
 	
 	//Shorthand completions (templates and comments)
 	private ShorthandCompletionCache shorthandCache;
@@ -567,12 +567,12 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	}
 
 
-	public void setPreProcessingScripts(PreProcesssingScripts preProcessing) {
+	public void setPreProcessingScripts(PreProcessingScripts preProcessing) {
 		this.preProcessing = preProcessing;
 	}
 
 
-	public PreProcesssingScripts getPreProcessingScripts() {
+	public PreProcessingScripts getPreProcessingScripts() {
 		return preProcessing;
 	}
 

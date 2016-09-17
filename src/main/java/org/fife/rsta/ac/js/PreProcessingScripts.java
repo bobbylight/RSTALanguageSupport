@@ -13,21 +13,20 @@ import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.ast.AstRoot;
 
 /**
-*
-* Scripts to be processed before  parsing main script text
-* 
-* Useful for includes within JavaScript client
-* 
-* Caches the completions so they do not have to parsed every single time the main script text is parsed
-*/
-public class PreProcesssingScripts {
+ * Scripts to be processed before  parsing main script text
+ * 
+ * Useful for includes within JavaScript client
+ * 
+ * Caches the completions so they do not have to parsed every single time the main script text is parsed
+ */
+public class PreProcessingScripts {
 	
 	private SourceCompletionProvider provider;
 	
 	private Set<Completion> preProcessingCompletions = new HashSet<Completion>();
 	
 	
-	public PreProcesssingScripts(SourceCompletionProvider provider)
+	public PreProcessingScripts(SourceCompletionProvider provider)
 	{
 		this.provider = provider;
 	}
