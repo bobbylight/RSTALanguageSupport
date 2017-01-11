@@ -125,6 +125,7 @@ class JavaLinkGenerator implements LinkGenerator {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public LinkGeneratorResult isLinkAtOffset(RSyntaxTextArea textArea,
 			int offs) {
 

@@ -160,6 +160,7 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public List<Completion> getParameterChoices(JTextComponent tc,
 								ParameterizedCompletion.Parameter param) {
 
@@ -327,6 +328,7 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 			return ICON;
 		}
 
+		@Override
 		public void rendererText(Graphics g, int x, int y, boolean selected) {
 			// Never called
 		}

@@ -124,6 +124,7 @@ public class GoToMemberWindow extends JWindow {
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "EscapePressed");
 		ActionMap am = pane.getActionMap();
 		am.put("EscapePressed", new AbstractAction() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
@@ -186,28 +187,34 @@ public class GoToMemberWindow extends JWindow {
 	private class Listener extends MouseAdapter implements WindowFocusListener,
 			ComponentListener, DocumentListener, ActionListener, KeyListener {
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (tree.gotoSelectedElement()) {
 				dispose();
 			}
 		}
 
+		@Override
 		public void changedUpdate(DocumentEvent e) {
 			handleDocumentEvent(e);
 		}
 
+		@Override
 		public void componentHidden(ComponentEvent e) {
 			dispose();
 		}
 
+		@Override
 		public void componentMoved(ComponentEvent e) {
 			dispose();
 		}
 
+		@Override
 		public void componentResized(ComponentEvent e) {
 			dispose();
 		}
 
+		@Override
 		public void componentShown(ComponentEvent e) {
 		}
 
@@ -216,10 +223,12 @@ public class GoToMemberWindow extends JWindow {
 			tree.selectFirstNodeMatchingFilter();
 		}
 
+		@Override
 		public void insertUpdate(DocumentEvent e) {
 			handleDocumentEvent(e);
 		}
 
+		@Override
 		public void keyPressed(KeyEvent e) {
 			switch (e.getKeyCode()) {
 				case KeyEvent.VK_DOWN:
@@ -231,9 +240,11 @@ public class GoToMemberWindow extends JWindow {
 			}
 		}
 
+		@Override
 		public void keyReleased(KeyEvent e) {
 		}
 
+		@Override
 		public void keyTyped(KeyEvent e) {
 		}
 
@@ -245,6 +256,7 @@ public class GoToMemberWindow extends JWindow {
 			}
 		}
 
+		@Override
 		public void removeUpdate(DocumentEvent e) {
 			handleDocumentEvent(e);
 		}
@@ -256,9 +268,11 @@ public class GoToMemberWindow extends JWindow {
 			removeWindowFocusListener(this);
 		}
 
+		@Override
 		public void windowGainedFocus(WindowEvent e) {
 		}
 
+		@Override
 		public void windowLostFocus(WindowEvent e) {
 			dispose();
 		}
@@ -271,14 +285,17 @@ public class GoToMemberWindow extends JWindow {
 	 */
 	private static class TextFieldBorder implements Border {
 
+		@Override
 		public Insets getBorderInsets(Component c) {
 			return new Insets(2, 5, 3, 5);
 		}
 
+		@Override
 		public boolean isBorderOpaque() {
 			return false;
 		}
 
+		@Override
 		public void paintBorder(Component c, Graphics g, int x, int y,
 				int w, int h) {
 			g.setColor(UIManager.getColor("controlDkShadow"));

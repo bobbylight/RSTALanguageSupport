@@ -50,6 +50,7 @@ class PackageNameCompletion extends AbstractJavaSourceCompletion {
 	}
 
 
+	@Override
 	public void rendererText(Graphics g, int x, int y, boolean selected) {
 		g.drawString(getInputText(), x, y);
 	}

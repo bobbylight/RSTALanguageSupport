@@ -77,6 +77,7 @@ public class JspLanguageSupport extends AbstractMarkupLanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void install(RSyntaxTextArea textArea) {
 
 		HtmlCompletionProvider provider = getProvider();
@@ -102,6 +103,7 @@ public class JspLanguageSupport extends AbstractMarkupLanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void uninstall(RSyntaxTextArea textArea) {
 		uninstallImpl(textArea);
 		uninstallKeyboardShortcuts(textArea);

@@ -80,42 +80,52 @@ class FieldCompletion extends AbstractJavaSourceCompletion
 		FieldCompletion fc = new FieldCompletion(provider, type.toString());
 		fc.data = new Data() {
 
+			@Override
 			public String getEnclosingClassName(boolean fullyQualified) {
 				return type.getName(fullyQualified);
 			}
 			
+			@Override
 			public String getIcon() {
 				return IconFactory.FIELD_PUBLIC_ICON;
 			}
 
+			@Override
 			public String getSignature() {
 				return "length";
 			}
 
+			@Override
 			public String getSummary() {
 				return null;
 			}
 
+			@Override
 			public String getType() {
 				return "int";
 			}
 
+			@Override
 			public boolean isConstructor() {
 				return false;
 			}
 
+			@Override
 			public boolean isDeprecated() {
 				return false;
 			}
 
+			@Override
 			public boolean isAbstract() {
 				return false;
 			}
 
+			@Override
 			public boolean isFinal() {
 				return false;
 			}
 
+			@Override
 			public boolean isStatic() {
 				return false;
 			}
@@ -125,6 +135,7 @@ class FieldCompletion extends AbstractJavaSourceCompletion
 	}
 
 
+	@Override
 	public String getEnclosingClassName(boolean fullyQualified) {
 		return data.getEnclosingClassName(fullyQualified);
 	}
@@ -136,6 +147,7 @@ class FieldCompletion extends AbstractJavaSourceCompletion
 	}
 
 
+	@Override
 	public String getSignature() {
 		return data.getSignature();
 	}
@@ -156,6 +168,7 @@ class FieldCompletion extends AbstractJavaSourceCompletion
 	}
 
 
+	@Override
 	public String getType() {
 		return data.getType();
 	}
@@ -167,11 +180,13 @@ class FieldCompletion extends AbstractJavaSourceCompletion
 	}
 
 
+	@Override
 	public boolean isDeprecated() {
 		return data.isDeprecated();
 	}
 
 
+	@Override
 	public void rendererText(Graphics g, int x, int y, boolean selected) {
 		MethodCompletion.rendererText(this, g, x, y, selected);
 	}

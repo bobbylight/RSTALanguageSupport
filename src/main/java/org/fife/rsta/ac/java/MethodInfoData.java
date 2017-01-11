@@ -66,6 +66,7 @@ class MethodInfoData implements Data {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getEnclosingClassName(boolean fullyQualified) {
 		return info.getClassFile().getClassName(fullyQualified);
 	}
@@ -74,6 +75,7 @@ class MethodInfoData implements Data {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getIcon() {
 
 		String key = null;
@@ -267,6 +269,7 @@ class MethodInfoData implements Data {
 	}
 
 
+	@Override
 	public String getSignature() {
 
 		// Don't call MethodInfo's implementation, as it is unaware of param
@@ -292,6 +295,7 @@ class MethodInfoData implements Data {
 	}
 
 
+	@Override
 	public String getSummary() {
 
 		ClassFile cf = info.getClassFile();
@@ -332,11 +336,13 @@ class MethodInfoData implements Data {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getType() {
 		return info.getReturnTypeString(false);
 	}
 
 
+	@Override
 	public boolean isAbstract() {
 		return info.isAbstract();
 	}
@@ -345,6 +351,7 @@ class MethodInfoData implements Data {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean isConstructor() {
 		return info.isConstructor();
 	}
@@ -353,16 +360,19 @@ class MethodInfoData implements Data {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean isDeprecated() {
 		return info.isDeprecated();
 	}
 
 
+	@Override
 	public boolean isFinal() {
 		return info.isFinal();
 	}
 
 
+	@Override
 	public boolean isStatic() {
 		return info.isStatic();
 	}

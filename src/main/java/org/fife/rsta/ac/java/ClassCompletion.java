@@ -196,6 +196,7 @@ class ClassCompletion extends AbstractJavaSourceCompletion {
 	}
 
 
+	@Override
 	public void rendererText(Graphics g, int x, int y, boolean selected) {
 
 		String s = cf.getClassName(false);

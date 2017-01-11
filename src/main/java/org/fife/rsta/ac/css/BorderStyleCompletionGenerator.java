@@ -31,6 +31,7 @@ class BorderStyleCompletionGenerator implements CompletionGenerator {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public List<Completion> generate(CompletionProvider provider, String input){
 
 		List<Completion> completions = new ArrayList<Completion>();

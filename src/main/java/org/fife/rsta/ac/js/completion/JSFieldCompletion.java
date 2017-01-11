@@ -58,6 +58,7 @@ public class JSFieldCompletion extends VariableCompletion implements
 	}
 
 
+	@Override
 	public String getEnclosingClassName(boolean fullyQualified) {
 		return fieldData.getEnclosingClassName(fullyQualified);
 	}
@@ -75,6 +76,7 @@ public class JSFieldCompletion extends VariableCompletion implements
 	}
 
 
+	@Override
 	public String getLookupName() {
 		return getReplacementText();
 	}
@@ -87,6 +89,7 @@ public class JSFieldCompletion extends VariableCompletion implements
 	}
 
 
+	@Override
 	public String getType(boolean qualified) {
 		return fieldData.getType(true); /*TypeDeclarationFactory.lookupJSType(fieldData.getType(true),
 				qualified);*/

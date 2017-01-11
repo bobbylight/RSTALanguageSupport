@@ -189,6 +189,7 @@ public class JavadocUrlHandler implements ExternalURLHandler {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void urlClicked(HyperlinkEvent e, Completion c,
 							DescWindowCallback callback) {
 

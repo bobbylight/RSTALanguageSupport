@@ -8,6 +8,7 @@ import org.fife.rsta.ac.js.ast.type.ecma.TypeDeclarations;
 public class ClientBrowserAdditions implements ECMAAdditions {
 
 	
+	@Override
 	public void addAdditionalTypes(TypeDeclarations typeDecs) {
 
 		//add browser objects

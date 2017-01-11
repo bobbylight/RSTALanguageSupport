@@ -3,14 +3,14 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.tros</groupId>
     <artifactId>languagesupport</artifactId>
-    <version>2.5.8</version>
+    <version>2.6.0</version>
     <packaging>jar</packaging>
     <build>
         <plugins>
             <plugin>
                 <groupId>eu.somatik.serviceloader-maven-plugin</groupId>
                 <artifactId>serviceloader-maven-plugin</artifactId>
-                <version>1.0.3</version>
+                <version>1.0.7</version>
                 <configuration>
                     <services>
                         <param>org.fife.rsta.ac.LanguageSupportRegistration</param>
@@ -47,7 +47,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.5.1</version>
+                <version>3.6.0</version>
                 <configuration>
                     <showDeprecation>true</showDeprecation>
                 </configuration>
@@ -64,22 +64,22 @@
         <dependency>
             <groupId>org.tros</groupId>
             <artifactId>rsyntaxtextarea</artifactId>
-            <version>2.5.8</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.tros</groupId>
             <artifactId>autocomplete</artifactId>
-            <version>2.5.8</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.mozilla</groupId>
             <artifactId>rhino</artifactId>
-            <version>1.7.7</version>
+            <version>1.7.7.1</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

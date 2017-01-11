@@ -73,6 +73,7 @@ public class DirLibraryInfo extends LibraryInfo {
 	 *
 	 * @return The sort order of these two library infos.
 	 */
+	@Override
 	public int compareTo(LibraryInfo info) {
 		if (info==this) {
 			return 0;

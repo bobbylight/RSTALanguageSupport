@@ -30,6 +30,7 @@ public class DtdValidationConfig implements ValidationConfig {
 	}
 
 
+	@Override
 	public void configureParser(XmlParser parser) {
 		SAXParserFactory spf = parser.getSaxParserFactory();
 		spf.setValidating(true);
@@ -37,6 +38,7 @@ public class DtdValidationConfig implements ValidationConfig {
 	}
 
 
+	@Override
 	public void configureHandler(XmlParser.Handler handler) {
 		handler.setEntityResolver(entityResolver);
 	}

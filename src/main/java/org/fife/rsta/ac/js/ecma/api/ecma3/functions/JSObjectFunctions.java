@@ -18,7 +18,8 @@ public interface JSObjectFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public String toString();
+    @Override
+	public String toString();
 
     /**
      * <b>function toLocaleString()</b> return an object localized string representation.

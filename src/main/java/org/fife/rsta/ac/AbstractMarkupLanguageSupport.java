@@ -143,6 +143,7 @@ public abstract class AbstractMarkupLanguageSupport
 			super(INSERT_CLOSING_TAG_ACTION);
 		}
 
+		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			RSyntaxTextArea textArea = (RSyntaxTextArea)getTextComponent(e);

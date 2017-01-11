@@ -192,6 +192,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 		}
 
 
+		@Override
 		public boolean visit(AstNode node) {
 
 			Logger.log(JavaScriptHelper.convertNodeToSource(node));
@@ -548,6 +549,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 
 		private ArrayList<AstNode> all = new ArrayList<AstNode>();
 
+		@Override
 		public boolean visit(AstNode node) {
 			all.add(node);
 			return true;

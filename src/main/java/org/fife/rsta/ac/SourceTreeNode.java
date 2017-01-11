@@ -138,6 +138,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 	 * @param stn2 A tree node to compare to.
 	 * @return How these tree nodes compare relative to each other.
 	 */
+	@Override
 	public int compareTo(SourceTreeNode stn2) {
 		int res = -1;
 		if (stn2!=null) {

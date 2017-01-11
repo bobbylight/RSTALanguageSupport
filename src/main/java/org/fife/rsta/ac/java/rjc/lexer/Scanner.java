@@ -144,6 +144,7 @@ private void pushOntoStack(Token t) {
 			}
 		}
 		return new Offset() {
+			@Override
 			public int getOffset() {
 				return offs;
 			}
@@ -860,6 +861,7 @@ private int currentResetStartOffset;
 			this.pos = pos;
 		}
 
+		@Override
 		public int getOffset() {
 			return pos.getOffset();
 		}

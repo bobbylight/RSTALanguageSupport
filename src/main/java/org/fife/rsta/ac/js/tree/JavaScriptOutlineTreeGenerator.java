@@ -171,6 +171,7 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 	}
 
 
+	@Override
 	public boolean visit(AstNode node) {
 
 		if (node==null) {

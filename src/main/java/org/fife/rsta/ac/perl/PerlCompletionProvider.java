@@ -205,6 +205,7 @@ private CaseInsensitiveComparator comparator = new CaseInsensitiveComparator();
 	private static class CaseInsensitiveComparator
 			implements Comparator<Completion>, Serializable {
 
+		@Override
 		public int compare(Completion c1, Completion c2) {
 			String s1 = c1.getInputText();
 			String s2 = c2.getInputText();

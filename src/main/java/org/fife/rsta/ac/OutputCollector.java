@@ -84,15 +84,15 @@ public class OutputCollector implements Runnable {
 	 * super implementation if they want to log the lines into the buffer.
 	 *
 	 * @param line The line read.
-	 * @throws IOException If an IO error occurs.
 	 */
-	protected void handleLineRead(String line) throws IOException {
+	protected void handleLineRead(String line) {
 		if (sb!=null) {
 			sb.append(line).append('\n');
 		}
 	}
 
 
+	@Override
 	public void run() {
 
 		String line = null;

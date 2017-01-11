@@ -234,6 +234,7 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void install(RSyntaxTextArea textArea) {
 
 		PerlCompletionProvider provider = getProvider();
@@ -373,6 +374,7 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void uninstall(RSyntaxTextArea textArea) {
 
 		uninstallImpl(textArea);

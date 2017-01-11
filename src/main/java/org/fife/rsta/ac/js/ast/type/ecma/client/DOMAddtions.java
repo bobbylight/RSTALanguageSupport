@@ -7,6 +7,7 @@ import org.fife.rsta.ac.js.ast.type.ecma.TypeDeclarations;
 
 public class DOMAddtions implements ECMAAdditions {
 
+	@Override
 	public void addAdditionalTypes(TypeDeclarations typeDecs) {
 		//add all client DOM objects
 		typeDecs.addTypeDeclaration("Attr", new TypeDeclaration( "org.fife.rsta.ac.js.ecma.api.dom", "JSAttr", "Attr", false, false));

@@ -99,6 +99,7 @@ class DocCommentCompletionProvider extends DefaultCompletionProvider {
 			return IconFactory.get().getIcon(IconFactory.JAVADOC_ITEM_ICON);
 		}
 
+		@Override
 		public void rendererText(Graphics g, int x, int y, boolean selected) {
 			g.drawString(getReplacementText(), x, y);
 		}

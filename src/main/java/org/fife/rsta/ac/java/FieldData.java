@@ -36,6 +36,7 @@ class FieldData implements Data {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getEnclosingClassName(boolean fullyQualified) {
 		// NOTE: This check isn't really necessary, but is here just in case
 		// there's a bug in the parsing code.
@@ -52,6 +53,7 @@ class FieldData implements Data {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getIcon() {
 
 		String key = null;
@@ -81,6 +83,7 @@ class FieldData implements Data {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getSignature() {
 		return field.getName();
 	}
@@ -89,6 +92,7 @@ class FieldData implements Data {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getSummary() {
 		String docComment = field.getDocComment();
 		return docComment!=null ? docComment : field.toString();
@@ -98,11 +102,13 @@ class FieldData implements Data {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String getType() {
 		return field.getType().toString();
 	}
 
 
+	@Override
 	public boolean isAbstract() {
 		return field.getModifiers().isAbstract();
 	}
@@ -113,6 +119,7 @@ class FieldData implements Data {
 	 *
 	 * @return <code>false</code> always.
 	 */
+	@Override
 	public boolean isConstructor() {
 		return false;
 	}
@@ -121,16 +128,19 @@ class FieldData implements Data {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean isDeprecated() {
 		return field.isDeprecated();
 	}
 
 
+	@Override
 	public boolean isFinal() {
 		return field.getModifiers().isFinal();
 	}
 
 
+	@Override
 	public boolean isStatic() {
 		return field.getModifiers().isStatic();
 	}

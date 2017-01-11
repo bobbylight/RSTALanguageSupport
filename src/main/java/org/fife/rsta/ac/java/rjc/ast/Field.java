@@ -35,21 +35,25 @@ public class Field extends AbstractMember {
 	}
 
 
+	@Override
 	public String getDocComment() {
 		return docComment;
 	}
 
 
+	@Override
 	public Modifiers getModifiers() {
 		return modifiers;
 	}
 
 
+	@Override
 	public Type getType() {
 		return type;
 	}
 
 
+	@Override
 	public boolean isDeprecated() {
 		return deprecated;
 	}

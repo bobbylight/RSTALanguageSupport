@@ -78,31 +78,37 @@ class TokenImpl implements Token {
 	}
 
 
+	@Override
 	public int getColumn() {
 		return column;
 	}
 
 
+	@Override
 	public int getLength() {
 		return lexeme.length();
 	}
 
 
+	@Override
 	public String getLexeme() {
 		return lexeme;
 	}
 
 
+	@Override
 	public int getLine() {
 		return line;
 	}
 
 
+	@Override
 	public int getOffset() {
 		return offset;
 	}
 
 
+	@Override
 	public int getType() {
 		return type;
 	}
@@ -114,6 +120,7 @@ class TokenImpl implements Token {
 	}
 
 
+	@Override
 	public boolean isBasicType() {
 		switch (getType()) {
 			case KEYWORD_BYTE:
@@ -131,21 +138,25 @@ class TokenImpl implements Token {
 	}
 
 
+	@Override
 	public boolean isIdentifier() {
 		return (getType()&IDENTIFIER)>0;
 	}
 
 
+	@Override
 	public boolean isInvalid() {
 		return invalid;
 	}
 
 
+	@Override
 	public boolean isOperator() {
 		return (getType()&OPERATOR)>0;
 	}
 
 
+	@Override
 	public boolean isType(int type) {
 		return this.type==type;
 	}

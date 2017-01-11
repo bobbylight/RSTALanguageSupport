@@ -126,6 +126,7 @@ public class XmlLanguageSupport extends AbstractMarkupLanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void install(RSyntaxTextArea textArea) {
 
 		// Code completion currently only completes words found elsewhere in
@@ -200,6 +201,7 @@ public class XmlLanguageSupport extends AbstractMarkupLanguageSupport {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void uninstall(RSyntaxTextArea textArea) {
 
 		uninstallImpl(textArea);

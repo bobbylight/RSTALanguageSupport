@@ -7,6 +7,7 @@ import org.fife.rsta.ac.js.ast.type.ecma.TypeDeclarations;
 
 public class HTMLDOMAdditions implements ECMAAdditions {
 
+	@Override
 	public void addAdditionalTypes(TypeDeclarations typeDecs) {
 		
 		//add HTML DOM Elements

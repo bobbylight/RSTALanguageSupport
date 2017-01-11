@@ -35,6 +35,7 @@ abstract class AbstractMember extends AbstractASTNode implements Member {
 	}
 
 
+	@Override
 	public TypeDeclaration getParentTypeDeclaration() {
 		return parentTypeDec;
 	}
@@ -43,6 +44,7 @@ abstract class AbstractMember extends AbstractASTNode implements Member {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean isStatic() {
 		Modifiers modifiers = getModifiers();
 		return modifiers!=null && modifiers.isStatic();
@@ -52,6 +54,7 @@ abstract class AbstractMember extends AbstractASTNode implements Member {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void setParentTypeDeclaration(TypeDeclaration dec) {
 		if (dec==null) {
 			throw new InternalError("Parent TypeDeclaration cannot be null");

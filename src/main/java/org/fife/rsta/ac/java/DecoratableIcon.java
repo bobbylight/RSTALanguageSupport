@@ -95,6 +95,7 @@ public class DecoratableIcon implements Icon {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getIconHeight() {
 		return mainIcon.getIconHeight();
 	}
@@ -103,6 +104,7 @@ public class DecoratableIcon implements Icon {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public int getIconWidth() {
 		return width;
 	}
@@ -111,6 +113,7 @@ public class DecoratableIcon implements Icon {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public void paintIcon(Component c, Graphics g, int x, int y) {
 		if (deprecated) {
 			IconFactory.get().getIcon(IconFactory.DEPRECATED_ICON).

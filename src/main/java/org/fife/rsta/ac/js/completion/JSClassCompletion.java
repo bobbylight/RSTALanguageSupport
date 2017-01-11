@@ -187,16 +187,19 @@ public class JSClassCompletion extends BasicCompletion implements JSCompletion {
 	}
 
 
+	@Override
 	public String getEnclosingClassName(boolean fullyQualified) {
 		return cf.getClassName(fullyQualified);
 	}
 
 
+	@Override
 	public String getLookupName() {
 		return  getReplacementText();
 	}
 
 
+	@Override
 	public String getType(boolean qualified) {
 		return getClassName(qualified);
 	}

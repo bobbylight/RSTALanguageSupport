@@ -10,10 +10,10 @@
  */
 package org.fife.rsta.ac.perl;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.swing.text.Element;
 
 import org.fife.rsta.ac.OutputCollector;
@@ -54,7 +54,7 @@ class PerlOutputCollector extends OutputCollector {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void handleLineRead(String line) throws IOException {
+	protected void handleLineRead(String line) {
 
 		Matcher m = ERROR_PATTERN.matcher(line);
 

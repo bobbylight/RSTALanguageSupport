@@ -114,6 +114,7 @@ public class ClasspathLibraryInfo extends LibraryInfo {
 	}
 
 
+	@Override
 	public int compareTo(LibraryInfo info) {
 
 		if (info==this) {

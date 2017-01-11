@@ -26,15 +26,18 @@ public interface Member extends ASTNode {
 	public String getDocComment();
 
 
+	@Override
 	public int getNameEndOffset();
 
 
+	@Override
 	public int getNameStartOffset();
 
 
 	public Modifiers getModifiers();
 
 
+	@Override
 	public String getName();
 
 

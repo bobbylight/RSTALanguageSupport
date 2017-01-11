@@ -35,13 +35,15 @@ import org.fife.rsta.ac.java.rjc.lang.Modifiers;
 import org.fife.rsta.ac.java.rjc.lang.Type;
 import org.fife.rsta.ac.java.rjc.lang.TypeArgument;
 import org.fife.rsta.ac.java.rjc.lang.TypeParameter;
-import org.fife.rsta.ac.java.rjc.lexer.*;
+import org.fife.rsta.ac.java.rjc.lexer.Scanner;
+import org.fife.rsta.ac.java.rjc.lexer.Token;
+import org.fife.rsta.ac.java.rjc.lexer.TokenTypes;
 import org.fife.rsta.ac.java.rjc.notices.ParserNotice;
 
 
 /**
  * Generates an abstract syntax tree for a Java source file.
- * 
+ *
  * @author Robert Futrell
  * @version 1.0
  */
@@ -481,12 +483,11 @@ case KEYWORD_WHILE:
 	/**
 	 * Reads tokens for a Java source file from the specified lexer and returns
 	 * the structure of the source as an AST.
-	 * 
+	 *
 	 * @param scanner The scanner to read from.
 	 * @return The root node of the AST.
 	 */
-	public CompilationUnit getCompilationUnit(String name, Scanner scanner)
-												throws IOException {
+	public CompilationUnit getCompilationUnit(String name, Scanner scanner) {
 
 		CompilationUnit cu = new CompilationUnit(name);
 
@@ -673,13 +674,23 @@ return cu;
 		}
 
 		while (true) {
+
 			boolean isFinal = false;
 			if (t.isType(KEYWORD_FINAL)) {
 				isFinal = true;
 				t = s.yylexNonNull("Type expected");
 			}
+
 			List<Annotation> annotations = null;
-			// TODO: Annotations
+			while (t.getType() == ANNOTATION_START) {
+				s.yyPushback(t);
+				if (annotations == null) {
+					annotations = new ArrayList<Annotation>(1); // Usually just 1
+				}
+				annotations.add(_getAnnotation(cu, s));
+				t = s.yylexNonNull("Type expected");
+			}
+
 			s.yyPushback(t);
 			Type type = _getType(cu, s);
 			Token temp = s.yylexNonNull("Argument name expected");
@@ -982,10 +993,47 @@ OUTER:
 									"Identifier (method name) expected");
 			while (true) {
 				t = s.yylexNonNull("Unexpected end of input");
-				if (t.isType(SEPARATOR_RPAREN)) {
+				if (t.isType(ANNOTATION_START)) {
+					// we have an annotation, we need to check if it has
+					// parenthesis
+					methodParamsList.add(t);
+					// first token should be annotation name
+					t = s.yylexNonNull("Unexpected end of input");
+					methodParamsList.add(t);
+					t = s.yylexNonNull("Unexpected end of input");
+					if (t.isType(SEPARATOR_LPAREN)) {
+						// add opening parenthesis
+						methodParamsList.add(t);
+						// read through next RPAREN
+						while (true) {
+							t = s.yylexNonNull("Unexpected end of input");
+							methodParamsList.add(t);
+							if (t.isType(SEPARATOR_RPAREN)) {
+								break;
+							}
+						}
+					}
+					// a new annotation starts right away, we push back onto
+					// stack, so we read at the next cycle again
+					else if (t.isType(ANNOTATION_START)) {
+						s.yyPushback(t);
+					}
+					else if (!t.isType(SEPARATOR_RPAREN)) {
+						// if not a brace, we add to the method param list
+						methodParamsList.add(t);
+					}
+					else {
+						// contains only 1 annotation without any parameters?
+						// (like public void someMethod(@Param) ?)
+						break;
+					}
+				}
+				else if (t.isType(SEPARATOR_RPAREN)) {
 					break;
 				}
-				methodParamsList.add(t);
+				else {
+					methodParamsList.add(t);
+				}
 			}
 			List<FormalParameter> formalParams = _getFormalParameters(cu, methodParamsList);
 			if (s.yyPeekCheckType()==SEPARATOR_LBRACKET) {
