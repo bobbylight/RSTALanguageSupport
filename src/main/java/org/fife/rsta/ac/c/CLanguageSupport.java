@@ -38,8 +38,7 @@ public class CLanguageSupport extends AbstractLanguageSupport {
 		setParameterAssistanceEnabled(true);
 		setShowDescWindow(true);
 	}
-
-
+        
 	/**
 	 * {@inheritDoc}
 	 */

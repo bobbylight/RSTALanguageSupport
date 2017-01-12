@@ -25,7 +25,7 @@ import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.DescWindowCallback;
 import org.fife.ui.autocomplete.ExternalURLHandler;
 import org.fife.ui.autocomplete.Util;
-import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rsyntaxtextarea.modes.JavaTokenRegistration;
 
 
 /**
@@ -65,7 +65,7 @@ public class JavadocUrlHandler implements ExternalURLHandler {
 	 */
 	private JavaLanguageSupport getJavaLanguageSupport() {
 		return (JavaLanguageSupport)LanguageSupportFactory.get().
-					getSupportFor(SyntaxConstants.SYNTAX_STYLE_JAVA);
+					getSupportFor(JavaTokenRegistration.SYNTAX_STYLE);
 	}
 
 

@@ -5,3 +5,4 @@ javadoc
 *.java~
 build
 .gradle
+/target/

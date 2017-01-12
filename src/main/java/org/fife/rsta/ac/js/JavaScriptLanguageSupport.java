@@ -100,7 +100,6 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 		setLanguageVersion(Integer.MIN_VALUE); // Take Rhino's default
 	}
 
-
 	/**
 	 * Creates a jar manager instance for used in JS language support.
 	 *

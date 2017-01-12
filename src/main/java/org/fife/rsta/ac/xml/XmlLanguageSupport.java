@@ -72,7 +72,6 @@ public class XmlLanguageSupport extends AbstractMarkupLanguageSupport {
 		setShowSyntaxErrors(true);
 	}
 
-
 	/**
 	 * {@inheritDoc}
 	 */

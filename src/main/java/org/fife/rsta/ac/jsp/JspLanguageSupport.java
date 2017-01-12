@@ -57,7 +57,6 @@ public class JspLanguageSupport extends AbstractMarkupLanguageSupport {
 		tagsToClose = HtmlLanguageSupport.getTagsToClose();
 	}
 
-
 	/**
 	 * {@inheritDoc}
 	 */

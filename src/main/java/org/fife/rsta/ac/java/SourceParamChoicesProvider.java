@@ -39,7 +39,7 @@ import org.fife.ui.autocomplete.EmptyIcon;
 import org.fife.ui.autocomplete.ParameterChoicesProvider;
 import org.fife.ui.autocomplete.ParameterizedCompletion;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rsyntaxtextarea.modes.JavaTokenRegistration;
 
 
 /**
@@ -166,8 +166,7 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 
 		// Get the language support for Java
 		LanguageSupportFactory lsf = LanguageSupportFactory.get();
-		LanguageSupport support = lsf.getSupportFor(SyntaxConstants.
-													SYNTAX_STYLE_JAVA);
+		LanguageSupport support = lsf.getSupportFor(JavaTokenRegistration.SYNTAX_STYLE);
 		JavaLanguageSupport jls = (JavaLanguageSupport)support;
 		JarManager jm = jls.getJarManager();
 

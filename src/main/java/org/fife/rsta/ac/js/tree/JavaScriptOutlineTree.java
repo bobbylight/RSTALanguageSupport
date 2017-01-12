@@ -28,7 +28,7 @@ import org.fife.rsta.ac.js.JavaScriptParser;
 import org.fife.ui.rsyntaxtextarea.DocumentRange;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
-import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rsyntaxtextarea.modes.JavaScriptTokenRegistration;
 import org.mozilla.javascript.ast.AstRoot;
 
 
@@ -102,8 +102,7 @@ public class JavaScriptOutlineTree extends AbstractSourceTree {
 		// Get the Java language support (shared by all RSTA instances editing
 		// Java that were registered with the LanguageSupportFactory).
 		LanguageSupportFactory lsf = LanguageSupportFactory.get();
-		LanguageSupport support = lsf.getSupportFor(SyntaxConstants.
-													SYNTAX_STYLE_JAVASCRIPT);
+		LanguageSupport support = lsf.getSupportFor(JavaScriptTokenRegistration.SYNTAX_STYLE);
 		JavaScriptLanguageSupport jls = (JavaScriptLanguageSupport)support;
 
 		// Listen for re-parsing of the editor, and update the tree accordingly

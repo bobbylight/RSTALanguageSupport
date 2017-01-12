@@ -20,99 +20,90 @@ import org.fife.rsta.ac.html.HtmlLanguageSupport;
 import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
-
 /**
- * Language support for PHP.  Features currently include:
+ * Language support for PHP. Features currently include:
  *
  * <ul>
- *    <li>Code completion for PHP functions.</li>
- *    <li>Code completion for HTML5 tags and attributes.</li>
- *    <li>Automatic creation of closing tags for non-self-closing tags.</li>
+ * <li>Code completion for PHP functions.</li>
+ * <li>Code completion for HTML5 tags and attributes.</li>
+ * <li>Automatic creation of closing tags for non-self-closing tags.</li>
  * </ul>
- * 
+ *
  * @author Robert Futrell
  * @version 1.0
  */
 public class PhpLanguageSupport extends AbstractMarkupLanguageSupport {
 
-	/**
-	 * The completion provider.  This is shared amongst all PHP text areas.
-	 */
-	private PhpCompletionProvider provider;
+    /**
+     * The completion provider. This is shared amongst all PHP text areas.
+     */
+    private PhpCompletionProvider provider;
 
-	/**
-	 * A cached set of tags that require closing tags.
-	 */
-	private static Set<String> tagsToClose = new HashSet<String>();
+    /**
+     * A cached set of tags that require closing tags.
+     */
+    private static Set<String> tagsToClose = new HashSet<String>();
 
-
-	/**
-	 * Constructor.
-	 */
-	public PhpLanguageSupport() {
-		setAutoActivationEnabled(true);
-		setParameterAssistanceEnabled(true);
-		setShowDescWindow(true);
-		tagsToClose = HtmlLanguageSupport.getTagsToClose();
-	}
-
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected ListCellRenderer createDefaultCompletionCellRenderer() {
-		return new HtmlCellRenderer();
-	}
+    /**
+     * Constructor.
+     */
+    public PhpLanguageSupport() {
+        setAutoActivationEnabled(true);
+        setParameterAssistanceEnabled(true);
+        setShowDescWindow(true);
+        tagsToClose = HtmlLanguageSupport.getTagsToClose();
+    }
 
 
-	/**
-	 * Lazily creates the shared completion provider instance for PHP.
-	 *
-	 * @return The completion provider.
-	 */
-	private PhpCompletionProvider getProvider() {
-		if (provider==null) {
-			provider = new PhpCompletionProvider();
-		}
-		return provider;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected ListCellRenderer createDefaultCompletionCellRenderer() {
+        return new HtmlCellRenderer();
+    }
 
+    /**
+     * Lazily creates the shared completion provider instance for PHP.
+     *
+     * @return The completion provider.
+     */
+    private PhpCompletionProvider getProvider() {
+        if (provider == null) {
+            provider = new PhpCompletionProvider();
+        }
+        return provider;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void install(RSyntaxTextArea textArea) {
+    /**
+     * {@inheritDoc}
+     */
+    public void install(RSyntaxTextArea textArea) {
 
-		PhpCompletionProvider provider = getProvider();
-		AutoCompletion ac = createAutoCompletion(provider);
-		ac.install(textArea);
-		installImpl(textArea, ac);
-		installKeyboardShortcuts(textArea);
+        PhpCompletionProvider provider = getProvider();
+        AutoCompletion ac = createAutoCompletion(provider);
+        ac.install(textArea);
+        installImpl(textArea, ac);
+        installKeyboardShortcuts(textArea);
 
-		textArea.setToolTipSupplier(null);
+        textArea.setToolTipSupplier(null);
 
-	}
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected boolean shouldAutoCloseTag(String tag) {
+        return tagsToClose.contains(tag.toLowerCase());
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected boolean shouldAutoCloseTag(String tag) {
-		return tagsToClose.contains(tag.toLowerCase());
-	}
-
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void uninstall(RSyntaxTextArea textArea) {
-		uninstallImpl(textArea);
-		uninstallKeyboardShortcuts(textArea);
-	}
-
+    /**
+     * {@inheritDoc}
+     */
+    public void uninstall(RSyntaxTextArea textArea) {
+        uninstallImpl(textArea);
+        uninstallKeyboardShortcuts(textArea);
+    }
 
 }
