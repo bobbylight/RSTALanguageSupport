@@ -1,0 +1,12 @@
+org.fife.rsta.ac.css.CssLanguageRegistration
+org.fife.rsta.ac.xml.XmlLanguageRegistration
+org.fife.rsta.ac.groovy.GroovyLanguageRegistration
+org.fife.rsta.ac.jsp.JspLanguageRegistration
+org.fife.rsta.ac.less.LessLanguageRegistration
+org.fife.rsta.ac.js.JavaScriptLanguageRegistration
+org.fife.rsta.ac.c.CLanguageRegistration
+org.fife.rsta.ac.html.HtmlLanguageRegistration
+org.fife.rsta.ac.php.PhpLanguageRegistration
+org.fife.rsta.ac.perl.PerlLanguageRegistration
+org.fife.rsta.ac.sh.ShellLanguageRegistration
+org.fife.rsta.ac.java.JavaLanguageRegistration
