@@ -74,6 +74,67 @@ class FieldCompletion extends AbstractJavaSourceCompletion
 			((FieldCompletion)obj).getSignature().equals(getSignature());
 	}
 
+    /**
+     * Used to add "this" with the class type to the completion list
+     * @param provider
+     * @param type
+     * @return
+     */
+    public static FieldCompletion createThisCompletion(CompletionProvider provider, final Type type) {
+        FieldCompletion fc = new FieldCompletion(provider, "this");
+        fc.data = new Data() {
+            @Override
+            public String getEnclosingClassName(boolean fullyQualified) {
+                return type.getName(fullyQualified);
+            }
+
+            @Override
+            public String getIcon() {
+                return IconFactory.FIELD_PUBLIC_ICON;
+            }
+
+            @Override
+            public String getSignature() {
+                return "this";
+            }
+
+            @Override
+            public String getSummary() {
+                return null;
+            }
+
+            @Override
+            public String getType() {
+                return type.getName(false);
+            }
+
+            @Override
+            public boolean isConstructor() {
+                return false;
+            }
+
+            @Override
+            public boolean isDeprecated() {
+                return false;
+            }
+
+            @Override
+            public boolean isAbstract() {
+                return false;
+            }
+
+            @Override
+            public boolean isFinal() {
+                return false;
+            }
+
+            @Override
+            public boolean isStatic() {
+                return false;
+            }
+        };
+        return fc;
+    }
 
 	public static FieldCompletion createLengthCompletion(
 							CompletionProvider provider, final Type type) {

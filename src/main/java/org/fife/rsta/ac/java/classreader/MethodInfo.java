@@ -71,6 +71,8 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 */
 	private String returnType;
 
+    private String returnTypeQualified;
+
 	/**
 	 * Cached string representing the name and parameters for this method.
 	 */
@@ -454,6 +456,15 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 		return returnType;
 	}
 
+    public String getReturnTypeFull() {
+        if (returnTypeQualified == null) {
+            returnTypeQualified = getReturnTypeStringFromTypeSignature(true);
+            if (returnTypeQualified == null) {
+                returnTypeQualified = getReturnTypeStringFromDescriptor(true);
+            }
+        }
+        return returnTypeQualified;
+    }
 
 	/**
 	 * Returns the return type of this method, as determined by a snippet

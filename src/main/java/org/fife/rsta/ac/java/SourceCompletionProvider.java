@@ -14,6 +14,7 @@ import java.awt.Cursor;
 import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -22,10 +23,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.Element;
 import javax.swing.text.JTextComponent;
+import javax.swing.text.Segment;
 
 import org.fife.rsta.ac.ShorthandCompletionCache;
+import org.fife.rsta.ac.common.TokenScanner;
 import org.fife.rsta.ac.java.buildpath.LibraryInfo;
 import org.fife.rsta.ac.java.buildpath.SourceLocation;
 import org.fife.rsta.ac.java.classreader.ClassFile;
@@ -42,14 +48,16 @@ import org.fife.rsta.ac.java.rjc.ast.Member;
 import org.fife.rsta.ac.java.rjc.ast.Method;
 import org.fife.rsta.ac.java.rjc.ast.NormalClassDeclaration;
 import org.fife.rsta.ac.java.rjc.ast.TypeDeclaration;
+import org.fife.rsta.ac.java.rjc.lang.Modifiers;
 import org.fife.rsta.ac.java.rjc.lang.Type;
 import org.fife.rsta.ac.java.rjc.lang.TypeArgument;
 import org.fife.rsta.ac.java.rjc.lang.TypeParameter;
+import org.fife.rsta.ac.java.rjc.lexer.*;
+import org.fife.rsta.ac.java.rjc.lexer.TokenTypes;
+import org.fife.rsta.ac.java.rjc.parser.ASTFactory;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
-import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
+import org.fife.ui.rsyntaxtextarea.*;
 import org.fife.ui.rsyntaxtextarea.Token;
 
 
@@ -69,6 +77,8 @@ import org.fife.ui.rsyntaxtextarea.Token;
  * @version 1.0
  */
 class SourceCompletionProvider extends DefaultCompletionProvider {
+
+    public static boolean loadPrivateMemberAlways = true;
 
 	/**
 	 * The parent completion provider.
@@ -201,8 +211,51 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 
 	}
 
+    private void addCompletionsForInnerClass(Set<Completion> set, CompilationUnit cu,
+                                             TypeDeclaration td, Map<String, String> typeParamMap) {
 
-	/**
+        // Check us first, so if we override anything, we get the "newest"
+        // version.
+        int memberCount = td.getMemberCount();
+        for (int i=0; i<memberCount; i++) {
+            Member member = td.getMember(i);
+            if (member instanceof Method) {
+                set.add(new MethodCompletion(this, (Method) member));
+            }
+            else if (member instanceof Field) {
+                set.add(new FieldCompletion(this, (Field) member));
+            }
+        }
+
+        // Add completions for any non-overridden super-class methods.
+        if (td instanceof NormalClassDeclaration) {
+            NormalClassDeclaration ncTd = (NormalClassDeclaration) td;
+            ClassFile superClass = getClassFileFor(cu, ncTd.getExtendedType().getName(true));
+            if (superClass != null) {
+                addCompletionsForExtendedClass(set, cu, superClass, cu.getPackageName(), typeParamMap);
+            }
+            Iterator<Type> intfIterator = ncTd.getImplementedIterator();
+            while (intfIterator.hasNext()) {
+                String intf = intfIterator.next().getName(true);
+                ClassFile cf = getClassFileFor(cu, intf);
+                if (cf != null) {
+                    addCompletionsForExtendedClass(set, cu, cf, cu.getPackageName(), typeParamMap);
+                }
+            }
+        }
+
+//        // Add completions for any interface methods, in case this class is
+//        // abstract and hasn't implemented some of them yet.
+//        // TODO: Do this only if "top-level" class is declared abstract
+//        for (int i=0; i<cf.getImplementedInterfaceCount(); i++) {
+//            String inter = cf.getImplementedInterfaceName(i, true);
+//            cf = getClassFileFor(cu, inter);
+//            addCompletionsForExtendedClass(set, cu, cf, pkg, typeParamMap);
+//        }
+    }
+
+
+    /**
 	 * Adds completions for all methods and public fields of a local variable.
 	 * This will add nothing if the local variable is a primitive type.
 	 *
@@ -231,6 +284,20 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 				Map<String, String> typeParamMap = createTypeParamMap(type, cf);
 				addCompletionsForExtendedClass(retVal, cu, cf, pkg, typeParamMap);
 			}
+            else {
+                // add completions for inner classes
+                for (int i = 0;i < cu.getTypeDeclarationCount();i++) {
+                    TypeDeclaration td = cu.getTypeDeclaration(i);
+
+                    for (int j = 0;j < td.getChildTypeCount();j++) {
+                        TypeDeclaration childTd = td.getChildType(j);
+                        if (var.getType().getName(false).equals(childTd.getName())) {
+                            Map<String, String> typeParamMap = createTypeParamMap(type, cf);
+                            addCompletionsForInnerClass(retVal, cu, childTd, typeParamMap);
+                        }
+                    }
+                }
+            }
 		}
 
 	}
@@ -588,6 +655,78 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 
 	}
 
+	@Override
+	public String getAlreadyEnteredText(JTextComponent comp) {
+		return getAlreadyEnteredTextS(comp);
+	}
+
+	public static String getAlreadyEnteredTextS(JTextComponent comp) {
+
+		Document doc = comp.getDocument();
+
+		int dot = comp.getCaretPosition();
+		Element root = doc.getDefaultRootElement();
+		int index = root.getElementIndex(dot);
+		Element elem = root.getElement(index);
+		int start = elem.getStartOffset();
+		int len = dot - start;
+		Segment seg = new Segment(new char[10000], 0, 0);
+		try {
+			doc.getText(start, len, seg);
+		} catch (BadLocationException ble) {
+			ble.printStackTrace();
+			return EMPTY_STRING;
+		}
+
+		int segEnd = seg.offset + len;
+		start = segEnd - 1;
+		while (start >= seg.offset && isValidChar2(seg.array[start])) {
+			start--;
+		}
+		start++;
+
+		len = segEnd - start;
+		if (len == 0)
+			return EMPTY_STRING;
+		String result = new String(seg.array, start, len);
+		result = result.trim().replace("\t", "");
+		return result;
+
+	}
+
+	public static String getAlreadyEnteredTextS2(JTextComponent comp, int dot) {
+
+		Document doc = comp.getDocument();
+
+//		int dot = comp.getCaretPosition();
+		Element root = doc.getDefaultRootElement();
+		int index = root.getElementIndex(dot);
+		Element elem = root.getElement(index);
+		int start = elem.getStartOffset();
+		int len = dot - start;
+		Segment seg = new Segment(new char[10000], 0, 0);
+		try {
+			doc.getText(start, len, seg);
+		} catch (BadLocationException ble) {
+			ble.printStackTrace();
+			return EMPTY_STRING;
+		}
+
+		int segEnd = seg.offset + len;
+		start = segEnd - 1;
+		while (start >= seg.offset && isValidChar2(seg.array[start])) {
+			start--;
+		}
+		start++;
+
+		len = segEnd - start;
+		if (len == 0)
+			return EMPTY_STRING;
+		String result = new String(seg.array, start, len);
+		result = result.trim().replace("\t", "");
+		return result;
+
+	}
 
 	/**
 	 * Returns the jars on the "build path."
@@ -618,7 +757,9 @@ public SourceLocation  getSourceLocForClass(String className) {
 	 * @return Whether or not the method is accessible.
 	 */
 	private boolean isAccessible(MemberInfo info, String pkg) {
-
+		if (loadPrivateMemberAlways) {
+			return true;
+		}
 		boolean accessible = false;
 		int access = info.getAccessFlags();
 
@@ -636,6 +777,13 @@ public SourceLocation  getSourceLocForClass(String className) {
 
 	}
 
+	protected static boolean isValidChar2(char ch) {
+		boolean res = ch != ';' && ch != '=' && ch != '{' && ch != '}';
+		if (!res) {
+			// System.out.println(ch);
+		}
+		return res;
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -676,7 +824,36 @@ public SourceLocation  getSourceLocForClass(String className) {
 
 		int lastDot = alreadyEntered.lastIndexOf('.');
 		boolean qualified = lastDot>-1;
-		String prefix = qualified ? alreadyEntered.substring(0, lastDot) : null;
+        int declarationStart = 0;
+        // we need to get where the declarations starts, so we need to go back till we find a whitespace, brace, anything which breaks the declaration
+        // otherwise completions for this will not work: System.out.println(ExampleCode.
+        Scanner scanner = new Scanner(new StringReader(alreadyEntered));
+        List<org.fife.rsta.ac.java.rjc.lexer.Token> tokens = new ArrayList<org.fife.rsta.ac.java.rjc.lexer.Token>();
+        org.fife.rsta.ac.java.rjc.lexer.Token token;
+        try {
+            while ((token = scanner.yylex()) != null) {
+                tokens.add(token);
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (tokens.size() > 0) {
+            // go back through the tokens till we find a whitespace or brace, take attention on method calls
+            int rparenCounter = 0;
+            for (int i = tokens.size() - 1;i >= 0;i--) {
+                token = tokens.get(i);
+                if (token.isType(TokenTypes.SEPARATOR_RPAREN)) rparenCounter++;
+                if (token.isType(TokenTypes.SEPARATOR_LPAREN) && rparenCounter == 0) {
+                    // we found an lparen without having a matching closing rparen, this should be the start of our delcaration
+                    declarationStart = token.getOffset() + token.getLength();
+                    break;
+                }
+                else if (token.isType(TokenTypes.SEPARATOR_LPAREN)) rparenCounter--;
+            }
+        }
+        if (declarationStart > lastDot) declarationStart = 0;
+        String prefix = qualified ? alreadyEntered.substring(declarationStart, lastDot) : null;
 
 		Iterator<TypeDeclaration> i = cu.getTypeDeclarationIterator();
 		while (i.hasNext()) {
@@ -701,6 +878,22 @@ public SourceLocation  getSourceLocForClass(String className) {
 
 	}
 
+	public static Method findCurrentMethod(CompilationUnit cu, JTextComponent comp,
+                                           TypeDeclaration td, int caret) {
+		Iterator<Member> j = td.getMemberIterator();
+		while (j.hasNext()) {
+			Member m = j.next();
+			if (m instanceof Method) {
+				Method method = (Method) m;
+				if (caret >= method.getBodyStartOffset() && caret < method.getBodyEndOffset()) {
+					// Don't add completions for local vars if there is
+					// a prefix, even "this".
+					return method;
+				}
+			}
+		}
+		return null;
+	}
 
 	/**
 	 * Loads completions based on the current caret location in the source.
@@ -726,6 +919,9 @@ public SourceLocation  getSourceLocForClass(String className) {
 			JTextComponent comp, String alreadyEntered, Set<Completion> retVal,
 			TypeDeclaration td, String prefix, int caret) {
 
+        // used to determine if this. is used which is our enclosing class
+        TypeDeclaration deepestTd = cu.getDeepestTypeDeclarationAtOffset(caret);
+
 		// Do any child types first, so if any vars, etc. have duplicate names,
 		// we pick up the one "closest" to us first.
 		for (int i=0; i<td.getChildTypeCount(); i++) {
@@ -733,8 +929,6 @@ public SourceLocation  getSourceLocForClass(String className) {
 			loadCompletionsForCaretPosition(cu, comp, alreadyEntered, retVal,
 					childType, prefix, caret);
 		}
-
-		Method currentMethod = null;
 
 		Map<String, String> typeParamMap = new HashMap<String, String>();
 		if (td instanceof NormalClassDeclaration) {
@@ -752,26 +946,33 @@ public SourceLocation  getSourceLocForClass(String className) {
 		// Get completions for this class's methods, fields and local
 		// vars.  Do this before checking super classes so that, if
 		// we overrode anything, we get the "newest" version.
+        Method currentMethod = findCurrentMethod(cu, comp, td, caret);
+        if(currentMethod !=null){
+            if (prefix == null) {
+                addLocalVarCompletions(retVal, currentMethod, caret);
+            }
+        }
+
 		String pkg = cu.getPackageName();
 		Iterator<Member> j = td.getMemberIterator();
 		while (j.hasNext()) {
 			Member m = j.next();
 			if (m instanceof Method) {
 				Method method = (Method)m;
-				if (prefix==null || THIS.equals(prefix)) {
+				if (prefix==null || (THIS.equals(prefix) && td == deepestTd)) {
 					retVal.add(new MethodCompletion(this, method));
 				}
-				if (caret>=method.getBodyStartOffset() && caret<method.getBodyEndOffset()) {
-					currentMethod = method;
-					// Don't add completions for local vars if there is
-					// a prefix, even "this".
-					if (prefix==null) {
-						addLocalVarCompletions(retVal, method, caret);
-					}
-				}
+//				if (caret>=method.getBodyStartOffset() && caret<method.getBodyEndOffset()) {
+//					currentMethod = method;
+//					// Don't add completions for local vars if there is
+//					// a prefix, even "this".
+//					if (prefix==null) {
+//						addLocalVarCompletions(retVal, method, caret);
+//					}
+//				}
 			}
 			else if (m instanceof Field) {
-				if (prefix==null || THIS.equals(prefix)) {
+				if (prefix==null || (THIS.equals(prefix) && td == deepestTd)) {
 					Field field = (Field)m;
 					retVal.add(new FieldCompletion(this, field));
 				}
@@ -780,7 +981,7 @@ public SourceLocation  getSourceLocForClass(String className) {
 
 		// Completions for superclass methods.
 		// TODO: Implement me better
-		if (prefix==null || THIS.equals(prefix)) {
+		if (prefix==null || (THIS.equals(prefix) && td == deepestTd)) {
 			if (td instanceof NormalClassDeclaration) {
 				NormalClassDeclaration ncd = (NormalClassDeclaration)td;
 				Type extended = ncd.getExtendedType();
@@ -791,7 +992,16 @@ public SourceLocation  getSourceLocForClass(String className) {
 						addCompletionsForExtendedClass(retVal, cu, cf, pkg, null);
 					}
 					else {
-						System.out.println("[DEBUG]: Couldn't find ClassFile for: " + superClassName);
+                        // check if we can find the class Type in this class and then load the inner class completions if any match
+                        TypeDeclaration extendedTd = null;
+                        for (int i = 0;i < cu.getTypeDeclarationCount();i++) {
+                            extendedTd = getTypeDeclarationForInnerType(cu.getTypeDeclaration(i), extended);
+                            if (extendedTd != null) break;
+                        }
+                        if (extendedTd != null) {
+                            addCompletionsForInnerClass(retVal, cu, extendedTd, typeParamMap);
+                        }
+                        else System.out.println("[DEBUG]: Couldn't find ClassFile for: " + superClassName);
 					}
 				}
 			}
@@ -807,6 +1017,531 @@ public SourceLocation  getSourceLocForClass(String className) {
 
 	}
 
+	private static int countMethodParams(String s) {
+		int length = s.length();
+		if (length == 0) {
+			return 0;
+		}
+		s = s.replace(",", "");
+		int lengthAfter = s.length();
+		int counttt = length - lengthAfter;
+		return counttt + 1;
+	}
+
+    private MethodInfo findMethod(ClassFile cf, String methodName, int paramCount) {
+        List<MethodInfo> methodInfoByName = cf.getMethodInfoByName(methodName, paramCount);
+        if (methodInfoByName == null) {
+            //System.out.println("can't find methods in  ");
+            String superClass = cf.getSuperClassName(true);
+            if(superClass!=null) {
+                {
+                    ClassFile classEntry = jarManager.getClassEntry(superClass);
+                    if (classEntry != null) {
+                        MethodInfo mi = findMethod(classEntry, methodName, paramCount);
+                        if (mi != null) {
+                            return mi;
+                        }
+                    }
+                }
+            }
+            int count = cf.getImplementedInterfaceCount();
+            for (int j = 0; j < count; j++) {
+                String implementedInterfaceName = cf.getImplementedInterfaceName(j, true);
+                ClassFile classEntry = jarManager.getClassEntry(implementedInterfaceName);
+                if (classEntry != null) {
+                    MethodInfo mi = findMethod(classEntry, methodName, paramCount);
+                    if (mi != null) {
+                        return mi;
+                    }
+                }
+            }
+            return null;
+        }
+        if (methodInfoByName.size() == 0) {
+            System.out.println(methodName);
+            return null;
+        }
+        if (methodInfoByName.size() > 1) {
+            System.out.println(methodInfoByName.size() + " " + methodName);
+        }
+
+        MethodInfo methodInfo = methodInfoByName.get(0);
+        return methodInfo;
+    }
+
+    private FieldInfo findField(ClassFile cf, String fieldNameS) {
+        FieldInfo fieldInfo = cf.getFieldInfoByName(fieldNameS);
+        if (fieldInfo == null) {
+
+            String s = cf.getSuperClassName(true);
+            if (s != null && s.length() > 1) {
+                System.out.println("can't find field for ");
+                ClassFile classEntry = jarManager.getClassEntry(s);
+                if (classEntry != null) {
+                    FieldInfo mi = findField(classEntry, fieldNameS);
+                    if (mi != null) {
+                        return mi;
+                    }
+                }
+            }
+
+            int count = cf.getImplementedInterfaceCount();
+            for (int j = 0; j < count; j++) {
+                String implementedInterfaceName = cf.getImplementedInterfaceName(j, true);
+                ClassFile classEntry = jarManager.getClassEntry(implementedInterfaceName);
+                if (classEntry != null) {
+                    FieldInfo mi = findField(classEntry, fieldNameS);
+                    if (mi != null) {
+                        return mi;
+                    }
+                }
+            }
+            return null;
+        }
+        return fieldInfo;
+    }
+
+    private Type resolveTypeWithDot(CompilationUnit cu, String alreadyEntered,
+                                    TypeDeclaration td, Method currentMethod, String prefix, int offs, int dot) {
+        String beforeDot = prefix.substring(0, dot).trim();
+        String afterDot = prefix.substring(dot + 1).trim();
+        System.out.println(beforeDot);
+        System.out.println(afterDot);
+        Type type = resolveType2(cu, alreadyEntered, td, currentMethod, beforeDot, offs);
+        if (type == null) {
+            System.out.println("not found " + prefix);
+            return null;
+        }
+        String typeStr = type.getName(true, false);
+        ClassFile cf = getClassFileFor(cu, typeStr);
+        if (cf != null) {
+            if (afterDot.contains("(")) {
+                int j = afterDot.indexOf("(");
+                String methodName = afterDot.substring(0, j).trim();
+                String params = afterDot.substring(j + 1);
+                params = params.replace(")", "").trim();
+                int countMethodParams = countMethodParams(params);
+                System.out.println(methodName + " " + countMethodParams);
+
+                MethodInfo methodInfo = findMethod(cf, methodName, countMethodParams);
+                String returnTypeString = methodInfo.getReturnTypeFull();
+                returnTypeString = returnTypeString.replaceAll("<.+>", "");
+                System.out.println(returnTypeString + " 123");
+                // cf.type
+                return new Type(returnTypeString);
+
+            } else if (afterDot.contains("[")) {
+                System.out.println("arrays not supported");
+                return null;
+            } else {
+                FieldInfo fieldInfoByName = findField(cf, afterDot);
+                if (fieldInfoByName == null) {
+                    System.out.println("can't fin fields '" + afterDot + "' , " + prefix + " " + cf.getClassName(true));
+                    return null;
+                }
+                String typeString = fieldInfoByName.getTypeString(true);
+                System.out.println(typeString);
+                typeString = typeString.replaceAll("<.+>", "");
+                return new Type(typeString);
+            }
+        }
+        // we have a valid type try to load from TypeDeclaration if the current TypeDeclaration is not static
+        else {
+            TypeDeclaration innerTd = getTypeDeclarationForInnerType(cu.getTypeDeclaration(0), type);
+            // check if this is accessible from current context
+            if (afterDot.equals(THIS)) {
+                if (isThisAccessible(innerTd, cu.getDeepestTypeDeclarationAtOffset(offs))) return type;
+                else return null;
+            }
+            // if not this entered, it can only be some static field or method
+            if (afterDot.contains("(")) {
+                int j = afterDot.indexOf("(");
+                String methodName = afterDot.substring(0, j).trim();
+                String params = afterDot.substring(j + 1);
+                params = params.replace(")", "").trim();
+                int countMethodParams = countMethodParams(params);
+                System.out.println(methodName + " " + countMethodParams);
+
+                Iterator<Method> methodIterator = innerTd.getMethodIterator();
+                while (methodIterator.hasNext()) {
+                    Method method = methodIterator.next();
+                    if (methodName.equals(method.getName()) && countMethodParams == method.getParameterCount()) {
+                        return method.getType();
+                    }
+                }
+
+            } else if (afterDot.contains("[")) {
+                System.out.println("arrays not supported");
+                return null;
+            } else {
+                Iterator<Field> fieldIterator = innerTd.getFieldIterator();
+                while (fieldIterator.hasNext()) {
+                    Field field = fieldIterator.next();
+                    if (afterDot.equals(field.getName())) {
+                        return field.getType();
+                    }
+                }
+            }
+
+        }
+        return null;
+    }
+
+    /**
+     * This method checks if the this variable of the innerTd is accessible
+     * from the TypeDeclaration currently the cursor is in
+     * @param innerTd
+     * @param deepestTypeDeclarationAtOffset
+     * @return
+     */
+    private boolean isThisAccessible(TypeDeclaration innerTd, TypeDeclaration deepestTypeDeclarationAtOffset)
+    {
+        // we reference the same class
+        if (innerTd.getName().equals(deepestTypeDeclarationAtOffset.getName())) {
+            return true;
+        }
+        // the class we are in is static, we cannot reference SomeClass.this
+        if (deepestTypeDeclarationAtOffset.isStatic()) {
+            return false;
+        }
+        // search the parent TypeDeclarations, till we reach a static class or reach the referenced class
+        TypeDeclaration parent = deepestTypeDeclarationAtOffset.getParentType();
+        while (parent != null) {
+            if (parent.getName().equals(innerTd.getName())) return true;
+            if (parent.isStatic()) return false;
+            parent = parent.getParentType();
+        }
+        return true;
+    }
+
+    /**
+     * Searches and returns the TypeDeclaration object for the given inner type. The Type can be the class or
+     * any inner class
+     * @param type
+     * @return
+     */
+    private TypeDeclaration getTypeDeclarationForInnerType(TypeDeclaration currentTd, Type type) {
+        if (currentTd.getName().equals(type.getName(false))) return currentTd;
+        if (currentTd.getChildTypeCount() > 0) {
+            for (int i = 0;i < currentTd.getChildTypeCount();i++) {
+                return getTypeDeclarationForInnerType(currentTd.getChildType(i), type);
+            }
+        }
+        return null;
+    }
+
+    private void resolveType2WithDot(CompilationUnit cu, String alreadyEntered, TypeDeclaration td,
+                                     Method currentMethod, String prefix, int offs, int dot, MemberClickedListener memberClickedListener) {
+        String beforeDot = prefix.substring(0, dot).trim();
+        String afterDot = prefix.substring(dot + 1).trim();
+        System.out.println(beforeDot);
+        System.out.println(afterDot);
+        String typeStr = "";
+        // special case, if ClassName.this. is entered, we use the class as base
+        if (beforeDot.equals(td.getName() + "." + THIS) && !td.isStatic()) {
+            typeStr = td.getName();
+        }
+        else if (!THIS.equals(beforeDot)) {
+            Type type = resolveType2(cu, alreadyEntered, td, currentMethod, beforeDot, offs);
+            if (type == null)
+            {
+                System.out.println("not found " + prefix);
+                return;
+            }
+            typeStr = type.getName(true, false);
+        }
+        else {
+            // find the enclosing class and use it's name as typeStr
+            TypeDeclaration enclosingTd = cu.getDeepestTypeDeclarationAtOffset(offs);
+            if (enclosingTd != null) {
+                typeStr = enclosingTd.getName();
+            }
+        }
+        ClassFile cf = getClassFileFor(cu, typeStr);
+        if (cf != null) {
+            if (afterDot.contains("(")) {
+                int j = afterDot.indexOf("(");
+                String methodName = afterDot.substring(0, j).trim();
+                String params = afterDot.substring(j + 1);
+                params = params.replace(")", "").trim();
+                int countMethodParams = countMethodParams(params);
+                System.out.println(methodName + " " + countMethodParams);
+
+                MethodInfo methodInfo = findMethod(cf, methodName, countMethodParams);
+                memberClickedListener.gotoMethodInClass(cf.getClassName(true), methodInfo);
+                return;
+            }
+            else if (afterDot.contains("[")) {
+                System.out.println("arrays not supported");
+                return;
+            }
+            else {
+                FieldInfo fieldInfoByName = findField(cf, afterDot);
+                if (fieldInfoByName == null) {
+                    System.out.println("can't find fields '" + afterDot + "' , " + prefix + " " + cf.getClassName(true));
+                    return;
+                }
+                memberClickedListener.gotoFieldInClass(cf.getClassName(true), fieldInfoByName);
+                return;
+            }
+        }
+        else {
+            // if the type equals with the current TD, find in the current td (eg this was used)
+            if (typeStr.equals(td.getName())) {
+                if (handleClick(typeStr, afterDot, td, memberClickedListener)) return;
+            }
+            // otherwise search the inner classes
+            else {
+                for (int i = 0;i < td.getChildTypeCount();i++) {
+                    TypeDeclaration childTd = td.getChildType(i);
+                    if (handleClick(typeStr, afterDot, childTd, memberClickedListener)) return;
+                }
+                // search the upper classes
+                TypeDeclaration parent = td.getParentType();
+                while (parent != null) {
+                    if (handleClick(typeStr, afterDot, parent, memberClickedListener)) return;
+                    parent = parent.getParentType();
+                }
+            }
+        }
+        System.out.println("not found : " + prefix);
+    }
+
+    /**
+     * This method will handle the local lookup for methods / fields in
+     * the given TypeDeclaration. If a match is found, the
+     * listener is called
+     * @param typeStr
+     * @param afterDot
+     * @param td
+     * @param memberClickedListener
+     * @return
+     */
+    private boolean handleClick(String typeStr, String afterDot, TypeDeclaration td, MemberClickedListener memberClickedListener) {
+        if (typeStr.equals(td.getName())) {
+            String methodName = afterDot;
+            int countMethodParams = 0;
+
+            if (afterDot.contains("(")) {
+                int j = afterDot.indexOf("(");
+                methodName = afterDot.substring(0, j).trim();
+                String params = afterDot.substring(j + 1);
+                params = params.replace(")", "").trim();
+                countMethodParams = countMethodParams(params);
+            }
+
+            for (int j = 0;j < td.getMemberCount();j++) {
+                Member member = td.getMember(j);
+                if (member instanceof Method && methodName.equals(member.getName()) && ((Method) member).getParameterCount() == countMethodParams) {
+                    memberClickedListener.gotoMethod((Method) member);
+                    return true;
+                }
+                else if (member instanceof Field && methodName.equals(member.getName())) {
+                    memberClickedListener.gotoField((Field) member);
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private Type resolveType2(CompilationUnit cu, String alreadyEntered, TypeDeclaration td,
+                              Method currentMethod, String prefix, int offs) {
+        // String prefix2 = prefix;
+        int dot = prefix.lastIndexOf(".");
+        if (dot > -1) {
+            return resolveTypeWithDot(cu, alreadyEntered,  td, currentMethod, prefix, offs, dot);
+        }
+        if (prefix.equals(td.getName())) {
+            return new Type(td.getName());
+        }
+        String methodName = prefix;
+        int countMethodParams = 0;
+
+        if (prefix.contains("(")) {
+            int j = prefix.indexOf("(");
+            methodName = prefix.substring(0, j).trim();
+            String params = prefix.substring(j + 1);
+            params = params.replace(")", "").trim();
+            countMethodParams = countMethodParams(params);
+        }
+        for (Iterator<Member> j = td.getMemberIterator(); j.hasNext();) {
+            Member m = j.next();
+            // The prefix might be a field in the local class.
+            if (m instanceof Field) {
+                Field field = (Field) m;
+                if (field.getName().equals(prefix)) {
+                    System.out.println("found prefix [" + prefix + "] as field in class [" + td.getName() + "]");
+                    return field.getType();
+                }
+            }
+            // or a method call in the local class
+            else if (m instanceof Method) {
+                Method method = (Method) m;
+                if (method.getName().equals(methodName) && method.getParameterCount() == countMethodParams) {
+                    System.out.println("found prefix [" + prefix + "] as method in class [" + td.getName() + "]");
+                    return method.getType();
+                }
+            }
+        }
+        if (currentMethod != null) {
+            for (int i = 0; i < currentMethod.getParameterCount(); i++) {
+                FormalParameter param = currentMethod.getParameter(i);
+                String name = param.getName();
+                // Assuming prefix is "one level deep" and contains no '.'...
+                if (prefix.equals(name)) {
+                    return param.getType();
+                }
+            }
+            // check method local variables for a match
+            for (int i = 0;i < currentMethod.getBody().getLocalVarCount();i++)
+            {
+                LocalVariable localVariable = currentMethod.getBody().getLocalVar(i);
+                if (prefix.equals(localVariable.getName())) {
+                    return localVariable.getType();
+                }
+            }
+        }
+        List<ClassFile> matchedImports = new ArrayList();
+        List<ImportDeclaration> imports = cu.getImports();
+        List<ClassFile> matches = jarManager.getClassesWithUnqualifiedName(prefix, imports);
+        if (matches != null) {
+            for (int i = 0; i < matches.size(); i++) {
+                ClassFile cf = matches.get(i);
+                String className = cf.getClassName(true);
+                if(className.endsWith(prefix)) {
+                    matchedImports.add(cf);
+                }
+            }
+        }
+        if (matchedImports.size() == 1) {
+            System.out.println("found matched imports ");
+            return new Type(matchedImports.get(0).getClassName(true));
+        }
+        if (matchedImports.size() > 0) {
+            System.out.println("found matched imports ,ore than 1");
+        } else {
+            // System.out.println("found matched imports not found");
+        }
+
+        System.out.println("not found " + prefix);
+
+        // go up on the typeDeclaration hierarchy and check for every class name
+        TypeDeclaration parent = td.getParentType();
+        while (parent != null) {
+            if (prefix.equals(parent.getName())) {
+                return new Type(prefix);
+            }
+            parent = parent.getParentType();
+        }
+
+        return null;
+    }
+
+    void open(CompilationUnit cu, String alreadyEntered, TypeDeclaration td,
+              Method currentMethod, String prefix, int offs, MemberClickedListener memberClickedListener) {
+        // String prefix2 = prefix;
+        int dot = prefix.lastIndexOf(".");
+        if (dot > -1) {
+            resolveType2WithDot(cu, alreadyEntered,  td, currentMethod, prefix, offs, dot, memberClickedListener);
+            return;
+        }
+        List<ClassFile> matchedImports = new ArrayList();
+        List<ImportDeclaration> imports = cu.getImports();
+        List<ClassFile> matches = jarManager.getClassesWithUnqualifiedName(prefix, imports);
+        if (matches != null) {
+            for (int i = 0; i < matches.size(); i++) {
+                ClassFile cf = matches.get(i);
+                String className = cf.getClassName(true);
+                if (className.endsWith(prefix)) {
+                    matchedImports.add(cf);
+                }
+            }
+        }
+        if (matchedImports.size() == 1) {
+            System.out.println("found matched imports ");
+            memberClickedListener.openClass(matchedImports.get(0).getClassName(true));
+            return;
+        }
+        if (matchedImports.size() > 0) {
+            System.out.println("found matched imports ,ore than 1");
+        } else {
+            // check if the clicked member is a local inner class
+            TypeDeclaration tmpTd = td;
+            do {
+                for (int i = 0; i < tmpTd.getChildTypeCount(); i++) {
+                    if (prefix.equals(tmpTd.getChildType(i).getName())) {
+                        // found inner class
+                        memberClickedListener.gotoInnerClass(tmpTd.getChildType(i));
+                        return;
+                    }
+                }
+                // check if clicked member is a parent class of this TypeDeclaration
+                TypeDeclaration parent = td.getParentType();
+                while (parent != null) {
+                    if (parent.getName().equals(prefix)) {
+                        memberClickedListener.gotoInnerClass(parent);
+                        return;
+                    }
+                    parent = parent.getParentType();
+                }
+                // check if clicked member is a method or field somewhere in the current class
+                String methodName = prefix;
+                int paramCount = 0;
+                if (prefix.contains("(")) {
+                    int j = prefix.indexOf("(");
+                    methodName = prefix.substring(0, j).trim();
+                    String params = prefix.substring(j + 1);
+                    params = params.replace(")", "").trim();
+                    paramCount = countMethodParams(params);
+                }
+
+                // since we did not have a . this is a method local var, a method parameter or a class field
+                // we check first the methods for local vars & parameters (we do not have the this. before the name, so this is the proper
+                // resolution order)
+
+                Iterator<Method> methodIterator = tmpTd.getMethodIterator();
+                while (methodIterator.hasNext()) {
+                    Method method = methodIterator.next();
+                    if (methodName.equals(method.getName()) && method.getParameterCount() == paramCount) {
+                        memberClickedListener.gotoMethod(method);
+                        return;
+                    }
+                    else if (offs >= method.getBodyStartOffset() && offs <= method.getBodyEndOffset()) {
+                        // clicked variable is somewhere inside a method block, check if it is a local variable
+                        for (int k = 0;k < method.getBody().getLocalVarCount();k++) {
+                            if (prefix.equals(method.getBody().getLocalVar(k).getName())) {
+                                memberClickedListener.gotoLocalVar(method.getBody().getLocalVar(k));
+                                return;
+                            }
+                        }
+                        // check if the clicked variable is a method parameter
+                        for (int k = 0;k < method.getParameterCount();k++) {
+                            if (prefix.equals(method.getParameter(k).getName())) {
+                                memberClickedListener.gotoMethodParameter(method.getParameter(k));
+                                return;
+                            }
+                        }
+                    }
+                }
+
+                // not found in the methods, check if this is a class field of this class
+                Iterator<Field> fieldIterator = tmpTd.getFieldIterator();
+                while (fieldIterator.hasNext()) {
+                    Field field = fieldIterator.next();
+                    if (prefix.equals(field.getName())) {
+                        memberClickedListener.gotoField(field);
+                        return;
+                    }
+                }
+                // if we did not find it, and this TypeDeclaration (inner class) is static, we cannot check the parent TypeDeclarations
+                if (tmpTd.isStatic()) break;
+            } while ((tmpTd = tmpTd.getParentType()) != null);
+            // System.out.println("found matched imports not found");
+        }
+        System.out.println("not found " + prefix);
+    }
 
 	/**
 	 * Loads completions for the text at the current caret position, if there
@@ -828,63 +1563,54 @@ public SourceLocation  getSourceLocForClass(String className) {
 			String alreadyEntered, Set<Completion> retVal,
 			TypeDeclaration td, Method currentMethod, String prefix, int offs) {
 
-		// TODO: Remove this restriction.
-		int dot = prefix.indexOf('.');
-		if (dot>-1) {
-			System.out.println("[DEBUG]: Qualified non-this completions currently only go 1 level deep");
+		if (EMPTY_STRING.equals(prefix)) {
+            System.out.println("string is empty");
 			return;
 		}
 
-		// TODO: Remove this restriction.
-		else if (!prefix.matches("[A-Za-z_][A-Za-z0-9_\\$]*")) {
-			System.out.println("[DEBUG]: Only identifier non-this completions are currently supported");
-			return;
-		}
+//		 TODO: Remove this restriction.
+//		else if (!prefix.matches("[A-Za-z_][A-Za-z0-9_\\$]*")) {
+//			System.out.println("[DEBUG]: Only identifier non-this completions are currently supported");
+//			return;
+//		}
 
 		String pkg = cu.getPackageName();
 		boolean matched = false;
-
-		for (Iterator<Member> j=td.getMemberIterator(); j.hasNext(); ) {
-
-			Member m = j.next();
-
-			// The prefix might be a field in the local class.
-			if (m instanceof Field) {
-
-				Field field = (Field)m;
-
-				if (field.getName().equals(prefix)) {
-					//System.out.println("FOUND: " + prefix + " (" + pkg + ")");
-					Type type = field.getType();
-					if (type.isArray()) {
-						ClassFile cf = getClassFileFor(cu, "java.lang.Object");
-						addCompletionsForExtendedClass(retVal, cu, cf, pkg, null);
-						FieldCompletion fc = FieldCompletion.
-							createLengthCompletion(this, type);
-						retVal.add(fc);
-					}
-					else if (!type.isBasicType()) {
-						String typeStr = type.getName(true, false);
-						ClassFile cf = getClassFileFor(cu, typeStr);
-						// Add completions for extended class type chain
-						if (cf!=null) {
-							Map<String, String> typeParamMap = createTypeParamMap(type, cf);
-							addCompletionsForExtendedClass(retVal, cu, cf, pkg, typeParamMap);
-							// Add completions for all implemented interfaces
-							// TODO: Only do this if type is abstract!
-							for (int i=0; i<cf.getImplementedInterfaceCount(); i++) {
-								String inter = cf.getImplementedInterfaceName(i, true);
-								cf = getClassFileFor(cu, inter);
-								System.out.println(cf);
-							}
-						}
-					}
-					matched = true;
-					break;
-				}
-
-			}
-
+		String prefix2 = prefix;
+		prefix2 = prefix2.replace("\r\n", " ");
+		prefix2 = prefix2.replace("\n", " ");
+		prefix2 = prefix2.replace("\t", " ");
+		prefix2 = prefix2.replace("\r", " ");
+		// groovy helper
+		prefix2 = prefix2.replace("@", "");
+		Type type = resolveType2(cu, alreadyEntered,  td, currentMethod, prefix2, offs);
+		if (type == null) {
+            System.out.println("type is null " + prefix);
+		} else {
+            if (type.isArray()) {
+                ClassFile cf = getClassFileFor(cu, "java.lang.Object");
+                addCompletionsForExtendedClass(retVal, cu, cf, pkg, null);
+                FieldCompletion fc = FieldCompletion.
+                    createLengthCompletion(this, type);
+                retVal.add(fc);
+            }
+            else if (!type.isBasicType()) {
+                String typeStr = type.getName(true, false);
+                ClassFile cf = getClassFileFor(cu, typeStr);
+                // Add completions for extended class type chain
+                if (cf!=null) {
+                    Map<String, String> typeParamMap = createTypeParamMap(type, cf);
+                    addCompletionsForExtendedClass(retVal, cu, cf, pkg, typeParamMap);
+                    // Add completions for all implemented interfaces
+                    // TODO: Only do this if type is abstract!
+                    for (int i=0; i<cf.getImplementedInterfaceCount(); i++) {
+                        String inter = cf.getImplementedInterfaceName(i, true);
+                        cf = getClassFileFor(cu, inter);
+                        System.out.println(cf);
+                    }
+                    matched = true;
+                }
+            }
 		}
 
 		// The prefix might be for a local variable in the current method.
@@ -920,15 +1646,29 @@ public SourceLocation  getSourceLocForClass(String className) {
 		// Could be a class name, in which case we'll need to add completions
 		// for static fields and methods.
 		if (!matched) {
-			List<ImportDeclaration> imports = cu.getImports();
-			List<ClassFile> matches = jarManager.getClassesWithUnqualifiedName(
-															prefix, imports);
-			if (matches!=null) {
-				for (int i=0; i<matches.size(); i++) {
-					ClassFile cf = matches.get(i);
-					addCompletionsForStaticMembers(retVal, cu, cf, pkg);
-				}
-			}
+            // if the class equals with current class, we load static members from local TypeDeclaration
+            if (type != null && type.getName(false).equals(td.getName())) {
+                loadStaticCompletionForClass(retVal, cu, td);
+                if (isThisAccessible(td, cu.getDeepestTypeDeclarationAtOffset(offs))) {
+                    retVal.add(FieldCompletion.createThisCompletion(javaProvider, type));
+                }
+                // if the prefix contains already a ., we assume it is something like this: classname.this. or
+                // classname.getInstance() or similar, so we load also non static members
+                if (prefix.contains(".")) {
+                    loadCompletionForClass(retVal, cu, td);
+                }
+            }
+            else {
+                List<ImportDeclaration> imports = cu.getImports();
+                List<ClassFile> matches = jarManager.getClassesWithUnqualifiedName(
+                        prefix, imports);
+                if (matches != null) {
+                    for (int i = 0; i < matches.size(); i++) {
+                        ClassFile cf = matches.get(i);
+                        addCompletionsForStaticMembers(retVal, cu, cf, pkg);
+                    }
+                }
+            }
 		}
 
 	}
@@ -974,6 +1714,40 @@ public SourceLocation  getSourceLocForClass(String className) {
 		}
 
 	}
+
+    /**
+     * Loads methods, fields for current class if user enters ClassName.this.
+     * @param set
+     * @param cu
+     * @param td
+     */
+    private void loadCompletionForClass(Set<Completion> set, CompilationUnit cu, TypeDeclaration td) {
+        Iterator<Member> memberIterator = td.getMemberIterator();
+        while (memberIterator.hasNext()) {
+            Member member = memberIterator.next();
+            if (!member.isStatic()) {
+                if (member instanceof Method && ((Method) member).isConstructor()) continue;
+                set.add(member instanceof Method ? new MethodCompletion(this, (Method) member) : new FieldCompletion(this, (Field) member));
+            }
+        }
+    }
+
+    /**
+     * Loads the static members of a class when the user enters the Classname
+     * @param set
+     * @param cu
+     * @param td
+     */
+    private void loadStaticCompletionForClass(Set<Completion> set, CompilationUnit cu, TypeDeclaration td) {
+        // add static methods to completion
+        Iterator<Member> memberIterator = td.getMemberIterator();
+        while (memberIterator.hasNext()) {
+            Member member = memberIterator.next();
+            if (member.isStatic()) {
+                set.add(member instanceof Method ? new MethodCompletion(this, (Method) member) : new FieldCompletion(this, (Field) member));
+            }
+        }
+    }
 
 
 	/**

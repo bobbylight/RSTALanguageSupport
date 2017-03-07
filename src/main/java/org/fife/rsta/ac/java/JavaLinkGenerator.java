@@ -10,26 +10,13 @@
  */
 package org.fife.rsta.ac.java;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import javax.swing.event.HyperlinkEvent;
 import javax.swing.text.BadLocationException;
 
-import org.fife.rsta.ac.java.rjc.ast.CodeBlock;
 import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
-import org.fife.rsta.ac.java.rjc.ast.FormalParameter;
-import org.fife.rsta.ac.java.rjc.ast.LocalVariable;
-import org.fife.rsta.ac.java.rjc.ast.Member;
 import org.fife.rsta.ac.java.rjc.ast.Method;
 import org.fife.rsta.ac.java.rjc.ast.TypeDeclaration;
-import org.fife.ui.rsyntaxtextarea.LinkGenerator;
-import org.fife.ui.rsyntaxtextarea.LinkGeneratorResult;
-import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
-import org.fife.ui.rsyntaxtextarea.SelectRegionLinkGeneratorResult;
-import org.fife.ui.rsyntaxtextarea.Token;
-import org.fife.ui.rsyntaxtextarea.TokenImpl;
+import org.fife.ui.rsyntaxtextarea.*;
 
 
 /**
@@ -44,17 +31,37 @@ import org.fife.ui.rsyntaxtextarea.TokenImpl;
  * @version 1.0
  */
 // TODO: Anonymous inner classes probably aren't handled well.
-class JavaLinkGenerator implements LinkGenerator {
+public class JavaLinkGenerator implements LinkGenerator {
 
 	private JavaLanguageSupport jls;
+	private JavaCompletionProvider javaCompletionProvider;
+	private SourceCompletionProvider sourceCompletionProvider;
+    private MemberClickedListener memberClickedListener;
 
-
-	JavaLinkGenerator(JavaLanguageSupport jls) {
+	JavaLinkGenerator(JavaLanguageSupport jls, JavaCompletionProvider p) {
 		this.jls = jls;
+		javaCompletionProvider = p;
+		sourceCompletionProvider = (SourceCompletionProvider)javaCompletionProvider.
+				getDefaultCompletionProvider();
 	}
 
+    JavaLinkGenerator(JavaLanguageSupport jls, JavaCompletionProvider p, MemberClickedListener memberClickedListener) {
+        this.jls = jls;
+        javaCompletionProvider = p;
+        sourceCompletionProvider = (SourceCompletionProvider)javaCompletionProvider.
+                getDefaultCompletionProvider();
+        this.memberClickedListener = memberClickedListener;
+    }
 
-	/**
+    public void setMemberClickedListener(MemberClickedListener memberClickedListener) {
+        this.memberClickedListener = memberClickedListener;
+    }
+
+    public MemberClickedListener getMemberClickedListener() {
+        return memberClickedListener;
+    }
+
+    /**
 	 * Checks if the token at the specified offset is possibly a "click-able"
 	 * region.
 	 *
@@ -85,29 +92,79 @@ class JavaLinkGenerator implements LinkGenerator {
 						Token token = new TokenImpl(t);
 						boolean isMethod = false;
 
-						if (prev==null) {
-							prev = RSyntaxUtilities.getPreviousImportantToken(
-									doc, line-1);
-						}
-						if (prev!=null && prev.isSingleChar('.')) {
-							// Not a field or method defined in this class.
-							break;
-						}
+                        Token firstE = token;
 
-						Token next = RSyntaxUtilities.getNextImportantToken(
-								t.getNextToken(), textArea, line);
-						if (next!=null && next.isSingleChar(Token.SEPARATOR, '(')) {
-							isMethod = true;
-						}
+                        int start=firstE.getOffset();
+                        // get the whole line only if the prev token is dot
+                        if (prev != null && prev.isSingleChar('.'))
+                        {
+                            String alreadyEnteredTextS2 = SourceCompletionProvider.getAlreadyEnteredTextS2(textArea, firstE.getOffset());
+                            start = start - alreadyEnteredTextS2.length();
+                        }
 
-						result = new IsLinkableCheckResult(token, isMethod);
-						break;
+                        int end = token.getEndOffset();
+
+                        // if next token is ( we need to find the corresponding closing ) token, and set the end to the closing )
+                        if (t.getNextToken() != null && t.getNextToken().getType() != TokenTypes.NULL && t.getNextToken().isSingleChar('('))
+                        {
+                            int bcounter = 1;
+                            // start from the token after the (
+                            Token tmp = t.getNextToken().getNextToken();
+                            while (tmp.getNextToken() != null && bcounter > 0) {
+                                if (tmp.isSingleChar('(')) bcounter++;
+                                if (tmp.isSingleChar(')')) bcounter--;
+                                if (bcounter > 0) tmp = tmp.getNextToken();
+                            }
+
+                            // we managed to find the closing ) w
+                            if (bcounter == 0 && tmp != null) {
+                                end = tmp.getEndOffset();
+                            }
+                        }
+
+//                        Token last= token;
+
+//                        int maxLength = textArea.getText().length();
+//                        String text2 = textArea.getText(end, Math.min(maxLength, 10));
+//                        if(text2.trim().startsWith("(")) {
+//                            int closeBracket = text2.indexOf(')');
+//                            end+=closeBracket+1;
+//                        }
+
+                        IsLinkableCheckResult aa = new IsLinkableCheckResult(token, isMethod);
+                        aa.start = start; // first.getOffset();
+                        aa.end = end;
+                        int length = aa.end - aa.start;
+                        if(length<1) {
+                        } else {
+                            String text = textArea.getText(aa.start, length);
+                            aa.text = text;
+                            return aa;
+                        }
+
+//						if (prev==null) {
+//							prev = RSyntaxUtilities.getPreviousImportantToken(
+//									doc, line-1);
+//						}
+//						if (prev!=null && prev.isSingleChar('.')) {
+//							// Not a field or method defined in this class.
+//							break;
+//						}
+//
+//						Token next = RSyntaxUtilities.getNextImportantToken(
+//								t.getNextToken(), textArea, line);
+//						if (next!=null && next.isSingleChar(Token.SEPARATOR, '(')) {
+//							isMethod = true;
+//						}
+//
+//						result = new IsLinkableCheckResult(token, isMethod);
+//						break;
 
 					}
 
-					else if (!t.isCommentOrWhitespace()) {
-						prev = t;
-					}
+//					else if (!t.isCommentOrWhitespace()) {
+                    prev = t;
+//					}
 
 				}
 
@@ -121,109 +178,134 @@ class JavaLinkGenerator implements LinkGenerator {
 
 	}
 
+	long lastAccess = -1;
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public LinkGeneratorResult isLinkAtOffset(RSyntaxTextArea textArea,
-			int offs) {
+	public LinkGeneratorResult isLinkAtOffset(final RSyntaxTextArea textArea,
+			final int offs) {
 
 		int start = -1;
 		int end = -1;
 
-		IsLinkableCheckResult result = checkForLinkableToken(textArea, offs);
+		final IsLinkableCheckResult result = checkForLinkableToken(textArea, offs);
 		if (result!=null) {
 
 			JavaParser parser = jls.getParser(textArea);
-			CompilationUnit cu = parser.getCompilationUnit();
+			final CompilationUnit cu = parser.getCompilationUnit();
 			Token t = result.token;
 			boolean method = result.method;
 
 			if (cu!=null) {
 
-				TypeDeclaration td = cu.getDeepestTypeDeclarationAtOffset(offs);
-				boolean staticFieldsOnly = false;
-				boolean deepestTypeDec = true;
-				boolean deepestContainingMemberStatic = false;
-				while (td!=null && start==-1) {
+				final TypeDeclaration td = cu.getDeepestTypeDeclarationAtOffset(offs);
+//				boolean staticFieldsOnly = false;
+//				boolean deepestTypeDec = true;
+//				boolean deepestContainingMemberStatic = false;
+				if(td != null && start == -1) {
+                    final Method findCurrentMethod = SourceCompletionProvider.findCurrentMethod(cu, textArea, td, offs);
+                    if (findCurrentMethod != null) {
+                        if(System.currentTimeMillis()-lastAccess < 2000) {
+                            return null;
+                        }
+                        return new LinkGeneratorResult() {
 
-					// First, check for a local variable in methods/static blocks
-					if (!method && deepestTypeDec) {
+                            @Override
+                            public int getSourceOffset() {
+//								log.info(1);
+                                return 0;
+                            }
 
-						Iterator<Member> i = td.getMemberIterator();
-						while (i.hasNext()) {
-	
-							Method m = null; // Nasty!  Clean this code up
-							Member member = i.next();
-							CodeBlock block = null;
-
-							// Check if a method or static block contains offs
-							if (member instanceof Method) {
-								m = (Method)member;
-								if (m.getBodyContainsOffset(offs) && m.getBody()!=null) {
-									deepestContainingMemberStatic = m.isStatic();
-									block = m.getBody().getDeepestCodeBlockContaining(offs);
-								}
-							}
-							else if (member instanceof CodeBlock) {
-								block = (CodeBlock)member;
-								deepestContainingMemberStatic = block.isStatic();
-								block = block.getDeepestCodeBlockContaining(offs);
-							}
-
-							// If so, scan its locals
-							if (block!=null) {
-								String varName = t.getLexeme();
-								// Local variables first, in reverse order
-								List<LocalVariable> locals = block.getLocalVarsBefore(offs);
-								Collections.reverse(locals);
-								for (LocalVariable local : locals) {
-									if (varName.equals(local.getName())) {
-										start = local.getNameStartOffset();
-										end = local.getNameEndOffset();
-									}
-								}
-								// Then arguments, if any.
-								if (start==-1 && m!=null) {
-									for (int j=0; j<m.getParameterCount(); j++) {
-										FormalParameter p = m.getParameter(j);
-										if (varName.equals(p.getName())) {
-											start = p.getNameStartOffset();
-											end = p.getNameEndOffset();
-										}
-									}
-								}
-								break; // No other code block will contain offs
-							}
-	
-						}
-					}
-
-					// If no local var match, check fields or methods.
-					if (start==-1) {
-						String varName = t.getLexeme();
-						Iterator<? extends Member> i = method ?
-								td.getMethodIterator() : td.getFieldIterator();
-						while (i.hasNext()) {
-							Member member = i.next();
-							if (((!deepestContainingMemberStatic && !staticFieldsOnly) || member.isStatic()) &&
-									varName.equals(member.getName())) {
-								start = member.getNameStartOffset();
-								end = member.getNameEndOffset();
-								break;
-							}
-						}
-					}
-
-					// If still no match found, check parent type
-					if (start==-1) {
-						staticFieldsOnly |= td.isStatic();
-						//td = td.isStatic() ? null : td.getParentType();
-						td = td.getParentType();
-						// Don't check for local vars in parent type methods.
-						deepestTypeDec = false;
-					}
+                            @Override
+                            public HyperlinkEvent execute() {
+                                if (memberClickedListener != null) {
+                                    String text2 = result.text.replace("@", "");
+                                    sourceCompletionProvider.open(cu, result.text, td, findCurrentMethod, text2, offs, memberClickedListener);
+                                }
+//								log.info(2);
+                                return null;
+                            }
+                        };
+                    } else {
+                    }
+//					// First, check for a local variable in methods/static blocks
+//					if (!method && deepestTypeDec) {
+//
+//						Iterator<Member> i = td.getMemberIterator();
+//						while (i.hasNext()) {
+//
+//							Method m = null; // Nasty!  Clean this code up
+//							Member member = i.next();
+//							CodeBlock block = null;
+//
+//							// Check if a method or static block contains offs
+//							if (member instanceof Method) {
+//								m = (Method)member;
+//								if (m.getBodyContainsOffset(offs) && m.getBody()!=null) {
+//									deepestContainingMemberStatic = m.isStatic();
+//									block = m.getBody().getDeepestCodeBlockContaining(offs);
+//								}
+//							}
+//							else if (member instanceof CodeBlock) {
+//								block = (CodeBlock)member;
+//								deepestContainingMemberStatic = block.isStatic();
+//								block = block.getDeepestCodeBlockContaining(offs);
+//							}
+//
+//							// If so, scan its locals
+//							if (block!=null) {
+//								String varName = t.getLexeme();
+//								// Local variables first, in reverse order
+//								List<LocalVariable> locals = block.getLocalVarsBefore(offs);
+//								Collections.reverse(locals);
+//								for (LocalVariable local : locals) {
+//									if (varName.equals(local.getName())) {
+//										start = local.getNameStartOffset();
+//										end = local.getNameEndOffset();
+//									}
+//								}
+//								// Then arguments, if any.
+//								if (start==-1 && m!=null) {
+//									for (int j=0; j<m.getParameterCount(); j++) {
+//										FormalParameter p = m.getParameter(j);
+//										if (varName.equals(p.getName())) {
+//											start = p.getNameStartOffset();
+//											end = p.getNameEndOffset();
+//										}
+//									}
+//								}
+//								break; // No other code block will contain offs
+//							}
+//
+//						}
+//					}
+//
+//					// If no local var match, check fields or methods.
+//					if (start==-1) {
+//						String varName = t.getLexeme();
+//						Iterator<? extends Member> i = method ?
+//								td.getMethodIterator() : td.getFieldIterator();
+//						while (i.hasNext()) {
+//							Member member = i.next();
+//							if (((!deepestContainingMemberStatic && !staticFieldsOnly) || member.isStatic()) &&
+//									varName.equals(member.getName())) {
+//								start = member.getNameStartOffset();
+//								end = member.getNameEndOffset();
+//								break;
+//							}
+//						}
+//					}
+//
+//					// If still no match found, check parent type
+//					if (start==-1) {
+//						staticFieldsOnly |= td.isStatic();
+//						//td = td.isStatic() ? null : td.getParentType();
+//						td = td.getParentType();
+//						// Don't check for local vars in parent type methods.
+//						deepestTypeDec = false;
+//					}
 
 				}
 
@@ -247,10 +329,14 @@ class JavaLinkGenerator implements LinkGenerator {
 	 */
 	private static class IsLinkableCheckResult {
 
+        public String text;
 		/**
 		 * The token under the mouse position.
 		 */
 		private Token token;
+
+		private int start;
+		private int end;
 
 		/**
 		 * Whether the token is a method invocation (as opposed to a local
