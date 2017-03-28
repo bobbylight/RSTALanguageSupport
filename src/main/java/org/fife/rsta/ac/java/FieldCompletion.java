@@ -136,9 +136,71 @@ class FieldCompletion extends AbstractJavaSourceCompletion
         return fc;
     }
 
+    /**
+     * Used to add "super" with the class type to the completion list
+     * @param provider
+     * @param type
+     * @return
+     */
+    public static FieldCompletion createSuperCompletion(CompletionProvider provider, final Type type) {
+        FieldCompletion fc = new FieldCompletion(provider, "super");
+        fc.data = new Data() {
+            @Override
+            public String getEnclosingClassName(boolean fullyQualified) {
+                return type.getName(fullyQualified);
+            }
+
+            @Override
+            public String getIcon() {
+                return IconFactory.FIELD_PROTECTED_ICON;
+            }
+
+            @Override
+            public String getSignature() {
+                return "super";
+            }
+
+            @Override
+            public String getSummary() {
+                return null;
+            }
+
+            @Override
+            public String getType() {
+                return type.getName(false);
+            }
+
+            @Override
+            public boolean isConstructor() {
+                return false;
+            }
+
+            @Override
+            public boolean isDeprecated() {
+                return false;
+            }
+
+            @Override
+            public boolean isAbstract() {
+                return false;
+            }
+
+            @Override
+            public boolean isFinal() {
+                return false;
+            }
+
+            @Override
+            public boolean isStatic() {
+                return false;
+            }
+        };
+        return fc;
+    }
+
 	public static FieldCompletion createLengthCompletion(
 							CompletionProvider provider, final Type type) {
-		FieldCompletion fc = new FieldCompletion(provider, type.toString());
+		FieldCompletion fc = new FieldCompletion(provider, "length");
 		fc.data = new Data() {
 
 			@Override

@@ -341,6 +341,7 @@ public class PackageMapNode {
 			String currentPkg, List<ClassFile> addTo) {
 
 		final int prefixLen = prefix.length();
+        List<String> prefixParts = org.fife.ui.autocomplete.Util.getTextParts(prefix);
 
 		for (Map.Entry<String, PackageMapNode> children : subpackages.entrySet()) {
 			String key = children.getKey();
@@ -354,7 +355,8 @@ public class PackageMapNode {
 			// necessary (i.e. if the class name does match what they've
 			// typed).
 			String className = cfEntry.getKey();
-			if (className.regionMatches(true, 0, prefix, 0, prefixLen)) {
+            // extend the match with our textPartsMatch, creating a match for example JTP with JTabbedPane
+            if (className.regionMatches(true, 0, prefix.toLowerCase(), 0, prefixLen) || org.fife.ui.autocomplete.Util.matchTextParts(prefixParts, org.fife.ui.autocomplete.Util.getTextParts(className))) {
 				ClassFile cf = cfEntry.getValue();
 				if (cf==null) {
 					String fqClassName = currentPkg + className + ".class";

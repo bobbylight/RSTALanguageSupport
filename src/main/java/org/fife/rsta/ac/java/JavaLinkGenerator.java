@@ -206,7 +206,7 @@ public class JavaLinkGenerator implements LinkGenerator {
 //				boolean deepestContainingMemberStatic = false;
 				if(td != null && start == -1) {
                     final Method findCurrentMethod = SourceCompletionProvider.findCurrentMethod(cu, textArea, td, offs);
-                    if (findCurrentMethod != null) {
+//                    if (findCurrentMethod != null) {
                         if(System.currentTimeMillis()-lastAccess < 2000) {
                             return null;
                         }
@@ -222,14 +222,14 @@ public class JavaLinkGenerator implements LinkGenerator {
                             public HyperlinkEvent execute() {
                                 if (memberClickedListener != null) {
                                     String text2 = result.text.replace("@", "");
-                                    sourceCompletionProvider.open(cu, result.text, td, findCurrentMethod, text2, offs, memberClickedListener);
+                                    sourceCompletionProvider.open(cu, result.text, td, findCurrentMethod, text2, offs, offs - result.start, memberClickedListener);
                                 }
 //								log.info(2);
                                 return null;
                             }
                         };
-                    } else {
-                    }
+//                    } else {
+//                    }
 //					// First, check for a local variable in methods/static blocks
 //					if (!method && deepestTypeDec) {
 //

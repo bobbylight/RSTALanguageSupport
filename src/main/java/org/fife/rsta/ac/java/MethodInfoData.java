@@ -10,6 +10,7 @@
  */
 package org.fife.rsta.ac.java;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -38,7 +39,7 @@ class MethodInfoData implements Data {
 	/**
 	 * The parent completion provider.
 	 */
-	private SourceCompletionProvider provider;
+	private WeakReference<SourceCompletionProvider> provider;
 
 	/**
 	 * The actual metadata.
@@ -59,7 +60,7 @@ class MethodInfoData implements Data {
 	 */
 	public MethodInfoData(MethodInfo info, SourceCompletionProvider provider) {
 		this.info = info;
-		this.provider = provider;
+		this.provider = new WeakReference<SourceCompletionProvider>(provider);
 	}
 
 
@@ -299,7 +300,8 @@ class MethodInfoData implements Data {
 	public String getSummary() {
 
 		ClassFile cf = info.getClassFile();
-		SourceLocation loc = provider.getSourceLocForClass(cf.getClassName(true));
+		SourceLocation loc = null;
+        if (provider != null && provider.get() != null) loc = provider.get().getSourceLocForClass(cf.getClassName(true));
 		String summary = null;
 
 		// First, try to parse the Javadoc for this method from the attached

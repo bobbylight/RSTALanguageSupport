@@ -409,7 +409,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		 * Thanks to Guilherme Joao Frantz and Jonatas Schuler for helping
 		 * with the patch!
 		 *
-		 * @param c The completion being inserted.
+		 * @param cc The completion being inserted.
 		 * @return Whether an import was added.
 		 */
 		private ImportToAddInfo getShouldAddImport(ClassCompletion cc) {

@@ -261,8 +261,76 @@ OUTER:
 case KEYWORD_FOR:
 	// TODO: Get local var (e.g. "int i", "Iterator i", etc.)
 	// Fall through
+    List<LocalVariable> localVariables = new ArrayList<LocalVariable>();
+    int nextType = s.yyPeekCheckType();
+    while (nextType!=-1 && nextType!=SEPARATOR_LPAREN) {
+        t = s.yylex(); // Grab the (unexpected) token
+        if (t!=null) { // Should always be true
+            ParserNotice pn = new ParserNotice(t, "Unexpected token");
+            cu.addParserNotice(pn);
+        }
+        nextType = s.yyPeekCheckType();
+    }
+    if (nextType==SEPARATOR_LPAREN) {
+        // extract local vars here
+        s.eatThroughNext(SEPARATOR_LPAREN);
+        int parenCounter = 1;
+        // we are interested in tokens until we encounter a '=' or a ':'
+        boolean varFinal = false;
+        String varType = null;
+        List<Token> variables = new ArrayList<Token>();
+        while (s.yyPeekCheckType() != OPERATOR_EQUALS && s.yyPeekCheckType() != OPERATOR_COLON && s.yyPeekCheckType() != SEPARATOR_SEMICOLON) {
+            if (s.yyPeekCheckType() == KEYWORD_FINAL) {
+                varFinal = true;
+                s.yylex(); // eat final keyword
+            }
+            else if (varType == null) {
+                varType  = s.yylex().getLexeme();
+            }
+            else  {
+                variables.add(s.yylex());
+            }
+        }
+
+        // if we had only one variable without type definition, means for (i=x;...)
+        // so we do not register any local variable. if we have variables and a varType
+        // the for was declared similar to this for (int i=0;....) or for (Iterator it=x.getIterator();..) or for (MyObject x : y)
+        if (variables.size() == 0 && varType != null) {
+            varType = null;
+        }
+
+        if (varType != null) {
+            for (Token variable : variables) {
+                LocalVariable localVariable = new LocalVariable(s, varFinal, new Type(varType), variable.getOffset(), variable.getLexeme());
+                localVariables.add(localVariable);
+            }
+        }
+
+        // read till we hit the closing ) of the for, or encounter a { or }
+        while (parenCounter > 0) {
+            Token token = s.yylex();
+            if (token.getType() == SEPARATOR_LPAREN) parenCounter++;
+            else if (token.getType() == SEPARATOR_RPAREN) parenCounter--;
+            else if (token.getType() == SEPARATOR_LBRACE || token.getType() == SEPARATOR_RBRACE) {
+                // encountered an opening or closing brace, stop cycle
+                s.yyPushback(token);
+                break;
+            }
+        }
+    }
+    nextType = s.yyPeekCheckType();
+    if (nextType==SEPARATOR_LBRACE) {
+        child = _getBlock(cu, block, m, s, isStatic, depth+1);
+        // if we have any variable declared in the for () we add them here as local variables
+        if (localVariables.size() > 0) {
+            for (LocalVariable localVariable : localVariables) child.addLocalVariable(localVariable);
+        }
+        block.add(child);
+        atStatementStart = true;
+    }
+    break;
 case KEYWORD_WHILE:
-	int nextType = s.yyPeekCheckType();
+	nextType = s.yyPeekCheckType();
 	while (nextType!=-1 && nextType!=SEPARATOR_LPAREN) {
 		t = s.yylex(); // Grab the (unexpected) token
 		if (t!=null) { // Should always be true
@@ -431,8 +499,7 @@ case KEYWORD_WHILE:
 					throws IOException {
 
 		log("Entering _getClassOrInterfaceDeclaration");
-		Token t = s.yyPeekNonNull(
-						"class, enum, interface or @interface expected");
+		Token t = s.yyPeekNonNull("class, enum, interface or @interface expected");
 
 		if (modList==null) { // Not yet read in
 			modList = _getModifierList(cu, s);
@@ -732,6 +799,11 @@ return cu;
 		iDec.setBodyStartOffset(s.createOffset(t.getOffset()));
 
 		t = s.yylexNonNull("InterfaceBody expected");
+        // if the next token is the closing brace (empty interface body), register the offset, otherwise
+        // the end offset will be null, and will provide various errors
+        if (t.getType() == SEPARATOR_RBRACE) {
+            iDec.setBodyEndOffset(s.createOffset(t.getOffset()));
+        }
 
 		while (t.getType() != SEPARATOR_RBRACE) {
 

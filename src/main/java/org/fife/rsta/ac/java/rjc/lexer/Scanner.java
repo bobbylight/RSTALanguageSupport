@@ -103,12 +103,12 @@ private void pushOntoStack(Token t) {
 	if (t!=null && !stack.isEmpty() && t.equals(stack.peek())) {
 		System.err.println("ERROR: Token being duplicated: " + t);
 		Thread.dumpStack();
-		System.exit(5);
+//		System.exit(5);
 	}
 	else if (t==null) {
 		System.err.println("ERROR: null token pushed onto stack");
 		Thread.dumpStack();
-		System.exit(6);
+//		System.exit(6);
 	}
 	stack.push(t);
 }

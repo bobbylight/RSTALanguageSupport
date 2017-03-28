@@ -14,6 +14,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
@@ -79,7 +80,8 @@ public class LanguageSupportFactory implements PropertyChangeListener {
 	 */
 	private void createSupportMap() {
 
-		styleToSupport = new HashMap<String, LanguageSupport>();
+        // use WeakHashMap so language supports not needed any more can be GC'd
+		styleToSupport = new WeakHashMap<String, LanguageSupport>();
 		styleToSupportClass = new HashMap<String, String>();
 
 		String prefix = "org.fife.rsta.ac.";
@@ -149,7 +151,8 @@ public class LanguageSupportFactory implements PropertyChangeListener {
 				}
 				styleToSupport.put(style, support);
 				// Always remove from classes to load, so we don't try again
-				styleToSupportClass.remove(style);
+                // don't do this, since the WeakHashMap can loose the reference, so we need to load it again
+//				styleToSupportClass.remove(style);
 			}
 		}
 

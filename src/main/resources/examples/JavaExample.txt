@@ -1,4 +1,12 @@
+package rsta.example;
+
 import java.util.HashMap;
+import java.io.Serializable;
+import java.util.List;
+import java.util.ArrayList;
+import java.awt.Component;
+import javax.swing.JTextField;
+import javax.swing.JButton;
 
 public class ExampleCode {
 
@@ -23,6 +31,10 @@ public class ExampleCode {
         this.value = value; // both value variables are clickable, this.value goes to class field value, value goes to parameter value
     }
 
+    public void setSer(Serializable s) {
+      
+    }
+
     public String getX() {
         String str = "Hello world!";
         String another = "one two three";
@@ -37,11 +49,18 @@ public class ExampleCode {
         aaa = abb = val2;
         System.out.println(getX()); // ctrl-click should work, also completions for getX(). should pop up String methods/fields
         System.out.println(foo()); // Ctrl+click shouldn't work for foo!
+        Inner1 in1 = new Inner1();
+        Serializable k;
+        setSer(k); // check parameter completion, it should bring in1, k and val1 (since String implements Serializable!)
     }
 
     /** Ctrl+click my stuff! */
-    private class Inner1 {
+    private class Inner1 implements MySerializable {
 
+        public Inner1() {
+         
+        }
+         
         private int aaa;
         private double d;
         private String strField;
@@ -53,8 +72,34 @@ public class ExampleCode {
             System.out.println(ExampleCode.getMap().get("asdf").); // try completion here
             System.out.println(ExampleCode.); // try completions here (this should be in the list, since Inner1 is not static)
             System.out.println(ExampleCode.this.); // try completions here
+
+            MyList<JTextField> x = new MyList<>();
+            MyList<JButton> buttons = new MyList<>();
+
+            for (JTextField textField : x) {
+               textField.getText(); // variable textField is recognized properly as JTextField type, completions come from proper class, try Ctrl-Click, should jump in for definition
+            }
+
+            buttons.get(0).addActionListener(null); // Type is also properly recognized here, check the completions
+
+            for (int i = 0;i < 100;i++) {
+               doWithInt(i); // check method parameter completion, it will offer i as local variable, Ctrl-Click will jump to i definition in the for statement
+            }
         }
 
+      public void doWithInt(int k) {
+         System.out.println("Current k: " + k);
+      }
+    }
+
+    public static class MyList<T extends Component> extends ArrayList<T> {
+         public MyList() {
+            
+         }
+    }
+
+    /** my serializable interface */
+    private interface MySerializable extends Serializable {
     }
 
     /** Ctrl+click my stuff also! */

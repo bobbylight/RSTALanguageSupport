@@ -63,6 +63,10 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 	private static final int NON_CONSTRUCTOR_RELEVANCE		= 2;
 
 
+    public MethodCompletion(CompletionProvider provider, String name, Type type) {
+        super(provider, name, type == null ? "void" : type.toString());
+    }
+
 	/**
 	 * Creates a completion for a method discovered when parsing a Java
 	 * source file.
@@ -332,5 +336,71 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 		return getSignature();
 	}
 
+    /**
+     * Returns a MethodCompletion instance using super keyword as method name and using parameters from provided
+     * method
+     * @param provider
+     * @param m
+     * @return
+     */
+    public static MethodCompletion createSuperConstructorCompletion(CompletionProvider provider, Method m) {
+        int count = m.getParameterCount();
+        List<Parameter> params = new ArrayList<Parameter>(count);
+        for (int i=0; i<count; i++) {
+            FormalParameter param = m.getParameter(i);
+            Type type = param.getType();
+            String name = param.getName();
+            params.add(new Parameter(type, name));
+        }
 
+        MethodCompletion mc = new MethodCompletion(provider, "super", m.getType());
+        mc.setDefinedIn(m.getParentTypeDeclaration().getName());
+        mc.data = new SuperConstructorData(new Type(m.getParentTypeDeclaration().getName(true)), params);
+        mc.setRelevanceAppropriately();
+
+        mc.setParams(params);
+
+        return mc;
+    }
+
+    /**
+     * Returns a MethodCompletion instance using super keyword as method name and using parameters from provided
+     * method
+     * @param provider
+     * @param m
+     * @return
+     */
+    public static MethodCompletion createSuperConstructorCompletion(CompletionProvider provider, MethodInfo m) {
+        String[] paramTypes = m.getParameterTypes();
+        List<Parameter> params = new ArrayList<Parameter>(paramTypes.length);
+        for (int i=0; i<paramTypes.length; i++) {
+            String name = m.getParameterName(i);
+            String type = m.getParameterType(i, false);
+            params.add(new Parameter(type, name));
+        }
+
+        MethodCompletion mc = new MethodCompletion(provider, "super", new Type(m.getReturnTypeFull()));
+        mc.setDefinedIn(m.getClassFile().getClassName(false));
+        mc.data = new SuperConstructorData(new Type(m.getClassFile().getClassName(true)), params);
+        mc.setRelevanceAppropriately();
+
+        mc.setParams(params);
+        return mc;
+    }
+
+    /**
+     * Creates a default constructor method completion in case no constructor is defined for a given class
+     * @param provider
+     * @param name
+     * @param type
+     * @return
+     */
+    public static MethodCompletion createDefaultConstructorCompletion(CompletionProvider provider, String name, Type type) {
+        MethodCompletion mc = new MethodCompletion(provider, name, type);
+        mc.setDefinedIn(type.getName(false));
+        mc.data = new SuperConstructorData(name, type, new ArrayList<Parameter>());
+        mc.setRelevanceAppropriately();
+
+        return mc;
+    }
 }
