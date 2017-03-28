@@ -835,6 +835,17 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
                     // should already be a method call
                     if (startIndex == endIndex) {
                         // search for a method in the current CU with matching signature
+                        TypeDeclaration td = cu.getDeepestTypeDeclarationAtOffset(comp.getCaretPosition());
+                        while (td != null) {
+                            List<Type> varTypes = findMethodsForType(cu, new Type(td.getName(true)), tokens.get(startIndex).getLexeme(), paramCounter + 1);
+                            if (varTypes != null) {
+                                for (Type t : varTypes) {
+                                    loadConstructorsForType(cu, retVal, t, false);
+                                }
+                                return true;
+                            }
+                            td = td.getParentType();
+                        }
                     }
                     else {
                         token = tokens.get(startIndex);
@@ -898,7 +909,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
     private List<Type> findMethodsForType(CompilationUnit cu, Type type, String methodName, int paramCounter) {
         List<Type> retval = new ArrayList<Type>();
         List<Object> result = new ArrayList<Object>();
-        searchForClassFilesWithType(cu, result, type);
+        searchForClassFilesWithType(cu, result, type, false);
         if (result.size() > 0) {
             // we managed to find at least one class with matching type. Check for methodName.
             for (int i = 0;i < result.size();i++) {
@@ -918,7 +929,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
                     if (methods != null) {
                         for (Object obj : methods) {
                             if (obj instanceof Method) {
-                                retval.add(((Method) obj).getParameter(paramCounter).getType());
+                                retval.add(((Method) obj).getParameter(paramCounter - 1).getType());
                             }
                             else if (obj instanceof MethodInfo) {
                                 retval.add(new Type(((MethodInfo) obj).getParameterType(paramCounter - 1, true)));
@@ -1581,7 +1592,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
      * @param result
      * @param type
      */
-    private void searchForClassFilesWithType(CompilationUnit cu, List<Object> result, Type type) {
+    private void searchForClassFilesWithType(CompilationUnit cu, List<Object> result, Type type, boolean forSuper) {
         String fqTypeName = SourceParamChoicesProvider.findFullyQualifiedNameFor(cu, jarManager, type.getName(true));
         for (ImportDeclaration imp : cu.getImports()) {
             List<ClassFile> cfs = null;
@@ -1595,7 +1606,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 
             for (int i = 0;cfs != null && i < cfs.size();i++) {
                 ClassFile cf = cfs.get(i);
-                if (cf.getClassName(true).equals(fqTypeName) || checkTypeInClassFiles(jarManager, cf, fqTypeName)) {
+                if (cf.getClassName(true).equals(fqTypeName) || (!forSuper && checkTypeInClassFiles(jarManager, cf, fqTypeName))) {
                     result.add(cf);
                 }
             }
@@ -1604,14 +1615,14 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
         List<ClassFile> cfs = jarManager.getClassesInPackage("java.lang", false);
         for (int i = 0;cfs != null && i < cfs.size();i++) {
             ClassFile cf = cfs.get(i);
-            if (cf.getClassName(true).equals(fqTypeName) || checkTypeInClassFiles(jarManager, cf, fqTypeName)) {
+            if (cf.getClassName(true).equals(fqTypeName) || (!forSuper && checkTypeInClassFiles(jarManager, cf, fqTypeName))) {
                 result.add(cf);
             }
         }
 
         if (cu != null && cu.getTypeDeclarationCount() > 0) {
             for (int i = 0; i < cu.getTypeDeclarationCount(); i++) {
-                TypeDeclaration foundDeclaration = findTypeInTypeDeclaration(cu, cu.getTypeDeclaration(i), fqTypeName);
+                TypeDeclaration foundDeclaration = findTypeInTypeDeclaration(cu, cu.getTypeDeclaration(i), fqTypeName, forSuper);
                 if (foundDeclaration != null) result.add(foundDeclaration);
             }
         }
@@ -1624,15 +1635,15 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
      * @param type
      * @return
      */
-    private TypeDeclaration findTypeInTypeDeclaration(CompilationUnit cu, TypeDeclaration td, String type) {
+    private TypeDeclaration findTypeInTypeDeclaration(CompilationUnit cu, TypeDeclaration td, String type, boolean forSuper) {
         String fqTypeName = SourceParamChoicesProvider.findFullyQualifiedNameFor(cu, jarManager, type);
-        if (td.getName(true).equals(fqTypeName) || checkTypeInTypeDeclaration(cu, td, jarManager, type)) {
+        if (td.getName(true).equals(fqTypeName) || (!forSuper && checkTypeInTypeDeclaration(cu, td, jarManager, type))) {
             return td;
         }
         if (td.getChildTypeCount() > 0) {
             for (int i = 0;i < td.getChildTypeCount();i++) {
                 TypeDeclaration childTd = td.getChildType(i);
-                if (childTd.getName(true).equals(fqTypeName) || checkTypeInTypeDeclaration(cu, childTd, jarManager, fqTypeName)) {
+                if (childTd.getName(true).equals(fqTypeName) || (!forSuper && checkTypeInTypeDeclaration(cu, childTd, jarManager, fqTypeName))) {
                     return childTd;
                 }
             }
@@ -1651,7 +1662,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
         String extendedTypeName = SourceParamChoicesProvider.findFullyQualifiedNameFor(cu, jarManager, extendedType.getName(true, false));
         // we need to load every ClassFile/TypeDeclaration, which extend or implement this type somewhere in the object hierarchy
         List<Object> classfiles = new ArrayList<Object>();
-        searchForClassFilesWithType(cu, classfiles, new Type(extendedTypeName));
+        searchForClassFilesWithType(cu, classfiles, new Type(extendedTypeName), forSuper);
         for (Object o : classfiles) {
             if (o instanceof ClassFile) {
                 ClassFile cf = (ClassFile) o;
@@ -1956,6 +1967,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
         ClassFile cf = getClassFileFor(cu, typeStr);
         if (cf != null) {
             if (afterDot.contains("(")) {
+                cf.setTypeParamsToTypeArgs(createTypeParamMap(type, cf));
                 int j = afterDot.indexOf("(");
                 String methodName = afterDot.substring(0, j).trim();
                 String params = afterDot.substring(j + 1);
@@ -2036,6 +2048,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
                 // if not found check the super class
                 if (innerTd instanceof NormalClassDeclaration) {
                     ClassFile superCf = getClassFileFor(cu, ((NormalClassDeclaration) innerTd).getExtendedType().getName(true, false));
+                    superCf.setTypeParamsToTypeArgs(createTypeParamMap(type, superCf));
                     if (superCf != null) {
                         for (int i = 0;i < superCf.getMethodCount();i++) {
                             MethodInfo mi = superCf.getMethodInfo(i);
@@ -2347,6 +2360,11 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
                 if (td.getChildType(i).getName(false).equals(methodName)) {
                     return new Type(td.getChildType(i).getName(false));
                 }
+            }
+            // still not found, check ClassFiles for a match
+            ClassFile cf = getClassFileFor(cu, methodName);
+            if (cf != null) {
+                return new Type(cf.getClassName(true));
             }
         }
 
