@@ -27,6 +27,10 @@ public class ExampleCode {
 
     }
 
+    public JTextField getTextField() {
+      return new JTextField("asdf");
+    }
+
     public ExampleCode(int value) {
         this.value = value; // both value variables are clickable, this.value goes to class field value, value goes to parameter value
     }
@@ -44,6 +48,10 @@ public class ExampleCode {
         return another;
     }
 
+    public int getInt(int i, int j) {
+      return i + j;
+    }
+
     public void setValues(String val1, int val2) {
         strField = val1;
         aaa = abb = val2;
@@ -51,7 +59,8 @@ public class ExampleCode {
         System.out.println(foo()); // Ctrl+click shouldn't work for foo!
         Inner1 in1 = new Inner1();
         Serializable k;
-        setSer(k); // check parameter completion, it should bring in1, k and val1 (since String implements Serializable!)
+        setSer(k); // check parameter completion, it should bring in1, k and val1 (since String implements Serializable!) and also brings some methods returning a valid Serializable class
+        // note that class Inner1 implements MySerializable interface which extends Serializable, the class hierarchy is followed correctly even for inner classes
     }
 
     /** Ctrl+click my stuff! */
@@ -81,6 +90,15 @@ public class ExampleCode {
             }
 
             buttons.get(0).addActionListener(null); // Type is also properly recognized here, check the completions
+            x.get(aaa).getText(); // list x has JTextField type, so returned value by getter is a JTextField
+            x.add(0, getTextField()); // check parameter completion, it will offer getTextField as only option
+            x.add(1, new JTextField(ASDF)); // after new keyword, we get JTextField constructor completions
+
+            JButton b;
+
+            JTextField local = getTextField(); // check completion after the = sign, you will get getTextField as completion proposal
+
+            buttons.add(getInt(aaa, abb), b); // check each method parameter position completion (Ctrl-Space before the parameter name to see the proposals)
 
             for (int i = 0;i < 100;i++) {
                doWithInt(i); // check method parameter completion, it will offer i as local variable, Ctrl-Click will jump to i definition in the for statement

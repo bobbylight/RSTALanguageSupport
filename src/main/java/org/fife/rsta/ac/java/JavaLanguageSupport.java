@@ -19,6 +19,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import javax.swing.*;
 import javax.swing.event.CaretEvent;
@@ -174,46 +175,70 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 
         @Override
         public void openClass(String className) {
-            System.out.println("openClass: " + className);
+            if (textArea.getLinkGenerator() instanceof JavaLinkGenerator) {
+                List<ExternalMemberClickedListener> externalListeners = ((JavaLinkGenerator) textArea.getLinkGenerator()).getExternalMemberClickedListeners();
+                if (externalListeners != null && externalListeners.size() > 0) {
+                    for (ExternalMemberClickedListener listener : externalListeners) {
+                        listener.openClass(className);
+                    }
+                }
+            }
+//            System.out.println("openClass: " + className);
         }
 
         @Override
         public void gotoMethodInClass(String className, MethodInfo methodInfo) {
-            System.out.println("gotoMethodInClass [" + className + "], method: " + methodInfo.getName());
+            if (textArea.getLinkGenerator() instanceof JavaLinkGenerator) {
+                List<ExternalMemberClickedListener> externalListeners = ((JavaLinkGenerator) textArea.getLinkGenerator()).getExternalMemberClickedListeners();
+                if (externalListeners != null && externalListeners.size() > 0) {
+                    for (ExternalMemberClickedListener listener : externalListeners) {
+                        listener.gotoMethodInClass(className, methodInfo);
+                    }
+                }
+            }
+//            System.out.println("gotoMethodInClass [" + className + "], method: " + methodInfo.getName());
         }
 
         @Override
         public void gotoFieldInClass(String className, FieldInfo fieldInfo) {
-            System.out.println("gotoFieldInClass [" + className + "], field: " + fieldInfo.getName());
+            if (textArea.getLinkGenerator() instanceof JavaLinkGenerator) {
+                List<ExternalMemberClickedListener> externalListeners = ((JavaLinkGenerator) textArea.getLinkGenerator()).getExternalMemberClickedListeners();
+                if (externalListeners != null && externalListeners.size() > 0) {
+                    for (ExternalMemberClickedListener listener : externalListeners) {
+                        listener.gotoFieldInClass(className, fieldInfo);
+                    }
+                }
+            }
+//            System.out.println("gotoFieldInClass [" + className + "], field: " + fieldInfo.getName());
         }
 
         @Override
         public void gotoInnerClass(TypeDeclaration typeDeclaration) {
-            System.out.println("gotoInnerClass: " + typeDeclaration.getName());
+//            System.out.println("gotoInnerClass: " + typeDeclaration.getName());
             textArea.setCaretPosition(typeDeclaration.getNameStartOffset());
         }
 
         @Override
         public void gotoMethod(Method method) {
-            System.out.println("gotoMethod: " + method.getName());
+//            System.out.println("gotoMethod: " + method.getName());
             textArea.setCaretPosition(method.getNameStartOffset());
         }
 
         @Override
         public void gotoField(Field field) {
-            System.out.println("gotoField: " + field.getName());
+//            System.out.println("gotoField: " + field.getName());
             textArea.setCaretPosition(field.getNameStartOffset());
         }
 
         @Override
         public void gotoLocalVar(LocalVariable localVar) {
-            System.out.println("gotoLocalVar: " + localVar.getName());
+//            System.out.println("gotoLocalVar: " + localVar.getName());
             textArea.setCaretPosition(localVar.getNameStartOffset());
         }
 
         @Override
         public void gotoMethodParameter(FormalParameter parameter) {
-            System.out.println("gotoMethodParameter: " + parameter.getName());
+//            System.out.println("gotoMethodParameter: " + parameter.getName());
             textArea.setCaretPosition(parameter.getNameStartOffset());
         }
     }

@@ -18,6 +18,9 @@ import org.fife.rsta.ac.java.rjc.ast.Method;
 import org.fife.rsta.ac.java.rjc.ast.TypeDeclaration;
 import org.fife.ui.rsyntaxtextarea.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * Checks for hyperlink-able tokens under the mouse position when Ctrl is
@@ -37,6 +40,7 @@ public class JavaLinkGenerator implements LinkGenerator {
 	private JavaCompletionProvider javaCompletionProvider;
 	private SourceCompletionProvider sourceCompletionProvider;
     private MemberClickedListener memberClickedListener;
+    private List<ExternalMemberClickedListener> externalMemberClickedListeners = new ArrayList<ExternalMemberClickedListener>();
 
 	JavaLinkGenerator(JavaLanguageSupport jls, JavaCompletionProvider p) {
 		this.jls = jls;
@@ -59,6 +63,20 @@ public class JavaLinkGenerator implements LinkGenerator {
 
     public MemberClickedListener getMemberClickedListener() {
         return memberClickedListener;
+    }
+
+    public List<ExternalMemberClickedListener> getExternalMemberClickedListeners() {
+        return externalMemberClickedListeners;
+    }
+
+    public void addExternalMemberClickedListener(ExternalMemberClickedListener externalMemberClickedListener) {
+        if (!externalMemberClickedListeners.contains(externalMemberClickedListener)) {
+            externalMemberClickedListeners.add(externalMemberClickedListener);
+        }
+    }
+
+    public void removeExternalMemberClickedListener(ExternalMemberClickedListener externalMemberClickedListener) {
+        externalMemberClickedListeners.remove(externalMemberClickedListener);
     }
 
     /**
@@ -205,7 +223,7 @@ public class JavaLinkGenerator implements LinkGenerator {
 //				boolean deepestTypeDec = true;
 //				boolean deepestContainingMemberStatic = false;
 				if(td != null && start == -1) {
-                    final Method findCurrentMethod = SourceCompletionProvider.findCurrentMethod(cu, textArea, td, offs);
+                    final Method findCurrentMethod = SourceCompletionProvider.findCurrentMethod(td, offs);
 //                    if (findCurrentMethod != null) {
                         if(System.currentTimeMillis()-lastAccess < 2000) {
                             return null;

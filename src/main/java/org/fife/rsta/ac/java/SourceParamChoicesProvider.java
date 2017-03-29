@@ -409,11 +409,14 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 	 * @return
 	 */
 	// TODO: Get me working!  Probably need better parameters passed in!!!
-	private boolean isTypeCompatible(CompilationUnit cu, Type type, String typeName, JarManager jm) {
+    // changed to public static, since this logic is also used in SourceCompletionProvider. Consider move these methods to
+    // Util
+	public static boolean isTypeCompatible(CompilationUnit cu, Type type, String typeName, JarManager jm) {
 
-		String typeName2 = type.getName(true);
+		String typeName2 = SourceParamChoicesProvider.findFullyQualifiedNameFor(cu, jm, type.getName(true));
+        typeName = SourceParamChoicesProvider.findFullyQualifiedNameFor(cu, jm, typeName);
 
-		// Remove generics info for now
+                // Remove generics info for now
 		// TODO: Handle messy generics cases
 //		int lt = typeName2.indexOf('<');
 //		if (lt>-1) {
@@ -470,7 +473,7 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
      * @param objectType the object type to check
      * @return true if the primitive type can be assigned from the object type, false otherwise
      */
-    private boolean matchPrimitiveWithObject(String primitiveType, String objectType)
+    public static boolean matchPrimitiveWithObject(String primitiveType, String objectType)
     {
         if (primitiveType.equals("int") && objectType.equals(Integer.class.getName())) return true;
         if (primitiveType.equals("long") && objectType.equals(Long.class.getName())) return true;
@@ -492,7 +495,7 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
      * @param paramType
      * @return
      */
-    private boolean checkTypeInTypeDeclaration(CompilationUnit cu, TypeDeclaration td, JarManager jm, String varType, String paramType) {
+    public static boolean checkTypeInTypeDeclaration(CompilationUnit cu, TypeDeclaration td, JarManager jm, String varType, String paramType) {
         // check in the local compilation unit if we find a matching type
         if (td instanceof NormalClassDeclaration) {
             NormalClassDeclaration ncd = (NormalClassDeclaration) td;
@@ -560,7 +563,7 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
      * @param paramType
      * @return
      */
-    private boolean checkTypeInClassFiles(JarManager jm, String varType, String paramType) {
+    public static boolean checkTypeInClassFiles(JarManager jm, String varType, String paramType) {
         ClassFile variableTypeCf = jm.getClassEntry(varType);
 
         if (variableTypeCf != null) {
