@@ -24,22 +24,17 @@ import javax.swing.text.JTextComponent;
 import javax.swing.text.Segment;
 
 import org.fife.rsta.ac.ShorthandCompletionCache;
-import org.fife.rsta.ac.common.TokenScanner;
 import org.fife.rsta.ac.java.buildpath.LibraryInfo;
 import org.fife.rsta.ac.java.buildpath.SourceLocation;
 import org.fife.rsta.ac.java.classreader.*;
 import org.fife.rsta.ac.java.rjc.ast.*;
-import org.fife.rsta.ac.java.rjc.lang.Modifiers;
 import org.fife.rsta.ac.java.rjc.lang.Type;
 import org.fife.rsta.ac.java.rjc.lang.TypeArgument;
 import org.fife.rsta.ac.java.rjc.lang.TypeParameter;
-import org.fife.rsta.ac.java.rjc.lexer.*;
 import org.fife.rsta.ac.java.rjc.lexer.Scanner;
 import org.fife.rsta.ac.java.rjc.lexer.TokenTypes;
-import org.fife.rsta.ac.java.rjc.parser.ASTFactory;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
-import org.fife.ui.autocomplete.ShorthandCompletion;
 import org.fife.ui.rsyntaxtextarea.*;
 import org.fife.ui.rsyntaxtextarea.Token;
 
@@ -392,7 +387,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 			}
 
 			// Finally, try java.lang
-			if (superClass==null) {
+			if (superClass==null && !className.equals("void")) {
 				String temp = "java.lang." + className;
 				superClass = jarManager.getClassEntry(temp);
 			}
@@ -688,7 +683,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
         // if there was no new keyword and was not in a method parameter, check if it is a value addition, like
         // "List x = ", and load completions for given type from local vars, methods, fields, etc.
         if (!hasNewKw) {
-            if (isSettingVariableValue(cu, set, comp)) {
+            if (isAssigningVariableValue(cu, set, comp)) {
                 skipToReturn = true;
             }
         }
@@ -762,7 +757,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	}
 
     /**
-     * Checks if the cursor is after a variable value setting (eg. List x = ) and if so, it tries to load completions
+     * Checks if the cursor is after a variable value assignment (eg. List x = ) and if so, it tries to load completions
      * for the given variable type.
      *
      * @param cu
@@ -770,26 +765,36 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
      * @param comp
      * @return
      */
-    private boolean isSettingVariableValue(CompilationUnit cu, Set<Completion> set, JTextComponent comp) {
+    private boolean isAssigningVariableValue(CompilationUnit cu, Set<Completion> set, JTextComponent comp) {
         org.fife.rsta.ac.java.rjc.lexer.Token token;
         List<org.fife.rsta.ac.java.rjc.lexer.Token> tokens = getTokenListForLine(comp);
         if (tokens == null) return false;
 
         if (tokens.size() > 0) {
-            // check backward the tokens check if we encounter a new keyword. A ) or a ( will stop the search with result false
-            String varName = null;
-            for (int i = tokens.size() - 1;i >= 0;i--) {
-                token = tokens.get(i);
-                // if we have the new keyword, and the prev token is a = sign, we can check for a variable token before the = sign
-                if (token.getType() == TokenTypes.OPERATOR_EQUALS && i > 0 && (tokens.get(i - 1).getType() & TokenTypes.OPERATOR) == 0) {
-                    varName = tokens.get(i - 1).getLexeme();
-                }
+            // check backward the tokens check if we encounter = as the last token.
+            // the last token should be = and before the = there should be no operator any more.
+            int i = tokens.size() - 1;
+            token = tokens.get(i);
+            String varName;
+            if (token.getType() == TokenTypes.OPERATOR_EQUALS && i > 0 && (tokens.get(i - 1).getType() & TokenTypes.OPERATOR) == 0) {
+                varName = tokens.get(i - 1).getLexeme();
             }
+            else {
+                return false;
+            }
+
             TypeDeclaration td = cu.getDeepestTypeDeclarationAtOffset(comp.getCaretPosition());
             if (varName != null && td != null) {
                 Type type = resolveType2(cu, varName, td, findCurrentMethod(td, comp.getCaretPosition()), varName, comp.getCaretPosition());
                 if (type != null) {
                     loadCompletionsForType(cu, set, type, comp);
+                    // check if the local variable is in the completions list (normally should be), and remove it
+                    for (Completion c : set) {
+                        if (varName.equals(c.getReplacementText())) {
+                            set.remove(c);
+                            break;
+                        }
+                    }
                     return true;
                 }
 
@@ -820,7 +825,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
             // increate the paramCounter only, if we are in the main method call, and not in some submethod call.
             // so if braceCounter equals 0, means we are in the main method, if it is greater than 0, we encountered some
             // other method call inside the method call
-            if (token.getLexeme().equals(",") && braceCounter == 0) paramCounter++;
+            if (token.getType() == TokenTypes.SEPARATOR_COMMA && braceCounter == 0) paramCounter++;
             else if (token.getType() == TokenTypes.SEPARATOR_RPAREN) braceCounter++;
             else if (token.getType() == TokenTypes.SEPARATOR_LPAREN && braceCounter > 0) braceCounter--;
             else if (token.getType() == TokenTypes.SEPARATOR_LPAREN && braceCounter == 0) {
@@ -969,10 +974,14 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
             int newIndex = -1;
             for (int i = tokens.size() - 1;i >= 0;i--) {
                 token = tokens.get(i);
-                if (token.getLexeme().equals(",")) {
+                if (token.getType() == TokenTypes.SEPARATOR_COMMA) {
                     // preserve the comma, so paramcounter will properly increased
                     newIndex = i;
                     break;
+                }
+                // if we encounter a dot, and we are not in an embedded method call, we break, this is no more a method param completion
+                else if (token.getType() == TokenTypes.SEPARATOR_DOT && braceCounter == 0) {
+                    return false;
                 }
                 else if (token.getType() == TokenTypes.SEPARATOR_RPAREN) braceCounter++;
                 else if (token.getType() == TokenTypes.SEPARATOR_LPAREN && braceCounter > 0) braceCounter--;
