@@ -4,6 +4,7 @@ import org.fife.rsta.ac.java.rjc.ast.NormalInterfaceDeclaration;
 import org.fife.rsta.ac.java.rjc.ast.TypeDeclaration;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
+import org.fife.ui.autocomplete.ParameterizedCompletion;
 
 import javax.swing.*;
 import java.awt.*;

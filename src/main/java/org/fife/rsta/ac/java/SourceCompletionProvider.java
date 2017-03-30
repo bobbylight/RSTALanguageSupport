@@ -33,8 +33,10 @@ import org.fife.rsta.ac.java.rjc.lang.TypeArgument;
 import org.fife.rsta.ac.java.rjc.lang.TypeParameter;
 import org.fife.rsta.ac.java.rjc.lexer.Scanner;
 import org.fife.rsta.ac.java.rjc.lexer.TokenTypes;
+import org.fife.ui.autocomplete.AbstractCompletion;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
+import org.fife.ui.autocomplete.ParameterizedCompletion;
 import org.fife.ui.rsyntaxtextarea.*;
 import org.fife.ui.rsyntaxtextarea.Token;
 
@@ -254,6 +256,16 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
                 if (cf != null) {
                     // create type param map
                     addCompletionsForExtendedClass(set, cu, cf, cu.getPackageName(), typeParamMap, staticOnly);
+                }
+            }
+
+            // add completions for public & public static inner classes
+            if (td.getChildTypeCount() > 0) {
+                for (int i = 0;i < td.getChildTypeCount();i++) {
+                    TypeDeclaration innerTd = td.getChildType(i);
+                    if (innerTd.getModifiers().isPublic() || (innerTd.isStatic() && innerTd.getModifiers().isPublic())) {
+                        set.add(new TypeDeclarationCompletion(this, innerTd));
+                    }
                 }
             }
         }
@@ -626,25 +638,26 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 		}
 
 		Set<Completion> set = new TreeSet<Completion>();
+        Set<Completion> returnSet = new TreeSet<Completion>();
 
 		// Cut down the list to just those matching what we've typed.
 		// Note: getAlreadyEnteredText() never returns null
 		String text = getAlreadyEnteredText(comp);
-        boolean skipToReturn = false;
+        boolean hasSpecialCompletions = false;
 
         // check if we have a "new" keyword before the entered text
         // if yes, find the type we try to create, and load only the constructors of that type, nothing else
         boolean hasNewKw = hasNewKeyword(comp);
         if (hasNewKw) {
             // get the type of: variable, if we have a = before the new
-            String tmp = getVariableBeforeNew(comp);
-            if (tmp != null) {
+            String variableBeforeNew = getVariableBeforeNew(comp);
+            if (variableBeforeNew != null) {
                 TypeDeclaration td = cu.getDeepestTypeDeclarationAtOffset(comp.getCaretPosition());
                 if (td != null) {
-                    Type type = resolveType2(cu, tmp, td, findCurrentMethod(td, comp.getCaretPosition()), tmp, comp.getCaretPosition());
+                    Type type = resolveType2(cu, variableBeforeNew, td, findCurrentMethod(td, comp.getCaretPosition()), variableBeforeNew, comp.getCaretPosition());
                     if (type != null) {
-                        loadConstructorsForType(cu, set, type, false);
-                        skipToReturn = true;
+                        loadConstructorsForType(cu, returnSet, type, false);
+                        hasSpecialCompletions = true;
                     }
                 }
             }
@@ -654,14 +667,14 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
                 if (td != null) {
                     Method c = findCurrentMethod(td, comp.getCaretPosition());
                     if (c != null) {
-                        loadConstructorsForType(cu, set, c.getType(), false);
-                        skipToReturn = true;
+                        loadConstructorsForType(cu, returnSet, c.getType(), false);
+                        hasSpecialCompletions = true;
                     }
                 }
             }
             // here we could check if the new is in a method parameter and try to get the parameter type
-            else if (newIsInMethodParameter(cu, set, comp)) {
-                skipToReturn = true;
+            else if (newIsInMethodParameter(cu, returnSet, comp)) {
+                hasSpecialCompletions = true;
             }
             else
             // if just a new keyword is present (without = or return),
@@ -674,55 +687,62 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
         if (!hasNewKw) {
             // if this method returns true, we do not load any other completions, since this succeeded to load
             // completion proposals for the given method parameter
-            if (isInMethodParameter(cu, set, comp)) {
-                skipToReturn = true;
-                hasNewKw = true;
+            if (isInMethodParameter(cu, returnSet, comp)) {
+                hasSpecialCompletions = true;
+            }
+            // if there was no new keyword and was not in a method parameter, check if it is a value addition, like
+            // "List x = ", and load completions for given type from local vars, methods, fields, etc.
+            else if (isAssigningVariableValue(cu, returnSet, comp)) {
+                hasSpecialCompletions = true;
             }
         }
 
-        // if there was no new keyword and was not in a method parameter, check if it is a value addition, like
-        // "List x = ", and load completions for given type from local vars, methods, fields, etc.
-        if (!hasNewKw) {
-            if (isAssigningVariableValue(cu, set, comp)) {
-                skipToReturn = true;
-            }
-        }
+        // Special case - end of a String literal
+        boolean stringLiteralMember = checkStringLiteralMember(comp, text, cu,
+                set);
 
-        if (!skipToReturn)
+        // Not after a String literal - regular code completion
+        if (!stringLiteralMember)
         {
-            // Special case - end of a String literal
-            boolean stringLiteralMember = checkStringLiteralMember(comp, text, cu,
-                    set);
 
-            // Not after a String literal - regular code completion
-            if (!stringLiteralMember)
+            // Don't add shorthand completions if they're typing something
+            // qualified
+            if (text.indexOf('.') == -1)
             {
-
-                // Don't add shorthand completions if they're typing something
-                // qualified
-                if (text.indexOf('.') == -1)
-                {
-                    addShorthandCompletions(set);
-                }
-
-                loadImportCompletions(set, text, cu);
-
-                // Add completions for fully-qualified stuff (e.g. "com.sun.jav")
-                //long startTime = System.currentTimeMillis();
-                jarManager.addCompletions(this, text, set);
-                //long time = System.currentTimeMillis() - startTime;
-                //System.out.println("jar completions loaded in: " + time);
-
-                // Loop through all types declared in this source, and provide
-                // completions depending on in what type/method/etc. the caret's in.
-                loadCompletionsForCaretPosition(cu, comp, text, set);
-
+                addShorthandCompletions(set);
             }
+
+            loadImportCompletions(set, text, cu);
+
+            // Add completions for fully-qualified stuff (e.g. "com.sun.jav")
+            //long startTime = System.currentTimeMillis();
+            jarManager.addCompletions(this, text, set);
+            //long time = System.currentTimeMillis() - startTime;
+            //System.out.println("jar completions loaded in: " + time);
+
+            // Loop through all types declared in this source, and provide
+            // completions depending on in what type/method/etc. the caret's in.
+            loadCompletionsForCaretPosition(cu, comp, text, set);
         }
 
-		// Do a final sort of all of our completions and we're good to go!
-		completions = new ArrayList<Completion>(set);
-		Collections.sort(completions);
+        // if we loaded some special completions above for new keyword or method parameter or variable assignment,
+        // add them to the from of the list, so they will appear at the top by setting the relevace some higher than
+        // the default 0, then add the completion set to this set, so it will filter out double elements
+        if (hasSpecialCompletions) {
+            for (Completion completion : returnSet) {
+                if (completion instanceof AbstractCompletion) {
+                    ((AbstractCompletion) completion).setRelevance(5);
+                }
+            }
+            returnSet.addAll(set);
+            set = returnSet;
+        }
+
+        // Do a final sort of all of our completions and we're good to go!
+        List<Completion> sortedCompletions = new ArrayList<Completion>(set);
+        Collections.sort(sortedCompletions);
+
+        completions.addAll(set);
 
 		// Only match based on stuff after the final '.', since that's what is
 		// displayed for all of our completions.
@@ -818,17 +838,17 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
         List<Type> result = new ArrayList<Type>();
 
         int paramCounter = 0;
-        int braceCounter = 0;
+        int parenCounter = 0;
         int newIndex = -1;
         for (int i = tokens.size() - 1;i >= 0;i--) {
             token = tokens.get(i);
             // increate the paramCounter only, if we are in the main method call, and not in some submethod call.
-            // so if braceCounter equals 0, means we are in the main method, if it is greater than 0, we encountered some
+            // so if parentCounter equals 0, means we are in the main method, if it is greater than 0, we encountered some
             // other method call inside the method call
-            if (token.getType() == TokenTypes.SEPARATOR_COMMA && braceCounter == 0) paramCounter++;
-            else if (token.getType() == TokenTypes.SEPARATOR_RPAREN) braceCounter++;
-            else if (token.getType() == TokenTypes.SEPARATOR_LPAREN && braceCounter > 0) braceCounter--;
-            else if (token.getType() == TokenTypes.SEPARATOR_LPAREN && braceCounter == 0) {
+            if (token.getType() == TokenTypes.SEPARATOR_COMMA && parenCounter == 0) paramCounter++;
+            else if (token.getType() == TokenTypes.SEPARATOR_RPAREN) parenCounter++;
+            else if (token.getType() == TokenTypes.SEPARATOR_LPAREN && parenCounter > 0) parenCounter--;
+            else if (token.getType() == TokenTypes.SEPARATOR_LPAREN && parenCounter == 0) {
                 newIndex = i - 1;
                 break;
             }
@@ -840,7 +860,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
         // in this case we load completion for all methods. Now we need to find out where our method declaration
         // starts.
         int startIndex = 0;
-        braceCounter = 0;
+        parenCounter = 0;
         int endIndex = newIndex;
         for (int i = newIndex;i >= 0;i--) {
             token = tokens.get(i);
@@ -849,9 +869,9 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
                 startIndex = i + 1;
                 break;
             }
-            else if (token.getType() == TokenTypes.SEPARATOR_RPAREN) braceCounter++;
-            else if (token.getType() == TokenTypes.SEPARATOR_LPAREN && braceCounter > 0) braceCounter--;
-            else if (token.getType() == TokenTypes.SEPARATOR_LPAREN && braceCounter == 0) {
+            else if (token.getType() == TokenTypes.SEPARATOR_RPAREN) parenCounter++;
+            else if (token.getType() == TokenTypes.SEPARATOR_LPAREN && parenCounter > 0) parenCounter--;
+            else if (token.getType() == TokenTypes.SEPARATOR_LPAREN && parenCounter == 0) {
                 startIndex = i + 1;
                 break;
             }
@@ -864,7 +884,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
                 // search for a method in the current CU with matching signature
                 TypeDeclaration td = cu.getDeepestTypeDeclarationAtOffset(comp.getCaretPosition());
                 while (td != null) {
-                    List<Type> varTypes = findMethodsForType(cu, new Type(td.getName(true)), tokens.get(startIndex).getLexeme(), paramCounter + 1);
+                    List<Type> varTypes = findMethodsParameterForType(cu, new Type(td.getName(true)), tokens.get(startIndex).getLexeme(), paramCounter + 1);
                     if (varTypes != null) {
                         result.addAll(varTypes);
                     }
@@ -904,7 +924,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
                     Type type = resolveType2(cu, sb.toString(), td, findCurrentMethod(td, comp.getCaretPosition()), sb.toString(), comp.getCaretPosition());
                     if (type != null) {
                         // get the possible  parameter types for the given method
-                        List<Type> varTypes = findMethodsForType(cu, type, methods.get(methods.size() - 1), paramCounter + 1);
+                        List<Type> varTypes = findMethodsParameterForType(cu, type, methods.get(methods.size() - 1), paramCounter + 1);
                         if (varTypes != null) {
                             result.addAll(varTypes);
                         }
@@ -970,7 +990,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 
         // get the position for the first , or first (. If we don't encounter a , or a ( without a having ) we are not in a method parameter
         if (tokens.size() > 0) {
-            int braceCounter = 0;
+            int parenCounter = 0;
             int newIndex = -1;
             for (int i = tokens.size() - 1;i >= 0;i--) {
                 token = tokens.get(i);
@@ -980,12 +1000,12 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
                     break;
                 }
                 // if we encounter a dot, and we are not in an embedded method call, we break, this is no more a method param completion
-                else if (token.getType() == TokenTypes.SEPARATOR_DOT && braceCounter == 0) {
+                else if (token.getType() == TokenTypes.SEPARATOR_DOT && parenCounter == 0) {
                     return false;
                 }
-                else if (token.getType() == TokenTypes.SEPARATOR_RPAREN) braceCounter++;
-                else if (token.getType() == TokenTypes.SEPARATOR_LPAREN && braceCounter > 0) braceCounter--;
-                else if (token.getType() == TokenTypes.SEPARATOR_LPAREN && braceCounter == 0) {
+                else if (token.getType() == TokenTypes.SEPARATOR_RPAREN) parenCounter++;
+                else if (token.getType() == TokenTypes.SEPARATOR_LPAREN && parenCounter > 0) parenCounter--;
+                else if (token.getType() == TokenTypes.SEPARATOR_LPAREN && parenCounter == 0) {
                     // preserve the lparen, so method boundary will be perfectly matched
                     newIndex = i;
                     break;
@@ -1052,14 +1072,15 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 
     /**
      * Finds a given method with methodName and with at least paramCounter number of parameters
-     * in the given type. Type can be an external ClassFile or an internal type declaration
+     * in the given type. Type can be an external ClassFile or an internal type declaration.
+     * This will return the type of the parameter at the given parameter index (paramCounter)
      *
      * @param type
      * @param methodName
      * @param paramCounter
      * @return
      */
-    private List<Type> findMethodsForType(CompilationUnit cu, Type type, String methodName, int paramCounter) {
+    private List<Type> findMethodsParameterForType(CompilationUnit cu, Type type, String methodName, int paramCounter) {
         List<Type> retval = new ArrayList<Type>();
         List<Object> result = new ArrayList<Object>();
         searchForClassFilesWithType(cu, result, type, false);
@@ -1093,6 +1114,73 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
                 }
             }
 
+        }
+        return retval;
+    }
+
+    /**
+     * Finds a given method with methodName and with at least paramCounter number of parameters
+     * in the given type. Type can be an external ClassFile or an internal type declaration.
+     * It will return the method/methodInfo object
+     *
+     * @param type
+     * @param methodName
+     * @param paramCounter
+     * @return
+     */
+    private List<Object> findMethodsForType(CompilationUnit cu, Type type, String methodName, int paramCounter) {
+        List<Object> retval = new ArrayList<Object>();
+        List<Object> result = new ArrayList<Object>();
+        searchForClassFilesWithType(cu, result, type, false);
+        if (result.size() > 0) {
+            // we managed to find at least one class with matching type. Check for methodName.
+            for (int i = 0;i < result.size();i++) {
+                Object o = result.get(i);
+                if (o instanceof ClassFile) {
+                    ClassFile cf = (ClassFile) o;
+                    cf.setTypeParamsToTypeArgs(createTypeParamMap(type, cf));
+                    List<MethodInfo> methodInfos = findMethods(cf, methodName, paramCounter);
+                    if (methodInfos != null) {
+                        for (MethodInfo methodInfo : methodInfos) {
+                            retval.add(methodInfo);
+                        }
+                    }
+                }
+                else if (o instanceof NormalClassDeclaration) {
+                    TypeDeclaration td = (TypeDeclaration) o;
+                    List methods = findMethods(cu, (NormalClassDeclaration) td, createTypeParamMap(type, td), methodName, paramCounter);
+                    if (methods != null) {
+                        for (Object obj : methods) {
+                            if (obj instanceof Method) {
+                                retval.add(obj);
+                            }
+                            else if (obj instanceof MethodInfo) {
+                                retval.add(obj);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // if not found, check if we can find a public inner class declaration
+            if (retval.size() == 0) {
+                for (int i = 0;i < result.size();i++) {
+                    Object o = result.get(i);
+                    if (o instanceof NormalClassDeclaration) {
+                        TypeDeclaration td = (TypeDeclaration) o;
+                        TypeDeclaration innerTd = getTypeDeclarationForInnerType(td, new Type(methodName));
+                        // find constructors with at least paramCount number of parameters
+                        if (innerTd != null && innerTd.getModifiers().isPublic()) {
+                            List<Method> methods = innerTd.getMethodsByName(methodName);
+                            for (int j = 0;methods != null && j < methods.size();j++) {
+                                if (methods.get(j).getParameterCount() >= paramCounter) {
+                                    retval.add(methods.get(j));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
         return retval;
     }
@@ -1274,13 +1362,13 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 
         // go back to the first opening ( without a matching closing )
         int pos = 0;
-        int braceCounter = 0;
+        int parentCounter = 0;
         for (int i = result.length() - 1;i >= 0;i--)
         {
             char c = result.charAt(i);
-            if (c == ')') braceCounter++;
-            else if (c == '(') braceCounter--;
-            if (braceCounter < 0)
+            if (c == ')') parentCounter++;
+            else if (c == '(') parentCounter--;
+            if (parentCounter < 0)
             {
                 pos = i + 1;
                 break;
@@ -1760,31 +1848,37 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
      */
     private void searchForClassFilesWithType(CompilationUnit cu, List<Object> result, Type type, boolean forSuper) {
         String fqTypeName = SourceParamChoicesProvider.findFullyQualifiedNameFor(cu, jarManager, type.getName(true, false));
-        for (ImportDeclaration imp : cu.getImports()) {
-            List<ClassFile> cfs = null;
-            if (imp.isWildcard()) {
-                cfs = jarManager.getClassesInPackage(imp.getName().substring(0, imp.getName().length() - 2), false);
-            }
-            else {
-                cfs = new ArrayList<ClassFile>();
-                cfs.add(jarManager.getClassEntry(imp.getName()));
-            }
-
-            for (int i = 0;cfs != null && i < cfs.size();i++) {
-                ClassFile cf = cfs.get(i);
-                if (cf.getClassName(true).equals(fqTypeName) || (!forSuper && checkTypeInClassFiles(jarManager, cf, fqTypeName))) {
-                    result.add(cf);
-                }
-            }
-        }
-        // check java.lang package
-        List<ClassFile> cfs = jarManager.getClassesInPackage("java.lang", false);
-        for (int i = 0;cfs != null && i < cfs.size();i++) {
-            ClassFile cf = cfs.get(i);
+        ClassFile cf = jarManager.getClassEntry(fqTypeName);
+        if (cf != null) {
             if (cf.getClassName(true).equals(fqTypeName) || (!forSuper && checkTypeInClassFiles(jarManager, cf, fqTypeName))) {
                 result.add(cf);
             }
         }
+//        for (ImportDeclaration imp : cu.getImports()) {
+//            List<ClassFile> cfs = null;
+//            if (imp.isWildcard()) {
+//                cfs = jarManager.getClassesInPackage(imp.getName().substring(0, imp.getName().length() - 2), false);
+//            }
+//            else {
+//                cfs = new ArrayList<ClassFile>();
+//                cfs.add(jarManager.getClassEntry(imp.getName()));
+//            }
+//
+//            for (int i = 0;cfs != null && i < cfs.size();i++) {
+//                ClassFile cf = cfs.get(i);
+//                if (cf.getClassName(true).equals(fqTypeName) || (!forSuper && checkTypeInClassFiles(jarManager, cf, fqTypeName))) {
+//                    result.add(cf);
+//                }
+//            }
+//        }
+//        // check java.lang package
+//        List<ClassFile> cfs = jarManager.getClassesInPackage("java.lang", false);
+//        for (int i = 0;cfs != null && i < cfs.size();i++) {
+//            ClassFile cf = cfs.get(i);
+//            if (cf.getClassName(true).equals(fqTypeName) || (!forSuper && checkTypeInClassFiles(jarManager, cf, fqTypeName))) {
+//                result.add(cf);
+//            }
+//        }
 
         if (cu != null && cu.getTypeDeclarationCount() > 0) {
             for (int i = 0; i < cu.getTypeDeclarationCount(); i++) {
@@ -2450,6 +2544,10 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
         if (prefix.equals(td.getName())) {
             return new Type(td.getName());
         }
+        // if super keyword, we return the super class' type
+        if (SUPER.equals(prefix) && td instanceof NormalClassDeclaration) {
+            return ((NormalClassDeclaration) td).getExtendedType();
+        }
         String methodName = prefix;
         int countMethodParams = 0;
 
@@ -2533,6 +2631,12 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
         // System.out.println("not found " + prefix);
 
         // go up on the typeDeclaration hierarchy and check for every class name
+        for (int i = 0;i < cu.getTypeDeclarationCount();i++) {
+            TypeDeclaration innerTd = getTypeDeclarationForInnerType(cu.getTypeDeclaration(i), new Type(prefix));
+            if (innerTd != null) {
+                return new Type(innerTd.getName(true));
+            }
+        }
         TypeDeclaration parent = td.getParentType();
         while (parent != null) {
             if (prefix.equals(parent.getName())) {
@@ -2610,13 +2714,13 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
             // go backwards from the dot position and check if we have an opening ( without a closing )
             // this means we reached a method call start, so this object clicked ends here
             int pos = 0;
-            int braceCounter = 0;
+            int parenCounter = 0;
             for (int i = dot;i >= 0;i--)
             {
                 char c = prefix.charAt(i);
-                if (c == ')') braceCounter++;
-                else if (c == '(') braceCounter--;
-                if (braceCounter < 0)
+                if (c == ')') parenCounter++;
+                else if (c == '(') parenCounter--;
+                if (parenCounter < 0)
                 {
                     pos = i + 1;
                     break;
@@ -3106,5 +3210,186 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 		this.javaProvider = javaProvider;
 	}
 
+    /**
+     * Get the parameterized completions for a method body. This will determine if the caret is currently in a method
+     * call, and get the metod type with parameters, and returns exactly one MethodCompletion. This is mainly used
+     * to show the tooltip for the method parameters when pressing Ctrl-P
+     *
+     * @param cu
+     * @param tc
+     * @return
+     */
+    public List<ParameterizedCompletion> getParameterizedCompletions(CompilationUnit cu, JTextComponent tc) {
+        List<org.fife.rsta.ac.java.rjc.lexer.Token> tokens = getTokenListForLine(tc);
+        org.fife.rsta.ac.java.rjc.lexer.Token token;
 
+        int paramCounter = 0;
+        int parenCounter = 0;
+        int newIndex = -1;
+        for (int i = tokens.size() - 1;i >= 0;i--) {
+            token = tokens.get(i);
+            // increase the paramCounter only, if we are in the main method call, and not in some submethod call.
+            // so if parenCounter equals 0, means we are in the main method, if it is greater than 0, we encountered some
+            // other method call inside the method call
+            if (token.getType() == TokenTypes.SEPARATOR_COMMA && parenCounter == 0) paramCounter++;
+            else if (token.getType() == TokenTypes.SEPARATOR_RPAREN) parenCounter++;
+            else if (token.getType() == TokenTypes.SEPARATOR_LPAREN && parenCounter > 0) parenCounter--;
+            else if (token.getType() == TokenTypes.SEPARATOR_LPAREN && parenCounter == 0) {
+                newIndex = i - 1;
+                break;
+            }
+        }
+
+        if (newIndex == -1) return null;
+        // found method call start, now we need to find the method, and check the paramCounter'th parameter of it
+        // we could have multiple methods with similar signature (eg one parameter, or two parameters),
+        // in this case we load completion for all methods. Now we need to find out where our method declaration
+        // starts.
+        int startIndex = 0;
+        parenCounter = 0;
+        int endIndex = newIndex;
+        for (int i = newIndex;i >= 0;i--) {
+            token = tokens.get(i);
+            // if we encounter any operator, or a ( without a ) we stop
+            if (/*((token.getType() & TokenTypes.OPERATOR) > 0) || */ token.getType() == TokenTypes.KEYWORD_NEW || token.getType() == TokenTypes.SEPARATOR_COMMA) {
+                startIndex = i + 1;
+                break;
+            }
+            else if (token.getType() == TokenTypes.SEPARATOR_RPAREN) parenCounter++;
+            else if (token.getType() == TokenTypes.SEPARATOR_LPAREN && parenCounter > 0) parenCounter--;
+            else if (token.getType() == TokenTypes.SEPARATOR_LPAREN && parenCounter == 0) {
+                startIndex = i + 1;
+                break;
+            }
+        }
+
+        if (startIndex <= endIndex) {
+            // now the first token at startIndex should be the variable name. If startindex == endindex, this
+            // should already be a method call
+            if (startIndex == endIndex) {
+                // search for a method in the current CU with matching signature
+                // if the token is super and we are in a constructor, load super class constructors
+                TypeDeclaration td = cu.getDeepestTypeDeclarationAtOffset(tc.getCaretPosition());
+
+                if (SUPER.equals(tokens.get(startIndex).getLexeme())) {
+                    Method m = findCurrentMethod(td, tc.getCaretPosition());
+                    if (m != null && m.getType() == null && m.getParentTypeDeclaration() instanceof NormalClassDeclaration) {
+                        NormalClassDeclaration parentType = (NormalClassDeclaration) m.getParentTypeDeclaration();
+                        List<Object> methods = findMethodsForType(cu, parentType.getExtendedType(), parentType.getExtendedType().getName(false, false), paramCounter + 1);
+                        List<ParameterizedCompletion> result = new ArrayList<ParameterizedCompletion>();
+                        for (Object obj : methods) {
+                            ParameterizedCompletion c;
+                            if (obj instanceof Method) c = new MethodCompletion(this, (Method) obj);
+                            else c = new MethodCompletion(this, (MethodInfo) obj);
+                            // check if the completion is not already on the list
+                            if (!result.contains(c)) result.add(c);
+                        }
+                        return result;
+                    }
+                }
+
+                while (td != null) {
+                    List<Object> methods = findMethodsForType(cu, new Type(td.getName(true)), tokens.get(startIndex).getLexeme(), paramCounter + 1);
+                    if (methods != null && methods.size() > 0) {
+                        List<ParameterizedCompletion> result = new ArrayList<ParameterizedCompletion>();
+                        for (Object obj : methods) {
+                            ParameterizedCompletion c;
+                            if (obj instanceof Method) c = new MethodCompletion(this, (Method) obj);
+                            else c = new MethodCompletion(this, (MethodInfo) obj);
+                            // check if the completion is not already on the list
+                            if (!result.contains(c)) result.add(c);
+                        }
+                        return result;
+                    }
+                    td = td.getParentType();
+                }
+
+                // check for td's child types, use a helper method because of recursion
+                for (int i = 0;i < cu.getTypeDeclarationCount();i++) {
+                    td = getTypeDeclarationForInnerType(cu.getTypeDeclaration(i), new Type(tokens.get(startIndex).getLexeme()));
+                    if (td != null) {
+                        List<Object> methods = findMethodsForType(cu, new Type(td.getName(true)), tokens.get(startIndex).getLexeme(), paramCounter + 1);
+                        if (methods != null && methods.size() > 0) {
+                            List<ParameterizedCompletion> result = new ArrayList<ParameterizedCompletion>();
+                            for (Object obj : methods) {
+                                ParameterizedCompletion c;
+                                if (obj instanceof Method) c = new MethodCompletion(this, (Method) obj);
+                                else c = new MethodCompletion(this, (MethodInfo) obj);
+                                // check if the completion is not already on the list
+                                if (!result.contains(c)) result.add(c);
+                            }
+                            return result;
+                        }
+                    }
+                }
+
+                // may be this is a class constructor not in the current context
+                String fqDnName = SourceParamChoicesProvider.findFullyQualifiedNameFor(cu, jarManager, tokens.get(startIndex).getLexeme());
+                ClassFile cf = jarManager.getClassEntry(fqDnName);
+                if (cf != null) {
+                    List<MethodInfo> methods = findMethods(cf, tokens.get(startIndex).getLexeme(), paramCounter + 1);
+                    if (methods != null && methods.size() > 0) {
+                        List<ParameterizedCompletion> result = new ArrayList<ParameterizedCompletion>();
+                        for (MethodInfo methodInfo : methods) {
+                            ParameterizedCompletion c = new MethodCompletion(this, methodInfo);
+                            // check if the completion is not already on the list
+                            if (!result.contains(c)) result.add(c);
+                        }
+                        return result;
+                    }
+                }
+            }
+            else {
+                token = tokens.get(startIndex);
+                String varName = token.getLexeme();
+                TypeDeclaration td = cu.getDeepestTypeDeclarationAtOffset(tc.getCaretPosition());
+                if (td != null) {
+                    // have a variable type, we should now follow the method calls till we reach to the end
+                    List<String> methods = new ArrayList<String>();
+                    StringBuilder sb = new StringBuilder();
+                    for (int i = startIndex + 2;i <= endIndex;i++) {
+                        token = tokens.get(i);
+                        // skip operators like <> for generics
+                        if (token.getType() != TokenTypes.SEPARATOR_DOT && (token.getType() & TokenTypes.OPERATOR) == 0) {
+                            sb.append(token.getLexeme());
+                        }
+                        else if ((token.getType() & TokenTypes.OPERATOR) == 0) {
+                            methods.add(sb.toString());
+                            sb = new StringBuilder();
+                        }
+                    }
+                    // this should be the last part
+                    if (sb.length() > 0) {
+                        methods.add(sb.toString());
+                    }
+
+                    // build a method call except the last call
+                    sb = new StringBuilder(varName);
+                    for (int i = 0;i < methods.size()-1;i++) {
+                        sb.append('.');
+                        sb.append(methods.get(i));
+                    }
+
+                    Type type = resolveType2(cu, sb.toString(), td, findCurrentMethod(td, tc.getCaretPosition()), sb.toString(), tc.getCaretPosition());
+                    if (type != null) {
+                        // get the possible  parameter types for the given method. if methods size is 0, try with varname (possible constructor?)
+                        List<Object> methodList = findMethodsForType(cu, type, methods.size() == 0 ? varName : methods.get(methods.size() - 1), paramCounter + 1);
+                        if (methodList != null && methodList.size() > 0) {
+                            List<ParameterizedCompletion> result = new ArrayList<ParameterizedCompletion>();
+                            for (Object obj : methodList) {
+                                ParameterizedCompletion c;
+                                if (obj instanceof Method) c = new MethodCompletion(this, (Method) obj);
+                                else c = new MethodCompletion(this, (MethodInfo) obj);
+                                // check if the completion is not already on the list
+                                if (!result.contains(c)) result.add(c);
+                            }
+                            return result;
+                        }
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
 }

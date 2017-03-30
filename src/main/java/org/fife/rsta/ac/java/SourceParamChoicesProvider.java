@@ -300,6 +300,9 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
         }
 
         // not found might be a java.lang class
+        if ("void".equals(type)) {
+            return type;
+        }
         return "java.lang." + type;
     }
 
@@ -415,6 +418,9 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 
 		String typeName2 = SourceParamChoicesProvider.findFullyQualifiedNameFor(cu, jm, type.getName(true));
         typeName = SourceParamChoicesProvider.findFullyQualifiedNameFor(cu, jm, typeName);
+
+        // void type cannot accept anything
+        if ("void".equals(typeName2)) return false;
 
                 // Remove generics info for now
 		// TODO: Handle messy generics cases
