@@ -82,7 +82,10 @@ class MethodInfoData implements Data {
 		String key = null;
 		int flags = info.getAccessFlags();
 
-		if (Util.isDefault(flags)) {
+        if (info.getReturnTypeFull() == null) {
+            key = IconFactory.CONSTRUCTOR_ICON;
+        }
+		else if (Util.isDefault(flags)) {
 			key = IconFactory.METHOD_DEFAULT_ICON;
 		}
 		else if (Util.isPrivate(flags)) {

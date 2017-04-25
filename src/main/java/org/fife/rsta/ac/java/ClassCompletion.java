@@ -41,6 +41,11 @@ class ClassCompletion extends AbstractJavaSourceCompletion {
 		this.cf = cf;
 	}
 
+    public ClassCompletion(CompletionProvider provider, ClassFile cf, String replacementText) {
+        super(provider, replacementText);
+        this.cf = cf;
+    }
+
 
 	/*
 	 * Fixed error when comparing classes of the same name, which did not allow

@@ -460,7 +460,14 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 				}
 
 				String className = cc.getClassName(false);
-				String fqClassName = cc.getClassName(true);
+                String fqClassName = cc.getClassName(true);
+                // if the unqualified class name already contains a dot, this coult be an inner class declaration.
+                // check if enclosing class is imported;
+                if (className.contains(".")) {
+                    // split at the first ., since it will be our outer class name
+                    className = className.substring(0, className.indexOf("."));
+                    fqClassName = fqClassName.substring(0, fqClassName.indexOf(className) + className.length());
+                }
 
 				// If the completion is in the same package as the source we're
 				// editing (or both are in the default package), bail.

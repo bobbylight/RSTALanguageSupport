@@ -265,37 +265,56 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
      * @return
      */
     public static String findFullyQualifiedNameFor(CompilationUnit cu, JarManager jm, String type) {
+        if (jm == null || type == null) return null;
         // if the type already contains a dot, consider fully qualified
-        if (type.contains(".")) return type;
+        if (type.startsWith("java.lang.")) return type;
         // if the type is a primitive type, return
         if (isPrimitiveNumericType(type) || type.equals("boolean")) return type;
         // check for imports
-        for (ImportDeclaration importDeclaration : cu.getImports()) {
-            if (importDeclaration.isWildcard()) {
-                // handle wildcard import, get the class list in the given package
-                String pkg = importDeclaration.getName().substring(0, importDeclaration.getName().lastIndexOf("."));
-                List<ClassFile> classFiles = jm.getClassesInPackage(pkg, false);
-                if (classFiles != null) {
-                    for (ClassFile cf : classFiles) {
-                        if (cf.getClassName(false).equals(type)) {
-                            return cf.getClassName(true);
+        if (cu != null) {
+            for (ImportDeclaration importDeclaration : cu.getImports()) {
+                if (importDeclaration.isWildcard()) {
+                    // handle wildcard import, get the class list in the given package
+                    String pkg = importDeclaration.getName().substring(0, importDeclaration.getName().lastIndexOf("."));
+                    List<ClassFile> classFiles = jm.getClassesInPackage(pkg, false);
+                    if (classFiles != null) {
+                        for (ClassFile cf : classFiles) {
+                            if (cf.getClassName(false).equals(type)) {
+                                return cf.getClassName(true);
+                            }
                         }
                     }
                 }
+                else {
+                    if (importDeclaration.getName().endsWith(type)) {
+                        return importDeclaration.getName();
+                    }
+                }
             }
-            else {
-                if (importDeclaration.getName().endsWith(type)) {
-                    return importDeclaration.getName();
+            // check if it is a class in the current cu
+            if (cu.getTypeDeclarationCount() > 0) {
+                for (int i = 0;i < cu.getTypeDeclarationCount();i++) {
+                    TypeDeclaration td = cu.getTypeDeclaration(i);
+                    String t = findTypeInTypeDeclaration(td, type);
+                    if (t != null) return t;
                 }
             }
         }
 
-        // check if it is a class in the current cu
-        if (cu.getTypeDeclarationCount() > 0) {
-            for (int i = 0;i < cu.getTypeDeclarationCount();i++) {
-                TypeDeclaration td = cu.getTypeDeclaration(i);
-                String t = findTypeInTypeDeclaration(td, type);
-                if (t != null) return t;
+//         check for type if it contains a . and try to find it as inner class
+        if (type.contains(".")) {
+            // check if we can find it as a classFile
+            ClassFile cf = jm.getClassEntry(type);
+            if (cf != null) {
+                return cf.getClassName(true);
+            }
+            // if not found, try to find it as inner class
+            String className = type.substring(0, type.indexOf("."));
+            String innerClassName = type.substring(type.indexOf(".") + 1);
+            String fqdn = findFullyQualifiedNameFor(cu, jm, className);
+            cf = jm.getClassEntry(fqdn + "$" + innerClassName);
+            if (cf != null) {
+                return fqdn + "$" + innerClassName;
             }
         }
 

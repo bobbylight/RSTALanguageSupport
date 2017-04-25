@@ -177,6 +177,15 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 			}
 		}
 
+        // add completions for any public inner classes
+        List<ClassFile> packageFiles = jarManager.getClassesInPackage(cf.getPackageName(), true);
+        for (int i = 0;packageFiles != null && i < packageFiles.size();i++) {
+            ClassFile pf = packageFiles.get(i);
+            if (pf.getClassName(true).startsWith(cf.getClassName(true) + ".") && (pf.getAccessFlags() & AccessFlags.ACC_PUBLIC) > 0) {
+                set.add(new ClassCompletion(this, pf, pf.getClassName(false).substring(pf.getClassName(false).lastIndexOf(".") + 1)));
+            }
+        }
+
 		// Add completions for any non-overridden super-class methods.
 		ClassFile superClass = getClassFileFor(cu, cf.getSuperClassName(true));
 		if (superClass!=null) {
@@ -727,7 +736,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 
         // if we loaded some special completions above for new keyword or method parameter or variable assignment,
         // add them to the from of the list, so they will appear at the top by setting the relevace some higher than
-        // the default 0, then add the completion set to this set, so it will filter out double elements
+        // the default 0/3, then add the completion set to this set, so it will filter out double elements
         if (hasSpecialCompletions) {
             for (Completion completion : returnSet) {
                 if (completion instanceof AbstractCompletion) {
@@ -864,8 +873,8 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
         int endIndex = newIndex;
         for (int i = newIndex;i >= 0;i--) {
             token = tokens.get(i);
-            // if we encounter any operator, or a ( without a ) we stop
-            if (((token.getType() & TokenTypes.OPERATOR) > 0)) {
+            // if we encounter any operator, comma or new keyword, or a ( without a ) we stop
+            if ((token.getType() & TokenTypes.OPERATOR) > 0 || (token.getType() & TokenTypes.ASSIGNMENT_OPERATOR) > 0 ||  token.getType() == TokenTypes.KEYWORD_NEW || token.getType() == TokenTypes.SEPARATOR_COMMA) {
                 startIndex = i + 1;
                 break;
             }
@@ -882,13 +891,28 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
             // should already be a method call
             if (startIndex == endIndex) {
                 // search for a method in the current CU with matching signature
-                TypeDeclaration td = cu.getDeepestTypeDeclarationAtOffset(comp.getCaretPosition());
+                TypeDeclaration deepestTd = cu.getDeepestTypeDeclarationAtOffset(comp.getCaretPosition());
+                TypeDeclaration td = deepestTd;
+                boolean foundMethodcall = false;
                 while (td != null) {
                     List<Type> varTypes = findMethodsParameterForType(cu, new Type(td.getName(true)), tokens.get(startIndex).getLexeme(), paramCounter + 1);
-                    if (varTypes != null) {
+                    if (varTypes != null && varTypes.size() > 0) {
+                        foundMethodcall = true;
                         result.addAll(varTypes);
                     }
                     td = td.getParentType();
+                }
+
+                // if we did not found any matching method call, this might be a constructor for a class file
+                if (!foundMethodcall && deepestTd != null) {
+                    Type type = resolveType2(cu, tokens.get(startIndex).getLexeme(), deepestTd, findCurrentMethod(deepestTd, comp.getCaretPosition()), tokens.get(startIndex).getLexeme(), comp.getCaretPosition());
+                    if (type != null) {
+                        // get the possible  parameter types for the given method
+                        List<Type> varTypes = findMethodsParameterForType(cu, type, tokens.get(startIndex).getLexeme(), paramCounter + 1);
+                        if (varTypes != null) {
+                            result.addAll(varTypes);
+                        }
+                    }
                 }
             }
             else {
@@ -1179,9 +1203,21 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
                             }
                         }
                     }
+                    // if not found, check if we can find a public inner class declaration in classfiles
+                    else if (o instanceof ClassFile) {
+                        ClassFile innerCf = getClassFileFor(cu, type.getName(true, false) + "$" + methodName);
+                        if (innerCf != null && (innerCf.getAccessFlags() & AccessFlags.ACC_PUBLIC) > 0) {
+                            // found a proper innerclass definition, load constructors
+                            List<MethodInfo> methods = innerCf.getMethodInfoByNameAndMinimalArguments(innerCf.getClassName(false), paramCounter);
+                            for (int j = 0;methods != null && j < methods.size();j++) {
+                                retval.add(methods.get(j));
+                            }
+                        }
+                    }
                 }
             }
         }
+
         return retval;
     }
 
@@ -1739,6 +1775,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
      */
     private boolean checkTypeInClassFiles(JarManager jm, ClassFile variableTypeCf, String paramType) {
         if (variableTypeCf != null) {
+            if (paramType.contains("$")) paramType = paramType.replaceAll("\\$", "\\.");
             // check if paramType (parameter type) is a super class of variableType
             if (paramType.equals(variableTypeCf.getSuperClassName(true))) return true;
             // if not, check for superclass's superclass, etc. till Object. If we reach object, the variableType cannot be
@@ -1850,6 +1887,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
         String fqTypeName = SourceParamChoicesProvider.findFullyQualifiedNameFor(cu, jarManager, type.getName(true, false));
         ClassFile cf = jarManager.getClassEntry(fqTypeName);
         if (cf != null) {
+            if (fqTypeName.contains("$")) fqTypeName = fqTypeName.replaceAll("\\$", "\\.");
             if (cf.getClassName(true).equals(fqTypeName) || (!forSuper && checkTypeInClassFiles(jarManager, cf, fqTypeName))) {
                 result.add(cf);
             }
@@ -1919,10 +1957,10 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
      * @param extendedType
      */
     private void loadConstructorsForType(CompilationUnit cu, Set<Completion> retVal, Type extendedType, boolean forSuper) {
-        String extendedTypeName = SourceParamChoicesProvider.findFullyQualifiedNameFor(cu, jarManager, extendedType.getName(true, false));
+//        String extendedTypeName = SourceParamChoicesProvider.findFullyQualifiedNameFor(cu, jarManager, extendedType.getName(true, false));
         // we need to load every ClassFile/TypeDeclaration, which extend or implement this type somewhere in the object hierarchy
         List<Object> classfiles = new ArrayList<Object>();
-        searchForClassFilesWithType(cu, classfiles, new Type(extendedTypeName), forSuper);
+        searchForClassFilesWithType(cu, classfiles, extendedType, forSuper);
         for (Object o : classfiles) {
             if (o instanceof ClassFile) {
                 ClassFile cf = (ClassFile) o;
@@ -1943,7 +1981,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
                     addConstructors(retVal, extendedTd, forSuper);
                 }
             }
-            else System.out.println("[DEBUG]: Couldn't find ClassFile for: " + extendedTypeName);
+            else System.out.println("[DEBUG]: Couldn't find ClassFile for: " + extendedType.getName(true));
         }
     }
 
@@ -2309,19 +2347,26 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
                 return null;
             } else {
                 FieldInfo fieldInfoByName = findField(cf, afterDot);
-                if (fieldInfoByName == null) {
+                if (fieldInfoByName != null) {
                     // System.out.println("can't find fields '" + afterDot + "' , " + prefix + " " + cf.getClassName(true));
-                    return null;
+                    String typeString = fieldInfoByName.getTypeString(true);
+                    // System.out.println(typeString);
+                    typeString = typeString.replaceAll("<.+>", "");
+                    return new Type(typeString);
                 }
-                String typeString = fieldInfoByName.getTypeString(true);
-                // System.out.println(typeString);
-                typeString = typeString.replaceAll("<.+>", "");
-                return new Type(typeString);
+                // search in subtypes
+                ClassFile innerCf = getClassFileFor(cu, cf.getClassName(true) + "$" + afterDot);
+                if (innerCf != null) {
+                    // found a classfile, which is an inner class
+                    String pkg = innerCf.getPackageName().substring(0, innerCf.getPackageName().indexOf(innerCf.getClassName(false).substring(0, innerCf.getClassName(false).indexOf("."))));
+                    return new Type(pkg + innerCf.getClassName(false).replaceAll("\\.", "\\$"));
+                }
             }
         }
         // we have a valid type try to load from TypeDeclaration if the current TypeDeclaration is not static
         else {
             TypeDeclaration innerTd = getTypeDeclarationForInnerType(cu.getTypeDeclaration(0), type);
+            if (innerTd == null) return null;
             // check if this is accessible from current context
             if (afterDot.equals(THIS)) {
                 if (isThisAccessible(innerTd, cu.getDeepestTypeDeclarationAtOffset(offs))) return type;
@@ -2944,6 +2989,13 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
             else if (!type.isBasicType()) {
                 String typeStr = type.getName(true, false);
                 ClassFile cf = getClassFileFor(cu, typeStr);
+                if (cf == null && typeStr.contains(".")) {
+                    // if we did not found a classFile but the type contains a dot, we assume, it is an inner class
+                    // try to load cf for that inner class
+                    String className = typeStr.substring(0, typeStr.indexOf("."));
+                    String innerName = typeStr.substring(typeStr.indexOf(".") + 1);
+                    cf = getClassFileFor(cu, SourceParamChoicesProvider.findFullyQualifiedNameFor(cu, jarManager, className) + "$" + innerName);
+                }
                 // Add completions for extended class type chain
                 if (cf!=null) {
                     Map<String, String> typeParamMap = createTypeParamMap(type, cf);
@@ -3250,8 +3302,8 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
         int endIndex = newIndex;
         for (int i = newIndex;i >= 0;i--) {
             token = tokens.get(i);
-            // if we encounter any operator, or a ( without a ) we stop
-            if (/*((token.getType() & TokenTypes.OPERATOR) > 0) || */ token.getType() == TokenTypes.KEYWORD_NEW || token.getType() == TokenTypes.SEPARATOR_COMMA) {
+            // if we encounter equals, comma or new keyword, or a ( without a ) we stop
+            if ((token.getType() & TokenTypes.OPERATOR) > 0 || (token.getType() & TokenTypes.ASSIGNMENT_OPERATOR) > 0 || token.getType() == TokenTypes.OPERATOR_LOGICAL_NOT ||  token.getType() == TokenTypes.KEYWORD_NEW || token.getType() == TokenTypes.SEPARATOR_COMMA) {
                 startIndex = i + 1;
                 break;
             }
