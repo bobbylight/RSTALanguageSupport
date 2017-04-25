@@ -389,6 +389,35 @@ public class ClassFile implements AccessFlags {
 		return methods;
 	}
 
+    /**
+     * Returns all method overloads with the specified name and number of
+     * arguments. It will return also methods, which have more arguments, than
+     * the desired number given in argCount.
+     *
+     * @param name The method name.
+     * @param argCount The number of arguments.  If this is less than zero,
+     *        all overloads will be returned, regardless of argument count.
+     * @return Any method overloads with the given name and minimal argument count, or
+     *         <code>null</code> if none.  This is a list of
+     *         {@link MethodInfo}s.
+     * @see #getMethodInfoByName(String)
+     */
+    public List<MethodInfo> getMethodInfoByNameAndMinimalArguments(String name, int argCount) {
+        List<MethodInfo> methods = null;
+        for (int i=0; i<getMethodCount(); i++) {
+            MethodInfo info = this.methods[i];
+            if (name.equals(info.getName())) {
+                if (argCount<0 || argCount<=info.getParameterCount()) {
+                    if (methods==null) {
+                        methods = new ArrayList<MethodInfo>(1); // Usually just 1
+                    }
+                    methods.add(info);
+                }
+            }
+        }
+        return methods;
+    }
+
 
 	/**
 	 * Returns the package for this class or interface.

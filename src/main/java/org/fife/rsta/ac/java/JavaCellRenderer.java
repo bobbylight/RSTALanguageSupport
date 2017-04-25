@@ -15,6 +15,7 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.lang.ref.WeakReference;
 import java.util.Map;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
@@ -39,7 +40,7 @@ public class JavaCellRenderer extends DefaultListCellRenderer {
 	private JList list;
 	private boolean selected;
 	private boolean evenRow;
-	private JavaSourceCompletion jsc;
+	private WeakReference<JavaSourceCompletion> jsc;
 
 	/**
 	 * The alternating background color, or <code>null</code> for none.
@@ -92,9 +93,9 @@ public class JavaCellRenderer extends DefaultListCellRenderer {
 		this.selected = selected;
 
 		if (value instanceof JavaSourceCompletion) {
-			jsc = (JavaSourceCompletion)value;
+			jsc = new WeakReference<JavaSourceCompletion>((JavaSourceCompletion)value);
 			nonJavaCompletion = null;
-			setIcon(jsc.getIcon());
+			setIcon(jsc.get().getIcon());
 		}
 		else {
 			jsc = null;
@@ -157,11 +158,11 @@ public class JavaCellRenderer extends DefaultListCellRenderer {
 		int x = getX() + iconW + 2;
 		g.setColor(selected ? list.getSelectionForeground() :
 								list.getForeground());
-		if (jsc!=null && !simpleText) {
-			jsc.rendererText(g, x, g.getFontMetrics().getHeight(), selected);
+		if (jsc!=null && jsc.get() != null && !simpleText) {
+			jsc.get().rendererText(g, x, g.getFontMetrics().getHeight(), selected);
 		}
 		else {
-			Completion c = jsc!=null ? jsc : nonJavaCompletion;
+			Completion c = jsc!=null && jsc.get() != null ? jsc.get() : nonJavaCompletion;
 			if (c!=null) {
 				g.drawString(c.toString(), x, g.getFontMetrics().getHeight());
 			}

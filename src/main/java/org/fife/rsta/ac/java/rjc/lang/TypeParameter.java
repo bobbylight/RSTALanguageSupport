@@ -53,5 +53,8 @@ public class TypeParameter {
 		return name.getLexeme();
 	}
 
-
+    public List<Type> getTypes()
+    {
+        return bounds;
+    }
 }

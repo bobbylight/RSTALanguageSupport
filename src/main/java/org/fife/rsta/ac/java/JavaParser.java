@@ -117,6 +117,9 @@ public class JavaParser extends AbstractParser {
 	public int getOffset(RSyntaxDocument doc, ParserNotice notice) {
 		Element root = doc.getDefaultRootElement();
 		Element elem = root.getElement(notice.getLine());
+        if (elem == null) {
+            return -1;
+        }
 		int offs = elem.getStartOffset() + notice.getColumn();
 		return offs>=elem.getEndOffset() ? -1 : offs;
 	}

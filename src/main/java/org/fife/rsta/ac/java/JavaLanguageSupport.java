@@ -19,11 +19,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import javax.swing.ActionMap;
-import javax.swing.InputMap;
-import javax.swing.KeyStroke;
-import javax.swing.Timer;
+import javax.swing.*;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.text.BadLocationException;
@@ -32,8 +30,9 @@ import javax.swing.text.Element;
 
 import org.fife.rsta.ac.AbstractLanguageSupport;
 import org.fife.rsta.ac.GoToMemberAction;
-import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
-import org.fife.rsta.ac.java.rjc.ast.ImportDeclaration;
+import org.fife.rsta.ac.java.classreader.FieldInfo;
+import org.fife.rsta.ac.java.classreader.MethodInfo;
+import org.fife.rsta.ac.java.rjc.ast.*;
 import org.fife.rsta.ac.java.rjc.ast.Package;
 import org.fife.rsta.ac.java.tree.JavaOutlineTree;
 import org.fife.ui.autocomplete.AutoCompletion;
@@ -162,9 +161,87 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 
 		installKeyboardShortcuts(textArea);
 
-		textArea.setLinkGenerator(new JavaLinkGenerator(this));
-
+		textArea.setLinkGenerator(new JavaLinkGenerator(this, p));
+        ((JavaLinkGenerator) textArea.getLinkGenerator()).setMemberClickedListener(new DefaultMemberClickedListener(textArea));
 	}
+
+    private static class DefaultMemberClickedListener implements MemberClickedListener
+    {
+        private RSyntaxTextArea textArea;
+
+        public DefaultMemberClickedListener(RSyntaxTextArea textArea) {
+            this.textArea = textArea;
+        }
+
+        @Override
+        public void openClass(String className) {
+            if (textArea.getLinkGenerator() instanceof JavaLinkGenerator) {
+                List<ExternalMemberClickedListener> externalListeners = ((JavaLinkGenerator) textArea.getLinkGenerator()).getExternalMemberClickedListeners();
+                if (externalListeners != null && externalListeners.size() > 0) {
+                    for (ExternalMemberClickedListener listener : externalListeners) {
+                        listener.openClass(className);
+                    }
+                }
+            }
+//            System.out.println("openClass: " + className);
+        }
+
+        @Override
+        public void gotoMethodInClass(String className, MethodInfo methodInfo) {
+            if (textArea.getLinkGenerator() instanceof JavaLinkGenerator) {
+                List<ExternalMemberClickedListener> externalListeners = ((JavaLinkGenerator) textArea.getLinkGenerator()).getExternalMemberClickedListeners();
+                if (externalListeners != null && externalListeners.size() > 0) {
+                    for (ExternalMemberClickedListener listener : externalListeners) {
+                        listener.gotoMethodInClass(className, methodInfo);
+                    }
+                }
+            }
+//            System.out.println("gotoMethodInClass [" + className + "], method: " + methodInfo.getName());
+        }
+
+        @Override
+        public void gotoFieldInClass(String className, FieldInfo fieldInfo) {
+            if (textArea.getLinkGenerator() instanceof JavaLinkGenerator) {
+                List<ExternalMemberClickedListener> externalListeners = ((JavaLinkGenerator) textArea.getLinkGenerator()).getExternalMemberClickedListeners();
+                if (externalListeners != null && externalListeners.size() > 0) {
+                    for (ExternalMemberClickedListener listener : externalListeners) {
+                        listener.gotoFieldInClass(className, fieldInfo);
+                    }
+                }
+            }
+//            System.out.println("gotoFieldInClass [" + className + "], field: " + fieldInfo.getName());
+        }
+
+        @Override
+        public void gotoInnerClass(TypeDeclaration typeDeclaration) {
+//            System.out.println("gotoInnerClass: " + typeDeclaration.getName());
+            textArea.setCaretPosition(typeDeclaration.getNameStartOffset());
+        }
+
+        @Override
+        public void gotoMethod(Method method) {
+//            System.out.println("gotoMethod: " + method.getName());
+            textArea.setCaretPosition(method.getNameStartOffset());
+        }
+
+        @Override
+        public void gotoField(Field field) {
+//            System.out.println("gotoField: " + field.getName());
+            textArea.setCaretPosition(field.getNameStartOffset());
+        }
+
+        @Override
+        public void gotoLocalVar(LocalVariable localVar) {
+//            System.out.println("gotoLocalVar: " + localVar.getName());
+            textArea.setCaretPosition(localVar.getNameStartOffset());
+        }
+
+        @Override
+        public void gotoMethodParameter(FormalParameter parameter) {
+//            System.out.println("gotoMethodParameter: " + parameter.getName());
+            textArea.setCaretPosition(parameter.getNameStartOffset());
+        }
+    }
 
 
 	/**
@@ -357,7 +434,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		 * Thanks to Guilherme Joao Frantz and Jonatas Schuler for helping
 		 * with the patch!
 		 *
-		 * @param c The completion being inserted.
+		 * @param cc The completion being inserted.
 		 * @return Whether an import was added.
 		 */
 		private ImportToAddInfo getShouldAddImport(ClassCompletion cc) {
@@ -383,7 +460,14 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 				}
 
 				String className = cc.getClassName(false);
-				String fqClassName = cc.getClassName(true);
+                String fqClassName = cc.getClassName(true);
+                // if the unqualified class name already contains a dot, this coult be an inner class declaration.
+                // check if enclosing class is imported;
+                if (className.contains(".")) {
+                    // split at the first ., since it will be our outer class name
+                    className = className.substring(0, className.indexOf("."));
+                    fqClassName = fqClassName.substring(0, fqClassName.indexOf(className) + className.length());
+                }
 
 				// If the completion is in the same package as the source we're
 				// editing (or both are in the default package), bail.

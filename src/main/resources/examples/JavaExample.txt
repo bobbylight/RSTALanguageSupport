@@ -1,57 +1,140 @@
+package rsta.example;
+
+import java.util.HashMap;
+import java.io.Serializable;
+import java.util.List;
+import java.util.ArrayList;
+import java.awt.Component;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+
 public class ExampleCode {
 
-   private String strField;
-   protected int aaa;
-   protected int abb;
-   public float foo;
+    public static final String ASDF = "ASDF";
+    public static final String QWER = "QWER";
 
-   public ExampleCode(int value) {
-      this.value = value;
-   }
+    private String strField;
+    protected int aaa;
+    protected int abb;
+    public float foo;
+    private int value;
 
-   public String getX() {
-      String str = "Hello world!";
-      String another = "one two three";
-      if (another.equals(str)) {
-         System.out.println("Match found");
+    public static ExampleCode getInstance() {
+        return new ExampleCode(0);
+    }
+
+    public static HashMap<String, String> getMap() {
+
+    }
+
+    public JTextField getTextField() {
+      return new JTextField("asdf");
+    }
+
+    public ExampleCode(int value) {
+        this.value = value; // both value variables are clickable, this.value goes to class field value, value goes to parameter value
+    }
+
+    public void setSer(Serializable s) {
+      
+    }
+
+    public String getX() {
+        String str = "Hello world!";
+        String another = "one two three";
+        if (another.equals(str)) {
+            System.out.println("Match found");
+        }
+        return another;
+    }
+
+    public int getInt(int i, int j) {
+      return i + j;
+    }
+
+    public void setValues(String val1, int val2) {
+        strField = val1;
+        aaa = abb = val2;
+        System.out.println(getX()); // ctrl-click should work, also completions for getX(). should pop up String methods/fields
+        System.out.println(foo()); // Ctrl+click shouldn't work for foo!
+        Inner1 in1 = new Inner1();
+        Serializable k;
+        setSer(k); // check parameter completion, it should bring in1, k and val1 (since String implements Serializable!) and also brings some methods returning a valid Serializable class
+        // note that class Inner1 implements MySerializable interface which extends Serializable, the class hierarchy is followed correctly even for inner classes
+    }
+
+    /** Ctrl+click my stuff! */
+    private class Inner1 implements MySerializable {
+
+        public Inner1() {
+         
+        }
+         
+        private int aaa;
+        private double d;
+        private String strField;
+
+        public void doSomething(double newVal) {
+            d = newVal;
+            aaa = abb = clickable;
+            strField = getX(); // getX() clickable, refers to ExampleCode.this.getX()
+            System.out.println(ExampleCode.getMap().get("asdf").); // try completion here
+            System.out.println(ExampleCode.); // try completions here (this should be in the list, since Inner1 is not static)
+            System.out.println(ExampleCode.this.); // try completions here
+
+            MyList<JTextField> x = new MyList<>();
+            MyList<JButton> buttons = new MyList<>();
+
+            for (JTextField textField : x) {
+               textField.getText(); // variable textField is recognized properly as JTextField type, completions come from proper class, try Ctrl-Click, should jump in for definition
+            }
+
+            buttons.get(0).addActionListener(null); // Type is also properly recognized here, check the completions
+            x.get(aaa).getText(); // list x has JTextField type, so returned value by getter is a JTextField
+            x.add(0, getTextField()); // check parameter completion, it will offer getTextField as only option
+            x.add(1, new JTextField(ASDF)); // after new keyword, we get JTextField constructor completions
+
+            JButton b;
+
+            JTextField local = getTextField(); // check completion after the = sign, you will get getTextField as completion proposal
+
+            buttons.add(getInt(aaa, abb), b); // check each method parameter position completion (Ctrl-Space before the parameter name to see the proposals)
+
+            for (int i = 0;i < 100;i++) {
+               doWithInt(i); // check method parameter completion, it will offer i as local variable, Ctrl-Click will jump to i definition in the for statement
+            }
+        }
+
+      public void doWithInt(int k) {
+         System.out.println("Current k: " + k);
       }
-      return another;
-   }
+    }
 
-   public void setValues(String val1, int val2) {
-      strField = val1;
-      aaa = abb = val2;
-      System.out.println(getX());
-      System.out.println(foo()); // Ctrl+click shouldn't work for foo!
-   }
+    public static class MyList<T extends Component> extends ArrayList<T> {
+         public MyList() {
+            
+         }
+    }
 
-   /** Ctrl+click my stuff! */
-   private class Inner1 {
-   
-      private int aaa;
-      private double d;
-      private String strField;
-      
-      public void doSomething(double newVal) {
-         d = newVal;
-         aaa = abb = clickable;
-         strField = getX(); // getX() clickable
-      }
-      
-   }
-   
-   /** Ctrl+click my stuff also! */
-   private static class Inner2 {
-   
-      private double d;
-      private String strField;
-      
-      public void doSomething(double newVal) {
-         d = newVal;
-         aaa = abb = notClickable;
-         strField = getX(); // getX() not clickable
-      }
-      
-   }
-   
-}   
+    /** my serializable interface */
+    private interface MySerializable extends Serializable {
+    }
+
+    /** Ctrl+click my stuff also! */
+    private static class Inner2 {
+
+        private double d;
+        private String strField;
+
+        public void doSomething(double newVal) {
+            d = newVal; // both d & newVal should be clickable
+            aaa = abb = notClickable;
+            strField = getX(); // getX() not clickable
+            ExampleCode.getInstance().setValues(strField, 0); // this should work (both completion & ctrl-click)
+            ExampleCode.this.getX(); // no completions should work for this, since it is in a static class, ctrl-click should also not working ExampleCode. should not pop up this in the list only static members
+            ExampleCode.getMap().put(strField, strField); // this should work (both completion & ctrl-click)
+        }
+
+    }
+
+}

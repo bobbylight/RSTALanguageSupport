@@ -57,7 +57,10 @@ class MethodData implements Data {
 		String key = null;
 
 		Modifiers mod = method.getModifiers();
-		if (mod==null) {
+        if (method.getType() == null) {
+            key = IconFactory.CONSTRUCTOR_ICON;
+        }
+		else if (mod==null) {
 			key = IconFactory.METHOD_DEFAULT_ICON;
 		}
 		else if (mod.isPrivate()) {

@@ -10,6 +10,7 @@
  */
 package org.fife.rsta.ac.java;
 
+import java.lang.ref.WeakReference;
 import java.util.Iterator;
 
 import org.fife.rsta.ac.java.MemberCompletion.Data;
@@ -33,12 +34,12 @@ import org.fife.rsta.ac.java.rjc.ast.TypeDeclaration;
 class FieldInfoData implements Data {
 
 	private FieldInfo info;
-	private SourceCompletionProvider provider;
+	private WeakReference<SourceCompletionProvider> provider;
 
 
 	public FieldInfoData(FieldInfo info, SourceCompletionProvider provider) {
 		this.info = info;
-		this.provider = provider;
+		this.provider = new WeakReference<SourceCompletionProvider>(provider);
 	}
 
 
@@ -96,8 +97,9 @@ class FieldInfoData implements Data {
 	@Override
 	public String getSummary() {
 
-		ClassFile cf = info.getClassFile();;
-		SourceLocation loc = provider.getSourceLocForClass(cf.getClassName(true));
+		ClassFile cf = info.getClassFile();
+		SourceLocation loc = null;
+        if (provider != null && provider.get() != null) loc = provider.get().getSourceLocForClass(cf.getClassName(true));
 		String summary = null;
 
 		// First, try to parse the Javadoc for this method from the attached

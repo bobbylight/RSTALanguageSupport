@@ -96,11 +96,12 @@ TODO: Verify me!!!
 		// completions for classes not in their import statements.
 		// Thanks to Guilherme Joao Frantz and Jonatas Schuler for the patch!
 		else {//if (text.indexOf('.')==-1) {
-			String lowerCaseText = text.toLowerCase();
+            // don't use lowercase here, since we would like to preserve the case for the textpartsmatch
+//			String lowerCaseText = text.toLowerCase();
 			for (int i=0; i<classFileSources.size(); i++) {
 				JarReader jar = classFileSources.get(i);
 				List<ClassFile> classFiles = jar.
-						getClassesWithNamesStartingWith(lowerCaseText);
+						getClassesWithNamesStartingWith(text);
 				if (classFiles!=null) {
 					for (ClassFile cf : classFiles) {
 						if (org.fife.rsta.ac.java.classreader.Util.isPublic(cf.getAccessFlags())) {

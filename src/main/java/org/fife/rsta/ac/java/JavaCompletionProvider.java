@@ -14,16 +14,13 @@ import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import javax.swing.*;
 import javax.swing.text.JTextComponent;
 
 import org.fife.rsta.ac.ShorthandCompletionCache;
 import org.fife.rsta.ac.java.buildpath.LibraryInfo;
 import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
-import org.fife.ui.autocomplete.AbstractCompletionProvider;
-import org.fife.ui.autocomplete.Completion;
-import org.fife.ui.autocomplete.DefaultCompletionProvider;
-import org.fife.ui.autocomplete.LanguageAwareCompletionProvider;
-import org.fife.ui.autocomplete.ParameterizedCompletion;
+import org.fife.ui.autocomplete.*;
 
 
 /**
@@ -147,8 +144,8 @@ public class JavaCompletionProvider extends LanguageAwareCompletionProvider {
 	@Override
 	public List<ParameterizedCompletion> getParameterizedCompletions(
 						JTextComponent tc) {
-		return null;
-	}
+        return sourceProvider.getParameterizedCompletions(cu, tc);
+    }
 
 
 	/**
