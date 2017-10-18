@@ -127,8 +127,20 @@ class JarReader {
 	public List<ClassFile> getClassesWithNamesStartingWith(String prefix) {
 		List<ClassFile> res = new ArrayList<ClassFile>();
 		String currentPkg = ""; // Don't use null; we're appending to it
-		packageMap.getClassesWithNamesStartingWith(info, prefix, currentPkg,
-				res);
+
+		try {
+			info.bulkClassFileCreationStart();
+
+			try {
+				packageMap.getClassesWithNamesStartingWith(info, prefix, currentPkg, res);
+			} finally {
+				info.bulkClassFileCreationEnd();
+			}
+
+		} catch (final IOException ioe) {
+			ioe.printStackTrace();
+		}
+
 		return res;
 	}
 

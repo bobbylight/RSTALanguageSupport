@@ -359,7 +359,7 @@ public class PackageMapNode {
 				if (cf==null) {
 					String fqClassName = currentPkg + className + ".class";
 					try {
-						cf = info.createClassFile(fqClassName);
+						cf = info.createClassFileBulk(fqClassName);
 						cfEntry.setValue(cf); // Update the map
 					} catch (IOException ioe) {
 						ioe.printStackTrace();
