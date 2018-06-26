@@ -10,8 +10,10 @@
  */
 package org.fife.rsta.ac.java;
 
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -277,6 +279,22 @@ TODO: Verify me!!!
 							result = new ArrayList<ClassFile>(1); // Usually small
 						}
 						result.add(entry);
+					} else {
+						try {
+							Class<?> classByName =
+									Class.forName(qualified);
+
+							InputStream classAsStream = classByName.getResourceAsStream("/" + qualified.replace(".", "/") + ".class");
+							if (result==null) {
+								result = new ArrayList<ClassFile>(1); // Usually small
+							}
+							result.add(new ClassFile(new DataInputStream(classAsStream)));
+						} catch (ClassNotFoundException e) {
+							e.printStackTrace();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						//System.err.println("ERROR: Class not found! - " + name2);
 					}
 
 				}
@@ -294,7 +312,21 @@ TODO: Verify me!!!
 							result.add(entry);
 						}
 						else {
-							System.err.println("ERROR: Class not found! - " + name2);
+							try {
+								Class<?> classByName =
+										Class.forName(name2);
+
+								InputStream classAsStream = classByName.getResourceAsStream("/" + name2.replace(".", "/") + ".class");
+								if (result==null) {
+									result = new ArrayList<ClassFile>(1); // Usually small
+								}
+								result.add(new ClassFile(new DataInputStream(classAsStream)));
+							} catch (ClassNotFoundException e) {
+								e.printStackTrace();
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+							//System.err.println("ERROR: Class not found! - " + name2);
 						}
 					}
 				}
