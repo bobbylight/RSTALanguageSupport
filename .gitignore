@@ -5,3 +5,5 @@ javadoc
 *.java~
 build
 .gradle
+/.idea/
+/languagesupport.iml
