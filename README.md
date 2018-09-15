@@ -66,5 +66,4 @@ Languages supported in this library include:
 # Getting Help
 
 * Add an issue on GitHub
-* Ask in the [project forum](http://fifesoft.com/forum/)
 

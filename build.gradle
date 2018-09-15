@@ -13,20 +13,21 @@ group = 'com.fifesoft'
 archivesBaseName = 'languagesupport'
 
 dependencies {
-	compile group: 'org.mozilla', name: 'rhino', version: '1.7.6'
-	testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile files("${projectDir.absolutePath}/../RSyntaxTextArea/RSyntaxTextArea/build/classes/java/main")
+    compile files("${projectDir.absolutePath}/../RSyntaxTextArea/RSyntaxTextArea/build/resources/main")
+    compile files("${projectDir.absolutePath}/../AutoComplete/AutoComplete/build/classes/java/main")
+    compile files("${projectDir.absolutePath}/../AutoComplete/AutoComplete/build/resources/main")
+	compile 'org.mozilla:rhino:1.7.6'
+    testCompile 'junit:junit:4.12'
 }
 
-// Regenerate local gradlew
-task wrapper(type: Wrapper) {
-	gradleVersion = '2.14'
+wrapper {
+    gradleVersion = '4.10'
 }
 
 compileJava {
 	sourceCompatibility javaVersion
 	targetCompatibility javaVersion
-	classpath += files("${projectDir.absolutePath}/../RSyntaxTextArea/build/classes/main",
-		"${projectDir.absolutePath}/../AutoComplete/build/classes/main")
 	options.debug = true
 	options.debugOptions.debugLevel = 'source,vars,lines'
 	// Most folks will compile with the latest JDK available, but official builds
@@ -34,13 +35,13 @@ compileJava {
 	if (project.hasProperty('java6CompileBootClasspath')) {
 		if (new File(java6CompileBootClasspath).isFile()) {
 			println "Bootstrap classpath when compiling Java: ${java6CompileBootClasspath}"
-			options.bootClasspath = java6CompileBootClasspath
+            options.bootstrapClasspath = files(java6CompileBootClasspath)
 		}
 		else {
 			println "Warning: Specified java6CompileBootClasspath does not exist: ${java6CompileBootClasspath}"
 		}
 	}
-	options.compilerArgs << "-Xlint:deprecation" << '-Xlint:unchecked'
+	options.compilerArgs << '-Xlint:deprecation' << '-Xlint:unchecked'
 }
 
 ext.sharedManifest = manifest {
@@ -63,8 +64,8 @@ distributions {
 		contents {
 			from { [ 'build/libs', // The built jar
 				     configurations.runtime, // all runtime dependencies (e.g. rhino)
-				     '../RSyntaxTextArea/build/libs/RSyntaxTextArea-2.6.0-SNAPSHOT.jar',
-					 '../AutoComplete/build/libs/AutoComplete-2.6.0-SNAPSHOT.jar',
+				     '../RSyntaxTextArea/RSyntaxTextArea/build/libs/rsyntaxtextarea-3.0.0-SNAPSHOT.jar',
+					 '../AutoComplete/AutoComplete/build/libs/autocomplete-3.0.0-SNAPSHOT.jar',
 				     'RSTALanguageSupport.License.txt', 'readme.txt' ] }
 			rename 'RSyntaxTextArea-.*\\.jar', 'rsyntaxtextarea.jar'
 			rename 'AutoComplete-.*\\.jar', 'autocomplete.jar'
@@ -93,12 +94,20 @@ srcDistZip {
 	include '.settings/**'
 }
 
-task buildSourceForgeZips << {
-	println "Building zip files for SourceForge"
+task buildSourceForgeZips {
+    doLast {
+        println "Building zip files for SourceForge"
+    }
 }
 buildSourceForgeZips.dependsOn clean, jar, distZip, srcDistZip
 
 // Stuff to generate and upload Maven artifacts
+javadoc {
+    source += files("${projectDir.absolutePath}/../RSyntaxTextArea/RSyntaxTextArea/src/main/java/**/*.java",
+            "${projectDir.absolutePath}/../AutoComplete/AutoComplete/src/main/java/**/*.java")
+    classpath += files("${projectDir.absolutePath}/../RSyntaxTextArea/RSyntaxTextArea/build/classes/java/main",
+            "${projectDir.absolutePath}/../AutoComplete/AutoComplete/build/classes/java/main")
+}
 task javadocJar (type: Jar, dependsOn: javadoc) {
 	manifest { from sharedManifest }
 	classifier = 'javadoc'

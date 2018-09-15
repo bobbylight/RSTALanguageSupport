@@ -18,9 +18,25 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 
-import javax.swing.*;
+import javax.swing.Action;
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JRootPane;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTree;
+import javax.swing.SwingUtilities;
+import javax.swing.ToolTipManager;
+import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
-import javax.swing.event.*;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 import javax.swing.tree.TreeNode;
 
 import org.fife.rsta.ac.AbstractSourceTree;
@@ -31,14 +47,14 @@ import org.fife.rsta.ac.java.tree.JavaOutlineTree;
 import org.fife.rsta.ac.js.tree.JavaScriptOutlineTree;
 import org.fife.rsta.ac.xml.tree.XmlOutlineTree;
 import org.fife.ui.rsyntaxtextarea.ErrorStrip;
-import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 
 /**
  * The root pane used by the demos.  This allows both the applet and the
- * stand-alone application to share the same UI. 
+ * stand-alone application to share the same UI.
  *
  * @author Robert Futrell
  * @version 1.0
@@ -54,18 +70,17 @@ class DemoRootPane extends JRootPane implements HyperlinkListener,
 
 	public DemoRootPane() {
 
-		LanguageSupportFactory lsf = LanguageSupportFactory.get();
-		LanguageSupport support = lsf.getSupportFor(SYNTAX_STYLE_JAVA);
-		JavaLanguageSupport jls = (JavaLanguageSupport)support;
-		// TODO: This API will change!  It will be easier to do per-editor
-		// changes to the build path.
-		try {
-			jls.getJarManager().addCurrentJreClassFileSource();
-			//jsls.getJarManager().addClassFileSource(ji);
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
-		
+LanguageSupportFactory lsf = LanguageSupportFactory.get();
+LanguageSupport support = lsf.getSupportFor(SYNTAX_STYLE_JAVA);
+JavaLanguageSupport jls = (JavaLanguageSupport)support;
+// TODO: This API will change!  It will be easier to do per-editor
+// changes to the build path.
+try {
+	jls.getJarManager().addCurrentJreClassFileSource();
+} catch (IOException ioe) {
+	ioe.printStackTrace();
+}
+
 		// Dummy tree keeps JViewport's "background" looking right initially
 		JTree dummy = new JTree((TreeNode)null);
 		treeSP = new JScrollPane(dummy);
@@ -144,7 +159,7 @@ setContentPane(cp);
 		menu = new JMenu("View");
 		menu.add(new JCheckBoxMenuItem(new ToggleLayeredHighlightsAction(this)));
 		mb.add(menu);
-		
+
 		menu = new JMenu("Help");
 		menu.add(new JMenuItem(new AboutAction(this)));
 		mb.add(menu);

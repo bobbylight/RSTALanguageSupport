@@ -1,7 +1,4 @@
-ant-classes
-bin
-dist
-javadoc
 *.java~
 build
 .gradle
+out/
