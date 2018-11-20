@@ -587,7 +587,7 @@ public class ClassFile implements AccessFlags {
 		// TODO: Handle other useful Attribute types, if any.
 
 		else { // An unknown/unsupported attribute.
-			System.out.println("Unsupported class attribute: "+  attrName);
+			debugPrint("Unsupported class attribute: "+  attrName);
 			ai = AttributeInfo.readUnsupportedAttribute(this, in, attrName,
 					attributeLength);
 		}
