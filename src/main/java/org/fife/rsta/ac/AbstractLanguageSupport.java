@@ -74,7 +74,7 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	/**
 	 * The default renderer for the completion list.
 	 */
-	private ListCellRenderer renderer;
+	private ListCellRenderer<Object> renderer;
 
 
 	/**
@@ -82,7 +82,7 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	 */
 	protected AbstractLanguageSupport() {
 		setDefaultCompletionCellRenderer(null); // Force default
-		textAreaToAutoCompletion = new HashMap<RSyntaxTextArea, AutoCompletion>();
+		textAreaToAutoCompletion = new HashMap<>();
 		autoCompleteEnabled = true;
 		autoActivationEnabled = false;
 		autoActivationDelay = 300;
@@ -115,7 +115,7 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	 *
 	 * @return The default renderer for the completion list.
 	 */
-	protected ListCellRenderer createDefaultCompletionCellRenderer() {
+	protected ListCellRenderer<Object> createDefaultCompletionCellRenderer() {
 		return new DefaultListCellRenderer();
 	}
 
@@ -135,9 +135,6 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public int getAutoActivationDelay() {
 		return autoActivationDelay;
@@ -156,18 +153,12 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public ListCellRenderer getDefaultCompletionCellRenderer() {
+	public ListCellRenderer<Object> getDefaultCompletionCellRenderer() {
 		return renderer;
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean getShowDescWindow() {
 		return showDescWindow;
@@ -199,36 +190,24 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean isAutoActivationEnabled() {
 		return autoActivationEnabled;
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean isAutoCompleteEnabled() {
 		return autoCompleteEnabled;
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean isParameterAssistanceEnabled() {
 		return parameterAssistanceEnabled;
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void setAutoActivationDelay(int ms) {
 		ms = Math.max(0, ms);
@@ -241,9 +220,6 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void setAutoActivationEnabled(boolean enabled) {
 		if (enabled!=autoActivationEnabled) {
@@ -255,9 +231,6 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void setAutoCompleteEnabled(boolean enabled) {
 		if (enabled!=autoCompleteEnabled) {
@@ -269,11 +242,8 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public void setDefaultCompletionCellRenderer(ListCellRenderer r) {
+	public void setDefaultCompletionCellRenderer(ListCellRenderer<Object> r) {
 		if (r==null) {
 			r = createDefaultCompletionCellRenderer();
 		}
@@ -289,9 +259,6 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void setParameterAssistanceEnabled(boolean enabled) {
 		if (enabled!=parameterAssistanceEnabled) {
@@ -303,9 +270,6 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void setShowDescWindow(boolean show) {
 		if (show!=showDescWindow) {

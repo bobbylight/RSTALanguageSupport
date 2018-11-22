@@ -27,18 +27,18 @@ import org.fife.rsta.ac.java.rjc.lexer.TokenTypes;
  */
 public class Modifiers {
 
-	public static final Integer ABSTRACT			= new Integer(1024);
-	public static final Integer FINAL				= new Integer(16);
-	public static final Integer INTERFACE			= new Integer(512);
-	public static final Integer NATIVE				= new Integer(256);
-	public static final Integer PRIVATE				= new Integer(2);
-	public static final Integer PROTECTED			= new Integer(4);
-	public static final Integer PUBLIC				= new Integer(1);
-	public static final Integer STATIC				= new Integer(8);
-	public static final Integer STRICTFP			= new Integer(2048);
-	public static final Integer SYNCHRONIZED		= new Integer(32);
-	public static final Integer TRANSIENT			= new Integer(128);
-	public static final Integer VOLATILE			= new Integer(64);
+	public static final Integer ABSTRACT			= 1024;
+	public static final Integer FINAL				= 16;
+	public static final Integer INTERFACE			= 512;
+	public static final Integer NATIVE				= 256;
+	public static final Integer PRIVATE				= 2;
+	public static final Integer PROTECTED			= 4;
+	public static final Integer PUBLIC				= 1;
+	public static final Integer STATIC				= 8;
+	public static final Integer STRICTFP			= 2048;
+	public static final Integer SYNCHRONIZED		= 32;
+	public static final Integer TRANSIENT			= 128;
+	public static final Integer VOLATILE			= 64;
 
 	private List<Integer> modifiers;
 	private List<Annotation> annotations;

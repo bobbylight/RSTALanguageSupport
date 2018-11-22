@@ -149,9 +149,9 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
      * <strong>Example</strong>
 	 * <pre>
 	 * var p = {}; //create object
-	 * Object.getPrototypeOf(p); //=> Object.prototype
+	 * Object.getPrototypeOf(p); //=&gt; Object.prototype
 	 * var o = Object.create(p); //an object inherited from p
-	 * Object.getPrototypeOf(o); //=> p
+	 * Object.getPrototypeOf(o); //=&gt; p
 	 * </pre> 
      * @param o An object.
      * @returns The prototype of object <b><i>o</b></i>.
@@ -168,9 +168,9 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
      * <strong>Example</strong>
 	 * <pre>
 	 * var o = {}; //create object
-	 * Object.isExtensible(o); //=> true
+	 * Object.isExtensible(o); //=&gt; true
 	 * Object.preventExtensions(o); //Make it non-extensible
-	 * Object.isExtensible(o); //=> false
+	 * Object.isExtensible(o); //=&gt; false
 	 * </pre> 
      * @param o The object to be checked for extensibility
      * @returns <b><i>true</b></i> if the object can be extended with new properties, otherwise <b><i>false</b></i>.
@@ -219,7 +219,7 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
      * 
      * <strong>Example</strong>
 	 * <pre>
-	 * Object.keys({x:1, y:2}); // => ["x", "y"]
+	 * Object.keys({x:1, y:2}); // =&gt; ["x", "y"]
 	 * </pre> 
      * @param o an object
      * @returns An array that contains the names of all enumerable own (non-inherited) properties of <b><i>o</b></i>.

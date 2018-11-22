@@ -109,8 +109,9 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	}
 
 	/**
-	 * Set template completion cache for source completion provider
-	 * @param templateCache
+	 * Set template completion cache for source completion provider.
+	 *
+	 * @param shorthandCache The cache to use.
 	 */
 	public void setShorthandCache(ShorthandCompletionCache shorthandCache) {
 		this.shorthandCache = shorthandCache;
@@ -414,8 +415,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	 *        and do elsewhere)
 	 * @param entered already entered text
 	 * @param dot position in code
-	 * @param preProcessingMode flag to state whether the parsing is before the
-	 *        RSTA parsing
+	 * @param options Options for the parsing.
 	 * @return
 	 */
 	protected CodeBlock iterateAstRoot(AstRoot root, Set<Completion> set,

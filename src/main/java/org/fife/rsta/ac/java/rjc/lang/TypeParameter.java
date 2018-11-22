@@ -24,7 +24,7 @@ import org.fife.rsta.ac.java.rjc.lexer.Token;
  *    Identifier ['extends' Bound]
  * 
  * Bound:
- *    Type { '&' Type }
+ *    Type { '&amp;' Type }
  * </pre>
  *
  * @author Robert Futrell

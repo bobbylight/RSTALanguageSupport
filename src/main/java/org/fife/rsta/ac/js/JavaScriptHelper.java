@@ -129,8 +129,8 @@ public class JavaScriptHelper {
 	 * 
 	 * If the node is a function, then the Parsed parent node structure is:
 	 * FunctionCall
-	 *   --> PropertyGet
-	 *    --> Name
+	 *   --&gt; PropertyGet
+	 *    --&gt; Name
 	 * 
 	 * Anything other structure should be rejected.
 	 * 

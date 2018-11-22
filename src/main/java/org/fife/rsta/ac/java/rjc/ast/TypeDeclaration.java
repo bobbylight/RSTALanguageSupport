@@ -19,16 +19,16 @@ import org.fife.rsta.ac.java.rjc.lang.Modifiers;
 public interface TypeDeclaration extends ASTNode, TypeDeclarationContainer {
 
 
-	public boolean getBodyContainsOffset(int offs);
+	boolean getBodyContainsOffset(int offs);
 
 
-	public int getBodyEndOffset();
+	int getBodyEndOffset();
 
 
-	public int getBodyStartOffset();
+	int getBodyStartOffset();
 
 
-	public TypeDeclaration getChildType(int index);
+	TypeDeclaration getChildType(int index);
 
 
 	/**
@@ -39,13 +39,13 @@ public interface TypeDeclaration extends ASTNode, TypeDeclarationContainer {
 	 * @return The type declaration, or <code>null</code> if the offset is
 	 *         outside of any child type declaration.
 	 */
-	public TypeDeclaration getChildTypeAtOffset(int offs);
+	TypeDeclaration getChildTypeAtOffset(int offs);
 
 
-	public int getChildTypeCount();
+	int getChildTypeCount();
 
 
-	public String getDocComment();
+	String getDocComment();
 
 
 	/**
@@ -55,13 +55,13 @@ public interface TypeDeclaration extends ASTNode, TypeDeclarationContainer {
 	 * @see #getMethodIterator()
 	 * @see #getMemberIterator()
 	 */
-	public Iterator<Field> getFieldIterator();
+	Iterator<Field> getFieldIterator();
 
 
-	public Member getMember(int index);
+	Member getMember(int index);
 
 
-	public int getMemberCount();
+	int getMemberCount();
 
 
 	/**
@@ -72,7 +72,7 @@ public interface TypeDeclaration extends ASTNode, TypeDeclarationContainer {
 	 * @return The iterator.
 	 * @see #getMethodIterator()
 	 */
-	public Iterator<Member> getMemberIterator();
+	Iterator<Member> getMemberIterator();
 
 
 	/**
@@ -82,7 +82,7 @@ public interface TypeDeclaration extends ASTNode, TypeDeclarationContainer {
 	 * @see #getFieldIterator()
 	 * @see #getMemberIterator()
 	 */
-	public Iterator<Method> getMethodIterator();
+	Iterator<Method> getMethodIterator();
 
 
 	/**
@@ -92,7 +92,7 @@ public interface TypeDeclaration extends ASTNode, TypeDeclarationContainer {
 	 * @param name The name to check for.
 	 * @return Any method overloads with that name, or an empty list if none.
 	 */
-	public List<Method> getMethodsByName(String name);
+	List<Method> getMethodsByName(String name);
 
 
 	/**
@@ -101,7 +101,7 @@ public interface TypeDeclaration extends ASTNode, TypeDeclarationContainer {
 	 * @return The modifier list.  This may be <code>null</code> if no
 	 *         modifiers were specified.
 	 */
-	public Modifiers getModifiers();
+	Modifiers getModifiers();
 
 
 	/**
@@ -111,7 +111,7 @@ public interface TypeDeclaration extends ASTNode, TypeDeclarationContainer {
 	 * @see #getName(boolean)
 	 */
 	@Override
-	public String getName();
+	String getName();
 
 
 	/**
@@ -122,7 +122,7 @@ public interface TypeDeclaration extends ASTNode, TypeDeclarationContainer {
 	 * @return The type's name.
 	 * @see #getName()
 	 */
-	public String getName(boolean fullyQualified);
+	String getName(boolean fullyQualified);
 
 
 	/**
@@ -130,7 +130,7 @@ public interface TypeDeclaration extends ASTNode, TypeDeclarationContainer {
 	 *
 	 * @return The package, or <code>null</code> if it's in the default package.
 	 */
-	public Package getPackage();
+	Package getPackage();
 
 
 	/**
@@ -140,13 +140,13 @@ public interface TypeDeclaration extends ASTNode, TypeDeclarationContainer {
 	 *             one.
 	 * @see #setParentType(TypeDeclaration)
 	 */
-	public TypeDeclaration getParentType();
+	TypeDeclaration getParentType();
 
 
-	public String getTypeString();
+	String getTypeString();
 
 
-	public boolean isDeprecated();
+	boolean isDeprecated();
 
 
 	/**
@@ -156,10 +156,10 @@ public interface TypeDeclaration extends ASTNode, TypeDeclarationContainer {
 	 * @return Whether this type declaration is static.
 	 * @see #getModifiers()
 	 */
-	public boolean isStatic();
+	boolean isStatic();
 
 
-	public void setDocComment(String comment);
+	void setDocComment(String comment);
 
 
 	/**
@@ -168,7 +168,7 @@ public interface TypeDeclaration extends ASTNode, TypeDeclarationContainer {
 	 * @param parentType The parent type declaration.
 	 * @see #getParentType()
 	 */
-	public void setParentType(TypeDeclaration parentType);
+	void setParentType(TypeDeclaration parentType);
 
 
 }

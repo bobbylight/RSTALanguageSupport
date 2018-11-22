@@ -10,11 +10,14 @@
  */
 package org.fife.rsta.ac.java.classreader;
 
+import org.fife.rsta.ac.java.classreader.attributes.Code;
+import org.fife.rsta.ac.java.classreader.constantpool.ConstantClassInfo;
+
 import java.io.*;
 
 
 /**
- * An entry in the exception table of a {@link Code} attribute.  This denotes
+ * An entry in the exception table of a {@code Code} attribute.  This denotes
  * either a <tt>catch</tt> or <tt>finally</tt> block (the section of code it
  * covers, the type of <tt>Throwable</tt> it handles, and the location of the
  * exception handler code).

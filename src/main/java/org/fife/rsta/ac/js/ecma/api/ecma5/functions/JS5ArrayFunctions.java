@@ -16,9 +16,9 @@ public interface JS5ArrayFunctions extends JS5ObjectFunctions, JSArrayFunctions 
 	 * <p>
 	 * <strong>Example</strong>
 	 * <pre>
-	 * [1,2,3].every(function(x){return x < 5;} //=>true
-	 * [1,2,3].every(function(x){return x < 2;} //=>false
-	 * [].every(function(x){return false;} //=>true, always true for []
+	 * [1,2,3].every(function(x){return x &lt; 5;} //=&gt;true
+	 * [1,2,3].every(function(x){return x &lt; 2;} //=&gt;false
+	 * [].every(function(x){return false;} //=&gt;true, always true for []
 	 * </pre> 
 	 * @param predicate A predicate function to test array elements
 	 * @param o The optional <b><i>this</i></b> value for invocations of <b><i>predicate</i></b>.
@@ -38,7 +38,7 @@ public interface JS5ArrayFunctions extends JS5ObjectFunctions, JSArrayFunctions 
 	 * <p>
 	 * <strong>Example</strong>
 	 * <pre>
-	 * [1,2,3].filter(function(x){return x > 1}); // returns [2,3]
+	 * [1,2,3].filter(function(x){return x &gt; 1}); // returns [2,3]
 	 * </pre> 
 	 * @param predicate The function to invoke to determine whether an element of <b>array</b> will be included in the returned array.
 	 * @param o An optional value on which <b><i>predicate</i></b> is invoked
@@ -169,9 +169,9 @@ public interface JS5ArrayFunctions extends JS5ObjectFunctions, JSArrayFunctions 
 	 * <p>
 	 * <strong>Example</strong>
 	 * <pre>
-	 * [1,2,3].some(function(x){return x > 5;} //=>false
-	 * [1,2,3].some(function(x){return x > 2;} //=>true
-	 * [].some(function(x){return true;} //=>false, always false for []
+	 * [1,2,3].some(function(x){return x &gt; 5;} //=&gt;false
+	 * [1,2,3].some(function(x){return x &gt; 2;} //=&gt;true
+	 * [].some(function(x){return true;} //=&gt;false, always false for []
 	 * </pre> 
 	 * @param predicate A predicate function to test array elements.
 	 * @param o The optional <b><i>this</i></b> value for the invocations of  <b><i>predicate</i></b>.

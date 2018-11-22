@@ -27,7 +27,7 @@ public interface Offset {
 	 *
 	 * @return The offset.
 	 */
-	public int getOffset();
+	int getOffset();
 
 
 }

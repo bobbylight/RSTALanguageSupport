@@ -121,14 +121,14 @@ public interface JSGlobalFunctions extends JSObjectFunctions {
 	 * <p>
 	 * <strong>Example</strong>
 	 * <pre>
-	 * isNaN(0); // => false
-	 * isNaN(0/0); //=> true
-	 * isNaN(parseInt("3")); //=> false
-	 * isNaN(parseInt("hello")); //=> true
-	 * isNaN("3"); //=> false
-	 * isNaN("hello"); //=> true
-	 * isNaN(true); //=> false
-	 * isNaN(undefined); //=> true
+	 * isNaN(0); // =&gt; false
+	 * isNaN(0/0); //=&gt; true
+	 * isNaN(parseInt("3")); //=&gt; false
+	 * isNaN(parseInt("hello")); //=&gt; true
+	 * isNaN("3"); //=&gt; false
+	 * isNaN("hello"); //=gt; true
+	 * isNaN(true); //=&gt; false
+	 * isNaN(undefined); //=&gt; true
 	 * </pre> 
 	 * @param n The number to be tested. 
 	 * @returns <b><i>true</i></b> if <b><i>n</i></b> is not a number or if it is the special numeric value NaN, otherwise <b><i>false</i></b> if <b><i>n</i></b> is any other number.

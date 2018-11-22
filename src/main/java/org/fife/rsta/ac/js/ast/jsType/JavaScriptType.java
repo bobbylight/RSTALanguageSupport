@@ -161,7 +161,7 @@ public class JavaScriptType {
 
 
 	/**
-	 * @return Map of completions String --> JSCompletion
+	 * @return A map of completion names to completions.
 	 * @see JSCompletion
 	 */
 	public HashMap<String, JSCompletion> getMethodFieldCompletions() {

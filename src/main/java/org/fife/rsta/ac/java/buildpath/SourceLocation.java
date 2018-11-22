@@ -47,7 +47,7 @@ public interface SourceLocation {
 	 * @return The location of this source as a string, or <code>null</code> if
 	 *         it is not an accessible location.
 	 */
-	public String getLocationAsString();
+	String getLocationAsString();
 
 
 }

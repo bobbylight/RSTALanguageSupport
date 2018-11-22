@@ -201,14 +201,11 @@ public class JavaScriptParser extends AbstractParser {
 
 	/**
 	 * Returns the location of the <code>.jshintrc</code> file to use if using
-	 * JsHint as your error parser.  This property is ignored if
-	 * {@link #getErrorParser()} does not return {@link JsErrorParser#JSHINT}.
+	 * JsHint as your error parser.
 	 *
 	 * @param textArea The text component.
 	 * @return The <code>.jshintrc</code> file, or <code>null</code> if none;
 	 *         in that case, the JsHint defaults will be used.
-	 * @see #setJsHintRCFile(File)
-	 * @see #setErrorParser(JsErrorParser)
 	 */
 	public File getJsHintRCFile(RSyntaxTextArea textArea) {
 

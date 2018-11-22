@@ -14,8 +14,8 @@ public abstract class History implements HistoryFunctions {
 	  * @constructor
 	  * @since Common Usage, no standard
 	 */
-	public History(){};
-	
+	public History(){}
+
 	/**
      * <b>property constructor</b>
      * 

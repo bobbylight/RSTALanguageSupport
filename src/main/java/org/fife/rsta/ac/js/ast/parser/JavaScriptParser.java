@@ -19,7 +19,7 @@ public abstract class JavaScriptParser {
 	 * JavaScriptParser constructor
 	 * @param provider
 	 * @param dot
-	 * @param preProcessingMode
+	 * @param options
 	 */
 	public JavaScriptParser(SourceCompletionProvider provider, int dot,
 			TypeDeclarationOptions options) {

@@ -38,7 +38,7 @@ public abstract class JSArray implements JSArrayFunctions {
 	 * 
 	 * @constructor
 	 * @extends Object
-	 * @param elements  An argument list of two or more values. The <b>length</b> field set to the number of arguments.
+	 * @param element0  An argument list of two or more values. The <b>length</b> field set to the number of arguments.
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */

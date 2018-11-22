@@ -77,7 +77,7 @@ public class XmlLanguageSupport extends AbstractMarkupLanguageSupport {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected ListCellRenderer createDefaultCompletionCellRenderer() {
+	protected ListCellRenderer<Object> createDefaultCompletionCellRenderer() {
 		return new HtmlCellRenderer();
 	}
 
@@ -171,7 +171,7 @@ public class XmlLanguageSupport extends AbstractMarkupLanguageSupport {
 		InputMap im = textArea.getInputMap();
 		ActionMap am = textArea.getActionMap();
 		int c = textArea.getToolkit().getMenuShortcutKeyMask();
-		int shift = InputEvent.SHIFT_MASK;
+		int shift = InputEvent.SHIFT_DOWN_MASK;
 
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_O, c|shift), "GoToType");
 		am.put("GoToType", new GoToMemberAction(XmlOutlineTree.class));
@@ -228,7 +228,7 @@ public class XmlLanguageSupport extends AbstractMarkupLanguageSupport {
 		InputMap im = textArea.getInputMap();
 		ActionMap am = textArea.getActionMap();
 		int c = textArea.getToolkit().getMenuShortcutKeyMask();
-		int shift = InputEvent.SHIFT_MASK;
+		int shift = InputEvent.SHIFT_DOWN_MASK;
 
 		im.remove(KeyStroke.getKeyStroke(KeyEvent.VK_O, c | shift));
 		am.remove("GoToType");

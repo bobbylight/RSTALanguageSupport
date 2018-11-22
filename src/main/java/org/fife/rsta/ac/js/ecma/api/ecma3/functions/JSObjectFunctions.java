@@ -64,7 +64,7 @@ public interface JSObjectFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSBoolean hasOwnProperty();
+    public JSBoolean hasOwnProperty(String name);
 
     /**
      * <b>function isPrototypeOf(o)</b> is an object the prototype of another?
@@ -102,7 +102,7 @@ public interface JSObjectFunctions {
      * @returns <b><i>true</i></b> if <b><i>object</i></b> has a noninherited property with the name specified by <b><i>name</i></b> and
      * if that name is enumerable.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSObject Object
-     * @see #hasOwnProperty() hasOwnProperty()
+     * @see #hasOwnProperty(String)
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */

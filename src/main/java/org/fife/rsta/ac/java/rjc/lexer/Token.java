@@ -19,37 +19,37 @@ package org.fife.rsta.ac.java.rjc.lexer;
  */
 public interface Token extends TokenTypes {
 
-	public int getColumn();
+	int getColumn();
 
 
-	public String getLexeme();
+	String getLexeme();
 
 
-	public int getLength();
+	int getLength();
 
 
-	public int getLine();
+	int getLine();
 
 
-	public int getOffset();
+	int getOffset();
 
 
-	public int getType();
+	int getType();
 
 
-	public boolean isBasicType();
+	boolean isBasicType();
 
 
-	public boolean isIdentifier();
+	boolean isIdentifier();
 
 
-	public boolean isInvalid();
+	boolean isInvalid();
 
 
-	public boolean isOperator();
+	boolean isOperator();
 
 
-	public boolean isType(int type);
+	boolean isType(int type);
 
 
 }

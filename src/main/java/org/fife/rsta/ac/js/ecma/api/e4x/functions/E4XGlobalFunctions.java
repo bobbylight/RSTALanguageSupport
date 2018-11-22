@@ -15,6 +15,6 @@ public interface E4XGlobalFunctions extends JS5ObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XGlobal Global
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public JSBoolean isXMLName(JSString name);
+	JSBoolean isXMLName(JSString name);
 	
 }

@@ -20,9 +20,9 @@ public abstract class JSRegExp implements JSRegExpFunctions {
 	* @since Standard ECMA-262 3rd. Edition
 	* @since Level 2 Document Object Model Core Definition.
 	*/
-	public JSRegExp(JSString pattern, JSString attributes) {};
-	
-	/**
+	public JSRegExp(JSString pattern, JSString attributes) {}
+
+    /**
     * <b>property prototype</b>
     * 
     * @type RegExp

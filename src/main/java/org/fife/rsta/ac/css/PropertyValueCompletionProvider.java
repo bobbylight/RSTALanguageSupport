@@ -570,8 +570,8 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 	 * A simple enum to keep track of what "state" we're in at a specific
 	 * location in a CSS file.
 	 */
-	protected static enum LexerState {
-		SELECTOR, PROPERTY, VALUE;
+	protected enum LexerState {
+		SELECTOR, PROPERTY, VALUE
 	}
 
 

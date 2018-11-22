@@ -97,7 +97,7 @@ public abstract class JSDate implements JSDateFunctions {
 	 * <b>function UTC(year,month,day,hour,min,sec,ms)</b> Converts a Date specification to milliseconds.
 	 * 
 	 * @memberOf Date
-	 * @param year The year in four digit format. If the year is added between 0 and 99 --> 1900 is added to it. 
+	 * @param year The year in four digit format. If the year is added between 0 and 99, then 1900 is added to it.
 	 * @param month The month specified from 0 (January) to 11 (December). 
 	 * @param day The day in the month between 1 and 31.
 	 * @param hour The hour specified from 0 (midnight) and 23 (11 p.m).

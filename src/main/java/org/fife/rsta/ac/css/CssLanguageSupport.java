@@ -43,7 +43,7 @@ public class CssLanguageSupport extends AbstractLanguageSupport {
 
 
 	@Override
-	protected ListCellRenderer createDefaultCompletionCellRenderer() {
+	protected ListCellRenderer<Object> createDefaultCompletionCellRenderer() {
 		return new CssCellRenderer();
 	}
 

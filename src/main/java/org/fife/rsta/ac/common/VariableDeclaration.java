@@ -11,6 +11,8 @@
 package org.fife.rsta.ac.common;
 
 
+import org.fife.rsta.ac.LanguageSupport;
+
 /**
  * A marker for a variable declaration.  This can be used by
  * {@link LanguageSupport}s to mark variables, and is especially helpful

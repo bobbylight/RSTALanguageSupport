@@ -14,9 +14,9 @@ public abstract class Screen implements JS5ObjectFunctions {
 	 * @constructor
 	 * @since Common Usage, no standard
 	 */
-	public Screen(){};
-	
-	/**
+	public Screen(){}
+
+    /**
 	 * <b>property constructor</b>
 	 * 
 	 * @type Function

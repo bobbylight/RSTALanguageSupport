@@ -10,6 +10,8 @@
  */
 package org.fife.rsta.ac.demo;
 
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+
 import javax.swing.JApplet;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -30,18 +32,15 @@ public class DemoApplet extends JApplet {
 	@Override
 	public void init() {
 		super.init();
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				String laf = UIManager.getSystemLookAndFeelClassName();
-				try {
-					UIManager.setLookAndFeel(laf);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				setRootPane(new DemoRootPane());
-			}
-		});
+		SwingUtilities.invokeLater(() -> {
+            String laf = UIManager.getSystemLookAndFeelClassName();
+            try {
+                UIManager.setLookAndFeel(laf);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            setRootPane(new DemoRootPane());
+        });
 	}
 
 

@@ -15,9 +15,9 @@ public abstract class Navigator implements NavigatorFunctions {
 	 * @constructor
 	 * @since Common Usage, no standard
 	*/
-	public Navigator(){};
-	
-	/**
+	public Navigator(){}
+
+    /**
     * <b>property constructor</b>
     * 
     * @type Function

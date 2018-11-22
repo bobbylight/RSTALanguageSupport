@@ -31,7 +31,7 @@ public interface ASTNode {
 	 *
 	 * @return The "name" of this node.
 	 */
-	public String getName();
+	String getName();
 
 
 	/**
@@ -39,7 +39,7 @@ public interface ASTNode {
 	 *
 	 * @return The end offset.
 	 */
-	public int getNameEndOffset();
+	int getNameEndOffset();
 
 
 	/**
@@ -47,7 +47,7 @@ public interface ASTNode {
 	 *
 	 * @return The start offset.
 	 */
-	public int getNameStartOffset();
+	int getNameStartOffset();
 
 
 }

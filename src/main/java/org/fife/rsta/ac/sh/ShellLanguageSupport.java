@@ -52,7 +52,7 @@ public class ShellLanguageSupport extends AbstractLanguageSupport {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected ListCellRenderer createDefaultCompletionCellRenderer() {
+	protected ListCellRenderer<Object> createDefaultCompletionCellRenderer() {
 		return new CompletionCellRenderer();
 	}
 

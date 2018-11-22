@@ -103,7 +103,7 @@ public class TypeDeclaration {
 	@Override
 	public int hashCode() {
 		int hash = 7;
-		hash = 31 * new Boolean(staticsOnly).hashCode();
+		hash = 31 * Boolean.valueOf(staticsOnly).hashCode();
 		hash = 31 * hash + getQualifiedName().hashCode();
 		return hash;
 	}

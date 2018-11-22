@@ -32,7 +32,7 @@ public abstract class JavaScriptResolver {
 	
 	/**
 	 * Resolve node type to TypeDeclaration. Called instead of #compileText(String text) when document is already parsed
-	 * @param node AstNode to resolve
+	 * @param text The type of node to resolve
 	 * @return TypeDeclaration for node or null if not found.
 	 */
 	public abstract TypeDeclaration resolveParamNode(String text) throws IOException;

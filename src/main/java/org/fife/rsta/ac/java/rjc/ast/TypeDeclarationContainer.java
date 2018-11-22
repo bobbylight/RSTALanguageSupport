@@ -21,7 +21,7 @@ package org.fife.rsta.ac.java.rjc.ast;
 public interface TypeDeclarationContainer {
 
 
-	public void addTypeDeclaration(TypeDeclaration typeDec);
+	void addTypeDeclaration(TypeDeclaration typeDec);
 
 
 }

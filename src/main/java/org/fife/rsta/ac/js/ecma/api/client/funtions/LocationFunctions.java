@@ -23,9 +23,9 @@ public interface LocationFunctions extends JS5ObjectFunctions {
 	
 	/**
 	 * function replace(newURL) - method replaces the current document with a new one
-	 * @param newURL
+	 * @param newUrl
 	 * @memberOf Location
 	 */
-	public void replace(JSString arg);
+	public void replace(JSString newUrl);
 	
 }

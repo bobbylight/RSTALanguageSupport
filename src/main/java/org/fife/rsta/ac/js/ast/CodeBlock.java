@@ -10,6 +10,8 @@
  */
 package org.fife.rsta.ac.js.ast;
 
+import org.fife.rsta.ac.common.VariableDeclaration;
+
 import java.util.ArrayList;
 import java.util.List;
 

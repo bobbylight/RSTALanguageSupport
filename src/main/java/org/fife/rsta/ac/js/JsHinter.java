@@ -378,8 +378,8 @@ class JsHinter {
 	 */
 	private enum MarkStrategy {
 		MARK_LINE, MARK_CUR_TOKEN, MARK_PREV_TOKEN, MARK_PREV_NON_WS_TOKEN,
-		IGNORE, STOP_PARSING;
-	}
+		IGNORE, STOP_PARSING
+    }
 
 
 }

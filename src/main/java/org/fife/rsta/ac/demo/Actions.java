@@ -34,7 +34,7 @@ interface Actions {
 	/**
 	 * Displays an "About" dialog.
 	 */
-	static class AboutAction extends AbstractAction {
+	class AboutAction extends AbstractAction {
 
 		private DemoRootPane demo;
 
@@ -57,13 +57,13 @@ interface Actions {
 	/**
 	 * Exits the application.
 	 */
-	static class ExitAction extends AbstractAction {
+	class ExitAction extends AbstractAction {
 
 		private static final long serialVersionUID = 1L;
 
 		public ExitAction() {
 			putValue(NAME, "Exit");
-			putValue(MNEMONIC_KEY, new Integer('x'));
+			putValue(MNEMONIC_KEY, (int)'x');
 		}
 
 		@Override
@@ -77,7 +77,7 @@ interface Actions {
 	/**
 	 * Lets the user open a file.
 	 */
-	static class OpenAction extends AbstractAction {
+	class OpenAction extends AbstractAction {
 
 		private static final long serialVersionUID = 1L;
 
@@ -87,7 +87,7 @@ interface Actions {
 		public OpenAction(DemoRootPane demo) {
 			this.demo = demo;
 			putValue(NAME, "Open...");
-			putValue(MNEMONIC_KEY, new Integer('O'));
+			putValue(MNEMONIC_KEY, 'O');
 			int mods = demo.getToolkit().getMenuShortcutKeyMask();
 			KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_O, mods);
 			putValue(ACCELERATOR_KEY, ks);
@@ -112,7 +112,7 @@ interface Actions {
 	/**
 	 * Changes the look and feel of the demo application.
 	 */
-	static class LookAndFeelAction extends AbstractAction {
+	class LookAndFeelAction extends AbstractAction {
 
 		private LookAndFeelInfo info;
 		private DemoRootPane demo;
@@ -141,7 +141,7 @@ interface Actions {
 	 * Changes the language being edited and installs appropriate language
 	 * support.
 	 */
-	static class StyleAction extends AbstractAction {
+	class StyleAction extends AbstractAction {
 
 		private DemoRootPane demo;
 		private String res;
@@ -163,7 +163,7 @@ interface Actions {
 	}
 
 
-	static class ToggleLayeredHighlightsAction extends AbstractAction {
+	class ToggleLayeredHighlightsAction extends AbstractAction {
 
 		private DemoRootPane demo;
 

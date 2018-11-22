@@ -13,9 +13,9 @@ public abstract class Location implements LocationFunctions {
 	  * @constructor
 	  * @since Common Usage, no standard
 	 */
-	public Location(){};
-	
-	/**
+	public Location(){}
+
+    /**
      * <b>property constructor</b>
      * 
      * @type Function

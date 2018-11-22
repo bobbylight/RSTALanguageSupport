@@ -94,8 +94,8 @@ public class TypeDeclarationFactory {
 	
 	/**
 	 * Returns whether the qualified name is a built in JavaScript type
-	 * @param name
-	 * @return
+	 * @param td The type declaration to check.
+	 * @return Whether it is a built-in JS type.
 	 */
 	public boolean isJavaScriptType(TypeDeclaration td)
 	{

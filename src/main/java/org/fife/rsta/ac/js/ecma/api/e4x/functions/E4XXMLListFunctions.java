@@ -19,7 +19,7 @@ public interface E4XXMLListFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.functions.E4XXMLFunctions#attribute(JSString) XML.attribute();
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXMLList attribute(JSString attributeName);
+	E4XXMLList attribute(JSString attributeName);
 	
 	/**
 	 * <b>function attributes()</b> calls the attributes() method of each XML object in this XMLList object and returns an XMLList containing the results in order.
@@ -29,7 +29,7 @@ public interface E4XXMLListFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.functions.E4XXMLFunctions#attributes() XML.attributes();
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXMLList attributes();
+	E4XXMLList attributes();
 	
 	/**
 	 * <b>function child(propertyName)</b> calls the child() method of each XML object in this XMLList object and returns an XMLList containing the results in order.
@@ -40,7 +40,7 @@ public interface E4XXMLListFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.functions.E4XXMLFunctions#child(JSString) XML.child();
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXMLList child(JSString propertyName);
+	E4XXMLList child(JSString propertyName);
 	
 	/**
 	 * <b>function children()</b> calls the children() method of each XML object in this XMLList object and returns an XMLList containing the results concatenated in order.
@@ -59,7 +59,7 @@ public interface E4XXMLListFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.functions.E4XXMLFunctions#children() XML.children();
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXMLList children();
+	E4XXMLList children();
 	
 	/**
 	 * <b>function comments()</b> calls the comments method of each XML object in this XMLList object and returns an XMLList containing the results concatenated in order.
@@ -69,7 +69,7 @@ public interface E4XXMLListFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.functions.E4XXMLFunctions#comments() XML.comments();
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXMLList comments();
+	E4XXMLList comments();
 	
 	/**
 	 * <b>function contains(value)</b> returns a boolean value indicating whether this XMLList object contains an XML object that compares equal to the given <b><i>value</i></b>.
@@ -79,7 +79,7 @@ public interface E4XXMLListFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXMLList XMLList
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public JSBoolean contains(E4XXML value);
+	JSBoolean contains(E4XXML value);
 	
 	/**
 	 * <b>function copy()</b> returns a deep copy of the XMLList object.
@@ -88,7 +88,7 @@ public interface E4XXMLListFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXMLList XMLList
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public JSBoolean copy();
+	JSBoolean copy();
 	
 	/**
 	 * <b>function descendants(name)</b> calls the descendants method of each XML object in this XMLList object with the optional parameter name (or the string "*" if name is omitted) and returns an XMLList containing the results concatenated in order.
@@ -99,7 +99,7 @@ public interface E4XXMLListFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.functions.E4XXMLFunctions#descendants(JSString) XML.descendants();
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXMLList descendants(JSString name);
+	E4XXMLList descendants(JSString name);
 	
 	/**
 	 * <b>function elements(name)</b> calls the elements method of each XML object in this XMLList object passing the optional parameter name (or "*" if it is omitted) and returns an XMList containing the results in order.
@@ -110,7 +110,7 @@ public interface E4XXMLListFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.functions.E4XXMLFunctions#elements(JSString) XML.elements();
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXMLList elements(JSString name);
+	E4XXMLList elements(JSString name);
 	
 	/**
 	 * <b>function hasComplexContent()</b> returns a Boolean value indicating whether this XMLList object contains complex content. An XMLList object is considered to contain complex content if it is not empty, contains a single XML item with complex content or contains elements.
@@ -119,7 +119,7 @@ public interface E4XXMLListFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXMLList XMLList
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public JSBoolean hasComplexContent();
+	JSBoolean hasComplexContent();
 	
 	/**
 	 * <b>function hasSimpleContent()</b> returns a Boolean value indicating whether this XMLList contains simple content. An XMLList object is considered to contain simple content if it is empty, contains a single XML item with simple content or contains no elements.
@@ -128,14 +128,14 @@ public interface E4XXMLListFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXMLList XMLList
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public JSBoolean hasSimpleContent();
+	JSBoolean hasSimpleContent();
 	
 	/**
 	 * <b>function length()</b> returns the number of properties in this XMLList object.
 	 * <p>
      * <strong>Example</strong>
 	 * <pre>
-	 * for (var i = 0; i < e..name.length(); i++) {
+	 * for (var i = 0; i &lt; e..name.length(); i++) {
 	 *   print("Employee name:" + e..name[i]);
 	 * }
 	 * </pre> 
@@ -144,7 +144,7 @@ public interface E4XXMLListFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXMLList XMLList
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public JSNumber length();
+	JSNumber length();
 	
 	/**
 	 * <b>function normalize()</b> puts all text nodes in this XMLList, all the XML objects it contains and the descendents of all the XML objects it contains into a normal form by merging adjacent text nodes and eliminating empty text nodes.
@@ -153,7 +153,7 @@ public interface E4XXMLListFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXMLList XMLList
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXMLList normalize();
+	E4XXMLList normalize();
 	
 	/**
 	 * <b>function parent()</b> If all items in this XMLList object have the same parent, it is returned. Otherwise, the parent method returns <b><i>undefined</i></b>.
@@ -162,7 +162,7 @@ public interface E4XXMLListFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXMLList XMLList
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXML parent();
+	E4XXML parent();
 	
 	/**
 	 * <b>function processingInstructions(name)</b> calls the processingInstructions method of each XML object in this XMLList object passing the optional parameter name (or "*" if it is omitted) and returns an XMList containing the results in order.
@@ -173,7 +173,7 @@ public interface E4XXMLListFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.functions.E4XXMLFunctions#processingInstructions(JSString) XML.processingInstructions();
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXMLList processingInstructions(JSString name);
+	E4XXMLList processingInstructions(JSString name);
 	
 	/**
 	 * <b>function text()</b> calls the text method of each XML object contained in this XMLList object and returns an XMLList containing the results concatenated in order.
@@ -183,7 +183,7 @@ public interface E4XXMLListFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.functions.E4XXMLFunctions#text() XML.text();
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXMLList text();
+	E4XXMLList text();
 	
 	/**
 	 * <b>function toXMLString()</b> returns the toXMLString() method returns an XML encoded string representation of this XML object. Unlike the toString method, toXMLString provides no special treatment for XML objects that contain only XML text nodes (i.e., primitive values). The toXMLString method always includes the start tag, attributes and end tag of the XML object regardless of its content. It is provided for cases when the default XML to string conversion rules are not desired.
@@ -192,5 +192,5 @@ public interface E4XXMLListFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXMLList XMLList
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public JSString toXMLString();
+	JSString toXMLString();
 }

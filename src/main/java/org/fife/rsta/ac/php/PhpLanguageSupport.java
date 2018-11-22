@@ -61,7 +61,7 @@ public class PhpLanguageSupport extends AbstractMarkupLanguageSupport {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected ListCellRenderer createDefaultCompletionCellRenderer() {
+	protected ListCellRenderer<Object> createDefaultCompletionCellRenderer() {
 		return new HtmlCellRenderer();
 	}
 

@@ -148,7 +148,6 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	 *
 	 * @return The <code>.jshintrc</code> file, or <code>null</code> if none;
 	 *         in that case, the JsHint defaults will be used.
-	 * @see #setJsHintRCFile(File)
 	 * @see #setErrorParser(JsErrorParser)
 	 */
 	public File getDefaultJsHintRCFile() {
@@ -314,7 +313,7 @@ return DEFAULT;
 		InputMap im = textArea.getInputMap();
 		ActionMap am = textArea.getActionMap();
 		int c = textArea.getToolkit().getMenuShortcutKeyMask();
-		int shift = InputEvent.SHIFT_MASK;
+		int shift = InputEvent.SHIFT_DOWN_MASK;
 
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_O, c | shift), "GoToType");
 		am.put("GoToType", new GoToMemberAction(JavaScriptOutlineTree.class));
@@ -372,7 +371,7 @@ return DEFAULT;
      * {@link JsErrorParser#RHINO}.
      *
      * @param client True if client mode is supported.
-     * @return {@link #isClient()}
+     * @see #isClient()
      */
 	public void setClient(boolean client) {
 		this.client = client;
@@ -514,7 +513,7 @@ return DEFAULT;
 		InputMap im = textArea.getInputMap();
 		ActionMap am = textArea.getActionMap();
 		int c = textArea.getToolkit().getMenuShortcutKeyMask();
-		int shift = InputEvent.SHIFT_MASK;
+		int shift = InputEvent.SHIFT_DOWN_MASK;
 
 		im.remove(KeyStroke.getKeyStroke(KeyEvent.VK_O, c | shift));
 		am.remove("GoToType");

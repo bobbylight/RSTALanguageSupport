@@ -23,31 +23,31 @@ import org.fife.rsta.ac.java.rjc.lang.Type;
 public interface Member extends ASTNode {
 
 
-	public String getDocComment();
+	String getDocComment();
 
 
 	@Override
-	public int getNameEndOffset();
+	int getNameEndOffset();
 
 
 	@Override
-	public int getNameStartOffset();
+	int getNameStartOffset();
 
 
-	public Modifiers getModifiers();
+	Modifiers getModifiers();
 
 
 	@Override
-	public String getName();
+	String getName();
 
 
-	public TypeDeclaration getParentTypeDeclaration();
+	TypeDeclaration getParentTypeDeclaration();
 
 
-	public Type getType();
+	Type getType();
 
 
-	public boolean isDeprecated();
+	boolean isDeprecated();
 
 
 	/**
@@ -57,10 +57,10 @@ public interface Member extends ASTNode {
 	 * @return Whether this member is static.
 	 * @see #getModifiers()
 	 */
-	public boolean isStatic();
+	boolean isStatic();
 
 
-	public void setParentTypeDeclaration(TypeDeclaration dec);
+	void setParentTypeDeclaration(TypeDeclaration dec);
 
 
 }

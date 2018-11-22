@@ -74,8 +74,8 @@ class TypeDeclarationTreeNode extends JavaTreeNode {
 					iconName = IconFactory.ENUM_ICON;
 				}
 				else if (ed.getModifiers().isProtected()) {
-					iconName = IconFactory.ENUM_PROTECTED_ICON;;
-				}
+					iconName = IconFactory.ENUM_PROTECTED_ICON;
+                }
 				else if (ed.getModifiers().isPrivate()) {
 					iconName = IconFactory.ENUM_PRIVATE_ICON;
 				}

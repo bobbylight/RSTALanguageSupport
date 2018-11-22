@@ -30,10 +30,10 @@ import org.mozilla.javascript.ast.PropertyGet;
 
 /**
  * Compiles the entered text using Rhino and tries to resolve the JavaScriptType
- * from the AstRoot e.g var a = ""; "" --> String JavaScriptType var b =
- * a.toString() a.toString --> String JavaScriptType
+ * from the AstRoot e.g var a = ""; "" --&gt; String JavaScriptType var b =
+ * a.toString() a.toString --&gt; String JavaScriptType
  * 
- * etc..
+ * etc.
  * 
  * Note, will resolve any type added to JavaScriptTypesFactory
  * 
@@ -80,7 +80,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 
 	/**
 	 * Resolve node type to TypeDeclaration. Called instead of #compileText(String text) when document is already parsed
-	 * @param node AstNode to resolve
+	 * @param text The node to resolve
 	 * @return TypeDeclaration for node or null if not found.
 	 */
 	@Override

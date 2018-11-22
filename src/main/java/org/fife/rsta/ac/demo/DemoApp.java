@@ -33,7 +33,7 @@ public class DemoApp extends JFrame {
 
 	/**
 	 * Called when we are made visible.  Here we request that the
-	 * {@link RSyntaxTextArea} is given focus.
+	 * {@code RSyntaxTextArea} is given focus.
 	 *
 	 * @param visible Whether this frame should be visible.
 	 */
@@ -47,19 +47,16 @@ public class DemoApp extends JFrame {
 
 
 	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					UIManager.setLookAndFeel(UIManager.
-											getSystemLookAndFeelClassName());
-//UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
-				} catch (Exception e) {
-					e.printStackTrace(); // Never happens
-				}
-				Toolkit.getDefaultToolkit().setDynamicLayout(true);
-				new DemoApp().setVisible(true);
+		SwingUtilities.invokeLater(() -> {
+			try {
+				UIManager.setLookAndFeel(UIManager.
+										getSystemLookAndFeelClassName());
+				//UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+			} catch (Exception e) {
+				e.printStackTrace(); // Never happens
 			}
+			Toolkit.getDefaultToolkit().setDynamicLayout(true);
+			new DemoApp().setVisible(true);
 		});
 	}
 

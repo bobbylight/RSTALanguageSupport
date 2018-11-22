@@ -11,5 +11,5 @@ public interface NavigatorFunctions extends JS5ObjectFunctions {
 	 * @returns true if java is enabled
 	 * @memberOf Navigator
 	 */
-	public JSBoolean javaEnabled();
+	JSBoolean javaEnabled();
 }

@@ -13,6 +13,7 @@ package org.fife.rsta.ac.java.buildpath;
 import java.io.File;
 import java.io.IOException;
 
+import org.fife.rsta.ac.java.JarManager;
 import org.fife.rsta.ac.java.PackageMapNode;
 import org.fife.rsta.ac.java.classreader.ClassFile;
 

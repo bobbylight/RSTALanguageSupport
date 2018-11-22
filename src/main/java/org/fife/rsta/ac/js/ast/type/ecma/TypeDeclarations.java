@@ -166,7 +166,7 @@ public abstract class TypeDeclarations {
 	 * Add Javascript reverse lookup
 	 * 
 	 * @param apiName Java API name
-	 * @param jsName Javascript name e.g java.lang.String --> String
+	 * @param jsName Javascript name
 	 */
 	public void addJavaScriptLookup(String apiName, String jsName) {
 		javascriptReverseLookup.put(apiName, jsName);
@@ -187,7 +187,7 @@ public abstract class TypeDeclarations {
 	/**
 	 * Returns whether the qualified name is a built in JavaScript type
 	 * 
-	 * @param name
+	 * @param td
 	 * @return
 	 */
 	public boolean isJavaScriptType(TypeDeclaration td) {

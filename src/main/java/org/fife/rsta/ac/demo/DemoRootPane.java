@@ -17,6 +17,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 import javax.swing.Action;
 import javax.swing.ButtonGroup;
@@ -93,12 +94,7 @@ try {
 
 		final JSplitPane sp = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 										treeSP, scrollPane);
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				sp.setDividerLocation(0.25);
-			}
-		});
+		SwingUtilities.invokeLater(() -> sp.setDividerLocation(0.25));
 		sp.setContinuousLayout(true);
 //		setContentPane(sp);
 
@@ -297,7 +293,7 @@ setContentPane(cp);
 		try {
 
 			r = new BufferedReader(new InputStreamReader(
-					cl.getResourceAsStream("examples/" + resource), "UTF-8"));
+					cl.getResourceAsStream("examples/" + resource), StandardCharsets.UTF_8));
 			textArea.read(r, null);
 			r.close();
 			textArea.setCaretPosition(0);

@@ -177,7 +177,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		InputMap im = textArea.getInputMap();
 		ActionMap am = textArea.getActionMap();
 		int c = textArea.getToolkit().getMenuShortcutKeyMask();
-		int shift = InputEvent.SHIFT_MASK;
+		int shift = InputEvent.SHIFT_DOWN_MASK;
 
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_O, c|shift), "GoToType");
 		am.put("GoToType", new GoToMemberAction(JavaOutlineTree.class));
@@ -225,7 +225,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		InputMap im = textArea.getInputMap();
 		ActionMap am = textArea.getActionMap();
 		int c = textArea.getToolkit().getMenuShortcutKeyMask();
-		int shift = InputEvent.SHIFT_MASK;
+		int shift = InputEvent.SHIFT_DOWN_MASK;
 
 		im.remove(KeyStroke.getKeyStroke(KeyEvent.VK_O, c|shift));
 		am.remove("GoToType");
@@ -357,7 +357,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		 * Thanks to Guilherme Joao Frantz and Jonatas Schuler for helping
 		 * with the patch!
 		 *
-		 * @param c The completion being inserted.
+		 * @param cc The completion being inserted.
 		 * @return Whether an import was added.
 		 */
 		private ImportToAddInfo getShouldAddImport(ClassCompletion cc) {

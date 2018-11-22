@@ -16,12 +16,12 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	
 	/**
 	 * <b>function addNamespace(namespace)</b> adds a namespace declaration to the in scope namespaces for this XML object and returns this XML object.
-	 * @param name The namespace to be added. 
+	 * @param namespace The namespace to be added.
 	 * @memberOf XML
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public void addNamespace(E4XNamespace namespace);
+	void addNamespace(E4XNamespace namespace);
 	
 	/**
 	 * <b>function appendChild(xml)</b> appends the given child to the end of this XML object's properties and returns this XML object.
@@ -41,7 +41,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXML appendChild(E4XXML xml);
+	E4XXML appendChild(E4XXML xml);
 	
 	/**
 	 * <b>function attribute(attributeName)</b> finds list of XML attributes associated with the attribute name.
@@ -57,7 +57,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXMLList attribute(JSString attributeName);
+	E4XXMLList attribute(JSString attributeName);
 	
 	/**
 	 * <b>function attributes()</b> list of XML attributes associated with an XML object.
@@ -76,7 +76,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXMLList attributes();
+	E4XXMLList attributes();
 	
 	
 	/**
@@ -93,7 +93,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXMLList child(JSString propertyName);
+	E4XXMLList child(JSString propertyName);
 	
 	/**
 	 * <b>function child(propertyName)</b> finds list of XML object matching a given <b><i>propertyName</i></b>.
@@ -109,7 +109,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXMLList child(JSNumber propertyName);
+	E4XXMLList child(JSNumber propertyName);
 	
 	/**
 	 * <b>function childIndex()</b> returns the index position of the XML element.
@@ -124,7 +124,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public JSNumber childIndex();
+	JSNumber childIndex();
 	
 	/**
 	 * <b>function children()</b> returns list of children for the XML element.
@@ -140,7 +140,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXMLList children();
+	E4XXMLList children();
 	
 	/**
 	 * <b>function comments()</b> returns list of comments for the XML element.
@@ -149,7 +149,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXMLList comments();
+	E4XXMLList comments();
 	
 	/**
 	 * <b>function contains(value)</b> returns the result of comparing this XML object with the given value.
@@ -159,7 +159,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public JSBoolean contains(E4XXML value);
+	JSBoolean contains(E4XXML value);
 	
 	/**
 	 * <b>function contains(value)</b> returns the result of comparing this XML object with the given value.
@@ -169,7 +169,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public JSBoolean contains(E4XXMLList value);
+	JSBoolean contains(E4XXMLList value);
 	
 	/**
 	 * <b>function copy()</b> returns a deep copy of the XML object.
@@ -178,7 +178,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public JSBoolean copy();
+	JSBoolean copy();
 	
 	/**
 	 * <b>function descendants(name)</b> returns all the XML valued descendants (children, grandchildren, great-grandchildren, etc.)
@@ -188,7 +188,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXMLList descendants(JSString name);
+	E4XXMLList descendants(JSString name);
 	
 	/**
 	 * <b>function elements(name)</b> returns the child elements.
@@ -198,7 +198,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXMLList elements(JSString name);
+	E4XXMLList elements(JSString name);
 	
 	/**
 	 * <b>function hasComplexContent()</b> a Boolean value indicating whether this XML object contains complex content.
@@ -207,7 +207,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public JSBoolean hasComplexContent();
+	JSBoolean hasComplexContent();
 	
 	/**
 	 * <b>function hasSimpleContent()</b> a Boolean value indicating whether this XML object contains simple content.
@@ -216,7 +216,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public JSBoolean hasSimpleContent();
+	JSBoolean hasSimpleContent();
 	
 	/**
 	 * <b>function inScopeNamespaces()</b> returns an array of Namespace objects representing the namespaces in scope for this object.
@@ -225,7 +225,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public JSArray inScopeNamespaces();
+	JSArray inScopeNamespaces();
 	
 	/**
 	 * <b>function insertChildAfter( child1 , child2)</b> inserts the given <b></i>child2</b></i> after the given </b></i>child1</b></i> in this XML object and returns this XML object. If </b></i>child1</b></i> is <b><i>null</i></b>, the insertChildAfter method inserts <b></i>child2</b></i> before all children of this XML object (i.e., after none of them). If </b></i>child1</b></i> does not exist in this XML object, it returns without modifying this XML object.
@@ -234,7 +234,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXML insertChildAfter ( E4XXML child1 , E4XXML child2);
+	E4XXML insertChildAfter ( E4XXML child1 , E4XXML child2);
 	
 	/**
 	 * <b>function insertChildBefore( child1 , child2)</b> inserts the given <b></i>child2</b></i> before the given </b></i>child1</b></i> in this XML object and returns this XML object. If </b></i>child1</b></i> is null, the insertChildBefore method inserts <b></i>child2</b></i> after all children in this XML object (i.e., before none of them). If </b></i>child1</b></i> does not exist in this XML object, it returns without modifying this XML object.
@@ -243,7 +243,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXML insertChildBefore ( E4XXML child1 , E4XXML child2);
+	E4XXML insertChildBefore ( E4XXML child1 , E4XXML child2);
 	
 	/**
 	 * <b>function length()</b> the length method always returns the integer 1 for XML objects.
@@ -252,7 +252,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public JSNumber length();
+	JSNumber length();
 	
 	/**
 	 * <b>function localName()</b> returns the localName part of the XML object.
@@ -261,7 +261,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public JSNumber localName();
+	JSNumber localName();
 	
 	/**
 	 * <b>function name()</b> returns qualified name for the XML object.
@@ -270,7 +270,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XQName name();
+	E4XQName name();
 	
 	/**
 	 * <b>function namespace(prefix)</b> returns the namespace associated with this object.
@@ -280,7 +280,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XNamespace namespace(JSString prefix);
+	E4XNamespace namespace(JSString prefix);
 	
 	/**
 	 * <b>function namespaceDeclarations()</b> returns a string representing the kind of object this is (e.g. "element").
@@ -289,7 +289,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public JSArray namespaceDeclarations();
+	JSArray namespaceDeclarations();
 	
 	/**
 	 * <b>function nodeKind()</b> return an array of Namespace objects representing the namespace declarations associated with this object.
@@ -298,7 +298,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public JSString nodeKind();
+	JSString nodeKind();
 	
 	/**
 	 * <b>function normalize()</b> puts all text nodes in this and all descendant XML objects into a normal form by merging adjacent text nodes and eliminating empty text nodes.
@@ -307,7 +307,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXML normalize();
+	E4XXML normalize();
 	
 	/**
 	 * <b>function parent()</b> returns the parent of this XML object.
@@ -322,7 +322,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXML parent();
+	E4XXML parent();
 	
 	/**
 	 * <b>function processingInstructions(name)</b> A list of all processing instructions that are children of this element.
@@ -332,7 +332,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXMLList processingInstructions(JSString name);
+	E4XXMLList processingInstructions(JSString name);
 	
 	/**
 	 * <b>function prependChild(value)</b> adds a new child to an element, prior to all other children.
@@ -347,7 +347,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXML prependChild(E4XXML value);
+	E4XXML prependChild(E4XXML value);
 	
 	/**
 	 * <b>function removeNamespace(namespace)</b> removes a namespace from the in-scope namespaces of the element.
@@ -357,7 +357,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXML removeNamespace(E4XNamespace namespace);
+	E4XXML removeNamespace(E4XNamespace namespace);
 	
 	/**
 	 * <b>function replace(propertyName, value)</b> replaces the XML properties of this XML object specified by propertyName with value and returns this XML object. If this XML object contains no properties that match propertyName, the replace method returns without modifying this XML object. The propertyName parameter may be a numeric property name, an unqualified name for a set of XML elements, a qualified name for a set of XML elements or the properties wildcard "*". When the propertyName parameter is an unqualified name, it identifies XML elements in the default namespace. The value parameter may be an XML object, XMLList object or any value that may be converted to a String with ToString().
@@ -376,7 +376,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXML replace(JSString propertyName, JSObject value);
+	E4XXML replace(JSString propertyName, JSObject value);
 	
 	/**
 	 * <b>function replace(propertyName, value)</b> replaces the XML properties of this XML object specified by propertyName with value and returns this XML object. If this XML object contains no properties that match propertyName, the replace method returns without modifying this XML object. The propertyName parameter may be a numeric property name, an unqualified name for a set of XML elements, a qualified name for a set of XML elements or the properties wildcard "*". When the propertyName parameter is an unqualified name, it identifies XML elements in the default namespace. The value parameter may be an XML object, XMLList object or any value that may be converted to a String with ToString().
@@ -395,7 +395,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXML replace(JSNumber propertyName, JSObject value);
+	E4XXML replace(JSNumber propertyName, JSObject value);
 	
 	/**
 	 * <b>function setChildren(value)</b> replaces the XML properties of this XML object with a new set of XML properties from value. value may be a single XML object or an XMLList. setChildren returns this XML object.
@@ -412,7 +412,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXML setChildren(E4XXML value);
+	E4XXML setChildren(E4XXML value);
 	
 	/**
 	 * <b>function setChildren(value)</b> replaces the XML properties of this XML object with a new set of XML properties from value. value may be a single XML object or an XMLList. setChildren returns this XML object.
@@ -429,7 +429,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXML setChildren(E4XXMLList value);
+	E4XXML setChildren(E4XXMLList value);
 	
 	/**
 	 * <b>function setLocalName(name)</b> replaces the local name of this XML object with a string constructed from the given <b><i>name</i></b>.
@@ -438,7 +438,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public void setLocalName(JSString name);
+	void setLocalName(JSString name);
 	
 	/**
 	 * <b>function setName(name)</b> sets the name of the XML object to the requested value (possibly qualified).
@@ -447,7 +447,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public void setName(E4XQName name);
+	void setName(E4XQName name);
 	
 	/**
 	 * <b>function setNamespace(namespace)</b> sets the namespace of the XML object to the requested value.
@@ -456,7 +456,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public void setNamespace(E4XNamespace namespace);
+	void setNamespace(E4XNamespace namespace);
 	
 	/**
 	 * <b>function text()</b> returns an XMLList containing all XML properties of this XML object that represent XML text nodes.
@@ -465,7 +465,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public E4XXMLList text();
+	E4XXMLList text();
 	
 	/**
 	 * <b>function toXMLString()</b> returns the toXMLString() method returns an XML encoded string representation of this XML object. Unlike the toString method, toXMLString provides no special treatment for XML objects that contain only XML text nodes (i.e., primitive values). The toXMLString method always includes the start tag, attributes and end tag of the XML object regardless of its content. It is provided for cases when the default XML to string conversion rules are not desired.
@@ -474,5 +474,5 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	public JSString toXMLString();
+	JSString toXMLString();
 }

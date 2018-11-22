@@ -202,8 +202,7 @@ public class VariableResolver {
 	 * Resolve the entered text by chopping up the text and working from left to
 	 * right, resolving each type in turn
 	 * 
-	 * @param entered
-	 * @param provider
+	 * @param varName
 	 * @param dot
 	 * @return TypeDeclaration for variable name
 	 */

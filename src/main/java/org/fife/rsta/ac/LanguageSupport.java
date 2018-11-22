@@ -27,7 +27,7 @@ public interface LanguageSupport {
 //	 * Client property set on <code>RSyntaxTextArea</code>s referencing the
 //	 * <code>AutoCompletion</code> instance providing its completion choices.
 //	 */
-//	public static final String PROPERTY_AUTO_COMPLETION	=
+//	static final String PROPERTY_AUTO_COMPLETION	=
 //										"org.fife.rsta.ac.AutoCompletion";
 
 	/**
@@ -35,7 +35,7 @@ public interface LanguageSupport {
 	 * <code>Parser</code> instance parsing its source code.  This will be
 	 * <code>null</code> if a language support does not install such a parser.
 	 */
-	public static final String PROPERTY_LANGUAGE_PARSER =
+	String PROPERTY_LANGUAGE_PARSER =
 		"org.fife.rsta.ac.LanguageSupport.LanguageParser";
 
 
@@ -48,7 +48,7 @@ public interface LanguageSupport {
 	 * @return The delay, in milliseconds.
 	 * @see #setAutoActivationDelay(int)
 	 */
-	public int getAutoActivationDelay();
+	int getAutoActivationDelay();
 
 
 	/**
@@ -58,7 +58,7 @@ public interface LanguageSupport {
 	 * @return The renderer.  This will never be <code>null</code>.
 	 * @see #setDefaultCompletionCellRenderer(ListCellRenderer)
 	 */
-	public ListCellRenderer getDefaultCompletionCellRenderer();
+	ListCellRenderer<Object> getDefaultCompletionCellRenderer();
 
 
 	/**
@@ -68,7 +68,7 @@ public interface LanguageSupport {
 	 * @return Whether the description window is shown.
 	 * @see #setShowDescWindow(boolean)
 	 */
-	public boolean getShowDescWindow();
+	boolean getShowDescWindow();
 
 
 	/**
@@ -82,7 +82,7 @@ public interface LanguageSupport {
 	 * @see #getAutoActivationDelay()
 	 * @see #isAutoCompleteEnabled()
 	 */
-	public boolean isAutoActivationEnabled();
+	boolean isAutoActivationEnabled();
 
 
 	/**
@@ -93,7 +93,7 @@ public interface LanguageSupport {
 	 * @return Whether auto-completion is enabled.
 	 * @see #setAutoCompleteEnabled(boolean)
 	 */
-	public boolean isAutoCompleteEnabled();
+	boolean isAutoCompleteEnabled();
 
 
 	/**
@@ -102,7 +102,7 @@ public interface LanguageSupport {
 	 * @param textArea The text area to install onto.
 	 * @see #uninstall(RSyntaxTextArea)
 	 */
-	public void install(RSyntaxTextArea textArea);
+	void install(RSyntaxTextArea textArea);
 
 
 	/**
@@ -114,7 +114,7 @@ public interface LanguageSupport {
 	 *         language.
 	 * @see #setParameterAssistanceEnabled(boolean)
 	 */
-	public boolean isParameterAssistanceEnabled();
+	boolean isParameterAssistanceEnabled();
 
 
 	/**
@@ -126,7 +126,7 @@ public interface LanguageSupport {
 	 * @param ms The delay, in milliseconds.  This should be greater than zero.
 	 * @see #getAutoActivationDelay()
 	 */
-	public void setAutoActivationDelay(int ms);
+	void setAutoActivationDelay(int ms);
 
 
 	/**
@@ -137,7 +137,7 @@ public interface LanguageSupport {
 	 * @see #isAutoActivationEnabled()
 	 * @see #setAutoActivationDelay(int)
 	 */
-	public void setAutoActivationEnabled(boolean enabled);
+	void setAutoActivationEnabled(boolean enabled);
 
 
 	/**
@@ -148,7 +148,7 @@ public interface LanguageSupport {
 	 * @param enabled Whether auto-completion should be enabled.
 	 * @see #isAutoCompleteEnabled()
 	 */
-	public void setAutoCompleteEnabled(boolean enabled);
+	void setAutoCompleteEnabled(boolean enabled);
 
 
 	/**
@@ -160,7 +160,7 @@ public interface LanguageSupport {
 	 *        be used.
 	 * @see #getDefaultCompletionCellRenderer()
 	 */
-	public void setDefaultCompletionCellRenderer(ListCellRenderer r);
+	void setDefaultCompletionCellRenderer(ListCellRenderer<Object> r);
 
 
 	/**
@@ -170,7 +170,7 @@ public interface LanguageSupport {
 	 * @param enabled Whether parameter assistance is enabled.
 	 * @see #isParameterAssistanceEnabled()
 	 */
-	public void setParameterAssistanceEnabled(boolean enabled);
+	void setParameterAssistanceEnabled(boolean enabled);
 
 
 	/**
@@ -180,7 +180,7 @@ public interface LanguageSupport {
 	 * @param show Whether to show the description window.
 	 * @see #getShowDescWindow()
 	 */
-	public void setShowDescWindow(boolean show);
+	void setShowDescWindow(boolean show);
 
 
 	/**
@@ -189,7 +189,7 @@ public interface LanguageSupport {
 	 * @param textArea The text area to uninstall from.
 	 * @see #install(RSyntaxTextArea)
 	 */
-	public void uninstall(RSyntaxTextArea textArea);
+	void uninstall(RSyntaxTextArea textArea);
 
 
 }

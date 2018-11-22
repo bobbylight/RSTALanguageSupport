@@ -14,6 +14,7 @@ import java.io.*;
 import java.util.*;
 
 import org.fife.rsta.ac.java.classreader.attributes.*;
+import org.fife.rsta.ac.java.classreader.constantpool.ConstantUtf8Info;
 
 
 /**

@@ -342,10 +342,8 @@ public abstract class JavaScriptTypesFactory {
 	 * Populate Completions for types... included extended classes. TODO
 	 * optimise this.
 	 * 
-	 * @param completionsMap
+	 * @param cachedType
 	 * @param completions
-	 * @param type
-	 * @param manager
 	 */
 	public void populateCompletionsForType(JavaScriptType cachedType,
 			Set<Completion> completions) {

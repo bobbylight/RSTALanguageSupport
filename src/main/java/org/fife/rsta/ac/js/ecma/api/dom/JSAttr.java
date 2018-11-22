@@ -22,7 +22,6 @@ public abstract class JSAttr implements Attr, JS5ObjectFunctions {
 	 * @constructor
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
-	 * @see Node
 	 */
 	public JSAttr() {
 
