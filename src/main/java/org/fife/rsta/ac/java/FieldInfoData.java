@@ -96,7 +96,7 @@ class FieldInfoData implements Data {
 	@Override
 	public String getSummary() {
 
-		ClassFile cf = info.getClassFile();;
+		ClassFile cf = info.getClassFile();
 		SourceLocation loc = provider.getSourceLocForClass(cf.getClassName(true));
 		String summary = null;
 

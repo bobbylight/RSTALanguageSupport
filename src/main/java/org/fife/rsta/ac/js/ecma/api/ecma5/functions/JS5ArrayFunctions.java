@@ -8,7 +8,6 @@ import org.fife.rsta.ac.js.ecma.api.ecma5.JS5Function;
 import org.fife.rsta.ac.js.ecma.api.ecma5.JS5Object;
 
 
-
 public interface JS5ArrayFunctions extends JS5ObjectFunctions, JSArrayFunctions {
 	
 	/**
@@ -30,7 +29,7 @@ public interface JS5ArrayFunctions extends JS5ObjectFunctions, JSArrayFunctions 
 	 * @see #some(JS5Function, JS5Object) some()
 	 * @since Standard ECMA-262 5th. Edition
 	 */
-	public JSBoolean every(JS5Function predicate, JS5Object o);
+	JSBoolean every(JS5Function predicate, JS5Object o);
 	
 	
 	/**
@@ -52,7 +51,7 @@ public interface JS5ArrayFunctions extends JS5ObjectFunctions, JSArrayFunctions 
 	 * @see #reduce(JS5Function, JS5Object) reduce()
 	 * @since Standard ECMA-262 5th. Edition
 	 */
-	public JS5Array filter(JS5Function predicate, JS5Object o);
+	JS5Array filter(JS5Function predicate, JS5Object o);
 	
 	
 	/**
@@ -69,7 +68,7 @@ public interface JS5ArrayFunctions extends JS5ObjectFunctions, JSArrayFunctions 
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma5.JS5Array Array
 	 * @since Standard ECMA-262 5th. Edition
 	 */
-	public void forEach(JS5Function f, JS5Object o);
+	void forEach(JS5Function f, JS5Object o);
 	
 	
 	/**
@@ -89,7 +88,7 @@ public interface JS5ArrayFunctions extends JS5ObjectFunctions, JSArrayFunctions 
 	 * @see #lastIndexOf(JS5Object, JSNumber) lastIndexOf()
 	 * @since Standard ECMA-262 5th. Edition
 	 */
-	public JSNumber indexOf(JS5Object value, JSNumber start);
+	JSNumber indexOf(JS5Object value, JSNumber start);
 	
 	
 	/**
@@ -103,7 +102,7 @@ public interface JS5ArrayFunctions extends JS5ObjectFunctions, JSArrayFunctions 
 	 * @see #indexOf(JS5Object, JSNumber) indexOf()
 	 * @since Standard ECMA-262 5th. Edition
 	 */
-	public JSNumber lastIndexOf(JS5Object value, JSNumber start);
+	JSNumber lastIndexOf(JS5Object value, JSNumber start);
 	
 	
 	/**
@@ -124,7 +123,7 @@ public interface JS5ArrayFunctions extends JS5ObjectFunctions, JSArrayFunctions 
 	 * @see #reduce(JS5Function, JS5Object) reduce()
 	 * @since Standard ECMA-262 5th. Edition
 	 */
-	public JS5Array map(JS5Function f, JS5Object o);
+	JS5Array map(JS5Function f, JS5Object o);
 	
 	/**
 	 * <b>function reduce(f, initial)</b> compute a value from the elements of an array.
@@ -143,7 +142,7 @@ public interface JS5ArrayFunctions extends JS5ObjectFunctions, JSArrayFunctions 
 	 * @see #reduceRight(JS5Function, JS5Object) reduceRight()
 	 * @since Standard ECMA-262 5th. Edition
 	 */
-	public JS5Object reduce(JS5Function f, JS5Object initial);
+	JS5Object reduce(JS5Function f, JS5Object initial);
 	
 	
 	/**
@@ -161,7 +160,7 @@ public interface JS5ArrayFunctions extends JS5ObjectFunctions, JSArrayFunctions 
 	 * @see #reduce(JS5Function, JS5Object) reduce()
 	 * @since Standard ECMA-262 5th. Edition
 	 */
-	public JS5Object reduceRight(JS5Function f, JS5Object initial);
+	JS5Object reduceRight(JS5Function f, JS5Object initial);
 	
 	
 	/**
@@ -180,5 +179,5 @@ public interface JS5ArrayFunctions extends JS5ObjectFunctions, JSArrayFunctions 
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma5.JS5Array Array
 	 * @since Standard ECMA-262 5th. Edition
 	 */
-	public JSBoolean some(JS5Function predicate, JS5Object o);
+	JSBoolean some(JS5Function predicate, JS5Object o);
 }

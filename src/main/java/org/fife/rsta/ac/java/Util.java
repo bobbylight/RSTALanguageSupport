@@ -65,9 +65,9 @@ public class Util {
 	/**
 	 * A cache of the last {@link CompilationUnit} read from some attached
 	 * source on disk.  This is cached because, in some scenarios, the method
-	 * {@link #getCompilationUnitFromDisk(File, ClassFile)} will be called for
-	 *  the same class many times in a row (such as to get method parameter
-	 *  info for all methods in a single class).
+	 * {@link #getCompilationUnitFromDisk(SourceLocation, ClassFile)} will be
+	 * called for the same class many times in a row (such as to get method
+	 * parameter info for all methods in a single class).
 	 */
 	private static CompilationUnit lastCUFromDisk;
 
@@ -82,7 +82,7 @@ public class Util {
 	}
 
 
-	private static final void appendDocCommentTail(StringBuilder sb,
+	private static void appendDocCommentTail(StringBuilder sb,
 			StringBuilder tail) {
 
 		StringBuilder params = null;
@@ -314,7 +314,7 @@ public class Util {
 	 * @param appendTo The buffer to append to.
 	 * @param linkContent The content of a "link", "linkplain" or "see" item.
 	 */
-	private static final void appendLinkTagText(StringBuilder appendTo,
+	private static void appendLinkTagText(StringBuilder appendTo,
 										String linkContent) {
 		linkContent = linkContent.trim(); // If "@link" and text on different lines
 		Matcher m = LINK_TAG_MEMBER_PATTERN.matcher(linkContent);
@@ -393,7 +393,7 @@ System.out.println("Unmatched linkContent: " + linkContent);
 	 * @param dc The documentation comment.
 	 * @return An HTML version of the comment.
 	 */
-	public static final String docCommentToHtml(String dc) {
+	public static String docCommentToHtml(String dc) {
 
 		if (dc==null) {
 			return null;
@@ -490,7 +490,7 @@ System.out.println("Unmatched linkContent: " + linkContent);
 	  }
 
 
-	private static final StringBuilder fixDocComment(StringBuilder text) {
+	private static StringBuilder fixDocComment(StringBuilder text) {
 
 		// Nothing to do.
 		int index = text.indexOf("{@");
@@ -557,7 +557,7 @@ System.out.println("Unmatched linkContent: " + linkContent);
 	 * @param text The text (a class, method, or field signature).
 	 * @return The display value for the signature.
 	 */
-	private static final String fixLinkText(String text) {
+	private static String fixLinkText(String text) {
 		if (text.startsWith("#")) { // Method in the current class
 			return text.substring(1);
 		}
@@ -631,7 +631,7 @@ System.out.println("Unmatched linkContent: " + linkContent);
 	 * @return The next location of the character, or <tt>-1</tt> if it is not
 	 *         found.
 	 */
-	private static final int indexOf(char ch, CharSequence sb, int offs) {
+	private static int indexOf(char ch, CharSequence sb, int offs) {
 		while (offs<sb.length()) {
 			if (ch==sb.charAt(offs)) {
 				return offs;
@@ -662,7 +662,7 @@ System.out.println("Unmatched linkContent: " + linkContent);
 	 * @param prevValue Whether this line started in a pre-block.
 	 * @return Whether the line ends in a pre-block.
 	 */
-	private static final boolean isInPreBlock(String line, boolean prevValue) {
+	private static boolean isInPreBlock(String line, boolean prevValue) {
 		int lastPre = line.lastIndexOf("pre>");
 		if (lastPre<=0) {
 			return prevValue;
@@ -688,7 +688,7 @@ System.out.println("Unmatched linkContent: " + linkContent);
 	 * @return The string, possibly with the documentation comment tail
 	 *         removed.
 	 */
-	private static final String possiblyStripDocCommentTail(String str) {
+	private static String possiblyStripDocCommentTail(String str) {
 		if (str.endsWith("*/")) {
 			str = str.substring(0, str.length()-2);
 		}

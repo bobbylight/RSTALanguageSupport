@@ -92,11 +92,11 @@ public class HtmlLanguageSupport extends AbstractMarkupLanguageSupport {
 	 * @param res The resource.
 	 * @return The set of tags that require closing.
 	 */
-	private static final Set<String> getTagsToClose(String res) {
+	private static Set<String> getTagsToClose(String res) {
 		Set<String> tags = new HashSet<String>();
 		InputStream in = HtmlLanguageSupport.class.getResourceAsStream(res);
 		if (in!=null) { // Never happens
-			String line = null;
+			String line;
 			try {
 				BufferedReader r = new BufferedReader(new InputStreamReader(in));
 				while ((line=r.readLine())!=null) {

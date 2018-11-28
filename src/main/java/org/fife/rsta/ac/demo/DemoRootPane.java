@@ -65,7 +65,6 @@ class DemoRootPane extends JRootPane implements HyperlinkListener,
 
 	private JScrollPane treeSP;
 	private AbstractSourceTree tree;
-	private RTextScrollPane scrollPane;
 	private RSyntaxTextArea textArea;
 
 
@@ -88,7 +87,7 @@ try {
 
 		textArea = createTextArea();
 		setText("CExample.txt", SYNTAX_STYLE_C);
-		scrollPane = new RTextScrollPane(textArea, true);
+		RTextScrollPane scrollPane = new RTextScrollPane(textArea, true);
 		scrollPane.setIconRowHeaderEnabled(true);
 		scrollPane.getGutter().setBookmarkingEnabled(true);
 
@@ -147,8 +146,8 @@ setContentPane(cp);
 		menu = new JMenu("LookAndFeel");
 		bg = new ButtonGroup();
 		LookAndFeelInfo[] infos = UIManager.getInstalledLookAndFeels();
-		for (int i=0; i<infos.length; i++) {
-			addItem(new LookAndFeelAction(this, infos[i]), bg, menu);
+		for (LookAndFeelInfo info : infos) {
+			addItem(new LookAndFeelAction(this, info), bg, menu);
 		}
 		mb.add(menu);
 
@@ -289,7 +288,7 @@ setContentPane(cp);
 		textArea.setSyntaxEditingStyle(style);
 
 		ClassLoader cl = getClass().getClassLoader();
-		BufferedReader r = null;
+		BufferedReader r;
 		try {
 
 			r = new BufferedReader(new InputStreamReader(

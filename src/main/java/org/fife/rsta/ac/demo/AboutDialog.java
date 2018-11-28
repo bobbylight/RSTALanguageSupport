@@ -18,8 +18,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.SystemColor;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -34,7 +32,6 @@ import javax.swing.Spring;
 import javax.swing.SpringLayout;
 import javax.swing.UIManager;
 import javax.swing.border.AbstractBorder;
-import javax.swing.border.Border;
 
 import org.fife.rsta.ac.java.buildpath.JarLibraryInfo;
 import org.fife.rsta.ac.java.buildpath.LibraryInfo;
@@ -49,15 +46,12 @@ import org.fife.rsta.ac.perl.PerlLanguageSupport;
  */
 public class AboutDialog extends JDialog {
 
-	private final Border empty5Border = BorderFactory.createEmptyBorder(5, 5, 5, 5);
-
 
 	public AboutDialog(DemoApp parent) {
 
 		super(parent);
 
 		JPanel cp = new JPanel(new BorderLayout());
-//		cp.setBorder(empty5Border);
 
 		Box box = Box.createVerticalBox();
 
@@ -127,14 +121,9 @@ public class AboutDialog extends JDialog {
 		cp.add(box, BorderLayout.NORTH);
 
 		JButton okButton = new JButton("OK");
-		okButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
-			}
-		});
+		okButton.addActionListener(e -> setVisible(false));
 		temp = new JPanel(new BorderLayout());
-		temp.setBorder(empty5Border);
+		temp.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		temp.add(okButton, BorderLayout.LINE_END);
 		cp.add(temp, BorderLayout.SOUTH);
 
@@ -175,7 +164,7 @@ public class AboutDialog extends JDialog {
 	 * @return The spring constraints for the specified component contained
 	 *         in <code>parent</code>.
 	 */
-	private static final SpringLayout.Constraints getConstraintsForCell(
+	private static SpringLayout.Constraints getConstraintsForCell(
 										int row, int col,
 										Container parent, int cols) {
 		SpringLayout layout = (SpringLayout) parent.getLayout();
@@ -203,7 +192,7 @@ public class AboutDialog extends JDialog {
 	 * @param xPad The x-padding between cells.
 	 * @param yPad The y-padding between cells.
 	 */
-	public static final void makeSpringCompactGrid(Container parent, int rows,
+	private static void makeSpringCompactGrid(Container parent, int rows,
 								int cols, int initialX, int initialY,
 								int xPad, int yPad) {
 

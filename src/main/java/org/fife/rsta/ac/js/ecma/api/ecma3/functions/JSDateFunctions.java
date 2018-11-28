@@ -16,7 +16,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSString toDateString();
+	JSString toDateString();
 
 
 	/**
@@ -28,7 +28,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSString toTimeString();
+	JSString toTimeString();
 
 
 	/**
@@ -41,7 +41,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
 	@Override
-	public JSString toLocaleString();
+	JSString toLocaleString();
 
 
 	/**
@@ -53,7 +53,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSString toLocaleDateString();
+	JSString toLocaleDateString();
 
 
 	/**
@@ -65,7 +65,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSString toLocaleTimeString();
+	JSString toLocaleTimeString();
 
 
 	/**
@@ -78,7 +78,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
 	@Override
-	public JSObject valueOf();
+	JSObject valueOf();
 
 
 	/**
@@ -90,7 +90,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getFullYear();
+	JSNumber getFullYear();
 
 
 	/**
@@ -102,7 +102,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getTime();
+	JSNumber getTime();
 
 
 	/**
@@ -114,7 +114,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getUTCFullYear();
+	JSNumber getUTCFullYear();
 
 
 	/**
@@ -126,7 +126,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getMonth();
+	JSNumber getMonth();
 
 
 	/**
@@ -138,7 +138,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getUTCMonth();
+	JSNumber getUTCMonth();
 
 
 	/**
@@ -150,7 +150,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getDate();
+	JSNumber getDate();
 
 
 	/**
@@ -162,7 +162,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getUTCDate();
+	JSNumber getUTCDate();
 
 
 	/**
@@ -174,7 +174,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getDay();
+	JSNumber getDay();
 
 
 	/**
@@ -188,7 +188,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Level 2 Document Object Model Core Definition.
 	 * 
 	 */
-	public JSNumber getUTCDay();
+	JSNumber getUTCDay();
 
 
 	/**
@@ -200,7 +200,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getHours();
+	JSNumber getHours();
 
 
 	/**
@@ -212,7 +212,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getUTCHours();
+	JSNumber getUTCHours();
 
 
 	/**
@@ -224,7 +224,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getMinutes();
+	JSNumber getMinutes();
 
 
 	/**
@@ -236,7 +236,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getUTCMinutes();
+	JSNumber getUTCMinutes();
 
 
 	/**
@@ -248,7 +248,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getSeconds();
+	JSNumber getSeconds();
 
 
 	/**
@@ -260,7 +260,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getUTCSeconds();
+	JSNumber getUTCSeconds();
 
 
 	/**
@@ -272,7 +272,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getMilliseconds();
+	JSNumber getMilliseconds();
 
 
 	/**
@@ -284,7 +284,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getUTCMilliseconds();
+	JSNumber getUTCMilliseconds();
 
 
 	/**
@@ -296,7 +296,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber getTimezoneOffset();
+	JSNumber getTimezoneOffset();
 
 
 	/**
@@ -309,7 +309,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber setTime(JSNumber value);
+	JSNumber setTime(JSNumber value);
 
 
 	/**
@@ -322,7 +322,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber setMilliseconds(JSNumber value);
+	JSNumber setMilliseconds(JSNumber value);
 
 
 	/**
@@ -335,7 +335,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber setUTCMilliseconds(JSNumber ms);
+	JSNumber setUTCMilliseconds(JSNumber ms);
 
 
 	/**
@@ -349,7 +349,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber setSeconds(JSNumber sec, JSNumber ms);
+	JSNumber setSeconds(JSNumber sec, JSNumber ms);
 
 
 	/**
@@ -363,7 +363,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber setUTCSeconds(JSNumber sec, JSNumber ms);
+	JSNumber setUTCSeconds(JSNumber sec, JSNumber ms);
 
 
 	/**
@@ -378,7 +378,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber setMinutes(JSNumber min, JSNumber sec, JSNumber ms);
+	JSNumber setMinutes(JSNumber min, JSNumber sec, JSNumber ms);
 
 
 	/**
@@ -393,7 +393,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber setUTCMinute(JSNumber min, JSNumber sec, JSNumber ms);
+	JSNumber setUTCMinute(JSNumber min, JSNumber sec, JSNumber ms);
 
 
 	/**
@@ -409,7 +409,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber setHours(JSNumber hour, JSNumber min, JSNumber sec, JSNumber ms);
+	JSNumber setHours(JSNumber hour, JSNumber min, JSNumber sec, JSNumber ms);
 
 
 	/**
@@ -425,7 +425,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber setUTCHours(JSNumber hour, JSNumber min, JSNumber sec, JSNumber ms);
+	JSNumber setUTCHours(JSNumber hour, JSNumber min, JSNumber sec, JSNumber ms);
 
 
 	/**
@@ -438,7 +438,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber setDate(JSNumber date);
+	JSNumber setDate(JSNumber date);
 
 
 	/**
@@ -451,7 +451,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber setUTCDate(JSNumber date);
+	JSNumber setUTCDate(JSNumber date);
 
 
 	/**
@@ -465,7 +465,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber setMonth(JSNumber month, JSNumber date);
+	JSNumber setMonth(JSNumber month, JSNumber date);
 
 
 	/**
@@ -479,7 +479,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber setUTCMonth(JSNumber month, JSNumber date);
+	JSNumber setUTCMonth(JSNumber month, JSNumber date);
 
 
 	/**
@@ -494,7 +494,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber setFullYear(JSNumber year, JSNumber month, JSNumber date);
+	JSNumber setFullYear(JSNumber year, JSNumber month, JSNumber date);
 
 
 	/**
@@ -509,7 +509,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber setUTCFullYear(JSNumber year, JSNumber month, JSNumber date);
+	JSNumber setUTCFullYear(JSNumber year, JSNumber month, JSNumber date);
 
 
 	/**
@@ -521,5 +521,5 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSString toUTCString();
+	JSString toUTCString();
 }

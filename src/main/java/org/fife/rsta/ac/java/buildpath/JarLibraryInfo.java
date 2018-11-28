@@ -110,7 +110,7 @@ public class JarLibraryInfo extends LibraryInfo {
 	}
 
 
-	private static final ClassFile createClassFileImpl(JarFile jar,
+	private static ClassFile createClassFileImpl(JarFile jar,
 			String entryName) throws IOException {
 		JarEntry entry = (JarEntry)jar.getEntry(entryName);
 		if (entry==null) {

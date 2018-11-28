@@ -27,7 +27,7 @@ public interface JSArrayFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSArray concat(JSArray args);
+	JSArray concat(JSArray args);
 
 
 	/**
@@ -46,7 +46,7 @@ public interface JSArrayFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSString join(String separator);
+	JSString join(String separator);
 
 
 	/**
@@ -66,7 +66,7 @@ public interface JSArrayFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSObject pop();
+	JSObject pop();
 
 
 	/**
@@ -84,7 +84,7 @@ public interface JSArrayFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public void push(JSArray array);
+	void push(JSArray array);
 
 
 	/**
@@ -101,7 +101,7 @@ public interface JSArrayFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSArray reverse();
+	JSArray reverse();
 
 
 	/**
@@ -121,7 +121,7 @@ public interface JSArrayFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSObject shift();
+	JSObject shift();
 
 
 	/**
@@ -143,7 +143,7 @@ public interface JSArrayFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSArray slice(Number start, Number end);
+	JSArray slice(Number start, Number end);
 
 
 	/**
@@ -163,7 +163,7 @@ public interface JSArrayFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSArray sort(JSFunction function);
+	JSArray sort(JSFunction function);
 
 
 	/**
@@ -186,7 +186,7 @@ public interface JSArrayFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSArray splice(JSNumber start, JSNumber deletecount, JSArray items);
+	JSArray splice(JSNumber start, JSNumber deletecount, JSArray items);
 
 
 	/**
@@ -207,5 +207,5 @@ public interface JSArrayFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSNumber unshift(JSArray value);
+	JSNumber unshift(JSArray value);
 }

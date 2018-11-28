@@ -39,7 +39,7 @@ class ColorCompletionGenerator implements CompletionGenerator {
 	}
 
 //completions.add(new ColorCompletion(provider, "silver"));
-	private static final List<Completion> createDefaults(CompletionProvider
+	private static List<Completion> createDefaults(CompletionProvider
 			provider) {
 
 		List<Completion> completions = new ArrayList<Completion>();

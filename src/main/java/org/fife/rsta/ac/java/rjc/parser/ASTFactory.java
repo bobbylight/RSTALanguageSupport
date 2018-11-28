@@ -1501,7 +1501,7 @@ OUTER:
 	}
 
 
-	private static final boolean isDebug() {
+	private static boolean isDebug() {
 		return DEBUG;
 	}
 
@@ -1526,7 +1526,7 @@ OUTER:
 	}
 
 
-	private static final void log(String msg) {
+	private static void log(String msg) {
 		if (DEBUG) {
 			System.out.println(msg);
 		}

@@ -21,7 +21,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSString charAt(JSNumber position);
+    JSString charAt(JSNumber position);
 
     /**
      * <b>function charCodeAt(position)</b> get the nth character code from a string.
@@ -34,7 +34,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSNumber charCodeAt(JSNumber position);
+    JSNumber charCodeAt(JSNumber position);
 
     /**
      * <b>function concat(value1, ...)</b> concatenate strings
@@ -46,7 +46,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSString concat(JSString value);
+    JSString concat(JSString value);
 
     
     /**
@@ -60,7 +60,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSNumber indexOf(JSString searchString, JSNumber startPosition);
+    JSNumber indexOf(JSString searchString, JSNumber startPosition);
 
     
     /**
@@ -74,7 +74,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSNumber lastIndexOf(JSString searchString, JSNumber startPosition);
+    JSNumber lastIndexOf(JSString searchString, JSNumber startPosition);
 
     /**
      * <b>function localeCompare(otherString)</b> compare one string to another, using locale-specific ordering.
@@ -91,7 +91,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSNumber localeCompare(JSString otherString);
+    JSNumber localeCompare(JSString otherString);
 
     /**
      * <b>function match(regexp)</b> find one or more regular-expression matches
@@ -103,7 +103,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSString match(JSRegExp regexp);
+    JSString match(JSRegExp regexp);
 
     /**
      * <b>function replace(regexp, replaceValue)</b> replace substring(s) matching a regular expression.
@@ -116,7 +116,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSString replace(JSRegExp regexp, JSString replaceValue);
+    JSString replace(JSRegExp regexp, JSString replaceValue);
 
     /**
      * <b>function search(regexp)</b> search for a regular expression
@@ -128,7 +128,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSNumber search(JSRegExp regexp);
+    JSNumber search(JSRegExp regexp);
 
     /**
      * <b>function slice(start, end)</b> extract a substring.
@@ -150,7 +150,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSString slice(JSNumber start, JSNumber end);
+    JSString slice(JSNumber start, JSNumber end);
 
     /**
      * <b>function split(separator, limit)</b> break a string into an array of strings.
@@ -168,7 +168,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSArray split(JSString separator, JSNumber limit);
+    JSArray split(JSString separator, JSNumber limit);
 
 
     /**
@@ -182,7 +182,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSString substring(JSNumber from, JSNumber to);
+    JSString substring(JSNumber from, JSNumber to);
 
     /**
      * <b>function toLowerCase()</b> Converts a string to lower case.
@@ -196,7 +196,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSString toLowerCase();
+    JSString toLowerCase();
 
     /**
      * <b>function toLocaleLowerCase()</b> Converts a string to lower case.
@@ -208,7 +208,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSString toLocaleLowerCase();
+    JSString toLocaleLowerCase();
 
     /**
      * <b>function toUpperCase()</b> Converts a string to upper case.
@@ -219,7 +219,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSString toUpperCase();
+    JSString toUpperCase();
 
     /**
      * <b>function toLocaleUpperCase()</b> Converts a string to upper case.
@@ -230,5 +230,5 @@ public interface JSStringFunctions extends JSObjectFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSString toLocaleUpperCase();
+    JSString toLocaleUpperCase();
 }

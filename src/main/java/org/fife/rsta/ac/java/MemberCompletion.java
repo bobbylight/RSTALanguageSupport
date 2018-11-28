@@ -29,7 +29,7 @@ interface MemberCompletion extends JavaSourceCompletion {
 	 *        qualified.
 	 * @return The class name.
 	 */
-	public String getEnclosingClassName(boolean fullyQualified);
+	String getEnclosingClassName(boolean fullyQualified);
 
 
 	/**
@@ -37,7 +37,7 @@ interface MemberCompletion extends JavaSourceCompletion {
 	 *
 	 * @return The signature.
 	 */
-	public String getSignature();
+	String getSignature();
 
 
 	/**
@@ -45,7 +45,7 @@ interface MemberCompletion extends JavaSourceCompletion {
 	 *
 	 * @return The type of this member.
 	 */
-	public String getType();
+	String getType();
 
 
 	/**
@@ -53,7 +53,7 @@ interface MemberCompletion extends JavaSourceCompletion {
 	 *
 	 * @return Whether this member is deprecated.
 	 */
-	public boolean isDeprecated();
+	boolean isDeprecated();
 
 
 	/**
@@ -62,7 +62,7 @@ interface MemberCompletion extends JavaSourceCompletion {
 	 * two sources that member completions come from - parsing Java source
 	 * files and parsing compiled class files (in libraries).
 	 */
-	public static interface Data extends IconData {
+	static interface Data extends IconData {
 
 		/**
 		 * Returns the name of the enclosing class.
@@ -71,7 +71,7 @@ interface MemberCompletion extends JavaSourceCompletion {
 		 *        qualified.
 		 * @return The class name.
 		 */
-		public String getEnclosingClassName(boolean fullyQualified);
+		String getEnclosingClassName(boolean fullyQualified);
 
 		/**
 		 * Returns the signature of this member.
@@ -79,7 +79,7 @@ interface MemberCompletion extends JavaSourceCompletion {
 		 * @return The signature.
 		 * @see MemberCompletion#getSignature()
 		 */
-		public String getSignature();
+		String getSignature();
 
 		/**
 		 * Returns the summary description (should be HTML) for this member.
@@ -88,7 +88,7 @@ interface MemberCompletion extends JavaSourceCompletion {
 		 *         none.
 		 * @see MemberCompletion#getSummary()
 		 */
-		public String getSummary();
+		String getSummary();
 
 		/**
 		 * Returns the type of this member (the return type for methods).
@@ -96,14 +96,14 @@ interface MemberCompletion extends JavaSourceCompletion {
 		 * @return The type of this member.
 		 * @see MemberCompletion#getType()
 		 */
-		public String getType();
+		String getType();
 
 		/**
 		 * Returns whether this member is a constructor.
 		 *
 		 * @return Whether this member is a constructor.
 		 */
-		public boolean isConstructor();
+		boolean isConstructor();
 
 	}
 

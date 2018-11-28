@@ -18,8 +18,6 @@ public interface JS5FunctionFunctions extends JS5ObjectFunctions, JSFunctionFunc
      * @since   Standard ECMA-262 5th. Edition 
      * @since   Level 2 Document Object Model Core Definition.
      */ 
-    public JS5Function bind(JS5Object thisObject, JS5Array argArray);
-    
-    
+	JS5Function bind(JS5Object thisObject, JS5Array argArray);
     
 }

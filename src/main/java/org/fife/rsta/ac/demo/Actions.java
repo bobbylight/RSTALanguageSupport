@@ -87,7 +87,7 @@ interface Actions {
 		public OpenAction(DemoRootPane demo) {
 			this.demo = demo;
 			putValue(NAME, "Open...");
-			putValue(MNEMONIC_KEY, 'O');
+			putValue(MNEMONIC_KEY, (int)'O');
 			int mods = demo.getToolkit().getMenuShortcutKeyMask();
 			KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_O, mods);
 			putValue(ACCELERATOR_KEY, ks);

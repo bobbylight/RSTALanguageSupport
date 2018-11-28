@@ -15,7 +15,7 @@ public interface JS5DateFunctions extends JS5ObjectFunctions, JSDateFunctions {
 	 * @since Standard ECMA-262 5th. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JS5String toISOString(); 
+	JS5String toISOString();
 	
 	/**
 	 * <b>function toJSON(key)</b> JSON-serialize a Date object.
@@ -28,7 +28,7 @@ public interface JS5DateFunctions extends JS5ObjectFunctions, JSDateFunctions {
 	 * @since Standard ECMA-262 5th. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JS5String toJSON(JS5String key); 
+	JS5String toJSON(JS5String key);
 	
 	
 }

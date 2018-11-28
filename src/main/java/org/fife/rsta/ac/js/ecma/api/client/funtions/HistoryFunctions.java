@@ -13,14 +13,14 @@ public interface HistoryFunctions extends JS5ObjectFunctions {
 	* @memberOf History
 	* @see org.fife.rsta.ac.js.ecma.api.client.History History
 	*/
-	public void back();
+	void back();
 	
 	/**
 	* <b>function forward - Loads the next URL in the history list</b>. 
 	* @memberOf History
 	* @see org.fife.rsta.ac.js.ecma.api.client.History History
 	*/
-	public void forward();
+	void forward();
 	
 	/**
 	* <b>function go - Loads a specific URL from the history list</b>. 
@@ -28,7 +28,7 @@ public interface HistoryFunctions extends JS5ObjectFunctions {
 	* @param arg goes to the URL within the specific position (-1 goes back one page, 1 goes forward one page)
 	* @see org.fife.rsta.ac.js.ecma.api.client.History History
 	*/
-	public void go(JSNumber arg);
+	void go(JSNumber arg);
 	
 	/**
 	* <b>function go - Loads a specific URL from the history list</b>. 
@@ -36,5 +36,5 @@ public interface HistoryFunctions extends JS5ObjectFunctions {
 	* @param arg the string must be a partial or full URL, and the function will go to the first URL that matches the string
 	* @see org.fife.rsta.ac.js.ecma.api.client.History History
 	*/
-	public void go(JSString arg);
+	void go(JSString arg);
 }

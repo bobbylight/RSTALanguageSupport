@@ -29,7 +29,7 @@ public interface JavaSourceCompletion extends Completion {
 	 * TODO: Remove me
 	 */
 	@Override
-	public boolean equals(Object obj);
+	boolean equals(Object obj);
 
 
 	/**
@@ -40,7 +40,7 @@ public interface JavaSourceCompletion extends Completion {
 	 * @param y
 	 * @param selected
 	 */
-	public void rendererText(Graphics g, int x, int y, boolean selected);
+	void rendererText(Graphics g, int x, int y, boolean selected);
 
 
 }

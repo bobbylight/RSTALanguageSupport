@@ -75,7 +75,7 @@ public class JSR223Type extends JavaScriptType {
 		//get a list of all potential matches, including extended
 		HashSet<JSCompletion> completionMatches = new HashSet<JSCompletion>();
 		getPotentialLookupList(name, completionMatches, this);
-		return completionMatches.toArray(new JSCompletion[completionMatches.size()]);
+		return completionMatches.toArray(new JSCompletion[0]);
 	}
 
 	// get a list of all potential method matches

@@ -12,5 +12,5 @@ public interface JS5StringFunctions extends JS5ObjectFunctions {
      * @see  org.fife.rsta.ac.js.ecma.api.ecma5.JS5String String
      * @since   Standard ECMA-262 5th. Edition 
      */ 
-    public JS5String trim();
+	JS5String trim();
 }

@@ -155,7 +155,7 @@ public class IconFactory {
 	}
 
 
-	public static interface IconData {
+	public interface IconData {
 
 		/**
 		 * Returns the main icon to use when rendering this member's completion.
@@ -164,15 +164,15 @@ public class IconFactory {
 		 *
 		 * @return The icon to use.
 		 */
-		public String getIcon();
+		String getIcon();
 
-		public boolean isAbstract();
+		boolean isAbstract();
 
-		public boolean isDeprecated();
+		boolean isDeprecated();
 
-		public boolean isFinal();
+		boolean isFinal();
 
-		public boolean isStatic();
+		boolean isStatic();
 
 	}
 

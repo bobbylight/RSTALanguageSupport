@@ -5,16 +5,16 @@ import org.fife.ui.autocomplete.Completion;
 
 public interface JSCompletionUI extends Completion {
 
-	static final int LOCAL_VARIABLE_RELEVANCE = 9;
-	static final int GLOBAL_VARIABLE_RELEVANCE = 8;
-	static final int DEFAULT_VARIABLE_RELEVANCE = 7;
-	static final int STATIC_FIELD_RELEVANCE = 6;
-	static final int BEAN_METHOD_RELEVANCE = 5;
-	static final int DEFAULT_FUNCTION_RELEVANCE = 4;
-	static final int GLOBAL_FUNCTION_RELEVANCE = 3;
-	static final int DEFAULT_CLASS_RELEVANCE = 2;
-	static final int BASIC_COMPLETION_RELEVANCE = 1;
-	static final int TEMPLATE_RELEVANCE = 0;
+	int LOCAL_VARIABLE_RELEVANCE = 9;
+	int GLOBAL_VARIABLE_RELEVANCE = 8;
+	int DEFAULT_VARIABLE_RELEVANCE = 7;
+	int STATIC_FIELD_RELEVANCE = 6;
+	int BEAN_METHOD_RELEVANCE = 5;
+	int DEFAULT_FUNCTION_RELEVANCE = 4;
+	int GLOBAL_FUNCTION_RELEVANCE = 3;
+	int DEFAULT_CLASS_RELEVANCE = 2;
+	int BASIC_COMPLETION_RELEVANCE = 1;
+	int TEMPLATE_RELEVANCE = 0;
 
 
 }

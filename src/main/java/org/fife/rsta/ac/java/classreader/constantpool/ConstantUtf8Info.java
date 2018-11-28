@@ -10,7 +10,7 @@
  */
 package org.fife.rsta.ac.java.classreader.constantpool;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 
 /**
@@ -93,12 +93,7 @@ public class ConstantUtf8Info extends ConstantPoolInfo {
 
 		representedString = sb.toString();
 */
-try {
-	representedString = new String(bytes, "UTF-8");
-} catch (UnsupportedEncodingException uee) { // Never happens.
-	uee.printStackTrace();
-	System.exit(0);
-}
+		representedString = new String(bytes, StandardCharsets.UTF_8);
 		return representedString;
 
 	}

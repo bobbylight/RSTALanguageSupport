@@ -23,7 +23,7 @@ public interface JSGlobalFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSString decodeURI(JSString uri);
+	JSString decodeURI(JSString uri);
 	
 	/**
 	 * <b>function decodeURIComponent(s)</b> unescape characters in a URI component.
@@ -39,7 +39,7 @@ public interface JSGlobalFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSString decodeURIComponent(JSString s);
+	JSString decodeURIComponent(JSString s);
 	
 	
 	/**
@@ -56,7 +56,7 @@ public interface JSGlobalFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSString encodeURI(JSString uri);
+	JSString encodeURI(JSString uri);
 	
 	/**
 	 * <b>function encodeURIComponent(s)</b> escape characters in a URI Component.
@@ -72,7 +72,7 @@ public interface JSGlobalFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSString encodeURIComponent(JSString s);
+	JSString encodeURIComponent(JSString s);
 	
 	/**
 	 * <b>function escape(s)</b> encode a string.
@@ -85,7 +85,7 @@ public interface JSGlobalFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSString escape(JSString s);
+	JSString escape(JSString s);
 	
 	/**
 	 * <b>function eval(code)</b> execute JavaScript from a string.
@@ -101,7 +101,7 @@ public interface JSGlobalFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSObject eval(JSString code);
+	JSObject eval(JSString code);
 	
 	/**
 	 * <b>function isFinite(n)</b> determine whether a number is finite.
@@ -114,7 +114,7 @@ public interface JSGlobalFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSBoolean isFinite(JSNumber n);
+	JSBoolean isFinite(JSNumber n);
 	
 	/**
 	 * <b>function isNaN(n)</b> check for not-a-number.
@@ -141,7 +141,7 @@ public interface JSGlobalFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSBoolean isNaN(JSNumber n);
+	JSBoolean isNaN(JSNumber n);
 	
 	/**
 	 * <b>function parseFloat(s)</b> convert a string to a number.
@@ -154,7 +154,7 @@ public interface JSGlobalFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSString parseFloat(JSString s);
+	JSString parseFloat(JSString s);
 	
 	/**
 	 * <b>function parseInt(s, radix)</b> convert a string to an integer.
@@ -168,7 +168,7 @@ public interface JSGlobalFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSString parseInt(JSString s, JSNumber radix);
+	JSString parseInt(JSString s, JSNumber radix);
 	
 	/**
 	 * <b>function unescape(s)</b> decode an escaped string.
@@ -181,5 +181,5 @@ public interface JSGlobalFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSString unescape(JSString s);
+	JSString unescape(JSString s);
 }

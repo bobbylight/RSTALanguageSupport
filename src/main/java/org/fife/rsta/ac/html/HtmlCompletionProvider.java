@@ -107,7 +107,7 @@ public class HtmlCompletionProvider extends DefaultCompletionProvider {
 	 * @param offs The offset into the document to check.
 	 * @return Whether a tag name was found.
 	 */
-	private final boolean findLastTagNameBefore(RSyntaxDocument doc,
+	private boolean findLastTagNameBefore(RSyntaxDocument doc,
 												Token tokenList, int offs) {
 
 		lastTagName = null;
@@ -336,7 +336,7 @@ if (t!=null && !t.isWhitespace()) {
 	 *         offset was the first offset in the token list (or not in the
 	 *         token list at all, which would be an error).
 	 */
-	private static final Token getTokenBeforeOffset(Token tokenList, int offs) {
+	private static Token getTokenBeforeOffset(Token tokenList, int offs) {
 		if (tokenList!=null) {
 			Token prev = tokenList;
 			for (Token t=tokenList.getNextToken(); t!=null; t=t.getNextToken()) {
@@ -375,7 +375,7 @@ if (t!=null && !t.isWhitespace()) {
 	 * @param offs The offset into the text area's content to check.
 	 * @return Whether the offset is inside a markup tag.
 	 */
-	private static final boolean insideMarkupTag(RSyntaxTextArea textArea,
+	private static boolean insideMarkupTag(RSyntaxTextArea textArea,
 								Token list, int line, int offs) {
 
 		int inside = -1; // -1 => not determined, 0 => false, 1 => true
@@ -460,7 +460,7 @@ if (t!=null && !t.isWhitespace()) {
 	 * @param t The token to check.
 	 * @return Whether it is a tag opening token.
 	 */
-	private static final boolean isTagOpeningToken(Token t) {
+	private static boolean isTagOpeningToken(Token t) {
 		return t.isSingleChar('<') ||
 			(t.length()==2 && t.charAt(0)=='<' &&
 					t.charAt(1)=='/');
