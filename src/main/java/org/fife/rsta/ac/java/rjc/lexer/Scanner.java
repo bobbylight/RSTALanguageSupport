@@ -74,7 +74,7 @@ public class Scanner {
 	 * @param tokens Tokens to return.
 	 */
 	public Scanner(List<Token> tokens) {
-		stack = new Stack<Token>();
+		stack = new Stack<>();
 		for (int i=tokens.size()-1; i>=0; i--) {
 			stack.push(tokens.get(i));
 		}
@@ -89,7 +89,7 @@ public class Scanner {
 	public Scanner(Reader r) {
 		s = r!=null ? new SourceCodeScanner(r) : null;
 		s.setKeepLastDocComment(true);
-		stack = new Stack<Token>();
+		stack = new Stack<>();
 	}
 
 
@@ -143,12 +143,7 @@ private void pushOntoStack(Token t) {
 				ble.printStackTrace();
 			}
 		}
-		return new Offset() {
-			@Override
-			public int getOffset() {
-				return offs;
-			}
-		};
+		return () -> offs;
 	}
 
 
@@ -440,9 +435,9 @@ private int currentResetStartOffset;
 	public void markResetPosition() {
 		if (s!=null) { // Hack!  We should really do something for token-only scanners
 			if (resetPositions==null) {
-				resetPositions = new Stack<Stack<Token>>();
+				resetPositions = new Stack<>();
 			}
-			currentResetTokenStack = new Stack<Token>();
+			currentResetTokenStack = new Stack<>();
 			resetPositions.push(currentResetTokenStack);
 			currentResetStartOffset = s.getOffset();
 		}
@@ -722,7 +717,7 @@ private int currentResetStartOffset;
 		if (depth<1) {
 			throw new IllegalArgumentException("depth must be >= 1");
 		}
-		Stack<Token> read = new Stack<Token>();
+		Stack<Token> read = new Stack<>();
 		for (int i=0; i<depth; i++) {
 			Token t = yylex();
 			if (t!=null) {

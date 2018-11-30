@@ -11,6 +11,7 @@
 package org.fife.rsta.ac.js.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.mozilla.javascript.Token;
@@ -45,7 +46,7 @@ public class RhinoUtil {
 	 * @param fn The function node.
 	 * @return The string representation of the function's arguments.
 	 */
-	public static final String getFunctionArgsString(FunctionNode fn) {
+	public static String getFunctionArgsString(FunctionNode fn) {
 		StringBuilder sb = new StringBuilder("(");
 		int paramCount = fn.getParamCount();
 		if (paramCount>0) {
@@ -83,7 +84,7 @@ public class RhinoUtil {
 	 * @param propKeyNode The AST node for the property key.
 	 * @return The property key's value.
 	 */
-	public static final String getPropertyName(AstNode propKeyNode) {
+	public static String getPropertyName(AstNode propKeyNode) {
 		// TODO: Does Rhino use any other node type for this?
 		return (propKeyNode instanceof Name) ?
 					((Name)propKeyNode).getIdentifier() :
@@ -91,13 +92,13 @@ public class RhinoUtil {
 	}
 
 
-	public static final String getPrototypeClazz(List<AstNode> nodes) {
+	public static String getPrototypeClazz(List<AstNode> nodes) {
 		return getPrototypeClazz(nodes, -1);
 	}
 
 
-	public static final String getPrototypeClazz(List<AstNode> nodes,
-			int depth) {
+	public static String getPrototypeClazz(List<AstNode> nodes,
+                                           int depth) {
 		if (depth<0) {
 			depth = nodes.size();
 		}
@@ -123,18 +124,18 @@ public class RhinoUtil {
 	 * @return Whether the AST node is a <code>Name</code> with the specified
 	 *         value.
 	 */
-	private static final boolean isName(AstNode node, String value) {
+	private static boolean isName(AstNode node, String value) {
 		return node instanceof Name && value.equals(((Name)node).getIdentifier());
 	}
 
 
-	public static final boolean isPrototypeNameNode(AstNode node) {
+	public static boolean isPrototypeNameNode(AstNode node) {
 		return node instanceof Name &&
 				"prototype".equals(((Name)node).getIdentifier());
 	}
 
 
-	public static final boolean isPrototypePropertyGet(PropertyGet pg) {
+	public static boolean isPrototypePropertyGet(PropertyGet pg) {
 		return pg!=null && pg.getLeft() instanceof Name &&
 				isPrototypeNameNode(pg.getRight());
 	}
@@ -149,18 +150,16 @@ public class RhinoUtil {
 	 * @param expectedField The expected string value.
 	 * @return Whether the object is what was expected.
 	 */
-	public static final boolean isSimplePropertyGet(PropertyGet pg,
-			String expectedObj, String expectedField) {
+	public static boolean isSimplePropertyGet(PropertyGet pg,
+                                              String expectedObj, String expectedField) {
 		return pg!=null && isName(pg.getLeft(), expectedObj) &&
 				isName(pg.getRight(), expectedField);
 	}
 
 
-	public static final List<AstNode> toList(AstNode... nodes) {
-		List<AstNode> list = new ArrayList<AstNode>();
-		for (AstNode node : nodes) {
-			list.add(node);
-		}
+	public static List<AstNode> toList(AstNode... nodes) {
+		List<AstNode> list = new ArrayList<>();
+        Collections.addAll(list, nodes);
 		return list;
 	}
 

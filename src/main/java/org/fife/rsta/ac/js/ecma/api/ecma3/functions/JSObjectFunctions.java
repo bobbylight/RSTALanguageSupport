@@ -19,7 +19,7 @@ public interface JSObjectFunctions {
      * @since Level 2 Document Object Model Core Definition.
      */
     @Override
-	public String toString();
+	String toString();
 
     /**
      * <b>function toLocaleString()</b> return an object localized string representation.
@@ -30,7 +30,7 @@ public interface JSObjectFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSString toLocaleString();
+    JSString toLocaleString();
 
     /**
      * <b>function valueOf()</b> the primitive value of a specified object.
@@ -41,7 +41,7 @@ public interface JSObjectFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSObject valueOf();
+    JSObject valueOf();
 
     /**
      * <b>function hasOwnProperty(name)</b> check whether a property is inherited.
@@ -64,7 +64,7 @@ public interface JSObjectFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSBoolean hasOwnProperty(String name);
+    JSBoolean hasOwnProperty(String name);
 
     /**
      * <b>function isPrototypeOf(o)</b> is an object the prototype of another?
@@ -84,7 +84,7 @@ public interface JSObjectFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSBoolean isPrototypeOf(JSObject o);
+    JSBoolean isPrototypeOf(JSObject o);
 
     /**
      * <b>function propertyIsEnumerable(name)</b>  will property be seen by for/in loop?
@@ -106,5 +106,5 @@ public interface JSObjectFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSBoolean propertyIsEnumerable(JSObject name);
+    JSBoolean propertyIsEnumerable(JSObject name);
 }

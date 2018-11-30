@@ -52,7 +52,7 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 	private Map<String, List<JavaScriptTreeNode>> prototypeAdditions = null;
 
 
-	public JavaScriptOutlineTreeGenerator(RSyntaxTextArea textArea,
+	JavaScriptOutlineTreeGenerator(RSyntaxTextArea textArea,
 			AstRoot ast) {
 		this.textArea = textArea;
 		root = new JavaScriptTreeNode((AstNode)null);
@@ -116,7 +116,7 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 	 * @param node The AST node.
 	 * @return The outline tree node.
 	 */
-	private final JavaScriptTreeNode createTreeNode(AstNode node) {
+	private JavaScriptTreeNode createTreeNode(AstNode node) {
 		JavaScriptTreeNode tn = new JavaScriptTreeNode(node);
 		try {
 			int offs = node.getAbsolutePosition();
@@ -130,12 +130,12 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 
 	/**
 	 * Creates and returns a node for the outline tree that corresponds to
-	 * a specific AST node.
+	 * specific AST nodes.
 	 *
-	 * @param node The AST node.
+	 * @param nodes The AST nodes.
 	 * @return The outline tree node.
 	 */
-	private final JavaScriptTreeNode createTreeNode(List<AstNode> nodes) {
+	private JavaScriptTreeNode createTreeNode(List<AstNode> nodes) {
 		JavaScriptTreeNode tn = new JavaScriptTreeNode(nodes);
 		try {
 			int offs = nodes.get(0).getAbsolutePosition();
@@ -148,7 +148,7 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 
 
 	private List<AstNode> getChainedPropertyGetNodes(PropertyGet pg) {
-		List<AstNode> nodes = new ArrayList<AstNode>();
+		List<AstNode> nodes = new ArrayList<>();
 		getChainedPropertyGetNodesImpl(pg, nodes);
 		return nodes;
 	}
@@ -474,12 +474,11 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 
 				tn.setText(text);
 				if (prototypeAdditions==null) {
-					prototypeAdditions = new HashMap<String,
-										List<JavaScriptTreeNode>>();
+					prototypeAdditions = new HashMap<>();
 				}
 				List<JavaScriptTreeNode> list = prototypeAdditions.get(clazz);
 				if (list==null) {
-					list = new ArrayList<JavaScriptTreeNode>();
+					list = new ArrayList<>();
 					prototypeAdditions.put(clazz, list);
 				}
 
@@ -545,12 +544,11 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 
 		tn.setText(text);
 		if (prototypeAdditions==null) {
-			prototypeAdditions = new HashMap<String,
-								List<JavaScriptTreeNode>>();
+			prototypeAdditions = new HashMap<>();
 		}
 		List<JavaScriptTreeNode> list = prototypeAdditions.get(clazz);
 		if (list==null) {
-			list = new ArrayList<JavaScriptTreeNode>();
+			list = new ArrayList<>();
 			prototypeAdditions.put(clazz, list);
 		}
 

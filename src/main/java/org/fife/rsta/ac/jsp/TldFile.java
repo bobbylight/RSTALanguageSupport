@@ -108,7 +108,7 @@ public class TldFile {
 
 	private List<TldElement> parseTld(InputStream in) throws IOException {
 
-		List<TldElement> tldElems = new ArrayList<TldElement>();
+		List<TldElement> tldElems = new ArrayList<>();
 
 		BufferedInputStream bin = new BufferedInputStream(in);
 //BufferedReader r = new BufferedReader(new InputStreamReader(bin));
@@ -145,7 +145,7 @@ public class TldFile {
 			tldElems.add(tldElem);
 			NodeList attrNl = elem.getElementsByTagName("attribute");
 			List<TldAttributeParam> attrs =
-					new ArrayList<TldAttributeParam>(attrNl.getLength());
+                    new ArrayList<>(attrNl.getLength());
 			for (int j=0; j<attrNl.getLength(); j++) {
 				Element attrElem = (Element)attrNl.item(j);
 				name = getChildText(attrElem.getElementsByTagName("name").item(0));

@@ -66,30 +66,27 @@ public class ZipSourceLocation implements SourceLocation {
 
 		CompilationUnit cu = null;
 
-		ZipFile zipFile = new ZipFile(archive);
+        try (ZipFile zipFile = new ZipFile(archive)) {
 
-		try {
+            String entryName = cf.getClassName(true).replaceAll("\\.", "/");
+            entryName += ".java";
+            //System.out.println("DEBUG: entry name: " + entryName);
+            ZipEntry entry = zipFile.getEntry(entryName);
+            if (entry == null) {
+                // Seen in some src.jar files, for example OS X's src.jar
+                entry = zipFile.getEntry("src/" + entryName);
+            }
 
-			String entryName = cf.getClassName(true).replaceAll("\\.", "/");
-			entryName += ".java";
-			//System.out.println("DEBUG: entry name: " + entryName);
-			ZipEntry entry = zipFile.getEntry(entryName);
-			if (entry == null) {
-				// Seen in some src.jar files, for example OS X's src.jar
-				entry = zipFile.getEntry("src/" + entryName);
-			}
+            if (entry != null) {
+                InputStream in = zipFile.getInputStream(entry);
+                Scanner s = new Scanner(new InputStreamReader(in));
+                cu = new ASTFactory().getCompilationUnit(entryName, s);
+            }
 
-			if (entry != null) {
-				InputStream in = zipFile.getInputStream(entry);
-				Scanner s = new Scanner(new InputStreamReader(in));
-				cu = new ASTFactory().getCompilationUnit(entryName, s);
-			}
+        }
+        // Closes the input stream too
 
-		} finally {
-			zipFile.close(); // Closes the input stream too
-		}
-
-		return cu;
+        return cu;
 
 	}
 

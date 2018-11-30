@@ -62,7 +62,7 @@ interface MemberCompletion extends JavaSourceCompletion {
 	 * two sources that member completions come from - parsing Java source
 	 * files and parsing compiled class files (in libraries).
 	 */
-	static interface Data extends IconData {
+	interface Data extends IconData {
 
 		/**
 		 * Returns the name of the enclosing class.

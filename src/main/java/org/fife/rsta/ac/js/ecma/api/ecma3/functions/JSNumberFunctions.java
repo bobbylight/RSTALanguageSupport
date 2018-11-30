@@ -24,7 +24,7 @@ public interface JSNumberFunctions extends JSObjectFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSString toFixed(JSNumber fractionDigits);
+    JSString toFixed(JSNumber fractionDigits);
 
     /**
      * <b>function toExponential(fractionDigits)</b> format a number using exponential notation.
@@ -44,7 +44,7 @@ public interface JSNumberFunctions extends JSObjectFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSString toExponential(JSNumber fractionDigits);
+    JSString toExponential(JSNumber fractionDigits);
 
     /**
      * <b>function toPrecision(precision)</b> format the significant digits of a number.
@@ -64,5 +64,5 @@ public interface JSNumberFunctions extends JSObjectFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public JSString toPrecision(JSNumber fractionDigits);
+    JSString toPrecision(JSNumber fractionDigits);
 }

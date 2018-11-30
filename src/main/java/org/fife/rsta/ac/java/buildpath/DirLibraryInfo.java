@@ -129,31 +129,28 @@ public class DirLibraryInfo extends LibraryInfo {
 	 * @param dir The directory to scan.
 	 * @param pkg The package name scanned so far, in the form
 	 *        "<code>com/company/pkgname</code>"...
-	 * @throws IOException If an IO error occurs.
 	 */
-	private void getPackageMapImpl(File dir, String pkg, PackageMapNode root)
-			throws IOException {
+	private void getPackageMapImpl(File dir, String pkg, PackageMapNode root) {
 
 		File[] children = dir.listFiles();
 
-		for (int i=0; i<children.length; i++) {
-			File child = children[i];
-			if (child.isFile() && child.getName().endsWith(".class")) {
-				if (pkg!=null) { // will be null the first time through
-					// TODO: Split pkg here to prevent repeated splits
-					// for performance
-					root.add(pkg + "/" + child.getName());
-				}
-				else {
-					root.add(child.getName());
-				}
-			}
-			else if (child.isDirectory()) {
-				String subpkg = pkg==null ? child.getName() :
-										(pkg + "/" + child.getName());
-				getPackageMapImpl(child, subpkg, root);
-			}
-		}
+        for (File child : children) {
+            if (child.isFile() && child.getName().endsWith(".class")) {
+                if (pkg != null) { // will be null the first time through
+                    // TODO: Split pkg here to prevent repeated splits
+                    // for performance
+                    root.add(pkg + "/" + child.getName());
+                }
+                else {
+                    root.add(child.getName());
+                }
+            }
+            else if (child.isDirectory()) {
+                String subpkg = pkg == null ? child.getName() :
+                        (pkg + "/" + child.getName());
+                getPackageMapImpl(child, subpkg, root);
+            }
+        }
 
 	}
 

@@ -26,7 +26,7 @@ import java.io.InputStreamReader;
 public class OutputCollector implements Runnable {
 
 	private InputStream in;
-	private StringBuffer sb;
+	private StringBuilder sb;
 
 
 	/**
@@ -45,7 +45,7 @@ public class OutputCollector implements Runnable {
 	 * @param in The input stream.
 	 * @param sb The buffer in which to collect the output.
 	 */
-	public OutputCollector(InputStream in, StringBuffer sb) {
+	public OutputCollector(InputStream in, StringBuilder sb) {
 		this.in = in;
 		this.sb = sb;
 	}
@@ -63,7 +63,7 @@ public class OutputCollector implements Runnable {
 	public OutputCollector(InputStream in, boolean collect) {
 		this.in = in;
 		if (collect) {
-			sb = new StringBuffer();
+			sb = new StringBuilder();
 		}
 	}
 
@@ -73,7 +73,7 @@ public class OutputCollector implements Runnable {
 	 *
 	 * @return The output.
 	 */
-	public StringBuffer getOutput() {
+	public StringBuilder getOutput() {
 		return sb;
 	}
 
@@ -95,19 +95,15 @@ public class OutputCollector implements Runnable {
 	@Override
 	public void run() {
 
-		String line = null;
+		String line;
 
 		try {
 
-			BufferedReader r = new BufferedReader(new InputStreamReader(in));
-
-			try {
-				while ((line=r.readLine())!=null) {
-					handleLineRead(line);
-				}
-			} finally {
-				r.close();
-			}
+            try (BufferedReader r = new BufferedReader(new InputStreamReader(in))) {
+                while ((line = r.readLine()) != null) {
+                    handleLineRead(line);
+                }
+            }
 
 		} catch (IOException ioe) {
 			ioe.printStackTrace();

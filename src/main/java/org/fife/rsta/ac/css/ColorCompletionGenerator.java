@@ -42,7 +42,7 @@ class ColorCompletionGenerator implements CompletionGenerator {
 	private static List<Completion> createDefaults(CompletionProvider
 			provider) {
 
-		List<Completion> completions = new ArrayList<Completion>();
+		List<Completion> completions = new ArrayList<>();
 
 		// CSS2 colors
 		completions.add(new ColorCompletion(provider, "black"));
@@ -89,7 +89,7 @@ class ColorCompletionGenerator implements CompletionGenerator {
 	@Override
 	public List<Completion> generate(CompletionProvider provider, String input){
 
-		List<Completion> completions = new ArrayList<Completion>(defaults);
+		List<Completion> completions = new ArrayList<>(defaults);
 
 		if (DIGITS.matcher(input).matches()) {
 			completions.add(new ColorCompletion(provider, input + "s"));

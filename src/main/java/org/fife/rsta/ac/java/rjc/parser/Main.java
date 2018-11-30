@@ -16,6 +16,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.fife.rsta.ac.java.rjc.lexer.Scanner;
@@ -63,7 +64,7 @@ PrintStream oldErr = System.err;
 		ASTFactory fact = new ASTFactory();
 		//CompilationUnit cu = null;
 
-		List<File> toDo = new ArrayList<File>();
+		List<File> toDo = new ArrayList<>();
 
 		if (args.length>0) {
 			toDo.add(new File(args[0]));
@@ -74,9 +75,7 @@ PrintStream oldErr = System.err;
 //rootDir = new File("C:/dev/rsta/JavaAst/src");
 //rootDir = new File("C:/dev/rjava/Common/src");
 			File[] files = rootDir.listFiles();
-			for (int i=0; i<files.length; i++) {
-				toDo.add(files[i]);
-			}
+            Collections.addAll(toDo, files);
 		}
 
 		int count = 0;
@@ -90,9 +89,7 @@ PrintStream oldErr = System.err;
 
 			if (file.isDirectory()) {
 				File[] contents = file.listFiles();
-				for (int j=0; j<contents.length; j++) {
-					toDo.add(contents[j]);
-				}
+                Collections.addAll(toDo, contents);
 				continue;
 			}
 			else if (!file.getName().endsWith(".java")) {

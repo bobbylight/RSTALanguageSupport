@@ -497,7 +497,7 @@ try {
 		List<Annotation> initialAnnotations = null; // Usually none
 		while (scanner.yyPeekCheckType()==ANNOTATION_START) {
 			if (initialAnnotations==null) {
-				initialAnnotations = new ArrayList<Annotation>(1);
+				initialAnnotations = new ArrayList<>(1);
 			}
 			initialAnnotations.add(_getAnnotation(cu, scanner));
 		}
@@ -639,7 +639,7 @@ return cu;
 		t = s.yylexNonNull("implements or '{' expected");
 
 		if (t.isType(KEYWORD_IMPLEMENTS)) {
-			List<Type> implemented = new ArrayList<Type>(1); // Usually small
+			List<Type> implemented = new ArrayList<>(1); // Usually small
 			do {
 				implemented.add(_getType(cu, s));
 				t = s.yylex();
@@ -665,7 +665,7 @@ return cu;
 	private List<FormalParameter> _getFormalParameters(CompilationUnit cu,
 									List<Token> tokenList) throws IOException {
 
-		List<FormalParameter> list = new ArrayList<FormalParameter>(0);
+		List<FormalParameter> list = new ArrayList<>(0);
 
 		Scanner s = new Scanner(tokenList);
 		Token t = s.yylex();
@@ -685,7 +685,7 @@ return cu;
 			while (t.getType() == ANNOTATION_START) {
 				s.yyPushback(t);
 				if (annotations == null) {
-					annotations = new ArrayList<Annotation>(1); // Usually just 1
+					annotations = new ArrayList<>(1); // Usually just 1
 				}
 				annotations.add(_getAnnotation(cu, s));
 				t = s.yylexNonNull("Type expected");
@@ -786,7 +786,7 @@ return cu;
 
 		log("Entering _getInterfaceMemberDecl");
 
-		List<Token> tokenList = new ArrayList<Token>(1);
+		List<Token> tokenList = new ArrayList<>(1);
 		List<Token> methodNameAndTypeTokenList = null;
 		List<Token> methodParamsList = null;
 		int bracketPairCount;
@@ -803,7 +803,7 @@ OUTER:
 			switch (t.getType()) {
 				case SEPARATOR_LPAREN:
 					methodNameAndTypeTokenList = tokenList;
-					methodParamsList = new ArrayList<Token>(1);
+					methodParamsList = new ArrayList<>(1);
 					methodDecl = true;
 					break OUTER;
 				case SEPARATOR_LBRACE:
@@ -919,7 +919,7 @@ OUTER:
 
 		log("Entering _getMemberDecl");
 
-		List<Token> tokenList = new ArrayList<Token>(1);
+		List<Token> tokenList = new ArrayList<>(1);
 		List<Token> methodNameAndTypeTokenList = null;
 		List<Token> methodParamsList = null;
 		int bracketPairCount;
@@ -936,7 +936,7 @@ OUTER:
 			switch (t.getType()) {
 				case SEPARATOR_LPAREN:
 					methodNameAndTypeTokenList = tokenList;
-					methodParamsList = new ArrayList<Token>(1);
+					methodParamsList = new ArrayList<>(1);
 					methodDecl = true;
 					break OUTER;
 				case SEPARATOR_LBRACE:
@@ -1264,7 +1264,7 @@ OUTER:
 		}
 		s.yylex();
 
-		List<String> list = new ArrayList<String>(1); // Usually small
+		List<String> list = new ArrayList<>(1); // Usually small
 
 		list.add(getQualifiedIdentifier(s));
 		while (s.yyPeekCheckType()==SEPARATOR_COMMA) {
@@ -1398,7 +1398,7 @@ OUTER:
 		s.markResetPosition();
 		s.yylexNonNull(OPERATOR_LT, "'<' expected");
 
-		List<TypeArgument> typeArgs = new ArrayList<TypeArgument>(1);
+		List<TypeArgument> typeArgs = new ArrayList<>(1);
 
 		Token t = null;
 		do {
@@ -1485,7 +1485,7 @@ OUTER:
 		s.markResetPosition();
 		Token t = s.yylexNonNull(OPERATOR_LT, "TypeParameters expected");
 
-		List<TypeParameter> typeParams = new ArrayList<TypeParameter>(1);
+		List<TypeParameter> typeParams = new ArrayList<>(1);
 
 		do {
 			TypeParameter typeParam = _getTypeParameter(cu, s);

@@ -99,7 +99,7 @@ public class IOUtil {
 
 		// Put any vars they want to explicitly specify
 		if (toAdd!=null) {
-			Map<String, String> temp = new HashMap<String, String>(env);
+			Map<String, String> temp = new HashMap<>(env);
 			for (int i=0; i<toAdd.length; i+=2) {
 				temp.put(toAdd[i], toAdd[i+1]);
 			}
@@ -164,10 +164,10 @@ public class IOUtil {
 	 * @param args Command line arguments.
 	 */
 	public static void main(String[] args) {
-		for (int i=0; i<args.length; i++) {
-			String value = IOUtil.getEnvSafely(args[i]);
-			System.out.println(args[i] + "=" + value);
-		}
+        for (String arg : args) {
+            String value = IOUtil.getEnvSafely(arg);
+            System.out.println(arg + "=" + value);
+        }
 	}
 
 

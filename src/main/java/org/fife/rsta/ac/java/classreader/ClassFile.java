@@ -122,13 +122,10 @@ public class ClassFile implements AccessFlags {
 
 
 	public ClassFile(File classFile) throws IOException {
-		DataInputStream in = new DataInputStream(new BufferedInputStream(
-				new FileInputStream(classFile)));
-		try {
-			init(in);
-		} finally {
-			in.close();
-		}
+        try (DataInputStream in = new DataInputStream(new BufferedInputStream(
+                new FileInputStream(classFile)))) {
+            init(in);
+        }
 	}
 
 
@@ -380,7 +377,7 @@ public class ClassFile implements AccessFlags {
 			if (name.equals(info.getName())) {
 				if (argCount<0 || argCount==info.getParameterCount()) {
 					if (methods==null) {
-						methods = new ArrayList<MethodInfo>(1); // Usually just 1
+						methods = new ArrayList<>(1); // Usually just 1
 					}
 					methods.add(info);
 				}
@@ -669,12 +666,12 @@ public class ClassFile implements AccessFlags {
 	 * @throws IOException If the header is invalid.
 	 */
 	private void readHeader(DataInputStream in) throws IOException {
-		for (int i=0; i<HEADER.length; i++) {
-			byte b = in.readByte();
-			if (b!=HEADER[i]) {
-				throw new IOException("\"CAFEBABE\" header not found");
-			}
-		}
+        for (byte b1 : HEADER) {
+            byte b = in.readByte();
+            if (b != b1) {
+                throw new IOException("\"CAFEBABE\" header not found");
+            }
+        }
 	}
 
 

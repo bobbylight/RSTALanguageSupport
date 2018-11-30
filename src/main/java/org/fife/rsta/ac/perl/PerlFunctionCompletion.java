@@ -116,7 +116,7 @@ public class PerlFunctionCompletion extends FunctionCompletion {
 	}
 
 
-	private static final StringBuilder perldocToHtml(CharSequence text) {
+	private static StringBuilder perldocToHtml(CharSequence text) {
 
 		StringBuilder sb = null;
 

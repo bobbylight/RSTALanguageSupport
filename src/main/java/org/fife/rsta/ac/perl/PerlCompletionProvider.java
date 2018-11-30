@@ -171,7 +171,7 @@ public class PerlCompletionProvider extends CCompletionProvider {
 
 		RSyntaxTextArea textArea = (RSyntaxTextArea)comp;
 		int dot = textArea.getCaretPosition();
-		SortedSet<Completion> varCompletions = new TreeSet<Completion>(comparator);
+		SortedSet<Completion> varCompletions = new TreeSet<>(comparator);
 
 		CompletionProvider p = getDefaultCompletionProvider();
 		String text = p.getAlreadyEnteredText(comp);

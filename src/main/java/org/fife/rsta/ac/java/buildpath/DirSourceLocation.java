@@ -71,14 +71,11 @@ public class DirSourceLocation implements SourceLocation {
 		}
 
 		if (file.isFile()) {
-			BufferedReader r = new BufferedReader(new FileReader(file));
-			try {
-				Scanner s = new Scanner(r);
-				cu = new ASTFactory().getCompilationUnit(entryName, s);
-				//System.out.println("DEBUG: cu: " + cu);
-			} finally {
-				r.close();
-			}
+            try (BufferedReader r = new BufferedReader(new FileReader(file))) {
+                Scanner s = new Scanner(r);
+                cu = new ASTFactory().getCompilationUnit(entryName, s);
+                //System.out.println("DEBUG: cu: " + cu);
+            }
 		}
 
 		return cu;

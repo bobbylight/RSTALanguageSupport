@@ -69,41 +69,38 @@ public class ClassEnumerationReader {
 
 		String lastPkg = null;
 		String line = null;
-		List<String> classNames = new ArrayList<String>();
+		List<String> classNames = new ArrayList<>();
 
-		BufferedReader r = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-		try {
+        try (BufferedReader r = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8))) {
 
-			while ((line=r.readLine())!=null) {
+            while ((line = r.readLine()) != null) {
 
-				// Skip blank lines and comments
-				line = line.trim();
-				if (line.length()==0 || line.charAt(0)=='#') {
-					continue;
-				}
+                // Skip blank lines and comments
+                line = line.trim();
+                if (line.length() == 0 || line.charAt(0) == '#') {
+                    continue;
+                }
 
-				// A new fully-qualified class name
-				if (line.charAt(0)=='-') {
-					line = line.substring(1).trim();
-					classNames.add(line);
-					int lastDot = line.lastIndexOf('.');
-					lastPkg = line.substring(0, lastDot+1);
-				}
+                // A new fully-qualified class name
+                if (line.charAt(0) == '-') {
+                    line = line.substring(1).trim();
+                    classNames.add(line);
+                    int lastDot = line.lastIndexOf('.');
+                    lastPkg = line.substring(0, lastDot + 1);
+                }
 
-				// Just a class name
-				else {
-					String className = line;
-					if (lastPkg!=null) {
-						className = lastPkg + className;
-					}
-					classNames.add(className);
-				}
+                // Just a class name
+                else {
+                    String className = line;
+                    if (lastPkg != null) {
+                        className = lastPkg + className;
+                    }
+                    classNames.add(className);
+                }
 
-			}
+            }
 
-		} finally {
-			r.close();
-		}
+        }
 
 		return classNames;
 

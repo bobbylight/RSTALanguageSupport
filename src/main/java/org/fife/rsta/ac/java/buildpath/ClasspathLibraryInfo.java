@@ -90,7 +90,7 @@ public class ClasspathLibraryInfo extends LibraryInfo {
 	 */
 	public ClasspathLibraryInfo(List<String> classes, SourceLocation sourceLoc){
 		setSourceLocation(sourceLoc);
-		classNameToClassFile = new HashMap<String, ClassFile>();
+		classNameToClassFile = new HashMap<>();
 		int count = classes==null ? 0 : classes.size();
 		for (int i=0; i<count; i++) {
 			// Our internal map must have all entries ending in ".class", but

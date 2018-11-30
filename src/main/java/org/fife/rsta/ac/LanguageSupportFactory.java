@@ -79,8 +79,8 @@ public class LanguageSupportFactory implements PropertyChangeListener {
 	 */
 	private void createSupportMap() {
 
-		styleToSupport = new HashMap<String, LanguageSupport>();
-		styleToSupportClass = new HashMap<String, String>();
+		styleToSupport = new HashMap<>();
+		styleToSupportClass = new HashMap<>();
 
 		String prefix = "org.fife.rsta.ac.";
 

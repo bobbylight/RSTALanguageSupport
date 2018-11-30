@@ -59,7 +59,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 	 */
 	public SourceTreeNode(Object userObject, boolean sorted) {
 		super(userObject);
-		visibleChildren = new Vector<TreeNode>();
+		visibleChildren = new Vector<>();
 		setSortable(true);
 		setSorted(sorted);
 	}
@@ -108,7 +108,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 	public Object clone() {
 		SourceTreeNode node = (SourceTreeNode)super.clone();
 		// Not based off original, no children!
-		node.visibleChildren = new Vector<TreeNode>();
+		node.visibleChildren = new Vector<>();
 		return node;
 	}
 

@@ -55,7 +55,7 @@ public class FieldInfo extends MemberInfo {
 		super(cf, accessFlags);
 		this.nameIndex = nameIndex;
 		this.descriptorIndex = descriptorIndex;
-		attributes = new ArrayList<AttributeInfo>(1); // Usually 0 or 1?
+		attributes = new ArrayList<>(1); // Usually 0 or 1?
 	}
 
 

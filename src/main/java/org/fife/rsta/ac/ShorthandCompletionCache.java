@@ -50,8 +50,8 @@ public class ShorthandCompletionCache {
 
 	public ShorthandCompletionCache(AbstractCompletionProvider templateProvider,
 			AbstractCompletionProvider commentProvider) {
-		shorthandCompletion = new ArrayList<Completion>();
-		commentCompletion = new ArrayList<Completion>();
+		shorthandCompletion = new ArrayList<>();
+		commentCompletion = new ArrayList<>();
 		this.templateProvider = templateProvider;
 		this.commentProvider = commentProvider;
 	}
@@ -61,8 +61,8 @@ public class ShorthandCompletionCache {
 	}
 
 
-	private static final void addSorted(List<Completion> list,
-			Completion completion) {
+	private static void addSorted(List<Completion> list,
+                                  Completion completion) {
 		int index = Collections.binarySearch(list, completion);
 		if (index<0) {
 			// index = -insertion_point - 1

@@ -9,7 +9,7 @@ public class JavaScriptEngineFactory {
 	public static final String DEFAULT = EMCAJavaScriptEngine.EMCA_ENGINE;
 	
 	private HashMap<String, JavaScriptEngine> supportedEngines =
-			new HashMap<String, JavaScriptEngine>();
+            new HashMap<>();
 
 	private static JavaScriptEngineFactory Instance = new JavaScriptEngineFactory();
 

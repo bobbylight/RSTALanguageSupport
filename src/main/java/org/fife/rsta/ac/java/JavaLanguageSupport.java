@@ -73,7 +73,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 	 * Constructor.
 	 */
 	public JavaLanguageSupport() {
-		parserToInfoMap = new HashMap<JavaParser, Info>();
+		parserToInfoMap = new HashMap<>();
 		jarManager = new JarManager();
 		setAutoActivationEnabled(true);
 		setParameterAssistanceEnabled(true);

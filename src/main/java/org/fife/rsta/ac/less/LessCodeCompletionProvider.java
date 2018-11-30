@@ -90,7 +90,7 @@ class LessCodeCompletionProvider extends PropertyValueCompletionProvider {
 
 		Icon functionIcon = loadIcon("methpub_obj");
 
-		List<Completion> completions = new ArrayList<Completion>();
+		List<Completion> completions = new ArrayList<>();
 		completions = loadFromXML("data/less_functions.xml");
 		for (Completion fc : completions) {
 			((FunctionCompletion)fc).setIcon(functionIcon);
