@@ -131,8 +131,8 @@ public class IOUtil {
 	 * @throws IOException If an IO error occurs.
 	 */
 	// TODO: Allow a timeout to be passed in
-	public static int waitForProcess(Process p, StringBuffer stdout,
-									StringBuffer stderr) throws IOException {
+	public static int waitForProcess(Process p, StringBuilder stdout,
+									StringBuilder stderr) throws IOException {
 
 		InputStream in = p.getInputStream();
 		InputStream err = p.getErrorStream();
