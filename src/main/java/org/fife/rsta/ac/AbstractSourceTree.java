@@ -14,6 +14,7 @@ import java.util.Enumeration;
 import java.util.regex.Pattern;
 import javax.swing.JLabel;
 import javax.swing.JTree;
+import javax.swing.event.TreeExpansionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
@@ -83,6 +84,27 @@ public abstract class AbstractSourceTree extends JTree {
 	 *         path
 	 */
 	protected boolean fastExpandAll(TreePath parent, boolean expand) {
+
+        TreeExpansionListener[] listeners = getTreeExpansionListeners();
+        for (TreeExpansionListener listener : listeners) {
+            removeTreeExpansionListener(listener);
+        }
+
+        boolean result = fastExpandAllImpl(parent, expand);
+
+        for (TreeExpansionListener listener : listeners) {
+            addTreeExpansionListener(listener);
+        }
+
+        // Trigger an update for the TreeExpansionListeners
+        collapsePath(parent);
+        expandPath(parent);
+
+        return result;
+    }
+
+    private boolean fastExpandAllImpl(TreePath parent, boolean expand) {
+
 		// Traverse children
 		TreeNode node = (TreeNode) parent.getLastPathComponent();
 		if (node.getChildCount() > 0) {
@@ -91,8 +113,8 @@ public abstract class AbstractSourceTree extends JTree {
 				TreeNode n = (TreeNode) e.nextElement();
 				TreePath path = parent.pathByAddingChild(n);
 				// The || order is important, don't let childExpand be first,
-				// or the fastExpandAll() call won't happen in some cases.
-				childExpandCalled = fastExpandAll(path, expand) || childExpandCalled;
+				// or the fastExpandAllImpl() call won't happen in some cases.
+				childExpandCalled = fastExpandAllImpl(path, expand) || childExpandCalled;
 			}
 
 			// Only expand me if one of the children hasn't already expanded
@@ -106,7 +128,6 @@ public abstract class AbstractSourceTree extends JTree {
 				else {
 					collapsePath(parent);
 				}
-				//expandCount++;
 			}
 			return true;
 		}

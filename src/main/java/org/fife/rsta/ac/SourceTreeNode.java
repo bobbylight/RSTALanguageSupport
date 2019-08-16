@@ -10,10 +10,7 @@
  */
 package org.fife.rsta.ac;
 
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.Vector;
+import java.util.*;
 import java.util.regex.Pattern;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
@@ -36,7 +33,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 	private boolean sortable;
 	private boolean sorted;
 	private Pattern pattern;
-	private Vector<TreeNode> visibleChildren;
+	private List<TreeNode> visibleChildren;
 	private int sortPriority;
 
 
@@ -59,7 +56,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 	 */
 	public SourceTreeNode(Object userObject, boolean sorted) {
 		super(userObject);
-		visibleChildren = new Vector<>();
+		visibleChildren = new ArrayList<>();
 		setSortable(true);
 		setSorted(sorted);
 	}
@@ -93,7 +90,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 	 */
 	@Override
 	public Enumeration<TreeNode> children() {
-		return visibleChildren.elements();
+		return Collections.enumeration(visibleChildren);
 	}
 
 
@@ -108,7 +105,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 	public Object clone() {
 		SourceTreeNode node = (SourceTreeNode)super.clone();
 		// Not based off original, no children!
-		node.visibleChildren = new Vector<>();
+		node.visibleChildren = new ArrayList<>();
 		return node;
 	}
 
@@ -309,11 +306,11 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 		if (children!=null) {
 			visibleChildren.addAll(children);
 			if (sortable && sorted) {
-				Collections.sort((Vector)visibleChildren);
+			    visibleChildren.sort(null);
 			}
 			if (pattern!=null) {
-				for (Iterator i=visibleChildren.iterator(); i.hasNext(); ) {
-					TreeNode node = (TreeNode)i.next();
+				for (Iterator<TreeNode> i=visibleChildren.iterator(); i.hasNext(); ) {
+					TreeNode node = i.next();
 					if (node.isLeaf()) {
 						String text = node.toString();
 						text = Util.stripHtml(text);

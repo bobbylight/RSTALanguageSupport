@@ -76,6 +76,7 @@ public class XmlParser extends AbstractParser {
 	private SAXParserFactory spf;
 	private SAXParser sp;
 	private ValidationConfig validationConfig;
+	private int elemCount;
 
 
 	public XmlParser(XmlLanguageSupport xls) {
