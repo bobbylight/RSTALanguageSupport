@@ -47,6 +47,11 @@ ext.sharedManifest = manifest {
 		'Implementation-Version': version)
 
 }
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
 jar {
 	manifest { from sharedManifest }
 }
