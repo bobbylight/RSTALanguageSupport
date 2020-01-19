@@ -90,23 +90,23 @@ public class ClassAndLocalVariablesTest extends TestCase {
 
 		ImportDeclaration id = i.next();
 		assertEquals("java.io.*", id.getName());
-		assertEquals(true, id.isWildcard());
-		assertEquals(false, id.isStatic());
+        assertTrue(id.isWildcard());
+        assertFalse(id.isStatic());
 
 		id = i.next();
 		assertEquals("java.util.List", id.getName());
-		assertEquals(false, id.isWildcard());
-		assertEquals(false, id.isStatic());
+        assertFalse(id.isWildcard());
+        assertFalse(id.isStatic());
 
 		id = i.next();
 		assertEquals("java.util.ArrayList", id.getName());
-		assertEquals(false, id.isWildcard());
-		assertEquals(false, id.isStatic());
+        assertFalse(id.isWildcard());
+        assertFalse(id.isStatic());
 
 		id = i.next();
 		assertEquals("java.lang.Math.*", id.getName());
-		assertEquals(true, id.isWildcard());
-		assertEquals(true, id.isStatic());
+        assertTrue(id.isWildcard());
+        assertTrue(id.isStatic());
 
 	}
 
@@ -135,7 +135,7 @@ public class ClassAndLocalVariablesTest extends TestCase {
 		assertEquals("classInt1", field.getName());
 		assertTrue(field.getModifiers().isPublic());
 		assertTrue(field.getDocComment()!=null &&
-				field.getDocComment().indexOf("A member int variable.")>=0);
+                field.getDocComment().contains("A member int variable."));
 
 		member = i.next();
 		assertTrue(member instanceof Field);
@@ -143,7 +143,7 @@ public class ClassAndLocalVariablesTest extends TestCase {
 		assertEquals("int", field.getType().toString());
 		assertEquals("classInt2", field.getName());
 		assertTrue(field.getModifiers().isProtected());
-		assertEquals(null, field.getDocComment());
+        assertNull(field.getDocComment());
 
 		member = i.next();
 		assertTrue(member instanceof Field);
@@ -152,7 +152,7 @@ public class ClassAndLocalVariablesTest extends TestCase {
 		assertEquals("classStr1", field.getName());
 		assertTrue(field.getModifiers().isPrivate());
 		assertTrue(field.getDocComment()!=null &&
-				field.getDocComment().indexOf("A string member variable.")>=0);
+                field.getDocComment().contains("A string member variable."));
 
 		member = i.next();
 		assertTrue(member instanceof Field);
@@ -160,7 +160,7 @@ public class ClassAndLocalVariablesTest extends TestCase {
 		assertEquals("list", field.getName());
 		assertEquals("List<Double>", field.getType().toString());
 		assertTrue(field.getModifiers().isPrivate());
-		assertEquals(field.getDocComment(), null);
+        assertNull(field.getDocComment());
 
 		member = i.next();
 		assertTrue(member instanceof Method);
@@ -175,7 +175,7 @@ public class ClassAndLocalVariablesTest extends TestCase {
 		assertEquals("getValue", method.getName());
 		assertTrue(method.getModifiers().isPublic());
 		assertTrue(method.getDocComment()!=null &&
-				method.getDocComment().indexOf("Returns a value.")>=0);
+                method.getDocComment().contains("Returns a value."));
 
 		member = i.next();
 		assertTrue(member instanceof Method);

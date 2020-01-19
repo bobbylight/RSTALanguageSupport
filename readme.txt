@@ -1,7 +1,7 @@
 RSTALanguageSupport Readme
 --------------------------
-Version 3.0.0
-21nov2018
+Version 3.0.2
+18jan2020
 
 ----------------------------------------
 Contents
@@ -27,7 +27,7 @@ of errors in the source code).
 Documentation is sparse at the moment, but should improve over time.
 
 Like all RSyntaxTextArea-related projects (AutoComplete, SpellChecker), this
-project targets Java 5 and beyond.
+project targets Java 8 and beyond.
 
 This library itself relies on the following other libraries (besides
 RSyntaxTextArea and AutoComplete):
@@ -82,7 +82,7 @@ Languages with support include:
      updated live with edits.
 
 5. JavaScript
-   - Embedded Rhino parser (v1.7R4) for squiggle underlining syntax errors.
+   - Embedded Rhino parser for squiggle underlining syntax errors.
    - Auto-completion for variables and functions in the current source file,
      derived from the parser above.  Completion choices are based on the
      type of the variable.  Scope is honored.
@@ -131,9 +131,6 @@ Languages with support include:
 ----------------------------------------
 III. Project Layout
 ----------------------------------------
-This project assumes it is checked out along-side its sister projects
-"RSyntaxTextArea" and "AutoComplete".  Without these projects it will not build
-properly.
 
    RSTALanguageSupport/
       src/main/java/                    Source tree
@@ -172,17 +169,9 @@ the method and parameter descriptions, is welcome.
 ----------------------------------------
 IV.  Building the Jar
 ----------------------------------------
-This library uses Gradle for builds.  It depends on the sister RSyntaxTextArea
-and AutoComplete projects.  It is recommended that you check out all three
-projects out side by side.  Thus, to build:
+This library uses Gradle for builds.
    
-   git clone https://github.com/bobbylight/RSyntaxTextArea.git
-   git clone https://github.com/bobbylight/AutoComplete.git
    git clone https://github.com/bobbylight/RSTALanguageSupport.git
-   cd RSyntaxTextArea
-   gradlew build
-   cd ../AutoComplete
-   gradlew build
    cd ../RSTALanguageSupport
    gradlew build
 
@@ -211,7 +200,7 @@ you can retrieve the LanguageSupport for Perl:
 
     LanguageSupportFactory lsf = LanguageSupportFactory.get();
     PerlLanguageSupport support = (PerlLanguageSupport)lsf.
-                            getSupportfor(SyntaxConstants.SYNTAX_STYLE_PERL);
+                            getSupportFor(SyntaxConstants.SYNTAX_STYLE_PERL);
 
 Now, you can tweak language-specific options.  For example, PerlLanguageSupport
 has a method named "setUseParensWithFunctions(boolean)" that toggles whether
@@ -237,13 +226,9 @@ the included Rhino.LICENSE.txt for details.
 If you use this library in your own projects, please let me know!  I like to
 know that my work is useful for others.
 
-Bugs and Feature requests can be sent directly to me, posted on GitHub:
+Bugs and Feature requests should be posted on GitHub:
 
    https://github.com/bobbylight/RSTALanguageSupport
-
-or posted on the RSyntaxTextArea forums:
-
-   http://forum.fifesoft.com
 
 
 ----------------------------------------
