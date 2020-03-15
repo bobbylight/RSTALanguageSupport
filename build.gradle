@@ -16,14 +16,14 @@ archivesBaseName = 'languagesupport'
 ext.isReleaseVersion = !project.version.endsWith('SNAPSHOT')
 
 dependencies {
-    api 'com.fifesoft:rsyntaxtextarea:3.0.8'
-    api 'com.fifesoft:autocomplete:3.0.5'
+    api 'com.fifesoft:rsyntaxtextarea:3.1.0'
+    api 'com.fifesoft:autocomplete:3.1.0'
 	implementation 'org.mozilla:rhino:1.7.6'
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
 }
 
 wrapper {
-    gradleVersion = '6.1'
+    gradleVersion = '6.2.2'
 }
 
 repositories {
