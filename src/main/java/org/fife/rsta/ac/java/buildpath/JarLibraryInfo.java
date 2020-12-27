@@ -95,12 +95,9 @@ public class JarLibraryInfo extends LibraryInfo {
 
 	@Override
 	public ClassFile createClassFile(String entryName) throws IOException {
-		JarFile jar = new JarFile(jarFile);
-		try {
-			return createClassFileImpl(jar, entryName);
-		} finally {
-			jar.close();
-		}
+        try (JarFile jar = new JarFile(jarFile)) {
+            return createClassFileImpl(jar, entryName);
+        }
 	}
 
 
@@ -119,7 +116,7 @@ public class JarLibraryInfo extends LibraryInfo {
 		}
 		DataInputStream in = new DataInputStream(
 				new BufferedInputStream(jar.getInputStream(entry)));
-		ClassFile cf = null;
+		ClassFile cf;
 		try {
 			cf = new ClassFile(in);
 		} finally {
@@ -133,22 +130,19 @@ public class JarLibraryInfo extends LibraryInfo {
 	public PackageMapNode createPackageMap() throws IOException {
 
 		PackageMapNode root = new PackageMapNode();
-		JarFile jar = new JarFile(jarFile);
 
-		try {
+        try (JarFile jar = new JarFile(jarFile)) {
 
-			Enumeration<JarEntry> e = jar.entries();
-			while (e.hasMoreElements()) {
-				ZipEntry entry = e.nextElement();
-				String entryName = entry.getName();
-				if (entryName.endsWith(".class")) {
-					root.add(entryName);
-				}
-			}
+            Enumeration<JarEntry> e = jar.entries();
+            while (e.hasMoreElements()) {
+                ZipEntry entry = e.nextElement();
+                String entryName = entry.getName();
+                if (entryName.endsWith(".class")) {
+                    root.add(entryName);
+                }
+            }
 
-		} finally {
-			jar.close();
-		}
+        }
 
 		return root;
 

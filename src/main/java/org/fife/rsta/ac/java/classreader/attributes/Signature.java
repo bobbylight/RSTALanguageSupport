@@ -45,7 +45,7 @@ public class Signature extends AttributeInfo {
 		
 		if (signature!=null && signature.startsWith("<")) {
 
-			types = new ArrayList<String>(1); // Usually a small number
+			types = new ArrayList<>(1); // Usually a small number
 			int afterMatchingGT = skipLtGt(signature, 1);
 
 			// We're assuming we don't come across corrupt signatures...
@@ -117,7 +117,7 @@ public class Signature extends AttributeInfo {
 
 		if (signature!=null) {
 
-			paramTypeList = new ArrayList<String>();
+			paramTypeList = new ArrayList<>();
 			
 			// Handle "<...>", which essentially defines extra type args
 			Map<String, String> additionalTypeArgs = null;
@@ -228,7 +228,7 @@ public class Signature extends AttributeInfo {
 
 	private Map<String, String> parseAdditionalTypeArgs(String typeParams) {
 
-		Map<String, String> additionalTypeArgs = new HashMap<String, String>();
+		Map<String, String> additionalTypeArgs = new HashMap<>();
 		int offs = 0;
 		int colon = typeParams.indexOf(':', offs);
 
@@ -266,7 +266,7 @@ public class Signature extends AttributeInfo {
 		int braceCount = -1;
 		while (str.charAt(++braceCount) == '[');
 		int pos = braceCount;
-		String type = null;
+		String type;
 		boolean extendingGenericType = false;
 
 		switch (str.charAt(pos)) {
@@ -326,7 +326,7 @@ public class Signature extends AttributeInfo {
 						// Get type parameters
 						String paramDescriptors = str.substring(lt+1, offs-1);
 						ParamDescriptorResult res2 = new ParamDescriptorResult();
-						List<String> paramTypeList = new ArrayList<String>();
+						List<String> paramTypeList = new ArrayList<>();
 						// Recursively parse type parameters of this parameter
 						while (paramDescriptors.length()>0) {
 							parseParamDescriptor(paramDescriptors, cf, additionalTypeArgs,

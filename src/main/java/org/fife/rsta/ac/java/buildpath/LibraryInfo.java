@@ -174,7 +174,7 @@ public abstract class LibraryInfo implements Comparable<LibraryInfo>,
 		LibraryInfo info = null;
 
 		File mainJar = new File(jreHome, "lib/rt.jar"); // Sun JRE's
-		File sourceZip = null;
+		File sourceZip;
 
 		if (mainJar.isFile()) { // Sun JRE's
 			sourceZip = new File(jreHome, "src.zip");

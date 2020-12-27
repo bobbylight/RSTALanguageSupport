@@ -67,11 +67,11 @@ public class HtmlCompletionProvider extends DefaultCompletionProvider {
 
 		initCompletions();
 
-		tagToAttrs = new HashMap<String, List<AttributeCompletion>>();
+		tagToAttrs = new HashMap<>();
 		for (Completion comp : completions) {
 			MarkupTagCompletion c = (MarkupTagCompletion)comp;
 			String tag = c.getName();
-			List<AttributeCompletion> attrs = new ArrayList<AttributeCompletion>();
+			List<AttributeCompletion> attrs = new ArrayList<>();
 			tagToAttrs.put(tag.toLowerCase(), attrs);
 			for (int j=0; j<c.getAttributeCount(); j++) {
 				Parameter param = c.getAttribute(j);
@@ -281,7 +281,7 @@ if (t!=null && !t.isWhitespace()) {
 	@Override
 	protected List<Completion> getCompletionsImpl(JTextComponent comp) {
 
-		List<Completion> retVal = new ArrayList<Completion>();
+		List<Completion> retVal = new ArrayList<>();
 		String text = getAlreadyEnteredText(comp);
 		List<? extends Completion> completions = getTagCompletions();
 		if (lastTagName!=null) {

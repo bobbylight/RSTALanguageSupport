@@ -40,7 +40,7 @@ public class NormalClassDeclaration extends AbstractTypeDeclarationNode {
 
 	public NormalClassDeclaration(Scanner s, int offs, String className) {
 		super(className, s.createOffset(offs), s.createOffset(offs+className.length()));
-		implementedList = new ArrayList<Type>(0); // Usually not many
+		implementedList = new ArrayList<>(0); // Usually not many
 		// If parsing java.lang.Object.java, setExtendedType(null) should be
 		// called.  This is here for all other classes without an explicit
 		// super class declared.

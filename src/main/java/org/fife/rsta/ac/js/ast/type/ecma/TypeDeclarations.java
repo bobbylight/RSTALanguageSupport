@@ -40,11 +40,11 @@ public abstract class TypeDeclarations {
 
 	public static String NULL_TYPE = "void";
 
-	private final HashMap<String, TypeDeclaration> types = new HashMap<String, TypeDeclaration>();
+	private final HashMap<String, TypeDeclaration> types = new HashMap<>();
 
 	// reverse lookup for Java types to Javascript types
-	private final HashMap<String, String> javascriptReverseLookup = new HashMap<String, String>();
-	private final HashSet<JavaScriptObject> ecmaObjects = new HashSet<JavaScriptObject>();
+	private final HashMap<String, String> javascriptReverseLookup = new HashMap<>();
+	private final HashSet<JavaScriptObject> ecmaObjects = new HashSet<>();
 
 
 	public TypeDeclarations() {
@@ -137,7 +137,7 @@ public abstract class TypeDeclarations {
 
 
 	public List<String> getAllClasses() {
-		List<String> classes = new ArrayList<String>();
+		List<String> classes = new ArrayList<>();
 
 		for (String name : types.keySet()) {
 			TypeDeclaration dec = types.get(name);
@@ -150,7 +150,7 @@ public abstract class TypeDeclarations {
 
 
 	public List<TypeDeclaration> getAllJavaScriptTypeDeclarations() {
-		List<TypeDeclaration> jsTypes = new ArrayList<TypeDeclaration>();
+		List<TypeDeclaration> jsTypes = new ArrayList<>();
 
 		for (String name : types.keySet()) {
 			TypeDeclaration dec = types.get(name);

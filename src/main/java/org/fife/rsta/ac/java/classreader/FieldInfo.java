@@ -253,7 +253,7 @@ public class FieldInfo extends MemberInfo {
 	 */
 	private AttributeInfo readAttribute(DataInputStream in) throws IOException {
 
-		AttributeInfo ai = null;
+		AttributeInfo ai;
 
 		int attributeNameIndex = in.readUnsignedShort();
 		int attributeLength = in.readInt();

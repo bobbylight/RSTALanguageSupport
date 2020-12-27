@@ -34,8 +34,8 @@ public class Type {
 
 
 	public Type() {
-		identifiers = new ArrayList<String>(1);
-		typeArguments = new ArrayList<List<TypeArgument>>(1);
+		identifiers = new ArrayList<>(1);
+		typeArguments = new ArrayList<>(1);
 	}
 
 
@@ -101,7 +101,7 @@ public class Type {
 		int count = identifiers.size();
 		int start = fullyQualified ? 0 : count-1;
 		for (int i=start; i<count; i++) {
-			sb.append(identifiers.get(i).toString());
+			sb.append(identifiers.get(i));
 			if (addTypeArgs && typeArguments.get(i)!=null) {
 				List<TypeArgument> typeArgs = typeArguments.get(i);
 				int typeArgCount = typeArgs.size();

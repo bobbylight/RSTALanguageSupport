@@ -79,7 +79,7 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 		setRelevanceAppropriately();
 
 		int count = m.getParameterCount();
-		List<Parameter> params = new ArrayList<Parameter>(count);
+		List<Parameter> params = new ArrayList<>(count);
 		for (int i=0; i<count; i++) {
 			FormalParameter param = m.getParameter(i);
 			Type type = param.getType();
@@ -106,7 +106,7 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 		setRelevanceAppropriately();
 
 		String[] paramTypes = info.getParameterTypes();
-		List<Parameter> params = new ArrayList<Parameter>(paramTypes.length);
+		List<Parameter> params = new ArrayList<>(paramTypes.length);
 		for (int i=0; i<paramTypes.length; i++) {
 			String name = ((MethodInfoData)data).getParameterName(i);
 			String type = paramTypes[i].substring(paramTypes[i].lastIndexOf('.')+1);

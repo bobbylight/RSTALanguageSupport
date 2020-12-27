@@ -185,7 +185,7 @@ public class JavaOutlineTree extends AbstractSourceTree {
 
 	private MemberTreeNode createMemberNode(Member member) {
 
-		MemberTreeNode node = null;
+		MemberTreeNode node;
 		if (member instanceof CodeBlock) {
 			node = new MemberTreeNode((CodeBlock)member);
 		}

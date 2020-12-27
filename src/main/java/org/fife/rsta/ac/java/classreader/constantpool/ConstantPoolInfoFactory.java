@@ -29,7 +29,7 @@ public class ConstantPoolInfoFactory implements ConstantTypes {
 	public static ConstantPoolInfo readConstantPoolInfo(ClassFile cf,
 							DataInputStream in) throws IOException {
 
-		ConstantPoolInfo cpi = null;
+		ConstantPoolInfo cpi;
 		int tag = in.read();
 
 		switch (tag) {

@@ -34,7 +34,7 @@ class IconFactory {
 	 * Private constructor to prevent instantiation.
 	 */
 	private IconFactory() {
-		iconMap = new HashMap<String, Icon>();
+		iconMap = new HashMap<>();
 	}
 
 

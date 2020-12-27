@@ -279,13 +279,13 @@ new ValidationConfigSniffer().sniff(doc);
 
 
 		@Override
-		public void error(SAXParseException e) throws SAXException {
+		public void error(SAXParseException e) {
 			doError(e, ParserNotice.Level.ERROR);
 		}
 
 
 		@Override
-		public void fatalError(SAXParseException e) throws SAXException {
+		public void fatalError(SAXParseException e) {
 			doError(e, ParserNotice.Level.ERROR);
 		}
 
@@ -384,7 +384,7 @@ new ValidationConfigSniffer().sniff(doc);
 
 
 		@Override
-		public void warning(SAXParseException e) throws SAXException {
+		public void warning(SAXParseException e) {
 			doError(e, ParserNotice.Level.WARNING);
 		}
 

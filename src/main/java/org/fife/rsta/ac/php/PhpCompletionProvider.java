@@ -107,10 +107,8 @@ public class PhpCompletionProvider extends HtmlCompletionProvider {
 					setParameterizedCompletionParams(startChar, sep, endChar);
 				}
 			}
-		} catch (SAXException se) {
-			throw new IOException(se.toString());
-		} catch (ParserConfigurationException pce) {
-			throw new IOException(pce.toString());
+		} catch (SAXException | ParserConfigurationException e) {
+			throw new IOException(e.toString());
 		} finally {
 			long time = System.currentTimeMillis() - start;
 			System.out.println("XML loaded in: " + time + "ms");
@@ -147,18 +145,18 @@ public class PhpCompletionProvider extends HtmlCompletionProvider {
 	@Override
 	protected List<Completion> getCompletionsImpl(JTextComponent comp) {
 
-		List<Completion> list = null;
+		List<Completion> list;
 		String text = getAlreadyEnteredText(comp); // Sets phpCompletion
 
 		if (phpCompletion) {
 
 			if (text==null) {
-				list = new ArrayList<Completion>(0);
+				list = new ArrayList<>(0);
 			}
 
 			else {
 
-				list = new ArrayList<Completion>();
+				list = new ArrayList<>();
 
 				@SuppressWarnings("unchecked")
 				int index = Collections.binarySearch(phpCompletions, text, comparator);

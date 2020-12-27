@@ -33,7 +33,7 @@ public class JavaShorthandCompletionCache extends ShorthandCompletionCache {
 			templateProvider, DefaultCompletionProvider commentsProvider) {
 
 		super(templateProvider, commentsProvider);
-		String template = null;
+		String template;
 
 		//load defaults
 		template = "System.out.println(${});${cursor}";

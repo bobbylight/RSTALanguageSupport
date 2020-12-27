@@ -44,7 +44,7 @@ class PercentageOrLengthCompletionGenerator implements CompletionGenerator {
 	@Override
 	public List<Completion> generate(CompletionProvider provider, String input){
 
-		List<Completion> completions = new ArrayList<Completion>();
+		List<Completion> completions = new ArrayList<>();
 
 		if (DIGITS.matcher(input).matches()) {
 

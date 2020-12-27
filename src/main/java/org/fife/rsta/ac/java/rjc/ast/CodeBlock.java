@@ -51,7 +51,7 @@ public class CodeBlock extends AbstractMember {
 
 	public void add(CodeBlock child) {
 		if (children==null) {
-			children = new ArrayList<CodeBlock>();
+			children = new ArrayList<>();
 		}
 		children.add(child);
 		child.setParent(this);
@@ -60,7 +60,7 @@ public class CodeBlock extends AbstractMember {
 
 	public void addLocalVariable(LocalVariable localVar) {
 		if (localVars==null) {
-			localVars = new ArrayList<LocalVariable>();
+			localVars = new ArrayList<>();
 		}
 		localVars.add(localVar);
 	}
@@ -133,7 +133,7 @@ public class CodeBlock extends AbstractMember {
 	 */
 	public List<LocalVariable> getLocalVarsBefore(int offs) {
 
-		List<LocalVariable> vars = new ArrayList<LocalVariable>();
+		List<LocalVariable> vars = new ArrayList<>();
 
 		if (localVars!=null) {
 			for (int i=0; i<getLocalVarCount(); i++) {

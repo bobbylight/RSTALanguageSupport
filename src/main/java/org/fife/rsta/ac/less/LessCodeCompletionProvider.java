@@ -12,7 +12,6 @@ package org.fife.rsta.ac.less;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -90,7 +89,7 @@ class LessCodeCompletionProvider extends PropertyValueCompletionProvider {
 
 		Icon functionIcon = loadIcon("methpub_obj");
 
-		List<Completion> completions = new ArrayList<>();
+		List<Completion> completions;
 		completions = loadFromXML("data/less_functions.xml");
 		for (Completion fc : completions) {
 			((FunctionCompletion)fc).setIcon(functionIcon);

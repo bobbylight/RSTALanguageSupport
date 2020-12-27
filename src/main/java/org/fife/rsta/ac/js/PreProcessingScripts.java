@@ -23,7 +23,7 @@ public class PreProcessingScripts {
 	
 	private SourceCompletionProvider provider;
 	
-	private Set<Completion> preProcessingCompletions = new HashSet<Completion>();
+	private Set<Completion> preProcessingCompletions = new HashSet<>();
 	
 	
 	public PreProcessingScripts(SourceCompletionProvider provider)

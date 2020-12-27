@@ -119,7 +119,7 @@ public class TldFile {
 //r.close();
 //System.exit(0);
 
-		Document doc = null;
+		Document doc;
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		try {
 			DocumentBuilder db = dbf.newDocumentBuilder();
@@ -150,7 +150,7 @@ public class TldFile {
 				Element attrElem = (Element)attrNl.item(j);
 				name = getChildText(attrElem.getElementsByTagName("name").item(0));
 				desc = getChildText(attrElem.getElementsByTagName("description").item(0));
-				boolean required = Boolean.valueOf(getChildText(attrElem.getElementsByTagName("required").item(0))).booleanValue();
+				boolean required = Boolean.parseBoolean(getChildText(attrElem.getElementsByTagName("required").item(0)));
 				boolean rtexprValue = false;//Boolean.valueOf(getChildText(attrElem.getElementsByTagName("rtexprValue").item(0))).booleanValue();
 				TldAttributeParam param = new TldAttributeParam(null, name,
 												required, rtexprValue);

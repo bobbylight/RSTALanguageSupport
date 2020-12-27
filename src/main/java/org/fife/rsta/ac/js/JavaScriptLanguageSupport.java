@@ -86,7 +86,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 
 
 	public JavaScriptLanguageSupport() {
-		parserToInfoMap = new HashMap<JavaScriptParser, Info>();
+		parserToInfoMap = new HashMap<>();
 		jarManager = createJarManager();
 		provider = createJavaScriptCompletionProvider();
 		setErrorParser(JsErrorParser.RHINO);
@@ -709,7 +709,7 @@ return DEFAULT;
 	}
 
 
-	private class DeepestScopeVisitor implements NodeVisitor {
+	private static class DeepestScopeVisitor implements NodeVisitor {
 
 		private int offs;
 		private AstNode deepestScope;

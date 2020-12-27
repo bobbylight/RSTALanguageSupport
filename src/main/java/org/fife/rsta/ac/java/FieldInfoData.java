@@ -57,7 +57,7 @@ class FieldInfoData implements Data {
 	@Override
 	public String getIcon() {
 
-		String key = null;
+		String key;
 		int flags = info.getAccessFlags();
 
 		if (Util.isDefault(flags)) {

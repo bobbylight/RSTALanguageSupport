@@ -51,7 +51,7 @@ public class JarManager {
 	 * Constructor.
 	 */
 	public JarManager() {
-		classFileSources = new ArrayList<JarReader>();
+		classFileSources = new ArrayList<>();
 		setCheckModifiedDatestamps(true);
 	}
 
@@ -274,7 +274,7 @@ TODO: Verify me!!!
 					ClassFile entry = getClassEntry(qualified);
 					if (entry!=null) {
 						if (result==null) {
-							result = new ArrayList<ClassFile>(1); // Usually small
+							result = new ArrayList<>(1); // Usually small
 						}
 						result.add(entry);
 					}
@@ -289,7 +289,7 @@ TODO: Verify me!!!
 						ClassFile entry = getClassEntry(name2);
 						if (entry!=null) { // Should always be true
 							if (result==null) {
-								result = new ArrayList<ClassFile>(1); // Usually small
+								result = new ArrayList<>(1); // Usually small
 							}
 							result.add(entry);
 						}
@@ -308,7 +308,7 @@ TODO: Verify me!!!
 		ClassFile entry = getClassEntry(qualified);
 		if (entry!=null) {
 			if (result==null) {
-				result = new ArrayList<ClassFile>(1); // Usually small
+				result = new ArrayList<>(1); // Usually small
 			}
 			result.add(entry);
 		}
@@ -325,7 +325,7 @@ TODO: Verify me!!!
 	 */
 	public List<ClassFile> getClassesInPackage(String pkgName, boolean inPkg) {
 
-		List<ClassFile> list = new ArrayList<ClassFile>();
+		List<ClassFile> list = new ArrayList<>();
 		String[] pkgs = Util.splitOnChar(pkgName, '.');
 
 		for (int i=0; i<classFileSources.size(); i++) {
@@ -350,7 +350,7 @@ TODO: Verify me!!!
 	 */
 	public List<LibraryInfo> getClassFileSources() {
 		List<LibraryInfo> jarList =
-				new ArrayList<LibraryInfo>(classFileSources.size());
+                new ArrayList<>(classFileSources.size());
 		for (JarReader reader : classFileSources) {
 			jarList.add(reader.getLibraryInfo()); // Already cloned
 		}

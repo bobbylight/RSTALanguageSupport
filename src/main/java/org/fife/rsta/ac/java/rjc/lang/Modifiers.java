@@ -67,8 +67,8 @@ public class Modifiers {
 
 
 	public Modifiers() {
-		modifiers = new ArrayList<Integer>(1); // Usually not many.
-		annotations = new ArrayList<Annotation>(0); // Often 0 or 1 (@Deprecated)
+		modifiers = new ArrayList<>(1); // Usually not many.
+		annotations = new ArrayList<>(0); // Often 0 or 1 (@Deprecated)
 	}
 
 
@@ -79,7 +79,7 @@ public class Modifiers {
 
 	public boolean addModifier(int tokenType) {
 
-		Integer key = null;
+		Integer key;
 
 		switch (tokenType) {
 			case TokenTypes.KEYWORD_ABSTRACT:

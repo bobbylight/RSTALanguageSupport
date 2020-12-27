@@ -91,9 +91,9 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 		this.isLess = isLess;
 
 		try {
-			this.valueCompletions = new HashMap<String, List<Completion>>();
+			this.valueCompletions = new HashMap<>();
 			this.valueCompletionGenerators =
-					new HashMap<String, List<CompletionGenerator>>();
+                    new HashMap<>();
 			loadPropertyCompletions();
 			this.htmlTagCompletions = loadHtmlTagCompletions();
 		} catch (IOException ioe) { // Never happens
@@ -236,7 +236,7 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 	@SuppressWarnings("unchecked")
 	protected List<Completion> getCompletionsImpl(JTextComponent comp) {
 
-		List<Completion> retVal = new ArrayList<Completion>();
+		List<Completion> retVal = new ArrayList<>();
 		String text = getAlreadyEnteredText(comp);
 
 		if (text!=null) {
@@ -246,7 +246,7 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 			LexerState lexerState = getLexerState(textArea,
 					textArea.getCaretLineNumber());
 
-			List<Completion> choices = new ArrayList<Completion>();
+			List<Completion> choices = new ArrayList<>();
 			switch (lexerState) {
 				case SELECTOR:
 					choices = htmlTagCompletions;
@@ -270,14 +270,14 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 									// Clone choices array since we had a shallow
 									// copy of the "static" completions for this
 									// property
-									choices = new ArrayList<Completion>(choices);
+									choices = new ArrayList<>(choices);
 									choices.addAll(toMerge);
 								}
 							}
 						}
 					}
 					if (choices==null) {
-						choices = new ArrayList<Completion>();
+						choices = new ArrayList<>();
 					}
 					Collections.sort(choices);
 					break;
@@ -385,8 +385,7 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 	private List<Completion> loadHtmlTagCompletions() throws IOException {
 
 		// TODO: Share/grab this list directly from HtmlCompletionProvider?
-		List<Completion> completions = new ArrayList<Completion>();
-		completions = loadFromXML("data/html.xml");
+        List<Completion> completions = loadFromXML("data/html.xml");
 
 		addAtRuleCompletions(completions);
 
@@ -398,9 +397,9 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 
 	private void loadPropertyCompletions() throws IOException {
 
-		propertyCompletions = new ArrayList<Completion>();
+		propertyCompletions = new ArrayList<>();
 
-		BufferedReader r = null;
+		BufferedReader r;
 		ClassLoader cl = getClass().getClassLoader();
 		InputStream in = cl.getResourceAsStream("data/css_properties.txt");
 		if (in!=null) {
@@ -409,7 +408,7 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 		else {
 			r = new BufferedReader(new FileReader("data/css_properties.txt"));
 		}
-		String line = null;
+		String line;
 		try {
 			while ((line=r.readLine())!=null) {
 				if (line.length()>0 && line.charAt(0)!='#') {
@@ -431,7 +430,7 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 	 *
 	 * @param in The input stream to read from.
 	 * @param cl The class loader to use when loading any extra classes defined
-	 *        in the XML, such as custom {@link FunctionCompletion}s.  This
+	 *        in the XML, such as custom {@code FunctionCompletion}s.  This
 	 *        may be <code>null</code> if the default is to be used, or if no
 	 *        custom completions are defined in the XML.
 	 * @throws IOException If an IO error occurs.
@@ -440,7 +439,7 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 			throws IOException {
 
 		//long start = System.currentTimeMillis();
-		List<Completion> completions = null;
+		List<Completion> completions;
 
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		factory.setValidating(true);
@@ -451,10 +450,8 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 			saxParser.parse(bin, handler);
 			completions =  handler.getCompletions();
 			// Ignore parameterized completion params
-		} catch (SAXException se) {
-			throw new IOException(se.toString());
-		} catch (ParserConfigurationException pce) {
-			throw new IOException(pce.toString());
+		} catch (SAXException | ParserConfigurationException e) {
+			throw new IOException(e.toString());
 		} finally {
 			//long time = System.currentTimeMillis() - start;
 			//System.out.println("XML loaded in: " + time + "ms");
@@ -484,12 +481,9 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 				throw new IOException("No such resource: " + resource);
 			}
 		}
-		BufferedInputStream bin = new BufferedInputStream(in);
-		try {
-			return loadFromXML(bin, null);
-		} finally {
-			bin.close();
-		}
+        try (BufferedInputStream bin = new BufferedInputStream(in)) {
+            return loadFromXML(bin, null);
+        }
 	}
 
 
@@ -501,7 +495,7 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 			String prop, CompletionGenerator generator) {
 		List<CompletionGenerator> generators = generatorMap.get(prop);
 		if (generators==null) {
-			generators = new ArrayList<CompletionGenerator>();
+			generators = new ArrayList<>();
 			generatorMap.put(prop, generators);
 		}
 		generators.add(generator);
@@ -517,7 +511,7 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 
 		if (tokens.length>2) {
 
-			List<Completion> completions = new ArrayList<Completion>();
+			List<Completion> completions = new ArrayList<>();
 			completions.add(INHERIT_COMPLETION);
 
 			// Format: display gifname [ none inline block ]

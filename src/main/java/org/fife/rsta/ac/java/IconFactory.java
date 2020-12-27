@@ -67,7 +67,7 @@ public class IconFactory {
 
 	private IconFactory() {
 
-		iconMap = new HashMap<String, Icon>();
+		iconMap = new HashMap<>();
 		iconMap.put(SOURCE_FILE_ICON, loadIcon("jcu_obj.gif"));
 		iconMap.put(PACKAGE_ICON, loadIcon("package_obj.gif"));
 		iconMap.put(IMPORT_ROOT_ICON, loadIcon("impc_obj.gif"));

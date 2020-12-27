@@ -224,8 +224,8 @@ OUTER:
 							s.yyPeekCheckType(2)==SEPARATOR_LPAREN) {
 						s.yylex(); // catch
 						s.yylex(); // lparen
-						Type exType = null;
-						Token var = null;
+						Type exType;
+						Token var;
 						boolean multiCatch = false;
 						do {
 							isFinal = false;
@@ -306,7 +306,7 @@ case KEYWORD_WHILE:
 					else if (atStatementStart && (t.isBasicType() || (t.isIdentifier()))) {
 						s.yyPushback(t);
 						// TODO: This is very inefficient
-						Type varType = null;
+						Type varType;
 						try {
 							varType = _getType(cu, s, true);
 						} catch (IOException ioe) { // Not a var declaration
@@ -439,7 +439,7 @@ case KEYWORD_WHILE:
 		}
 		t = s.yylexNonNull("class, enum, interface or @interface expected");
 
-		TypeDeclaration td = null;
+		AbstractTypeDeclarationNode td;
 
 		switch (t.getType()) {
 
@@ -471,8 +471,8 @@ case KEYWORD_WHILE:
 
 		}
 
-		((AbstractTypeDeclarationNode) td).setModifiers(modList);
-		((AbstractTypeDeclarationNode)td).setDeprecated(checkDeprecated());
+		td.setModifiers(modList);
+		td.setDeprecated(checkDeprecated());
 
 		log("Exiting _getClassOrInterfaceDeclaration");
 		return td;
@@ -601,7 +601,7 @@ OUTER:
 	if (isDebug() && !(ioe instanceof EOFException)) { // Not just "end of file"
 		ioe.printStackTrace();
 	}
-	ParserNotice notice = null;
+	ParserNotice notice;
 	Token lastTokenLexed = scanner.getMostRecentToken();
 	if (lastTokenLexed==null) {
 		notice = new ParserNotice(0,0,5, ioe.getMessage());
@@ -1132,7 +1132,7 @@ OUTER:
 			throws IOException {
 
 		log("Entering _getNormalClassDeclaration");
-		String className = null;
+		String className;
 
 		Token t = s.yylexNonNull("Identifier expected");
 		if (t.isType(IDENTIFIER)) {
@@ -1187,7 +1187,7 @@ OUTER:
 			CompilationUnit cu, Scanner s, TypeDeclarationContainer addTo)
 			throws IOException {
 
-		String iName = null;
+		String iName;
 
 		Token t = s.yylexNonNull("Identifier expected");
 		if (t.isType(IDENTIFIER)) {
@@ -1234,7 +1234,7 @@ OUTER:
 	private String getQualifiedIdentifier(Scanner scanner)
 			throws IOException {
 
-		Token t = null;
+		Token t;
 		StringBuilder sb = new StringBuilder();
 
 		while ((t = scanner.yylex()).isIdentifier()) {
@@ -1348,7 +1348,7 @@ OUTER:
 
 		log("Entering _getTypeArgument()");
 
-		TypeArgument typeArg = null;
+		TypeArgument typeArg;
 
 		Token t = s.yyPeekNonNull("Type or '?' expected");
 
@@ -1400,7 +1400,7 @@ OUTER:
 
 		List<TypeArgument> typeArgs = new ArrayList<>(1);
 
-		Token t = null;
+		Token t;
 		do {
 			typeArgs.add(_getTypeArgument(cu, s));
 			t = s.yylexNonNull("',' or '>' expected");

@@ -68,7 +68,7 @@ public class ShellFunctionCompletion extends FunctionCompletion {
 	 */
 	private String getSummaryFromManPage() {
 
-		Process p = null;
+		Process p;
 
 		String[] cmd = { "/usr/bin/man", getName() };
 		try {
@@ -135,7 +135,7 @@ public class ShellFunctionCompletion extends FunctionCompletion {
 	// Matcher.quoteReplacement() in 1.5.
 	private static String quoteReplacement(String text) {
 		if (text.indexOf('$')>-1 || text.indexOf('\\')>-1) {
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			for (int i=0; i<text.length(); i++) {
 				char ch = text.charAt(i);
 				if (ch=='$' || ch=='\\') {

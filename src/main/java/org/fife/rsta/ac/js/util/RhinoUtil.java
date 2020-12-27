@@ -52,7 +52,7 @@ public class RhinoUtil {
 		if (paramCount>0) {
 			List<AstNode> fnParams = fn.getParams();
 			for (int i=0; i<paramCount; i++) {
-				String paramName = null;
+				String paramName;
 				AstNode paramNode = fnParams.get(i);
 				switch (paramNode.getType()) {
 					case Token.NAME:

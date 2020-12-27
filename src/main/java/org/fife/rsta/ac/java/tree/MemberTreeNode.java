@@ -55,7 +55,7 @@ class MemberTreeNode extends JavaTreeNode {
 		super(field);
 
 		Modifiers mods = field.getModifiers();
-		String icon = null;
+		String icon;
 
 		if (mods==null) {
 			icon = IconFactory.FIELD_DEFAULT_ICON;
@@ -107,7 +107,7 @@ class MemberTreeNode extends JavaTreeNode {
 
 		super(method);
 
-		String icon = null;
+		String icon;
 		int priority = PRIORITY_METHOD;
 
 		Modifiers mods = method.getModifiers();

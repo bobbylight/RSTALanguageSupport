@@ -68,7 +68,7 @@ public class ClassEnumerationReader {
 	public static List<String> getClassNames(InputStream in) throws IOException {
 
 		String lastPkg = null;
-		String line = null;
+		String line;
 		List<String> classNames = new ArrayList<>();
 
         try (BufferedReader r = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8))) {

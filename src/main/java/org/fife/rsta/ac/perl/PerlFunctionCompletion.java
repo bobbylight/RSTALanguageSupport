@@ -71,7 +71,7 @@ public class PerlFunctionCompletion extends FunctionCompletion {
 	 */
 	private String getSummaryFromPerldoc(File installLoc) {
 
-		Process p = null;
+		Process p;
 
 		String fileName = "bin/perldoc";
 		if (File.separatorChar=='\\') {
@@ -118,7 +118,7 @@ public class PerlFunctionCompletion extends FunctionCompletion {
 
 	private static StringBuilder perldocToHtml(CharSequence text) {
 
-		StringBuilder sb = null;
+		StringBuilder sb;
 
 		Font font = UIManager.getFont("Label.font");
 		// Even Nimbus sets Label.font, but just to be safe...

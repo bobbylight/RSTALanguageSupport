@@ -56,7 +56,7 @@ public class CodeBlock {
 		CodeBlock child = new CodeBlock(start);
 		child.parent = this;
 		if (children == null) {
-			children = new ArrayList<CodeBlock>();
+			children = new ArrayList<>();
 		}
 		children.add(child);
 		return child;
@@ -70,7 +70,7 @@ public class CodeBlock {
 	 */
 	public void addVariable(JavaScriptVariableDeclaration varDec) {
 		if (varDecs == null) {
-			varDecs = new ArrayList<JavaScriptVariableDeclaration>();
+			varDecs = new ArrayList<>();
 		}
 		varDecs.add(varDec);
 	}

@@ -84,7 +84,7 @@ class JarReader {
 	private void checkLastModified() {
 		long newLastModified = info.getLastModified();
 		if (newLastModified!=0 && newLastModified!=lastModified) {
-			int count = 0;
+			int count;
 			count = packageMap.clearClassFiles();
 			System.out.println("DEBUG: Cleared " + count + " cached ClassFiles");
 			lastModified = newLastModified;
@@ -125,7 +125,7 @@ class JarReader {
 	 *         empty.
 	 */
 	public List<ClassFile> getClassesWithNamesStartingWith(String prefix) {
-		List<ClassFile> res = new ArrayList<ClassFile>();
+		List<ClassFile> res = new ArrayList<>();
 		String currentPkg = ""; // Don't use null; we're appending to it
 		packageMap.getClassesWithNamesStartingWith(info, prefix, currentPkg,
 				res);

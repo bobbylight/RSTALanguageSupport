@@ -104,7 +104,7 @@ public class DirLibraryInfo extends LibraryInfo {
 
 
 	@Override
-	public PackageMapNode createPackageMap() throws IOException {
+	public PackageMapNode createPackageMap() {
 		PackageMapNode root = new PackageMapNode();
 		getPackageMapImpl(dir, null, root);
 		return root;

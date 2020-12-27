@@ -480,7 +480,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 		Map<String, String> typeParamMap = null;
 		List<TypeArgument> typeArgs = type.getTypeArguments(type.getIdentifierCount()-1);
 		if (typeArgs!=null) {
-			typeParamMap = new HashMap<String, String>();
+			typeParamMap = new HashMap<>();
 			List<String> paramTypes = cf.getParamTypes();
 			// Should be the same size!  Otherwise, the source code has
 			// too many/too few type arguments listed for this type.
@@ -515,14 +515,14 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 
 		try {
 
-		completions = new ArrayList<Completion>();//completions.clear();
+		completions = new ArrayList<>();//completions.clear();
 
 		CompilationUnit cu = javaProvider.getCompilationUnit();
 		if (cu==null) {
 			return completions; // empty
 		}
 
-		Set<Completion> set = new TreeSet<Completion>();
+		Set<Completion> set = new TreeSet<>();
 
 		// Cut down the list to just those matching what we've typed.
 		// Note: getAlreadyEnteredText() never returns null
@@ -556,7 +556,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 		}
 
 		// Do a final sort of all of our completions and we're good to go!
-		completions = new ArrayList<Completion>(set);
+		completions = new ArrayList<>(set);
 		Collections.sort(completions);
 
 		// Only match based on stuff after the final '.', since that's what is
@@ -736,7 +736,7 @@ public SourceLocation  getSourceLocForClass(String className) {
 
 		Method currentMethod = null;
 
-		Map<String, String> typeParamMap = new HashMap<String, String>();
+		Map<String, String> typeParamMap = new HashMap<>();
 		if (td instanceof NormalClassDeclaration) {
 			NormalClassDeclaration ncd = (NormalClassDeclaration)td;
 			List<TypeParameter> typeParams = ncd.getTypeParameters();

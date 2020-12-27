@@ -95,7 +95,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 		super(cf, accessFlags);
 		this.nameIndex = nameIndex;
 		this.descriptorIndex = descriptorIndex;
-		attributes = new ArrayList<AttributeInfo>(1); // Usually only 0 or 1?
+		attributes = new ArrayList<>(1); // Usually only 0 or 1?
 	}
 
 
@@ -147,7 +147,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 * {@link ClassFile#setTypeParamsToTypeArgs(Map)}.
 	 *
 	 * @return The array of parameter types.
-	 * @see #createParamTypesFromDescriptor()
+	 * @see #createParamTypesFromDescriptor(boolean) 
 	 * @see #createParamTypesFromTypeSignature()
 	 */
 	private String[] createParamTypes() {
@@ -174,8 +174,8 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 		String paramDescriptors = descriptor.substring(1, rparen);
 		//String returnDescriptor = descriptor.substring(rparen+1);
 
-		List<String> paramTypeList = new ArrayList<String>();
-		String type = null;
+		List<String> paramTypeList = new ArrayList<>();
+		String type;
 
 		while (paramDescriptors.length()>0) {
 
@@ -263,7 +263,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 * generic parameters.
 	 *
 	 * @return The parameter types.
-	 * @see #createParamTypesFromDescriptor()
+	 * @see #createParamTypesFromDescriptor(boolean) 
 	 */
 	private String[] createParamTypesFromTypeSignature() {
 
@@ -447,7 +447,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 		}
 		if(!fullyQualified)
 		{
-			if(returnType != null && returnType.indexOf(".") > -1) {
+			if(returnType != null && returnType.contains(".")) {
 				return returnType.substring(returnType.lastIndexOf(".") +1, returnType.length());  
 			}
 		}
@@ -462,7 +462,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 * Java 5.
 	 *
 	 * @return The return type of this method.
-	 * @see #getReturnTypeStringFromTypeSignature()
+	 * @see #getReturnTypeStringFromTypeSignature(boolean) 
 	 */
 	/*
 	 * TODO: This is identical to FieldInfo.getTypeString(), except for the
@@ -538,7 +538,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 * us to check for generic types.
 	 *
 	 * @return The return type of this method.
-	 * @see #getReturnTypeStringFromDescriptor()
+	 * @see #getReturnTypeStringFromDescriptor(boolean)
 	 */
 	private String getReturnTypeStringFromTypeSignature(boolean qualified) {
 		String retType = null;
@@ -676,7 +676,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 */
 	private AttributeInfo readAttribute(DataInputStream in) throws IOException {
 
-		AttributeInfo ai = null;
+		AttributeInfo ai;
 
 		int attributeNameIndex = in.readUnsignedShort();
 		int attributeLength = in.readInt();

@@ -100,7 +100,7 @@ public class Util {
 				inVersion = false, inUnknowns = false;
 
 		String[] st = tail.toString().split("[ \t\r\n\f]+");
-		String token = null;
+		String token;
 
 		int i = 0;
 		while (i<st.length && (token=st[i++])!=null) {
@@ -710,8 +710,8 @@ System.out.println("Unmatched linkContent: " + linkContent);
 	 *         '<tt>.</tt>').
 	 */
 	public static final String[] splitOnChar(String str, int ch) {
-		List<String> list = new ArrayList<String>(3);
-		int pos = 0;
+		List<String> list = new ArrayList<>(3);
+		int pos;
 		int old = 0;
 		while ((pos=str.indexOf(ch, old))>-1) {
 			list.add(str.substring(old, pos));

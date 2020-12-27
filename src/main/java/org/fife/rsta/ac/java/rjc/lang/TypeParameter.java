@@ -43,7 +43,7 @@ public class TypeParameter {
 
 	public void addBound(Type bound) {
 		if (bounds==null) {
-			bounds = new ArrayList<Type>(1); // Usually just 1
+			bounds = new ArrayList<>(1); // Usually just 1
 		}
 		bounds.add(bound);
 	}

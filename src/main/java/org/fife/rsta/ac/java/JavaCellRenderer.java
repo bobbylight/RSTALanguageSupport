@@ -37,7 +37,7 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
  */
 public class JavaCellRenderer extends DefaultListCellRenderer {
 
-	private JList list;
+	private JList<?> list;
 	private boolean selected;
 	private boolean evenRow;
 	private JavaSourceCompletion jsc;
@@ -83,7 +83,7 @@ public class JavaCellRenderer extends DefaultListCellRenderer {
 	 * @param hasFocus Whether the item has focus.
 	 */
 	@Override
-	public Component getListCellRendererComponent(JList list, Object value,
+	public Component getListCellRendererComponent(JList<?> list, Object value,
 						int index, boolean selected, boolean hasFocus) {
 
 		super.getListCellRendererComponent(list, value, index, selected, hasFocus);
@@ -118,7 +118,7 @@ public class JavaCellRenderer extends DefaultListCellRenderer {
 
 		// Set up rendering hints to look as close to native as possible
 		Graphics2D g2d = (Graphics2D)g;
-		Object old = null;
+		Object old;
 
 		// First, try to use the rendering hint set that is "native".
 		Map<?,?> hints = RSyntaxUtilities.getDesktopAntiAliasHints();

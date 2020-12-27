@@ -34,7 +34,7 @@ class BorderStyleCompletionGenerator implements CompletionGenerator {
 	@Override
 	public List<Completion> generate(CompletionProvider provider, String input){
 
-		List<Completion> completions = new ArrayList<Completion>();
+		List<Completion> completions = new ArrayList<>();
 
 		completions.add(new BorderStyleCompletion(provider, "none"));
 		completions.add(new BorderStyleCompletion(provider, "hidden"));

@@ -24,20 +24,20 @@ public class VariableResolver {
 
 	// HashMap of local variables mapped Name --> JSVariableDeclaration
 	private HashMap<String, JavaScriptVariableDeclaration> localVariables =
-			new HashMap<String, JavaScriptVariableDeclaration>();
+            new HashMap<>();
 	// pre processing variables - these are set when pre-processing
 	private HashMap<String, JavaScriptVariableDeclaration> preProcessedVariables =
-			new HashMap<String, JavaScriptVariableDeclaration>();
+            new HashMap<>();
 	// HashMap of system variables mapped Name --> JSVariableDeclaration
 	// system variables do not get cleared as they are always available to the
 	// system
 	private HashMap<String, JavaScriptVariableDeclaration> systemVariables =
-			new HashMap<String, JavaScriptVariableDeclaration>();
+            new HashMap<>();
 	
 	private HashMap<String, JavaScriptFunctionDeclaration> localFunctions =
-			new HashMap<String, JavaScriptFunctionDeclaration>();
+            new HashMap<>();
 	private HashMap<String, JavaScriptFunctionDeclaration> preProcessedFunctions =
-			new HashMap<String, JavaScriptFunctionDeclaration>();
+            new HashMap<>();
 
 
 	/**
@@ -229,9 +229,9 @@ public class VariableResolver {
 	
 	public JavaScriptFunctionDeclaration findFunctionDeclaration(String name, boolean local, boolean preProcessed)
 	{
-		JavaScriptFunctionDeclaration dec = local ? (JavaScriptFunctionDeclaration) localFunctions.get(name) : null;
+		JavaScriptFunctionDeclaration dec = local ? localFunctions.get(name) : null;
 		if(dec == null) {
-			dec = preProcessed ? (JavaScriptFunctionDeclaration)  preProcessedFunctions.get(name) : null;
+			dec = preProcessed ? preProcessedFunctions.get(name) : null;
 		}
 		return dec;	
 	}

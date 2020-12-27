@@ -56,9 +56,9 @@ public class PackageMapNode {
 
 	public PackageMapNode() {
 		subpackages =
-			new TreeMap<String, PackageMapNode>(String.CASE_INSENSITIVE_ORDER);
+                new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 		classFiles =
-			new TreeMap<String, ClassFile>(String.CASE_INSENSITIVE_ORDER);
+                new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 	}
 
 

@@ -62,7 +62,7 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 		MethodInfo methodInfo = methodData.getMethodInfo();
 		int count = methodInfo.getParameterCount();
 		String[] paramTypes = methodInfo.getParameterTypes();
-		List<Parameter> params = new ArrayList<Parameter>(count);
+		List<Parameter> params = new ArrayList<>(count);
 		for (int i = 0; i < count; i++) {
 			String name = methodData.getParameterName(i);
 			String type = methodData.getParameterType(paramTypes, i, getProvider());

@@ -96,8 +96,8 @@ public class JavaScriptDocUrlhandler implements ExternalURLHandler {
 		// Javadoc is always ".html", and we support full URL's elsewhere.
 		final String[] EXTS = { ".html", ".htm" };
 		for (int i=0; i<EXTS.length; i++) {
-			if (text.endsWith(EXTS[i]) || text.indexOf(EXTS[i]+"#")>-1 ||
-					text.indexOf(EXTS[i]+"?")>-1) {
+			if (text.endsWith(EXTS[i]) || text.contains(EXTS[i] + "#") ||
+                    text.contains(EXTS[i] + "?")) {
 				return true;
 			}
 		}

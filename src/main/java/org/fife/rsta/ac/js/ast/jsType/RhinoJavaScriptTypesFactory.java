@@ -24,8 +24,8 @@ import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
  */
 public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 
-	private LinkedHashSet<String> importClasses = new LinkedHashSet<String>();
-	private LinkedHashSet<String> importPackages = new LinkedHashSet<String>();
+	private LinkedHashSet<String> importClasses = new LinkedHashSet<>();
+	private LinkedHashSet<String> importPackages = new LinkedHashSet<>();
 	
 	public RhinoJavaScriptTypesFactory(TypeDeclarationFactory typesFactory)
 	{
@@ -50,7 +50,7 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 	private void mergeImports(HashSet<String> newImports, LinkedHashSet<String> oldImports, boolean packages)
 	{
 		//iterate through the old imports and check whether the the import exists in new. If not then add to remove and remove all types for that package/class
-		HashSet<String> remove = new HashSet<String>();
+		HashSet<String> remove = new HashSet<>();
 		for (String obj : oldImports) {
 			if(!newImports.contains(obj)) {
 				remove.add(obj);
@@ -61,7 +61,7 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 		//now iterate through the remove list and remove imports not needed
 		if(!remove.isEmpty())
 		{
-			HashSet<TypeDeclaration> removeTypes = new HashSet<TypeDeclaration>();
+			HashSet<TypeDeclaration> removeTypes = new HashSet<>();
 			for (String name : remove) {
 				for (TypeDeclaration dec : cachedTypes.keySet()) {
 					if((packages && dec.getQualifiedName().startsWith(name)) || (!packages && dec.getQualifiedName().equals(name)))
@@ -114,7 +114,7 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 	
 	private void clearAllImportTypes()
 	{
-		HashSet<TypeDeclaration> removeTypes = new HashSet<TypeDeclaration>();
+		HashSet<TypeDeclaration> removeTypes = new HashSet<>();
 		//clear all non ECMA (JavaScript types) for importPackage and importClass to work properly
 		for(Iterator<TypeDeclaration> i = cachedTypes.keySet().iterator(); i.hasNext();) {
 			TypeDeclaration dec = i.next();

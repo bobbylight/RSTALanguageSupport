@@ -59,14 +59,14 @@ public class JSMethodData {
 			// Next, check the attached source, if any (lazily parsed).
 			if (paramNames==null) {
 
-				paramNames = new ArrayList<String>(1);
+				paramNames = new ArrayList<>(1);
 				int offs = 0;
 				String rawSummary = getSummary();
 
 				// If there's attached source with Javadoc for this method...
 				if (rawSummary!=null && rawSummary.startsWith("/**")) {
 
-					int nextParam = 0;
+					int nextParam;
 					int summaryLen = rawSummary.length();
 
 					while ((nextParam=rawSummary.indexOf("@param", offs))>-1) {
@@ -205,7 +205,7 @@ public class JSMethodData {
 							Method m2 = (Method)member;
 							if (m2.getParameterCount()==info.getParameterCount()) {
 								if (contenders==null) {
-									contenders = new ArrayList<Method>(1); // Usually just 1
+									contenders = new ArrayList<>(1); // Usually just 1
 								}
 								contenders.add(m2);
 							}

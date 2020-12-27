@@ -89,7 +89,7 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 	public List<Completion> getLocalVarsFieldsAndGetters(
 			NormalClassDeclaration ncd, String type, int offs) {
 
-		List<Completion> members = new ArrayList<Completion>();
+		List<Completion> members = new ArrayList<>();
 
 		if (!ncd.getBodyContainsOffset(offs)) {
 			return members;

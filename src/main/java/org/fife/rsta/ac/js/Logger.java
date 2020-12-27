@@ -3,11 +3,11 @@ package org.fife.rsta.ac.js;
 
 public class Logger {
 
-	private static boolean DEBUG = false;
+	private static boolean DEBUG;
 	
 	static
 	{
-		DEBUG = Boolean.valueOf(System.getProperty("javascript.debug")).booleanValue(); 
+		DEBUG = Boolean.parseBoolean(System.getProperty("javascript.debug"));
 	}
 	
 	/**

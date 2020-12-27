@@ -54,7 +54,7 @@ class MethodData implements Data {
 	@Override
 	public String getIcon() {
 
-		String key = null;
+		String key;
 
 		Modifiers mod = method.getModifiers();
 		if (mod==null) {

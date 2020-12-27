@@ -86,7 +86,7 @@ public class DecoratableIcon implements Icon {
 			throw new IllegalArgumentException("decoration cannot be null");
 		}
 		if (decorations==null) {
-			decorations = new ArrayList<Icon>(1); // Usually just 1
+			decorations = new ArrayList<>(1); // Usually just 1
 		}
 		decorations.add(decoration);
 	}

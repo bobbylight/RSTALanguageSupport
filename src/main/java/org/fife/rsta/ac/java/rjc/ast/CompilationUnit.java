@@ -47,8 +47,8 @@ public class CompilationUnit extends AbstractASTNode
 
 	public CompilationUnit(String name) {
 		super(name, ZERO_OFFSET);
-		imports = new ArrayList<ImportDeclaration>(3); // Usually not many,
-		typeDeclarations = new ArrayList<TypeDeclaration>(1); // Usually only 1
+		imports = new ArrayList<>(3); // Usually not many,
+		typeDeclarations = new ArrayList<>(1); // Usually only 1
 	}
 
 
@@ -70,7 +70,7 @@ public class CompilationUnit extends AbstractASTNode
 
 	public void addParserNotice(ParserNotice notice) {
 		if (notices==null) {
-			notices = new ArrayList<ParserNotice>();
+			notices = new ArrayList<>();
 			notices.add(notice);
 		}
 	}
@@ -185,7 +185,7 @@ public class CompilationUnit extends AbstractASTNode
 	 * @return A list or imports, or an empty list if there are none.
 	 */
 	public List<ImportDeclaration> getImports() {
-		return new ArrayList<ImportDeclaration>(imports);
+		return new ArrayList<>(imports);
 	}
 
 

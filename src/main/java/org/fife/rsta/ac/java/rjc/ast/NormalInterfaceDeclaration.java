@@ -36,7 +36,7 @@ public class NormalInterfaceDeclaration extends AbstractTypeDeclarationNode {
 
 	public NormalInterfaceDeclaration(Scanner s, int offs, String name) {
 		super(name, s.createOffset(offs), s.createOffset(offs+name.length()));
-		extendedList = new ArrayList<Type>(1); // Usually small
+		extendedList = new ArrayList<>(1); // Usually small
 	}
 
 

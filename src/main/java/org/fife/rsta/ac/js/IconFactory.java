@@ -49,7 +49,7 @@ public class IconFactory {
 
 	private IconFactory() {
 
-		iconMap = new HashMap<String, Icon>();
+		iconMap = new HashMap<>();
 
 		iconMap.put(FUNCTION_ICON, loadIcon("methpub_obj.gif"));
 		iconMap.put(PUBLIC_STATIC_FUNCTION_ICON, loadIcon("methpub_static.gif"));

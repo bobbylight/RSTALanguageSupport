@@ -35,7 +35,7 @@ public class JSFieldData {
 	/**
 	 * Scours the source in a location (zip file, directory), looking for a
 	 * particular class's source.  If it is found, it is parsed, and the
-	 * {@link Method} for this method (if any) is returned.
+	 * {@code Method} for this method (if any) is returned.
 	 *
 	 * @param loc The zip file, jar file, or directory to look in.
 	 * @param cf The {@link ClassFile} representing the class of this method.

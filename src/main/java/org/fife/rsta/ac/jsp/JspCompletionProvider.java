@@ -40,7 +40,7 @@ public class JspCompletionProvider extends HtmlCompletionProvider {
 
 	public JspCompletionProvider() {
 
-		prefixToTld = new HashMap<String, TldFile>();
+		prefixToTld = new HashMap<>();
 /*
 		String fileName = File.separatorChar=='/' ?
 				"/users/robert/struts-2.2.3/lib/struts2-core-2.2.3.jar" :
@@ -83,7 +83,7 @@ public class JspCompletionProvider extends HtmlCompletionProvider {
 				if (tldFile!=null) {
 					List<Parameter> attrs = tldFile.getAttributesForTag(tagName);
 					if (attrs!=null && attrs.size()>-1) {
-						list = new ArrayList<AttributeCompletion>();
+						list = new ArrayList<>();
 						for (Parameter param : attrs) {
 							list.add(new AttributeCompletion(this, param));
 						}
@@ -108,8 +108,8 @@ public class JspCompletionProvider extends HtmlCompletionProvider {
 	@Override
 	protected List<Completion> getTagCompletions() {
 
-		List<Completion> completions = new ArrayList<Completion>(
-											super.getTagCompletions());
+		List<Completion> completions = new ArrayList<>(
+                super.getTagCompletions());
 
 		for (Map.Entry<String, TldFile> entry : prefixToTld.entrySet()) {
 			String prefix = entry.getKey();
@@ -147,7 +147,7 @@ public class JspCompletionProvider extends HtmlCompletionProvider {
 
 		// The completions array is expected to be sorted alphabetically.
 		// We must re-sort since we added to it.
-		Collections.sort(completions, comparator);
+		completions.sort(comparator);
 
 	}
 

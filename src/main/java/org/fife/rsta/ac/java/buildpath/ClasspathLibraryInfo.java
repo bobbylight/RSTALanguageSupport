@@ -169,7 +169,7 @@ public class ClasspathLibraryInfo extends LibraryInfo {
 
 		InputStream in = getClass().getClassLoader().getResourceAsStream(res);
 		if (in!=null) {
-			DataInputStream din = null;
+			DataInputStream din;
 			try {
 				BufferedInputStream bin = new BufferedInputStream(in);
 				din = new DataInputStream(bin);
@@ -185,7 +185,7 @@ public class ClasspathLibraryInfo extends LibraryInfo {
 
 
 	@Override
-	public PackageMapNode createPackageMap() throws IOException {
+	public PackageMapNode createPackageMap() {
 		PackageMapNode root = new PackageMapNode();
 		for (String className : classNameToClassFile.keySet()) {
 			root.add(className);

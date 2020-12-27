@@ -169,11 +169,11 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 			// Get a list of all Completions matching the text.
 			AstRoot ast = this.parent.getASTRoot();
-			Set<Completion> set = new HashSet<Completion>();
+			Set<Completion> set = new HashSet<>();
 			CodeBlock block = iterateAstRoot(ast, set, text, tc.getCaretPosition(), typeDeclarationOptions);
 			recursivelyAddLocalVars(set, block, dot, null, false, false);
 			lastCompletionsAtText = text;
-			return lastParameterizedCompletionsAt = new ArrayList<Completion>(set);
+			return lastParameterizedCompletionsAt = new ArrayList<>(set);
 
 		} catch (BadLocationException ble) {
 			ble.printStackTrace(); // Never happens
@@ -207,7 +207,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 				return completions; // empty
 			}
 
-			Set<Completion> set = new TreeSet<Completion>();
+			Set<Completion> set = new TreeSet<>();
 
 			// Cut down the list to just those matching what we've typed.
 			// Note: getAlreadyEnteredText() never returns null
@@ -292,7 +292,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 		completions.addAll(set);
 
 		// Do a sort of all of our completions to put into case insensitive order and we're good to go!
-		Collections.sort(completions, comparator);
+		completions.sort(comparator);
 
 		// Only match based on stuff after the final '.', since that's what
 		// is
@@ -615,7 +615,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	public void parseDocument(int dot)
 	{
 		AstRoot ast = this.parent.getASTRoot();
-		Set<Completion> set = new HashSet<Completion>();
+		Set<Completion> set = new HashSet<>();
 		variableResolver.resetLocalVariables();
 		iterateAstRoot(ast, set, "", dot, typeDeclarationOptions);
 	}

@@ -36,15 +36,12 @@ public class SchemaValidationConfig implements ValidationConfig {
 
 		SchemaFactory sf = SchemaFactory.newInstance(language);
 
-		BufferedInputStream bis = new BufferedInputStream(in);
-		try {
-			schema = sf.newSchema(new StreamSource(bis));
-		} catch (SAXException se) {
-			se.printStackTrace();
-			throw new IOException(se.toString());
-		} finally {
-			bis.close();
-		}
+        try (BufferedInputStream bis = new BufferedInputStream(in)) {
+            schema = sf.newSchema(new StreamSource(bis));
+        } catch (SAXException se) {
+            se.printStackTrace();
+            throw new IOException(se.toString());
+        }
 
 	}
 

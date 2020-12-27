@@ -35,7 +35,7 @@ class CommonFontCompletionGenerator implements CompletionGenerator {
 	@Override
 	public List<Completion> generate(CompletionProvider provider, String input){
 
-		List<Completion> completions = new ArrayList<Completion>();
+		List<Completion> completions = new ArrayList<>();
 
 		completions.add(new FontFamilyCompletion(provider, "Georgia"));
 		completions.add(new FontFamilyCompletion(provider, "\"Times New Roman\""));

@@ -69,7 +69,7 @@ public class JSClassCompletion extends BasicCompletion implements JSCompletion {
 		if (lastDot > -1) {
 			return temp.substring(lastDot + 1);
 		}
-		if(temp.indexOf("new") != -1)
+		if(temp.contains("new"))
 		{
 			return "";
 		}

@@ -47,7 +47,7 @@ class JsHinter {
 
 	private static final Map<String, MarkStrategy> MARK_STRATEGIES;
 	static {
-		MARK_STRATEGIES = new HashMap<String, MarkStrategy>();
+		MARK_STRATEGIES = new HashMap<>();
 		MARK_STRATEGIES.put("E015", MarkStrategy.MARK_CUR_TOKEN); // Unclosed regular expression.
 		MARK_STRATEGIES.put("E019", MarkStrategy.MARK_CUR_TOKEN); // Unmatched '{a}'
 		MARK_STRATEGIES.put("E030", MarkStrategy.MARK_CUR_TOKEN); // Expected an identifier and instead saw '{a}'.
@@ -79,7 +79,7 @@ class JsHinter {
 		String stdout = null;
 		RSyntaxDocument doc = (RSyntaxDocument)textArea.getDocument();
 
-		List<String> command = new ArrayList<String>();
+		List<String> command = new ArrayList<>();
 		if (File.separatorChar=='\\') {
 			command.add("cmd.exe");
 			command.add("/c");
@@ -211,7 +211,7 @@ class JsHinter {
 							msg = msg.substring(0, openParen-1);
 						}
 
-						DefaultParserNotice dpn = null;
+						DefaultParserNotice dpn;
 						MarkStrategy markStrategy = getMarkStrategy(errorCode);
 						switch (markStrategy) {
 //							case MARK_PREV_TOKEN:

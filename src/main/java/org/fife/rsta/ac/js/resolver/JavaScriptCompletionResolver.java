@@ -183,7 +183,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	private class CompilerNodeVisitor implements NodeVisitor {
 
 		private boolean ignoreParams;
-		private HashSet<AstNode> paramNodes = new HashSet<AstNode>();
+		private HashSet<AstNode> paramNodes = new HashSet<>();
 		
 
 
@@ -209,8 +209,8 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 			if (ignore(node, ignoreParams))
 				return true;
 
-			JavaScriptType jsType = null;
-			TypeDeclaration dec = null;
+			JavaScriptType jsType;
+			TypeDeclaration dec;
 			//only resolve native type if last type is null
 			//otherwise it can be assumed that this is part of multi depth - e.g "".length.toString()
 			if(lastJavaScriptType == null) {
@@ -345,13 +345,11 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 			if (node.getType() == Token.CALL) {
 				// collect all argument nodes
 				FunctionCall call = (FunctionCall) node;
-				Iterator<AstNode> args = call.getArguments().iterator();
-				while (args.hasNext()) {
-					AstNode arg = args.next();
-					VisitorAll all = new VisitorAll();
-					arg.visit(all);
-					paramNodes.addAll(all.getAllNodes());
-				}
+                for (AstNode arg : call.getArguments()) {
+                    VisitorAll all = new VisitorAll();
+                    arg.visit(all);
+                    paramNodes.addAll(all.getAllNodes());
+                }
 			}
 		}
 
@@ -517,7 +515,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 			SourceCompletionProvider provider, String type, String text) {
 		if (provider.getJavaScriptTypesFactory() != null) {
 			ClassFile cf = provider.getJarManager().getClassEntry(type);
-			TypeDeclaration newType = null;
+			TypeDeclaration newType;
 			if (cf != null) {
 				newType = provider.getJavaScriptTypesFactory()
 						.createNewTypeDeclaration(cf, false);
@@ -545,9 +543,9 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	/**
 	 * Visit all nodes in the AstNode tree and all to a single list
 	 */
-	private class VisitorAll implements NodeVisitor {
+	private static class VisitorAll implements NodeVisitor {
 
-		private ArrayList<AstNode> all = new ArrayList<AstNode>();
+		private ArrayList<AstNode> all = new ArrayList<>();
 
 		@Override
 		public boolean visit(AstNode node) {

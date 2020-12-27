@@ -617,7 +617,7 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 		for (VariableInitializer var : vars) {
 
 			Name varNameNode = null;
-			String varName = null;
+			String varName;
 			AstNode target = var.getTarget();
 			switch (target.getType()) {
 				case Token.NAME:

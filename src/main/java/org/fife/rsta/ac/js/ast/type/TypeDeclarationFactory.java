@@ -147,7 +147,7 @@ public class TypeDeclarationFactory {
 			
 			lookupName = lookup != null ? lookup : lookupName;
 			if (!qualified) {
-				if (lookupName != null && lookupName.indexOf(".") > -1) {
+				if (lookupName != null && lookupName.contains(".")) {
 					return lookupName.substring(
 							lookupName.lastIndexOf(".") + 1, lookupName
 									.length());

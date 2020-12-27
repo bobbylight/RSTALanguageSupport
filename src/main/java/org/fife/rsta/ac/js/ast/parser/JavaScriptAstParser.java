@@ -49,7 +49,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	public JavaScriptAstParser(SourceCompletionProvider provider, int dot,
 			TypeDeclarationOptions options) {
 		super(provider, dot, options);
-		functions = new ArrayList<ProcessFunctionType>();
+		functions = new ArrayList<>();
 	}
 
 
@@ -448,7 +448,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 		if (fn.getParamCount() > 0) {
 			List<AstNode> fnParams = fn.getParams();
-			List<Parameter> params = new ArrayList<Parameter>();
+			List<Parameter> params = new ArrayList<>();
 			for (int i = 0; i < fn.getParamCount(); i++) {
 				String paramName = null;
 				AstNode node = fnParams.get(i);
@@ -777,7 +777,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 	private class FunctionReturnVisitor implements NodeVisitor {
 
-		private ArrayList<ReturnStatement> returnStatements = new ArrayList<ReturnStatement>();
+		private ArrayList<ReturnStatement> returnStatements = new ArrayList<>();
 
 		@Override
 		public boolean visit(AstNode node) {

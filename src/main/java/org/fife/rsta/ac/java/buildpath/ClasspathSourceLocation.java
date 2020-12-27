@@ -10,7 +10,6 @@
  */
 package org.fife.rsta.ac.java.buildpath;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
@@ -44,7 +43,7 @@ public class ClasspathSourceLocation implements SourceLocation {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public CompilationUnit getCompilationUnit(ClassFile cf) throws IOException {
+	public CompilationUnit getCompilationUnit(ClassFile cf) {
 
 		CompilationUnit cu = null;
 

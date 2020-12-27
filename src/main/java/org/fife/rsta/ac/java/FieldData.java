@@ -56,7 +56,7 @@ class FieldData implements Data {
 	@Override
 	public String getIcon() {
 
-		String key = null;
+		String key;
 
 		Modifiers mod = field.getModifiers();
 		if (mod==null) {

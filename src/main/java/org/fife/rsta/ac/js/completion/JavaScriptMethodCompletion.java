@@ -27,7 +27,7 @@ public class JavaScriptMethodCompletion extends FunctionCompletion implements
 		super(provider, method.getName(), null);
 		this.method = method;
 		int count = method.getParameterCount();
-		List<Parameter> params = new ArrayList<Parameter>(count);
+		List<Parameter> params = new ArrayList<>(count);
 		for (int i = 0; i < count; i++) {
 			FormalParameter param = method.getParameter(i);
 			String name = param.getName();

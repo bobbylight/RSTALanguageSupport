@@ -444,7 +444,7 @@ public class ClassFile implements AccessFlags {
 		// If no type arguments are specified for a class that's supposed to
 		// have them (according to calling code), return "Object", as Java
 		// assumes this.
-		return typeMap==null ? "Object" : (String)typeMap.get(typeParam);
+		return typeMap==null ? "Object" : typeMap.get(typeParam);
 	}
 
 

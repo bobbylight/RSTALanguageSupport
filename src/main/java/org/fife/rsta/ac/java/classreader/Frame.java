@@ -35,7 +35,7 @@ public class Frame {
 	 */
 	public Frame(Code code) {
 
-		operandStack = new Stack<String>();
+		operandStack = new Stack<>();
 
 		localVars = new LocalVarInfo[code.getMaxLocals()];
 		int i = 0;

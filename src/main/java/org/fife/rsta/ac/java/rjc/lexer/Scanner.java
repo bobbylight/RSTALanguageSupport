@@ -264,7 +264,7 @@ private void pushOntoStack(Token t) {
 	 * @throws IOException If an IO error occurs.
 	 */
 	public void eatThroughNext(int tokenType) throws IOException {
-		Token t = null;
+		Token t;
 		while ((t=yylex())!=null && t.getType()!=tokenType);
 	}
 
@@ -279,7 +279,7 @@ private void pushOntoStack(Token t) {
 	 * @see #eatThroughNextSkippingBlocksAndStuffInParens(int, int)
 	 */
 	public void eatThroughNextSkippingBlocks(int tokenType) throws IOException {
-		Token t = null;
+		Token t;
 		int blockDepth = 0;
 		while ((t=yylex())!=null) {
 			int type = t.getType();
@@ -313,7 +313,7 @@ private void pushOntoStack(Token t) {
 	 */
 	public Token eatThroughNextSkippingBlocks(int tokenType1,
 									int tokenType2) throws IOException {
-		Token t = null;
+		Token t;
 		int blockDepth = 0;
 		while ((t=yylex())!=null) {
 			int type = t.getType();
@@ -349,7 +349,7 @@ private void pushOntoStack(Token t) {
 	public Token eatThroughNextSkippingBlocksAndStuffInParens(int tokenType1,
 									int tokenType2) throws IOException {
 
-		Token t = null;
+		Token t;
 		int blockDepth = 0;
 		int parenDepth = 0;
 
@@ -383,7 +383,7 @@ private void pushOntoStack(Token t) {
 
 
 	public void eatUntilNext(int type1, int type2) throws IOException {
-		Token t = null;
+		Token t;
 		while ((t=yylex())!=null) {
 			int type = t.getType();
 			if (type==type1 || type==type2) {
@@ -395,7 +395,7 @@ private void pushOntoStack(Token t) {
 
 
 	public void eatUntilNext(int type1, int type2, int type3) throws IOException {
-		Token t = null;
+		Token t;
 		while ((t=yylex())!=null) {
 			int type = t.getType();
 			if (type==type1 || type==type2 || type==type3) {
@@ -463,7 +463,7 @@ private int currentResetStartOffset;
 				stack.push(t);
 			}
 			resetPositions.pop(); // Remote currentResetTokenStack
-			currentResetTokenStack = resetPositions.isEmpty() ? null : (Stack<Token>)resetPositions.peek();
+			currentResetTokenStack = resetPositions.isEmpty() ? null : resetPositions.peek();
 			currentResetStartOffset = -1;
 		}
 	}
@@ -473,7 +473,7 @@ private int currentResetStartOffset;
 				throw new InternalError("No resetTokenStack!");
 			}
 			resetPositions.pop(); // Remote currentResetTokenStack
-			currentResetTokenStack = resetPositions.isEmpty() ? null : (Stack<Token>)resetPositions.peek();
+			currentResetTokenStack = resetPositions.isEmpty() ? null : resetPositions.peek();
 			currentResetStartOffset = -1;
 		}
 	}
@@ -525,7 +525,7 @@ private int currentResetStartOffset;
 	 */
 	public Token yylex() throws IOException {
 
-		Token t = null;
+		Token t;
 		if (stack.isEmpty()) {
 			t = s!=null ? s.yylex() : null;
 		}
@@ -848,7 +848,7 @@ private int currentResetStartOffset;
 	}
 
 
-	private class DocumentOffset implements Offset {
+	private static class DocumentOffset implements Offset {
 
 		public Position pos;
 

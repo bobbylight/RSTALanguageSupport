@@ -49,7 +49,7 @@ public class JavaScriptFunctionType {
 
 
 	private JavaScriptFunctionType(String name, SourceCompletionProvider provider) {
-		this(name, new ArrayList<TypeDeclaration>(), provider);
+		this(name, new ArrayList<>(), provider);
 	}
 
 
@@ -77,7 +77,7 @@ public class JavaScriptFunctionType {
 
 	public void addArgument(TypeDeclaration type) {
 		if (arguments == null) {
-			arguments = new ArrayList<TypeDeclaration>();
+			arguments = new ArrayList<>();
 		}
 		arguments.add(type);
 	}
@@ -89,8 +89,7 @@ public class JavaScriptFunctionType {
 
 
 	public TypeDeclaration getArgument(int index) {
-		return arguments != null ? (TypeDeclaration) arguments.get(index)
-				: null;
+		return arguments != null ? arguments.get(index) : null;
 	}
 
 

@@ -38,7 +38,7 @@ import org.fife.ui.autocomplete.DefaultCompletionProvider;
 public abstract class JavaScriptTypesFactory {
 
 	protected HashMap<TypeDeclaration, JavaScriptType> cachedTypes =
-			new HashMap<TypeDeclaration, JavaScriptType>();
+            new HashMap<>();
 	private boolean useBeanproperties;
 	protected TypeDeclarationFactory typesFactory;
 	
@@ -48,7 +48,7 @@ public abstract class JavaScriptTypesFactory {
 	//list of unsupported completions e.g java.lang.Object as JavaScript has it's own
 	static
 	{
-		UNSUPPORTED_COMPLETIONS = new ArrayList<String>();
+		UNSUPPORTED_COMPLETIONS = new ArrayList<>();
 		UNSUPPORTED_COMPLETIONS.add("java.lang.Object");
 	}
 	
@@ -153,10 +153,9 @@ public abstract class JavaScriptTypesFactory {
 	 * completions
 	 * 
 	 * @param cachedType CachedType to populate all completions
-	 * @param dec TypeDeclaration to read from the API e.g JString
 	 * @param provider CompletionsProvider to bind to <code>Completion</code>
-	 * @param cu CompilationUnit that binds source to class
 	 * @param jarManager JarManager containing source and classes
+     * @param cf The class file being parsed.
 	 */
 	private void readMethodsAndFieldsFromTypeDeclaration(
 			JavaScriptType cachedType,
@@ -243,9 +242,8 @@ public abstract class JavaScriptTypesFactory {
 
 	private boolean isAccessible(MemberInfo info, boolean staticOnly, boolean isJJType) {
 
-		boolean accessible = false;
 		int access = info.getAccessFlags();
-		accessible = isAccessible(access, staticOnly, isJJType);
+		boolean accessible = isAccessible(access, staticOnly, isJJType);
 
 		return (!staticOnly && accessible) || ((staticOnly && info.isStatic() && accessible));
 
@@ -382,7 +380,7 @@ public abstract class JavaScriptTypesFactory {
 	 * @return
 	 */
 	public List<JavaScriptType> getECMAObjectTypes(SourceCompletionProvider provider) {
-		List<JavaScriptType> constructors = new ArrayList<JavaScriptType>();
+		List<JavaScriptType> constructors = new ArrayList<>();
 		//no constructors... we'd better load them
 		Set<JavaScriptObject> types = typesFactory.getECMAScriptObjects();
 		JarManager manager = provider.getJarManager();

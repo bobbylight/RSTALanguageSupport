@@ -92,9 +92,9 @@ class XmlCompletionProvider extends DefaultCompletionProvider {
 	private Set<String> collectCompletionWordsAttribute(RSyntaxDocument doc,
 			Token inTag, int currentWordStart) {
 
-		Set<String> possibleAttrs = new HashSet<String>();
-		Set<String> attrs = new HashSet<String>();
-		Set<String> attrsAlreadySpecified = new HashSet<String>();
+		Set<String> possibleAttrs = new HashSet<>();
+		Set<String> attrs = new HashSet<>();
+		Set<String> attrsAlreadySpecified = new HashSet<>();
 		String desiredTagName = inTag.getLexeme();
 		boolean collectAttrs = false;
 		boolean inCurTag = false;
@@ -163,7 +163,7 @@ class XmlCompletionProvider extends DefaultCompletionProvider {
 	 */
 	private Set<String> collectCompletionWordsTag(RSyntaxDocument doc,
 			int currentWordStart) {
-		Set<String> words = new HashSet<String>();
+		Set<String> words = new HashSet<>();
 		for (Token t2 : doc) {
 			if (t2.getType()==TokenTypes.MARKUP_TAG_NAME &&
 					t2.getOffset()!=currentWordStart) {
@@ -200,7 +200,7 @@ class XmlCompletionProvider extends DefaultCompletionProvider {
 		}
 
 		int currentWordStart = dot - text.length();
-		Set<String> words = null;
+		Set<String> words;
 		if (desiredType==TokenTypes.MARKUP_TAG_NAME) {
 			words = collectCompletionWordsTag(doc, currentWordStart);
 		}

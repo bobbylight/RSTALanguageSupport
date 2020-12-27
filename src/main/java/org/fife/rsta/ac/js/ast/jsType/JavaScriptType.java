@@ -45,9 +45,9 @@ public class JavaScriptType {
 
 	public JavaScriptType(TypeDeclaration type) {
 		this.type = type;
-		methodFieldCompletions = new HashMap<String, JSCompletion>();
-		constructors = new HashMap<String, JSCompletion>();
-		extended = new ArrayList<JavaScriptType>();
+		methodFieldCompletions = new HashMap<>();
+		constructors = new HashMap<>();
+		extended = new ArrayList<>();
 	}
 
 
@@ -73,7 +73,7 @@ public class JavaScriptType {
 	/**
 	 * Recursively walk through completions for this and extended classes to remove completion for this lookup name
 	 * @param type
-	 * @param lookupName
+	 * @param completion The completion to remove.
 	 */
 	private void removeCompletion(JavaScriptType type, JSCompletion completion) {
 		

@@ -55,7 +55,7 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	@Override
 	public void addTypeDeclaration(TypeDeclaration type) {
 		if (childTypes==null) {
-			childTypes = new ArrayList<TypeDeclaration>(1); // Usually small
+			childTypes = new ArrayList<>(1); // Usually small
 		}
 		type.setParentType(this);
 		childTypes.add(type);
@@ -124,7 +124,7 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	 */
 	@Override
 	public Iterator<Field> getFieldIterator() {
-		List<Field> fields = new ArrayList<Field>();
+		List<Field> fields = new ArrayList<>();
 		for (Iterator<Member> i=getMemberIterator(); i.hasNext(); ) {
 			Member member = i.next();
 			if (member instanceof Field) {
@@ -161,7 +161,7 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	 */
 	@Override
 	public Iterator<Method> getMethodIterator() {
-		List<Method> methods = new ArrayList<Method>();
+		List<Method> methods = new ArrayList<>();
 		for (Iterator<Member> i=getMemberIterator(); i.hasNext(); ) {
 			Member member = i.next();
 			if (member instanceof Method) {
@@ -177,7 +177,7 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	 */
 	@Override
 	public List<Method> getMethodsByName(String name) {
-		List<Method> methods = new ArrayList<Method>();
+		List<Method> methods = new ArrayList<>();
 		for (Iterator<Member> i=getMemberIterator(); i.hasNext(); ) {
 			Member member = i.next();
 			if (member instanceof Method && name.equals(member.getName())) {
@@ -229,7 +229,7 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 
 
 	private void init() {
-		memberList = new ArrayList<Member>();
+		memberList = new ArrayList<>();
 	}
 
 
