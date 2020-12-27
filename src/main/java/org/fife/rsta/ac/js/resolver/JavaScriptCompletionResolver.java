@@ -139,7 +139,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	 * Test whether the node can be resolved as a static Java class.
 	 * Only looks for Token.NAME nodes to test
 	 * @param node node to test
-	 * @return
+	 * @return The type declaration.
 	 */
 	protected TypeDeclaration testJavaStaticType(AstNode node) {
 		switch (node.getType()) {
@@ -386,7 +386,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	 * 
 	 * @param node
 	 * @param lastJavaScriptType
-	 * @return
+	 * @return The type.
 	 */
 	protected JavaScriptType lookupFromName(AstNode node,
 			JavaScriptType lastJavaScriptType) {
@@ -416,7 +416,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	 * 
 	 * @param node
 	 * @param lastJavaScriptType
-	 * @return
+	 * @return The type.
 	 */
 	protected JavaScriptType lookupFunctionCompletion(AstNode node,
 			JavaScriptType lastJavaScriptType) {

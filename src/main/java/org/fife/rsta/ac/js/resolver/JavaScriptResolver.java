@@ -59,7 +59,7 @@ public abstract class JavaScriptResolver {
 	 * Get lookup string for function completions
 	 * @param method JSMethodData holding method information
 	 * @param name name of method
-	 * @return
+	 * @return The lookup text.
 	 */
 	public abstract String getLookupText(JSMethodData method, String name);
 	
@@ -67,7 +67,7 @@ public abstract class JavaScriptResolver {
 	 * Returns same string format as {@link #getLookupText(JSMethodData, String)} but from AstNode Function 
 	 * @param call
 	 * @param provider
-	 * @return
+	 * @return The function name.
 	 */
 	public abstract String getFunctionNameLookup(FunctionCall call, SourceCompletionProvider provider);
 	
