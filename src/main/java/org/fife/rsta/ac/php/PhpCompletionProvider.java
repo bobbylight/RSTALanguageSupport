@@ -246,7 +246,7 @@ public class PhpCompletionProvider extends HtmlCompletionProvider {
 	 */
 	@Override
 	public boolean isAutoActivateOkay(JTextComponent tc) {
-		return inPhpBlock(tc) ? false : super.isAutoActivateOkay(tc);
+		return inPhpBlock(tc) ? true : super.isAutoActivateOkay(tc);
 	}
 
 
