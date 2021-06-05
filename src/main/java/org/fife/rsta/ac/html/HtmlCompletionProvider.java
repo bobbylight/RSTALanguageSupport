@@ -422,7 +422,24 @@ if (t!=null && !t.isWhitespace()) {
 
 
 	/**
-	 * {@inheritDoc}
+	 * Returns the base implementation - basically checking that the
+	 * caret comes immediately after letters.  This is here for
+	 * subclasses that sometimes auto-activate in markup, other times
+	 * auto-activate in some other language, such as PHP.
+	 *
+	 * @param tc The text component.
+	 * @return Whether auto-activation is okay outside of markup.
+	 * @see #isAutoActivateOkay(JTextComponent)
+	 */
+	protected boolean isAutoActivateOkayOutsideOfMarkup(JTextComponent tc) {
+		return super.isAutoActivateOkay(tc);
+	}
+
+
+	/**
+	 * Overridden to ensure auto-activation only occurs in a markup tag.
+	 *
+	 * @see #isAutoActivateOkayOutsideOfMarkup(JTextComponent)
 	 */
 	@Override
 	public boolean isAutoActivateOkay(JTextComponent tc) {
