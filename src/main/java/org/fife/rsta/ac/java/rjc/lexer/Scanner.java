@@ -101,15 +101,22 @@ public class Scanner {
  */
 private void pushOntoStack(Token t) {
 	if (t!=null && !stack.isEmpty() && t.equals(stack.peek())) {
-		System.err.println("ERROR: Token being duplicated: " + t);
-		Thread.dumpStack();
-		System.exit(5);
+		throw new InternalError("ERROR: Token being duplicated: " + t);
 	}
 	else if (t==null) {
-		System.err.println("ERROR: null token pushed onto stack");
-		Thread.dumpStack();
-		System.exit(6);
+		throw new InternalError("ERROR: null token pushed onto stack");
 	}
+
+	// This method should always be called with the most recently read token.
+	// If we're remembering a set of tokens to reset, remove this token.
+	if (currentResetTokenStack!=null) {
+		if (!currentResetTokenStack.isEmpty() && !t.equals(currentResetTokenStack.peek())) {
+			throw new InternalError("Pushing onto stack: " + t + ", but top reset token was: " +
+					currentResetTokenStack.peek());
+		}
+		currentResetTokenStack.pop();
+	}
+
 	stack.push(t);
 }
 
@@ -591,10 +598,13 @@ private int currentResetStartOffset;
 		}
 
 		debugPrintToken(t);
-		if (currentResetTokenStack!=null) {
-			currentResetTokenStack.push(t);
-		}
 		if (t!=null) { // Don't let EOS corrupt most recent token
+			if (currentResetTokenStack!=null) {
+				if (!currentResetTokenStack.isEmpty() && t.equals(currentResetTokenStack.peek())) {
+					throw new InternalError("Duplicating a token on reset token stack! - " + t);
+				}
+				currentResetTokenStack.push(t);
+			}
 			mostRecentToken = t;
 		}
 		return t;

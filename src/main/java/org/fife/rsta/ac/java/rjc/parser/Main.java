@@ -10,13 +10,10 @@
  */
 package org.fife.rsta.ac.java.rjc.parser;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.fife.rsta.ac.java.rjc.lexer.Scanner;
@@ -55,11 +52,12 @@ public class Main {
 	 */
 	public static void main(String[] args) throws IOException {
 
-PrintStream oldOut = System.out;
-PrintStream oldErr = System.err;
-//PrintStream out = new PrintStream(new BufferedOutputStream(new FileOutputStream("C:/temp/rofutr.out")));
-//System.setOut(out);
-//System.setErr(out);
+		PrintStream oldOut = System.out;
+		PrintStream oldErr = System.err;
+		String outputFileName = File.separatorChar == '/' ? "/tmp/rofutr.out" : "C:/temp/rofutr.out";
+		PrintStream out = new PrintStream(new BufferedOutputStream(new FileOutputStream(outputFileName)));
+		System.setOut(out);
+		System.setErr(out);
 
 		ASTFactory fact = new ASTFactory();
 		//CompilationUnit cu = null;
@@ -70,12 +68,25 @@ PrintStream oldErr = System.err;
 			toDo.add(new File(args[0]));
 		}
 		else {
-//toDo.add(new File("C:\\java\\32\\jdk1.6.0_16\\src\\java\\util\\concurrent\\TimeUnit.java"));
-			File rootDir = new File("C:/java/32/jdk1.6.0_16/src/");
-//rootDir = new File("C:/dev/rsta/JavaAst/src");
-//rootDir = new File("C:/dev/rjava/Common/src");
-			File[] files = rootDir.listFiles();
-            Collections.addAll(toDo, files);
+
+			// Smoke test by verifying that a large amount of valid source is parsed properly
+			String[] roots = new String[2];
+			if (File.separatorChar == '/') {
+				roots[0] = "/Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home/src";
+				roots[1] = "/Users/robert/dev/RText/src";
+			}
+			else {
+				roots[0] = "C:/java/32/jdk1.6.0_16/src/";
+				roots[1] = "D:/dev/rjava/RText/src";
+			}
+
+			for (String root : roots) {
+				File[] files = new File(root).listFiles();
+				if (files != null) {
+					Collections.addAll(toDo, files);
+				}
+			}
+			toDo.sort(Comparator.comparing(File::getAbsolutePath));
 		}
 
 		int count = 0;
