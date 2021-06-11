@@ -84,6 +84,8 @@ public class LanguageSupportFactory implements PropertyChangeListener {
 
 		String prefix = "org.fife.rsta.ac.";
 
+        addLanguageSupport(SyntaxConstants.SYNTAX_STYLE_ASSEMBLER_6502,
+                prefix + "asm6502.Asm6502LanguageSupport");
 		addLanguageSupport(SyntaxConstants.SYNTAX_STYLE_C,
 				prefix + "c.CLanguageSupport");
 		addLanguageSupport(SyntaxConstants.SYNTAX_STYLE_CSS,

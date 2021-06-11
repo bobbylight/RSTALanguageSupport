@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE api SYSTEM "CompletionXml.dtd">
+
+<!--
+
+   asm6502.xml - API specification for 6502 Assembler.
+                 Used by RSyntaxTextArea to provide code completion.
+
+   Author:         Robert Futrell
+   Version:        0.1
+
+   This file was generated from: /d/dev/rsta/RSTALanguageSupport/data/asm6502/create_asm6502_xml.pl
+   on date: 2021-01-04 23:38:45
+
+
+ -->
+<api language="asm6502">
+
+	<environment paramStartChar=" " paramEndChar="" paramSeparator=" " terminal="" />
+
+<keywords>
+	<keyword name="ADC" type="function">
+		<desc>add with carry</desc>
+        <params>
+            <param name="param"/>
+        </params>
+	</keyword>
+	<keyword name="AND" type="function">
+		<desc>and (with accumulator)</desc>
+        <params>
+            <param name="param"/>
+        </params>
+	</keyword>
+	<keyword name="ASL" type="function">
+		<desc>arithmetic shift left</desc>
+        <params>
+            <param name="param"/>
+        </params>
+	</keyword>
+	<keyword name="BCC" type="function">
+		<desc>branch on carry clear</desc>
+        <params>
+            <param name="param"/>
+        </params>
+	</keyword>
+	<keyword name="BCS" type="function">
+		<desc>branch on carry set</desc>
+        <params>
+            <param name="param"/>
+        </params>
+	</keyword>
+	<keyword name="BEQ" type="function">
+		<desc>branch on equal (zero set)</desc>
+        <params>
+            <param name="param"/>
+        </params>
+	</keyword>
+	<keyword name="BIT" type="function">
+		<desc>bit test</desc>
+        <params>
+            <param name="param"/>
+        </params>
+	</keyword>
+	<keyword name="BMI" type="function">
+		<desc>branch on minus (negative set)</desc>
+        <params>
+            <param name="param"/>
+        </params>
+	</keyword>
+	<keyword name="BNE" type="function">
+		<desc>branch on not equal (zero clear)</desc>
+        <params>
+            <param name="param"/>
+        </params>
+	</keyword>
+	<keyword name="BPL" type="function">
+		<desc>branch on plus (negative clear)</desc>
+        <params>
+            <param name="param"/>
+        </params>
+	</keyword>
+	<keyword name="BRK" type="function">
+		<desc>break / interrupt</desc>
+	</keyword>
+	<keyword name="BVC" type="function">
+		<desc>branch on overflow clear</desc>
+        <params>
+            <param name="param"/>
+        </params>
+	</keyword>
+	<keyword name="BVS" type="function">
+		<desc>branch on overflow set</desc>
+        <params>
+            <param name="param"/>
+        </params>
+	</keyword>
+	<keyword name="CLC" type="function">
+		<desc>clear carry</desc>
+	</keyword>
+	<keyword name="CLD" type="function">
+		<desc>clear decimal</desc>
+	</keyword>
+	<keyword name="CLI" type="function">
+		<desc>clear interrupt disable</desc>
+	</keyword>
+	<keyword name="CLV" type="function">
+		<desc>clear overflow</desc>
+	</keyword>
+	<keyword name="CMP" type="function">
+		<desc>compare (with accumulator)</desc>
+        <params>
+            <param name="param"/>
+        </params>
+	</keyword>
+	<keyword name="CPX" type="function">
+		<desc>compare with X</desc>
+        <params>
+            <param name="param"/>
+        </params>
+	</keyword>
+	<keyword name="CPY" type="function">
+		<desc>compare with Y</desc>
+        <params>
+            <param name="param"/>
+        </params>
+	</keyword>
+	<keyword name="DEC" type="function">
+		<desc>decrement</desc>
+        <params>
+            <param name="param"/>
+        </params>
+	</keyword>
+	<keyword name="DEX" type="function">
+		<desc>decrement X</desc>
+	</keyword>
+	<keyword name="DEY" type="function">
+		<desc>decrement Y</desc>
+	</keyword>
+	<keyword name="EOR" type="function">
+		<desc>exclusive or (with accumulator)</desc>
+        <params>
+            <param name="param"/>
+        </params>
+	</keyword>
+	<keyword name="INC" type="function">
+		<desc>increment</desc>
+        <params>
+            <param name="param"/>
+        </params>
+	</keyword>
+	<keyword name="INX" type="function">
+		<desc>increment X</desc>
+	</keyword>
+	<keyword name="INY" type="function">
+		<desc>increment Y</desc>
+	</keyword>
+	<keyword name="JMP" type="function">
+		<desc>jump</desc>
+        <params>
+            <param name="param"/>
+        </params>
+	</keyword>
+	<keyword name="JSR" type="function">
+		<desc>jump subroutine</desc>
+        <params>
+            <param name="param"/>
+        </params>
+	</keyword>
+	<keyword name="LDA" type="function">
+		<desc>load accumulator</desc>
+        <params>
+            <param name="param"/>
+        </params>
+	</keyword>
+	<keyword name="LDX" type="function">
+		<desc>load X</desc>
+        <params>
+            <param name="param"/>
+        </params>
+	</keyword>
+	<keyword name="LDY" type="function">
+		<desc>load Y</desc>
+        <params>
+            <param name="param"/>
+        </params>
+	</keyword>
+	<keyword name="LSR" type="function">
+		<desc>logical shift right</desc>
+        <params>
+            <param name="param"/>
+        </params>
+	</keyword>
+	<keyword name="NOP" type="function">
+		<desc>no operation</desc>
+	</keyword>
+	<keyword name="ORA" type="function">
+		<desc>or with accumulator</desc>
+        <params>
+            <param name="param"/>
+        </params>
+	</keyword>
+	<keyword name="PHA" type="function">
+		<desc>push accumulator</desc>
+	</keyword>
+	<keyword name="PHP" type="function">
+		<desc>push processor status (SR)</desc>
+	</keyword>
+	<keyword name="PLA" type="function">
+		<desc>pull accumulator</desc>
+	</keyword>
+	<keyword name="PLP" type="function">
+		<desc>pull processor status (SR)</desc>
+	</keyword>
+	<keyword name="ROL" type="function">
+		<desc>rotate left</desc>
+        <params>
+            <param name="param"/>
+        </params>
+	</keyword>
+	<keyword name="ROR" type="function">
+		<desc>rotate right</desc>
+        <params>
+            <param name="param"/>
+        </params>
+	</keyword>
+	<keyword name="RTI" type="function">
+		<desc>return from interrupt</desc>
+	</keyword>
+	<keyword name="RTS" type="function">
+		<desc>return from subroutine</desc>
+	</keyword>
+	<keyword name="SBC" type="function">
+		<desc>subtract with carry</desc>
+        <params>
+            <param name="param"/>
+        </params>
+	</keyword>
+	<keyword name="SEC" type="function">
+		<desc>set carry</desc>
+	</keyword>
+	<keyword name="SED" type="function">
+		<desc>set decimal</desc>
+	</keyword>
+	<keyword name="SEI" type="function">
+		<desc>set interrupt disable</desc>
+	</keyword>
+	<keyword name="STA" type="function">
+		<desc>store accumulator</desc>
+        <params>
+            <param name="param"/>
+        </params>
+	</keyword>
+	<keyword name="STX" type="function">
+		<desc>store X</desc>
+        <params>
+            <param name="param"/>
+        </params>
+	</keyword>
+	<keyword name="STY" type="function">
+		<desc>store Y</desc>
+        <params>
+            <param name="param"/>
+        </params>
+	</keyword>
+	<keyword name="TAX" type="function">
+		<desc>transfer accumulator to X</desc>
+	</keyword>
+	<keyword name="TAY" type="function">
+		<desc>transfer accumulator to Y</desc>
+	</keyword>
+	<keyword name="TSX" type="function">
+		<desc>transfer stack pointer to X</desc>
+	</keyword>
+	<keyword name="TXA" type="function">
+		<desc>transfer X to accumulator</desc>
+	</keyword>
+	<keyword name="TXS" type="function">
+		<desc>transfer X to stack pointer</desc>
+	</keyword>
+	<keyword name="TYA" type="function">
+		<desc>transfer Y to accumulator</desc>
+	</keyword>
+</keywords>
+
+</api>

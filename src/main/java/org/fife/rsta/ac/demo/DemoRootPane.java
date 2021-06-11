@@ -127,6 +127,7 @@ setContentPane(cp);
 
 		menu = new JMenu("Language");
 		ButtonGroup bg = new ButtonGroup();
+        addItem(new StyleAction(this, "6502 Assembly","Asm6502Example.txt",      SYNTAX_STYLE_ASSEMBLER_6502), bg, menu);
 		addItem(new StyleAction(this, "C",          "CExample.txt",      SYNTAX_STYLE_C), bg, menu);
 		addItem(new StyleAction(this, "CSS",        "CssExample.txt",    SYNTAX_STYLE_CSS), bg, menu);
 		addItem(new StyleAction(this, "Groovy",     "GroovyExample.txt", SYNTAX_STYLE_GROOVY), bg, menu);
