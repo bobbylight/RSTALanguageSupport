@@ -60,6 +60,8 @@ public class PhpCompletionProvider extends HtmlCompletionProvider {
 	 */
 	private List<Completion> phpCompletions;
 
+    // TODO: Make PHPTokenMaker.INTERNAL_IN_PHP public!  Or come up with a better way to do this
+    private static final int EVERYTHING_HERE_AND_BELOW_IS_PHP = -(4<<11);//PHPTokenMaker.INTERNAL_IN_PHP;
 
 	public PhpCompletionProvider() {
 
@@ -227,11 +229,11 @@ public class PhpCompletionProvider extends HtmlCompletionProvider {
 		}
 
 		// Check if previous line ended in a PHP block.
-		// HACK: This relies on insider knowledge of PhpTokenmaker! All
+		// HACK: This relies on insider knowledge of PhpTokenMaker! All
 		// PHP-related states have the "lowest" token types.
 		if (!inPhp && line>0) {
 			int prevLineEndType = doc.getLastTokenTypeOnLine(line-1);
-			if (prevLineEndType<=PHPTokenMaker.INTERNAL_IN_PHP) {
+			if (prevLineEndType <= EVERYTHING_HERE_AND_BELOW_IS_PHP) {
 				inPhp = true;
 			}
 		}
