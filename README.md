@@ -1,3 +1,7 @@
+# RSTALanguageSupport
+![Build](https://github.com/bobbylight/RSTALanguageSupport/actions/workflows/gradle.yml/badge.svg)
+![CodeQL](https://github.com/bobbylight/RSTALanguageSupport/actions/workflows/codeql-analysis.yml/badge.svg)
+
 This library contains "language support" for various languages for RSyntaxTextArea.  "Language support" is a little vague, but it generally means auto-completion of function names and/or [Parsers](https://github.com/bobbylight/RSyntaxTextArea/blob/master/src/org/fife/ui/rsyntaxtextarea/parser/Parser.java) for the language (i.e. squiggle-underlining of errors in the source code).
 
 Documentation is sparse for the moment, but should improve over time.
