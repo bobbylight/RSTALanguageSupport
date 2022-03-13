@@ -91,7 +91,7 @@ publishing {
                 licenses {
                     license {
                         name = 'BSD-3-Clause'
-                        url = 'https://github.com/bobbylight/RSTALanguageSupport/blob/master/RSTALanguageSupport.License.txt'
+                        url = 'https://github.com/bobbylight/RSTALanguageSupport/blob/master/LICENSE.md'
                     }
                 }
                 developers {

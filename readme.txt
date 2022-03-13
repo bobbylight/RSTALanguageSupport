@@ -156,7 +156,7 @@ III. Project Layout
       gradle.properties                 Properties for the build.
       README.md                         Markdown readme for Git repository
       readme.txt                        This file
-      RSTALanguageSupport.License.txt   License for this library (modified BSD)
+      LICENSE.md   License for this library (modified BSD)
 
 Sub-directories of "data/" contain Perl scripts and input files for generating
 the XML files used by various languages for code completion.  If you want to
@@ -218,7 +218,7 @@ instances of RSyntaxTextArea editing Perl, as well as all future instances.
 VI.  License
 ----------------------------------------
 All code licensed in this library is modified BSD.  See the included
-RSTALanguageSupport.License.txt.
+LICENSE.md.
 
 The Rhino jar used for JavaScript support is licensed under the MPL 1.1.  See
 the included Rhino.LICENSE.txt for details.
