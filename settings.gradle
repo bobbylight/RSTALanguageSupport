@@ -1,0 +1,3 @@
+rootProject.name = 'RSTALanguageSupport'
+
+include 'RSTALanguageSupport', 'RSTALanguageSupportDemo'

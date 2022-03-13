@@ -1,122 +1,66 @@
-plugins {
-    id 'java-library'
-}
+//plugins {
+//    id 'com.github.spotbugs' version '4.7.1'
+//}
 
-['java', 'distribution', 'maven-publish', 'signing'].each { apply plugin: it }
+group = 'com.fifesoft'
+// NOTE: Local Java 8:  /Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home
 
-assert org.gradle.api.JavaVersion.current().isJava8Compatible()
 allprojects {
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven {
+            url 'https://oss.sonatype.org/content/repositories/snapshots'
+        }
+    }
+
+    wrapper {
+        gradleVersion = '7.3.3'
+    }
+
 	tasks.withType(Javadoc) {
 		options.addStringOption('Xdoclint:none', '-quiet')
 	}
 }
 
-group = 'com.fifesoft'
-archivesBaseName = 'languagesupport'
-ext.isReleaseVersion = !project.version.endsWith('SNAPSHOT')
+subprojects {
 
-dependencies {
-    api('com.fifesoft:rsyntaxtextarea:3.1.6') { changing = true }
-    api 'com.fifesoft:autocomplete:3.1.5'
-	implementation 'org.mozilla:rhino:1.7.6'
-    testImplementation 'junit:junit:4.13.2'
-}
+    apply plugin: 'java'
+//    apply plugin: 'checkstyle'
+//    apply plugin: 'com.github.spotbugs'
 
-wrapper {
-    gradleVersion = '7.3.3'
-}
+//    checkstyle {
+//        toolVersion = '9.3'
+//        configDirectory = file("$rootProject.projectDir/config/checkstyle")
+//    }
 
-repositories {
-    mavenLocal()
-    mavenCentral()
-    maven {
-        url 'https://oss.sonatype.org/content/repositories/snapshots'
+//    spotbugsMain {
+//        reports {
+//            html {
+//                required = true
+//            }
+//            xml {
+//                required = false
+//            }
+//        }
+//    }
+//    spotbugsTest {
+//        reports {
+//            html {
+//                required = true
+//            }
+//            xml {
+//                required = false
+//            }
+//        }
+//    }
+
+    compileJava {
+        sourceCompatibility javaVersion.toString()
+        targetCompatibility javaVersion.toString()
+        options.debug = true
+        options.debugOptions.debugLevel = 'source,vars,lines'
+        options.compilerArgs << '-Xlint:deprecation' << '-Xlint:unchecked'
     }
-}
-
-compileJava {
-    sourceCompatibility javaVersion.toString()
-    targetCompatibility javaVersion.toString()
-	options.debug = true
-	options.debugOptions.debugLevel = 'source,vars,lines'
-	options.compilerArgs << '-Xlint:deprecation' << '-Xlint:unchecked'
-}
-
-ext.sharedManifest = manifest {
-	attributes('Main-Class': 'org.fife.rsta.ac.demo.DemoApp',
-		'Class-Path': 'rsyntaxtextarea.jar autocomplete.jar rhino-1.7.6.jar',
-		'Specification-Title': 'RSyntaxTextArea Language Support',
-		'Specification-Version': version,
-		'Implementation-Title': 'org.fife.ui',
-		'Implementation-Version': version)
-
-}
-
-java {
-    withSourcesJar()
-    withJavadocJar()
-}
-jar {
-	manifest { from sharedManifest }
-}
-
-publishing {
-    repositories {
-        maven {
-            def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-            def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
-            url = isReleaseVersion ? releasesRepoUrl : snapshotsRepoUrl
-            credentials { // Credentials usually kept in user's .gradle/gradle.properties
-                // We must defensively check for these properties so Travis CI build works
-                username = project.hasProperty('ossrhUsername') ? ossrhUsername : 'unknown'
-                password = project.hasProperty('ossrhPassword') ? ossrhPassword : 'unknown'
-            }
-        }
-    }
-    publications {
-        maven(MavenPublication) {
-
-            groupId = 'com.fifesoft'
-            artifactId = 'languagesupport'
-            version = version
-
-            from components.java
-
-            pom {
-                name = 'LanguageSupport'
-                description = 'A library adding code completion and other advanced features for Java, JavaScript, Perl, and other languages to RSyntaxTextArea.'
-                url = 'http://www.fifesoft.com/rsyntaxtextarea/'
-                inceptionYear = '2003'
-                packaging = 'jar'
-                licenses {
-                    license {
-                        name = 'BSD-3-Clause'
-                        url = 'https://github.com/bobbylight/RSTALanguageSupport/blob/master/LICENSE.md'
-                    }
-                }
-                developers {
-                    developer {
-                        name = 'Robert Futrell'
-                    }
-                }
-                scm {
-                    url = 'https://github.com/bobbylight/RSTALanguageSupport'
-                    connection = 'scm:git:git://github.com/bobbylight/RSTALanguageSupport'
-                    developerConnection = 'scm:git:git@github.com:bobbylight/RSTALanguageSupport'
-                    if (isReleaseVersion) {
-                        tag = project.version
-                    }
-                }
-            }
-        }
-    }
-}
-
-signing {
-    // Don't require signing for e.g. ./gradlew install
-    required { gradle.taskGraph.hasTask('publish') && isReleaseVersion }
-    sign publishing.publications.maven
-}
-tasks.withType(Sign) {
-    onlyIf { isReleaseVersion }
 }

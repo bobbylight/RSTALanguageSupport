@@ -1,0 +1,97 @@
+plugins {
+    id 'java-library'
+}
+
+['java', 'distribution', 'maven-publish', 'signing'].each { apply plugin: it }
+
+assert JavaVersion.current().isJava8Compatible()
+
+archivesBaseName = 'languagesupport'
+
+dependencies {
+    api 'com.fifesoft:rsyntaxtextarea:3.2.0'
+    api 'com.fifesoft:autocomplete:3.2.0'
+    implementation 'org.mozilla:rhino:1.7.6'
+    testImplementation 'junit:junit:4.13.2'
+}
+
+ext.isReleaseVersion = !project.version.endsWith('SNAPSHOT')
+
+ext.sharedManifest = manifest {
+    attributes('Main-Class': 'org.fife.rsta.ac.demo.DemoApp',
+            'Class-Path': 'rsyntaxtextarea.jar autocomplete.jar rhino-1.7.6.jar',
+            'Specification-Title': 'RSyntaxTextArea Language Support',
+            'Specification-Version': version,
+            'Implementation-Title': 'org.fife.ui',
+            'Implementation-Version': version)
+}
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+jar {
+    manifest { from sharedManifest }
+}
+
+publishing {
+    repositories {
+        maven {
+            def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+            def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
+            url = isReleaseVersion ? releasesRepoUrl : snapshotsRepoUrl
+            credentials { // Credentials usually kept in user's .gradle/gradle.properties
+                // We must defensively check for these properties so Travis CI build works
+                username = project.hasProperty('ossrhUsername') ? ossrhUsername : 'unknown'
+                password = project.hasProperty('ossrhPassword') ? ossrhPassword : 'unknown'
+            }
+        }
+    }
+    publications {
+        maven(MavenPublication) {
+
+            groupId = 'com.fifesoft'
+            artifactId = 'languagesupport'
+            version = version
+
+            from components.java
+
+            pom {
+                name = 'LanguageSupport'
+                description = 'A library adding code completion and other advanced features for Java, JavaScript, Perl, and other languages to RSyntaxTextArea.'
+                url = 'https://github.com/bobbylight/RSTALanguageSupport'
+                inceptionYear = '2003'
+                packaging = 'jar'
+                licenses {
+                    license {
+                        name = 'BSD-3-Clause'
+                        url = 'https://github.com/bobbylight/RSTALanguageSupport/blob/master/LICENSE.md'
+                    }
+                }
+                developers {
+                    developer {
+                        name = 'Robert Futrell'
+                    }
+                }
+                scm {
+                    url = 'https://github.com/bobbylight/RSTALanguageSupport'
+                    connection = 'scm:git:git://github.com/bobbylight/RSTALanguageSupport'
+                    developerConnection = 'scm:git:git@github.com:bobbylight/RSTALanguageSupport'
+                    if (isReleaseVersion) {
+                        tag = project.version
+                    }
+                }
+            }
+        }
+    }
+}
+
+signing {
+    // Don't require signing for e.g. ./gradlew install
+    required { gradle.taskGraph.hasTask('publish') && isReleaseVersion }
+    sign publishing.publications.maven
+}
+tasks.withType(Sign) {
+    onlyIf { isReleaseVersion }
+}
+
