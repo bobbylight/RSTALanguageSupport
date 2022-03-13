@@ -226,7 +226,7 @@ private void pushOntoStack(Token t) {
 	 * Blocks nested inside the paren pairs are also skipped.
 	 *
 	 * @throws IOException If an IO error occurs.
-	 * @throws InternalError If the next token is not a '('.
+	 * @throws InternalError If the next token is not a {@code '('}.
 	 */
 	public void eatParenPairs() throws IOException {
 

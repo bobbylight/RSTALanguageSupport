@@ -159,7 +159,7 @@ public interface JSGlobalFunctions extends JSObjectFunctions {
 	/**
 	 * <b>function parseInt(s, radix)</b> convert a string to an integer.
 	 * @param s The string to be parsed and converted to an integer
-	 * @param radix An optional integer argument that represents the radix (i.e base) of the number to be parsed. If omitted or 0, the number is parsed in base 10.
+	 * @param radix An optional integer argument that represents the radix (i.e. base) of the number to be parsed. If omitted or 0, the number is parsed in base 10.
 	 * @returns The parsed number or <b><i>NaN</i></b> if <b><i>s</i></b> does not begin with a valid number.
 	 * @memberOf Global
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSGlobal Global
@@ -173,7 +173,7 @@ public interface JSGlobalFunctions extends JSObjectFunctions {
 	/**
 	 * <b>function unescape(s)</b> decode an escaped string.
 	 * @param s A string to be "unescaped" or decoded. 
-	 * @returns An decoded copy of <b><i>s</i></b>.
+	 * @returns A decoded copy of <b><i>s</i></b>.
 	 * @memberOf Global
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSGlobal Global
 	 * @see #decodeURI(JSString) decodeURI()

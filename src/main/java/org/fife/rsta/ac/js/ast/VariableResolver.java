@@ -25,7 +25,7 @@ public class VariableResolver {
 	// HashMap of local variables mapped Name --> JSVariableDeclaration
 	private HashMap<String, JavaScriptVariableDeclaration> localVariables =
             new HashMap<>();
-	// pre processing variables - these are set when pre-processing
+	// pre-processing variables - these are set when pre-processing
 	private HashMap<String, JavaScriptVariableDeclaration> preProcessedVariables =
             new HashMap<>();
 	// HashMap of system variables mapped Name --> JSVariableDeclaration

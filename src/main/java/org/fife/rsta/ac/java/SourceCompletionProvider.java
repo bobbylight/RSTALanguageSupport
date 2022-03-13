@@ -348,7 +348,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 
 
 	/**
-	 * Adds completions for local variables in a code block inside of a method.
+	 * Adds completions for local variables in a code block inside a method.
 	 *
 	 * @param set
 	 * @param block The code block.
@@ -615,7 +615,7 @@ public SourceLocation  getSourceLocForClass(String className) {
 	 *
 	 * @param info Information about the member.
 	 * @param pkg The package of the source currently being parsed.
-	 * @return Whether or not the method is accessible.
+	 * @return Whether the method is accessible.
 	 */
 	private boolean isAccessible(MemberInfo info, String pkg) {
 
@@ -924,10 +924,9 @@ public SourceLocation  getSourceLocForClass(String className) {
 			List<ClassFile> matches = jarManager.getClassesWithUnqualifiedName(
 															prefix, imports);
 			if (matches!=null) {
-				for (int i=0; i<matches.size(); i++) {
-					ClassFile cf = matches.get(i);
-					addCompletionsForStaticMembers(retVal, cu, cf, pkg);
-				}
+                for (ClassFile cf : matches) {
+                    addCompletionsForStaticMembers(retVal, cu, cf, pkg);
+                }
 			}
 		}
 

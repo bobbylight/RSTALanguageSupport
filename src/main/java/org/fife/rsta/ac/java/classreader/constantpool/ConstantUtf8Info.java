@@ -110,8 +110,7 @@ public class ConstantUtf8Info extends ConstantPoolInfo {
 		if (!quoted) {
 			return representedString;
 		}
-		String temp = "\"" + representedString.replaceAll("\"", "\\\"") + "\"";
-		return temp;
+        return "\"" + representedString.replaceAll("\"", "\\\"") + "\"";
 	}
 
 

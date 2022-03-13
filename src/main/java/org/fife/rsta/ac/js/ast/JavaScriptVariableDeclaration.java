@@ -102,7 +102,7 @@ public class JavaScriptVariableDeclaration extends JavaScriptDeclaration {
 
 
 	/**
-	 * @return JavaScript name for the type declaration e.g String, Number etc..
+	 * @return JavaScript name for the type declaration e.g. String, Number etc.
 	 */
 	public String getJavaScriptTypeName() {
 		TypeDeclaration dec = getTypeDeclaration();

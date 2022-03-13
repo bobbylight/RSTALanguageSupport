@@ -46,7 +46,7 @@ public class JavaScriptDocUrlhandler implements ExternalURLHandler {
 		}
 		else {
 			Logger.logError("Can't determine class from completion type: " +
-					c.getClass() + " (" + c.toString() + ") - href: " + desc);
+					c.getClass() + " (" + c + ") - href: " + desc);
 		}
 
 		return clazz;
@@ -79,7 +79,7 @@ public class JavaScriptDocUrlhandler implements ExternalURLHandler {
 		}
 		else {
 			Logger.logError("Can't determine package from completion type: " +
-					c.getClass() + " (" + c.toString() + ") - href: " + desc);
+					c.getClass() + " (" + c + ") - href: " + desc);
 		}
 
 		return pkg;
@@ -95,12 +95,12 @@ public class JavaScriptDocUrlhandler implements ExternalURLHandler {
 	private boolean isRelativeUrl(String text) {
 		// Javadoc is always ".html", and we support full URL's elsewhere.
 		final String[] EXTS = { ".html", ".htm" };
-		for (int i=0; i<EXTS.length; i++) {
-			if (text.endsWith(EXTS[i]) || text.contains(EXTS[i] + "#") ||
-                    text.contains(EXTS[i] + "?")) {
-				return true;
-			}
-		}
+        for (String ext : EXTS) {
+            if (text.endsWith(ext) || text.contains(ext + "#") ||
+                    text.contains(ext + "?")) {
+                return true;
+            }
+        }
 		return false;
 	}
 	
@@ -138,7 +138,7 @@ public class JavaScriptDocUrlhandler implements ExternalURLHandler {
 	 * @param url The URL.
 	 * @return The anchor, or <code>null</code> if none.
 	 */
-	private static final String getAnchor(String url) {
+	private static String getAnchor(String url) {
 		int pound = url.indexOf('#');
 		return pound>-1 ? url.substring(pound+1) : null;
 	}
@@ -149,7 +149,7 @@ public class JavaScriptDocUrlhandler implements ExternalURLHandler {
 	 * @param methodSignature The method signature.
 	 * @return The arguments, or an empty array if none.
 	 */
-	private static final String[] getArgs(String methodSignature) {
+	private static String[] getArgs(String methodSignature) {
 
 		String[] args = null;
 

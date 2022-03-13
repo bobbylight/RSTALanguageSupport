@@ -4,7 +4,6 @@
  */
 package org.fife.rsta.ac.asm6502;
 
-import org.fife.rsta.ac.css.PropertyValueCompletionProvider;
 import org.fife.ui.autocomplete.BasicCompletion;
 import org.fife.ui.autocomplete.CompletionProvider;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;

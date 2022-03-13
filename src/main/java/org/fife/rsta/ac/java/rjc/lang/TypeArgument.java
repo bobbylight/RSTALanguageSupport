@@ -44,7 +44,7 @@ public class TypeArgument {
 			sb.append('?');
 		}
 		else {
-			sb.append(type.toString());
+			sb.append(type);
 		}
 		if (doesExtend==EXTENDS) {
 			sb.append(" extends ");

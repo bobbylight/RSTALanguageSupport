@@ -30,7 +30,7 @@ import org.mozilla.javascript.ast.PropertyGet;
 
 /**
  * Compiles the entered text using Rhino and tries to resolve the JavaScriptType
- * from the AstRoot e.g var a = ""; "" --&gt; String JavaScriptType var b =
+ * from the AstRoot e.g. var a = ""; "" --&gt; String JavaScriptType var b =
  * a.toString() a.toString --&gt; String JavaScriptType
  * 
  * etc.
@@ -57,7 +57,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	
 	/**
 	 * Compiles Text and resolves the type.
-	 * e.g 
+	 * e.g.
 	 * "Hello World".length; //resolve as a Number
 	 * 
 	 * @param text to compile and resolve  
@@ -166,9 +166,8 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 				ClassFile cf = provider.getJavaScriptTypesFactory().getClassFile(
 						provider.getJarManager(), dec);
 				if (cf != null) {
-					TypeDeclaration returnDec = provider.getJavaScriptTypesFactory()
-							.createNewTypeDeclaration(cf, true, false);
-					return returnDec;
+                    return provider.getJavaScriptTypesFactory()
+                            .createNewTypeDeclaration(cf, true, false);
 				}
 			}
 		}
@@ -212,7 +211,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 			JavaScriptType jsType;
 			TypeDeclaration dec;
 			//only resolve native type if last type is null
-			//otherwise it can be assumed that this is part of multi depth - e.g "".length.toString()
+			//otherwise it can be assumed that this is part of multi depth - e.g. "".length.toString()
 			if(lastJavaScriptType == null) {
 				dec = resolveNativeType(node);
 				if(dec == null && node.getType() == Token.NAME) {
@@ -310,7 +309,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 		 */
 		private boolean ignore(AstNode node, boolean ignoreParams) {
 			switch (node.getType()) {
-				// ignore errors e.g if statement - if(a. //no closing brace
+				// ignore errors e.g. if statement - if(a. //no closing brace
 				case Token.EXPR_VOID:
 				case Token.EXPR_RESULT:
 					return ((ExpressionStatement) node).getExpression()
@@ -378,7 +377,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 
 
 	/**
-	 * Lookup the name of the node within the last JavaScript type. e.g var a =
+	 * Lookup the name of the node within the last JavaScript type. e.g. var a =
 	 * 1; var b = a.MAX_VALUE; looks up MAX_VALUE within NumberLiteral a where a
 	 * is resolve before as a JavaScript Number;
 	 * 
@@ -408,7 +407,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 
 
 	/**
-	 * Lookup the function name of the node within the last JavaScript type. e.g
+	 * Lookup the function name of the node within the last JavaScript type. e.g.
 	 * var a = ""; var b = a.toString(); looks up toString() within
 	 * StringLiteral a where a is resolve before as a JavaScript String;
 	 * 
@@ -507,7 +506,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	/**
 	 * Creates a new JavaScriptType based on the String type
 	 * @param provider SourceCompletionProvider
-	 * @param type type of JavaScript type to create e.g java.sql.Connection
+	 * @param type type of JavaScript type to create e.g. java.sql.Connection
 	 * @param text Text entered from the user to resolve the node. This will be null if resolveNode(AstNode node) is called
 	 * @return
 	 */
@@ -528,9 +527,9 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	}
 	
 	/**
-	 * Method called if the lastJavaScriptType is not null. i.e has gone through one iteration at least. 
-	 * Resolves TypeDeclaration for parts of a variable past the first part. e.g "".toString() //resolve toString()
-	 * In some circumstances this is useful to resolve this. e.g for Custom Object completions  
+	 * Method called if the lastJavaScriptType is not null. i.e. has gone through one iteration at least.
+	 * Resolves TypeDeclaration for parts of a variable past the first part. e.g. "".toString() //resolve toString()
+	 * In some circumstances this is useful to resolve this. e.g. for Custom Object completions
 	 * @param node Node to resolve
 	 * @return Type Declaration
 	 * 

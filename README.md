@@ -2,11 +2,16 @@
 ![Build](https://github.com/bobbylight/RSTALanguageSupport/actions/workflows/gradle.yml/badge.svg)
 ![CodeQL](https://github.com/bobbylight/RSTALanguageSupport/actions/workflows/codeql-analysis.yml/badge.svg)
 
-This library contains "language support" for various languages for RSyntaxTextArea.  "Language support" is a little vague, but it generally means auto-completion of function names and/or [Parsers](https://github.com/bobbylight/RSyntaxTextArea/blob/master/src/org/fife/ui/rsyntaxtextarea/parser/Parser.java) for the language (i.e. squiggle-underlining of errors in the source code).
+This library contains "language support" for various languages for RSyntaxTextArea.
+"Language support" is a little vague, but it generally means auto-completion of function
+names and/or
+[Parsers](https://github.com/bobbylight/RSyntaxTextArea/blob/master/RSyntaxTextArea/src/main/java/org/fife/ui/rsyntaxtextarea/parser/Parser.java)
+for the language (i.e. squiggle-underlining of errors in the source code).
 
 Documentation is sparse for the moment, but should improve over time.
 
-Besides RSyntaxTextArea and AutoComplete, this library depends on [Rhino](http://www.mozilla.org/rhino/).  Rhino is used to implement the code completion and syntax checking for JavaScript.
+Besides RSyntaxTextArea and AutoComplete, this library depends on [Rhino](http://www.mozilla.org/rhino/). 
+Rhino is used to implement the code completion and syntax checking for JavaScript.
 
 RSTALanguageSupport is available under a [modified BSD license](https://github.com/bobbylight/RSTALanguageSupport/blob/master/LICENSE.md).
 For more information, visit [http://bobbylight.github.io/RSyntaxTextArea](http://bobbylight.github.io/RSyntaxTextArea).

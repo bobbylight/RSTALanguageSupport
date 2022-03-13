@@ -391,7 +391,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 
 
 	/**
-	 * Returns a string representing the type of a parameter to this method.
+	 * Returns a string representing the type of parameter to this method.
 	 *
 	 * @param index The index of the parameter.
 	 * @param fullyQualified Whether the returned type should be fully
@@ -696,8 +696,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 					exceptionIndexTable[i] = in.readUnsignedShort();
 				}
 			}
-			Exceptions e = new Exceptions(this, exceptionIndexTable);
-			ai = e;
+            ai = new Exceptions(this, exceptionIndexTable);
 		}
 
 		// TODO: Handle other Attribute types.

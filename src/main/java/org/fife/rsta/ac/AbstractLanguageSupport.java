@@ -142,10 +142,10 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 
 
 	/**
-	 * Returns the auto completion instance used by a text area.
+	 * Returns the auto-completion instance used by a text area.
 	 *
 	 * @param textArea The text area.
-	 * @return The auto completion instance, or <code>null</code> if none
+	 * @return The auto-completion instance, or <code>null</code> if none
 	 *         is installed on the text area.
 	 */
 	protected AutoCompletion getAutoCompletionFor(RSyntaxTextArea textArea) {
@@ -181,8 +181,8 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	 * {@link #install(org.fife.ui.rsyntaxtextarea.RSyntaxTextArea)} methods
 	 * so that this language support can update all of them at once.
 	 *
-	 * @param textArea The text area that just installed the auto completion.
-	 * @param ac The auto completion instance.
+	 * @param textArea The text area that just installed the auto-completion.
+	 * @param ac The auto-completion instance.
 	 * @see #uninstallImpl(RSyntaxTextArea)
 	 */
 	protected void installImpl(RSyntaxTextArea textArea, AutoCompletion ac) {

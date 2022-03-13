@@ -105,7 +105,7 @@ public class JavaScriptShorthandCompletionCache extends ShorthandCompletionCache
         addShorthandCompletion(new JavaScriptTemplateCompletion(templateProvider, "catch", "catch-block",
                 template, msg.getString("catch.block.shortDesc"), msg.getString("catch.block.summary")));
         
-        /** Comments **/
+        // Comments
         addCommentCompletion(new BasicCompletion(commentsProvider, "TODO:", null, msg.getString("todo")));
         addCommentCompletion(new BasicCompletion(commentsProvider, "FIXME:", null, msg.getString("fixme")));
 	}

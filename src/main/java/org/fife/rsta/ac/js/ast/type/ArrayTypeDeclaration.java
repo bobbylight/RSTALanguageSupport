@@ -2,13 +2,13 @@ package org.fife.rsta.ac.js.ast.type;
 
 /**
  * Extended TypeDeclaration that stores the TypeDeclaration for the Array.
- * e.g
+ * e.g.
  * var a = [1, 2, 3]; //Array Type - Number
  * var b = ["","",""]; //Array Type - String
  * var c = [1, "", true] //Array Type - any (Default)
  *
  * This is used to determine the type of object in the array when setting variables:
- * e.g
+ * e.g.
  * var a = [1, 2, 3]; //Array Type - Number
  * var d = a[1]; //var d is resolved as a Number
  * 

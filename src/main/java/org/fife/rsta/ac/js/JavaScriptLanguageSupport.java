@@ -107,8 +107,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	 * @return The jar manager instance.
 	 */
 	protected JarManager createJarManager() {
-		JarManager jarManager = new JarManager();
-		return jarManager;
+        return new JarManager();
 	}
 	
 	public void setECMAVersion(String version, JarManager jarManager) {
@@ -386,7 +385,7 @@ return DEFAULT;
 	 *
 	 * @param file The <code>.jshintrc</code> file, or <code>null</code> if
 	 *        none; in that case, the JsHint defaults will be used.
-	 * @return Whether the new .jshintrc file is different than the original
+	 * @return Whether the new .jshintrc file is different from the original
 	 *         one.
 	 * @see #getDefaultJsHintRCFile()
 	 * @see #setErrorParser(JsErrorParser)

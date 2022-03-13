@@ -45,7 +45,7 @@ public abstract class JavaScriptTypesFactory {
 	private static final List<String> UNSUPPORTED_COMPLETIONS;
 	private static String SPECIAL_METHOD = "<clinit>";
 	
-	//list of unsupported completions e.g java.lang.Object as JavaScript has it's own
+	//list of unsupported completions e.g. java.lang.Object as JavaScript has it's own
 	static
 	{
 		UNSUPPORTED_COMPLETIONS = new ArrayList<>();
@@ -85,7 +85,7 @@ public abstract class JavaScriptTypesFactory {
 	 * type and add all completions, then cache. Extracts all function and type
 	 * completions from API based on the <code>TypeDeclaration</code>.
 	 * 
-	 * @param type TypeDeclaration to read from the API e.g JSString
+	 * @param type TypeDeclaration to read from the API e.g. JSString
 	 * @param manager JarManager containing source and classes
 	 * @param text - full text entered by user
 	 * @param provider CompletionsProvider to bind the <code>Completion</code>
@@ -124,7 +124,7 @@ public abstract class JavaScriptTypesFactory {
 	 * @param cf ClassFile to read
 	 * @param provider CompletionsProvider to bind to <code>Completion</code>
 	 * @param manager JarManager containing source and classes
-	 * @param type TypeDeclaration to read from the API e.g JString
+	 * @param type TypeDeclaration to read from the API e.g. JString
 	 */
 	private void readClassFile(JavaScriptType cachedType, ClassFile cf,
 			DefaultCompletionProvider provider, JarManager manager,

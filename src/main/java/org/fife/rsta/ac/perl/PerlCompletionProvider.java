@@ -63,7 +63,7 @@ public class PerlCompletionProvider extends CCompletionProvider {
 
 	/**
 	 * Creates an "AST" for Perl code, representing code blocks and variables
-	 * inside of those blocks.
+	 * inside those blocks.
 	 *
 	 * @param textArea The text area.
 	 * @return A "code block" representing the entire Perl source file.
@@ -94,8 +94,7 @@ public class PerlCompletionProvider extends CCompletionProvider {
 	 */
 	@Override
 	protected CompletionProvider createStringCompletionProvider() {
-		DefaultCompletionProvider cp = new DefaultCompletionProvider();
-		return cp;
+        return new DefaultCompletionProvider();
 	}
 
 

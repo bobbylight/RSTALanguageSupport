@@ -52,14 +52,14 @@ public class TypeDeclarationOptions
 	}
 
 	/**
-	 * @return whether the type declaration has been created from a pre processed script
+	 * @return whether the type declaration has been created from a pre-processed script
 	 */
 	public boolean isPreProcessing() {
 		return preProcessing;
 	}
 
 	/**
-	 * set whether the type declaration has been created from a pre processed script
+	 * set whether the type declaration has been created from a pre-processed script
 	 */
 	public void setPreProcessing(boolean preProcessing) {
 		this.preProcessing = preProcessing;

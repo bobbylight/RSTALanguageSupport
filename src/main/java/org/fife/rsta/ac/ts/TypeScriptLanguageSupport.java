@@ -27,8 +27,7 @@ public class TypeScriptLanguageSupport extends AbstractLanguageSupport {
 
 
 	private AutoCompletion createAutoCompletion() {
-		AutoCompletion ac = new AutoCompletion(provider);
-		return ac;
+        return new AutoCompletion(provider);
 	}
 	
 	@Override

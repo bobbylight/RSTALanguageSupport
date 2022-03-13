@@ -153,7 +153,7 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 	}
 
 
-	private static final String removeVendorPrefix(String text) {
+	private static String removeVendorPrefix(String text) {
 		if (text.length()>0 && text.charAt(0)=='-') {
 			Matcher m = VENDOR_PREFIXES.matcher(text);
 			if (m.find()) {
@@ -444,21 +444,18 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		factory.setValidating(true);
 		CompletionXMLParser handler = new CompletionXMLParser(this, cl);
-		BufferedInputStream bin = new BufferedInputStream(in);
-		try {
-			SAXParser saxParser = factory.newSAXParser();
-			saxParser.parse(bin, handler);
-			completions =  handler.getCompletions();
-			// Ignore parameterized completion params
-		} catch (SAXException | ParserConfigurationException e) {
-			throw new IOException(e.toString());
-		} finally {
-			//long time = System.currentTimeMillis() - start;
-			//System.out.println("XML loaded in: " + time + "ms");
-			bin.close();
-		}
+        try (BufferedInputStream bin = new BufferedInputStream(in)) {
+            SAXParser saxParser = factory.newSAXParser();
+            saxParser.parse(bin, handler);
+            completions = handler.getCompletions();
+            // Ignore parameterized completion params
+        } catch (SAXException | ParserConfigurationException e) {
+            throw new IOException(e.toString());
+        }
+        //long time = System.currentTimeMillis() - start;
+        //System.out.println("XML loaded in: " + time + "ms");
 
-		return completions;
+        return completions;
 	}
 
 
@@ -490,15 +487,11 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 	/**
 	 * Adds a completion generator for a specific property.
 	 */
-	private static final void add(
+	private static void add(
 			Map<String, List<CompletionGenerator>> generatorMap,
 			String prop, CompletionGenerator generator) {
-		List<CompletionGenerator> generators = generatorMap.get(prop);
-		if (generators==null) {
-			generators = new ArrayList<>();
-			generatorMap.put(prop, generators);
-		}
-		generators.add(generator);
+        List<CompletionGenerator> generators = generatorMap.computeIfAbsent(prop, k -> new ArrayList<>());
+        generators.add(generator);
 	}
 
 

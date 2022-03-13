@@ -7,7 +7,7 @@ import org.fife.rsta.ac.js.ecma.api.ecma5.functions.JS5ObjectFunctions;
 public interface NavigatorFunctions extends JS5ObjectFunctions {
 	
 	/**
-	 * function javaEnabled() - Specifies whether or not the browser has Java enabled
+	 * function javaEnabled() - Specifies whether the browser has Java enabled
 	 * @returns true if java is enabled
 	 * @memberOf Navigator
 	 */

@@ -374,9 +374,8 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 					}
 
 					else if (rhs instanceof FunctionNode) {
-						String text = clazz;
-						curScopeTreeNode.add(tn);
-						tn.setText(text);
+                        curScopeTreeNode.add(tn);
+						tn.setText(clazz);
 
 						curScopeTreeNode = tn;
 						((FunctionNode)rhs).getBody().visit(this);
@@ -476,13 +475,9 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 				if (prototypeAdditions==null) {
 					prototypeAdditions = new HashMap<>();
 				}
-				List<JavaScriptTreeNode> list = prototypeAdditions.get(clazz);
-				if (list==null) {
-					list = new ArrayList<>();
-					prototypeAdditions.put(clazz, list);
-				}
+                List<JavaScriptTreeNode> list = prototypeAdditions.computeIfAbsent(clazz, k -> new ArrayList<>());
 
-				list.add(tn);
+                list.add(tn);
 
 				if (isFunction) {
 					JavaScriptTreeNode prevScopeTreeNode = curScopeTreeNode;
@@ -546,13 +541,9 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 		if (prototypeAdditions==null) {
 			prototypeAdditions = new HashMap<>();
 		}
-		List<JavaScriptTreeNode> list = prototypeAdditions.get(clazz);
-		if (list==null) {
-			list = new ArrayList<>();
-			prototypeAdditions.put(clazz, list);
-		}
+        List<JavaScriptTreeNode> list = prototypeAdditions.computeIfAbsent(clazz, k -> new ArrayList<>());
 
-		list.add(tn);
+        list.add(tn);
 
 		if (isFunction) {
 			JavaScriptTreeNode prevScopeTreeNode = curScopeTreeNode;

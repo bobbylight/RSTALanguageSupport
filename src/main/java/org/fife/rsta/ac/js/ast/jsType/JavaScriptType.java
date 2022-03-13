@@ -12,7 +12,6 @@ package org.fife.rsta.ac.js.ast.jsType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import org.fife.rsta.ac.js.SourceCompletionProvider;
@@ -100,7 +99,7 @@ public class JavaScriptType {
 	}
 
 	/**
-	 * Set the class type completion e.g String, Number
+	 * Set the class type completion e.g. String, Number
 	 * @param classType Completion to format the class
 	 */
 	public void setClassTypeCompletion(JSCompletion classType) {
@@ -149,12 +148,11 @@ public class JavaScriptType {
 				provider);
 		if (completion == null) {
 			// try the extended types
-			for (Iterator<JavaScriptType> i = cachedType.getExtendedClasses().iterator(); i
-					.hasNext();) {
-				completion = getCompletion(i.next(), completionLookup, provider);
-				if (completion != null)
-					break;
-			}
+            for (JavaScriptType javaScriptType : cachedType.getExtendedClasses()) {
+                completion = getCompletion(javaScriptType, completionLookup, provider);
+                if (completion != null)
+                    break;
+            }
 		}
 		return completion;
 	}

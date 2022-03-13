@@ -493,8 +493,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 						// so the compiler resolves the correct class.
 						int dot = fqClassName.lastIndexOf('.');
 						if (dot>-1) {
-							String pkgName = fqClassName.substring(0, dot+1);
-							replacementTextPrefix = pkgName;
+                            replacementTextPrefix = fqClassName.substring(0, dot+1);
 						}
 					}
 

@@ -37,7 +37,7 @@ public interface TypeDeclaration extends ASTNode, TypeDeclarationContainer {
 	 *
 	 * @param offs The offset.
 	 * @return The type declaration, or <code>null</code> if the offset is
-	 *         outside of any child type declaration.
+	 *         outside any child type declaration.
 	 */
 	TypeDeclaration getChildTypeAtOffset(int offs);
 

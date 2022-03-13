@@ -57,7 +57,7 @@ public class JavaScriptHelper {
 			}
 		} 
 		catch(Exception e) {
-			//AstNode can throw exceptions if toSource() is invalid e.g new Date(""..toString());
+			//AstNode can throw exceptions if toSource() is invalid e.g. new Date(""..toString());
 		}
 		return false;
 	}
@@ -65,7 +65,7 @@ public class JavaScriptHelper {
 
 	/**
 	 * Parse Text with JavaScript Parser and return AstNode from the expression
-	 * etc..
+	 * etc.
 	 * 
 	 * @param text to parse
 	 * @return expression statement text from source
@@ -115,7 +115,7 @@ public class JavaScriptHelper {
 
 	/**
 	 * @param node AstNode to look for function
-	 * @return function lookup name from it's AstNode. i.e concat function name
+	 * @return function lookup name from it's AstNode. i.e. concat function name
 	 *         and parameters. If no function is found, then return null
 	 */
 	public static String getFunctionNameLookup(AstNode node, SourceCompletionProvider provider) {
@@ -157,8 +157,8 @@ public class JavaScriptHelper {
 	 * 
 	 * @param typeNode AstNode to convert
 	 * @param provider SourceProvider
-	 * @return TypeDeclaration if node resolves to supported type, e.g Number,
-	 *         New etc.., otherwise null
+	 * @return TypeDeclaration if node resolves to supported type, e.g. Number,
+	 *         New etc., otherwise null
 	 */
 	public static final TypeDeclaration tokenToNativeTypeDeclaration(
 			AstNode typeNode, SourceCompletionProvider provider) {
@@ -384,7 +384,7 @@ case Token.EXPR_RESULT:
 
 	/**
 	 * Use a visitor to visit all the nodes to work out which type to return e.g
-	 * 1 + 1 returns Number 1 + "" returns String true returns Boolean etc..
+	 * 1 + 1 returns Number 1 + "" returns String true returns Boolean etc.
 	 * 
 	 * @param node
 	 * @return
@@ -407,8 +407,7 @@ case Token.EXPR_RESULT:
 		//else
 		AstNode rightExp = infix.getRight();
 		JavaScriptResolver resolver = provider.getJavaScriptEngine().getJavaScriptResolver(provider);
-		TypeDeclaration dec = resolver.resolveNode(rightExp);
-		return dec;
+        return resolver.resolveNode(rightExp);
 	}
 	
 	
@@ -481,8 +480,8 @@ case Token.EXPR_RESULT:
 	
 	
 	/**
-	 * Returns the node name from 'Token.NEW' AstNode e.g new Object --> Object
-	 * new Date --> Date etc..
+	 * Returns the node name from 'Token.NEW' AstNode e.g. new Object --> Object
+	 * new Date --> Date etc.
 	 * 
 	 * @param node NewExpression node
 	 * @return Extracts the Name identifier from NewExpression
@@ -514,7 +513,7 @@ case Token.EXPR_RESULT:
 	public static int findLastIndexOfJavaScriptIdentifier(String input) {
 		int index = -1;
 		if (input != null) {
-			char c[] = input.toCharArray();
+			char[] c = input.toCharArray();
 			for (int i = 0; i < c.length; i++) {
 				if (!Character.isJavaIdentifierPart(c[i])) {
 					index = i;
@@ -527,7 +526,7 @@ case Token.EXPR_RESULT:
 	/**
 	 * 
 	 * @param text to trim
-	 * @return text up to the last dot e.g a.getText().length returns a.getText()
+	 * @return text up to the last dot e.g. a.getText().length returns a.getText()
 	 */
 	public static String removeLastDotFromText(String text) {
 		int trim = text.length();
@@ -535,14 +534,12 @@ case Token.EXPR_RESULT:
 			trim = text.lastIndexOf('.');
 		}
 
-		String parseText = text.substring(0, trim);
-
-		return parseText;
+        return text.substring(0, trim);
 	}
 	
 	/**
 	 * Trims the text from the last , from the string
-	 * Looks for ( or [ starting at the end of the string to find out where in the string to substring.
+	 * Looks for {@code (} or {@code [} starting at the end of the string to find out where in the string to substring.
 	 * Do not need to trim off if inside either () or [].
 	 * e.g
 	 * 1, "".charAt(position).indexOf(2, "")

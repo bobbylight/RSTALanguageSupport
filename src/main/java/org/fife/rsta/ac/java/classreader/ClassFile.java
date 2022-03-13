@@ -536,8 +536,7 @@ public class ClassFile implements AccessFlags {
 
 		if (SOURCE_FILE.equals(attrName)) { // 4.7.7
 			int sourceFileIndex = in.readUnsignedShort();
-			SourceFile sf = new SourceFile(this, sourceFileIndex);
-			ai = sf;
+            ai = new SourceFile(this, sourceFileIndex);
 		}
 
 		else if (BOOTSTRAP_METHODS.equals(attrName)) { // 4.7.23

@@ -27,7 +27,7 @@ public abstract class JSObject implements JSObjectFunctions {
      * 
      * 
      * @constructor
-     * @param value optional argument specifies a primitive JavaScript value - a number, boolean etc...
+     * @param value optional argument specifies a primitive JavaScript value - a number, boolean etc..
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */

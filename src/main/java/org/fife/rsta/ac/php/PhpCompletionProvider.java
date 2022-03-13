@@ -29,7 +29,6 @@ import org.fife.ui.autocomplete.Util;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.Token;
-import org.fife.ui.rsyntaxtextarea.modes.PHPTokenMaker;
 import org.xml.sax.SAXException;
 
 
@@ -96,26 +95,24 @@ public class PhpCompletionProvider extends HtmlCompletionProvider {
 
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		CompletionXMLParser handler = new CompletionXMLParser(this);
-		BufferedInputStream bin = new BufferedInputStream(in);
-		try {
-			SAXParser saxParser = factory.newSAXParser();
-			saxParser.parse(bin, handler);
-			phpCompletions =  handler.getCompletions();
-			char startChar = handler.getParamStartChar();
-			if (startChar!=0) {
-				char endChar = handler.getParamEndChar();
-				String sep = handler.getParamSeparator();
-				if (endChar!=0 && sep!=null && sep.length()>0) { // Sanity
-					setParameterizedCompletionParams(startChar, sep, endChar);
-				}
-			}
-		} catch (SAXException | ParserConfigurationException e) {
-			throw new IOException(e.toString());
-		} finally {
-			long time = System.currentTimeMillis() - start;
-			System.out.println("XML loaded in: " + time + "ms");
-			bin.close();
-		}
+        try (BufferedInputStream bin = new BufferedInputStream(in)) {
+            SAXParser saxParser = factory.newSAXParser();
+            saxParser.parse(bin, handler);
+            phpCompletions = handler.getCompletions();
+            char startChar = handler.getParamStartChar();
+            if (startChar != 0) {
+                char endChar = handler.getParamEndChar();
+                String sep = handler.getParamSeparator();
+                if (endChar != 0 && sep != null && sep.length() > 0) { // Sanity
+                    setParameterizedCompletionParams(startChar, sep, endChar);
+                }
+            }
+        } catch (SAXException | ParserConfigurationException e) {
+            throw new IOException(e.toString());
+        } finally {
+            long time = System.currentTimeMillis() - start;
+            System.out.println("XML loaded in: " + time + "ms");
+        }
 
 	}
 
@@ -190,7 +187,7 @@ public class PhpCompletionProvider extends HtmlCompletionProvider {
 
 
 	/**
-	 * Returns whether the caret is inside of a PHP block in this text
+	 * Returns whether the caret is inside a PHP block in this text
 	 * component.
 	 *
 	 * @param comp The <code>RSyntaxTextAera</code>.

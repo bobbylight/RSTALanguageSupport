@@ -226,23 +226,23 @@ public class JSMethodData {
 						// we're looking for by checking each of its
 						// parameters' types and making sure they're correct.
 						else {
-							for (int j=0; j<contenders.size(); j++) {
-								boolean match = true;
-								Method method = contenders.get(j);
-								for (int p=0; p<info.getParameterCount(); p++) {
-									String type1 = info.getParameterType(p, false);
-									FormalParameter fp = method.getParameter(p);
-									String type2 = fp.getType().toString();
-									if (!type1.equals(type2)) {
-										match = false;
-										break;
-									}
-								}
-								if (match) {
-									res = method;
-									break;
-								}
-							}
+                            for (Method contender : contenders) {
+                                boolean match = true;
+                                Method method = contender;
+                                for (int p = 0; p < info.getParameterCount(); p++) {
+                                    String type1 = info.getParameterType(p, false);
+                                    FormalParameter fp = method.getParameter(p);
+                                    String type2 = fp.getType().toString();
+                                    if (!type1.equals(type2)) {
+                                        match = false;
+                                        break;
+                                    }
+                                }
+                                if (match) {
+                                    res = method;
+                                    break;
+                                }
+                            }
 						}
 
 					}

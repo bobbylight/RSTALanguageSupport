@@ -93,7 +93,7 @@ public class TypeDeclarationFactory {
 	}
 	
 	/**
-	 * Returns whether the qualified name is a built in JavaScript type
+	 * Returns whether the qualified name is a built-in JavaScript type
 	 * @param td The type declaration to check.
 	 * @return Whether it is a built-in JS type.
 	 */
@@ -127,8 +127,8 @@ public class TypeDeclarationFactory {
 
 	
 	/**
-	 * The API may have it's own types, so these need converting back to
-	 * JavaScript types e.g JSString == String, JSNumber == Number
+	 * The API may have its own types, so these need converting back to
+	 * JavaScript types e.g. JSString == String, JSNumber == Number
 	 */
 
 	public String convertJavaScriptType(String lookupName, boolean qualified) {
@@ -137,7 +137,7 @@ public class TypeDeclarationFactory {
 				return null;
 			}
 			
-			//remove param descriptor type from type e.g java.util.Iterator<Object> --> java.util.Iterator
+			//remove param descriptor type from type e.g. java.util.Iterator<Object> --> java.util.Iterator
 			//as JavaScript does not support this
 			if(lookupName.indexOf('<') > -1) {
 				lookupName = lookupName.substring(0, lookupName.indexOf('<'));
@@ -187,7 +187,7 @@ public class TypeDeclarationFactory {
 	}
 	
 	/**
-	 * Answers the question whether an object can be instantiated (i.e has a constructor) 
+	 * Answers the question whether an object can be instantiated (i.e. has a constructor)
 	 * @param name name of class to test
 	 * 
 	 */

@@ -1,7 +1,6 @@
 package org.fife.rsta.ac.js.ast.jsType;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 
 import org.fife.rsta.ac.java.JarManager;
@@ -49,7 +48,7 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 	
 	private void mergeImports(HashSet<String> newImports, LinkedHashSet<String> oldImports, boolean packages)
 	{
-		//iterate through the old imports and check whether the the import exists in new. If not then add to remove and remove all types for that package/class
+		//iterate through the old imports and check whether the import exists in new. If not then add to remove and remove all types for that package/class
 		HashSet<String> remove = new HashSet<>();
 		for (String obj : oldImports) {
 			if(!newImports.contains(obj)) {
@@ -116,13 +115,12 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 	{
 		HashSet<TypeDeclaration> removeTypes = new HashSet<>();
 		//clear all non ECMA (JavaScript types) for importPackage and importClass to work properly
-		for(Iterator<TypeDeclaration> i = cachedTypes.keySet().iterator(); i.hasNext();) {
-			TypeDeclaration dec = i.next();
-			if(!typesFactory.isJavaScriptType(dec) && !dec.equals(typesFactory.getDefaultTypeDeclaration())) {
-				removeAllTypes(cachedTypes.get(dec));
-				removeTypes.add(dec);
-			}
-		}
+        for (TypeDeclaration dec : cachedTypes.keySet()) {
+            if (!typesFactory.isJavaScriptType(dec) && !dec.equals(typesFactory.getDefaultTypeDeclaration())) {
+                removeAllTypes(cachedTypes.get(dec));
+                removeTypes.add(dec);
+            }
+        }
 		cachedTypes.keySet().removeAll(removeTypes);
 	}
 	
@@ -137,11 +135,9 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 			typesFactory.removeType(type.getType().getQualifiedName());
 			if(type.getExtendedClasses().size() > 0)
 			{
-				for(Iterator<JavaScriptType> i = type.getExtendedClasses().iterator(); i.hasNext();)
-				{
-					JavaScriptType extendedType = i.next();
-					removeAllTypes(extendedType);
-				}
+                for (JavaScriptType extendedType : type.getExtendedClasses()) {
+                    removeAllTypes(extendedType);
+                }
 			}
 		}
 	}

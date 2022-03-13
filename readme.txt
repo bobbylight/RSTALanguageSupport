@@ -158,7 +158,7 @@ III. Project Layout
       readme.txt                        This file
       LICENSE.md   License for this library (modified BSD)
 
-Sub-directories of "data/" contain Perl scripts and input files for generating
+Subdirectories of "data/" contain Perl scripts and input files for generating
 the XML files used by various languages for code completion.  If you want to
 improve the code completion for one of these languages, this is where you have
 to work.  But send me any updates you make!  Any improvement, especially to

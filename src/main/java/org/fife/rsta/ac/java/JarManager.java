@@ -84,31 +84,29 @@ TODO: Verify me!!!
 		// If what they've typed is qualified, add qualified completions.
 		if (text.indexOf('.')>-1) {
 			String[] pkgNames = Util.splitOnChar(text, '.');
-			for (int i=0; i<classFileSources.size(); i++) {
-				JarReader jar = classFileSources.get(i);
-				jar.addCompletions(p, pkgNames, addTo);
-			}
+            for (JarReader jar : classFileSources) {
+                jar.addCompletions(p, pkgNames, addTo);
+            }
 		}
 
 		// If they are (possibly) typing an unqualified class name, see if
-		// what they're typing matches any classes in any of jar jars, and if
+		// what they're typing matches any classes in any of our jars, and if
 		// so, add completions for them too.  This allows the user to get
 		// completions for classes not in their import statements.
 		// Thanks to Guilherme Joao Frantz and Jonatas Schuler for the patch!
 		else {//if (text.indexOf('.')==-1) {
 			String lowerCaseText = text.toLowerCase();
-			for (int i=0; i<classFileSources.size(); i++) {
-				JarReader jar = classFileSources.get(i);
-				List<ClassFile> classFiles = jar.
-						getClassesWithNamesStartingWith(lowerCaseText);
-				if (classFiles!=null) {
-					for (ClassFile cf : classFiles) {
-						if (org.fife.rsta.ac.java.classreader.Util.isPublic(cf.getAccessFlags())) {
-							addTo.add(new ClassCompletion(p, cf));
-						}
-					}
-				}
-			}
+            for (JarReader jar : classFileSources) {
+                List<ClassFile> classFiles = jar.
+                        getClassesWithNamesStartingWith(lowerCaseText);
+                if (classFiles != null) {
+                    for (ClassFile cf : classFiles) {
+                        if (org.fife.rsta.ac.java.classreader.Util.isPublic(cf.getAccessFlags())) {
+                            addTo.add(new ClassCompletion(p, cf));
+                        }
+                    }
+                }
+            }
 		}
 
 	}
@@ -231,13 +229,12 @@ TODO: Verify me!!!
 
 		String[] items = Util.splitOnChar(className, '.');
 
-		for (int i=0; i<classFileSources.size(); i++) {
-			JarReader jar = classFileSources.get(i);
-			ClassFile cf = jar.getClassEntry(items);
-			if (cf!=null) {
-				return cf;
-			}
-		}
+        for (JarReader jar : classFileSources) {
+            ClassFile cf = jar.getClassEntry(items);
+            if (cf != null) {
+                return cf;
+            }
+        }
 
 		return null;
 
@@ -328,10 +325,9 @@ TODO: Verify me!!!
 		List<ClassFile> list = new ArrayList<>();
 		String[] pkgs = Util.splitOnChar(pkgName, '.');
 
-		for (int i=0; i<classFileSources.size(); i++) {
-			JarReader jar = classFileSources.get(i);
-			jar.getClassesInPackage(list, pkgs, inPkg);
-		}
+        for (JarReader jar : classFileSources) {
+            jar.getClassesInPackage(list, pkgs, inPkg);
+        }
 
 		return list;
 
@@ -360,13 +356,12 @@ TODO: Verify me!!!
 
 public SourceLocation getSourceLocForClass(String className) {
 	SourceLocation  sourceLoc = null;
-	for (int i=0; i<classFileSources.size(); i++) {
-		JarReader jar = classFileSources.get(i);
-		if (jar.containsClass(className)) {
-			sourceLoc = jar.getLibraryInfo().getSourceLocation();
-			break;
-		}
-	}
+    for (JarReader jar : classFileSources) {
+        if (jar.containsClass(className)) {
+            sourceLoc = jar.getLibraryInfo().getSourceLocation();
+            break;
+        }
+    }
 	return sourceLoc;
 }
 

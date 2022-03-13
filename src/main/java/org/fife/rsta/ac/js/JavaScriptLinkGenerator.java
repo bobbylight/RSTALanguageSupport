@@ -107,7 +107,7 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 
 	/**
 	 * Convert the function Token to JavaScript variable resolver lookup name by replacing any parameters with 'p' and stripping any whitespace between the parameters:
-	 * e.g
+	 * e.g.
 	 * Token may contain the function:
 	 * addTwoNumbers(num1, num2);
 	 * 

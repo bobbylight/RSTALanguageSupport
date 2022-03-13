@@ -191,14 +191,14 @@ public class CodeBlock {
 	public void debug() {
 		StringBuilder sb = new StringBuilder();
 		outputChild(sb, this, 0);
-		System.out.println(sb.toString());
+		System.out.println(sb);
 	}
 	
 	private void outputChild(StringBuilder sb, CodeBlock block, int tab) {
-		String tabs = "";
+		StringBuilder tabs = new StringBuilder();
 		for(int i=0; i<tab; i++)
 		{
-			tabs = tabs + "\t";
+			tabs.append("\t");
 		}
 		sb.append(tabs);
 		sb.append("start: " + block.getStartOffset() + "\n");

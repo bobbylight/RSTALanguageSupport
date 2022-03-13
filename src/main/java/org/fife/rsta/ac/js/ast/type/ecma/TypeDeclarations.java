@@ -85,7 +85,7 @@ public abstract class TypeDeclarations {
 
 	protected void loadReverseLookup() {
 		// need to add lookup for Javascript Objects such as new Date(), String
-		// etc...
+		// etc..
 		addJavaScriptLookup("String", ECMA_STRING);
 		addJavaScriptLookup("Date", ECMA_DATE);
 		addJavaScriptLookup("RegExp", ECMA_REGEXP);
@@ -185,7 +185,7 @@ public abstract class TypeDeclarations {
 
 
 	/**
-	 * Returns whether the qualified name is a built in JavaScript type
+	 * Returns whether the qualified name is a built-in JavaScript type
 	 * 
 	 * @param td
 	 * @return
@@ -256,7 +256,7 @@ public abstract class TypeDeclarations {
 	}
 	
 	/**
-	 * Answers the question whether an object can be instantiated (i.e has a constructor)
+	 * Answers the question whether an object can be instantiated (i.e. has a constructor)
 	 * Note, only tests ECMA objects 
 	 * @param name name of class to test
 	 * 

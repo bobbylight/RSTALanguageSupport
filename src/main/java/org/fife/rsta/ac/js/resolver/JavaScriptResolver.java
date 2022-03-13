@@ -41,7 +41,7 @@ public abstract class JavaScriptResolver {
 	
 	/**
 	 * Compiles Text and resolves the type.
-	 * e.g 
+	 * e.g.
 	 * "Hello World".length; //resolve as a Number
 	 * 
 	 * @param text to compile and resolve  

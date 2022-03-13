@@ -189,7 +189,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 					break;
 				default:
 					Logger.log("Unhandled: " + child.getClass() + " (\""
-							+ child.toString() + "\":" + child.getLineno());
+							+ child + "\":" + child.getLineno());
 					break;
 			}
 		}
@@ -418,7 +418,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 
 	/**
-	 * Extract variable from binary operator e.g <, >, = etc...
+	 * Extract variable from binary operator e.g. <, >, = etc..
 	 */
 	private void processInfix(Node child, CodeBlock block,
 			Set<Completion> set, String entered, int offset) {
@@ -539,8 +539,8 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 
 	/**
-	 * Extract code from Token.FOR and add completions, then parse body of for
-	 * loop
+	 * Extract code from {@code Token.FOR} and add completions, then parse body
+	 * of for-loop.
 	 */
 	private void processForNode(Node child, CodeBlock block,
 			Set<Completion> set, String entered, int offset) {

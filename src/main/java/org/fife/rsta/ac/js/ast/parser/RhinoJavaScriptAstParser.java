@@ -124,13 +124,12 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 			if(pkg != null) {
 				StringBuilder sb = new StringBuilder();
 				//remove any non java characters
-				char[] chars = pkg.toCharArray(); 
-				for(int i =0; i<chars.length; i++) {
-					char ch = chars[i];
-					if(Character.isJavaIdentifierPart(ch) || ch == '.'){
-						sb.append(ch);
-					}
-				}
+				char[] chars = pkg.toCharArray();
+                for (char ch : chars) {
+                    if (Character.isJavaIdentifierPart(ch) || ch == '.') {
+                        sb.append(ch);
+                    }
+                }
 				if(sb.length() > 0) {
 					return sb.toString();
 				}
@@ -143,7 +142,7 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 	/**
 	 * @param src String to extract name
 	 * @return import statement from withing the ( and ) 
-	 * e.g  importPackage(java.util)
+	 * e.g.  importPackage(java.util)
 	 * 		importClass(java.util.HashSet)
 	 * 
 	 * returns java.util or java.util.HashSet respectively 

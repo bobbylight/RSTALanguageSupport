@@ -30,7 +30,7 @@ import java.util.List;
  * Class3
  * - com.mycompany.pkg2.Foo
  * Bar
- * - aonther.pkg.Utils
+ * - another.pkg.Utils
  * ...
  * </pre>
  * 

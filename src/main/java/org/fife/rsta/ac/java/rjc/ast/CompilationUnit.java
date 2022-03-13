@@ -98,7 +98,7 @@ public class CompilationUnit extends AbstractASTNode
 	 *
 	 * @param offs The offset.
 	 * @return The deepest-nested type declaration containing the offset, or
-	 *         <code>null</code> if the offset is outside of any type
+	 *         <code>null</code> if the offset is outside any type
 	 *         declaration (such as in the import statements, etc.).
 	 * @see #getTypeDeclarationAtOffset(int)
 	 */
@@ -242,7 +242,7 @@ public class CompilationUnit extends AbstractASTNode
 	 *
 	 * @param offs The offset.
 	 * @return The type declaration, or <code>null</code> if the offset is
-	 *         outside of any type declaration.
+	 *         outside any type declaration.
 	 * @see #getDeepestTypeDeclarationAtOffset(int)
 	 */
 	public TypeDeclaration getTypeDeclarationAtOffset(int offs) {

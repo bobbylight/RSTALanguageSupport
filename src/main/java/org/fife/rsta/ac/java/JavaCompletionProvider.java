@@ -181,7 +181,7 @@ public class JavaCompletionProvider extends LanguageAwareCompletionProvider {
 
 
 	/**
-	 * Set short hand completion cache (template and comment completions)
+	 * Set shorthand completion cache (template and comment completions)
 	 */
 	public void setShorthandCompletionCache(ShorthandCompletionCache cache) {
 		sourceProvider.setShorthandCache(cache);

@@ -96,7 +96,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 
 	/**
-	 * Adds simple shorthand completions relevant to JavaScript from the short hand template.
+	 * Adds simple shorthand completions relevant to JavaScript from the shorthand template.
 	 *
 	 * @param set The set to add to.
 	 * @see ShorthandCompletionCache
@@ -241,7 +241,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 				
 				
 				if (text.length() > 0) { // try to convert text by removing
-					// any if, while etc...
+					// any if, while etc..
 					ParseText pt = JavaScriptHelper.parseEnteredText(text);
 					text = pt.text;
 					isNew = pt.isNew;
@@ -291,7 +291,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	{
 		completions.addAll(set);
 
-		// Do a sort of all of our completions to put into case insensitive order and we're good to go!
+		// Do a sort of all of our completions to put into case-insensitive order and we're good to go!
 		completions.sort(comparator);
 
 		// Only match based on stuff after the final '.', since that's what
@@ -347,7 +347,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	
 	/**
 	 * returns the Base class for the source completion provider. This is represented by a class name or ECMA lookup name 
-	 * e.g set to 'Global' for server side or 'Window' for client JavaScript support  
+	 * e.g. set to 'Global' for server side or 'Window' for client JavaScript support
      * @return base class for the completion provider 
      */
 	public String getSelf()
@@ -408,7 +408,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 	/**
 	 * Iterates through AstRoot to extract all code blocks, functions, variables
-	 * etc.... e.g functions, if statements, variables
+	 * etc... e.g. functions, if statements, variables
 	 * 
 	 * @param root AstRoot to iterate
 	 * @param set add add completions to set (functions only TODO remove this
@@ -447,8 +447,8 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	}
 	
 	/**
-	 * Convenience method to call variable resolver for non local variables
-	 * i.e does NOT try to resolve name to any local variables (just pre-processed or system) 
+	 * Convenience method to call variable resolver for non-local variables
+	 * i.e. does NOT try to resolve name to any local variables (just pre-processed or system)
 	 * @param name
 	 * @return JavaScript variable declaration
 	 */

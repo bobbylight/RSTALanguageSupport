@@ -62,7 +62,7 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 	private static boolean useSystemPerldoc;
 
 
-	/**
+	/*
 	 * Determine the Perl install on the user's PATH, if any.
 	 */
 	static {
@@ -77,14 +77,14 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 			}
 
 			String[] dirs = path.split(File.pathSeparator);
-			for (int i=0; i<dirs.length; i++) {
-				File temp = new File(dirs[i], perlLoc);
-				//System.out.println(temp.getAbsolutePath());
-				if (temp.isFile()) {
-					DEFAULT_PERL_INSTALL_LOC= new File(dirs[i]).getParentFile();
-					break;
-				}
-			}
+            for (String dir : dirs) {
+                File temp = new File(dir, perlLoc);
+                //System.out.println(temp.getAbsolutePath());
+                if (temp.isFile()) {
+                    DEFAULT_PERL_INSTALL_LOC = new File(dir).getParentFile();
+                    break;
+                }
+            }
 
 			perlInstallLoc = DEFAULT_PERL_INSTALL_LOC;
 

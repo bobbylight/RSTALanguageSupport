@@ -94,7 +94,7 @@ class JsHinter {
 			command.add("--config");
 			command.add(jshintrc.getAbsolutePath());
 		}
-		command.add("--verbose"); // Allows to decide error vs. warning
+		command.add("--verbose"); // Allows deciding on error vs. warning
 		command.add("-");
 
 		ProcessBuilder pb = new ProcessBuilder(command);
@@ -312,7 +312,7 @@ class JsHinter {
 //	}
 
 
-	private static final MarkStrategy getMarkStrategy(String msgCode) {
+	private static MarkStrategy getMarkStrategy(String msgCode) {
 		MarkStrategy strategy = MARK_STRATEGIES.get(msgCode);
 		return strategy!=null ? strategy : MarkStrategy.MARK_LINE;
 	}

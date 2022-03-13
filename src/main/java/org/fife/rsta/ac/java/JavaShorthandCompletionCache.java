@@ -85,7 +85,7 @@ public class JavaShorthandCompletionCache extends ShorthandCompletionCache {
         addShorthandCompletion(new JavaTemplateCompletion(templateProvider, "catch", "catch-block",
                 template, msg.getString("catch.block.shortDesc"), msg.getString("catch.block.summary")));
         
-		/** Comments **/
+		// Comments
         addCommentCompletion(new BasicCompletion(commentsProvider, "TODO:", null, msg.getString("todo")));
         addCommentCompletion(new BasicCompletion(commentsProvider, "FIXME:", null, msg.getString("fixme")));
 

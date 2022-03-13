@@ -261,7 +261,7 @@ public class XmlOutlineTree extends AbstractSourceTree {
 	}
 
 
-	/**
+	/*
 	 * Whenever the caret moves in the listened-to RSyntaxTextArea, this
 	 * class ensures that the XML element containing the caret position is
 	 * focused in the tree view after a small delay.

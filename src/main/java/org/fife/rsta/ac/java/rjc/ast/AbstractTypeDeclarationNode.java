@@ -299,7 +299,7 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		if (modifiers!=null) {
-			sb.append(modifiers.toString()).append(' ');
+			sb.append(modifiers).append(' ');
 		}
 		sb.append(getTypeString()).append(' ');
 		sb.append(getName());

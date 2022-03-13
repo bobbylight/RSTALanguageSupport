@@ -57,7 +57,7 @@ interface MemberCompletion extends JavaSourceCompletion {
 
 
 	/**
-	 * Meta data about the member.  Member completions will be constructed
+	 * Metadata about the member.  Member completions will be constructed
 	 * from a concrete instance of this interface.  This is because there are
 	 * two sources that member completions come from - parsing Java source
 	 * files and parsing compiled class files (in libraries).

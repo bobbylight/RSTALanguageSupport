@@ -9,7 +9,7 @@ import org.fife.ui.autocomplete.CompletionProvider;
 
 /**
  * Basic JavaScript completion that requires no icon
- * e.g for or while
+ * e.g. for or while
  */
 public class JavascriptBasicCompletion extends BasicCompletion implements
 		JSCompletionUI {

@@ -104,7 +104,7 @@ public class ShellFunctionCompletion extends FunctionCompletion {
 	}
 
 
-	private static final StringBuffer manToHtml(CharSequence text) {
+	private static StringBuffer manToHtml(CharSequence text) {
 //		text = text.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 		Pattern p = Pattern.compile("(?:_\\010.)+|(?:(.)\\010\\1)+");//"(?:.\\010.)+");
 		Matcher m = p.matcher(text);

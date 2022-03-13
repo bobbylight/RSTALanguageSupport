@@ -50,8 +50,7 @@ public class ShellCompletionProvider extends CCompletionProvider {
 	 */
 	@Override
 	protected CompletionProvider createStringCompletionProvider() {
-		DefaultCompletionProvider cp = new DefaultCompletionProvider();
-		return cp;
+        return new DefaultCompletionProvider();
 	}
 
 

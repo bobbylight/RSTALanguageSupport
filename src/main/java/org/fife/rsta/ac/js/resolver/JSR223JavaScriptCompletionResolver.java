@@ -20,7 +20,7 @@ public class JSR223JavaScriptCompletionResolver extends
 	/**
 	 * RhinoCompletionProvider constructor
 	 * - resolves Rhino specific types
-	 * Used to resolve Static class e.g java.lag.String methods and fields 
+	 * Used to resolve Static class e.g. java.lag.String methods and fields
 	 * @param provider
 	 */
 	public JSR223JavaScriptCompletionResolver(SourceCompletionProvider provider) {
@@ -144,9 +144,8 @@ public class JSR223JavaScriptCompletionResolver extends
 			ClassFile cf = provider.getJavaScriptTypesFactory().getClassFile(
 					provider.getJarManager(), dec);
 			if (cf != null) {
-				TypeDeclaration returnDec = provider.getJavaScriptTypesFactory()
-						.createNewTypeDeclaration(cf, true, false);
-				return returnDec;
+                return provider.getJavaScriptTypesFactory()
+                        .createNewTypeDeclaration(cf, true, false);
 			}
 		}
 		return null;

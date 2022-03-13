@@ -42,9 +42,9 @@ public class JsDocCompletionProvider extends DefaultCompletionProvider {
 			"static", "summary", "this", "throws", "todo", /*"tutorial",*/
 			"type", "typedef", "variation", "version",
 		};
-		for (int i=0; i<simpleTags.length; i++) {
-			addCompletion(new JsDocCompletion(this, "@" + simpleTags[i]));
-		}
+        for (String simpleTag : simpleTags) {
+            addCompletion(new JsDocCompletion(this, "@" + simpleTag));
+        }
 
 		// Parameterized (simple) tags
 		addCompletion(new JsDocParameterizedCompletion(this, "@param", "@param {type} varName",

@@ -262,8 +262,7 @@ public class FieldInfo extends MemberInfo {
 
 		if (CONSTANT_VALUE.equals(attrName)) { // 4.7.2
 			int constantValueIndex = in.readUnsignedShort();
-			ConstantValue cv = new ConstantValue(cf, constantValueIndex);
-			ai = cv;
+            ai = new ConstantValue(cf, constantValueIndex);
 		}
 
 		// Attributes common to all members, or unhandled attributes.

@@ -83,7 +83,7 @@ abstract class AbstractASTNode implements ASTNode {
 
 
 	/**
-	 * Returns the name of this node (e.g. the value of {@link #getName()}.
+	 * Returns the name of this node (e.g. the value of {@link #getName()}).
 	 * Subclasses can override this method if appropriate.
 	 *
 	 * @return A string representation of this node.

@@ -147,8 +147,7 @@ public class ASTFactory implements TokenTypes {
 			s.eatThroughNextSkippingBlocks(SEPARATOR_RPAREN);
 		}
 
-		Annotation a = new Annotation(type);
-		return a;
+        return new Annotation(type);
 
 	}
 
@@ -316,10 +315,10 @@ case KEYWORD_WHILE:
 							break;
 						}
 						if (s.yyPeekCheckType()==IDENTIFIER) {
-							while ((t=s.yylexNonNull(IDENTIFIER, "Variable name expected (type==" + varType.toString() + ")"))!=null) {
+							while ((t=s.yylexNonNull(IDENTIFIER, "Variable name expected (type==" + varType + ")"))!=null) {
 								int arrayDepth = s.skipBracketPairs();
 								varType.incrementBracketPairCount(arrayDepth);
-								String varDec = varType.toString() + " " + t.getLexeme();
+								String varDec = varType + " " + t.getLexeme();
 								log(">>> Variable -- " + varDec + " (line " + t.getLine() + ")");
 								int offs = t.getOffset();
 								String name = t.getLexeme();
@@ -337,7 +336,7 @@ case KEYWORD_WHILE:
 									nextType = s.yyPeekCheckType();
 								}
 								// If next is a comma, loop to read the next local
-								// var.  Otherwise, whether or not it's valid,
+								// var.  Otherwise, whether it's valid,
 								// eat until the end of the statement.
 								if (nextType!=SEPARATOR_COMMA) {
 									s.eatThroughNextSkippingBlocks(SEPARATOR_SEMICOLON);
@@ -1295,14 +1294,14 @@ OUTER:
 		// TODO: "void" checking is NOT in the JLS for type!  Remove me
 		if (t.isType(KEYWORD_VOID)) {
 			type.addIdentifier(t.getLexeme(), null);
-			log("Exiting _getType(): " + type.toString());
+			log("Exiting _getType(): " + type);
 			return type;
 		}
 		else if (t.isBasicType()) {
 			int arrayDepth = s.skipBracketPairs();
 			type.addIdentifier(t.getLexeme(), null);
 			type.setBracketPairCount(arrayDepth);
-			log("Exiting _getType(): " + type.toString());
+			log("Exiting _getType(): " + type);
 			return type;
 		}
 
@@ -1337,7 +1336,7 @@ OUTER:
 			}
 		}
 
-		log("Exiting _getType(): " + type.toString());
+		log("Exiting _getType(): " + type);
 		return type;
 
 	}

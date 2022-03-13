@@ -135,12 +135,11 @@ public class JavaScriptMethodCompletion extends FunctionCompletion implements
 			rc= getLookupName().compareTo(c2.getLookupName());
 		}
 		else if (other!=null) {
-			Completion c2 = other;
-			rc = toString().compareTo(c2.toString());
+            rc = toString().compareTo(other.toString());
 			if (rc == 0) { // Same text value
 				String clazz1 = getClass().getName();
 				clazz1 = clazz1.substring(clazz1.lastIndexOf('.'));
-				String clazz2 = c2.getClass().getName();
+				String clazz2 = other.getClass().getName();
 				clazz2 = clazz2.substring(clazz2.lastIndexOf('.'));
 				rc = clazz1.compareTo(clazz2);
 			}

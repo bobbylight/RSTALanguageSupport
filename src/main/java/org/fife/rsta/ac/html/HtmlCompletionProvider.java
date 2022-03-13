@@ -370,7 +370,7 @@ if (t!=null && !t.isWhitespace()) {
 	 *
 	 * @param textArea The text area being parsed.
 	 * @param list The list of tokens for the current line (the line containing
-	 *        <code>offs</code>.
+	 *        <code>offs</code>).
 	 * @param line The index of the line containing <code>offs</code>.
 	 * @param offs The offset into the text area's content to check.
 	 * @return Whether the offset is inside a markup tag.

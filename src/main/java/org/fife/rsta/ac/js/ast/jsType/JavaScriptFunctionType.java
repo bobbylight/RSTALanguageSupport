@@ -254,7 +254,7 @@ public class JavaScriptFunctionType {
 					}
 					if (to.isArray()) {
 						if (from == JSArray || from.isArray()) {
-							// This is a native array conversion to a java array
+							// This is a native array conversion to a java array.
 							// Array conversions are all equal, and preferable
 							// to object
 							// and string conversion, per LC3.
@@ -344,9 +344,9 @@ public class JavaScriptFunctionType {
 	}
 
 
-	/**
+	/*
 	 * Convenience method to parse function string and converts to JavaScriptFunctionType
-	 * @param function String to parse e.g convertValue(java.util.String val);
+	 * @param function String to parse e.g. convertValue(java.util.String val);
 	 * @return
 	 */
 	/*public static JavaScriptFunctionType parseFunction(String function, SourceCompletionProvider provider) {
@@ -374,7 +374,7 @@ public class JavaScriptFunctionType {
 
 	/**
 	 * Convenience method to parse function string and converts to JavaScriptFunctionType
-	 * @param function String to parse e.g convertValue(java.util.String val);
+	 * @param function String to parse e.g. convertValue(java.util.String val);
 	 * @param provider used for type conversions
 	 * @return
 	 */
@@ -392,19 +392,19 @@ public class JavaScriptFunctionType {
 			// iterate through params
 			if(paramsStr.length() > 0) {
 				String[] params = paramsStr.split(",");
-				for (int i = 0; i < params.length; i++) {
-					String param = provider.getTypesFactory().convertJavaScriptType(
-							params[i], true);
-					TypeDeclaration type = provider.getTypesFactory().getTypeDeclaration(param);
-					if (type != null) {
-						functionType.addArgument(type);
-					}
-					else {
-	
-						functionType.addArgument(JavaScriptHelper
-								.createNewTypeDeclaration(param));
-					}
-				}
+                for (String s : params) {
+                    String param = provider.getTypesFactory().convertJavaScriptType(
+                            s, true);
+                    TypeDeclaration type = provider.getTypesFactory().getTypeDeclaration(param);
+                    if (type != null) {
+                        functionType.addArgument(type);
+                    }
+                    else {
+
+                        functionType.addArgument(JavaScriptHelper
+                                .createNewTypeDeclaration(param));
+                    }
+                }
 			}
 		}
 

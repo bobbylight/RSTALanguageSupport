@@ -68,7 +68,7 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 	 * source file.
 	 *
 	 * @param provider
-	 * @param m Meta data about the method.
+	 * @param m Metadata about the method.
 	 */
 	public MethodCompletion(CompletionProvider provider, Method m) {
 
@@ -96,7 +96,7 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 	 * class file.
 	 *
 	 * @param provider
-	 * @param info Meta data about the method.
+	 * @param info Metadata about the method.
 	 */
 	public MethodCompletion(CompletionProvider provider, MethodInfo info) {
 

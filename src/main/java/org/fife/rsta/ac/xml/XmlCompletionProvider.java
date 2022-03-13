@@ -236,7 +236,7 @@ class XmlCompletionProvider extends DefaultCompletionProvider {
 	 * @return The token type, or {@link TokenTypes#NULL} if no completion
 	 *         choices should be suggested for the current caret position.
 	 */
-	private static final int getDesiredTokenType(Token t, int dot) {
+	private static int getDesiredTokenType(Token t, int dot) {
 		switch (t.getType()) {
 			case TokenTypes.MARKUP_TAG_NAME:
 				if (t.containsPosition(dot-1)) {
@@ -262,7 +262,7 @@ class XmlCompletionProvider extends DefaultCompletionProvider {
 
 
 	/**
-	 * If the caret is inside of a tag, this method returns the token
+	 * If the caret is inside a tag, this method returns the token
 	 * representing the tag name; otherwise, <code>null</code> is returned.
 	 *
 	 * @param textArea The text area.

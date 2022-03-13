@@ -168,7 +168,7 @@ public interface WindowFunctions extends JS5ObjectFunctions {
 	JSString atob(JSString arg);
 	
 	/**
-	 * function btoa(arg) The btoa() method of window object is used to convert a given string to a encoded data (using base-64 encoding) string.
+	 * function btoa(arg) The btoa() method of window object is used to convert a given string to an encoded data (using base-64 encoding) string.
 	 * @param arg
 	 * @memberOf  Window
 	 * @returns {String}

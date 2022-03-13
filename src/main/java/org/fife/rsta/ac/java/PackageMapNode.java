@@ -226,15 +226,15 @@ public class PackageMapNode {
 		String[] items = Util.splitOnChar(pkgName, '.');
 
 		PackageMapNode pmn = this;
-		for (int i=0; i<items.length; i++) {
-			// "value" can be a ClassFile "too early" here if className
-			// is a nested class.
-			// TODO: Handle nested classes better
-			pmn = pmn.subpackages.get(items[i]);
-			if (pmn == null) {
-				return false;
-			}
-		}
+        for (String item : items) {
+            // "value" can be a ClassFile "too early" here if className
+            // is a nested class.
+            // TODO: Handle nested classes better
+            pmn = pmn.subpackages.get(item);
+            if (pmn == null) {
+                return false;
+            }
+        }
 
 		return true;
 
@@ -283,12 +283,12 @@ public class PackageMapNode {
 
 		PackageMapNode map = this;
 
-		for (int i=0; i<pkgs.length; i++) {
-			map = map.subpackages.get(pkgs[i]);
-			if (map == null) {
-				return;
-			}
-		}
+        for (String pkg : pkgs) {
+            map = map.subpackages.get(pkg);
+            if (map == null) {
+                return;
+            }
+        }
 
 		try {
 
@@ -374,8 +374,8 @@ public class PackageMapNode {
 	}
 
 
-	private static final void possiblyAddTo(Collection<ClassFile> addTo,
-			ClassFile cf, boolean inPkg) {
+	private static void possiblyAddTo(Collection<ClassFile> addTo,
+                                      ClassFile cf, boolean inPkg) {
 		if (inPkg || org.fife.rsta.ac.java.classreader.Util.isPublic(cf.getAccessFlags())) {
 			addTo.add(cf);
 		}

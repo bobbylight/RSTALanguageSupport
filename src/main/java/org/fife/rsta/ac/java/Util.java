@@ -699,7 +699,7 @@ System.out.println("Unmatched linkContent: " + linkContent);
 	/**
 	 * A faster way to split on a single char than String#split(), since
 	 * we'll be doing this in a tight loop possibly thousands of times (rt.jar).
-	 * This is also fundamentally different than {@link String#split(String)}),
+	 * This is also fundamentally different from {@link String#split(String)}),
 	 * in the case where <code>str</code> ends with <code>ch</code> - this
 	 * method will return an empty item at the end of the returned array, while
 	 * String#split() will not.
