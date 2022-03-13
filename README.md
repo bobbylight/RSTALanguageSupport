@@ -10,11 +10,12 @@ for the language (i.e. squiggle-underlining of errors in the source code).
 
 Documentation is sparse for the moment, but should improve over time.
 
-Besides RSyntaxTextArea and AutoComplete, this library depends on [Rhino](http://www.mozilla.org/rhino/). 
+Besides RSyntaxTextArea and AutoComplete, this library depends on [Rhino](https://github.com/mozilla/rhino). 
 Rhino is used to implement the code completion and syntax checking for JavaScript.
 
-RSTALanguageSupport is available under a [modified BSD license](https://github.com/bobbylight/RSTALanguageSupport/blob/master/RSTALanguageSupport/LICENSE.md).
+RSTALanguageSupport is available under a [modified BSD license](https://github.com/bobbylight/RSTALanguageSupport/blob/master/LICENSE.md).
 For more information, visit [https://github.com/bobbylight/RSyntaxTextArea](https://github.com/bobbylight/RSyntaxTextArea).
+
 
 # Supported Languages and Status
 
@@ -66,12 +67,73 @@ Languages supported in this library include:
     * Ctrl+Shift+O (Cmd+Shift+O on OS X) opens a "Go to Member" popup, a la Eclipse.
     * XmlOutlineTree component provides a tree view of an XML file that is updated live with edits.
 
+
+# Using this Library in your Project
+
+By far, the easiest way to use this library is by simply registering any
+`RSyntaxTextArea`s in your application with the
+`org.fife.rsta.ac.LanguageSupportFactory`.  This is done as follows:
+
+```java
+RSyntaxTextArea textArea = new RSyntaxTextArea(25, 70);
+LanguageSupportFactory.get().register(textArea);
+```
+
+Then, whenever you call `textArea.setSyntaxEditingStyle(String style)`, language
+support will automatically be installed as appropriate.  If you set the style
+to a language with no language support, then any previous language support will
+be removed.  If you set the style to a language with support, any existing
+language support will be replaced.
+
+Language support options may vary from language to language.  To tweak the
+functionality or appearance for a particular language, you have to edit the
+`org.fife.rsta.ac.LanguageSupport` for that language.  As an example, here is how
+you can retrieve the `LanguageSupport` for Perl:
+
+```java
+LanguageSupportFactory lsf = LanguageSupportFactory.get();
+PerlLanguageSupport support = (PerlLanguageSupport)lsf.
+                        getSupportFor(SyntaxConstants.SYNTAX_STYLE_PERL);
+```
+
+Now, you can tweak language-specific options.  For example, `PerlLanguageSupport`
+has a method named `setUseParensWithFunctions(boolean)` that toggles whether
+parens are used to wrap parameters inserted via parameter assistance.  This
+setting can be toggled to match whether you prefer to "use strict".
+
+Concrete implementations of `LanguageSupport` are shared amongst all text editors
+that are highlighting the same language.  Thus, in the above example, calling
+`support.setUseParensWithFunctions(false)` will affect all currently open
+instances of RSyntaxTextArea editing Perl, as well as all future instances.
+
+
+# Hacking
+
+For each supported language, the corresponding `LanguageSupport` class can have widely-varying
+implementations, so you have to drill into the source for your particular language to
+see how things work.  The Java language support, for example, scans jars on the classpath
+to initialize code completion.  Many static languages, however, seed their code completion
+information from the contents of the project's `data/` folder:
+
+    RSTALanguageSupport/
+      data/                           Input XML for some languages
+      RSTALanguageSupport/            The library source code
+      RSTALanguageSupportDemo/        A demo application showing off the library
+
+Subdirectories of `data/` contain Perl scripts and input files for generating
+the XML files used by various languages for code completion.  If you want to
+improve the code completion for one of these languages, this is where you have
+to work.  But send me any updates you make!  Any improvement, especially to
+the method and parameter descriptions, is welcome.
+
+
 # Sister Projects
 
 * [RSyntaxTextArea](https://github.com/bobbylight/RSyntaxTextArea) provides syntax highlighting, code folding, and many other features out-of-the-box.
 * [AutoComplete](https://github.com/bobbylight/AutoComplete) - Adds code completion to RSyntaxTextArea (or any other JTextComponent).
 * [RSTAUI](https://github.com/bobbylight/RSTAUI) - Common dialogs needed by text editing applications: Find, Replace, Go to Line, File Properties.
 * [SpellChecker](https://github.com/bobbylight/SpellChecker) - Adds squiggle-underline spell checking to RSyntaxTextArea.
+
 
 # Getting Help
 
