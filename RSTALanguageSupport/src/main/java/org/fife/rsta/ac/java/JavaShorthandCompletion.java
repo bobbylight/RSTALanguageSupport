@@ -33,11 +33,11 @@ class JavaShorthandCompletion extends ShorthandCompletion implements
 	/**
 	 * Constructor.
 	 *
-	 * @param provider
-	 * @param inputText
-	 * @param replacementText
+	 * @param provider The completion provider.
+	 * @param inputText The input text.
+	 * @param replacementText The replacement text.
 	 */
-	public JavaShorthandCompletion(CompletionProvider provider,
+	JavaShorthandCompletion(CompletionProvider provider,
 			String inputText, String replacementText) {
 		super(provider, inputText, replacementText);
 	}
@@ -46,20 +46,17 @@ class JavaShorthandCompletion extends ShorthandCompletion implements
 	/**
 	 * Constructor.
 	 *
-	 * @param provider
-	 * @param inputText
-	 * @param replacementText
-	 * @param shortDesc
+	 * @param provider The completion provider.
+	 * @param inputText The input text.
+	 * @param replacementText The replacement text.
+	 * @param shortDesc A short description of the completion.
 	 */
-	public JavaShorthandCompletion(CompletionProvider provider,
+	JavaShorthandCompletion(CompletionProvider provider,
 			String inputText, String replacementText, String shortDesc) {
 		super(provider, inputText, replacementText, shortDesc);
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public Icon getIcon() {
 		return IconFactory.get().getIcon(IconFactory.TEMPLATE_ICON);
@@ -77,7 +74,7 @@ class JavaShorthandCompletion extends ShorthandCompletion implements
 
 	/**
 	 * Renders a completion in the style of a short-hand completion.
-	 * 
+	 *
 	 * @param g The graphics context.
 	 * @param input The text the user enters to display this completion.
 	 * @param shortDesc An optional short description of the completion.

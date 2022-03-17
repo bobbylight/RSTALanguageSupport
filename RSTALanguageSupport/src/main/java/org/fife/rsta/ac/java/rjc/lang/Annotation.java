@@ -11,11 +11,22 @@
 package org.fife.rsta.ac.java.rjc.lang;
 
 
+/**
+ * Represents an annotation.
+ *
+ * @author Robert Futrell
+ * @version 1.0
+ */
 public class Annotation {
 
 	private Type type;
 
 
+	/**
+	 * Constructor.
+	 *
+	 * @param type The type.
+	 */
 	public Annotation(Type type) {
 		this.type = type;
 	}

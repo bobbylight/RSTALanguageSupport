@@ -11,7 +11,7 @@ public abstract class JSBoolean implements JSObjectFunctions {
 
     /**
      * Object Boolean(value)
-     * 
+     *
      * @constructor
      * @extends Object
      * @param value The value to be held by the Boolean object or be converted to a boolean value
@@ -20,10 +20,10 @@ public abstract class JSBoolean implements JSObjectFunctions {
      */
     public JSBoolean(JSObject value) {
     }
-    
+
     /**
      * <b>property prototype</b>
-     * 
+     *
      * @type Boolean
      * @memberOf Boolean
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSBoolean Boolean
@@ -31,10 +31,10 @@ public abstract class JSBoolean implements JSObjectFunctions {
      * @since Level 2 Document Object Model Core Definition.
      */
     public JSBoolean prototype;
-    
+
     /**
      * <b>property constructor</b>
-     * 
+     *
      * @type Function
      * @memberOf Boolean
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction Function

@@ -132,6 +132,12 @@ public class Type {
 	}
 
 
+	/**
+	 * Returns a set of type arguments by index.
+	 *
+	 * @param index The index.
+	 * @return The type arguments.
+	 */
 	public List<TypeArgument> getTypeArguments(int index) {
 		return typeArguments.get(index);
 	}
@@ -140,6 +146,11 @@ public class Type {
 	/*
 	 * MethodDeclaratorRest allows bracket pairs after its FormalParameters,
 	 * which increment the array depth of the return type.
+	 */
+	/**
+	 * Increments an internally-used count of bracket pairs.
+	 *
+	 * @param count The amount to increment by.
 	 */
 	public void incrementBracketPairCount(int count) {
 		bracketPairCount += count;
@@ -156,6 +167,11 @@ public class Type {
 	}
 
 
+	/**
+	 * Returns whether this is a basic type (e.g. a primitive type).
+	 *
+	 * @return Whther this is a basic type.
+	 */
 	public boolean isBasicType() {
 		boolean basicType = false;
 		if (!isArray() && identifiers.size()==1 && typeArguments.get(0)==null) {

@@ -34,6 +34,12 @@ public class XmlTreeNode extends SourceTreeNode {
 	}
 
 
+	/**
+	 * Returns whether this tree node contains a specific offset.
+	 *
+	 * @param offs An offset in the document.
+	 * @return Whether this node contains that offset.
+	 */
 	public boolean containsOffset(int offs) {
 		return offset!=null && endOffset!=null &&
 				offs>=offset.getOffset() && offs<=endOffset.getOffset();

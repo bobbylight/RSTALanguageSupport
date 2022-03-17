@@ -65,18 +65,18 @@ public class JarManager {
 	 */
 	public void addCompletions(CompletionProvider p, String text,
 			Set<Completion> addTo) {
-/*
- * The commented-out code below is probably replaced by the rest of the code
- * in this method...
-TODO: Verify me!!!
- * 
+		/*
+		 * The commented-out code below is probably replaced by the rest of the code
+		 * in this method...
+		TODO: Verify me!!!
+		 *
 		// Add any completions matching the text for each jar we know about
 		String[] pkgNames = Util.splitOnChar(text, '.');
 		for (int i=0; i<jars.size(); i++) {
 			JarReader jar = (JarReader)jars.get(i);
 			jar.addCompletions(p, pkgNames, addTo);
 		}
-*/
+		*/
 		if (text.length()==0) {
 			return;
 		}
@@ -193,7 +193,7 @@ TODO: Verify me!!!
 
 
 	/**
-	 * Removes all class file sources from the "build path."
+	 * Removes all class file sources from the "build path".
 	 *
 	 * @see #removeClassFileSource(LibraryInfo)
 	 * @see #removeClassFileSource(File)
@@ -225,6 +225,12 @@ TODO: Verify me!!!
 	}
 
 
+	/**
+	 * Returns a class file's entry.
+	 *
+	 * @param className The class name.
+	 * @return Its entry, or {@code null} if it cannot be found.
+	 */
 	public ClassFile getClassEntry(String className) {
 
 		String[] items = Util.splitOnChar(className, '.');
@@ -316,8 +322,10 @@ TODO: Verify me!!!
 
 
 	/**
-	 * 
+	 * Returns all classes in a package.
+	 *
 	 * @param pkgName A package name.
+	 * @param inPkg Not sure here
 	 * @return A list of all classes in that package.
 	 */
 	public List<ClassFile> getClassesInPackage(String pkgName, boolean inPkg) {
@@ -335,7 +343,7 @@ TODO: Verify me!!!
 
 
 	/**
-	 * Returns the jars on the "build path."
+	 * Returns the jars on the "build path".
 	 *
 	 * @return A list of {@link LibraryInfo}s. Modifying a
 	 *         <code>LibraryInfo</code> in this list will have no effect on
@@ -354,20 +362,26 @@ TODO: Verify me!!!
 	}
 
 
-public SourceLocation getSourceLocForClass(String className) {
-	SourceLocation  sourceLoc = null;
-    for (JarReader jar : classFileSources) {
-        if (jar.containsClass(className)) {
-            sourceLoc = jar.getLibraryInfo().getSourceLocation();
-            break;
-        }
-    }
-	return sourceLoc;
-}
+	/**
+	 * Returns the source location for a specific class.
+	 *
+	 * @param className The class.
+	 * @return Its source location.
+	 */
+	public SourceLocation getSourceLocForClass(String className) {
+		SourceLocation  sourceLoc = null;
+		for (JarReader jar : classFileSources) {
+			if (jar.containsClass(className)) {
+				sourceLoc = jar.getLibraryInfo().getSourceLocation();
+				break;
+			}
+		}
+		return sourceLoc;
+	}
 
 
 	/**
-	 * Removes a jar from the "build path."  This is a convenience method for
+	 * Removes a jar from the "build path".  This is a convenience method for
 	 * folks only adding and removing jar sources.
 	 *
 	 * @param jar The jar to remove.
@@ -383,7 +397,7 @@ public SourceLocation getSourceLocForClass(String className) {
 
 
 	/**
-	 * Removes a class file source from the "build path."
+	 * Removes a class file source from the "build path".
 	 *
 	 * @param toRemove The source to remove.
 	 * @return Whether source jar was removed.  This will be <code>false</code>
@@ -393,7 +407,7 @@ public SourceLocation getSourceLocForClass(String className) {
 	 * @see #getClassFileSources()
 	 */
 	public boolean removeClassFileSource(LibraryInfo toRemove) {
-		for (Iterator<JarReader> i=classFileSources.iterator(); i.hasNext(); ) {
+		for (Iterator<JarReader> i=classFileSources.iterator(); i.hasNext();) {
 			JarReader reader = i.next();
 			LibraryInfo info = reader.getLibraryInfo();
 			if (info.equals(toRemove)) {

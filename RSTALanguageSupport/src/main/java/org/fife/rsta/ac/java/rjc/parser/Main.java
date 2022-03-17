@@ -25,7 +25,7 @@ import org.fife.rsta.ac.java.rjc.lexer.Scanner;
  * @author Robert Futrell
  * @version 1.0
  */
-public class Main {
+public final class Main {
 
 	/**
 	 * If this system property is set to "<code>true</code>",
@@ -35,6 +35,14 @@ public class Main {
 
 	private static final boolean LOG = !"true".equals(
 							System.getProperty(PROPERTY_NO_OUTPUT));
+
+
+    /**
+     * Private constructor to prevent instantiation.
+     */
+    private Main() {
+        // Do nothing (comment for Sonar)
+    }
 
 
 	private static void log(Object text) {

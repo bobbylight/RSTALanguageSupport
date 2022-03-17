@@ -7,7 +7,7 @@ import static java.lang.Math.*;
 /**
  * A simple class used in JUnit tests to validate the following features
  * of the Java parser when parsing a class file:
- * 
+ *
  * <ul>
  *    <li>Import statements</li>
  *    <li>Class variables</li>

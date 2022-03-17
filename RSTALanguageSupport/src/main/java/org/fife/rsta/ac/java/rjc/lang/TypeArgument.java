@@ -11,6 +11,12 @@
 package org.fife.rsta.ac.java.rjc.lang;
 
 
+/**
+ * A type argument.
+ *
+ * @author Robert Futrell
+ * @version 1.0
+ */
 public class TypeArgument {
 
 	public static final int NOTHING			= 0;

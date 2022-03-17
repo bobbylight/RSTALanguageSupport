@@ -12,7 +12,7 @@ import org.fife.rsta.ac.js.resolver.JavaScriptResolver;
 public class EMCAJavaScriptEngine extends JavaScriptEngine {
 
 	public static final String EMCA_ENGINE = "EMCA";
-	
+
 	@Override
 	public JavaScriptResolver getJavaScriptResolver(SourceCompletionProvider provider) {
 		return new JavaScriptCompletionResolver(provider);
@@ -22,7 +22,7 @@ public class EMCAJavaScriptEngine extends JavaScriptEngine {
 	public JavaScriptTypesFactory getJavaScriptTypesFactory(SourceCompletionProvider provider) {
 		if(jsFactory == null)
 			jsFactory = JavaScriptTypesFactory.getDefaultJavaScriptTypesFactory(provider.getTypesFactory());
-		
+
 		return jsFactory;
 	}
 

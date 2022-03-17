@@ -27,7 +27,7 @@ import org.fife.ui.autocomplete.DefaultCompletionProvider;
 class DocCommentCompletionProvider extends DefaultCompletionProvider {
 
 
-	public DocCommentCompletionProvider() {
+	DocCommentCompletionProvider() {
 
 		// Block tags
 		addCompletion(new JavadocCompletion(this, "@author"));
@@ -57,7 +57,8 @@ class DocCommentCompletionProvider extends DefaultCompletionProvider {
 		// Inline tags
 		addCompletion(new JavadocTemplateCompletion(this, "{@code}", "{@code}", "{@code ${}}${cursor}"));
 		addCompletion(new JavadocTemplateCompletion(this, "{@docRoot}", "{@docRoot}", "{@docRoot ${}}${cursor}"));
-		addCompletion(new JavadocTemplateCompletion(this, "{@inheritDoc}", "{@inheritDoc}", "{@inheritDoc ${}}${cursor}"));
+		addCompletion(new JavadocTemplateCompletion(this, "{@inheritDoc}", "{@inheritDoc}",
+			"{@inheritDoc ${}}${cursor}"));
 		addCompletion(new JavadocTemplateCompletion(this, "{@link}", "{@link}", "{@link ${}}${cursor}"));
 		addCompletion(new JavadocTemplateCompletion(this, "{@linkplain}", "{@linkplain}", "{@linkplain ${}}${cursor}"));
 		addCompletion(new JavadocTemplateCompletion(this, "{@literal}", "{@literal}", "{@literal ${}}${cursor}"));
@@ -73,9 +74,6 @@ class DocCommentCompletionProvider extends DefaultCompletionProvider {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected boolean isValidChar(char ch) {
 		return Character.isLetterOrDigit(ch) || ch=='_' || ch=='@' ||
@@ -89,7 +87,7 @@ class DocCommentCompletionProvider extends DefaultCompletionProvider {
 	private static class JavadocCompletion extends BasicCompletion
 								implements JavaSourceCompletion {
 
-		public JavadocCompletion(CompletionProvider provider,
+		JavadocCompletion(CompletionProvider provider,
 									String replacementText) {
 			super(provider, replacementText);
 		}
@@ -103,14 +101,14 @@ class DocCommentCompletionProvider extends DefaultCompletionProvider {
 		public void rendererText(Graphics g, int x, int y, boolean selected) {
 			g.drawString(getReplacementText(), x, y);
 		}
-		
+
 	}
 
 
 	private static class JavadocTemplateCompletion
 						extends JavaTemplateCompletion {
 
-		public JavadocTemplateCompletion(CompletionProvider provider,
+		JavadocTemplateCompletion(CompletionProvider provider,
 				String inputText, String definitionString, String template) {
 			super(provider, inputText, definitionString, template);
 			setIcon(IconFactory.JAVADOC_ITEM_ICON);

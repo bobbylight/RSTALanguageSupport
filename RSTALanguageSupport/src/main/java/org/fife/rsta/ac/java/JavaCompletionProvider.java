@@ -73,7 +73,7 @@ public class JavaCompletionProvider extends LanguageAwareCompletionProvider {
 
 
 	/**
-	 * Adds a jar to the "build path."
+	 * Adds a jar to the "build path".
 	 *
 	 * @param info The jar to add.  If this is <code>null</code>, then
 	 *        the current JVM's main JRE jar (rt.jar, or classes.jar on OS X)
@@ -90,7 +90,7 @@ public class JavaCompletionProvider extends LanguageAwareCompletionProvider {
 
 
 	/**
-	 * Removes all jars from the "build path."
+	 * Removes all jars from the "build path".
 	 *
 	 * @see #removeJar(File)
 	 * @see #addJar(LibraryInfo)
@@ -117,9 +117,6 @@ public class JavaCompletionProvider extends LanguageAwareCompletionProvider {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public List<Completion> getCompletionsAt(JTextComponent tc, Point p) {
 		return sourceProvider.getCompletionsAt(tc, p);
@@ -127,7 +124,7 @@ public class JavaCompletionProvider extends LanguageAwareCompletionProvider {
 
 
 	/**
-	 * Returns the jars on the "build path."
+	 * Returns the jars on the "build path".
 	 *
 	 * @return A list of {@link LibraryInfo}s.  Modifying a
 	 *         <code>LibraryInfo</code> in this list will have no effect on
@@ -141,9 +138,6 @@ public class JavaCompletionProvider extends LanguageAwareCompletionProvider {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public List<ParameterizedCompletion> getParameterizedCompletions(
 						JTextComponent tc) {
@@ -152,7 +146,7 @@ public class JavaCompletionProvider extends LanguageAwareCompletionProvider {
 
 
 	/**
-	 * Removes a jar from the "build path."
+	 * Removes a jar from the "build path".
 	 *
 	 * @param jar The jar to remove.
 	 * @return Whether the jar was removed.  This will be <code>false</code>
@@ -181,7 +175,9 @@ public class JavaCompletionProvider extends LanguageAwareCompletionProvider {
 
 
 	/**
-	 * Set shorthand completion cache (template and comment completions)
+	 * Set shorthand completion cache (template and comment completions).
+	 *
+	 * @param cache The cache to use.
 	 */
 	public void setShorthandCompletionCache(ShorthandCompletionCache cache) {
 		sourceProvider.setShorthandCache(cache);

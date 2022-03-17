@@ -53,7 +53,7 @@ public class JsDocCompletionProvider extends DefaultCompletionProvider {
 				"@return {${type}} ${}"));
 		addCompletion(new JsDocParameterizedCompletion(this, "@returns", "@returns {type} description",
 				"@returns {${type}} ${}"));
-		
+
 		// Inline tags
 		addCompletion(new JsDocParameterizedCompletion(this, "{@link}", "{@link}", "{@link ${}}${cursor}"));
 		addCompletion(new JsDocParameterizedCompletion(this, "{@linkplain}", "{@linkplain}", "{@linkplain ${}}${cursor}"));

@@ -45,7 +45,7 @@ import org.mozilla.javascript.ast.WhileLoop;
 public class JavaScriptAstParser extends JavaScriptParser {
 
 	private ArrayList<ProcessFunctionType> functions;
-	
+
 	public JavaScriptAstParser(SourceCompletionProvider provider, int dot,
 			TypeDeclarationOptions options) {
 		super(provider, dot, options);
@@ -77,7 +77,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	/**
 	 * for each child of parent AstNode add a new code block and add completions
 	 * for each block of code
-	 * 
+	 *
 	 * @param parent AstNode to iterate children
 	 * @param set completions set to add to
 	 * @param entered Text entered
@@ -86,10 +86,10 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	 */
 	private void addCodeBlock(Node parent, Set<Completion> set,
 			String entered, CodeBlock codeBlock, int offset) {
-		
+
 		if(parent == null)
 			return;
-		
+
 		Node child = parent.getFirstChild();
 
 		while (child != null) {
@@ -106,7 +106,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 		}
 	}
-	
+
 	protected void iterateNode(AstNode child, Set<Completion> set,
 			String entered, CodeBlock block, int offset) {
 
@@ -491,7 +491,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 		}
 
 	}
-	
+
 	private JavaScriptFunctionDeclaration createJavaScriptFunction(String lookupName, int offset, CodeBlock block, TypeDeclaration returnType, FunctionNode fn) {
 		Name name = fn.getFunctionName();
 		JavaScriptFunctionDeclaration function = new JavaScriptFunctionDeclaration(lookupName, offset, block, returnType);
@@ -501,7 +501,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 			function.setStartOffset(start);
 			function.setEndOffset(end);
 			function.setFunctionName(fn.getName());
-			
+
 		}
 		return function;
 	}
@@ -585,7 +585,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 	/**
 	 * Extract the variable from the Variable initializer and set the Type
-	 * 
+	 *
 	 * @param initializer AstNode from which to extract the variable
 	 * @param block code block to add the variable too
 	 * @param offset position of the variable in code
@@ -605,7 +605,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	 * Extract variable for each in loop. If the iteratedObject is an Array,
 	 * then resolve the variable to the array type otherwise set to iterator
 	 * object type
-	 * 
+	 *
 	 * @param initializer
 	 * @param block
 	 * @param offset
@@ -651,7 +651,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	/**
 	 * Extract variable for in loop. If the iteratedObject is an Array, then
 	 * assume the variable to be a number otherwise do not attempt to resolve
-	 * 
+	 *
 	 * @param initializer
 	 * @param block
 	 * @param offset
@@ -702,10 +702,10 @@ public class JavaScriptAstParser extends JavaScriptParser {
 		return parent != null && parent.getStartOffset() == 0;
 	}
 
-	
+
 	/**
 	 * Extract the variable from the Rhino node and add to the CodeBlock
-	 * 
+	 *
 	 * @param node AstNode node from which to extract the variable
 	 * @param block code block to add the variable too
 	 * @param offset position of the variable in code
@@ -718,7 +718,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 	/**
 	 * Extract the variable from the Rhino node and add to the CodeBlock
-	 * 
+	 *
 	 * @param node AstNode node from which to extract the variable
 	 * @param block code block to add the variable too
 	 * @param offset position of the variable in code
@@ -793,7 +793,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 		/**
 		 * Iterate through all the return types and check they are all the same,
 		 * otherwise return no type
-		 * 
+		 *
 		 * @return
 		 */
 		public TypeDeclaration getCommonReturnType() {
@@ -826,7 +826,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 		AstNode typeNode;
 		JavaScriptVariableDeclaration dec;
-		
+
 	}
-	
+
 }

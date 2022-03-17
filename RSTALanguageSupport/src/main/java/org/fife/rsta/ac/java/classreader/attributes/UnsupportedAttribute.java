@@ -29,6 +29,7 @@ public class UnsupportedAttribute extends AttributeInfo {
 	 * Constructor.
 	 *
 	 * @param cf The class file.
+	 * @param name The name of the attribute.
 	 */
 	public UnsupportedAttribute(ClassFile cf, String name/*, int[] info*/) {
 		super(cf);
@@ -36,11 +37,11 @@ public class UnsupportedAttribute extends AttributeInfo {
 		//this.info = info;
 	}
 
-/*
+	/*
 	public int[] getInfo() {
 		return info;
 	}
-*/
+	*/
 
 	@Override
 	public String getName() {

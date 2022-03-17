@@ -57,7 +57,7 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
  * <code>JavaOutlineTree</code> for each one, or call <code>uninstall()</code>
  * and <code>listenTo(RSyntaxTextArea)</code> each time a new RSTA receives
  * focus.
- * 
+ *
  * @author Robert Futrell
  * @version 1.0
  */
@@ -294,9 +294,6 @@ public class JavaOutlineTree extends AbstractSourceTree {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean gotoSelectedElement() {
 		TreePath path = getLeadSelectionPath();//e.getNewLeadSelectionPath();
@@ -308,9 +305,6 @@ public class JavaOutlineTree extends AbstractSourceTree {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void listenTo(RSyntaxTextArea textArea) {
 
@@ -334,9 +328,6 @@ public class JavaOutlineTree extends AbstractSourceTree {
 	}
 
 
-	/**
-	 *{@inheritDoc}
-	 */
 	@Override
 	public void uninstall() {
 

@@ -16,6 +16,12 @@ import org.fife.rsta.ac.java.rjc.lexer.Scanner;
 import org.fife.rsta.ac.java.rjc.lexer.Token;
 
 
+/**
+ * Represents a field in a class file.
+ *
+ * @author Robert Futrell
+ * @version 1.0
+ */
 public class Field extends AbstractMember {
 
 	private Modifiers modifiers;

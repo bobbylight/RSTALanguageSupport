@@ -20,13 +20,13 @@ import org.mozilla.javascript.ast.AstNode;
  */
 public class JavaScriptVariableDeclaration extends JavaScriptDeclaration {
 
-	
+
 	protected TypeDeclaration typeDec;
 	protected SourceCompletionProvider provider;
 
 	private boolean reassigned;
 	private TypeDeclaration originalTypeDec;
-	
+
 
 	/**
 	 * @param name of the variable
@@ -42,7 +42,7 @@ public class JavaScriptVariableDeclaration extends JavaScriptDeclaration {
 
 	/**
 	 * Lookup TypeDeclaration from the Rhino <code>AstNode</code>
-	 * 
+	 *
 	 * @param typeNode - Rhino AstNode linked to this variable
 	 */
 	public void setTypeDeclaration(AstNode typeNode) {
@@ -51,7 +51,7 @@ public class JavaScriptVariableDeclaration extends JavaScriptDeclaration {
 	}
 
 	/**
-	 * Set the TypeDeclaration for the AstNode. Stores the original value so it can be reset 
+	 * Set the TypeDeclaration for the AstNode. Stores the original value so it can be reset
 	 * @param typeNode
 	 * @param overrideOriginal
 	 * @see #resetVariableToOriginalType()
@@ -72,7 +72,7 @@ public class JavaScriptVariableDeclaration extends JavaScriptDeclaration {
 	}
 
 	/**
-	 * Resets the TypeDeclaration to the original value 
+	 * Resets the TypeDeclaration to the original value
 	 */
 	public void resetVariableToOriginalType() {
 		if (reassigned) {
@@ -85,7 +85,7 @@ public class JavaScriptVariableDeclaration extends JavaScriptDeclaration {
 
 	/**
 	 * Set TypeDeclaration
-	 * 
+	 *
 	 * @param typeDec
 	 */
 	public void setTypeDeclaration(TypeDeclaration typeDec) {
@@ -109,6 +109,6 @@ public class JavaScriptVariableDeclaration extends JavaScriptDeclaration {
 		return dec != null ? dec.getJSName() : provider.getTypesFactory()
 				.getDefaultTypeDeclaration().getJSName();
 	}
-	
+
 
 }

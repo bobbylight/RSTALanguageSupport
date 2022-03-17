@@ -20,7 +20,7 @@ import org.fife.ui.autocomplete.CompletionProvider;
 
 /**
  * A generator that returns completions for CSS percentage/length values.
- * 
+ *
  * @author Robert Futrell
  * @version 1.0
  */
@@ -33,14 +33,11 @@ class PercentageOrLengthCompletionGenerator implements CompletionGenerator {
 	private static final Pattern DIGITS = Pattern.compile("\\d*");
 
 
-	public PercentageOrLengthCompletionGenerator(boolean includePercentage) {
+	PercentageOrLengthCompletionGenerator(boolean includePercentage) {
 		this.includePercentage = includePercentage;
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public List<Completion> generate(CompletionProvider provider, String input){
 
@@ -83,7 +80,7 @@ class PercentageOrLengthCompletionGenerator implements CompletionGenerator {
 	 */
 	private static class POrLCompletion extends BasicCssCompletion {
 
-		public POrLCompletion(CompletionProvider provider, String value) {
+		POrLCompletion(CompletionProvider provider, String value) {
 			super(provider, value, ICON_KEY);
 		}
 

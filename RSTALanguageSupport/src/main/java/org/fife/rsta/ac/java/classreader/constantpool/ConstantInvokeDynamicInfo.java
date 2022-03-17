@@ -26,8 +26,8 @@ public class ConstantInvokeDynamicInfo extends ConstantPoolInfo {
     /**
      * Constructor.
      *
-     * @param bootstrapMethodAttrIndex
-     * @param nameAndTypeIndex
+     * @param bootstrapMethodAttrIndex The index.
+     * @param nameAndTypeIndex The name and type index.
      */
     public ConstantInvokeDynamicInfo(int bootstrapMethodAttrIndex, int nameAndTypeIndex) {
         super(CONSTANT_InvokeDynamic);

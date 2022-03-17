@@ -46,6 +46,11 @@ public class DemoApp extends JFrame {
 	}
 
 
+	/**
+	 * Application entry point.
+	 *
+	 * @param args The command line arguments.
+	 */
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(() -> {
 			try {

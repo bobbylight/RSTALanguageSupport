@@ -21,7 +21,7 @@ import org.mozilla.javascript.ast.AstRoot;
 
 /**
  * Completion provider for JavaScript.
- * 
+ *
  * @author Robert Futrell
  * @version 1.0
  */
@@ -37,7 +37,7 @@ public class JavaScriptCompletionProvider extends
 	 * The provider used for source code, kept here since it's used so much.
 	 */
 	private SourceCompletionProvider sourceProvider;
-	
+
 	private JavaScriptLanguageSupport languageSupport;
 
 
@@ -54,7 +54,7 @@ public class JavaScriptCompletionProvider extends
 		this.sourceProvider = (SourceCompletionProvider) getDefaultCompletionProvider();
 		this.sourceProvider.setJarManager(jarManager);
 		this.languageSupport = ls;
-		
+
 		setShorthandCompletionCache(new JavaScriptShorthandCompletionCache(
 				sourceProvider, new DefaultCompletionProvider(), ls.isXmlAvailable()));
 		sourceProvider.setParent(this);
@@ -65,7 +65,7 @@ public class JavaScriptCompletionProvider extends
 
 	/**
 	 * Returns the AST for the JavaScript in the editor.
-	 * 
+	 *
 	 * @return The AST.
 	 */
 	public synchronized AstRoot getASTRoot() {
@@ -77,16 +77,16 @@ public class JavaScriptCompletionProvider extends
 		return ((SourceCompletionProvider) getDefaultCompletionProvider())
 				.getJarManager();
 	}
-	
+
 	public JavaScriptLanguageSupport getLanguageSupport() {
 		return languageSupport;
 	}
-	
+
 	public SourceCompletionProvider getProvider()
 	{
 		return sourceProvider;
 	}
-	
+
 	/**
 	 * Set shorthand completion cache
 	 */
@@ -96,7 +96,7 @@ public class JavaScriptCompletionProvider extends
 		//reset comment completions too
 		setCommentCompletions(shorthandCache);
 	}
-	
+
 	/**
 	 * load the comment completions from the shorthand cache
 	 * @param shorthandCache
@@ -114,14 +114,14 @@ public class JavaScriptCompletionProvider extends
 
 	/**
 	 * Sets the AST for the JavaScript in this editor.
-	 * 
+	 *
 	 * @param root The AST.
 	 */
 	public synchronized void setASTRoot(AstRoot root) {
 		this.astRoot = root;
 	}
 
-	
+
 	protected synchronized void reparseDocument(int offset) {
 		sourceProvider.parseDocument(offset);
 	}

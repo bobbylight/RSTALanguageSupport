@@ -18,7 +18,7 @@ public abstract class History implements HistoryFunctions {
 
 	/**
      * <b>property constructor</b>
-     * 
+     *
      * @type Function
      * @memberOf Object
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction Function
@@ -26,10 +26,10 @@ public abstract class History implements HistoryFunctions {
      * @since Level 2 Document Object Model Core Definition.
      */
     protected JSFunction constructor;
-    
+
     /**
      * <b>property prototype</b>
-     * 
+     *
      * @type History
      * @memberOf History
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSObject Object
@@ -37,13 +37,13 @@ public abstract class History implements HistoryFunctions {
      * @since Level 2 Document Object Model Core Definition.
      */
     public History prototype;
-	
+
 	/**
 	 * Property length
 	 * @type Number
 	 * @memberOf History
 	 */
 	public JSNumber length;
-	
-	
+
+
 }

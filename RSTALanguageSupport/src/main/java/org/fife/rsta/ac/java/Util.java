@@ -31,7 +31,7 @@ import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
  * @author Robert Futrell
  * @version 1.0
  */
-public class Util {
+public final class Util {
 
 	/**
 	 * Optional leading text for doc comment lines (except the first line) that
@@ -43,7 +43,7 @@ public class Util {
 	/**
 	 * Pattern matching a link in a "<code>@link</code>" tag.  This should
 	 * match the following:
-	 * 
+	 *
 	 * <ul>
 	 *    <li>ClassName</li>
 	 *    <li>fully.qualified.ClassName</li>
@@ -94,10 +94,14 @@ public class Util {
 		StringBuilder author = null;
 		StringBuilder version = null;
 		StringBuilder unknowns = null;
-		boolean inParams = false, inThrows = false,
-				inReturns = false, inSeeAlso = false,
-				inSince = false, inAuthor = false,
-				inVersion = false, inUnknowns = false;
+		boolean inParams = false;
+		boolean inThrows = false;
+		boolean inReturns = false;
+		boolean inSeeAlso = false;
+		boolean inSince = false;
+		boolean inAuthor = false;
+		boolean inVersion = false;
+		boolean inUnknowns = false;
 
 		String[] st = tail.toString().split("[ \t\r\n\f]+");
 		String token;
@@ -389,7 +393,8 @@ System.out.println("Unmatched linkContent: " + linkContent);
 	 * <pre>
 	 * This is a
 	 * pre block
-	 *</pre>
+	 * </pre>
+	 *
 	 * @param dc The documentation comment.
 	 * @return An HTML version of the comment.
 	 */
@@ -458,12 +463,12 @@ System.out.println("Unmatched linkContent: " + linkContent);
 		return html.toString();
 
 	}
-	
-	public static String forXML(String aText){
+
+	private static String forXML(String aText) {
 	    final StringBuilder result = new StringBuilder();
 	    final StringCharacterIterator iterator = new StringCharacterIterator(aText);
 	    char character =  iterator.current();
-	    while (character != CharacterIterator.DONE ){
+	    while (character != CharacterIterator.DONE) {
 	      if (character == '<') {
 	        result.append("&lt;");
 	      }
@@ -553,7 +558,7 @@ System.out.println("Unmatched linkContent: " + linkContent);
 
 	/**
 	 * Tidies up a link's display text for use in a &lt;a&gt; tag.
-	 * 
+	 *
 	 * @param text The text (a class, method, or field signature).
 	 * @return The display value for the signature.
 	 */
@@ -611,7 +616,7 @@ System.out.println("Unmatched linkContent: " + linkContent);
 	 * @param clazz The class name.
 	 * @return The unqualified version of the name.
 	 */
-	public static final String getUnqualified(String clazz) {
+	public static String getUnqualified(String clazz) {
 		int dot = clazz.lastIndexOf('.');
 		if (dot>-1) {
 			clazz = clazz.substring(dot+1);
@@ -650,7 +655,7 @@ System.out.println("Unmatched linkContent: " + linkContent);
 	 * @return Whether the string is fully qualified.
 	 * @see #getUnqualified(String)
 	 */
-	public static final boolean isFullyQualified(String str) {
+	public static boolean isFullyQualified(String str) {
 		return str.indexOf('.')>-1;
 	}
 
@@ -709,7 +714,7 @@ System.out.println("Unmatched linkContent: " + linkContent);
 	 * @return The string, split on the character (e.g. '<tt>/</tt>' or
 	 *         '<tt>.</tt>').
 	 */
-	public static final String[] splitOnChar(String str, int ch) {
+	public static String[] splitOnChar(String str, int ch) {
 		List<String> list = new ArrayList<>(3);
 		int pos;
 		int old = 0;

@@ -39,7 +39,7 @@ import org.fife.ui.rsyntaxtextarea.TokenImpl;
  * classes on the classpath, etc.).  So naturally, there is a lot of room for
  * improvement. IDE-style applications, for example, would want to check
  * for members in super-classes, and open their source on click events.
- * 
+ *
  * @author Robert Futrell
  * @version 1.0
  */
@@ -153,7 +153,7 @@ class JavaLinkGenerator implements LinkGenerator {
 
 						Iterator<Member> i = td.getMemberIterator();
 						while (i.hasNext()) {
-	
+
 							Method m = null; // Nasty!  Clean this code up
 							Member member = i.next();
 							CodeBlock block = null;
@@ -196,7 +196,7 @@ class JavaLinkGenerator implements LinkGenerator {
 								}
 								break; // No other code block will contain offs
 							}
-	
+
 						}
 					}
 
@@ -245,7 +245,7 @@ class JavaLinkGenerator implements LinkGenerator {
 	 * The result of checking whether a region of code under the mouse is
 	 * <em>possibly</em> link-able.
 	 */
-	private static class IsLinkableCheckResult {
+	private static final class IsLinkableCheckResult {
 
 		/**
 		 * The token under the mouse position.

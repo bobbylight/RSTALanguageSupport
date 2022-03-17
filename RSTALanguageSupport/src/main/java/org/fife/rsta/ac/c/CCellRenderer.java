@@ -34,15 +34,12 @@ class CCellRenderer extends CompletionCellRenderer {
 	/**
 	 * Constructor.
 	 */
-	public CCellRenderer() {
+	CCellRenderer() {
 		variableIcon = getIcon("var.png");
 		functionIcon = getIcon("function.png");
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void prepareForOtherCompletion(JList list,
 			Completion c, int index, boolean selected, boolean hasFocus) {
@@ -51,9 +48,6 @@ class CCellRenderer extends CompletionCellRenderer {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void prepareForVariableCompletion(JList list,
 			VariableCompletion vc, int index, boolean selected,
@@ -64,9 +58,6 @@ class CCellRenderer extends CompletionCellRenderer {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void prepareForFunctionCompletion(JList list,
 			FunctionCompletion fc, int index, boolean selected,

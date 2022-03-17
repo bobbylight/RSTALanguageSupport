@@ -32,7 +32,7 @@ import org.fife.ui.rsyntaxtextarea.Token;
 
 /**
  * A completion provider for Perl.  It provides:
- * 
+ *
  * <ul>
  *    <li>Auto-completion for standard Perl 5.10 functions (read from an
  *        XML file).</li>
@@ -52,9 +52,6 @@ public class PerlCompletionProvider extends CCompletionProvider {
 	private boolean useParensWithFunctions;
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void addShorthandCompletions(DefaultCompletionProvider codeCP) {
 		// Add nothing for now.
@@ -76,9 +73,6 @@ public class PerlCompletionProvider extends CCompletionProvider {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected CompletionProvider createCodeCompletionProvider() {
 		DefaultCompletionProvider cp = new PerlCodeCompletionProvider(this);
@@ -89,18 +83,12 @@ public class PerlCompletionProvider extends CCompletionProvider {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected CompletionProvider createStringCompletionProvider() {
         return new DefaultCompletionProvider();
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected List<Completion> getCompletionsImpl(JTextComponent comp) {
 
@@ -214,10 +202,6 @@ private CaseInsensitiveComparator comparator = new CaseInsensitiveComparator();
 	}
 
 
-
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected String getXmlResource() {
 		return "data/perl5.xml";
@@ -227,8 +211,8 @@ private CaseInsensitiveComparator comparator = new CaseInsensitiveComparator();
 	/**
 	 * Recursively adds code blocks, remembering variables in them.
 	 *
-	 * @param scanner
-	 * @param block
+	 * @param scanner The scanner to read from.
+	 * @param block The code block update.
 	 */
 	private void parseCodeBlock(TokenScanner scanner, CodeBlock block) {
 		Token t = scanner.next();

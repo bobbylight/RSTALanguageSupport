@@ -276,7 +276,7 @@ public class GoToMemberWindow extends JWindow {
 		public void windowLostFocus(WindowEvent e) {
 			dispose();
 		}
-		
+
 	}
 
 
@@ -301,7 +301,7 @@ public class GoToMemberWindow extends JWindow {
 			g.setColor(UIManager.getColor("controlDkShadow"));
 			g.drawLine(x,y+h-1, x+w-1,y+h-1);
 		}
-		
+
 	}
 
 

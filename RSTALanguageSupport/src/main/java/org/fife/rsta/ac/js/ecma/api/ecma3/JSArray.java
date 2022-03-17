@@ -10,7 +10,7 @@ public abstract class JSArray implements JSArrayFunctions {
 
 	/**
 	 * Object Array()
-	 * 
+	 *
 	 * @constructor
 	 * @extends Object
 	 * @since Standard ECMA-262 3rd. Edition
@@ -19,10 +19,10 @@ public abstract class JSArray implements JSArrayFunctions {
 	public JSArray() {
 
 	}
-	
+
 	/**
 	 * Object Array(size)
-	 * 
+	 *
 	 * @constructor
 	 * @extends Object
 	 * @param size The desired number of elements in the array. The returned value has its <b>length</b> field set to <b><i>size</b></i>
@@ -32,10 +32,10 @@ public abstract class JSArray implements JSArrayFunctions {
 	public JSArray(JSNumber size) {
 
 	}
-	
+
 	/**
 	 * Object Array(element0, ... elementn)
-	 * 
+	 *
 	 * @constructor
 	 * @extends Object
 	 * @param element0  An argument list of two or more values. The <b>length</b> field set to the number of arguments.
@@ -49,7 +49,7 @@ public abstract class JSArray implements JSArrayFunctions {
 
 	/**
 	 * <b>property length</b>
-	 * 
+	 *
 	 * @type Number
 	 * @memberOf Array
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
@@ -57,10 +57,10 @@ public abstract class JSArray implements JSArrayFunctions {
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
 	public JSNumber length;
-	
+
 	/**
     * <b>property prototype</b>
-    * 
+    *
     * @type Array
     * @memberOf Array
     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSArray Array
@@ -68,10 +68,10 @@ public abstract class JSArray implements JSArrayFunctions {
     * @since Level 2 Document Object Model Core Definition.
     */
    public JSArray prototype;
-   
+
    /**
     * <b>property constructor</b>
-    * 
+    *
     * @type Function
     * @memberOf Array
     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction Function

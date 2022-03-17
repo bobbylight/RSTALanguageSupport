@@ -31,7 +31,7 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 	 */
 	@Override
 	public LinkGeneratorResult isLinkAtOffset(RSyntaxTextArea textArea, int offs) {
-		
+
 		JavaScriptDeclaration dec = null;
 		IsLinkableCheckResult result = checkForLinkableToken(textArea, offs);
 		if (result != null) {
@@ -41,7 +41,7 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 			String name = t.getLexeme();
 			if(name != null && name.length() > 0)
 			{
-				//only re-parse the document if there is a character that could potentially be a variable or function 
+				//only re-parse the document if there is a character that could potentially be a variable or function
 				if(name.length() > 1 || (name.length() == 1 && Character.isJavaIdentifierPart(name.charAt(0))))
 				{
 					language.reparseDocument(offs);
@@ -51,7 +51,7 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 			VariableResolver variableResolver = parser.getVariablesAndFunctions();
 
 			if (variableResolver != null) {
-				
+
 				if (!function) { // must be a variable
 					dec = variableResolver.findDeclaration(name, offs, findLocal, findPreprocessed, findSystem);
 				}
@@ -72,9 +72,9 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 		}
 		return null;
 	}
-	
+
 	/**
-	 * @return LinkGeneratorResult based on the JavaScriptDeclaraton and the position 
+	 * @return LinkGeneratorResult based on the JavaScriptDeclaraton and the position
 	 */
 	protected LinkGeneratorResult createSelectedRegionResult(RSyntaxTextArea textArea, Token t, JavaScriptDeclaration dec) {
 		if(dec.getTypeDeclarationOptions() != null && !dec.getTypeDeclarationOptions().isSupportsLinks()) {
@@ -82,21 +82,21 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 		}
 		return new SelectRegionLinkGeneratorResult(textArea, t.getOffset(), dec.getStartOffSet(), dec.getEndOffset());
 	}
-	
+
 	/**
 	 * @param find flag to state whether to look in the RSTA editing script for variable/function completions
 	 */
 	public void setFindLocal(boolean find) {
 		this.findLocal = find;
 	}
-	
+
 	/**
 	 * @param find flag to state whether to look in the pre-processed scripts for variable/function completions
 	 */
 	public void setFindPreprocessed(boolean find) {
 		this.findPreprocessed = find;
 	}
-	
+
 	/**
 	 * @param find flag to state whether to look in the system scripts for variable/function completions
 	 */
@@ -110,20 +110,20 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 	 * e.g.
 	 * Token may contain the function:
 	 * addTwoNumbers(num1, num2);
-	 * 
+	 *
 	 * The return result will be:
 	 * addTwoNumbers(p,p);
-	 * 
+	 *
 	 * @return converted function name to variable resolver lookup name
 	 */
 	private String getLookupNameForFunction(RSyntaxTextArea textArea, int offs, String name) {
-		
+
 		StringBuilder temp = new StringBuilder();
 		if (offs>=0) {
-			
+
 			try {
 				int line = textArea.getLineOfOffset(offs);
-				
+
 				Token first = wrapToken(textArea.getTokenListForLine(line));
 				for (Token t=first; t!=null && t.isPaintable(); t=wrapToken(t.getNextToken())) {
 					if (t.containsPosition(offs)) {
@@ -139,7 +139,7 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 				ble.printStackTrace(); // Never happens
 			}
 		}
-		
+
 		//now replace all the variables with lookup 'p'
 		String function = temp.toString().replaceAll("\\s", ""); //remove all whitespace
 		boolean params = false;
@@ -147,45 +147,45 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 		StringBuilder sb = new StringBuilder();
 		for(int i=0; i<function.length(); i++) {
 			char ch = function.charAt(i);
-			
+
 			if(ch == '(') {
 				params = true;
 				count = 0;
 				sb.append(ch);
 			}
-			
+
 			else if(ch == ')') {
 				sb.append(ch);
 				break;
 			}
-			
+
 			else if(ch == ',') {
 				count = 0;
 				sb.append(ch);
 				continue;
 			}
-			
+
 			else if(params && count == 0) {
 				sb.append('p');
 				count++;
 			}
-			
+
 			else if(!params) {
 				sb.append(ch);
 			}
-			
-			
+
+
 		}
-		
+
 		return sb.toString();
-		
+
 	}
-	
-	
+
+
 	/**
 	 * Checks if the token at the specified offset is possibly a "click-able"
 	 * region.
-	 * 
+	 *
 	 * @param textArea The text area.
 	 * @param offs The offset, presumably at the mouse position.
 	 * @return A result object.
@@ -251,7 +251,7 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 	 * Due to the Tokens being reused, this can cause problems when finding the
 	 * next token associated with a token.  Wrap the tokens to stop this
 	 * problem.
-	 * 
+	 *
 	 * @param token to wrap
 	 * @return copy of the original token
 	 */
@@ -260,7 +260,7 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 			return new TokenImpl(token);
 		return token;
 	}
-	
+
 	/**
 	 * @return JavaScriptLanguage support
 	 */

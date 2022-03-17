@@ -23,12 +23,12 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
  */
 public interface LanguageSupport {
 
-//	/**
-//	 * Client property set on <code>RSyntaxTextArea</code>s referencing the
-//	 * <code>AutoCompletion</code> instance providing its completion choices.
-//	 */
-//	static final String PROPERTY_AUTO_COMPLETION	=
-//										"org.fife.rsta.ac.AutoCompletion";
+	///**
+	// * Client property set on <code>RSyntaxTextArea</code>s referencing the
+	// * <code>AutoCompletion</code> instance providing its completion choices.
+	// */
+	//static final String PROPERTY_AUTO_COMPLETION	=
+	//									"org.fife.rsta.ac.AutoCompletion";
 
 	/**
 	 * Client property set on <code>RSyntaxTextArea</code>s referencing the
@@ -44,7 +44,7 @@ public interface LanguageSupport {
 	 * code completion popup should automatically appear (if applicable).
 	 * This parameter is only honored if {@link #isAutoActivationEnabled()}
 	 * returns <code>true</code>.
-	 * 
+	 *
 	 * @return The delay, in milliseconds.
 	 * @see #setAutoActivationDelay(int)
 	 */

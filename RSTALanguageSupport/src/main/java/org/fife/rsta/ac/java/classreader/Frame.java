@@ -49,12 +49,12 @@ public class Frame {
 		// Name the passed-in local vars by their types. longs and doubles
 		// take up two slots.
 		String[] paramTypes = mi.getParameterTypes();
-		for (int param_i=0; param_i<paramTypes.length; param_i++) {
-			String type = paramTypes[param_i];
+		for (int paramI = 0; paramI <paramTypes.length; paramI++) {
+			String type = paramTypes[paramI];
 			if (type.indexOf('.')>-1) { // Class types.
 				type = type.substring(type.lastIndexOf('.')+1);
 			}
-			String name = "localVar_" + type + "_" + param_i;
+			String name = "localVar_" + type + "_" + paramI;
 			localVars[i] = new LocalVarInfo(name, true);
 			i++;
 			if ("long".equals(type) || "double".equals(type)) {
@@ -69,6 +69,13 @@ public class Frame {
 	}
 
 
+	/**
+	 * Returns the specified local variable.
+	 *
+	 * @param index The index of the local variable.
+	 * @param defaultType The default type.
+	 * @return The local variable.
+	 */
 	public LocalVarInfo getLocalVar(int index, String defaultType) {
 		LocalVarInfo var = localVars[index];
 		if (var==null) {
@@ -83,16 +90,31 @@ public class Frame {
 	}
 
 
+	/**
+	 * Pops a value from this frame.
+	 *
+	 * @return The value.
+	 * @see #push(String)
+	 */
 	public String pop() {
 		return operandStack.pop();
 	}
 
 
+	/**
+	 * Pushes a value onto this frame.
+	 *
+	 * @param value The value to push.
+	 * @see #pop()
+	 */
 	public void push(String value) {
 		operandStack.push(value);
 	}
 
 
+	/**
+	 * Information about a local variable.
+	 */
 	public static class LocalVarInfo {
 
 		private String value;

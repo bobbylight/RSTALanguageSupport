@@ -43,7 +43,7 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxUtilities;
  * You should only add instances of {@link SourceTreeNode} or subclasses to
  * this tree.  You should also provide a no-argument constructor if you wish to
  * use your subclass in {@link GoToMemberAction}.
- * 
+ *
  * @author Robert Futrell
  * @version 1.0
  * @see SourceTreeNode

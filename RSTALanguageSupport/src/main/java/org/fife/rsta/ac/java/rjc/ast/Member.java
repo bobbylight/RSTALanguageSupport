@@ -23,6 +23,11 @@ import org.fife.rsta.ac.java.rjc.lang.Type;
 public interface Member extends ASTNode {
 
 
+	/**
+	 * Returns the doc comment for this member.
+	 *
+	 * @return This member's doc comment.
+	 */
 	String getDocComment();
 
 
@@ -34,6 +39,11 @@ public interface Member extends ASTNode {
 	int getNameStartOffset();
 
 
+	/**
+	 * Returns the modifiers of this member.
+	 *
+	 * @return The modifiers.
+	 */
 	Modifiers getModifiers();
 
 
@@ -41,12 +51,28 @@ public interface Member extends ASTNode {
 	String getName();
 
 
+	/**
+	 * Returns the parent type declaration of this member.
+	 *
+	 * @return The parent type declaration.
+	 * @see #setParentTypeDeclaration(TypeDeclaration)
+	 */
 	TypeDeclaration getParentTypeDeclaration();
 
 
+	/**
+	 * Returns the type of this member.
+	 *
+	 * @return This member's type.
+	 */
 	Type getType();
 
 
+	/**
+	 * Returns whether this member is deprecated.
+	 *
+	 * @return Whether this member is deprecated.
+	 */
 	boolean isDeprecated();
 
 
@@ -60,6 +86,12 @@ public interface Member extends ASTNode {
 	boolean isStatic();
 
 
+	/**
+	 * Sets the parent type declaration of this member.
+	 *
+	 * @param dec The parent type declaration.
+	 * @see #getParentTypeDeclaration()
+	 */
 	void setParentTypeDeclaration(TypeDeclaration dec);
 
 

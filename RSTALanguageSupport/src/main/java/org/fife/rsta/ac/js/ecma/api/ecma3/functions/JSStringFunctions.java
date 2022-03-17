@@ -7,10 +7,10 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.JSString;
 
 
 public interface JSStringFunctions extends JSObjectFunctions {
-	
+
 	/**
      * <b>function charAt(position)</b> get the nth character from a string.
-     * 
+     *
      * @memberOf String
      * @param position The index of the character that should be returned from <b><i>string</i></b>.
      * @returns The <i>nth</i> character of <b><i>string</i></b>.
@@ -25,7 +25,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
 
     /**
      * <b>function charCodeAt(position)</b> get the nth character code from a string.
-     * 
+     *
      * @memberOf String
      * @param position The index of the character whose encoding is to be returned.
      * @returns The Unicode encoding of the i>nth</i> character within <b><i>string</i></b>.
@@ -38,7 +38,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
 
     /**
      * <b>function concat(value1, ...)</b> concatenate strings
-     * 
+     *
      * @memberOf String
      * @param value one or more values to be concatenated to <b><i>string</i></b>.
      * @returns A new string that results from concatenating each argument to a <b><i>string</i></b>.
@@ -48,10 +48,10 @@ public interface JSStringFunctions extends JSObjectFunctions {
      */
     JSString concat(JSString value);
 
-    
+
     /**
      * <b>function indexOf(searchString, startPosition)</b> search a string.
-     * 
+     *
      * @memberOf String
      * @param searchString The substring to be search within <b><i>string</i></b>.
      * @param startPosition Optional start index.
@@ -62,10 +62,10 @@ public interface JSStringFunctions extends JSObjectFunctions {
      */
     JSNumber indexOf(JSString searchString, JSNumber startPosition);
 
-    
+
     /**
      * <b>function lastIndexOf(searchString, startPosition)</b> search a string backward.
-     * 
+     *
      * @memberOf String
      * @param searchString The substring to be search within <b><i>string</i></b>.
      * @param startPosition Optional start index.
@@ -83,9 +83,9 @@ public interface JSStringFunctions extends JSObjectFunctions {
 	 * <pre>
 	 * var string;//array of string initialised somewhere
 	 * strings.sort(function(a,b){return a.localCompare(b);});
-	 * </pre> 
+	 * </pre>
      * @memberOf String
-     * @param otherString A <b><i>string</i></b> to be compared, in a locale-sensitive fashion, with <b><i>string</i></b>. 
+     * @param otherString A <b><i>string</i></b> to be compared, in a locale-sensitive fashion, with <b><i>string</i></b>.
      * @returns A number that indicates the result of the comparison.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
@@ -95,9 +95,9 @@ public interface JSStringFunctions extends JSObjectFunctions {
 
     /**
      * <b>function match(regexp)</b> find one or more regular-expression matches
-     * 
+     *
      * @memberOf String
-     * @param regexp A RegExp object that specifies the pattern to be matched. 
+     * @param regexp A RegExp object that specifies the pattern to be matched.
      * @returns An Array containing results of the match.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
@@ -107,9 +107,9 @@ public interface JSStringFunctions extends JSObjectFunctions {
 
     /**
      * <b>function replace(regexp, replaceValue)</b> replace substring(s) matching a regular expression.
-     * 
+     *
      * @memberOf String
-     * @param regexp A RegExp object that specifies the pattern to be replaced. 
+     * @param regexp A RegExp object that specifies the pattern to be replaced.
      * @param replaceValue A string that specifies the replacement text.
      * @returns {String}
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
@@ -120,9 +120,9 @@ public interface JSStringFunctions extends JSObjectFunctions {
 
     /**
      * <b>function search(regexp)</b> search for a regular expression
-     * 
+     *
      * @memberOf String
-     * @param regexp A RegExp object that specifies the pattern to be searched.  
+     * @param regexp A RegExp object that specifies the pattern to be searched.
      * @returns The position of the start of the first substring of <b><i>string</i></b>. -1 if no match is found.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
@@ -141,7 +141,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
 	 * s.slice(4); //returns "efg"
 	 * s.slice(3, -1); //returns "def"
 	 * s.slice(3,-2); //returns "de"
-	 * </pre> 
+	 * </pre>
      * @memberOf String
      * @param start The start index where the slice if to begin.
      * @param end Optional end index where the slice is to end.
@@ -173,10 +173,10 @@ public interface JSStringFunctions extends JSObjectFunctions {
 
     /**
      * <b>function substring(from, to)</b> return a substring of a string.
-     * 
+     *
      * @memberOf String
      * @param from The index where to start the extraction. First character is at index 0
-     * @param to Optional. The index where to stop the extraction. If omitted, it extracts the rest of the string 
+     * @param to Optional. The index where to stop the extraction. If omitted, it extracts the rest of the string
      * @returns A new string of length <b><i>from-to</i></b> which contains a substring of <b><i>string</i></b>.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @since Standard ECMA-262 3rd. Edition
@@ -186,7 +186,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
 
     /**
      * <b>function toLowerCase()</b> Converts a string to lower case.
-     * 
+     *
      * @memberOf String
      * @returns A copy of <b><i>string</i></b> converted to lower case.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
@@ -200,11 +200,11 @@ public interface JSStringFunctions extends JSObjectFunctions {
 
     /**
      * <b>function toLocaleLowerCase()</b> Converts a string to lower case.
-     * 
+     *
      * @memberOf String
      * @returns A copy of <b><i>string</i></b> converted to lower case a locale-specific way.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
-     * @see #toLocaleUpperCase() 
+     * @see #toLocaleUpperCase()
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
@@ -212,7 +212,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
 
     /**
      * <b>function toUpperCase()</b> Converts a string to upper case.
-     * 
+     *
      * @memberOf String
      * @returns A copy of <b><i>string</i></b> converted to upper case.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
@@ -223,7 +223,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
 
     /**
      * <b>function toLocaleUpperCase()</b> Converts a string to upper case.
-     * 
+     *
      * @memberOf String
      * @returns A copy of <b><i>string</i></b> converted to upper case a locale-specific way.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String

@@ -27,8 +27,8 @@ public abstract class AbstractJavaSourceCompletion extends BasicCompletion
 									implements JavaSourceCompletion {
 
 
-	public AbstractJavaSourceCompletion(CompletionProvider provider,
-										String replacementText) {
+	protected AbstractJavaSourceCompletion(CompletionProvider provider,
+										   String replacementText) {
 		super(provider, replacementText);
 	}
 

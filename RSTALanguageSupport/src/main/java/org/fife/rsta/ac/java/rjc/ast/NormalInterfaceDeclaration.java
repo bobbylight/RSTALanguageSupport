@@ -19,8 +19,8 @@ import org.fife.rsta.ac.java.rjc.lexer.Scanner;
 
 
 /**
- * An interface declaration:
- * 
+ * An interface declaration. Its structure is as follows:
+ *
  * <pre>
  * NormalInterfaceDeclaration:
  *    'interface' Identifier [TypeParameters] ['extends' TypeList] InterfaceBody
@@ -40,6 +40,11 @@ public class NormalInterfaceDeclaration extends AbstractTypeDeclarationNode {
 	}
 
 
+	/**
+	 * Adds a type this interface extends.
+	 *
+	 * @param extended The extended type.
+	 */
 	public void addExtended(Type extended) {
 		extendedList.add(extended);
 	}

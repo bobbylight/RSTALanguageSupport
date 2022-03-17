@@ -13,9 +13,15 @@ package org.fife.rsta.ac.java.rjc.ast;
 import org.fife.rsta.ac.java.rjc.lexer.Scanner;
 
 
+/**
+ * Represents an enum declaration.
+ *
+ * @author Robert Futrell
+ * @version 1.0
+ */
 public class EnumDeclaration extends AbstractTypeDeclarationNode {
 
-//	private EnumBody enumBody;
+	//private EnumBody enumBody;
 
 
 	public EnumDeclaration(Scanner s, int offs, String name) {
@@ -29,9 +35,9 @@ public class EnumDeclaration extends AbstractTypeDeclarationNode {
 	}
 
 
-//	public void setEnumBody(EnumBody enumBody) {
-//		this.enumBody = enumBody;
-//	}
+	//public void setEnumBody(EnumBody enumBody) {
+	//	this.enumBody = enumBody;
+	//}
 
 
 }

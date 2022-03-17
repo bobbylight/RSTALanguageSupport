@@ -28,7 +28,8 @@ public class ConstantStringInfo extends ConstantPoolInfo {
 	/**
 	 * Constructor.
 	 *
-	 * @param stringIndex
+	 * @param cf The class file being parsed.
+	 * @param stringIndex The string index.
 	 */
 	public ConstantStringInfo(ClassFile cf, int stringIndex) {
 		super(CONSTANT_String);
@@ -49,7 +50,7 @@ public class ConstantStringInfo extends ConstantPoolInfo {
 	 */
 	public String getStringValue() {
 		return '"' + cf.getUtf8ValueFromConstantPool(getStringIndex()) + '"';
-				
+
 	}
 
 

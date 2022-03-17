@@ -10,7 +10,7 @@ public class JSR223JavaScriptTypesFactory extends JavaScriptTypesFactory {
 	{
 		super(typesFactory);
 	}
-	
+
 	@Override
 	public JavaScriptType makeJavaScriptType(TypeDeclaration type) {
 		return new JSR223Type(type);

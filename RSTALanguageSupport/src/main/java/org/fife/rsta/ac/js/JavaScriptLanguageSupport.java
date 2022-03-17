@@ -54,7 +54,7 @@ import org.mozilla.javascript.ast.NodeVisitor;
 /**
  * Language support for JavaScript. This requires Rhino, which is included with
  * this library.
- * 
+ *
  * @author Robert Futrell
  * @version 1.0
  * @see JavaScriptOutlineTree
@@ -92,7 +92,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 		setErrorParser(JsErrorParser.RHINO);
 //setErrorParser(JsErrorParser.JSHINT);
 //setJsHintRCFile(new File("D:/users/robert/.jshintrc"));
-		setECMAVersion(null, jarManager); //load default ecma 
+		setECMAVersion(null, jarManager); //load default ecma
 		setDefaultCompletionCellRenderer(new JavaScriptCellRenderer());
 		setAutoActivationEnabled(true);
 		setParameterAssistanceEnabled(true);
@@ -109,7 +109,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	protected JarManager createJarManager() {
         return new JarManager();
 	}
-	
+
 	public void setECMAVersion(String version, JarManager jarManager) {
 		//load classes
 		try {
@@ -131,7 +131,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	 * Creates the provider to use for an RSTA instance editing JavaScript.
 	 * Subclasses can override to return custom subclasses of
 	 * <code>JavaScriptCompletionProvider</code>.
-	 * 
+	 *
 	 * @return The provider.
 	 */
 	protected JavaScriptCompletionProvider createJavaScriptCompletionProvider() {
@@ -250,7 +250,7 @@ return DEFAULT;
 	/**
 	 * Returns the JS parser running on a text area with this JavaScript
 	 * language support installed.
-	 * 
+	 *
 	 * @param textArea The text area.
 	 * @return The JS parser. This will be <code>null</code> if the text area
 	 *         does not have this <code>JavaScriptLanguageSupport</code>
@@ -294,7 +294,7 @@ return DEFAULT;
 		parserToInfoMap.put(parser, info);
 
 		installKeyboardShortcuts(textArea);
-		
+
 		// Set XML on JavascriptTokenMaker
 		JavaScriptTokenMaker.setE4xSupported(isXmlAvailable());
 
@@ -304,7 +304,7 @@ return DEFAULT;
 
 	/**
 	 * Installs extra keyboard shortcuts supported by this language support.
-	 * 
+	 *
 	 * @param textArea The text area to install the shortcuts into.
 	 */
 	private void installKeyboardShortcuts(RSyntaxTextArea textArea) {
@@ -324,7 +324,7 @@ return DEFAULT;
 	 * Returns whether strict mode (more warnings are detected) is enabled.
      * This parameter is ignored if the error parser is set to
      * {@link JsErrorParser#RHINO}.
-	 * 
+	 *
 	 * @return Whether strict mode is enabled.
 	 * @see #setStrictMode(boolean)
 	 */
@@ -337,7 +337,7 @@ return DEFAULT;
 	 * Returns whether E4X is supported in parsed JavaScript.
      * This parameter is ignored if the error parser is set to
      * {@link JsErrorParser#RHINO}.
-	 * 
+	 *
 	 * @return Whether E4X is supported.
 	 * @see #setXmlAvailable(boolean)
 	 */
@@ -350,7 +350,7 @@ return DEFAULT;
      * Returns whether this JavaScript support supports client/browser objects.
      * This parameter is ignored if the error parser is set to
      * {@link JsErrorParser#RHINO}.
-     * 
+     *
      * @return Whether the JavaScript support supports client/browser objects.
      * @see #setClient(boolean)
      */
@@ -375,7 +375,7 @@ return DEFAULT;
 	public void setClient(boolean client) {
 		this.client = client;
 	}
-	
+
 
 	/**
 	 * Sets the location of the <code>.jshintrc</code> file to use if using
@@ -444,7 +444,7 @@ return DEFAULT;
 	 * Sets whether strict mode (more warnings are detected) is enabled.
      * This parameter is ignored if the error parser is set to
      * {@link JsErrorParser#RHINO}.
-	 * 
+	 *
 	 * @param strict Whether strict mode is enabled.
 	 * @return Whether a new value was actually set for this property.
 	 * @see #isStrictMode()
@@ -462,7 +462,7 @@ return DEFAULT;
 	 * Sets whether E4X is supported in parsed JavaScript.
      * This parameter is ignored if the error parser is set to
      * {@link JsErrorParser#RHINO}.
-	 * 
+	 *
 	 * @param available Whether E4X is supported.
 	 * @return Whether a new value was actually set for this property.
 	 * @see #isXmlAvailable()
@@ -500,11 +500,11 @@ return DEFAULT;
 		uninstallKeyboardShortcuts(textArea);
 
 	}
-	
+
 
 	/**
 	 * Uninstalls any keyboard shortcuts specific to this language support.
-	 * 
+	 *
 	 * @param textArea The text area to uninstall the actions from.
 	 */
 	private void uninstallKeyboardShortcuts(RSyntaxTextArea textArea) {
@@ -528,7 +528,7 @@ return DEFAULT;
 	private static class Info implements PropertyChangeListener {
 
 		public JavaScriptCompletionProvider provider;
-		
+
 		// public JavaScriptParser parser;
 
 		public Info(JavaScriptCompletionProvider provider, JavaScriptParser parser) {
@@ -540,7 +540,7 @@ return DEFAULT;
 
 		/**
 		 * Called when a text area is re-parsed.
-		 * 
+		 *
 		 * @param e The event.
 		 */
 		@Override
@@ -575,7 +575,7 @@ return DEFAULT;
 		@Override
 		protected String getReplacementText(Completion c, Document doc,
 				int start, int len) {
-			
+
 			String replacement = super.getReplacementText(c, doc, start, len);
 			if(c instanceof JavaScriptShorthandCompletion)
 			{
@@ -586,7 +586,7 @@ return DEFAULT;
 					if (replacement.indexOf('\n')>-1) {
 						replacement = replacement.replaceAll("\n", "\n" + leadingWS);
 					}
-					
+
 				}
 				catch(BadLocationException ble){}
 			}

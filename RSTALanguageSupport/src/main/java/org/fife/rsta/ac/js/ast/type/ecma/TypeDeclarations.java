@@ -164,7 +164,7 @@ public abstract class TypeDeclarations {
 
 	/**
 	 * Add Javascript reverse lookup
-	 * 
+	 *
 	 * @param apiName Java API name
 	 * @param jsName Javascript name
 	 */
@@ -175,9 +175,9 @@ public abstract class TypeDeclarations {
 
 	/**
 	 * Removes declaration type from type cache
-	 * 
+	 *
 	 * @param name name of type declaration
-	 * 
+	 *
 	 */
 	public void removeType(String name) {
 		types.remove(name);
@@ -186,7 +186,7 @@ public abstract class TypeDeclarations {
 
 	/**
 	 * Returns whether the qualified name is a built-in JavaScript type
-	 * 
+	 *
 	 * @param td
 	 * @return
 	 */
@@ -197,7 +197,7 @@ public abstract class TypeDeclarations {
 
 
 	/**
-	 * 
+	 *
 	 * @param name
 	 * @return Lookup type declaration from name. If the
 	 *         <code>TypeDeclaration</code> cannot be found, then lookup using
@@ -218,7 +218,7 @@ public abstract class TypeDeclarations {
 
 	/**
 	 * Lookup the JavaScript name for a given name
-	 * 
+	 *
 	 * @param lookupName
 	 * @return check whether the name is wrapped in [] then return
 	 *         ArrayTypeDeclaration otherwise lookup from JavaScript Name cache
@@ -254,12 +254,12 @@ public abstract class TypeDeclarations {
 	public Set<JavaScriptObject> getJavaScriptObjects() {
 		return ecmaObjects;
 	}
-	
+
 	/**
 	 * Answers the question whether an object can be instantiated (i.e. has a constructor)
-	 * Note, only tests ECMA objects 
+	 * Note, only tests ECMA objects
 	 * @param name name of class to test
-	 * 
+	 *
 	 */
 	public boolean canECMAObjectBeInstantiated(String name)
 	{
@@ -272,7 +272,7 @@ public abstract class TypeDeclarations {
 				return jo.canBeInstantiated();
 			}
 		}
-		
+
 		return false;
 	}
 
@@ -300,17 +300,17 @@ public abstract class TypeDeclarations {
 		public boolean canBeInstantiated() {
 			return canBeInstantiated;
 		}
-		
+
 		@Override
 		public boolean equals(Object jsObj) {
 			if(jsObj == this)
 				return true;
-			
+
 			if(jsObj instanceof JavaScriptObject)
 			{
 				return ((JavaScriptObject) jsObj).getName().equals(getName());
 			}
-			
+
 			return false;
 		}
 
@@ -319,7 +319,7 @@ public abstract class TypeDeclarations {
 		public int hashCode() {
 			return name.hashCode();
 		}
-		
-		
+
+
 	}
 }

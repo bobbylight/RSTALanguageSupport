@@ -28,9 +28,9 @@ import org.fife.ui.rsyntaxtextarea.parser.ParseResult;
 
 /**
  * Parses Perl code in an <tt>RSyntaxTextArea</tt>.<p>
- * 
+ *
  * Please keep in mind that this class is a work-in-progress!
- * 
+ *
  * @author Robert Futrell
  * @version 0.6
  */

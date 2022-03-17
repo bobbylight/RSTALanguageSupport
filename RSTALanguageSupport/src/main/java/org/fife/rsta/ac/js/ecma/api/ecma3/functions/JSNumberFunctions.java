@@ -5,7 +5,7 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.JSString;
 
 
 public interface JSNumberFunctions extends JSObjectFunctions {
-	
+
 	/**
      * <b>function toFixed(fractionDigits)</b> format a number using fixed-point notation.
      * <p>
@@ -16,9 +16,9 @@ public interface JSNumberFunctions extends JSObjectFunctions {
 	 * n.toFixed(1); //returns 12345.7: note rounding up
 	 * n.toFixed(6); //returns 12345.678900: note zeros
 	 * (1.23e+20).toFixed(2); //returns 123000000000000000000.00
-	 * </pre> 
+	 * </pre>
      * @memberOf Number
-     * @param fractionDigits The number of digits to appear after the decimal point. If omitted it is treated as 0. 
+     * @param fractionDigits The number of digits to appear after the decimal point. If omitted it is treated as 0.
      * @returns A string representation of <b><i>number</i></b> that does not use exponential notation and has exactly the digits applied.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
      * @since Standard ECMA-262 3rd. Edition
@@ -36,7 +36,7 @@ public interface JSNumberFunctions extends JSObjectFunctions {
 	 * n.toExponential(5); //returns 1.23457e+4
 	 * n.toExponential(10); //returns 1.2345678900e+4
 	 * n.toExponential(); //returns 1.23456789e+4
-	 * </pre> 
+	 * </pre>
      * @memberOf Number
      * @param fractionDigits The number of digits that appear after the decimal point.
      * @returns a string representation of <b><i>number</i></b> in exponential notation.

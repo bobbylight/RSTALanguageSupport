@@ -17,19 +17,19 @@ public class JavaScriptFunctionType {
 	public static int CONVERSION_NONE = 999;
 	public static int CONVERSION_JS = 99;
 
-	public static Class<?> BooleanClass = Kit.classOrNull("java.lang.Boolean"), 
-							  ByteClass = Kit.classOrNull("java.lang.Byte"), 
-							  CharacterClass = Kit.classOrNull("java.lang.Character"), 
-							  ClassClass = Kit.classOrNull("java.lang.Class"), 
-							  DoubleClass = Kit.classOrNull("java.lang.Double"), 
-							  FloatClass = Kit.classOrNull("java.lang.Float"), 
-							  IntegerClass = Kit.classOrNull("java.lang.Integer"), 
-							  LongClass = Kit.classOrNull("java.lang.Long"), 
-							  NumberClass = Kit.classOrNull("java.lang.Number"), 
-							  ObjectClass = Kit.classOrNull("java.lang.Object"), 
-							  ShortClass = Kit.classOrNull("java.lang.Short"), 
-							  StringClass = Kit.classOrNull("java.lang.String"), 
-							  DateClass = Kit.classOrNull("java.util.Date"), 
+	public static Class<?> BooleanClass = Kit.classOrNull("java.lang.Boolean"),
+							  ByteClass = Kit.classOrNull("java.lang.Byte"),
+							  CharacterClass = Kit.classOrNull("java.lang.Character"),
+							  ClassClass = Kit.classOrNull("java.lang.Class"),
+							  DoubleClass = Kit.classOrNull("java.lang.Double"),
+							  FloatClass = Kit.classOrNull("java.lang.Float"),
+							  IntegerClass = Kit.classOrNull("java.lang.Integer"),
+							  LongClass = Kit.classOrNull("java.lang.Long"),
+							  NumberClass = Kit.classOrNull("java.lang.Number"),
+							  ObjectClass = Kit.classOrNull("java.lang.Object"),
+							  ShortClass = Kit.classOrNull("java.lang.Short"),
+							  StringClass = Kit.classOrNull("java.lang.String"),
+							  DateClass = Kit.classOrNull("java.util.Date"),
 							  JSBooleanClass = null,
 							  JSStringClass = null,
 							  JSNumberClass = null,
@@ -94,7 +94,7 @@ public class JavaScriptFunctionType {
 
 
 	/**
-	 * Compare this JavaScriptFunctionType with another and return a weight integer based on the parameters matching or 
+	 * Compare this JavaScriptFunctionType with another and return a weight integer based on the parameters matching or
 	 * whether the parameters are compatible.
 	 * @param compareType method to compare with this
 	 * @param provider SourceCompletionProvider
@@ -105,17 +105,17 @@ public class JavaScriptFunctionType {
 		if (!compareType.getName().equals(getName())) {
 			return CONVERSION_NONE;
 		}
-		
+
 		//args match?
 		boolean argsMatch = compareType.getArgumentCount() == getArgumentCount();
-		
+
 		//if Java type and args do not match... cannot match
 		if (!isJavaScriptType && !argsMatch) {
 			return CONVERSION_NONE;
 		} else if(isJavaScriptType && !argsMatch) { //is javascript type and args do not match, return higher compare number
 			return CONVERSION_JS;
 		}
-		
+
 		int weight = 0;
 		// check parameters
 		for (int i = 0; i < getArgumentCount(); i++) {
@@ -413,7 +413,7 @@ public class JavaScriptFunctionType {
 
 
 	/**
-	 * Converts JavaScript class name to integer code 
+	 * Converts JavaScript class name to integer code
 	 * @param clsName
 	 * @return
 	 * @throws ClassNotFoundException

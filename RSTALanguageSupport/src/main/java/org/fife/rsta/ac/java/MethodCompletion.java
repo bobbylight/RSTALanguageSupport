@@ -30,7 +30,7 @@ import org.fife.ui.autocomplete.FunctionCompletion;
 /**
  * A completion for a Java method.  This completion gets its information from
  * one of two sources:
- * 
+ *
  * <ul>
  *    <li>A {@link MethodInfo} instance, which is loaded by parsing a class
  *        file.  This is used when this completion represents a method found
@@ -67,10 +67,10 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 	 * Creates a completion for a method discovered when parsing a Java
 	 * source file.
 	 *
-	 * @param provider
+	 * @param provider The parent completion provider.
 	 * @param m Metadata about the method.
 	 */
-	public MethodCompletion(CompletionProvider provider, Method m) {
+	MethodCompletion(CompletionProvider provider, Method m) {
 
 		// NOTE: "void" might not be right - I think this might be constructors
 		super(provider, m.getName(), m.getType()==null ? "void" : m.getType().toString());
@@ -95,10 +95,10 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 	 * Creates a completion for a method discovered when parsing a compiled
 	 * class file.
 	 *
-	 * @param provider
+	 * @param provider The parent completion provider.
 	 * @param info Metadata about the method.
 	 */
-	public MethodCompletion(CompletionProvider provider, MethodInfo info) {
+	MethodCompletion(CompletionProvider provider, MethodInfo info) {
 
 		super(provider, info.getName(), info.getReturnTypeString(false));
 		setDefinedIn(info.getClassFile().getClassName(false));
@@ -157,7 +157,7 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 	public boolean equals(Object obj) {
 		return (obj instanceof MethodCompletion) &&
 			//((MethodCompletion)obj).getSignature().equals(getSignature());
-		((MethodCompletion)obj).getCompareString().equals(getCompareString());
+			((MethodCompletion)obj).getCompareString().equals(getCompareString());
 	}
 
 
@@ -199,7 +199,7 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 			for (int i=0; i<paramCount; i++) {
 				String type = getParam(i).getType();
 				sb.append(type);
-				if (i<paramCount-1) { 
+				if (i<paramCount-1) {
 					sb.append(',');
 				}
 			}
@@ -278,11 +278,11 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 	/**
 	 * Renders a member completion.
 	 *
-	 * @param mc
-	 * @param g
-	 * @param x
-	 * @param y
-	 * @param selected
+	 * @param mc The completion to render.
+	 * @param g The graphics context.
+	 * @param x The x-offset at which to render.
+	 * @param y The y-offset at which to render.
+	 * @param selected Whether the completion is selected/active.
 	 */
 	public static void rendererText(MemberCompletion mc, Graphics g, int x,
 									int y, boolean selected) {

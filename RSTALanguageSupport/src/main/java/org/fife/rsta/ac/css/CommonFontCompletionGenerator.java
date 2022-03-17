@@ -20,7 +20,7 @@ import org.fife.ui.autocomplete.CompletionProvider;
 /**
  * A generator that returns completions for common font names (not the
  * standardized generic fonts defined in the CSS spec).
- * 
+ *
  * @author Robert Futrell
  * @version 1.0
  */
@@ -63,7 +63,7 @@ class CommonFontCompletionGenerator implements CompletionGenerator {
 	 */
 	private static class FontFamilyCompletion extends BasicCssCompletion {
 
-		public FontFamilyCompletion(CompletionProvider provider, String value) {
+		FontFamilyCompletion(CompletionProvider provider, String value) {
 			super(provider, value, ICON_KEY);
 		}
 

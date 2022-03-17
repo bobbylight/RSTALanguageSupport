@@ -26,8 +26,8 @@ public class ConstantDoubleInfo extends ConstantPoolInfo {
 	/**
 	 * Constructor.
 	 *
-	 * @param highBytes
-	 * @param lowBytes
+	 * @param highBytes The high bytes.
+	 * @param lowBytes The low bytes.
 	 */
 	public ConstantDoubleInfo(int highBytes, int lowBytes) {
 		super(CONSTANT_Double);

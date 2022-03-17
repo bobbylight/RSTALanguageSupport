@@ -10,11 +10,11 @@ public abstract class JSDocumentFragment implements DocumentFragment, JS5ObjectF
 	/**
 	 * Object DocumentFragment()
 	 * http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/ecma-script-binding.html
-	 * 
+	 *
 	 * @constructor
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
-	 * 
+	 *
 	 */
 	public JSDocumentFragment() {
 
@@ -22,7 +22,7 @@ public abstract class JSDocumentFragment implements DocumentFragment, JS5ObjectF
 
 	/**
 	 * <b>property prototype</b>
-	 * 
+	 *
 	 * @type DocumentFragment
 	 * @memberOf DocumentFragment
 	 * @see org.fife.rsta.ac.js.ecma.api.dom.JSDocumentFragment DocumentFragment
@@ -33,7 +33,7 @@ public abstract class JSDocumentFragment implements DocumentFragment, JS5ObjectF
 
 	/**
 	 * <b>property constructor</b>
-	 * 
+	 *
 	 * @type Function
 	 * @memberOf Array
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction Function

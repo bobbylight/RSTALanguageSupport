@@ -45,6 +45,12 @@ public class TldFile {
 	}
 
 
+	/**
+	 * Returns the attributes for a tag.
+	 *
+	 * @param tagName The tag to look up.
+	 * @return The attributes for the tag, or {@code null} if none.
+	 */
 	public List<Parameter> getAttributesForTag(String tagName) {
 
 		for (TldElement elem : tldElems) {
@@ -69,11 +75,24 @@ public class TldFile {
 	}
 
 
+	/**
+	 * Returns an element.
+	 *
+	 * @param index The index of the element.
+	 * @return The element.
+	 * @see #getElementCount()
+	 */
 	public TldElement getElement(int index) {
 		return tldElems.get(index);
 	}
 
 
+	/**
+	 * Returns the number of elements.
+	 *
+	 * @return The element count.
+	 * @see #getElement(int)
+	 */
 	public int getElementCount() {
 		return tldElems.size();
 	}
@@ -91,11 +110,11 @@ public class TldFile {
 				//System.out.println(entry.getName());
 				InputStream in = jar.getInputStream(entry);
 				elems = parseTld(in);
-/*
+				/*
 				for (int i=0; i<elems.size(); i++) {
 					System.out.println(elems.get(i));
 				}
-*/
+				*/
 				in.close();
 			}
 		}
@@ -111,13 +130,13 @@ public class TldFile {
 		List<TldElement> tldElems = new ArrayList<>();
 
 		BufferedInputStream bin = new BufferedInputStream(in);
-//BufferedReader r = new BufferedReader(new InputStreamReader(bin));
-//String line = null;
-//while ((line=r.readLine())!=null) {
-//	System.out.println(line);
-//}
-//r.close();
-//System.exit(0);
+		//BufferedReader r = new BufferedReader(new InputStreamReader(bin));
+		//String line = null;
+		//while ((line=r.readLine())!=null) {
+		//	System.out.println(line);
+		//}
+		//r.close();
+		//System.exit(0);
 
 		Document doc;
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -133,8 +152,8 @@ public class TldFile {
 		if (nl.getLength()!=1) {
 			throw new IOException("Expected 1 'uri' tag; found: " + nl.getLength());
 		}
-//		String uri = getChildText(nl.item(0));;
-//		System.out.println("URI: " + uri);
+		//String uri = getChildText(nl.item(0));
+		//System.out.println("URI: " + uri);
 
 		nl = root.getElementsByTagName("tag");
 		for (int i=0; i<nl.getLength(); i++) {
@@ -150,8 +169,10 @@ public class TldFile {
 				Element attrElem = (Element)attrNl.item(j);
 				name = getChildText(attrElem.getElementsByTagName("name").item(0));
 				desc = getChildText(attrElem.getElementsByTagName("description").item(0));
-				boolean required = Boolean.parseBoolean(getChildText(attrElem.getElementsByTagName("required").item(0)));
-				boolean rtexprValue = false;//Boolean.valueOf(getChildText(attrElem.getElementsByTagName("rtexprValue").item(0))).booleanValue();
+				boolean required = Boolean.parseBoolean(getChildText(attrElem.getElementsByTagName("required").
+					item(0)));
+				boolean rtexprValue = false;//Boolean.valueOf(getChildText(
+				// attrElem.getElementsByTagName("rtexprValue").item(0))).booleanValue();
 				TldAttributeParam param = new TldAttributeParam(null, name,
 												required, rtexprValue);
 				param.setDescription(desc);

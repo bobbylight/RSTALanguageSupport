@@ -55,12 +55,12 @@ class JavaTreeNode extends SourceTreeNode {
 	}
 
 
-	public JavaTreeNode(String text, String iconName) {
+	JavaTreeNode(String text, String iconName) {
 		this(text, iconName, false);
 	}
 
 
-	public JavaTreeNode(String text, String iconName, boolean sorted) {
+	JavaTreeNode(String text, String iconName, boolean sorted) {
 		super(text, sorted);
 		if (iconName!=null) {
 			this.icon = IconFactory.get().getIcon(iconName);

@@ -19,7 +19,7 @@ import org.fife.ui.autocomplete.CompletionProvider;
 
 /**
  * A generator that returns completions for border styles.
- * 
+ *
  * @author Robert Futrell
  * @version 1.0
  */
@@ -56,7 +56,7 @@ class BorderStyleCompletionGenerator implements CompletionGenerator {
 	 */
 	private static class BorderStyleCompletion extends BasicCssCompletion {
 
-		public BorderStyleCompletion(CompletionProvider provider, String value) {
+		BorderStyleCompletion(CompletionProvider provider, String value) {
 			super(provider, value, ICON_KEY);
 		}
 

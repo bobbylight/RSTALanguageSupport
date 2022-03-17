@@ -27,7 +27,7 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
  * @author Robert Futrell
  * @version 1.0
  */
-public class LanguageSupportFactory implements PropertyChangeListener {
+public final class LanguageSupportFactory implements PropertyChangeListener {
 
 	private static final LanguageSupportFactory INSTANCE =
 										new LanguageSupportFactory();
@@ -66,7 +66,7 @@ public class LanguageSupportFactory implements PropertyChangeListener {
 	 *
 	 * @param style The language to add support for.  This should be one of
 	 *        the values defined in {@link SyntaxConstants}.  Any previous
-	 *        language support for this language is removed. 
+	 *        language support for this language is removed.
 	 * @param lsClassName The class name of the <code>LanguageSupport</code>.
 	 */
 	public void addLanguageSupport(String style, String lsClassName) {

@@ -55,11 +55,11 @@ public class Code extends AttributeInfo {
 	 */
 	private int maxLocals;
 
-//	/**
-//	 * The actual bytes of JVM code that implement the method.  This must have
-//	 * length greater than zero.
-//	 */
-//	private int[] code;
+	///**
+	// * The actual bytes of JVM code that implement the method.  This must have
+	// * length greater than zero.
+	// */
+	//private int[] code;
 
 	/**
 	 * The size of the method's code, in bytes.
@@ -75,6 +75,7 @@ public class Code extends AttributeInfo {
 	/**
 	 * The names of parameters to the parent method, if debugging was enabled
 	 * during compilation.
+	 *
 	 * @see #LOCAL_VARIABLE_TABLE
 	 */
 	private String[] paramNames;
@@ -101,15 +102,15 @@ public class Code extends AttributeInfo {
 	}
 
 
-//	/**
-//	 * Returns the code byte at the specified offset.
-//	 *
-//	 * @param offset The offset.
-//	 * @return The byte.
-//	 */
-//	public int getByte(int offset) {
-//		return code[offset];
-//	}
+	///**
+	// * Returns the code byte at the specified offset.
+	// *
+	// * @param offset The offset.
+	// * @return The byte.
+	// */
+	//public int getByte(int offset) {
+	//	return code[offset];
+	//}
 
 
 	/**
@@ -141,6 +142,8 @@ public class Code extends AttributeInfo {
 	/**
 	 * Returns the maximum depth of the operand stack of this method at any
 	 * point during its execution.
+	 *
+	 * @return The maximum value of the operand stack.
 	 */
 	public int getMaxStack() {
 		return maxStack;

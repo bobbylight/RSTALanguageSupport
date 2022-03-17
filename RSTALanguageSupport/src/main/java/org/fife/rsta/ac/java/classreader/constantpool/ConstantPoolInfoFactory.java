@@ -16,7 +16,13 @@ import java.io.IOException;
 import org.fife.rsta.ac.java.classreader.*;
 
 
-public class ConstantPoolInfoFactory implements ConstantTypes {
+/**
+ * A factory for constant pool information.
+ *
+ * @author Robert Futrell
+ * @version 1.0
+ */
+public final class ConstantPoolInfoFactory implements ConstantTypes {
 
 
 	/**
@@ -26,6 +32,14 @@ public class ConstantPoolInfoFactory implements ConstantTypes {
 	}
 
 
+	/**
+	 * Reads constant pool information.
+	 *
+	 * @param cf The class file being parsed.
+	 * @param in The input stream to read from.
+	 * @return The next constant pool record.
+	 * @throws IOException If an IO error occurs.
+	 */
 	public static ConstantPoolInfo readConstantPoolInfo(ClassFile cf,
 							DataInputStream in) throws IOException {
 

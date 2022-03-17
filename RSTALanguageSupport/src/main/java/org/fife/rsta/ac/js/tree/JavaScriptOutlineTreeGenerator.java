@@ -87,7 +87,7 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 					}
 					/*
 					 * Not sure why this happens, but it happens in *some* instances like this:
-					 * 
+					 *
 					 * ... js code ...
 					 * Foo = function() {
 					 *   ... foo body ...
@@ -229,7 +229,7 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 				List<AstNode> chainedPropertyGetNodes =
 						getChainedPropertyGetNodes(pg);
 				int count = chainedPropertyGetNodes.size();
-				
+
 				// Check for "Foo.prototype.xyz = ..."
 				if (count>=3 &&
 						RhinoUtil.isPrototypeNameNode(chainedPropertyGetNodes.get(count-2))) {
@@ -310,7 +310,7 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 
 					// "Foo.bar.bas = { ... };"
 					if (rhs instanceof ObjectLiteral) {
-						
+
 						curScopeTreeNode.add(tn);
 						tn.setText(clazz + "()");
 
@@ -327,7 +327,7 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 								memberName, propertyValue);
 
 						}
-						
+
 					}
 
 					// Check for "Foo.bar.bas = Object.create(...)"
@@ -572,7 +572,7 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 		// Happens with certain syntax errors, such as
 		// "function function foo() {".
 		if (funcName!=null) {
-	
+
 			String text = fn.getName() + RhinoUtil.getFunctionArgsString(fn);
 
 			JavaScriptTreeNode tn = createTreeNode(funcName);

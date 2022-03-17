@@ -39,6 +39,7 @@ public class Exceptions extends AttributeInfo {
 	 * Constructor.
 	 *
 	 * @param mi The method this attribute is describing.
+	 * @param exceptionIndexTable The exception index table.
 	 */
 	public Exceptions(MethodInfo mi, int[] exceptionIndexTable) {
 		super(mi.getClassFile());

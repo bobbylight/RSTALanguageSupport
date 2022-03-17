@@ -21,7 +21,7 @@ import org.fife.ui.autocomplete.VariableCompletion;
 
 /**
  * The cell renderer used for JavaScript completion choices.
- * 
+ *
  * @author Robert Futrell
  * @version 1.0
  */

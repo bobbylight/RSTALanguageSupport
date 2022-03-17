@@ -32,18 +32,18 @@ import org.fife.ui.rsyntaxtextarea.Token;
 import org.xml.sax.SAXException;
 
 
-/**
- * Completion provider for PHP.
- *
- * @author Robert Futrell
- * @version 1.0
- */
 /*
  * NOTE: This isn't really optimized.  A truly optimized provider wouldn't
  * extend HtmlCompletionProvider, as it doesn't provide enough hooks to do
  * things most efficiently (re-use token lists, etc.).  If this implementation
  * proves to not be efficient enough, HtmlCompletionProvider could be modified
  * to provide more hooks necessary to do so.
+ */
+/**
+ * Completion provider for PHP.
+ *
+ * @author Robert Futrell
+ * @version 1.0
  */
 public class PhpCompletionProvider extends HtmlCompletionProvider {
 

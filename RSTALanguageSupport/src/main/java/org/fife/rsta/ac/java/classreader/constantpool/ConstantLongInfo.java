@@ -26,8 +26,8 @@ public class ConstantLongInfo extends ConstantPoolInfo {
 	/**
 	 * Constructor.
 	 *
-	 * @param highBytes
-	 * @param lowBytes
+	 * @param highBytes The high bytes.
+	 * @param lowBytes The low bytes.
 	 */
 	public ConstantLongInfo(int highBytes, int lowBytes) {
 		super(CONSTANT_Long);

@@ -24,9 +24,9 @@ import java.util.Map;
  * @author Robert Futrell
  * @version 1.0
  */
-public class IOUtil {
+public final class IOUtil {
 
-	private static Map<String, String> DEFAULT_ENV;
+	private static Map<String, String> defaultEnv;
 
 
 	/**
@@ -37,26 +37,24 @@ public class IOUtil {
 
 
 	/**
-	 * Gets the environment of the current process.  Works with Java 1.4 as
-	 * well as 1.5+.
+	 * Gets the environment of the current process.
 	 *
 	 * @return A mapping of environment variable names to values.
 	 */
 	private static Map<String, String> getDefaultEnvMap() {
 
 		// If we've already created it...
-		if (DEFAULT_ENV!=null) {
-			return DEFAULT_ENV;
+		if (defaultEnv !=null) {
+			return defaultEnv;
 		}
 
-		// In Java 5+, we can just get the environment directly
 		try {
-			DEFAULT_ENV = System.getenv();
+			defaultEnv = System.getenv();
 		} catch (SecurityException e) { // In an applet perhaps?
-			DEFAULT_ENV = Collections.emptyMap();
+			defaultEnv = Collections.emptyMap();
 		}
 
-		return DEFAULT_ENV;
+		return defaultEnv;
 
 	}
 

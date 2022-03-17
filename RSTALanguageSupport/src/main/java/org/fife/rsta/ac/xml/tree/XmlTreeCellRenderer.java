@@ -43,7 +43,7 @@ class XmlTreeCellRenderer extends DefaultTreeCellRenderer {
 	private static final Color ATTR_COLOR = new Color(0x808080);
 
 
-	public XmlTreeCellRenderer() {
+	XmlTreeCellRenderer() {
 		URL url = getClass().getResource("tag.png");
 		if (url!=null) { // Always true
 			elemIcon = new ImageIcon(url);
@@ -100,7 +100,7 @@ class XmlTreeCellRenderer extends DefaultTreeCellRenderer {
 		}
 
 		@Override
-		protected void paintEnabledText(JLabel l, Graphics g, String s, 
+		protected void paintEnabledText(JLabel l, Graphics g, String s,
 				int textX, int textY) {
 			XmlTreeCellRenderer r = (XmlTreeCellRenderer)l;
 			Graphics2D g2d = (Graphics2D)g;
@@ -127,5 +127,5 @@ class XmlTreeCellRenderer extends DefaultTreeCellRenderer {
 
 	}
 
-   
+
 }

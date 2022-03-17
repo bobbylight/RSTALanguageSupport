@@ -42,7 +42,7 @@ import org.mozilla.javascript.ast.AstRoot;
  * installed by calling {@link #listenTo(RSyntaxTextArea)}.  Note that, if you
  * have an application with multiple RSTA editors, you would want to call this
  * method each time a new editor is focused.
- * 
+ *
  * @author Robert Futrell
  * @version 1.0
  */

@@ -471,8 +471,8 @@ if (t!=null && !t.isWhitespace()) {
 
 
 	/**
-	 * Returns whether this token's text is "<" or "</".  It is assumed that
-	 * whether this is a markup delimiter token is checked elsewhere.
+	 * Returns whether this token's text is "&lt;" or "&lt;/".  It is assumed
+	 * that whether this is a markup delimiter token is checked elsewhere.
 	 *
 	 * @param t The token to check.
 	 * @return Whether it is a tag opening token.

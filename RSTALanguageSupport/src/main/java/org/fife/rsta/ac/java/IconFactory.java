@@ -24,7 +24,7 @@ import javax.swing.ImageIcon;
  * @author Robert Futrell
  * @version 1.0
  */
-public class IconFactory {
+public final class IconFactory {
 
 	public static final String SOURCE_FILE_ICON			= "sourceFileIcon";
 	public static final String PACKAGE_ICON				= "packageIcon";
@@ -105,16 +105,38 @@ public class IconFactory {
 	}
 
 
+	/**
+	 * Returns the singleton instance of this class.
+	 *
+	 * @return The singleton instance.
+	 */
 	public static IconFactory get() {
 		return INSTANCE;
 	}
 
 
+	/**
+	 * Returns a known icon.
+	 *
+	 * @param key The icon to retrieve.
+	 * @return The icon.
+	 * @see #getIcon(String, boolean)
+	 * @see #getIcon(IconData)
+	 */
 	public Icon getIcon(String key) {
 		return getIcon(key, false);
 	}
 
 
+	/**
+	 * Returns a known icon, possibly marked as deprecated.
+	 *
+	 * @param key The icon to retrieve.
+	 * @param deprecated Whether to render it as deprecated.
+	 * @return The icon.
+	 * @see #getIcon(String)
+	 * @see #getIcon(IconData)
+	 */
 	public Icon getIcon(String key, boolean deprecated) {
 		Icon icon = iconMap.get(key);
 		if (deprecated) { // TODO: Optimize me
@@ -126,6 +148,13 @@ public class IconFactory {
 	}
 
 
+	/**
+	 * Creates and returns an icon based on the properties provided.
+	 *
+	 * @param data Properties about the icon to create.
+	 * @return The icon.
+	 * @see #getIcon(String)
+	 */
 	public Icon getIcon(IconData data) {
 		// TODO: Optimize me
 		DecoratableIcon icon = new DecoratableIcon(16, getIcon(data.getIcon()));
@@ -155,6 +184,9 @@ public class IconFactory {
 	}
 
 
+	/**
+	 * Information about an icon.
+	 */
 	public interface IconData {
 
 		/**
@@ -166,12 +198,32 @@ public class IconFactory {
 		 */
 		String getIcon();
 
+		/**
+		 * Returns whether this icon represents an abstract class/method/etc.
+		 *
+		 * @return Whether it represents something abstract.
+		 */
 		boolean isAbstract();
 
+		/**
+		 * Returns whether this icon represents a deprecated class/method/etc.
+		 *
+		 * @return Whether it represents something deprecated.
+		 */
 		boolean isDeprecated();
 
+		/**
+		 * Returns whether this icon represents a final class/method/etc.
+		 *
+		 * @return Whether it represents something final.
+		 */
 		boolean isFinal();
 
+		/**
+		 * Returns whether this icon represents a static class/method/etc.
+		 *
+		 * @return Whether it represents something static.
+		 */
 		boolean isStatic();
 
 	}

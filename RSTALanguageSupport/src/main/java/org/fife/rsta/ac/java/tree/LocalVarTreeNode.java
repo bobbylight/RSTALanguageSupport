@@ -26,7 +26,7 @@ class LocalVarTreeNode extends JavaTreeNode {
 	private String text;
 
 
-	public LocalVarTreeNode(LocalVariable var) {
+	LocalVarTreeNode(LocalVariable var) {
 
 		super(var);
 		setIcon(IconFactory.get().getIcon(IconFactory.LOCAL_VARIABLE_ICON));

@@ -13,9 +13,9 @@ public abstract class JS5Date extends JSDate implements JS5DateFunctions {
 
 	/**
 	 * Object Date()
-	 * 
+	 *
 	 * <p>Creates a Date object set to the current date and time.</p>
-	 * 
+	 *
 	 * @constructor
 	 * @extends Object
 	 * @since Standard ECMA-262 3rd. Edition
@@ -24,10 +24,10 @@ public abstract class JS5Date extends JSDate implements JS5DateFunctions {
 	public JS5Date() {
 
 	}
-	
+
 	/**
 	 * Object Date(milliseconds)
-	 * 
+	 *
 	 * @constructor
 	 * @extends Object
 	 * @param milliseconds The number of milliseconds between the desired date and midnight January 1, 1970 (UTC).
@@ -37,10 +37,10 @@ public abstract class JS5Date extends JSDate implements JS5DateFunctions {
 	public JS5Date(JSNumber milliseconds) {
 
 	}
-	
+
 	/**
 	 * Object Date(datestring)
-	 * 
+	 *
 	 * @constructor
 	 * @extends Object
 	 * @param datestring A single argument that specifies date and optionally, the time as a string. The string should be in a format accepted by <b>Date.parse()</b>
@@ -50,10 +50,10 @@ public abstract class JS5Date extends JSDate implements JS5DateFunctions {
 	public JS5Date(JSString datestring) {
 
 	}
-	
+
 	/**
 	 * Object Date(year, month, day, hours, minutes, seconds, ms)
-	 * 
+	 *
 	 * @constructor
 	 * @extends Object
 	 * @param year The year in a four digit format. e.g. 2011 for the year 2011
@@ -69,10 +69,10 @@ public abstract class JS5Date extends JSDate implements JS5DateFunctions {
 	public JS5Date(JSNumber year, JSNumber month, JSNumber day, JSNumber hours, JSNumber minutes, JSNumber seconds, JSNumber ms) {
 
 	}
-	
+
 	/**
 	 * <b>function now()</b> return the current time in milliseconds.
-	 * 
+	 *
 	 * @memberOf Date
 	 * @returns The current time in milliseconds since midnight GMT on January 1, 1970
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma5.JS5Date Date

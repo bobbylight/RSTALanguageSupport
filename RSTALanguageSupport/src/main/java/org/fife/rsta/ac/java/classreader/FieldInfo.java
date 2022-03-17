@@ -48,6 +48,10 @@ public class FieldInfo extends MemberInfo {
 	/**
 	 * Constructor.
 	 *
+	 * @param cf The class file being parsed.
+	 * @param accessFlags The access flags.
+	 * @param nameIndex The name index.
+	 * @param descriptorIndex The descriptor index.
 	 * @see AccessFlags
 	 */
 	public FieldInfo(ClassFile cf, int accessFlags, int nameIndex,
@@ -90,6 +94,12 @@ public class FieldInfo extends MemberInfo {
 	}
 
 
+	/**
+	 * Returns this constant value as a string.
+	 *
+	 * @return A string representation of this constant value, or
+	 *         {@code null} if it isn't one.
+	 */
 	public String getConstantValueAsString() {
 		ConstantValue cv = getConstantValueAttributeInfo();
 		return cv==null ? null : cv.getConstantValueAsString();
@@ -124,9 +134,6 @@ public class FieldInfo extends MemberInfo {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getName() {
 		return cf.getUtf8ValueFromConstantPool(nameIndex);
@@ -147,6 +154,7 @@ public class FieldInfo extends MemberInfo {
 	/**
 	 * Returns the type of this field, as determined from its field descriptor.
 	 *
+	 * @param qualified Whether the returned value should be fully-qualified.
 	 * @return The type of this field.
 	 */
 	public String getTypeString(boolean qualified) {
@@ -213,6 +221,11 @@ public class FieldInfo extends MemberInfo {
 	}
 
 
+	/**
+	 * Returns whether this field is a constant.
+	 *
+	 * @return Whether this field is a constant.
+	 */
 	public boolean isConstant() {
 		return getConstantValueAttributeInfo()!=null;
 	}

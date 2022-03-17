@@ -9,10 +9,10 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.functions.JSStringFunctions;
  */
 public abstract class JSString implements JSStringFunctions {
 
-    
+
 	/**
      * Object String(s)
-     * 
+     *
      * @constructor
      * @extends Object
      * @param s The value to be stored in a String or converted to a primitive type
@@ -23,7 +23,7 @@ public abstract class JSString implements JSStringFunctions {
 
     /**
      * <b>property length</b>
-     * 
+     *
      * @type Number
      * @memberOf String
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
@@ -31,10 +31,10 @@ public abstract class JSString implements JSStringFunctions {
      * @since Level 2 Document Object Model Core Definition.
      */
     protected JSNumber length;
-    
+
     /**
      * <b>property prototype</b>
-     * 
+     *
      * @type String
      * @memberOf String
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
@@ -42,10 +42,10 @@ public abstract class JSString implements JSStringFunctions {
      * @since Level 2 Document Object Model Core Definition.
      */
     public JSString prototype;
-    
+
     /**
      * <b>property constructor</b>
-     * 
+     *
      * @type Function
      * @memberOf String
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction Function
@@ -53,8 +53,8 @@ public abstract class JSString implements JSStringFunctions {
      * @since Level 2 Document Object Model Core Definition.
      */
     protected JSFunction constructor;
-    
-    
+
+
     /**
      * <b>function fromCharCode(charCode1, ...)</b> create a string from character encodings.
      * <p>

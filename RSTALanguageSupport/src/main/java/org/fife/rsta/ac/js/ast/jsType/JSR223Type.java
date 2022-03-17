@@ -81,7 +81,7 @@ public class JSR223Type extends JavaScriptType {
 	// get a list of all potential method matches
 	private void getPotentialLookupList(String name,
 			HashSet<JSCompletion> completionMatches, JavaScriptType type) {
-		
+
 		Map<String, JSCompletion> typeCompletions = type.methodFieldCompletions;
 
 		for (String key : typeCompletions.keySet()) {
@@ -92,13 +92,13 @@ public class JSR223Type extends JavaScriptType {
 				}
 			}
 		}
-		
+
 		//loop through extended and add it's methods too recursively
 		for (JavaScriptType extendedType : type.getExtendedClasses()) {
 			getPotentialLookupList(name, completionMatches, extendedType);
 		}
 
-		
+
 	}
 
 }

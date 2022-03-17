@@ -185,9 +185,6 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void uninstall(RSyntaxTextArea textArea) {
 
@@ -240,10 +237,10 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 	 */
 	private static class ImportToAddInfo {
 
-		public int offs;
-		public String text;
+		private int offs;
+		private String text;
 
-		public ImportToAddInfo(int offset, String text) {
+		ImportToAddInfo(int offset, String text) {
 			this.offs = offset;
 			this.text = text;
 		}
@@ -259,10 +256,10 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 	 */
 	private static class Info implements PropertyChangeListener {
 
-		public JavaCompletionProvider provider;
-		//public JavaParser parser;
+		private JavaCompletionProvider provider;
+		//private JavaParser parser;
 
-		public Info(RSyntaxTextArea textArea, JavaCompletionProvider provider,
+		Info(RSyntaxTextArea textArea, JavaCompletionProvider provider,
 					JavaParser parser) {
 			this.provider = provider;
 			//this.parser = parser;
@@ -282,8 +279,8 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 
 			if (JavaParser.PROPERTY_COMPILATION_UNIT.equals(name)) {
 				CompilationUnit cu = (CompilationUnit)e.getNewValue();
-//				structureTree.update(file, cu);
-//				updateTable();
+				//structureTree.update(file, cu);
+				//updateTable();
 				provider.setCompilationUnit(cu);
 			}
 
@@ -301,7 +298,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		private RSyntaxTextArea textArea;
 		private String replacementTextPrefix;
 
-		public JavaAutoCompletion(JavaCompletionProvider provider,
+		JavaAutoCompletion(JavaCompletionProvider provider,
 									RSyntaxTextArea textArea) {
 			super(provider);
 			this.textArea = textArea;
@@ -353,7 +350,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		 * class with the same (unqualified) name HAS been imported, this
 		 * method sets things up so the fully-qualified version of this class's
 		 * name is inserted.<p>
-		 * 
+		 *
 		 * Thanks to Guilherme Joao Frantz and Jonatas Schuler for helping
 		 * with the patch!
 		 *
@@ -403,7 +400,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 
 				// Loop through all import statements.
 				Iterator<ImportDeclaration> i = cu.getImportIterator();
-				for (; i.hasNext(); ) {
+				for (; i.hasNext();) {
 
 					ImportDeclaration id = i.next();
 					offset = id.getNameEndOffset() + 1;
@@ -563,7 +560,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		private RSyntaxTextArea textArea;
 		private Timer t;
 
-		public Listener(RSyntaxTextArea textArea) {
+		Listener(RSyntaxTextArea textArea) {
 			this.textArea = textArea;
 			textArea.addCaretListener(this);
 			t = new Timer(650, this);

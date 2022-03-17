@@ -28,6 +28,8 @@ public abstract class ConstantPoolInfo implements ConstantTypes {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param tag The tag.
 	 */
 	public ConstantPoolInfo(int tag) {
 		this.tag = tag;

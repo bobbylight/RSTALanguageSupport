@@ -21,7 +21,7 @@ import java.util.List;
  * for languages that have some concept of code blocks, such as C, Perl, Java,
  * etc. Currently, using <code>CodeBlock</code>s provides a means of remembering
  * where variables are defined, as well as their scopes.
- * 
+ *
  * @author Robert Futrell
  * @version 1.0
  * @see VariableDeclaration
@@ -37,7 +37,7 @@ public class CodeBlock {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param start The starting offset of the code block.
 	 */
 	public CodeBlock(int start) {
@@ -48,7 +48,7 @@ public class CodeBlock {
 
 	/**
 	 * Creates and returns a child (nested) code block.
-	 * 
+	 *
 	 * @param start The starting offset of the nested code block.
 	 * @return The code block.
 	 */
@@ -65,7 +65,7 @@ public class CodeBlock {
 
 	/**
 	 * Adds a variable declaration.
-	 * 
+	 *
 	 * @param varDec The variable declaration.
 	 */
 	public void addVariable(JavaScriptVariableDeclaration varDec) {
@@ -78,7 +78,7 @@ public class CodeBlock {
 
 	/**
 	 * Returns whether this code block contains a given offset.
-	 * 
+	 *
 	 * @param offset The offset.
 	 * @return Whether this code block contains that offset.
 	 */
@@ -89,7 +89,7 @@ public class CodeBlock {
 
 	/**
 	 * Returns a child code block.
-	 * 
+	 *
 	 * @param index The index of the child code block.
 	 * @return The child code block.
 	 * @see #getChildCodeBlockCount()
@@ -101,7 +101,7 @@ public class CodeBlock {
 
 	/**
 	 * Returns the number of child code blocks.
-	 * 
+	 *
 	 * @return The child code block count.
 	 * @see #getChildCodeBlock(int)
 	 */
@@ -112,7 +112,7 @@ public class CodeBlock {
 
 	/**
 	 * Returns the end offset of this code block.
-	 * 
+	 *
 	 * @return The end offset.
 	 * @see #getStartOffset()
 	 * @see #setEndOffset(int)
@@ -124,7 +124,7 @@ public class CodeBlock {
 
 	/**
 	 * Returns the parent code block.
-	 * 
+	 *
 	 * @return The parent code block, or <code>null</code> if there isn't one.
 	 */
 	public CodeBlock getParent() {
@@ -134,7 +134,7 @@ public class CodeBlock {
 
 	/**
 	 * Returns the start offset of this code block.
-	 * 
+	 *
 	 * @return The start offset.
 	 * @see #getEndOffset()
 	 */
@@ -145,7 +145,7 @@ public class CodeBlock {
 
 	/**
 	 * Returns a variable declaration.
-	 * 
+	 *
 	 * @param index The index of the declaration.
 	 * @return The declaration.
 	 * @see #getVariableDeclarationCount()
@@ -157,7 +157,7 @@ public class CodeBlock {
 
 	/**
 	 * Returns the number of variable declarations in this code block.
-	 * 
+	 *
 	 * @return The number of variable declarations.
 	 * @see #getVariableDeclaration(int)
 	 */
@@ -168,7 +168,7 @@ public class CodeBlock {
 
 	/**
 	 * Sets the end offset of this code block.
-	 * 
+	 *
 	 * @param end The end offset.
 	 * @see #getEndOffset()
 	 */
@@ -186,14 +186,14 @@ public class CodeBlock {
 	{
 		this.start = start;
 	}
-	
-	
+
+
 	public void debug() {
 		StringBuilder sb = new StringBuilder();
 		outputChild(sb, this, 0);
 		System.out.println(sb);
 	}
-	
+
 	private void outputChild(StringBuilder sb, CodeBlock block, int tab) {
 		StringBuilder tabs = new StringBuilder();
 		for(int i=0; i<tab; i++)
@@ -210,6 +210,6 @@ public class CodeBlock {
 			CodeBlock childBlock = block.getChildCodeBlock(i);
 			outputChild(sb, childBlock, tab++);
 		}
-		
+
 	}
 }

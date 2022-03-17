@@ -20,6 +20,13 @@ import org.fife.rsta.ac.java.rjc.lexer.Token;
 
 
 // TODO: Implement me correctly
+
+/**
+ * Represents a method in a Java type.
+ *
+ * @author Robert Futrell
+ * @version 1.0
+ */
 public class Method extends AbstractMember {
 
 	private Modifiers modifiers;
@@ -51,6 +58,12 @@ public class Method extends AbstractMember {
 	}
 
 
+	/**
+	 * Returns whether this method's body contains the specified offset.
+	 *
+	 * @param offs The offset to check.
+	 * @return Whether this method's body contains that offset.
+	 */
 	public boolean getBodyContainsOffset(int offs) {
 		return offs>=getBodyStartOffset() && offs<getBodyEndOffset();
 	}
@@ -78,6 +91,12 @@ public class Method extends AbstractMember {
 	}
 
 
+	/**
+	 * Returns this method name and parameters, as a string, in
+	 * the format {@code methodName(Type1 param1, Type2 param2)}.
+	 *
+	 * @return This method's name and parameters.
+	 */
 	public String getNameAndParameters() {
 		StringBuilder sb = new StringBuilder(getName());
 		sb.append('(');
@@ -97,6 +116,13 @@ public class Method extends AbstractMember {
 	}
 
 
+	/**
+	 * Returns the specified formal parameter.
+	 *
+	 * @param index The parameter's index.
+	 * @return The formal parameter.
+	 * @see #getParameterCount()
+	 */
 	public FormalParameter getParameter(int index) {
 		return parameters.get(index);
 	}

@@ -14,23 +14,23 @@ import org.mozilla.javascript.ast.AstRoot;
 
 /**
  * Scripts to be processed before  parsing main script text
- * 
+ *
  * Useful for includes within JavaScript client
- * 
+ *
  * Caches the completions so they do not have to parsed every single time the main script text is parsed
  */
 public class PreProcessingScripts {
-	
+
 	private SourceCompletionProvider provider;
-	
+
 	private Set<Completion> preProcessingCompletions = new HashSet<>();
-	
-	
+
+
 	public PreProcessingScripts(SourceCompletionProvider provider)
 	{
 		this.provider = provider;
 	}
-	
+
 	public void parseScript(String scriptText, TypeDeclarationOptions options)
 	{
 		if(scriptText != null && scriptText.length() > 0)
@@ -48,19 +48,19 @@ public class PreProcessingScripts {
 			}
 		}
 	}
-	
-	
+
+
 	public void reset()
 	{
 		preProcessingCompletions.clear();
 		//remove all preProcessing Variables
 		provider.getVariableResolver().resetPreProcessingVariables(true);
 	}
-	
+
 	public Set<Completion> getCompletions()
 	{
 		return preProcessingCompletions;
 	}
-	
-	
+
+
 }

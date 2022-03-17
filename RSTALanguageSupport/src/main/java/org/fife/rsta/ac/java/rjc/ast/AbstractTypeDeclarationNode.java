@@ -18,6 +18,12 @@ import org.fife.rsta.ac.java.rjc.lang.Modifiers;
 import org.fife.rsta.ac.java.rjc.lexer.Offset;
 
 
+/**
+ * A base class for type declaration nodes.
+ *
+ * @author Robert Futrell
+ * @version 1.0
+ */
 public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 												implements TypeDeclaration {
 
@@ -46,6 +52,11 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	}
 
 
+	/**
+	 * Adds a member to this type declaration.
+	 *
+	 * @param member The member to add.
+	 */
 	public void addMember(Member member) {
 		member.setParentTypeDeclaration(this);
 		memberList.add(member);
@@ -86,9 +97,6 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public TypeDeclaration getChildTypeAtOffset(int offs) {
 
@@ -119,13 +127,10 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public Iterator<Field> getFieldIterator() {
 		List<Field> fields = new ArrayList<>();
-		for (Iterator<Member> i=getMemberIterator(); i.hasNext(); ) {
+		for (Iterator<Member> i=getMemberIterator(); i.hasNext();) {
 			Member member = i.next();
 			if (member instanceof Field) {
 				fields.add((Field)member);
@@ -147,22 +152,16 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public Iterator<Member> getMemberIterator() {
 		return memberList.iterator();
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public Iterator<Method> getMethodIterator() {
 		List<Method> methods = new ArrayList<>();
-		for (Iterator<Member> i=getMemberIterator(); i.hasNext(); ) {
+		for (Iterator<Member> i=getMemberIterator(); i.hasNext();) {
 			Member member = i.next();
 			if (member instanceof Method) {
 				methods.add((Method)member);
@@ -172,13 +171,10 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public List<Method> getMethodsByName(String name) {
 		List<Method> methods = new ArrayList<>();
-		for (Iterator<Member> i=getMemberIterator(); i.hasNext(); ) {
+		for (Iterator<Member> i=getMemberIterator(); i.hasNext();) {
 			Member member = i.next();
 			if (member instanceof Method && name.equals(member.getName())) {
 				methods.add((Method)member);
@@ -194,9 +190,6 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getName(boolean fullyQualified) {
 		String name = getName();

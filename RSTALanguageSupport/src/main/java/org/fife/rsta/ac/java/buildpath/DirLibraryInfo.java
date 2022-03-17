@@ -156,7 +156,7 @@ public class DirLibraryInfo extends LibraryInfo {
 
 
 	@Override
-	public int hashCode() {
+	public int hashCodeImpl() {
 		return dir.hashCode();
 	}
 

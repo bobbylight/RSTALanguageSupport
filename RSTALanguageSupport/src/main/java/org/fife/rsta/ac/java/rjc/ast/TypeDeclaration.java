@@ -16,18 +16,49 @@ import java.util.List;
 import org.fife.rsta.ac.java.rjc.lang.Modifiers;
 
 
+/**
+ * A type declaration.
+ *
+ * @author Robert Futrell
+ * @version 1.0
+ */
 public interface TypeDeclaration extends ASTNode, TypeDeclarationContainer {
 
 
+	/**
+	 * Returns whether this type declaration contains the specified offset.
+	 *
+	 * @param offs The offset to check.
+	 * @return Whether the offset is contained.
+	 */
 	boolean getBodyContainsOffset(int offs);
 
 
+	/**
+	 * Returns the end-offset of the type declaration's body.
+	 *
+	 * @return The end offset.
+	 * @see #getBodyStartOffset()
+	 */
 	int getBodyEndOffset();
 
 
+	/**
+	 * Returns the start-offset of the type declaration's body.
+	 *
+	 * @return The start offset.
+	 * @see #getBodyEndOffset()
+	 */
 	int getBodyStartOffset();
 
 
+	/**
+	 * Returns a child type by index.
+	 *
+	 * @param index The index.
+	 * @return The child type.
+	 * @see #getChildTypeCount()
+	 */
 	TypeDeclaration getChildType(int index);
 
 
@@ -42,9 +73,21 @@ public interface TypeDeclaration extends ASTNode, TypeDeclarationContainer {
 	TypeDeclaration getChildTypeAtOffset(int offs);
 
 
+	/**
+	 * Returns the number of child types.
+	 *
+	 * @return The number of child types.
+	 * @see #getChildType(int)
+	 */
 	int getChildTypeCount();
 
 
+	/**
+	 * Returns the doc comment for this type declaration.
+	 *
+	 * @return The doc comment.
+	 * @see #setDocComment(String)
+	 */
 	String getDocComment();
 
 
@@ -58,19 +101,36 @@ public interface TypeDeclaration extends ASTNode, TypeDeclarationContainer {
 	Iterator<Field> getFieldIterator();
 
 
+	/**
+	 * Returns a member by index.
+	 *
+	 * @param index The index.
+	 * @return The member.
+	 * @see #getMemberCount()
+	 * @see #getMemberIterator()
+	 */
 	Member getMember(int index);
 
 
+	/**
+	 * Returns the number of members in this type declaration.
+	 *
+	 * @return The number of members.
+	 * @see #getMember(int)
+	 * @see #getMemberIterator()
+	 */
 	int getMemberCount();
 
 
 	/**
-	 * Returns an iterator over all members of this type.  Note 
+	 * Returns an iterator over all members of this type.  Note
 	 * that an exception may be thrown if a method is added to this type
 	 * while this iterator is being used.
 	 *
 	 * @return The iterator.
 	 * @see #getMethodIterator()
+	 * @see #getMember(int)
+	 * @see #getMemberCount()
 	 */
 	Iterator<Member> getMemberIterator();
 
@@ -143,9 +203,19 @@ public interface TypeDeclaration extends ASTNode, TypeDeclarationContainer {
 	TypeDeclaration getParentType();
 
 
+	/**
+	 * Returns the type of this type declaration, as a string.
+	 *
+	 * @return The type.
+	 */
 	String getTypeString();
 
 
+	/**
+	 * Returns whether this type declaration is deprecated.
+	 *
+	 * @return Whether this type declaration is deprecated.
+	 */
 	boolean isDeprecated();
 
 
@@ -159,6 +229,12 @@ public interface TypeDeclaration extends ASTNode, TypeDeclarationContainer {
 	boolean isStatic();
 
 
+	/**
+	 * Sets the doc comment for this type declaration.
+	 *
+	 * @param comment The new doc comment.
+	 * @see #getDocComment()
+	 */
 	void setDocComment(String comment);
 
 

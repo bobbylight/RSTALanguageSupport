@@ -18,18 +18,18 @@ import org.fife.ui.autocomplete.CompletionProvider;
 
 
 public class JSMethodData {
-	
-	
+
+
 	private MethodInfo info;
 	private JarManager jarManager;
 	private ArrayList<String> paramNames;
-	
+
 	public JSMethodData(MethodInfo info, JarManager jarManager)
 	{
 		this.info = info;
 		this.jarManager = jarManager;
 	}
-	
+
 	/**
 	 * Returns the name of the specified parameter to this method, or
 	 * <code>null</code> if it cannot be determined.
@@ -52,7 +52,7 @@ public class JSMethodData {
 		{
 			name = method.getParameter(index).getName();
 		}
-		
+
 		// Otherwise...
 		if (name==null) {
 
@@ -109,7 +109,7 @@ public class JSMethodData {
 		return name;
 
 	}
-	
+
 	public String getParameterType(String[] paramTypes, int index, CompletionProvider provider)
 	{
 		if(paramTypes != null && index < paramTypes.length)
@@ -118,7 +118,7 @@ public class JSMethodData {
 		}
 		return null;
 	}
-	
+
 	public String getSummary() {
 
 		ClassFile cf = info.getClassFile();
@@ -140,8 +140,8 @@ public class JSMethodData {
 		}
 		return summary;
 	}
-	
-	
+
+
 	public Method getMethod()
 	{
 		ClassFile cf = info.getClassFile();
@@ -149,7 +149,7 @@ public class JSMethodData {
 				cf.getClassName(true));
 		return getMethodFromSourceLoc(loc, cf);
 	}
-	
+
 	/**
 	 * Scours the source in a location (zip file, directory), looking for a
 	 * particular class's source.  If it is found, it is parsed, and the
@@ -164,7 +164,7 @@ public class JSMethodData {
 		Method method = getMethodFromSourceLoc(loc, cf);
 		return method!=null ? method.getDocComment() : null;
 	}
-	
+
 	/**
 	 * Scours the source in a location (zip file, directory), looking for a
 	 * particular class's source.  If it is found, it is parsed, and the
@@ -258,29 +258,29 @@ public class JSMethodData {
 		return res;
 
 	}
-	
+
 	public MethodInfo getMethodInfo()
 	{
 		return info;
 	}
-	
+
 	public String getType(boolean qualified)
 	{
 		return info.getReturnTypeString(qualified);
 	}
-	
+
 	public int getParameterCount()
 	{
 		return info.getParameterCount();
 	}
-	
+
 	public boolean isStatic()
 	{
 		return info.isStatic();
 	}
-	
+
 	public String getEnclosingClassName(boolean fullyQualified) {
 		return info.getClassFile().getClassName(fullyQualified);
 	}
-	
+
 }

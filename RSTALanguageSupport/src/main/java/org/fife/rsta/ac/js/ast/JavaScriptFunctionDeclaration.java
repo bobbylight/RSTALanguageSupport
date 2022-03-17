@@ -6,7 +6,7 @@ import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
 public class JavaScriptFunctionDeclaration extends JavaScriptDeclaration {
 
 	private TypeDeclaration typeDec;
-	
+
 	private String functionName;
 
 
@@ -19,14 +19,14 @@ public class JavaScriptFunctionDeclaration extends JavaScriptDeclaration {
 	public TypeDeclaration getTypeDeclaration() {
 		return typeDec;
 	}
-	
+
 	public void setFunctionName(String functionName) {
 		this.functionName = functionName;
 	}
-	
+
 	public String getFunctionName()
 	{
 		return functionName;
 	}
-	
+
 }

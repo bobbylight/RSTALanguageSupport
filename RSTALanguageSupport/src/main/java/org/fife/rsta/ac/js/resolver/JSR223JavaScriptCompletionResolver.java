@@ -40,8 +40,8 @@ public class JSR223JavaScriptCompletionResolver extends
 
 		return dec;
 	}
-	
-	
+
+
 
 
 	@Override
@@ -61,8 +61,8 @@ public class JSR223JavaScriptCompletionResolver extends
 		sb.append(')');
 		return sb.toString();
 	}
-	
-	
+
+
 
 
 	@Override
@@ -75,7 +75,7 @@ public class JSR223JavaScriptCompletionResolver extends
 			}
 			sb.append("(");
 			int count = call.getArguments().size();
-			
+
 			for (int i = 0; i < count; i++) {
 				AstNode paramNode = call.getArguments().get(i);
 				JavaScriptResolver resolver = provider.getJavaScriptEngine().getJavaScriptResolver(provider);
@@ -110,12 +110,12 @@ public class JSR223JavaScriptCompletionResolver extends
 		if (node.getParent() != null
 				&& node.getParent().getType() == Token.GETPROP) { // ast
 																	// parser
-			
+
 			String name = node.toSource();
 			try
 			{
 				String longName = node.getParent().toSource();
-				
+
 				if(longName.indexOf('[') == -1 && longName.indexOf(']') == -1 &&
 						longName.indexOf('(') == -1 && longName.indexOf(')') == -1) {
 
@@ -137,10 +137,10 @@ public class JSR223JavaScriptCompletionResolver extends
 
 		if (testName != null) {
 			TypeDeclaration dec = JavaScriptHelper.getTypeDeclaration(testName, provider);
-			
+
 			if(dec == null)
 				dec = JavaScriptHelper.createNewTypeDeclaration(testName);
-			
+
 			ClassFile cf = provider.getJavaScriptTypesFactory().getClassFile(
 					provider.getJarManager(), dec);
 			if (cf != null) {

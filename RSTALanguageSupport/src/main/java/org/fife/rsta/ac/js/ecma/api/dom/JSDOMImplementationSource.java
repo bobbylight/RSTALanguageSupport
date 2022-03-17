@@ -10,11 +10,11 @@ public abstract class JSDOMImplementationSource implements DOMImplementationList
 	/**
 	 * Object DOMImplementationSource()
 	 * http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/ecma-script-binding.html
-	 * 
+	 *
 	 * @constructor
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
-	 * 
+	 *
 	 */
 	public JSDOMImplementationSource() {
 
@@ -22,7 +22,7 @@ public abstract class JSDOMImplementationSource implements DOMImplementationList
 
 	/**
 	 * <b>property prototype</b>
-	 * 
+	 *
 	 * @type DOMImplementationSource
 	 * @memberOf DOMImplementationSource
 	 * @see org.fife.rsta.ac.js.ecma.api.dom.JSDOMImplementationSource DOMImplementationSource
@@ -33,7 +33,7 @@ public abstract class JSDOMImplementationSource implements DOMImplementationList
 
 	/**
 	 * <b>property constructor</b>
-	 * 
+	 *
 	 * @type Function
 	 * @memberOf Array
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction Function

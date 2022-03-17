@@ -6,7 +6,13 @@ import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
 
 
-public interface CompletionGenerator {
+/**
+ * Generates completions based on the current user input.
+ *
+ * @author Robert Futrell
+ * @version 1.0
+ */
+interface CompletionGenerator {
 
 
 	/**

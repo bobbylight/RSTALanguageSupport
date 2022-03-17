@@ -32,9 +32,9 @@ public class PerlFunctionCompletion extends FunctionCompletion {
 	/**
 	 * Constructor.
 	 *
-	 * @param provider
-	 * @param name
-	 * @param returnType
+	 * @param provider The completion provider.
+	 * @param name The name of the function.
+	 * @param returnType The return type of the function.
 	 */
 	public PerlFunctionCompletion(CompletionProvider provider, String name,
 			String returnType) {
@@ -42,9 +42,6 @@ public class PerlFunctionCompletion extends FunctionCompletion {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getSummary() {
 

@@ -24,7 +24,7 @@ class PerlCodeCompletionProvider extends DefaultCompletionProvider {
 	private PerlCompletionProvider parent;
 
 
-	public PerlCodeCompletionProvider(PerlCompletionProvider parent) {
+	PerlCodeCompletionProvider(PerlCompletionProvider parent) {
 		this.parent = parent;
 	}
 
@@ -41,9 +41,6 @@ class PerlCodeCompletionProvider extends DefaultCompletionProvider {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean isValidChar(char ch) {
 		return super.isValidChar(ch) || ch=='@' || ch=='$' || ch=='%';

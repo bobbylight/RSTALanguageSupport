@@ -52,6 +52,12 @@ public class CompilationUnit extends AbstractASTNode
 	}
 
 
+	/**
+	 * Adds an import declaration to this compilation unit.
+	 *
+	 * @param dec The import declaration.
+	 * @see #getImports()
+	 */
 	public void addImportDeclaration(ImportDeclaration dec) {
 		imports.add(dec);
 	}
@@ -60,14 +66,21 @@ public class CompilationUnit extends AbstractASTNode
 	/**
 	 * Shorthand for "<tt>addParserNotice(new ParserNotice(t, msg))</tt>".
 	 *
-	 * @param t
-	 * @param msg
+	 * @param t The token to add a parser notice for.
+	 * @param msg The message of the parser notice.
+	 * @see #addParserNotice(ParserNotice)
 	 */
 	public void addParserNotice(Token t, String msg) {
 		addParserNotice(new ParserNotice(t, msg));
 	}
 
 
+	/**
+	 * Adds a parser notice to this compilation unit.
+	 *
+	 * @param notice The notice to add.
+	 * @see #addParserNotice(Token, String)
+	 */
 	public void addParserNotice(ParserNotice notice) {
 		if (notices==null) {
 			notices = new ArrayList<>();
@@ -123,14 +136,14 @@ public class CompilationUnit extends AbstractASTNode
 	 * TODO: Return range for more instances than just class methods.
 	 * Also handle child TypeDeclarations.
 	 *
-	 * @param offs
+	 * @param offs The offset to check.
 	 * @return The starting and ending offset of the enclosing method range.
 	 */
 	public Point getEnclosingMethodRange(int offs) {
 
 		Point range = null;
 
-		for (Iterator<TypeDeclaration> i=getTypeDeclarationIterator(); i.hasNext(); ) {
+		for (Iterator<TypeDeclaration> i=getTypeDeclarationIterator(); i.hasNext();) {
 
 			TypeDeclaration td = i.next();
 			int start = td.getBodyStartOffset();
@@ -140,7 +153,7 @@ public class CompilationUnit extends AbstractASTNode
 
 				if (td instanceof NormalClassDeclaration) {
 					NormalClassDeclaration ncd = (NormalClassDeclaration)td;
-					for (Iterator<Member> j=ncd.getMemberIterator(); j.hasNext(); ) {
+					for (Iterator<Member> j=ncd.getMemberIterator(); j.hasNext();) {
 						Member m = j.next();
 						if (m instanceof Method) {
 							Method method = (Method)m;
@@ -218,6 +231,13 @@ public class CompilationUnit extends AbstractASTNode
 	}
 
 
+	/**
+	 * Returns the specified parser notice.
+	 *
+	 * @param index The index of the parser notice.
+	 * @return The parser notice.
+	 * @see #getParserNoticeCount()
+	 */
 	public ParserNotice getParserNotice(int index) {
 		if (notices==null) {
 			throw new IndexOutOfBoundsException("No parser notices available");
@@ -231,6 +251,13 @@ public class CompilationUnit extends AbstractASTNode
 	}
 
 
+	/**
+	 * Returns the specified type declaration.
+	 *
+	 * @param index The index of the type declaration.
+	 * @return The type declaration.
+	 * @see #getTypeDeclarationCount()
+	 */
 	public TypeDeclaration getTypeDeclaration(int index) {
 		return typeDeclarations.get(index);
 	}

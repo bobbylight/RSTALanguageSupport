@@ -11,12 +11,12 @@ public abstract class JSRegExp implements JSRegExpFunctions {
 
 	/**
 	* Object RegExp(pattern, attributes)
-	* 
+	*
 	* @super Object
 	* @constructor
 	* @memberOf RegExp
 	* @param pattern a string that specifies the pattern of the regular expression.
-	* @param attributes an optional string containing and of the "g", "i" an "m" attributes that specify global, case-insensitive, and multiline matches respectively. 
+	* @param attributes an optional string containing and of the "g", "i" an "m" attributes that specify global, case-insensitive, and multiline matches respectively.
 	* @since Standard ECMA-262 3rd. Edition
 	* @since Level 2 Document Object Model Core Definition.
 	*/
@@ -24,7 +24,7 @@ public abstract class JSRegExp implements JSRegExpFunctions {
 
     /**
     * <b>property prototype</b>
-    * 
+    *
     * @type RegExp
     * @memberOf RegExp
     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSRegExp RegExp
@@ -32,10 +32,10 @@ public abstract class JSRegExp implements JSRegExpFunctions {
     * @since Level 2 Document Object Model Core Definition.
     */
     public JSRegExp prototype;
-   
+
 	/**
     * <b>property constructor</b>
-    * 
+    *
     * @type Function
     * @memberOf RegExp
     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction Function
@@ -43,10 +43,10 @@ public abstract class JSRegExp implements JSRegExpFunctions {
     * @since Level 2 Document Object Model Core Definition.
     */
     protected JSFunction constructor;
-   
+
 	/**
 	 * <b>property source</b>
-	 * 
+	 *
 	 * @type String
 	 * @memberOf RegExp
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
@@ -57,7 +57,7 @@ public abstract class JSRegExp implements JSRegExpFunctions {
 
 	/**
 	 * <b>property global</b>
-	 * 
+	 *
 	 * @type Boolean
 	 * @memberOf RegExp
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSBoolean Boolean
@@ -68,7 +68,7 @@ public abstract class JSRegExp implements JSRegExpFunctions {
 
 	/**
 	 * <b>property ignoreCase</b>
-	 * 
+	 *
 	 * @type Boolean
 	 * @memberOf RegExp
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSBoolean Boolean
@@ -79,7 +79,7 @@ public abstract class JSRegExp implements JSRegExpFunctions {
 
 	/**
 	 * <b>property multiline</b>
-	 * 
+	 *
 	 * @type Boolean
 	 * @memberOf RegExp
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSBoolean Boolean
@@ -90,7 +90,7 @@ public abstract class JSRegExp implements JSRegExpFunctions {
 
 	/**
 	 * <b>property lastIndex</b>
-	 * 
+	 *
 	 * @type Number
 	 * @memberOf RegExp
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number

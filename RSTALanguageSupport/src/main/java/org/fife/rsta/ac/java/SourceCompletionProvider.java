@@ -55,7 +55,7 @@ import org.fife.ui.rsyntaxtextarea.Token;
 
 /**
  * Parses a Java AST for code completions.  It currently scans the following:
- * 
+ *
  * <ul>
  *    <li>Import statements
  *    <li>Method names
@@ -82,13 +82,13 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 
 	private static final String JAVA_LANG_PACKAGE			= "java.lang.*";
 	private static final String THIS						= "this";
-	
+
 	//Shorthand completions (templates and comments)
 	private ShorthandCompletionCache shorthandCache;
 	/**
 	 * Constructor.
 	 */
-	public SourceCompletionProvider() {
+	SourceCompletionProvider() {
 		this(null);
 	}
 
@@ -98,7 +98,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	 *
 	 * @param jarManager The jar manager for this provider.
 	 */
-	public SourceCompletionProvider(JarManager jarManager) {
+	SourceCompletionProvider(JarManager jarManager) {
 		if (jarManager==null) {
 			jarManager = new JarManager();
 		}
@@ -145,7 +145,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	 * This is only called when the caret is inside of a class.
 	 * TODO: Handle accessibility correctly!
 	 *
-	 * @param set
+	 * @param set The set of completions to add to.
 	 * @param cu The compilation unit.
 	 * @param cf A class in the chain of classes that a type being parsed
 	 *        inherits from.
@@ -246,7 +246,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 			set.addAll(shorthandCache.getShorthandCompletions());
 		}
 	}
-	
+
 	/**
 	 * Set template completion cache for source completion provider.
 	 *
@@ -326,8 +326,8 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	/**
 	 * Adds completions for local variables in a method.
 	 *
-	 * @param set
-	 * @param method
+	 * @param set The set of completions to add to.
+	 * @param method The  method being examined.
 	 * @param offs The caret's offset into the source.  This should be inside
 	 *        of <code>method</code>.
 	 */
@@ -350,7 +350,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	/**
 	 * Adds completions for local variables in a code block inside a method.
 	 *
-	 * @param set
+	 * @param set The set of completions to add to.
 	 * @param block The code block.
 	 * @param offs The caret's offset into the source. This should be inside
 	 *        of <code>block</code>.
@@ -450,7 +450,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 
 
 	/**
-	 * Removes all jars from the "build path."
+	 * Removes all jars from the "build path".
 	 *
 	 * @see #removeJar(File)
 	 * @see #addJar(LibraryInfo)
@@ -495,9 +495,6 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public List<Completion> getCompletionsAt(JTextComponent tc, Point p) {
 		getCompletionsImpl(tc); // Force loading of completions
@@ -505,9 +502,6 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected List<Completion> getCompletionsImpl(JTextComponent comp) {
 
@@ -590,7 +584,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 
 
 	/**
-	 * Returns the jars on the "build path."
+	 * Returns the jars on the "build path".
 	 *
 	 * @return A list of {@link LibraryInfo}s.  Modifying a
 	 *         <code>LibraryInfo</code> in this list will have no effect on
@@ -637,9 +631,6 @@ public SourceLocation  getSourceLocForClass(String className) {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected boolean isValidChar(char ch) {
 		return Character.isJavaIdentifierPart(ch) || ch=='.';
@@ -649,7 +640,7 @@ public SourceLocation  getSourceLocForClass(String className) {
 	/**
 	 * Loads completions based on the current caret location in the source.  In
 	 * other words:
-	 * 
+	 *
 	 * <ul>
 	 *   <li>If the caret is anywhere in a class, the names of all methods and
 	 *       fields in the class are loaded.  Methods and fields in super
@@ -659,10 +650,10 @@ public SourceLocation  getSourceLocForClass(String className) {
 	 *       are loaded.
 	 * </ul>
 	 *
-	 * @param cu
-	 * @param comp
-	 * @param alreadyEntered
-	 * @param retVal
+	 * @param cu The compilation unit being parsed.
+	 * @param comp The text component.
+	 * @param alreadyEntered The already-entered text.
+	 * @param retVal The set of values to add to.
 	 */
 	private void loadCompletionsForCaretPosition(CompilationUnit cu,
 		JTextComponent comp, String alreadyEntered, Set<Completion> retVal) {
@@ -672,7 +663,8 @@ public SourceLocation  getSourceLocForClass(String className) {
 		//long startTime = System.currentTimeMillis();
 		int caret = comp.getCaretPosition();
 		//List temp = new ArrayList();
-		int start, end;
+		int start;
+		int end;
 
 		int lastDot = alreadyEntered.lastIndexOf('.');
 		boolean qualified = lastDot>-1;
@@ -707,7 +699,7 @@ public SourceLocation  getSourceLocForClass(String className) {
 	 * This method is called when the caret is found to be in a specific type
 	 * declaration.  This method checks if the caret is in a child type
 	 * declaration first, then adds completions for itself next.
-	 * 
+	 *
 	 * <ul>
 	 *   <li>If the caret is anywhere in a class, the names of all methods and
 	 *       fields in the class are loaded.  Methods and fields in super
@@ -717,10 +709,13 @@ public SourceLocation  getSourceLocForClass(String className) {
 	 *       are loaded.
 	 * </ul>
 	 *
-	 * @param cu
-	 * @param comp
-	 * @param alreadyEntered
-	 * @param retVal
+	 * @param cu The compilation unit.
+	 * @param comp The text component being analyzed.
+	 * @param alreadyEntered The already-entered text.
+	 * @param retVal The set of returned completions.
+	 * @param td The type declaration.
+	 * @param prefix The prefix.
+	 * @param caret The caret position.
 	 */
 	private void loadCompletionsForCaretPosition(CompilationUnit cu,
 			JTextComponent comp, String alreadyEntered, Set<Completion> retVal,
@@ -813,9 +808,9 @@ public SourceLocation  getSourceLocForClass(String className) {
 	 * is a "prefix" of chars and at least one '.' character in the text up to
 	 * the caret.  This is currently very limited and needs to be improved.
 	 *
-	 * @param cu
-	 * @param alreadyEntered
-	 * @param retVal
+	 * @param cu The compilation unit being examined.
+	 * @param alreadyEntered The already-entered text.
+	 * @param retVal The return value.
 	 * @param td The type declaration the caret is in.
 	 * @param currentMethod The method the caret is in, or <code>null</code> if
 	 *        none.
@@ -844,7 +839,7 @@ public SourceLocation  getSourceLocForClass(String className) {
 		String pkg = cu.getPackageName();
 		boolean matched = false;
 
-		for (Iterator<Member> j=td.getMemberIterator(); j.hasNext(); ) {
+		for (Iterator<Member> j=td.getMemberIterator(); j.hasNext();) {
 
 			Member m = j.next();
 
@@ -1021,14 +1016,14 @@ public SourceLocation  getSourceLocForClass(String className) {
 
 		String pkgName = cu.getPackageName();
 		loadCompletionsForImport(set, JAVA_LANG_PACKAGE, pkgName);
-		for (Iterator<ImportDeclaration> i=cu.getImportIterator(); i.hasNext(); ) {
+		for (Iterator<ImportDeclaration> i=cu.getImportIterator(); i.hasNext();) {
 			ImportDeclaration id = i.next();
 			String name = id.getName();
 			if (!JAVA_LANG_PACKAGE.equals(name)) {
 				loadCompletionsForImport(set, name, pkgName);
 			}
 		}
-//		Collections.sort(completions);
+		//Collections.sort(completions);
 
 		//long time = System.currentTimeMillis() - startTime;
 		//System.out.println("imports loaded in: " + time);
@@ -1037,7 +1032,7 @@ public SourceLocation  getSourceLocForClass(String className) {
 
 
 	/**
-	 * Removes a jar from the "build path."
+	 * Removes a jar from the "build path".
 	 *
 	 * @param jar The jar to remove.
 	 * @return Whether the jar was removed.  This will be <code>false</code>
@@ -1060,7 +1055,7 @@ public SourceLocation  getSourceLocForClass(String className) {
 
 	/**
 	 * Sets the parent Java provider.
-	 * 
+	 *
 	 * @param javaProvider The parent completion provider.
 	 */
 	void setJavaProvider(JavaCompletionProvider javaProvider) {

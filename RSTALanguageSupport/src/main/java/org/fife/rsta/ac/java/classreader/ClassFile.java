@@ -102,7 +102,7 @@ public class ClassFile implements AccessFlags {
 	 * {@link #setTypeParamsToTypeArgs(Map)} during code completion of members of an
 	 * instance variable whose type is represented by this class file.  This
 	 * <code>ClassFile</code> doesn't use this field itself; rather, it's there
-	 * for consumers (such as the Java code completion API) to use. 
+	 * for consumers (such as the Java code completion API) to use.
 	 */
 	private Map<String, String> typeMap;
 
@@ -478,7 +478,7 @@ public class ClassFile implements AccessFlags {
 	/**
 	 * Parses the class file from a given input stream.
 	 *
-	 * @param in
+	 * @param in The input stream to read from.
 	 * @throws IOException If an error occurs reading the class file.
 	 */
 	private void init(DataInputStream in) throws IOException {
@@ -508,7 +508,7 @@ public class ClassFile implements AccessFlags {
 	/**
 	 * Reads this class or interface's access flags.
 	 *
-	 * @param in
+	 * @param in The input stream to read from.
 	 * @throws IOException If an error occurs reading the access flags.
 	 */
 	private void readAccessFlags(DataInputStream in) throws IOException {
@@ -613,7 +613,7 @@ public class ClassFile implements AccessFlags {
 	/**
 	 * Reads the constant pool.
 	 *
-	 * @param in
+	 * @param in The input stream to read from.
 	 * @throws IOException If an IO error occurs.
 	 */
 	private void readConstantPoolInfos(DataInputStream in) throws IOException {
@@ -643,7 +643,7 @@ public class ClassFile implements AccessFlags {
 	/**
 	 * Reads the "fields" information.
 	 *
-	 * @param in
+	 * @param in The input stream to read from.
 	 * @throws IOException If an IO error occurs.
 	 */
 	private void readFields(DataInputStream in) throws IOException {
@@ -661,7 +661,7 @@ public class ClassFile implements AccessFlags {
 	/**
 	 * Reads the <code>0xCAFEBABE</code> class file header.
 	 *
-	 * @param in
+	 * @param in The input stream to read from.
 	 * @throws IOException If the header is invalid.
 	 */
 	private void readHeader(DataInputStream in) throws IOException {
@@ -678,7 +678,7 @@ public class ClassFile implements AccessFlags {
 	 * Reads the array of indices into the constant pool for the names of the
 	 * interfaces implemented by this class or interface.
 	 *
-	 * @param in
+	 * @param in The input stream to read from.
 	 * @throws IOException If an IO error occurs reading the input stream.
 	 */
 	private void readInterfaces(DataInputStream in) throws IOException {
@@ -721,7 +721,7 @@ public class ClassFile implements AccessFlags {
 	/**
 	 * Reads the class file's major and minor version numbers.
 	 *
-	 * @param in
+	 * @param in The input stream to read from.
 	 * @throws IOException If the version numbers are invalid.
 	 */
 	private void readVersion(DataInputStream in) throws IOException {

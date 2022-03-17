@@ -41,7 +41,7 @@ class PerlOutputCollector extends OutputCollector {
 	 *
 	 * @param in The input stream.
 	 */
-	public PerlOutputCollector(InputStream in, PerlParser parser,
+	PerlOutputCollector(InputStream in, PerlParser parser,
 								DefaultParseResult result, Element root) {
 		super(in);
 		this.parser = parser;
@@ -50,9 +50,6 @@ class PerlOutputCollector extends OutputCollector {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void handleLineRead(String line) {
 

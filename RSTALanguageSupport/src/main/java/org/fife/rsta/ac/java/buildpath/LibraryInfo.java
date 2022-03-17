@@ -48,7 +48,7 @@ public abstract class LibraryInfo implements Comparable<LibraryInfo>,
 	/**
 	 * Does any cleanup necessary after a call to
 	 * {@link #bulkClassFileCreationStart()}.
-	 * 
+	 *
 	 * @throws IOException If an IO error occurs.
 	 * @see #bulkClassFileCreationStart()
 	 * @see #createClassFileBulk(String)
@@ -61,7 +61,7 @@ public abstract class LibraryInfo implements Comparable<LibraryInfo>,
 	 * {@link #createClassFileBulk(String)}.  After calling this method,
 	 * the actual class file fetching should be done in a try/finally block
 	 * that ensures a call to {@link #bulkClassFileCreationEnd()}; e.g.
-	 * 
+	 *
 	 * <pre>
 	 * libInfo.bulkClassFileCreationStart();
 	 * try {
@@ -72,7 +72,7 @@ public abstract class LibraryInfo implements Comparable<LibraryInfo>,
 	 *    libInfo.bulkClassFileCreationEnd();
 	 * }
 	 * </pre>
-	 * 
+	 *
 	 * @throws IOException If an IO error occurs.
 	 * @see #bulkClassFileCreationEnd()
 	 * @see #createClassFileBulk(String)
@@ -165,6 +165,7 @@ public abstract class LibraryInfo implements Comparable<LibraryInfo>,
 	 * <tt>classes.jar</tt>.  The associated source zip/jar file is also
 	 * checked for.
 	 *
+	 * @param jreHome The location of the JRE.
 	 * @return The information, or <code>null</code> if there is not a JRE in
 	 *         the specified directory.
 	 * @see #getMainJreJarInfo()
@@ -258,6 +259,12 @@ public abstract class LibraryInfo implements Comparable<LibraryInfo>,
 	}
 
 
+	@Override
+	public int hashCode() {
+		return hashCodeImpl();
+	}
+
+
 	/**
 	 * Subclasses should override this method since {@link #equals(Object)} is
 	 * overridden.  Instances of <code>LibraryInfo</code> aren't typically
@@ -266,8 +273,7 @@ public abstract class LibraryInfo implements Comparable<LibraryInfo>,
 	 *
 	 * @return The hash code for this library.
 	 */
-	@Override
-	public abstract int hashCode();
+	public abstract int hashCodeImpl();
 
 
 	/**

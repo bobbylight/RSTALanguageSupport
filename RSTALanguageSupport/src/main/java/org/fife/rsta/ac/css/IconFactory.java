@@ -23,9 +23,9 @@ import javax.swing.ImageIcon;
  * @author Robert Futrell
  * @version 1.0
  */
-class IconFactory {
+final class IconFactory {
 
-	private static IconFactory INSTANCE;
+	private static IconFactory instance;
 
 	private Map<String, Icon> iconMap;
 
@@ -44,10 +44,10 @@ class IconFactory {
 	 * @return The singleton instance.
 	 */
 	public static IconFactory get() {
-		if (INSTANCE==null) {
-			INSTANCE = new IconFactory();
+		if (instance ==null) {
+			instance = new IconFactory();
 		}
-		return INSTANCE;
+		return instance;
 	}
 
 

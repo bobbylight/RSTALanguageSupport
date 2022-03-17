@@ -52,7 +52,7 @@ class JarReader {
 	 * @param info The jar file to read from.  This cannot be <code>null</code>.
 	 * @throws IOException If an IO error occurs reading from the jar file.
 	 */
-	public JarReader(LibraryInfo info) throws IOException {
+	JarReader(LibraryInfo info) throws IOException {
 		this.info = info;
 		packageMap = new PackageMapNode();
 		loadCompletions();

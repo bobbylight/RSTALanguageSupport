@@ -24,6 +24,8 @@ public class ConstantIntegerInfo extends ConstantPoolInfo {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param bytes The bytes that make up this object.
 	 */
 	public ConstantIntegerInfo(long bytes) {
 		super(CONSTANT_String);

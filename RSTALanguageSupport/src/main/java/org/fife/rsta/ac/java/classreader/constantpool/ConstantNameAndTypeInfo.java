@@ -26,8 +26,8 @@ public class ConstantNameAndTypeInfo extends ConstantPoolInfo {
 	/**
 	 * Constructor.
 	 *
-	 * @param nameIndex
-	 * @param descriptorIndex
+	 * @param nameIndex The name index.
+	 * @param descriptorIndex The descriptor index.
 	 */
 	public ConstantNameAndTypeInfo(int nameIndex, int descriptorIndex) {
 		super(CONSTANT_NameAndType);

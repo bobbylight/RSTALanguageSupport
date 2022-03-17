@@ -22,7 +22,7 @@ import org.fife.ui.autocomplete.CompletionProvider;
 /**
  * A completion for a Java field.  This completion gets its information from
  * one of two sources:
- * 
+ *
  * <ul>
  *    <li>A {@link FieldInfo} instance, which is loaded by parsing a class
  *        file.  This is used when this completion represents a field found
@@ -48,14 +48,14 @@ class FieldCompletion extends AbstractJavaSourceCompletion
 	private static final int RELEVANCE		= 3;
 
 
-	public FieldCompletion(CompletionProvider provider, Field field) {
+	FieldCompletion(CompletionProvider provider, Field field) {
 		super(provider, field.getName());
 		this.data = new FieldData(field);
 		setRelevance(RELEVANCE);
 	}
 
 
-	public FieldCompletion(CompletionProvider provider, FieldInfo info) {
+	FieldCompletion(CompletionProvider provider, FieldInfo info) {
 		super(provider, info.getName());
 		this.data = new FieldInfoData(info, (SourceCompletionProvider)provider);
 		setRelevance(RELEVANCE);
@@ -84,7 +84,7 @@ class FieldCompletion extends AbstractJavaSourceCompletion
 			public String getEnclosingClassName(boolean fullyQualified) {
 				return type.getName(fullyQualified);
 			}
-			
+
 			@Override
 			public String getIcon() {
 				return IconFactory.FIELD_PUBLIC_ICON;

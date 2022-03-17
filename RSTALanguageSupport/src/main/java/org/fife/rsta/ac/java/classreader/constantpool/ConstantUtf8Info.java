@@ -27,6 +27,8 @@ public class ConstantUtf8Info extends ConstantPoolInfo {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param bytes The bytes for this record.
 	 */
 	public ConstantUtf8Info(byte[] bytes) {
 		super(CONSTANT_Utf8);
@@ -35,18 +37,18 @@ public class ConstantUtf8Info extends ConstantPoolInfo {
 	}
 
 
-//	public byte[] getBytes() {
-//		return bytes;
-//	}
+	//public byte[] getBytes() {
+	//	return bytes;
+	//}
 
-/*
+	/*
 	private static final boolean isBitSet(int b, int bit) {
 		return ((b>>bit)&1)>0;
 	}
-*/
+	*/
 
 	private String createRepresentedString(byte[] bytes) {
-/*
+		/*
 		StringBuilder sb = new StringBuilder();
 
 		int pos = 0;
@@ -92,7 +94,7 @@ public class ConstantUtf8Info extends ConstantPoolInfo {
 		}
 
 		representedString = sb.toString();
-*/
+		*/
 		representedString = new String(bytes, StandardCharsets.UTF_8);
 		return representedString;
 

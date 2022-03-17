@@ -17,7 +17,7 @@ public abstract class JSAttr implements Attr, JS5ObjectFunctions {
 	/**
 	 * Object Attr()
 	 * http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/ecma-script-binding.html
-	 * 
+	 *
 	 * @augments Node
 	 * @constructor
 	 * @since Standard ECMA-262 3rd. Edition
@@ -30,7 +30,7 @@ public abstract class JSAttr implements Attr, JS5ObjectFunctions {
 	/**
 	 * <b>property prototype</b>
 	 * http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/ecma-script-binding.html
-	 * 
+	 *
 	 * @type Attr
 	 * @memberOf Attr
 	 * @see org.fife.rsta.ac.js.ecma.api.dom.JSAttr Attr
@@ -42,7 +42,7 @@ public abstract class JSAttr implements Attr, JS5ObjectFunctions {
 	/**
 	 * <b>property constructor</b>
 	 * http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/ecma-script-binding.html
-	 * 
+	 *
 	 * @type Function
 	 * @memberOf Attr
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction Function

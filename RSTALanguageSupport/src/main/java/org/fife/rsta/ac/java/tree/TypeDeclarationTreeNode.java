@@ -30,7 +30,7 @@ import org.fife.rsta.ac.java.rjc.lang.Modifiers;
 class TypeDeclarationTreeNode extends JavaTreeNode {
 
 
-	public TypeDeclarationTreeNode(TypeDeclaration typeDec) {
+	TypeDeclarationTreeNode(TypeDeclaration typeDec) {
 
 		super(typeDec);
 		//System.out.println("... " + typeDec);
@@ -54,7 +54,7 @@ class TypeDeclarationTreeNode extends JavaTreeNode {
 				}
 			}
 			else {
-//System.out.println("...  " + value);
+				//System.out.println("...  " + value);
 				iconName = IconFactory.DEFAULT_CLASS_ICON;
 			}
 		}

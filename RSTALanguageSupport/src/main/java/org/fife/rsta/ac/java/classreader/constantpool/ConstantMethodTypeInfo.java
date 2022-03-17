@@ -23,7 +23,7 @@ public class ConstantMethodTypeInfo extends ConstantPoolInfo {
     /**
      * Constructor.
      *
-     * @param descriptorIndex
+     * @param descriptorIndex The descriptor index.
      */
     public ConstantMethodTypeInfo(int descriptorIndex) {
         super(CONSTANT_MethodType);

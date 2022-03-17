@@ -4,18 +4,18 @@ package org.fife.rsta.ac.js.ast;
 
 /**
  * Object that represents options associated with JavaScriptDeclaration. These can be used to ask questions:
- * 
+ *
  * 1) Which script the JavaScriptDeclaration belongs to.
  * 2) Whether the JavaScriptDeclaration supports searchable hyperlinks
- * 
+ *
  *
  */
-public class TypeDeclarationOptions 
+public class TypeDeclarationOptions
 {
 	private String ownerScriptName;
 	private boolean supportsLinks;
 	private boolean preProcessing;
-	
+
 	public TypeDeclarationOptions(String ownerScriptName, boolean supportsLinks, boolean preProcessing)
 	{
 		this.ownerScriptName = ownerScriptName;
@@ -64,6 +64,6 @@ public class TypeDeclarationOptions
 	public void setPreProcessing(boolean preProcessing) {
 		this.preProcessing = preProcessing;
 	}
-	
-	
+
+
 }

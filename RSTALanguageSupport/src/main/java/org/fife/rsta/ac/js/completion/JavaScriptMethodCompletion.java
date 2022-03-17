@@ -168,7 +168,7 @@ public class JavaScriptMethodCompletion extends FunctionCompletion implements
 		/*
 		 * This string compares the following parts of methods in this order, to
 		 * optimize sort order in completion lists.
-		 * 
+		 *
 		 * 1. First, by name 2. Next, by number of parameters. 3. Finally, by
 		 * parameter type.
 		 */
@@ -200,12 +200,12 @@ public class JavaScriptMethodCompletion extends FunctionCompletion implements
 	public String getDefinitionString() {
 		return getSignature();
 	}
-	
+
 	@Override
 	public String getType(boolean qualified) {
 		return ((SourceCompletionProvider) getProvider()).getTypesFactory().convertJavaScriptType("void", qualified);
 	}
-	
+
 	@Override
 	public String getEnclosingClassName(boolean fullyQualified) {
 		return null;
@@ -227,6 +227,6 @@ public class JavaScriptMethodCompletion extends FunctionCompletion implements
 		return sb.toString();
 	}
 
-	
+
 
 }

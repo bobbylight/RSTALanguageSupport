@@ -20,8 +20,8 @@ import org.fife.rsta.ac.java.rjc.lexer.Scanner;
 
 
 /**
- * A class declaration:
- * 
+ * A class declaration.  Its structure is as follows:
+ *
  * <pre>
  * NormalClassDeclaration:
  *    'class' Identifier [TypeParameters] ['extends' Type] ['implements' TypeList] ClassBody
@@ -48,6 +48,11 @@ public class NormalClassDeclaration extends AbstractTypeDeclarationNode {
 	}
 
 
+	/**
+	 * Adds an implemented type to this class declaration.
+	 *
+	 * @param implemented The implemented type.
+	 */
 	public void addImplemented(Type implemented) {
 		implementedList.add(implemented);
 	}
@@ -76,7 +81,7 @@ public class NormalClassDeclaration extends AbstractTypeDeclarationNode {
 	 *         method in this class contains the offset.
 	 */
 	public Method getMethodContainingOffset(int offs) {
-		for (Iterator<Method> i=getMethodIterator(); i.hasNext(); ) {
+		for (Iterator<Method> i=getMethodIterator(); i.hasNext();) {
 			Method method = i.next();
 			if (method.getBodyContainsOffset(offs)) {
 				return method;
@@ -101,9 +106,9 @@ public class NormalClassDeclaration extends AbstractTypeDeclarationNode {
 	 * Returns whether a <code>Type</code> and a type name are type
 	 * compatible.  This method currently is a sham!
 	 *
-	 * @param type
-	 * @param typeName
-	 * @return
+	 * @param type The type to check against.
+	 * @param typeName The type name to also check.
+	 * @return Whether they are type-compatible.
 	 */
 	// TODO: Get me working!  Probably need better parameters passed in!!!
 	private boolean isTypeCompatible(Type type, String typeName) {

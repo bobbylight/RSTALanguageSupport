@@ -27,7 +27,7 @@ class PropertyCompletion extends ShorthandCompletion {
 	private String iconKey;
 
 
-	public PropertyCompletion(CompletionProvider provider, String property,
+	PropertyCompletion(CompletionProvider provider, String property,
 			String iconKey) {
 		super(provider, property, property + ": ");
 		this.iconKey = iconKey;

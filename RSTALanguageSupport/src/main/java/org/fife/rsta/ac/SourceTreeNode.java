@@ -265,7 +265,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 	}
 
 
-    /**
+	/**
 	 * Returns whether this particular node's children can be sorted.
 	 *
 	 * @return Whether this node's children can be sorted.
@@ -286,6 +286,9 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 	}
 
 
+	/**
+	 * Refreshes this tree node and its children.
+	 */
 	public void refresh() {
 		refreshVisibleChildren();
 		for (int i=0; i<getChildCount(); i++) {
@@ -309,7 +312,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 			    visibleChildren.sort(null);
 			}
 			if (pattern!=null) {
-				for (Iterator<TreeNode> i=visibleChildren.iterator(); i.hasNext(); ) {
+				for (Iterator<TreeNode> i=visibleChildren.iterator(); i.hasNext();) {
 					TreeNode node = i.next();
 					if (node.isLeaf()) {
 						String text = node.toString();

@@ -12,7 +12,7 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 /**
  * Language support for TypeScript.
- * 
+ *
  * @author Robert Futrell
  * @version 1.0
  */
@@ -29,7 +29,7 @@ public class TypeScriptLanguageSupport extends AbstractLanguageSupport {
 	private AutoCompletion createAutoCompletion() {
         return new AutoCompletion(provider);
 	}
-	
+
 	@Override
 	public void install(RSyntaxTextArea textArea) {
 
@@ -38,20 +38,20 @@ public class TypeScriptLanguageSupport extends AbstractLanguageSupport {
 		ac.install(textArea);
 		installImpl(textArea, ac);
 
-//		Listener listener = new Listener(textArea);
-//		textArea.putClientProperty(PROPERTY_LISTENER, listener);
-//
-//		parser = new JavaScriptParser(this, textArea);
-//		textArea.putClientProperty(PROPERTY_LANGUAGE_PARSER, parser);
-//		textArea.addParser(parser);
-//		//textArea.setToolTipSupplier(provider);
-//
-//		Info info = new Info(provider, parser);
-//		parserToInfoMap.put(parser, info);
+		//Listener listener = new Listener(textArea);
+		//textArea.putClientProperty(PROPERTY_LISTENER, listener);
 
-//		installKeyboardShortcuts(textArea);
-		
-//		textArea.setLinkGenerator(new JavaScriptLinkGenerator(this));
+		//parser = new JavaScriptParser(this, textArea);
+		//textArea.putClientProperty(PROPERTY_LANGUAGE_PARSER, parser);
+		//textArea.addParser(parser);
+		////textArea.setToolTipSupplier(provider);
+
+		//Info info = new Info(provider, parser);
+		//parserToInfoMap.put(parser, info);
+
+		//installKeyboardShortcuts(textArea);
+
+		//textArea.setLinkGenerator(new JavaScriptLinkGenerator(this));
 	}
 
 

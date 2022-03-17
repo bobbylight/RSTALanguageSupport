@@ -325,7 +325,7 @@ class JsHinter {
 	 * idea was taken from
 	 * <a href="http://www.javaworld.com/javaworld/jw-12-2000/jw-1229-traps_p.html">
 	 * this JavaWorld article</a>.
-	 * 
+	 *
 	 * @author Robert Futrell
 	 */
 	static class StreamReaderThread extends Thread {
@@ -335,7 +335,7 @@ class JsHinter {
 
 		/**
 		 * Constructor.
-		 * 
+		 *
 		 * @param in The stream (stdout or stderr) to read from.
 		 */
 		public StreamReaderThread(InputStream in) {
@@ -345,7 +345,7 @@ class JsHinter {
 
 		/**
 		 * Returns the output read from the stream.
-		 * 
+		 *
 		 * @return The stream's output, as a <code>String</code>.
 		 */
 		public String getStreamOutput() {

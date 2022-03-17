@@ -41,7 +41,7 @@ public class JspCompletionProvider extends HtmlCompletionProvider {
 	public JspCompletionProvider() {
 
 		prefixToTld = new HashMap<>();
-/*
+		/*
 		String fileName = File.separatorChar=='/' ?
 				"/users/robert/struts-2.2.3/lib/struts2-core-2.2.3.jar" :
 				"c:/dev/struts/struts-2.2.3/lib/struts2-core-2.2.3.jar";
@@ -55,7 +55,7 @@ public class JspCompletionProvider extends HtmlCompletionProvider {
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
-*/
+		*/
 		setAutoActivationRules(false, "<:");
 
 	}

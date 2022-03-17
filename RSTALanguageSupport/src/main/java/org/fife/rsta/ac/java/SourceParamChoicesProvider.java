@@ -62,10 +62,10 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 	 * Adds all accessible fields and getters of a specific type, from an
 	 * extended class or implemented interface.
 	 *
-	 * @param type
-	 * @param jm
-	 * @param pkg
-	 * @param list
+	 * @param type The type being examined.
+	 * @param jm The jar manager.
+	 * @param pkg The parent package.
+	 * @param list The list of completions to add to.
 	 */
 	private void addPublicAndProtectedFieldsAndGetters(Type type, JarManager jm,
 			Package pkg, List<Completion> list) {
@@ -82,7 +82,7 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 	 *
 	 * @param ncd The class.
 	 * @param type The type that the variables, fields, and (return value of)
-	 *        getters must be. 
+	 *        getters must be.
 	 * @param offs The offset of the caret.
 	 * @return The list of stuff, or an empty list if none are found.
 	 */
@@ -129,7 +129,7 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 
 		// Next, any fields/getters taking no parameters (for simplicity)
 		// in this class.
-		for (Iterator<Member> i=ncd.getMemberIterator(); i.hasNext(); ) {
+		for (Iterator<Member> i=ncd.getMemberIterator(); i.hasNext();) {
 
 			Member member = i.next();
 
@@ -157,9 +157,6 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public List<Completion> getParameterChoices(JTextComponent tc,
 								ParameterizedCompletion.Parameter param) {
@@ -198,7 +195,7 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 			// Get accessible members of this type.
 			NormalClassDeclaration ncd = (NormalClassDeclaration)typeDec;
 			list = getLocalVarsFieldsAndGetters(ncd, param.getType(), dot);
-//			list = typeDec.getAccessibleMembersOfType(param.getType(), dot);
+			//list = typeDec.getAccessibleMembersOfType(param.getType(), dot);
 
 			// Get accessible members of the extended type.
 			Type extended = ncd.getExtendedType();
@@ -207,12 +204,12 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 			}
 
 			// Get accessible members of any implemented interfaces.
-			for (Iterator<Type> i=ncd.getImplementedIterator(); i.hasNext(); ) {
+			for (Iterator<Type> i=ncd.getImplementedIterator(); i.hasNext();) {
 				Type implemented = i.next();
 				addPublicAndProtectedFieldsAndGetters(implemented,jm,pkg,list);
 			}
 
-			
+
 		}
 
 		// If we're an interface, local vars, etc. don't exist
@@ -249,7 +246,7 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 				list.add(new SimpleCompletion(provider, "null"));
 			}
 		}
-		
+
 		// And we're done!
 		return list;
 
@@ -274,15 +271,15 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 		return method.getParameterCount()==0 &&
 					method.getName().startsWith("get");
 	}
-	
-	
+
+
 	/**
 	 * Returns whether a <code>Type</code> and a type name are type
 	 * compatible.  This method currently is a sham!
 	 *
-	 * @param type
-	 * @param typeName
-	 * @return
+	 * @param type The type to check.
+	 * @param typeName The name of a type to check.
+	 * @return Whether the two are compatible.
 	 */
 	// TODO: Get me working!  Probably need better parameters passed in!!!
 	private boolean isTypeCompatible(Type type, String typeName) {
@@ -317,9 +314,9 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 	private static class SimpleCompletion extends BasicCompletion
 								implements JavaSourceCompletion {
 
-		private Icon ICON = new EmptyIcon(16);
+		private static final Icon ICON = new EmptyIcon(16);
 
-		public SimpleCompletion(CompletionProvider provider, String text) {
+		SimpleCompletion(CompletionProvider provider, String text) {
 			super(provider, text);
 			setRelevance(-1);
 		}

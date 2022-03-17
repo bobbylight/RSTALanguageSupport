@@ -38,11 +38,11 @@ public class JavaScriptHelper {
 	private static final String INFIX = org.mozilla.javascript.ast.InfixExpression.class
 			.getName();
 
-	
+
 	/**
 	 * Test whether the start of the variable is the same name as the variable
 	 * being initialised. This is not possible.
-	 * 
+	 *
 	 * @param target Name of variable being created
 	 * @param initialiser name of initialiser
 	 * @return true if name is different
@@ -55,7 +55,7 @@ public class JavaScriptHelper {
 			if (splitInit.length > 0) {
 				return !varName.equals(splitInit[0]);
 			}
-		} 
+		}
 		catch(Exception e) {
 			//AstNode can throw exceptions if toSource() is invalid e.g. new Date(""..toString());
 		}
@@ -66,7 +66,7 @@ public class JavaScriptHelper {
 	/**
 	 * Parse Text with JavaScript Parser and return AstNode from the expression
 	 * etc.
-	 * 
+	 *
 	 * @param text to parse
 	 * @return expression statement text from source
 	 */
@@ -126,14 +126,14 @@ public class JavaScriptHelper {
 
 	/**
 	 * Iterate back up through parent nodes and check whether inside a function
-	 * 
+	 *
 	 * If the node is a function, then the Parsed parent node structure is:
 	 * FunctionCall
 	 *   --&gt; PropertyGet
 	 *    --&gt; Name
-	 * 
+	 *
 	 * Anything other structure should be rejected.
-	 * 
+	 *
 	 * @param node
 	 * @return
 	 */
@@ -154,7 +154,7 @@ public class JavaScriptHelper {
 
 	/**
 	 * Convert AstNode to TypeDeclaration
-	 * 
+	 *
 	 * @param typeNode AstNode to convert
 	 * @param provider SourceProvider
 	 * @return TypeDeclaration if node resolves to supported type, e.g. Number,
@@ -187,7 +187,7 @@ case Token.EXPR_RESULT:
 				case Token.TRUE:
 				case Token.FALSE:
 					return getTypeDeclaration(TypeDeclarations.ECMA_BOOLEAN, provider);
-				case Token.ARRAYLIT: 
+				case Token.ARRAYLIT:
 					return createArrayType(typeNode, provider);
 				case Token.GETELEM: {
 					TypeDeclaration dec = findGetElementType(typeNode, provider);
@@ -201,7 +201,7 @@ case Token.EXPR_RESULT:
 					String self = provider.getSelf();
 					if(self == null)
 						self = TypeDeclarations.ECMA_GLOBAL;
-					
+
 					return getTypeDeclaration(self, provider);
 				}
 				//xml support
@@ -224,12 +224,12 @@ case Token.EXPR_RESULT:
 		return null;
 
 	}
-	
+
 	/**
 	 * Check the Get Element and extract the Array type from the variable
 	 * e.g
 	 * var a = [1, 2, 3];
-	 * var b = a[1]; //b resolves to Number 
+	 * var b = a[1]; //b resolves to Number
 	 * @param node
 	 * @param provider
 	 * @return
@@ -250,7 +250,7 @@ case Token.EXPR_RESULT:
 		}
 		return  null;
 	}
-	
+
 	/**
 	 * Create array type from AstNode and try to determine the array type
 	 * @param typeNode
@@ -272,7 +272,7 @@ case Token.EXPR_RESULT:
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Find the array type from ArrayLiteral. Iterates through elements and checks all the types are the same
 	 * @param arrayLit
@@ -303,7 +303,7 @@ case Token.EXPR_RESULT:
 	private static TypeDeclaration processNewNode(AstNode typeNode, SourceCompletionProvider provider) {
 		String newName = findNewExpressionString(typeNode);
 		if (newName != null) {
-			
+
 			TypeDeclaration newType = createNewTypeDeclaration(newName);
 			if(newType.isQualified()) {
 				return newType;
@@ -313,8 +313,8 @@ case Token.EXPR_RESULT:
 		}
 		return null;
 	}
-	
-	
+
+
 	public static TypeDeclaration findOrMakeTypeDeclaration(String name, SourceCompletionProvider provider)
 	{
 		TypeDeclaration newType = getTypeDeclaration(name, provider);
@@ -323,7 +323,7 @@ case Token.EXPR_RESULT:
 		}
 		return newType;
 	}
-	
+
 	public static TypeDeclaration createNewTypeDeclaration(String newName)
 	{
 		// create a new Type
@@ -347,18 +347,18 @@ case Token.EXPR_RESULT:
 	 * string number literal Only works by determining the presence of
 	 * StringLiterals and NumberLiterals. StringLiteral will override type to
 	 * evaluate to String.
-	 * 
+	 *
 	 * TODO most probably need some work on this
 	 */
 	private static class InfixVisitor implements NodeVisitor {
 
 		private String type = null;
 		private SourceCompletionProvider provider;
-		
+
 		private InfixVisitor(SourceCompletionProvider provider) {
 			this.provider = provider;
 		}
-		
+
 		@Override
 		public boolean visit(AstNode node) {
 
@@ -366,7 +366,7 @@ case Token.EXPR_RESULT:
 			{
 				JavaScriptResolver resolver = provider.getJavaScriptEngine().getJavaScriptResolver(provider);
 				TypeDeclaration dec = resolver.resolveNode(node);
-				
+
 				boolean isNumber = TypeDeclarations.ECMA_NUMBER.equals(dec.getAPITypeName()) || TypeDeclarations.ECMA_BOOLEAN.equals(dec.getAPITypeName());
 				if(isNumber && (type == null || (isNumber && TypeDeclarations.ECMA_NUMBER.equals(type)))) {
 					type = TypeDeclarations.ECMA_NUMBER;
@@ -374,7 +374,7 @@ case Token.EXPR_RESULT:
 				else {
 					type = TypeDeclarations.ECMA_STRING;
 				}
-					
+
 			}
 
 			return true;
@@ -385,7 +385,7 @@ case Token.EXPR_RESULT:
 	/**
 	 * Use a visitor to visit all the nodes to work out which type to return e.g
 	 * 1 + 1 returns Number 1 + "" returns String true returns Boolean etc.
-	 * 
+	 *
 	 * @param node
 	 * @return
 	 */
@@ -409,8 +409,8 @@ case Token.EXPR_RESULT:
 		JavaScriptResolver resolver = provider.getJavaScriptEngine().getJavaScriptResolver(provider);
         return resolver.resolveNode(rightExp);
 	}
-	
-	
+
+
 	public static String convertNodeToSource(AstNode node)
 	{
 		try
@@ -426,10 +426,10 @@ case Token.EXPR_RESULT:
 
 
 	/**
-	 * 
+	 *
 	 * Returns the index of the first ( working backwards if there is no
 	 * matching closing bracket
-	 * 
+	 *
 	 * @param text
 	 */
 	public static int findIndexOfFirstOpeningBracket(String text) {
@@ -454,7 +454,7 @@ case Token.EXPR_RESULT:
 		}
 		return 0;
 	}
-	
+
 	public static int findIndexOfFirstOpeningSquareBracket(String text) {
 		int index = 0;
 		if (text != null && text.length() > 0) {
@@ -477,12 +477,12 @@ case Token.EXPR_RESULT:
 		}
 		return 0;
 	}
-	
-	
+
+
 	/**
 	 * Returns the node name from 'Token.NEW' AstNode e.g. new Object --> Object
 	 * new Date --> Date etc.
-	 * 
+	 *
 	 * @param node NewExpression node
 	 * @return Extracts the Name identifier from NewExpression
 	 */
@@ -501,7 +501,7 @@ case Token.EXPR_RESULT:
 	/**
 	 * Convenience method to lookup TypeDeclaration through the
 	 * TypeDeclarationFactory.
-	 * 
+	 *
 	 * @param name
 	 * @return
 	 */
@@ -522,9 +522,9 @@ case Token.EXPR_RESULT:
 		}
 		return index;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param text to trim
 	 * @return text up to the last dot e.g. a.getText().length returns a.getText()
 	 */
@@ -536,16 +536,16 @@ case Token.EXPR_RESULT:
 
         return text.substring(0, trim);
 	}
-	
+
 	/**
 	 * Trims the text from the last , from the string
 	 * Looks for {@code (} or {@code [} starting at the end of the string to find out where in the string to substring.
 	 * Do not need to trim off if inside either () or [].
 	 * e.g
 	 * 1, "".charAt(position).indexOf(2, "")
-	 * 
+	 *
 	 * String should be trimmed at the 1, not the 2,
-	 * 
+	 *
 	 * @param text
 	 * @return
 	 */
@@ -580,23 +580,23 @@ case Token.EXPR_RESULT:
 			//not trimmed yet, so find last index and trim there
 			trim = text.lastIndexOf(',') + 1;
 		}
-		//all else fails, trim 
+		//all else fails, trim
 		String parseText = text.substring(trim, text.length());
 
 		return parseText.trim();
 	}
-	
-	
+
+
 	private static class ParseTextVisitor implements NodeVisitor {
 
 		private AstNode lastNode;
 		private String text;
 		private boolean isNew;
-		
+
 		private ParseTextVisitor(String text) {
 			this.text = text;
 		}
-		
+
 
 		@Override
 		public boolean visit(AstNode node) {
@@ -621,19 +621,19 @@ case Token.EXPR_RESULT:
 		public String getLastNodeSource() {
 			return lastNode != null ? lastNode.toSource() : isNew ? "" : text;
 		}
-		
+
 		public boolean isNew()
 		{
 			return isNew;
 		}
 
 	}
-	
+
 	public static class ParseText
 	{
 		public String text = "";
 		public boolean isNew;
-		
+
 	}
 
 }

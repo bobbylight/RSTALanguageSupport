@@ -16,10 +16,16 @@ import org.fife.rsta.ac.java.classreader.ClassFile;
 import org.fife.rsta.ac.java.classreader.Util;
 
 
+/**
+ * Represents an "attribute_info" structure in a class file.
+ *
+ * @author Robert Futrell
+ * @version 1.0
+ */
 public abstract class AttributeInfo {
 
 	private ClassFile cf;
-	public int attributeNameIndex; // u2
+	private int attributeNameIndex; // u2
 
 
 	protected AttributeInfo(ClassFile cf) {

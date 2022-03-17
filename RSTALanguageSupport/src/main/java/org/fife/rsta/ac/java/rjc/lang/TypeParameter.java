@@ -22,7 +22,7 @@ import org.fife.rsta.ac.java.rjc.lexer.Token;
  * <pre>
  * TypeParameter:
  *    Identifier ['extends' Bound]
- * 
+ *
  * Bound:
  *    Type { '&amp;' Type }
  * </pre>
@@ -41,6 +41,11 @@ public class TypeParameter {
 	}
 
 
+	/**
+	 * Adds a bound to this type parameter.
+	 *
+	 * @param bound The bound to add.
+	 */
 	public void addBound(Type bound) {
 		if (bounds==null) {
 			bounds = new ArrayList<>(1); // Usually just 1

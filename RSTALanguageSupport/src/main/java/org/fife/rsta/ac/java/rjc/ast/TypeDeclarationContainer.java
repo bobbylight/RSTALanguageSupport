@@ -21,6 +21,11 @@ package org.fife.rsta.ac.java.rjc.ast;
 public interface TypeDeclarationContainer {
 
 
+	/**
+	 * Adds a type declaration to this container.
+	 *
+	 * @param typeDec The new type declaration.
+	 */
 	void addTypeDeclaration(TypeDeclaration typeDec);
 
 

@@ -24,7 +24,7 @@ import org.fife.rsta.ac.java.classreader.ClassFile;
 
 
 /**
- * Information about a jar of classes to add to the "build path."
+ * Information about a jar of classes to add to the "build path".
  *
  * @author Robert Futrell
  * @version 1.0
@@ -172,7 +172,7 @@ public class JarLibraryInfo extends LibraryInfo {
 
 
 	@Override
-	public int hashCode() {
+	public int hashCodeImpl() {
 		return jarFile.hashCode();
 	}
 

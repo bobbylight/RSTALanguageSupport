@@ -23,7 +23,7 @@ public class TypeDeclarationsECMAv5 extends TypeDeclarationsECMAv3 {
 				"org.fife.rsta.ac.js.ecma.api.ecma5", "JS5String", "String", false, false));
 		addTypeDeclaration(ECMA_JSON, new TypeDeclaration(
 				"org.fife.rsta.ac.js.ecma.api.ecma5", "JS5JSON", "JSON", false, false));
-		
+
 		addTypeDeclaration("org.fife.rsta.ac.js.ecma.api.ecma5.functions.JS5ArrayFunctions", new TypeDeclaration(
 				"org.fife.rsta.ac.js.ecma.api.ecma5.functions", "JS5ArrayFunctions", "Array", false, false));
 		addTypeDeclaration("org.fife.rsta.ac.js.ecma.api.ecma5.functions.JS5DateFunctions", new TypeDeclaration(
@@ -34,7 +34,7 @@ public class TypeDeclarationsECMAv5 extends TypeDeclarationsECMAv3 {
 				"org.fife.rsta.ac.js.ecma.api.ecma5.functions", "JS5ObjectFunctions", "Object", false, false));
 		addTypeDeclaration("org.fife.rsta.ac.js.ecma.api.ecma5.functions.JS5StringFunctions", new TypeDeclaration(
 				"org.fife.rsta.ac.js.ecma.api.ecma5.functions", "JS5StringFunctions", "String", false, false));
-		
+
 	}
-	
+
 }

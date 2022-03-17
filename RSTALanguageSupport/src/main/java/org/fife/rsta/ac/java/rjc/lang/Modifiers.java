@@ -49,7 +49,7 @@ public class Modifiers {
 
 		private static final long serialVersionUID = 1L;
 
-		{ 
+		{
 			put(ABSTRACT, "abstract");
 			put(FINAL, "final");
 			put(INTERFACE, "interface");
@@ -72,11 +72,22 @@ public class Modifiers {
 	}
 
 
+	/**
+	 * Adds an annotation to this set of modifiers.
+	 *
+	 * @param annotation The annotation to add.
+	 */
 	public void addAnnotation(Annotation annotation) {
 		annotations.add(annotation);
 	}
 
 
+	/**
+	 * Adds a modifier to this set of modifiers.
+	 *
+	 * @param tokenType The modifier to add.
+	 * @return Whether the modifier was added (vs. was already known).
+	 */
 	public boolean addModifier(int tokenType) {
 
 		Integer key;
@@ -161,7 +172,7 @@ public class Modifiers {
 
 
 	public boolean isPublic() {
-		return containsModifier(PUBLIC); 
+		return containsModifier(PUBLIC);
 	}
 
 

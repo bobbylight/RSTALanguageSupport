@@ -29,7 +29,7 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
  *    <li>Code completion for HTML5 tags and attributes.</li>
  *    <li>Automatic creation of closing tags for non-self-closing tags.</li>
  * </ul>
- * 
+ *
  * @author Robert Futrell
  * @version 1.0
  */

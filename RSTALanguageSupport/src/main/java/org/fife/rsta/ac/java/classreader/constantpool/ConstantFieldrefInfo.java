@@ -27,8 +27,8 @@ public class ConstantFieldrefInfo extends ConstantPoolInfo {
 	/**
 	 * Constructor.
 	 *
-	 * @param classIndex
-	 * @param nameAndTypeIndex
+	 * @param classIndex The class index.
+	 * @param nameAndTypeIndex The name and type index.
 	 */
 	public ConstantFieldrefInfo(int classIndex, int nameAndTypeIndex) {
 		super(CONSTANT_Fieldref);

@@ -36,24 +36,18 @@ class FieldInfoData implements Data {
 	private SourceCompletionProvider provider;
 
 
-	public FieldInfoData(FieldInfo info, SourceCompletionProvider provider) {
+	FieldInfoData(FieldInfo info, SourceCompletionProvider provider) {
 		this.info = info;
 		this.provider = provider;
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getEnclosingClassName(boolean fullyQualified) {
 		return info.getClassFile().getClassName(fullyQualified);
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getIcon() {
 
@@ -81,18 +75,12 @@ class FieldInfoData implements Data {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getSignature() {
 		return info.getName();
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getSummary() {
 
@@ -167,9 +155,6 @@ class FieldInfoData implements Data {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getType() {
 		return info.getTypeString(false);
@@ -198,9 +183,6 @@ class FieldInfoData implements Data {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean isDeprecated() {
 		return info.isDeprecated();

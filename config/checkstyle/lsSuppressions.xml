@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE suppressions PUBLIC
+    "-//Puppy Crawl//DTD Suppressions 1.1//EN"
+	"https://www.puppycrawl.com/dtds/configuration_1_3.dtd">
+<suppressions>
+    <suppress files=".*src[\\/]test[\\/].*" checks="[a-zA-Z0-9]*"/>
+
+    <!-- The JS classes currently use invalid Javadoc tags, as their Javadoc
+         is used to generate the JSDoc documentation for ES constructs.
+         For now just ignore everything for simplicity.
+    -->
+    <suppress files=".*src[\\/]main[\\/]java[\\/]org[\\/]fife[\\/]rsta[\\/]ac[\\/]js[\\/].*" checks="[a-zA-Z0-9]*"/>
+
+    <!-- Lots of blocks are empty with "TODO" comments describing future implementations -->
+    <suppress files=".*src[\\/]main[\\/]java[\\/]org[\\/]fife[\\/]rsta[\\/]ac[\\/].*" checks="EmptyBlock"/>
+
+    <!-- Generated code is ignored. -->
+    <suppress files=".*src[\\/]main[\\/]java[\\/]org[\\/]fife[\\/]rsta[\\/]ac[\\/]java[\\/]rjc[\\/]lexer[\\/]SourceCodeScanner.*" checks="[a-zA-Z0-9]*"/>
+
+    <!-- Types that are capitalized as defined in the JVM specification. -->
+    <suppress files=".*src[\\/]main[\\/]java[\\/]org[\\/]fife[\\/]rsta[\\/]ac[\\/]java[\\/]classreader[\\/]constantpool[\\/]ConstantTypes.*" checks="ConstantName"/>
+</suppressions>

@@ -13,19 +13,19 @@ import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 
 /**
  * Rhino Specific JavaScriptTypesFactory
- * 
+ *
  * Supports: importPackage and importClass
- * 
+ *
  * importPackage(java.util)
  * importClass(java.util.HashSet)
- * 
+ *
  * Clears the cache every time document is parsed for importPackage and importClass to work properly
  */
 public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 
 	private LinkedHashSet<String> importClasses = new LinkedHashSet<>();
 	private LinkedHashSet<String> importPackages = new LinkedHashSet<>();
-	
+
 	public RhinoJavaScriptTypesFactory(TypeDeclarationFactory typesFactory)
 	{
 		super(typesFactory);
@@ -39,13 +39,13 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 	public void addImportPackage(String packageName) {
 		importPackages.add(packageName);
 	}
-	
+
 	public void mergeImports(HashSet<String> packages, HashSet<String> classes)
 	{
 		mergeImports(packages, importPackages, true);
 		mergeImports(classes, importClasses, false);
 	}
-	
+
 	private void mergeImports(HashSet<String> newImports, LinkedHashSet<String> oldImports, boolean packages)
 	{
 		//iterate through the old imports and check whether the import exists in new. If not then add to remove and remove all types for that package/class
@@ -55,8 +55,8 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 				remove.add(obj);
 			}
 		}
-		
-		
+
+
 		//now iterate through the remove list and remove imports not needed
 		if(!remove.isEmpty())
 		{
@@ -72,7 +72,7 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 			}
 			cachedTypes.keySet().removeAll(removeTypes);
 		}
-		
+
 		if(canClearCache(newImports, oldImports))
 		{
 			//now clear and swap
@@ -83,7 +83,7 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 			oldImports.addAll(newImports);
 		}
 	}
-	
+
 	/**
 	 * Validate whether the newImports and old imports contain the same values
 	 * @param newImports
@@ -94,23 +94,23 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 		if(newImports.size() != oldImports.size()) {
 			return true;
 		}
-		
+
 		for (String im : oldImports) {
 			if(!newImports.contains(im)) {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	public void clearImportCache()
 	{
 		importClasses.clear();
 		importPackages.clear();
 		clearAllImportTypes();
 	}
-	
+
 	private void clearAllImportTypes()
 	{
 		HashSet<TypeDeclaration> removeTypes = new HashSet<>();
@@ -123,7 +123,7 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
         }
 		cachedTypes.keySet().removeAll(removeTypes);
 	}
-	
+
 	/**
 	 * Remove all TypeDeclarations from the TypeDeclarationFactory from the JavaScriptType and all it's extended classes
 	 * @param type
@@ -159,7 +159,7 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 		}
 		return file;
 	}
-	
+
 	private String removePackagesFromType(String type)
 	{
 		if(type.startsWith(RhinoJavaScriptAstParser.PACKAGES))
@@ -196,13 +196,13 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 	private ClassFile findFromImport(JarManager manager, String name) {
 		ClassFile file = null;
 		for (String packageName : importPackages) {
-			String cls = name.startsWith(".") ? (packageName + name) : (packageName + "." + name);   
+			String cls = name.startsWith(".") ? (packageName + name) : (packageName + "." + name);
 			file = manager.getClassEntry(cls);
 			if (file != null)
 				break;
 		}
 		return file;
 	}
-	
-	
+
+
 }

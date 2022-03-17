@@ -28,7 +28,7 @@ class BasicCssCompletion extends BasicCompletion {
 	private String iconKey;
 
 
-	public BasicCssCompletion(CompletionProvider provider, String value,
+	BasicCssCompletion(CompletionProvider provider, String value,
 			String iconKey) {
 		super(provider, value);
 		this.iconKey = iconKey;

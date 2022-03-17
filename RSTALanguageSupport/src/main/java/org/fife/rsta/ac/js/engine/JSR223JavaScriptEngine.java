@@ -12,9 +12,9 @@ import org.fife.rsta.ac.js.resolver.JavaScriptResolver;
 
 public class JSR223JavaScriptEngine extends JavaScriptEngine {
 
-	
+
 public static final String JSR223_ENGINE = "JSR223";
-	
+
 	@Override
 	public JavaScriptResolver getJavaScriptResolver(SourceCompletionProvider provider) {
 		return new JSR223JavaScriptCompletionResolver(provider);

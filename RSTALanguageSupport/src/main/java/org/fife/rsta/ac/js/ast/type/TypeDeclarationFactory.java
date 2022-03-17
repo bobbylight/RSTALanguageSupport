@@ -29,18 +29,18 @@ import org.fife.rsta.ac.js.ast.type.ecma.v5.TypeDeclarationsECMAv5;
  */
 public class TypeDeclarationFactory {
 
-	
+
 	private TypeDeclarations ecma;
-	
+
 	public TypeDeclarationFactory()
 	{
 		setTypeDeclarationVersion(null, false, false);
 	}
 
-	
+
 	public List<String> setTypeDeclarationVersion(String ecmaVersion,
 			boolean xmlSupported, boolean client) {
-		
+
 		try
 		{
 			ecmaVersion = ecmaVersion == null ? getDefaultECMAVersion() : ecmaVersion;
@@ -54,22 +54,22 @@ public class TypeDeclarationFactory {
 			//ignore this
 			ecma = new TypeDeclarationsECMAv5();
 		}
-		
+
 		if(xmlSupported) { //add E4X API
 			new ECMAvE4xAdditions().addAdditionalTypes(ecma);
 		}
-		
+
 		if(client) {
 			//for client we are going to add DOM, HTML DOM and Browser attributes/methods
 			new ClientBrowserAdditions().addAdditionalTypes(ecma);
 			new DOMAddtions().addAdditionalTypes(ecma);
 			new HTMLDOMAdditions().addAdditionalTypes(ecma);
 		}
-			
-		
+
+
 		return ecma.getAllClasses();
 	}
-	
+
 	/**
 	 * @return Default base ECMA implementation
 	 */
@@ -77,21 +77,21 @@ public class TypeDeclarationFactory {
 	{
 		return TypeDeclarationsECMAv5.class.getName();
 	}
-	
+
 	public List<TypeDeclaration> getAllJavaScriptTypes() {
 		return ecma.getAllJavaScriptTypeDeclarations();
 	}
 
 	/**
 	 * Removes declaration type from type cache
-	 * 
+	 *
 	 * @param name name of type declaration
-	 * 
+	 *
 	 */
 	public void removeType(String name) {
 		ecma.removeType(name);
 	}
-	
+
 	/**
 	 * Returns whether the qualified name is a built-in JavaScript type
 	 * @param td The type declaration to check.
@@ -104,7 +104,7 @@ public class TypeDeclarationFactory {
 
 
 	/**
-	 * 
+	 *
 	 * @param name
 	 * @return Lookup type declaration from name. If the
 	 *         <code>TypeDeclaration</code> cannot be found, then lookup using
@@ -113,8 +113,8 @@ public class TypeDeclarationFactory {
 	public TypeDeclaration getTypeDeclaration(String name) {
 		return ecma.getTypeDeclaration(name);
 	}
-	
-	
+
+
 	/**
 	 * @param name of TypeDeclaration to lookup
 	 * @return lookup <code>TypeDeclaration</code> and return the JavaScript name
@@ -125,7 +125,7 @@ public class TypeDeclarationFactory {
 	}
 
 
-	
+
 	/**
 	 * The API may have its own types, so these need converting back to
 	 * JavaScript types e.g. JSString == String, JSNumber == Number
@@ -136,15 +136,15 @@ public class TypeDeclarationFactory {
 			if (TypeDeclarations.NULL_TYPE.equals(lookupName)) { // void has no type
 				return null;
 			}
-			
+
 			//remove param descriptor type from type e.g. java.util.Iterator<Object> --> java.util.Iterator
 			//as JavaScript does not support this
 			if(lookupName.indexOf('<') > -1) {
 				lookupName = lookupName.substring(0, lookupName.indexOf('<'));
 			}
-			
+
 			String lookup = !qualified ? getJSTypeDeclarationAsString(lookupName) : lookupName;
-			
+
 			lookupName = lookup != null ? lookup : lookupName;
 			if (!qualified) {
 				if (lookupName != null && lookupName.contains(".")) {
@@ -164,11 +164,11 @@ public class TypeDeclarationFactory {
 	public TypeDeclaration getDefaultTypeDeclaration() {
 		return getTypeDeclaration(TypeDeclarations.ANY);
 	}
-	
+
 	public void addType(String name, TypeDeclaration dec) {
 		ecma.addTypeDeclaration(name, dec);
 	}
-	
+
 	public String getClassName(String lookup) throws RuntimeException {
 		TypeDeclaration td = getTypeDeclaration(lookup);
 		if(td != null) {
@@ -177,22 +177,22 @@ public class TypeDeclarationFactory {
 		//else
 		throw new RuntimeException("Error finding TypeDeclaration for: " + lookup);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return a list of ECMA JavaScriptObjects
 	 */
 	public Set<JavaScriptObject> getECMAScriptObjects() {
 		return ecma.getJavaScriptObjects();
 	}
-	
+
 	/**
 	 * Answers the question whether an object can be instantiated (i.e. has a constructor)
 	 * @param name name of class to test
-	 * 
+	 *
 	 */
 	public boolean canJavaScriptBeInstantiated(String name) {
 		return ecma.canECMAObjectBeInstantiated(name);
 	}
-	
+
 }

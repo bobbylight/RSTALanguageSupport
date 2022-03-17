@@ -98,7 +98,7 @@ public class JSBeanCompletion extends VariableCompletion implements
 	public String getEnclosingClassName(boolean fullyQualified) {
 		return methodData.getEnclosingClassName(fullyQualified);
 	}
-	
+
 	public JSMethodData getMethodData()
 	{
 		return methodData;
@@ -139,14 +139,14 @@ public class JSBeanCompletion extends VariableCompletion implements
 
 	/**
 	 * Overridden since {@link #equals(Object)} is overridden.
-	 * 
+	 *
 	 * @return The hash code.
 	 */
 	@Override
 	public int hashCode() {
 		return getName().hashCode();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */

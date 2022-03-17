@@ -23,7 +23,7 @@ public class ImportDeclaration extends AbstractASTNode {
 
 	private boolean isStatic;
 
-	
+
 	public ImportDeclaration(Scanner s, int offs, String info, boolean isStatic) {
 		super(info, s.createOffset(offs), s.createOffset(offs+info.length()));
 		setStatic(isStatic);

@@ -33,7 +33,7 @@ public class VariableResolver {
 	// system
 	private HashMap<String, JavaScriptVariableDeclaration> systemVariables =
             new HashMap<>();
-	
+
 	private HashMap<String, JavaScriptFunctionDeclaration> localFunctions =
             new HashMap<>();
 	private HashMap<String, JavaScriptFunctionDeclaration> preProcessedFunctions =
@@ -42,7 +42,7 @@ public class VariableResolver {
 
 	/**
 	 * Add local scope variable to cache.
-	 * 
+	 *
 	 * @param declaration variable to add
 	 */
 	public void addLocalVariable(JavaScriptVariableDeclaration declaration) {
@@ -52,7 +52,7 @@ public class VariableResolver {
 
 	/**
 	 * Add pre-processing scope variable to cache.
-	 * 
+	 *
 	 * @param declaration variable to add
 	 */
 	public void addPreProcessingVariable(JavaScriptVariableDeclaration declaration) {
@@ -62,7 +62,7 @@ public class VariableResolver {
 
 	/**
 	 * Add system scope variable to cache
-	 * 
+	 *
 	 * @param declaration variable to add
 	 */
 	public void addSystemVariable(JavaScriptVariableDeclaration declaration) {
@@ -72,7 +72,7 @@ public class VariableResolver {
 
 	/**
 	 * remove pre-processing variable from system variable cache
-	 * 
+	 *
 	 * @param name of the system variable to remove
 	 */
 	public void removePreProcessingVariable(String name) {
@@ -82,7 +82,7 @@ public class VariableResolver {
 
 	/**
 	 * remove system variable from system variable cache
-	 * 
+	 *
 	 * @param name of the system variable to remove
 	 */
 	public void removeSystemVariable(String name) {
@@ -92,7 +92,7 @@ public class VariableResolver {
 
 	/**
 	 * Find JSVariableDeclaration for name against all variable types and check is in scope of caret position
-	 * 
+	 *
 	 * @param name
 	 * @param dot
 	 * @return JSVariableDeclaration from the name
@@ -107,7 +107,7 @@ public class VariableResolver {
 		return findDeclaration == null ? findDeclaration(systemVariables, name,
 				dot) : findDeclaration;
 	}
-	
+
 	public JavaScriptVariableDeclaration findDeclaration(String name, int dot, boolean local, boolean preProcessed, boolean system) {
 		JavaScriptVariableDeclaration findDeclaration = local ? findDeclaration(localVariables, name, dot) : null;
 		// test whether this was found and then try pre-processing variable
@@ -115,15 +115,15 @@ public class VariableResolver {
 		// last chance... look in system variables
 		return findDeclaration == null ? system ? findDeclaration(systemVariables, name, dot) : null : findDeclaration;
 	}
-	
+
 	/**
 	 * Find JSVariableDeclaration within pre-processed and system variable only. Also check is in scope of caret position
-	 * 
+	 *
 	 * @param name of variable to resolve
 	 * @param dot position in text document
 	 * @return JSVariableDeclaration from the name
 	 */
-	
+
 	public JavaScriptVariableDeclaration findNonLocalDeclaration(String name, int dot) {
 		//try pre-processing variable
 		JavaScriptVariableDeclaration findDeclaration = findDeclaration(preProcessedVariables, name, dot);
@@ -135,7 +135,7 @@ public class VariableResolver {
 
 	/**
 	 * Find JSVariableDeclaration and check the scope of the caret position
-	 * 
+	 *
 	 * @param name
 	 * @param dot
 	 * @return JSVariableDeclaration from the name
@@ -160,7 +160,7 @@ public class VariableResolver {
 	/**
 	 * Find the <code>TypeDeclaration</code> for the variable and check the
 	 * scope of the caret position
-	 * 
+	 *
 	 * @param name name of variable
 	 * @param dot position
 	 * @return TypeDeclaration from the name
@@ -201,7 +201,7 @@ public class VariableResolver {
 	/**
 	 * Resolve the entered text by chopping up the text and working from left to
 	 * right, resolving each type in turn
-	 * 
+	 *
 	 * @param varName
 	 * @param dot
 	 * @return TypeDeclaration for variable name
@@ -211,31 +211,31 @@ public class VariableResolver {
 		// just look up variable
 		return getTypeDeclarationForVariable(varName, dot);
 	}
-	
-	
+
+
 	public void addLocalFunction(JavaScriptFunctionDeclaration func)
 	{
 		localFunctions.put(func.getName(), func);
 	}
-	
+
 	public JavaScriptFunctionDeclaration findFunctionDeclaration(String name)
 	{
 		JavaScriptFunctionDeclaration dec = localFunctions.get(name);
 		if(dec == null) {
 			dec = preProcessedFunctions.get(name);
 		}
-		return dec;	
+		return dec;
 	}
-	
+
 	public JavaScriptFunctionDeclaration findFunctionDeclaration(String name, boolean local, boolean preProcessed)
 	{
 		JavaScriptFunctionDeclaration dec = local ? localFunctions.get(name) : null;
 		if(dec == null) {
 			dec = preProcessed ? preProcessedFunctions.get(name) : null;
 		}
-		return dec;	
+		return dec;
 	}
-	
+
 	public JavaScriptFunctionDeclaration findFunctionDeclarationByFunctionName(String name, boolean local, boolean preprocessed) {
 		JavaScriptFunctionDeclaration func = local ? findFirstFunction(name, localFunctions) : null;
 		if(func == null) {
@@ -243,7 +243,7 @@ public class VariableResolver {
 		}
 		return func;
 	}
-	
+
 	private JavaScriptFunctionDeclaration findFirstFunction(String name,
 			HashMap<String, JavaScriptFunctionDeclaration> functions) {
 		for (JavaScriptFunctionDeclaration func : functions.values()) {
@@ -253,10 +253,10 @@ public class VariableResolver {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Add pre-processing scope function to cache.
-	 * 
+	 *
 	 * @param func variable to add
 	 */
 	public void addPreProcessingFunction(

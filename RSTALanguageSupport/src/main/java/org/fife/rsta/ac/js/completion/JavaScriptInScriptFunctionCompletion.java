@@ -14,7 +14,7 @@ public class JavaScriptInScriptFunctionCompletion extends FunctionCompletion
 		implements JSCompletion {
 
 	private TypeDeclaration returnType;
-	
+
 	public JavaScriptInScriptFunctionCompletion(CompletionProvider provider,
 			String name, TypeDeclaration returnType) {
 		super(provider, name, null);
@@ -71,9 +71,9 @@ public class JavaScriptInScriptFunctionCompletion extends FunctionCompletion
 		String type = returnType != null ? returnType.getQualifiedName() : null;
 		return ((SourceCompletionProvider) getProvider()).getTypesFactory().convertJavaScriptType(type, qualified);
 	}
-	
-	
-	
+
+
+
 	@Override
 	public String getEnclosingClassName(boolean fullyQualified) {
 		return null;
@@ -98,12 +98,12 @@ public class JavaScriptInScriptFunctionCompletion extends FunctionCompletion
 	public int hashCode() {
 		return getLookupName().hashCode();
 	}
-	
+
 	@Override
 	public String toString() {
 		return getLookupName();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */

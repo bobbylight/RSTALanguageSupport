@@ -6,15 +6,15 @@ import org.w3c.dom.EntityReference;
 
 
 public abstract class JSEntityReference implements EntityReference, JS5ObjectFunctions {
-	
+
 	/**
 	 * Object EntityReference()
 	 * http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/ecma-script-binding.html
-	 * 
+	 *
 	 * @constructor
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
-	 * 
+	 *
 	 */
 	public JSEntityReference() {
 
@@ -22,7 +22,7 @@ public abstract class JSEntityReference implements EntityReference, JS5ObjectFun
 
 	/**
 	 * <b>property prototype</b>
-	 * 
+	 *
 	 * @type EntityReference
 	 * @memberOf EntityReference
 	 * @see org.fife.rsta.ac.js.ecma.api.dom.JSEntityReference Node
@@ -33,7 +33,7 @@ public abstract class JSEntityReference implements EntityReference, JS5ObjectFun
 
 	/**
 	 * <b>property constructor</b>
-	 * 
+	 *
 	 * @type Function
 	 * @memberOf Array
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction Function

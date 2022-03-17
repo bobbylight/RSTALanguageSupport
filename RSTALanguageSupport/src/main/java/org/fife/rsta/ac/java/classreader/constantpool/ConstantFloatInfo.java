@@ -25,7 +25,7 @@ public class ConstantFloatInfo extends ConstantPoolInfo {
 	/**
 	 * Constructor.
 	 *
-	 * @param bytes
+	 * @param bytes The bytes.
 	 */
 	public ConstantFloatInfo(int bytes) {
 		super(CONSTANT_Float);

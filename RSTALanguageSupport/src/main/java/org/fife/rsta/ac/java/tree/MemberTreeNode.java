@@ -34,7 +34,7 @@ class MemberTreeNode extends JavaTreeNode {
 	private String text;
 
 
-	public MemberTreeNode(CodeBlock cb) {
+	MemberTreeNode(CodeBlock cb) {
 		super(cb);
 		text = "<html>" + cb.getName();
 		IconFactory fact = IconFactory.get();
@@ -49,8 +49,8 @@ class MemberTreeNode extends JavaTreeNode {
 		setSortPriority(priority);
 	}
 
- 
-	public MemberTreeNode(Field field) {
+
+	MemberTreeNode(Field field) {
 
 		super(field);
 
@@ -103,7 +103,7 @@ class MemberTreeNode extends JavaTreeNode {
 	}
 
 
-	public MemberTreeNode(Method method) {
+	MemberTreeNode(Method method) {
 
 		super(method);
 

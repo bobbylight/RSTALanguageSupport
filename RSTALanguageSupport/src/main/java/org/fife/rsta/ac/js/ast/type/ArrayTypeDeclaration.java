@@ -11,7 +11,7 @@ package org.fife.rsta.ac.js.ast.type;
  * e.g.
  * var a = [1, 2, 3]; //Array Type - Number
  * var d = a[1]; //var d is resolved as a Number
- * 
+ *
  */
 public class ArrayTypeDeclaration extends TypeDeclaration {
 

@@ -23,9 +23,9 @@ import org.fife.rsta.ac.js.completion.JSCompletion;
  * Cached Type Tree Node with pointer to a list of super classes to make it easy
  * to walk through Completion hierarchy Contains a HashMap of lookup keys to
  * <code>JSCompletion</code>
- * 
+ *
  * @author steveup
- * 
+ *
  */
 public class JavaScriptType {
 
@@ -52,14 +52,14 @@ public class JavaScriptType {
 
 	/**
 	 * Add method or field completion to CachedType
-	 * 
+	 *
 	 * @param completion
 	 * @see JSCompletion
 	 */
 	public void addCompletion(JSCompletion completion) {
 		methodFieldCompletions.put(completion.getLookupName(), completion);
 	}
-	
+
 	public JSCompletion removeCompletion(String completionLookup, SourceCompletionProvider provider)
 	{
 		JSCompletion completion = getCompletion(completionLookup, provider);
@@ -68,14 +68,14 @@ public class JavaScriptType {
 		}
 		return completion;
 	}
-	
+
 	/**
 	 * Recursively walk through completions for this and extended classes to remove completion for this lookup name
 	 * @param type
 	 * @param completion The completion to remove.
 	 */
 	private void removeCompletion(JavaScriptType type, JSCompletion completion) {
-		
+
 		if(type.methodFieldCompletions.containsKey(completion.getLookupName())) {
 			type.methodFieldCompletions.remove(completion.getLookupName());
 		}
@@ -84,15 +84,15 @@ public class JavaScriptType {
 			removeCompletion(extendedType, completion);
 		}
 	}
-	
+
 	/**
 	 * Adds a constructor completion to CachedType object type
-	 * @param completion 
+	 * @param completion
 	 */
 	public void addConstructor(JSCompletion completion) {
 		constructors.put(completion.getLookupName(), completion);
 	}
-	
+
 	public void removeConstructor(JSCompletion completion)
 	{
 		constructors.remove(completion.getLookupName());
@@ -105,7 +105,7 @@ public class JavaScriptType {
 	public void setClassTypeCompletion(JSCompletion classType) {
 		this.classType = classType;
 	}
-	
+
 	/**
 	 * @return the class type completion for the javascript type
 	 */
@@ -165,14 +165,14 @@ public class JavaScriptType {
 	public HashMap<String, JSCompletion> getMethodFieldCompletions() {
 		return methodFieldCompletions;
 	}
-	
+
 	public HashMap<String, JSCompletion> getConstructorCompletions() {
 		return constructors;
 	}
 
 
 	/**
-	 * 
+	 *
 	 * @return Get type declaration for CachedType
 	 * @see TypeDeclaration
 	 */
@@ -183,7 +183,7 @@ public class JavaScriptType {
 
 	/**
 	 * Add Cached Type extension
-	 * 
+	 *
 	 * @param type
 	 * @see JavaScriptType
 	 */
@@ -193,7 +193,7 @@ public class JavaScriptType {
 
 
 	/**
-	 * 
+	 *
 	 * @return list of CachedType extended classes
 	 */
 	public List<JavaScriptType> getExtendedClasses() {
@@ -222,7 +222,7 @@ public class JavaScriptType {
 
 	/**
 	 * Overridden since {@link #equals(Object)} is overridden.
-	 * 
+	 *
 	 * @return The hash code.
 	 */
 	@Override

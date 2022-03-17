@@ -65,6 +65,8 @@ public class JavaParser extends AbstractParser {
 
 	/**
 	 * Constructor.
+	 *
+	 * @param textArea The text area to parse.
 	 */
 	public JavaParser(RSyntaxTextArea textArea) {
 		support = new PropertyChangeSupport(this);
@@ -97,6 +99,13 @@ public class JavaParser extends AbstractParser {
 	}
 
 
+	/**
+	 * Adds a listener to this parser.
+	 *
+	 * @param prop The property to listen for changes to.
+	 * @param l The listener to add.
+	 * @see #removePropertyChangeListener(String, PropertyChangeListener)
+	 */
 	public void addPropertyChangeListener(String prop, PropertyChangeListener l) {
 		 support.addPropertyChangeListener(prop, l);
 	}
@@ -114,6 +123,13 @@ public class JavaParser extends AbstractParser {
 	}
 
 
+	/**
+	 * Returns the offset into the document of a parser notice.
+	 *
+	 * @param doc The document.
+	 * @param notice The parser notice.
+	 * @return The offset, or {@code -1} if it is invalid.
+	 */
 	public int getOffset(RSyntaxDocument doc, ParserNotice notice) {
 		Element root = doc.getDefaultRootElement();
 		Element elem = root.getElement(notice.getLine());
@@ -122,9 +138,6 @@ public class JavaParser extends AbstractParser {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public ParseResult parse(RSyntaxDocument doc, String style) {
 
@@ -154,6 +167,13 @@ public class JavaParser extends AbstractParser {
 	}
 
 
+	/**
+	 * Removes a property change listener from this parser.
+	 *
+	 * @param prop The property being listened to.
+	 * @param l The listener to remove.
+	 * @see #addPropertyChangeListener(String, PropertyChangeListener)
+	 */
 	public void removePropertyChangeListener(String prop, PropertyChangeListener l) {
 		support.removePropertyChangeListener(prop, l);
 	}

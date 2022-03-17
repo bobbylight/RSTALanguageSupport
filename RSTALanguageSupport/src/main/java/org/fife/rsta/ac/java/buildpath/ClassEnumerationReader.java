@@ -23,7 +23,7 @@ import java.util.List;
  * Reads plain text files enumerating classes to take from the classpath and
  * add to a {@link ClasspathLibraryInfo}.  Files should have a format similar
  * to the following:
- * 
+ *
  * <pre>
  * - com.mycompany.pkg1.Class1
  * Class2
@@ -33,7 +33,7 @@ import java.util.List;
  * - another.pkg.Utils
  * ...
  * </pre>
- * 
+ *
  * Such files are expected to be UTF-8. The exact file structure is as follows:
  * <ul>
  *    <li>Lines that start with a "<code>-</code>" denote a fully-qualified
@@ -47,7 +47,7 @@ import java.util.List;
  * @author Robert Futrell
  * @version 1.0
  */
-public class ClassEnumerationReader {
+public final class ClassEnumerationReader {
 
 
 	/**
@@ -106,5 +106,5 @@ public class ClassEnumerationReader {
 
 	}
 
-	
+
 }

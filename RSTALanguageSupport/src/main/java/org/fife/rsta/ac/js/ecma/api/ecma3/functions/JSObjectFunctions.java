@@ -6,7 +6,7 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.JSString;
 
 
 public interface JSObjectFunctions {
-	
+
 
     /**
      * <b>function toString()</b> define an objects string representation.
@@ -35,7 +35,7 @@ public interface JSObjectFunctions {
     /**
      * <b>function valueOf()</b> the primitive value of a specified object.
      * @memberOf Object
-     * @returns The primitive value associated with the <b><i>object</i></b>, if any. 
+     * @returns The primitive value associated with the <b><i>object</i></b>, if any.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSObject Object.
      * @see #toString() toString()
      * @since Standard ECMA-262 3rd. Edition
@@ -53,12 +53,12 @@ public interface JSObjectFunctions {
 	 * o.hasOwnProperty("x"); //return true; o has property x.
 	 * o.hasOwnProperty("y"); //return false; o does not have property y.
 	 * o.hasOwnProperty("toString"); //return false; o inherits toString.
-	 * </pre> 
+	 * </pre>
      * @memberOf Object
      * @param name A string that contains the name of a property of <b><i>object</i></b>.
-     * @returns <b><i>true</i></b> if <b><i>object</i></b> has a noninherited property with the name specified by <b><i>name</i></b>. 
+     * @returns <b><i>true</i></b> if <b><i>object</i></b> has a noninherited property with the name specified by <b><i>name</i></b>.
      * <b><i>false</i></b> if <b><i>object</i></b> does not contain the property with the specified name or if it inherits the property from
-     * its prototype object. 
+     * its prototype object.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSObject Object
      * @see #propertyIsEnumerable(JSObject) propertyIsEnumerable()
      * @since Standard ECMA-262 3rd. Edition
@@ -75,7 +75,7 @@ public interface JSObjectFunctions {
 	 * Object.prototype.isPrototypeOf(o); //true: o is an object.
 	 * Function.prototype.isPrototypeOf(o.toString(); //return true: toString is a function.
 	 * Array.prototype.isPrototypeOf([1,2,3]; //return true: [1,2,3] is an Array.
-	 * </pre> 
+	 * </pre>
      * @memberOf Object
      * @param o Any object
      * @returns <b><i>true</i></b> if <b><i>object</i></b> is prototype of o. <b><i>false</i></b> is not an object or if <b><i>object</i></b>
@@ -96,7 +96,7 @@ public interface JSObjectFunctions {
 	 * o.propertyIsEnumerable("x"); //return true; property x is local and enumerable.
 	 * o.propertyIsEnumerable("y"); //return false; o does not have property y.
 	 * o.propertyIsEnumerable("toString"); //return false; o inherits toString.
-	 * </pre> 
+	 * </pre>
      * @memberOf Object
      * @param name A string that contains the name of a property of <b><i>object</i></b>.
      * @returns <b><i>true</i></b> if <b><i>object</i></b> has a noninherited property with the name specified by <b><i>name</i></b> and

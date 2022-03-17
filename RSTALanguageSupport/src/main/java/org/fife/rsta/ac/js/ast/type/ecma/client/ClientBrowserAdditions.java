@@ -7,7 +7,7 @@ import org.fife.rsta.ac.js.ast.type.ecma.TypeDeclarations;
 
 public class ClientBrowserAdditions implements ECMAAdditions {
 
-	
+
 	@Override
 	public void addAdditionalTypes(TypeDeclarations typeDecs) {
 
@@ -18,7 +18,7 @@ public class ClientBrowserAdditions implements ECMAAdditions {
 		typeDecs.addTypeDeclaration("Navigator", new TypeDeclaration("org.fife.rsta.ac.js.ecma.api.client", "Navigator", "Navigator", false, false));
 		typeDecs.addTypeDeclaration("Screen", new TypeDeclaration("org.fife.rsta.ac.js.ecma.api.client", "Screen", "Screen", false, false));
 		typeDecs.addTypeDeclaration("BarProp", new TypeDeclaration("org.fife.rsta.ac.js.ecma.api.client", "BarProp", "BarProp", false, false));
-		
+
 		typeDecs.addTypeDeclaration("org.fife.rsta.ac.js.ecma.api.client.funtions.HistoryFunctions", new TypeDeclaration(
 				"org.fife.rsta.ac.js.ecma.api.client.funtions", "HistoryFunctions", "History", false, false));
 		typeDecs.addTypeDeclaration("org.fife.rsta.ac.js.ecma.api.client.funtions.LocationFunctions", new TypeDeclaration(
@@ -27,7 +27,7 @@ public class ClientBrowserAdditions implements ECMAAdditions {
 				"org.fife.rsta.ac.js.ecma.api.client.funtions", "NavigatorFunctions", "Navigator", false, false));
 		typeDecs.addTypeDeclaration("org.fife.rsta.ac.js.ecma.api.client.funtions.WindowFunctions", new TypeDeclaration(
 				"org.fife.rsta.ac.js.ecma.api.client.funtions", "WindowFunctions", "Window", false, false));
-		
+
 		typeDecs.addECMAObject("Window", true);
 		typeDecs.addECMAObject("History", true);
 		typeDecs.addECMAObject("Location", true);

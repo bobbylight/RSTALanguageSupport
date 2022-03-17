@@ -79,7 +79,7 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 	private static final Pattern VENDOR_PREFIXES =
 			Pattern.compile("^\\-(?:ms|moz|o|xv|webkit|khtml|apple)\\-");
 
-	private final Completion INHERIT_COMPLETION =
+	private final Completion inheritCompletion =
 		new BasicCssCompletion(this, "inherit", "css_propertyvalue_identifier");
 
 
@@ -340,9 +340,6 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean isAutoActivateOkay(JTextComponent tc) {
 
@@ -369,6 +366,12 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 	}
 
 
+	/**
+	 * Returns whether a character is valid in a property value.
+	 *
+	 * @param ch The character.
+	 * @return Whether it is valid.
+	 */
 	public boolean isValidChar(char ch) {
 		switch (ch) {
 			case '-':
@@ -385,7 +388,7 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 	private List<Completion> loadHtmlTagCompletions() throws IOException {
 
 		// TODO: Share/grab this list directly from HtmlCompletionProvider?
-        List<Completion> completions = loadFromXML("data/html.xml");
+		List<Completion> completions = loadFromXML("data/html.xml");
 
 		addAtRuleCompletions(completions);
 
@@ -505,7 +508,7 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 		if (tokens.length>2) {
 
 			List<Completion> completions = new ArrayList<>();
-			completions.add(INHERIT_COMPLETION);
+			completions.add(inheritCompletion);
 
 			// Format: display gifname [ none inline block ]
 			if (tokens[2].equals("[") &&

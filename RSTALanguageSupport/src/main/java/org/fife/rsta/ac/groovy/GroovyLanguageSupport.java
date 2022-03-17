@@ -40,14 +40,6 @@ public class GroovyLanguageSupport extends AbstractLanguageSupport {
 	}
 
 
-//	/**
-//	 * {@inheritDoc}
-//	 */
-//	protected ListCellRenderer createDefaultCompletionCellRenderer() {
-//		return new CCellRenderer();
-//	}
-
-
 	private GroovyCompletionProvider getProvider() {
 		if (provider==null) {
 			provider = new GroovyCompletionProvider();
@@ -56,9 +48,6 @@ public class GroovyLanguageSupport extends AbstractLanguageSupport {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void install(RSyntaxTextArea textArea) {
 
@@ -72,9 +61,6 @@ public class GroovyLanguageSupport extends AbstractLanguageSupport {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void uninstall(RSyntaxTextArea textArea) {
 		uninstallImpl(textArea);

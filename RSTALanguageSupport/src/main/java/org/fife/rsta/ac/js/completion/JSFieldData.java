@@ -13,17 +13,17 @@ import org.fife.rsta.ac.java.rjc.ast.TypeDeclaration;
 
 
 public class JSFieldData {
-	
+
 	private FieldInfo info;
 	private JarManager jarManager;
-	
+
 	public JSFieldData(FieldInfo info, JarManager jarManager)
 	{
 		this.info = info;
 		this.jarManager = jarManager;
 	}
-	
-	
+
+
 	public Field getField()
 	{
 		ClassFile cf = info.getClassFile();
@@ -31,7 +31,7 @@ public class JSFieldData {
 				cf.getClassName(true));
 		return getFieldFromSourceLoc(loc, cf);
 	}
-	
+
 	/**
 	 * Scours the source in a location (zip file, directory), looking for a
 	 * particular class's source.  If it is found, it is parsed, and the
@@ -81,23 +81,23 @@ public class JSFieldData {
 		return null;
 
 	}
-	
+
 	public String getType(boolean qualified)
 	{
 		return info.getTypeString(qualified);
 	}
-	
+
 	public boolean isStatic()
 	{
 		return info.isStatic();
 	}
-	
+
 	public boolean isPublic()
 	{
 		int access = info.getAccessFlags();
 		return org.fife.rsta.ac.java.classreader.Util.isPublic(access);
 	}
-	
+
 	public String getEnclosingClassName(boolean fullyQualified) {
 		return info.getClassFile().getClassName(fullyQualified);
 	}

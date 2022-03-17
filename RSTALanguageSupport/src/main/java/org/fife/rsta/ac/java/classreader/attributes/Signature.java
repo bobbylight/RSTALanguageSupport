@@ -39,10 +39,15 @@ public class Signature extends AttributeInfo {
 	}
 
 
+	/**
+	 * Returns the class-param types of this method.
+	 *
+	 * @return The class-param types.
+	 */
 	public List<String> getClassParamTypes() {
 
 		List<String> types = null;
-		
+
 		if (signature!=null && signature.startsWith("<")) {
 
 			types = new ArrayList<>(1); // Usually a small number
@@ -109,6 +114,14 @@ public class Signature extends AttributeInfo {
 	}
 
 
+	/**
+	 * Returns the parameter types for parameters of this method.
+	 *
+	 * @param mi The method information.
+	 * @param cf The class file being parsed.
+	 * @param qualified Whether the results should be fully-qualified.
+	 * @return The return types.
+	 */
 	public List<String> getMethodParamTypes(MethodInfo mi, ClassFile cf,
 			boolean qualified) {
 
@@ -118,7 +131,7 @@ public class Signature extends AttributeInfo {
 		if (signature!=null) {
 
 			paramTypeList = new ArrayList<>();
-			
+
 			// Handle "<...>", which essentially defines extra type args
 			Map<String, String> additionalTypeArgs = null;
 			if (signature.charAt(0)=='<') {
@@ -159,6 +172,14 @@ public class Signature extends AttributeInfo {
 	}
 
 
+	/**
+	 * Returns the return type of this method.
+	 *
+	 * @param mi The method information.
+	 * @param cf The class file being parsed.
+	 * @param qualified Whether the result should be fully-qualified.
+	 * @return The return type.
+	 */
 	public String getMethodReturnType(MethodInfo mi, ClassFile cf, boolean qualified) {
 
 		String signature = this.signature; // Since we modify it
@@ -319,7 +340,7 @@ public class Signature extends AttributeInfo {
 					}
 					else {
 						// Set "type" to class name, without type params
-						type = str.substring(pos+1, lt); 
+						type = str.substring(pos+1, lt);
 						//type = org.fife.rsta.ac.java.Util.replaceChar(type, '/', '.');
 						//type = type.substring(type.lastIndexOf('/')+1);
 						type = qualified ? type.replace('/', '.') : type.substring(type.lastIndexOf('/')+1);
@@ -337,7 +358,7 @@ public class Signature extends AttributeInfo {
 							} else {
 								break;
 							}
-								
+
 						}
 						StringBuilder sb = new StringBuilder(type).append('<');
 						for (int i=0; i<paramTypeList.size(); i++) {
@@ -409,8 +430,8 @@ public class Signature extends AttributeInfo {
 
 	private static class ParamDescriptorResult {
 
-		public String type;
-		public int pos;
+		private String type;
+		private int pos;
 
 		public ParamDescriptorResult set(String type, int pos) {
 			this.type = type;

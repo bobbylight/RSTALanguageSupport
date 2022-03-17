@@ -4,9 +4,22 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.Token;
 import org.fife.ui.rsyntaxtextarea.TokenTypes;
 
+
+/**
+ * Sniffs for validation configuration in a document.
+ *
+ * @author Robert Futrell
+ * @version 1.0
+ */
 public class ValidationConfigSniffer {
 
 
+	/**
+	 * Sniffs a document.
+	 *
+	 * @param doc The document to sniff.
+	 * @return The validation configuration, or {@code null} if none.
+	 */
 	public ValidationConfig sniff(RSyntaxDocument doc) {
 
 		ValidationConfig config = null;

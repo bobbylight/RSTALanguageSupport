@@ -32,24 +32,18 @@ class ExtensionFileFilter extends FileFilter {
 	 * @param desc A description of the file type.
 	 * @param ext The extension of the file type.
 	 */
-	public ExtensionFileFilter(String desc, String ext) {
+	ExtensionFileFilter(String desc, String ext) {
 		this.desc = desc;
 		this.ext = ext;
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean accept(File f) {
 		return f.isDirectory() || f.getName().endsWith(ext);
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getDescription() {
 		return desc + " (*." + ext + ")";

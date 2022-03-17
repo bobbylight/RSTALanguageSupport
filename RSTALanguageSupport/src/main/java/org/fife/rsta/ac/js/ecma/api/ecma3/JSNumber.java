@@ -11,7 +11,7 @@ public abstract class JSNumber implements JSNumberFunctions {
 
     /**
      * Object Number(value)
-     * 
+     *
      * @constructor
      * @extends Object
      * @param value The numeric value of the Number object being created or a value to be converted to a number.
@@ -20,10 +20,10 @@ public abstract class JSNumber implements JSNumberFunctions {
      */
     public JSNumber(JSObject value) {
     }
-    
+
     /**
      * <b>property prototype</b>
-     * 
+     *
      * @type Number
      * @memberOf Number
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber Number
@@ -31,10 +31,10 @@ public abstract class JSNumber implements JSNumberFunctions {
      * @since Level 2 Document Object Model Core Definition.
      */
     public JSNumber prototype;
-    
+
     /**
      * <b>property constructor</b>
-     * 
+     *
      * @type Function
      * @memberOf Number
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction Function
@@ -45,7 +45,7 @@ public abstract class JSNumber implements JSNumberFunctions {
 
     /**
      * <b>property MIN_VALUE</b> The smallest representable number.
-     * 
+     *
      * @type Number
      * @memberOf Number
      * @static
@@ -57,7 +57,7 @@ public abstract class JSNumber implements JSNumberFunctions {
 
     /**
      * <b>property MAX_VALUE</b> The largest representable number.
-     * 
+     *
      * @type Number
      * @memberOf Number
      * @static
@@ -69,7 +69,7 @@ public abstract class JSNumber implements JSNumberFunctions {
 
     /**
      * <b>property NaN</b> Not-a-number value.
-     * 
+     *
      * @type Number
      * @memberOf Number
      * @static
@@ -81,7 +81,7 @@ public abstract class JSNumber implements JSNumberFunctions {
 
     /**
      * <b>property NEGATIVE_INFINITY</b> Negative infinite value.
-     * 
+     *
      * @type Number
      * @memberOf Number
      * @static
@@ -93,7 +93,7 @@ public abstract class JSNumber implements JSNumberFunctions {
 
     /**
      * <b>property POSITIVE_INFINITY</b> Infinite value.
-     * 
+     *
      * @type Number
      * @memberOf Number
      * @static

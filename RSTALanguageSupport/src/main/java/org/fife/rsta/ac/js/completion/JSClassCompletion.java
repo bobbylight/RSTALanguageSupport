@@ -73,7 +73,7 @@ public class JSClassCompletion extends BasicCompletion implements JSCompletion {
 		{
 			return "";
 		}
-		
+
 		return temp;
 	}
 
@@ -168,7 +168,7 @@ public class JSClassCompletion extends BasicCompletion implements JSCompletion {
 			s = " - ";
 			g.drawString(s, x, y);
 			x += fm.stringWidth(s);
-	
+
 			String pkgName = cf.getClassName(true);
 			int lastIndexOf = pkgName.lastIndexOf('.');
 			if (lastIndexOf != -1) { // Class may not be in a package
@@ -203,6 +203,6 @@ public class JSClassCompletion extends BasicCompletion implements JSCompletion {
 	public String getType(boolean qualified) {
 		return getClassName(qualified);
 	}
-	
-	
+
+
 }

@@ -22,7 +22,7 @@ import org.fife.ui.autocomplete.EmptyIcon;
 
 /**
  * Holds icons used by JavaScript auto-completion.
- * 
+ *
  * @author Robert Futrell
  * @version 1.0
  */
@@ -85,7 +85,7 @@ public class IconFactory {
 
 	/**
 	 * Loads an icon.
-	 * 
+	 *
 	 * @param name The file name of the icon to load.
 	 * @return The icon.
 	 */

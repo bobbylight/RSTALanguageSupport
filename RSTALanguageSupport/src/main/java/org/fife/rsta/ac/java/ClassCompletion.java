@@ -36,7 +36,7 @@ class ClassCompletion extends AbstractJavaSourceCompletion {
 	private ClassFile cf;
 
 
-	public ClassCompletion(CompletionProvider provider, ClassFile cf) {
+	ClassCompletion(CompletionProvider provider, ClassFile cf) {
 		super(provider, cf.getClassName(false));
 		this.cf = cf;
 	}
@@ -83,9 +83,6 @@ class ClassCompletion extends AbstractJavaSourceCompletion {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public Icon getIcon() {
 
@@ -105,12 +102,12 @@ class ClassCompletion extends AbstractJavaSourceCompletion {
 		else if (org.fife.rsta.ac.java.classreader.Util.isPublic(access)) {
 			isPublic = true;
 		}
-//		else if (org.fife.rsta.ac.java.classreader.Util.isProtected(access)) {
-//			isProtected = true;
-//		}
-//		else if (org.fife.rsta.ac.java.classreader.Util.isPrivate(access)) {
-//			isPrivate = true;
-//		}
+		//else if (org.fife.rsta.ac.java.classreader.Util.isProtected(access)) {
+		//	isProtected = true;
+		//}
+		//else if (org.fife.rsta.ac.java.classreader.Util.isPrivate(access)) {
+		//	isPrivate = true;
+		//}
 		else {
 			isDefault = true;
 		}
@@ -162,7 +159,7 @@ class ClassCompletion extends AbstractJavaSourceCompletion {
 			CompilationUnit cu = Util.getCompilationUnitFromDisk(loc, cf);
 			if (cu!=null) {
 				Iterator<TypeDeclaration> i=cu.getTypeDeclarationIterator();
-				for (; i.hasNext(); ) {
+				while (i.hasNext()) {
 					TypeDeclaration td = i.next();
 					String typeName = td.getName();
 					// Avoid inner classes, etc.

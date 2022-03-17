@@ -34,10 +34,10 @@ public class Asm6502LanguageSupport extends AbstractLanguageSupport {
 	}
 
 
-//	@Override
-//	protected ListCellRenderer<Object> createDefaultCompletionCellRenderer() {
-//		return new CssCellRenderer();
-//	}
+	//@Override
+	//protected ListCellRenderer<Object> createDefaultCompletionCellRenderer() {
+	//	return new CssCellRenderer();
+	//}
 
 
 	private Asm6502CompletionProvider getProvider() {

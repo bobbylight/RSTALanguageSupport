@@ -38,7 +38,7 @@ interface Actions {
 
 		private DemoRootPane demo;
 
-		public AboutAction(DemoRootPane demo) {
+		AboutAction(DemoRootPane demo) {
 			this.demo = demo;
 			putValue(NAME, "About RSTALanguageSupport...");
 		}
@@ -61,7 +61,7 @@ interface Actions {
 
 		private static final long serialVersionUID = 1L;
 
-		public ExitAction() {
+		ExitAction() {
 			putValue(NAME, "Exit");
 			putValue(MNEMONIC_KEY, (int)'x');
 		}
@@ -84,7 +84,7 @@ interface Actions {
 		private DemoRootPane demo;
 		private JFileChooser chooser;
 
-		public OpenAction(DemoRootPane demo) {
+		OpenAction(DemoRootPane demo) {
 			this.demo = demo;
 			putValue(NAME, "Open...");
 			putValue(MNEMONIC_KEY, (int)'O');
@@ -117,7 +117,7 @@ interface Actions {
 		private LookAndFeelInfo info;
 		private DemoRootPane demo;
 
-		public LookAndFeelAction(DemoRootPane demo, LookAndFeelInfo info) {
+		LookAndFeelAction(DemoRootPane demo, LookAndFeelInfo info) {
 			putValue(NAME, info.getName());
 			this.demo = demo;
 			this.info = info;
@@ -147,7 +147,7 @@ interface Actions {
 		private String res;
 		private String style;
 
-		public StyleAction(DemoRootPane demo, String name, String res,
+		StyleAction(DemoRootPane demo, String name, String res,
 							String style) {
 			putValue(NAME, name);
 			this.demo = demo;
@@ -167,7 +167,7 @@ interface Actions {
 
 		private DemoRootPane demo;
 
-		public ToggleLayeredHighlightsAction(DemoRootPane demo) {
+		ToggleLayeredHighlightsAction(DemoRootPane demo) {
 			this.demo = demo;
 			putValue(NAME, "Layered Selection Highlights");
 		}

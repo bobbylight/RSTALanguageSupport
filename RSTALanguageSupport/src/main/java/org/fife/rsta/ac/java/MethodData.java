@@ -29,14 +29,11 @@ class MethodData implements Data {
 	private Method method;
 
 
-	public MethodData(Method method) {
+	MethodData(Method method) {
 		this.method = method;
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getEnclosingClassName(boolean fullyQualified) {
 		// NOTE: This check isn't really necessary, but is here just in case

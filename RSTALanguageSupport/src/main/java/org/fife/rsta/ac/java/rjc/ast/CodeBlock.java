@@ -21,7 +21,7 @@ import org.fife.rsta.ac.java.rjc.lexer.TokenTypes;
 
 /**
  * A block of code in curly braces in a class.<p>
- * 
+ *
  * This class implements the <code>Member</code> interface because a block
  * can be a member (say, a static block in a class declaration), but usually
  * it's not actually a <code>Member</code>, but something else, e.g. the body
@@ -49,6 +49,12 @@ public class CodeBlock extends AbstractMember {
 	}
 
 
+	/**
+	 * Adds a child code block to this code block.
+	 *
+	 * @param child The child code block to add.
+	 * @see #getChildBlock(int)
+	 */
 	public void add(CodeBlock child) {
 		if (children==null) {
 			children = new ArrayList<>();
@@ -58,6 +64,12 @@ public class CodeBlock extends AbstractMember {
 	}
 
 
+	/**
+	 * Adds a local variable to this code block.
+	 *
+	 * @param localVar The local variable to add.
+	 * @see #getLocalVar(int)
+	 */
 	public void addLocalVariable(LocalVariable localVar) {
 		if (localVars==null) {
 			localVars = new ArrayList<>();
@@ -66,6 +78,12 @@ public class CodeBlock extends AbstractMember {
 	}
 
 
+	/**
+	 * Returns whether this code block contains the specified offset.
+	 *
+	 * @param offs The offset.
+	 * @return Whether this code block contains the offset.
+	 */
 	public boolean containsOffset(int offs) {
 		// Do endOffset first since we'll often iterate from first CodeBlock
 		// to last, so checking it first should be faster.
@@ -73,6 +91,13 @@ public class CodeBlock extends AbstractMember {
 	}
 
 
+	/**
+	 * Returns the specified child block.
+	 *
+	 * @param index The index of the child block.
+	 * @return The child block.
+	 * @see #getChildBlockCount()
+	 */
 	public CodeBlock getChildBlock(int index) {
 		return children.get(index);
 	}
@@ -113,6 +138,13 @@ public class CodeBlock extends AbstractMember {
 	}
 
 
+	/**
+	 * Returns the specified local variable.
+	 *
+	 * @param index The index of the variable.
+	 * @return The local variable.
+	 * @see #getLocalVarCount()
+	 */
 	public LocalVariable getLocalVar(int index) {
 		return localVars.get(index);
 	}

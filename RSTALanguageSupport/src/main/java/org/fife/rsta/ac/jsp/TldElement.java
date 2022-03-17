@@ -22,7 +22,7 @@ import org.fife.ui.autocomplete.MarkupTagCompletion;
 class TldElement extends MarkupTagCompletion {
 
 
-	public TldElement(JspCompletionProvider provider, String name, String desc){
+	TldElement(JspCompletionProvider provider, String name, String desc){
 		super(provider, name);
 		setDescription(desc);
 	}

@@ -15,7 +15,6 @@ import javax.swing.ListCellRenderer;
 
 import org.fife.rsta.ac.AbstractLanguageSupport;
 import org.fife.rsta.ac.IOUtil;
-import org.fife.rsta.ac.perl.PerlCompletionProvider;
 import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.autocomplete.CompletionCellRenderer;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -47,7 +46,7 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 	/**
 	 * The root directory of the default Perl install.
 	 */
-	private static File DEFAULT_PERL_INSTALL_LOC;
+	private static final File DEFAULT_PERL_INSTALL_LOC;
 
 	/**
 	 * Whether parens should be used around arguments to functions.
@@ -81,15 +80,14 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
                 File temp = new File(dir, perlLoc);
                 //System.out.println(temp.getAbsolutePath());
                 if (temp.isFile()) {
-                    DEFAULT_PERL_INSTALL_LOC = new File(dir).getParentFile();
+					perlInstallLoc = new File(dir).getParentFile();
                     break;
                 }
             }
 
-			perlInstallLoc = DEFAULT_PERL_INSTALL_LOC;
-
 		}
 
+		DEFAULT_PERL_INSTALL_LOC = perlInstallLoc;
 	}
 
 
@@ -233,9 +231,6 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void install(RSyntaxTextArea textArea) {
 
@@ -256,7 +251,7 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 	/**
 	 * Returns whether text areas with this language support installed are
 	 * parsed for syntax errors.<p>
-	 * 
+	 *
 	 * Note that if {@link #getPerlInstallLocation()}
 	 * returns <code>null</code> or an invalid value, parsing will not occur
 	 * even if this value is <code>true</code>.

@@ -13,6 +13,12 @@ package org.fife.rsta.ac.java.rjc.ast;
 import org.fife.rsta.ac.java.rjc.lexer.Scanner;
 
 
+/**
+ * Represents a package in a class file.
+ *
+ * @author Robert Futrell
+ * @version 1.0
+ */
 public class Package extends AbstractASTNode {
 
 

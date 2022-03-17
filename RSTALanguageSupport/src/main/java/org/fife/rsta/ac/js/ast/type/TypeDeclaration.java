@@ -26,11 +26,11 @@ public class TypeDeclaration {
 		this.jsName = jsName;
 		this.supportsBeanProperties = supportsBeanProperties;
 	}
-	
+
 	public TypeDeclaration(String pkg, String apiName, String jsName, boolean staticsOnly) {
 		this(pkg, apiName, jsName, staticsOnly, true);
 	}
-	
+
 	public TypeDeclaration(String pkg, String apiName, String jsName) {
 		this(pkg, apiName, jsName, false, true);
 	}
@@ -54,16 +54,16 @@ public class TypeDeclaration {
 	public String getQualifiedName() {
 		return pkg != null && pkg.length() > 0 ? (pkg + '.' + apiName) : apiName;
 	}
-	
+
 	public boolean isQualified()
 	{
 		return getQualifiedName().indexOf('.') != -1;
 	}
-	
+
 	public boolean isStaticsOnly() {
 		return staticsOnly;
 	}
-	
+
 	public void setStaticsOnly(boolean staticsOnly) {
 		this.staticsOnly = staticsOnly;
 	}
@@ -71,7 +71,7 @@ public class TypeDeclaration {
 	public void setSupportsBeanProperties(boolean supportsBeanProperties){
 		this.supportsBeanProperties = supportsBeanProperties;
 	}
-	
+
 	public boolean supportsBeanProperties() {
 		return supportsBeanProperties;
 	}
@@ -84,7 +84,7 @@ public class TypeDeclaration {
 
 		if((obj == null) || (obj.getClass() != this.getClass()))
 			return false;
-		
+
 		if (obj instanceof TypeDeclaration) {
 			TypeDeclaration dec = (TypeDeclaration) obj;
 			return getQualifiedName().equals(dec.getQualifiedName()) &&

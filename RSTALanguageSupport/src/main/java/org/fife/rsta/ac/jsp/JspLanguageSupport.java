@@ -30,7 +30,7 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
  *    <li>Code completion for JSTL.</li>
  *    <li>Automatic creation of closing tags for non-self-closing tags.</li>
  * </ul>
- * 
+ *
  * @author Robert Futrell
  * @version 1.0
  */

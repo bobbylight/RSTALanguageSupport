@@ -142,12 +142,12 @@ public abstract class MemberInfo {
 	 * not common to members, the attribute returned is an "unsupported"
 	 * attribute.
 	 *
-	 * @param in
-	 * @param attrName
-	 * @param attrLength
+	 * @param in The input stream to read from.
+	 * @param attrName The attribute name.
+	 * @param attrLength The attribute length.
 	 * @return The attribute, or <code>null</code> if it was purposely skipped
 	 *         for some reason (known to be useless for our purposes, etc.).
-	 * @throws IOException
+	 * @throws IOException If an IO error occurs.
 	 */
 	protected AttributeInfo readAttribute(DataInputStream in, String attrName,
 										int attrLength) throws IOException {

@@ -18,13 +18,13 @@ public class DOMAddtions implements ECMAAdditions {
 		typeDecs.addTypeDeclaration("DocumentFragment", new TypeDeclaration( "org.fife.rsta.ac.js.ecma.api.dom", "JSDocumentFragment", "DocumentFragment", false, false));
 		typeDecs.addTypeDeclaration("DocumentType", new TypeDeclaration( "org.fife.rsta.ac.js.ecma.api.dom", "JSDocumentType", "DocumentType", false, false));
 		typeDecs.addTypeDeclaration("DOMConfiguration", new TypeDeclaration( "org.fife.rsta.ac.js.ecma.api.dom", "JSDOMConfiguration", "DOMConfiguration", false, false));
-		typeDecs.addTypeDeclaration("DOMImplementation", new TypeDeclaration( "org.fife.rsta.ac.js.ecma.api.dom", "JSDOMImplementation", "DOMImplementation", false, false));		
+		typeDecs.addTypeDeclaration("DOMImplementation", new TypeDeclaration( "org.fife.rsta.ac.js.ecma.api.dom", "JSDOMImplementation", "DOMImplementation", false, false));
 		typeDecs.addTypeDeclaration("DOMImplementationList", new TypeDeclaration( "org.fife.rsta.ac.js.ecma.api.dom", "JSDOMImplementationList", "DOMImplementationList", false, false));
 		typeDecs.addTypeDeclaration("DOMImplementationSource", new TypeDeclaration( "org.fife.rsta.ac.js.ecma.api.dom", "DOMImplementationSource", "DOMImplementationSource", false, false));
 		typeDecs.addTypeDeclaration("DOMLocator", new TypeDeclaration( "org.fife.rsta.ac.js.ecma.api.dom", "JSDOMLocator", "DOMLocator", false, false));
 		typeDecs.addTypeDeclaration("DOMStringList", new TypeDeclaration( "org.fife.rsta.ac.js.ecma.api.dom", "JSDOMStringList", "DOMStringList", false, false));
 		typeDecs.addTypeDeclaration("Element", new TypeDeclaration( "org.fife.rsta.ac.js.ecma.api.dom", "JSElement", "Element", false, false));
-		typeDecs.addTypeDeclaration("Entity", new TypeDeclaration( "org.fife.rsta.ac.js.ecma.api.dom", "JSEntity", "Entity", false, false));		
+		typeDecs.addTypeDeclaration("Entity", new TypeDeclaration( "org.fife.rsta.ac.js.ecma.api.dom", "JSEntity", "Entity", false, false));
 		typeDecs.addTypeDeclaration("EntityReference", new TypeDeclaration( "org.fife.rsta.ac.js.ecma.api.dom", "JSEntityReference", "EntityReference", false, false));
 		typeDecs.addTypeDeclaration("NamedNodeMap", new TypeDeclaration( "org.fife.rsta.ac.js.ecma.api.dom", "JSNamedNodeMap", "NamedNodeMap", false, false));
 		typeDecs.addTypeDeclaration("NameList", new TypeDeclaration( "org.fife.rsta.ac.js.ecma.api.dom", "JSNameList", "NameList", false, false));
@@ -35,8 +35,8 @@ public class DOMAddtions implements ECMAAdditions {
 		typeDecs.addTypeDeclaration("Text", new TypeDeclaration( "org.fife.rsta.ac.js.ecma.api.dom", "JSText", "Text", false, false));
 		typeDecs.addTypeDeclaration("TypeInfo", new TypeDeclaration( "org.fife.rsta.ac.js.ecma.api.dom", "JSTypeInfo", "TypeInfo", false, false));
 		typeDecs.addTypeDeclaration("UserDataHandler", new TypeDeclaration( "org.fife.rsta.ac.js.ecma.api.dom", "JSUserDataHandler", "UserDataHandler", false, false));
-		
-		
+
+
 		// add dom ecma objects
 		typeDecs.addECMAObject("Attr", true);
 		typeDecs.addECMAObject("CDATASection", true);
@@ -61,7 +61,7 @@ public class DOMAddtions implements ECMAAdditions {
 		typeDecs.addECMAObject("Text", true);
 		typeDecs.addECMAObject("TypeInfo", true);
 		typeDecs.addECMAObject("UserDataHandler", true);
-		
+
 	}
 
 }

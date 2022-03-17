@@ -133,9 +133,9 @@ public class JavaCellRenderer extends DefaultListCellRenderer {
 								RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		}
 
-//		if (jsc!=null) {
-//			setText(null); // Stop "Foobar" from being painted
-//		}
+		//if (jsc!=null) {
+		//	setText(null); // Stop "Foobar" from being painted
+		//}
 
 		// We never paint "selection" around the icon, to imitate Eclipse
 		final int iconW = 18;

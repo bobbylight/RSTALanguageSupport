@@ -21,31 +21,32 @@ import org.fife.ui.autocomplete.Completion;
 /**
  * A cache to store completions for Template completions and Comment
  * completions.  Template completions should extend
- * <code>TemplateCompletion</code> that uses parameterized variables/values.<p> 
- * 
+ * <code>TemplateCompletion</code> that uses parameterized variables/values.<p>
+ *
  * While template completion example:
  * <pre>
  * while --&gt; while(condition) {
  *              //cursor here
  *           }
  * </pre>
- * 
+ *
  * Comment completion example:
  * <pre>
  * null --&gt; &lt;code&gt;null&lt;/code&gt;
- * </pre> 
- * 
+ * </pre>
+ *
  * This is really a convenient place to store these types of completions that
  * are re-used.
- * 
+ *
  * @author Steve
  */
 public class ShorthandCompletionCache {
-	
+
 	private List<Completion> shorthandCompletion;
 	private List<Completion> commentCompletion;
-	
-	private AbstractCompletionProvider templateProvider, commentProvider;
+
+	private AbstractCompletionProvider templateProvider;
+	private AbstractCompletionProvider commentProvider;
 
 
 	public ShorthandCompletionCache(AbstractCompletionProvider templateProvider,
@@ -55,7 +56,13 @@ public class ShorthandCompletionCache {
 		this.templateProvider = templateProvider;
 		this.commentProvider = commentProvider;
 	}
-	
+
+	/**
+	 * Adds a shorthand completion to this cache.
+	 *
+	 * @param completion The completion to add.
+	 * @see #removeShorthandCompletion(Completion)
+	 */
 	public void addShorthandCompletion(Completion completion) {
 		addSorted(shorthandCompletion, completion);
 	}
@@ -75,16 +82,30 @@ public class ShorthandCompletionCache {
 	public List<Completion> getShorthandCompletions() {
 		return shorthandCompletion;
 	}
-	
+
+	/**
+	 * Removes a shorthand completion from this cache.
+	 *
+	 * @param completion The completion to remove.
+	 * @see #addShorthandCompletion(Completion)
+	 */
 	public void removeShorthandCompletion(Completion completion) {
 		shorthandCompletion.remove(completion);
 	}
-	
+
+	/**
+	 * Removes all completions from this cache.
+	 */
 	public void clearCache() {
 		shorthandCompletion.clear();
 	}
-	
-	//comments
+
+	/**
+	 * Adds a comment completion to this cache.
+	 *
+	 * @param completion The completion to add.
+	 * @see #removeCommentCompletion(Completion)
+	 */
 	public void addCommentCompletion(Completion completion) {
 		addSorted(commentCompletion, completion);
 	}
@@ -92,15 +113,21 @@ public class ShorthandCompletionCache {
 	public List<Completion> getCommentCompletions() {
 		return commentCompletion;
 	}
-	
+
+	/**
+	 * Removes a specific comment completion from this cache.
+	 *
+	 * @param completion The completion to remove.
+	 * @see #addCommentCompletion(Completion)
+	 */
 	public void removeCommentCompletion(Completion completion) {
 		commentCompletion.remove(completion);
 	}
-	
+
 	public AbstractCompletionProvider getTemplateProvider() {
 		return templateProvider;
 	}
-	
+
 	public AbstractCompletionProvider getCommentProvider() {
 		return commentProvider;
 	}

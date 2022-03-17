@@ -42,7 +42,7 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
  * <code>XmlOutlineTree</code> for each one, or call <code>uninstall()</code>
  * and <code>listenTo(RSyntaxTextArea)</code> each time a new RSTA receives
  * focus.
- * 
+ *
  * @author Robert Futrell
  * @version 1.0
  */
@@ -205,7 +205,7 @@ public class XmlOutlineTree extends AbstractSourceTree {
 
 
 	/**
-	 * Overridden to update the cell renderer
+	 * Overridden to update the cell renderer.
 	 */
 	@Override
 	public void updateUI() {
@@ -266,9 +266,9 @@ public class XmlOutlineTree extends AbstractSourceTree {
 	 * class ensures that the XML element containing the caret position is
 	 * focused in the tree view after a small delay.
 	 */
-/*
- * TODO: Make me work for any LanguageSupport (don't synchronize if waiting on
- * a pending parse) and pull me out and make me available for all languages.
+	/*
+	 * TODO: Make me work for any LanguageSupport (don't synchronize if waiting on
+	 * a pending parse) and pull me out and make me available for all languages.
 	private class Synchronizer implements CaretListener, ActionListener {
 
 		private Timer timer;

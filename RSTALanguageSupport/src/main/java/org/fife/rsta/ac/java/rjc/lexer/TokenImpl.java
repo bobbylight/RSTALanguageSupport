@@ -47,12 +47,12 @@ class TokenImpl implements Token {
 	private boolean invalid;
 
 
-	public TokenImpl(int type, String lexeme, int line, int column, int offs) {
+	TokenImpl(int type, String lexeme, int line, int column, int offs) {
 		this(type, lexeme, line, column, offs, false);
 	}
 
 
-	public TokenImpl(int type, String lexeme, int line, int column, int offs,
+	TokenImpl(int type, String lexeme, int line, int column, int offs,
 					boolean invalid) {
 		this.type = type;
 		this.lexeme = lexeme;

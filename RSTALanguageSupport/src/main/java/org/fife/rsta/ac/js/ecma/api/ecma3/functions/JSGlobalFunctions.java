@@ -11,7 +11,7 @@ public interface JSGlobalFunctions extends JSObjectFunctions {
 
 	/**
 	 * <b>function decodeURI(uri)</b> unescape characters in a URI.
-	 * @param uri A string that contains an encoded URI or other text to be decoded. 
+	 * @param uri A string that contains an encoded URI or other text to be decoded.
 	 * @returns A copy of <b><i>uri</i></b>, with any hexidecimal escaped sequences replaced with characters they represent.
 	 * @memberOf Global
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSGlobal Global
@@ -24,10 +24,10 @@ public interface JSGlobalFunctions extends JSObjectFunctions {
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
 	JSString decodeURI(JSString uri);
-	
+
 	/**
 	 * <b>function decodeURIComponent(s)</b> unescape characters in a URI component.
-	 * @param s A string that contains an encoded URI components or other text to be decoded. 
+	 * @param s A string that contains an encoded URI components or other text to be decoded.
 	 * @returns A copy of <b><i>s</i></b>, with any hexidecimal escaped sequences replaced with characters they represent.
 	 * @memberOf Global
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSGlobal Global
@@ -40,11 +40,11 @@ public interface JSGlobalFunctions extends JSObjectFunctions {
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
 	JSString decodeURIComponent(JSString s);
-	
-	
+
+
 	/**
 	 * <b>function encodeURI(uri)</b> escape characters in a URI.
-	 * @param uri A string that contains the URI or other text to be encoded. 
+	 * @param uri A string that contains the URI or other text to be encoded.
 	 * @returns A copy of <b><i>uri</i></b>, with certain characters replaced by hexidecimal escape sequences.
 	 * @memberOf Global
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSGlobal Global
@@ -57,10 +57,10 @@ public interface JSGlobalFunctions extends JSObjectFunctions {
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
 	JSString encodeURI(JSString uri);
-	
+
 	/**
 	 * <b>function encodeURIComponent(s)</b> escape characters in a URI Component.
-	 * @param s A string that contains a portion of a URI or other text to be encoded. 
+	 * @param s A string that contains a portion of a URI or other text to be encoded.
 	 * @returns A copy of <b><i>s</i></b>, with certain characters replaced by hexidecimal escape sequences.
 	 * @memberOf Global
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSGlobal Global
@@ -73,10 +73,10 @@ public interface JSGlobalFunctions extends JSObjectFunctions {
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
 	JSString encodeURIComponent(JSString s);
-	
+
 	/**
 	 * <b>function escape(s)</b> encode a string.
-	 * @param s A string to be "escaped" or encoded. 
+	 * @param s A string to be "escaped" or encoded.
 	 * @returns An encoded copy of <b><i>s</i></b>, with certain characters replaced by hexidecimal escape sequences.
 	 * @memberOf Global
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSGlobal Global
@@ -86,15 +86,15 @@ public interface JSGlobalFunctions extends JSObjectFunctions {
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
 	JSString escape(JSString s);
-	
+
 	/**
 	 * <b>function eval(code)</b> execute JavaScript from a string.
 	 * <p>
 	 * <strong>Example</strong>
 	 * <pre>
 	 * eval("2+5"); //Returns 7
-	 * </pre> 
-	 * @param code A string that contains the JavaScript expression to be evaluated or the statements to be executed. 
+	 * </pre>
+	 * @param code A string that contains the JavaScript expression to be evaluated or the statements to be executed.
 	 * @returns The value of the evaluated <b><i>code</i></b>, if any.
 	 * @memberOf Global
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSGlobal Global
@@ -102,10 +102,10 @@ public interface JSGlobalFunctions extends JSObjectFunctions {
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
 	JSObject eval(JSString code);
-	
+
 	/**
 	 * <b>function isFinite(n)</b> determine whether a number is finite.
-	 * @param n The number to be tested. 
+	 * @param n The number to be tested.
 	 * @returns <b><i>true</i></b> if <b><i>n</i></b> is or can be converted to a finite number or otherwise <b><i>false</i></b> if <b><i>n</i></b> is NaN or positive or negative Infinity.
 	 * @memberOf Global
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSGlobal Global
@@ -115,7 +115,7 @@ public interface JSGlobalFunctions extends JSObjectFunctions {
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
 	JSBoolean isFinite(JSNumber n);
-	
+
 	/**
 	 * <b>function isNaN(n)</b> check for not-a-number.
 	 * <p>
@@ -129,8 +129,8 @@ public interface JSGlobalFunctions extends JSObjectFunctions {
 	 * isNaN("hello"); //=gt; true
 	 * isNaN(true); //=&gt; false
 	 * isNaN(undefined); //=&gt; true
-	 * </pre> 
-	 * @param n The number to be tested. 
+	 * </pre>
+	 * @param n The number to be tested.
 	 * @returns <b><i>true</i></b> if <b><i>n</i></b> is not a number or if it is the special numeric value NaN, otherwise <b><i>false</i></b> if <b><i>n</i></b> is any other number.
 	 * @memberOf Global
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSGlobal Global
@@ -142,7 +142,7 @@ public interface JSGlobalFunctions extends JSObjectFunctions {
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
 	JSBoolean isNaN(JSNumber n);
-	
+
 	/**
 	 * <b>function parseFloat(s)</b> convert a string to a number.
 	 * @param s The string to be parsed and converted to a number
@@ -155,7 +155,7 @@ public interface JSGlobalFunctions extends JSObjectFunctions {
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
 	JSString parseFloat(JSString s);
-	
+
 	/**
 	 * <b>function parseInt(s, radix)</b> convert a string to an integer.
 	 * @param s The string to be parsed and converted to an integer
@@ -169,10 +169,10 @@ public interface JSGlobalFunctions extends JSObjectFunctions {
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
 	JSString parseInt(JSString s, JSNumber radix);
-	
+
 	/**
 	 * <b>function unescape(s)</b> decode an escaped string.
-	 * @param s A string to be "unescaped" or decoded. 
+	 * @param s A string to be "unescaped" or decoded.
 	 * @returns A decoded copy of <b><i>s</i></b>.
 	 * @memberOf Global
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSGlobal Global

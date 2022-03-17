@@ -11,9 +11,9 @@ public abstract class JSDate implements JSDateFunctions {
 
 	/**
 	 * Object Date()
-	 * 
+	 *
 	 * <p>Creates a Date object set to the current date and time.</p>
-	 * 
+	 *
 	 * @constructor
 	 * @extends Object
 	 * @since Standard ECMA-262 3rd. Edition
@@ -22,10 +22,10 @@ public abstract class JSDate implements JSDateFunctions {
 	public JSDate() {
 
 	}
-	
+
 	/**
 	 * Object Date(milliseconds)
-	 * 
+	 *
 	 * @constructor
 	 * @extends Object
 	 * @param milliseconds The number of milliseconds between the desired date and midnight January 1, 1970 (UTC).
@@ -35,10 +35,10 @@ public abstract class JSDate implements JSDateFunctions {
 	public JSDate(JSNumber milliseconds) {
 
 	}
-	
+
 	/**
 	 * Object Date(datestring)
-	 * 
+	 *
 	 * @constructor
 	 * @extends Object
 	 * @param datestring A single argument that specifies date and optionally, the time as a string. The string should be in a format accepted by <b>Date.parse()</b>
@@ -48,10 +48,10 @@ public abstract class JSDate implements JSDateFunctions {
 	public JSDate(JSString datestring) {
 
 	}
-	
+
 	/**
 	 * Object Date(year, month, day, hours, minutes, seconds, ms)
-	 * 
+	 *
 	 * @constructor
 	 * @extends Object
 	 * @param year The year in a four digit format. e.g. 2011 for the year 2011
@@ -67,12 +67,12 @@ public abstract class JSDate implements JSDateFunctions {
 	public JSDate(JSNumber year, JSNumber month, JSNumber day, JSNumber hours, JSNumber minutes, JSNumber seconds, JSNumber ms) {
 
 	}
-	
-	
-	
+
+
+
 	/**
     * <b>property prototype</b>
-    * 
+    *
     * @type Date
     * @memberOf Date
     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
@@ -80,10 +80,10 @@ public abstract class JSDate implements JSDateFunctions {
     * @since Level 2 Document Object Model Core Definition.
     */
    public JSDate prototype;
-   
+
    /**
     * <b>property constructor</b>
-    * 
+    *
     * @type Function
     * @memberOf Date
     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction Function
@@ -95,10 +95,10 @@ public abstract class JSDate implements JSDateFunctions {
 
    /**
 	 * <b>function UTC(year,month,day,hour,min,sec,ms)</b> Converts a Date specification to milliseconds.
-	 * 
+	 *
 	 * @memberOf Date
 	 * @param year The year in four digit format. If the year is added between 0 and 99, then 1900 is added to it.
-	 * @param month The month specified from 0 (January) to 11 (December). 
+	 * @param month The month specified from 0 (January) to 11 (December).
 	 * @param day The day in the month between 1 and 31.
 	 * @param hour The hour specified from 0 (midnight) and 23 (11 p.m).
 	 * @param min The minutes in the hour, specified from 0 to 59.
@@ -116,7 +116,7 @@ public abstract class JSDate implements JSDateFunctions {
 
 	/**
 	 * <b>function parse(string)</b> parse a date/time string.
-	 * 
+	 *
 	 * @memberOf Date
 	 * @param string A string containing the date and time to be parsed.
 	 * @returns The millisecond between 1st January 1970 and the specified date and time.
@@ -126,5 +126,5 @@ public abstract class JSDate implements JSDateFunctions {
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
 	public static JSNumber parse(JSString string){return null;}
-	
+
 }

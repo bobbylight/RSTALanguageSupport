@@ -25,7 +25,7 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 /**
  * Language support for HTML.  This currently provides the following:
- * 
+ *
  * <ul>
  *    <li>Code completion for HTML5 tags and attributes.</li>
  *    <li>Automatic creation of closing tags for non-self-closing tags.</li>
@@ -77,7 +77,7 @@ public class HtmlLanguageSupport extends AbstractMarkupLanguageSupport {
 	/**
 	 * Dirty hack to share this with others, such as PHP and JSP supports.
 	 * Note that we should be passing doctype information here.
-	 * 
+	 *
 	 * @return The set of tags to close.
 	 */
 	public static Set<String> getTagsToClose() {

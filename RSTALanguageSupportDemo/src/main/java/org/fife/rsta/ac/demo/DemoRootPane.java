@@ -68,18 +68,18 @@ class DemoRootPane extends JRootPane implements HyperlinkListener,
 	private RSyntaxTextArea textArea;
 
 
-	public DemoRootPane() {
+	DemoRootPane() {
 
-LanguageSupportFactory lsf = LanguageSupportFactory.get();
-LanguageSupport support = lsf.getSupportFor(SYNTAX_STYLE_JAVA);
-JavaLanguageSupport jls = (JavaLanguageSupport)support;
-// TODO: This API will change!  It will be easier to do per-editor
-// changes to the build path.
-try {
-	jls.getJarManager().addCurrentJreClassFileSource();
-} catch (IOException ioe) {
-	ioe.printStackTrace();
-}
+		LanguageSupportFactory lsf = LanguageSupportFactory.get();
+		LanguageSupport support = lsf.getSupportFor(SYNTAX_STYLE_JAVA);
+		JavaLanguageSupport jls = (JavaLanguageSupport)support;
+		// TODO: This API will change!  It will be easier to do per-editor
+		// changes to the build path.
+		try {
+			jls.getJarManager().addCurrentJreClassFileSource();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 
 		// Dummy tree keeps JViewport's "background" looking right initially
 		JTree dummy = new JTree((TreeNode)null);
@@ -95,7 +95,7 @@ try {
 										treeSP, scrollPane);
 		SwingUtilities.invokeLater(() -> sp.setDividerLocation(0.25));
 		sp.setContinuousLayout(true);
-//		setContentPane(sp);
+		//setContentPane(sp);
 
 		setJMenuBar(createMenuBar());
 
@@ -127,7 +127,7 @@ setContentPane(cp);
 
 		menu = new JMenu("Language");
 		ButtonGroup bg = new ButtonGroup();
-        addItem(new StyleAction(this, "6502 Assembly","Asm6502Example.txt",      SYNTAX_STYLE_ASSEMBLER_6502), bg, menu);
+        addItem(new StyleAction(this, "6502 Assembly","Asm6502Example.txt",    SYNTAX_STYLE_ASSEMBLER_6502), bg, menu);
 		addItem(new StyleAction(this, "C",          "CExample.txt",      SYNTAX_STYLE_C), bg, menu);
 		addItem(new StyleAction(this, "CSS",        "CssExample.txt",    SYNTAX_STYLE_CSS), bg, menu);
 		addItem(new StyleAction(this, "Groovy",     "GroovyExample.txt", SYNTAX_STYLE_GROOVY), bg, menu);
@@ -180,9 +180,9 @@ setContentPane(cp);
 		textArea.setCodeFoldingEnabled(true);
 		textArea.setTabsEmulated(true);
 		textArea.setTabSize(3);
-//textArea.setBackground(new java.awt.Color(224, 255, 224));
-//textArea.setUseSelectedTextColor(true);
-//textArea.setLineWrap(true);
+		//textArea.setBackground(new java.awt.Color(224, 255, 224));
+		//textArea.setUseSelectedTextColor(true);
+		//textArea.setLineWrap(true);
 		ToolTipManager.sharedInstance().registerComponent(textArea);
 		return textArea;
 	}

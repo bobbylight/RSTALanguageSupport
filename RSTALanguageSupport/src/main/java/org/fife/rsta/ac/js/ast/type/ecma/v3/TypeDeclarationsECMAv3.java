@@ -50,5 +50,5 @@ public class TypeDeclarationsECMAv3 extends TypeDeclarations {
 		addTypeDeclaration("org.fife.rsta.ac.js.ecma.api.ecma3.functions.JSGlobalFunctions", new TypeDeclaration(
 				"org.fife.rsta.ac.js.ecma.api.ecma3.functions", "JSGlobalFunctions", "Global", false, false));
 	}
-	
+
 }

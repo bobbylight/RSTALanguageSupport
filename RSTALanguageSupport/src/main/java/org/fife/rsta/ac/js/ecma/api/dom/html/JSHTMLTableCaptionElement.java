@@ -6,15 +6,15 @@ import org.w3c.dom.html.HTMLTableCaptionElement;
 
 
 public abstract class JSHTMLTableCaptionElement implements HTMLTableCaptionElement, JS5ObjectFunctions {
-	
+
 	/**
 	 * Object HTMLTableCaptionElement()
 	 * See also the <a href='http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510'>Document Object Model (DOM) Level 2 Specification
-	 * 
+	 *
 	 * @constructor
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
-	 * 
+	 *
 	 */
 	public JSHTMLTableCaptionElement() {
 
@@ -22,7 +22,7 @@ public abstract class JSHTMLTableCaptionElement implements HTMLTableCaptionEleme
 
 	/**
 	 * <b>property prototype</b>
-	 * 
+	 *
 	 * @type HTMLTableCaptionElement
 	 * @memberOf HTMLTableCaptionElement
 	 * @see org.fife.rsta.ac.js.ecma.api.dom.html.JSHTMLElement HTMLElement
@@ -33,12 +33,12 @@ public abstract class JSHTMLTableCaptionElement implements HTMLTableCaptionEleme
 
 	/**
 	 * <b>property constructor</b>
-	 * 
+	 *
 	 * @type Function
 	 * @memberOf Array
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction Function
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	protected JSFunction constructor;	
+	protected JSFunction constructor;
 }

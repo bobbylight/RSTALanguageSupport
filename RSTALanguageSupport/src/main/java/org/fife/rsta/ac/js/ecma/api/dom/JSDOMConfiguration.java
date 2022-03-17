@@ -10,11 +10,11 @@ public abstract class JSDOMConfiguration implements DOMConfiguration, JS5ObjectF
 	/**
 	 * Object DOMConfiguration()
 	 * http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/ecma-script-binding.html
-	 * 
+	 *
 	 * @constructor
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
-	 * 
+	 *
 	 */
 	public JSDOMConfiguration() {
 
@@ -22,7 +22,7 @@ public abstract class JSDOMConfiguration implements DOMConfiguration, JS5ObjectF
 
 	/**
 	 * <b>property prototype</b>
-	 * 
+	 *
 	 * @type DOMConfiguration
 	 * @memberOf DOMConfiguration
 	 * @see org.fife.rsta.ac.js.ecma.api.dom.JSDOMConfiguration DOMConfiguration
@@ -33,7 +33,7 @@ public abstract class JSDOMConfiguration implements DOMConfiguration, JS5ObjectF
 
 	/**
 	 * <b>property constructor</b>
-	 * 
+	 *
 	 * @type Function
 	 * @memberOf Array
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction Function

@@ -54,27 +54,21 @@ class MethodInfoData implements Data {
 	/**
 	 * Constructor.
 	 *
-	 * @param info
-	 * @param provider
+	 * @param info The method info.
+	 * @param provider The parent completion provider.
 	 */
-	public MethodInfoData(MethodInfo info, SourceCompletionProvider provider) {
+	MethodInfoData(MethodInfo info, SourceCompletionProvider provider) {
 		this.info = info;
 		this.provider = provider;
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getEnclosingClassName(boolean fullyQualified) {
 		return info.getClassFile().getClassName(fullyQualified);
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getIcon() {
 
@@ -333,9 +327,6 @@ class MethodInfoData implements Data {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getType() {
 		return info.getReturnTypeString(false);
@@ -348,18 +339,12 @@ class MethodInfoData implements Data {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean isConstructor() {
 		return info.isConstructor();
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean isDeprecated() {
 		return info.isDeprecated();

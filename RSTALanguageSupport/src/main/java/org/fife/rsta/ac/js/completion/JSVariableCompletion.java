@@ -107,7 +107,7 @@ public class JSVariableCompletion extends VariableCompletion implements
 
 		return super.equals(obj);
 	}
-	
+
 	@Override
 	public int compareTo(Completion c2) {
 		if (c2==this) {
@@ -121,7 +121,7 @@ public class JSVariableCompletion extends VariableCompletion implements
 	public int hashCode() {
 		return getName().hashCode();
 	}
-	
+
 	@Override
 	public String getSummary() {
 
@@ -130,9 +130,9 @@ public class JSVariableCompletion extends VariableCompletion implements
         if(cf != null)
         {
             SourceLocation  loc = scp.getSourceLocForClass(cf.getClassName(true));
-    
+
             if (loc!=null) {
-    
+
                 CompilationUnit cu = Util.getCompilationUnitFromDisk(loc, cf);
                 if (cu!=null) {
                 	Iterator<TypeDeclaration> i = cu.getTypeDeclarationIterator();
@@ -153,9 +153,9 @@ public class JSVariableCompletion extends VariableCompletion implements
             // Default to the fully-qualified class name.
             return cf.getClassName(true);
         }
-        
+
         return super.getSummary();
-        
+
 
     }
 

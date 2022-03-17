@@ -26,8 +26,8 @@ public class ConstantMethodHandleInfo extends ConstantPoolInfo {
     /**
      * Constructor.
      *
-     * @param referenceKind
-     * @param referenceIndex
+     * @param referenceKind The reference kind.
+     * @param referenceIndex The reference index.
      */
     public ConstantMethodHandleInfo(int referenceKind, int referenceIndex) {
         super(CONSTANT_MethodHandle);

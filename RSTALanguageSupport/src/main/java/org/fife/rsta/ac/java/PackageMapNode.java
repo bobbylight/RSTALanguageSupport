@@ -97,6 +97,7 @@ public class PackageMapNode {
 	/**
 	 * Gets the completions in this package map that match a given string.
 	 *
+	 * @param info The library info.
 	 * @param provider The parent completion provider.
 	 * @param pkgNames The text to match, split into tokens around the
 	 *        '<code>.</code>' character.  This should be (the start of) a
@@ -201,6 +202,12 @@ public class PackageMapNode {
 	}
 
 
+	/**
+	 * Returns whether this package map node contains a class.
+	 *
+	 * @param className The class name to check.
+	 * @return Whether it is contained.
+	 */
 	public boolean containsClass(String className) {
 
 		String[] items = className.split("\\.");
@@ -221,6 +228,12 @@ public class PackageMapNode {
 	}
 
 
+	/**
+	 * Returns whether this package map node contains a package.
+	 *
+	 * @param pkgName The package to check.
+	 * @return Whether it is contained.
+	 */
 	public boolean containsPackage(String pkgName) {
 
 		String[] items = Util.splitOnChar(pkgName, '.');
@@ -241,6 +254,13 @@ public class PackageMapNode {
 	}
 
 
+	/**
+	 * Returns a class entry.
+	 *
+	 * @param info The library info.
+	 * @param items The set of items (?).
+	 * @return The class file entry.
+	 */
 	public ClassFile getClassEntry(LibraryInfo info, String[] items) {
 
 		PackageMapNode pmn = this;
@@ -278,6 +298,14 @@ public class PackageMapNode {
 	}
 
 
+	/**
+	 * Returns the classes in a package.
+	 *
+	 * @param info The library info.
+	 * @param addTo The collection to add to.
+	 * @param pkgs The current set of packages.
+	 * @param inPkg Whether to be in the package (?).
+	 */
 	public void getClassesInPackage(LibraryInfo info, List<ClassFile> addTo,
 			String[] pkgs, boolean inPkg) {
 
@@ -331,7 +359,7 @@ public class PackageMapNode {
 	 * start with a given prefix, ignoring case.
 	 *
 	 * @param prefix The prefix that the unqualified class names must match
-	 *        (ignoring case). 
+	 *        (ignoring case).
 	 * @param currentPkg The package that <code>map</code> belongs to (i.e.
 	 *        all levels of packages scanned before this one), separated by
 	 *        '<code>/</code>'.

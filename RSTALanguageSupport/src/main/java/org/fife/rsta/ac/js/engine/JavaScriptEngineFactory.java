@@ -5,9 +5,9 @@ import java.util.HashMap;
 
 public class JavaScriptEngineFactory {
 
-	
+
 	public static final String DEFAULT = EMCAJavaScriptEngine.EMCA_ENGINE;
-	
+
 	private HashMap<String, JavaScriptEngine> supportedEngines =
             new HashMap<>();
 

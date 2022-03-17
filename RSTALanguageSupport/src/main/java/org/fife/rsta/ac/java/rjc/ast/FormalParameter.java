@@ -17,18 +17,18 @@ import org.fife.rsta.ac.java.rjc.lang.Type;
 import org.fife.rsta.ac.java.rjc.lexer.Scanner;
 
 
+/*
+ * FormalParameter:
+ *    ['final'] [Annotations] Type VariableDeclaratorId
+ *
+ * VariableDeclaratorId:
+ *    Identifier { "[" "]" }
+ */
 /**
  * A parameter to a method.
  *
  * @author Robert Futrell
  * @version 1.0
- */
-/*
- * FormalParameter:
- *    ['final'] [Annotations] Type VariableDeclaratorId
- *   
- * VariableDeclaratorId:
- *    Identifier { "[" "]" }
  */
 public class FormalParameter extends LocalVariable {
 

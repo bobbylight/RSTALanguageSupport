@@ -20,7 +20,7 @@ import java.io.IOException;
  * @author Robert Futrell
  * @version 1.0
  */
-public class Util implements AccessFlags {
+public final class Util implements AccessFlags {
 
 
 	/**
@@ -33,6 +33,7 @@ public class Util implements AccessFlags {
 	/**
 	 * Returns whether an object has default scope.
 	 *
+	 * @param accessFlags The access flags to check.
 	 * @return Whether an object has default scope.
 	 * @see #isDefault(int)
 	 * @see #isPrivate(int)
@@ -47,6 +48,7 @@ public class Util implements AccessFlags {
 	/**
 	 * Returns whether an object has private scope.
 	 *
+	 * @param accessFlags The access flags to check.
 	 * @return Whether an object has private scope.
 	 * @see #isDefault(int)
 	 * @see #isPrivate(int)
@@ -60,6 +62,7 @@ public class Util implements AccessFlags {
 	/**
 	 * Returns whether an object has protected scope.
 	 *
+	 * @param accessFlags The access flags to check.
 	 * @return Whether an object has protected scope.
 	 * @see #isDefault(int)
 	 * @see #isPrivate(int)
@@ -73,6 +76,7 @@ public class Util implements AccessFlags {
 	/**
 	 * Returns whether an object has public scope.
 	 *
+	 * @param accessFlags The access flags to check.
 	 * @return Whether an object has public scope.
 	 * @see #isDefault(int)
 	 * @see #isPrivate(int)

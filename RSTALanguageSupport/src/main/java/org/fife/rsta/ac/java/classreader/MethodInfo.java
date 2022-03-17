@@ -62,7 +62,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 * The type of all parameters to this method.  Note that this cache will
 	 * be short-lived, as classes that take type parameters will pass their
 	 * type arguments down to individual <code>MethodInfo</code>s when doing
-	 * completions, to ensure types are as correct as possible. 
+	 * completions, to ensure types are as correct as possible.
 	 */
 	private String[] paramTypes;
 
@@ -89,6 +89,9 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 * Constructor.
 	 *
 	 * @param cf The class file defining this method.
+	 * @param accessFlags The access flags.
+	 * @param nameIndex The name index.
+	 * @param descriptorIndex The descriptor index.
 	 */
 	public MethodInfo(ClassFile cf, int accessFlags, int nameIndex,
 						int descriptorIndex) {
@@ -118,7 +121,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 				sb.append(", ");
 			}
 		}
-		
+
 	}
 
 
@@ -129,7 +132,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 * lazily recomputed the next time they are needed.  This allows this
 	 * <code>MethodInfo</code> to be used for code completion for instances
 	 * of the same class initialized with different type arguments.<p>
-	 * 
+	 *
 	 * Note that if this method does not have parameterized arguments or
 	 * return type, calling this method won't affect its behavior.
 	 */
@@ -147,7 +150,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 * {@link ClassFile#setTypeParamsToTypeArgs(Map)}.
 	 *
 	 * @return The array of parameter types.
-	 * @see #createParamTypesFromDescriptor(boolean) 
+	 * @see #createParamTypesFromDescriptor(boolean)
 	 * @see #createParamTypesFromTypeSignature()
 	 */
 	private String[] createParamTypes() {
@@ -263,7 +266,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 * generic parameters.
 	 *
 	 * @return The parameter types.
-	 * @see #createParamTypesFromDescriptor(boolean) 
+	 * @see #createParamTypesFromDescriptor(boolean)
 	 */
 	private String[] createParamTypesFromTypeSignature() {
 
@@ -304,18 +307,12 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getDescriptor() {
 		return cf.getUtf8ValueFromConstantPool(descriptorIndex);
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getName() {
 		String name = cf.getUtf8ValueFromConstantPool(nameIndex);
@@ -436,6 +433,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	/**
 	 * Returns the return type of this method.
 	 *
+	 * @param fullyQualified Whether the returned value should be fully-qualified.
 	 * @return The return type of this method.
 	 */
 	public String getReturnTypeString(boolean fullyQualified) {
@@ -445,10 +443,9 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 				returnType = getReturnTypeStringFromDescriptor(fullyQualified);
 			}
 		}
-		if(!fullyQualified)
-		{
+		if (!fullyQualified) {
 			if(returnType != null && returnType.contains(".")) {
-				return returnType.substring(returnType.lastIndexOf(".") +1, returnType.length());  
+				return returnType.substring(returnType.lastIndexOf(".") +1, returnType.length());
 			}
 		}
 		return returnType;
@@ -462,7 +459,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 * Java 5.
 	 *
 	 * @return The return type of this method.
-	 * @see #getReturnTypeStringFromTypeSignature(boolean) 
+	 * @see #getReturnTypeStringFromTypeSignature(boolean)
 	 */
 	/*
 	 * TODO: This is identical to FieldInfo.getTypeString(), except for the
@@ -704,9 +701,9 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 		// Attributes common to all members, or unhandled attributes.
 		else {
 			ai = super.readAttribute(in, attrName, attributeLength);
-//			if (ai!=null) { // "Deprecated" attribute returns null
-//				System.out.println("-------------- " + ai.getName());
-//			}
+			//if (ai!=null) { // "Deprecated" attribute returns null
+			//	System.out.println("-------------- " + ai.getName());
+			//}
 		}
 
 		return ai;

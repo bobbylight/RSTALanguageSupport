@@ -27,7 +27,7 @@ class LocalVariableCompletion extends AbstractJavaSourceCompletion {
 	private static final int RELEVANCE		= 4;
 
 
-	public LocalVariableCompletion(CompletionProvider provider,
+	LocalVariableCompletion(CompletionProvider provider,
 									LocalVariable localVar) {
 		super(provider, localVar.getName());
 		this.localVar = localVar;

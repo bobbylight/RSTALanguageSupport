@@ -25,7 +25,7 @@ import org.fife.ui.autocomplete.CompletionProvider;
 class PackageNameCompletion extends AbstractJavaSourceCompletion {
 
 
-	public PackageNameCompletion(CompletionProvider provider, String text,
+	PackageNameCompletion(CompletionProvider provider, String text,
 								String alreadyEntered) {
 		super(provider, text.substring(text.lastIndexOf('.')+1));
 	}

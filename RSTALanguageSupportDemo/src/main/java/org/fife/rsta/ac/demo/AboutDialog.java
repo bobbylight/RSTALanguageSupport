@@ -40,7 +40,7 @@ import org.fife.rsta.ac.perl.PerlLanguageSupport;
 
 /**
  * The "About" dialog for the demo application.
- * 
+ *
  * @author Robert Futrell
  * @version 1.0
  */
@@ -74,7 +74,7 @@ public class AboutDialog extends JDialog {
 		JTextArea textArea = new JTextArea(6, 60);
 		// Windows LAF picks a bad font for text areas, for some reason.
 		textArea.setFont(labelFont);
-		textArea.setText("Version 0.2\n\n" + 
+		textArea.setText("Version 0.2\n\n" +
 			"Demonstrates basic features of the RSTALanguageSupport library.\n" +
 			"Note that some features for some languages may not work unless your system " +
 			"is set up properly.\nFor example, Java code completion requires a JRE on " +
@@ -254,7 +254,7 @@ public class AboutDialog extends JDialog {
 	private static class TopBorder extends AbstractBorder {
 
 		@Override
-		public Insets getBorderInsets(Component c) { 
+		public Insets getBorderInsets(Component c) {
 			return getBorderInsets(c, new Insets(0, 0, 0, 0));
 		}
 

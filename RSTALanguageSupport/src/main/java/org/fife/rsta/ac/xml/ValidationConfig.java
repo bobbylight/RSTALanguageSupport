@@ -23,7 +23,9 @@ public interface ValidationConfig {
 
 	/**
 	 * Configures the parser itself.  Called when this config is first set
-	 * on an <code>XmlParsre</code>.
+	 * on an <code>XmlParser</code>.
+	 *
+	 * @param parser The parser to configure.
 	 */
 	void configureParser(XmlParser parser);
 
@@ -31,6 +33,8 @@ public interface ValidationConfig {
 	/**
 	 * Configures the actual handler instance.  Called before each parsing
 	 * of the document.
+	 *
+	 * @param handler The handler to configure.
 	 */
 	void configureHandler(XmlParser.Handler handler);
 

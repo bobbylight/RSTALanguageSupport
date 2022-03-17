@@ -37,7 +37,7 @@ public class Scanner {
 	private SourceCodeScanner s;
 
 	/**
-	 * Stack of tokens that have been "pushed back."
+	 * Stack of tokens that have been "pushed back".
 	 */
 	private Stack<Token> stack;
 
@@ -389,6 +389,15 @@ private void pushOntoStack(Token t) {
 	}
 
 
+	/**
+	 * Eats tokens from the stream until one of the given types is found.
+	 * That token is kept in the stream and will be the next one returned.
+	 *
+	 * @param type1 The first desired type.
+	 * @param type2 The second desired type.
+	 * @throws IOException If an IO error occurs.
+	 * @see #eatUntilNext(int, int, int)
+	 */
 	public void eatUntilNext(int type1, int type2) throws IOException {
 		Token t;
 		while ((t=yylex())!=null) {
@@ -401,6 +410,16 @@ private void pushOntoStack(Token t) {
 	}
 
 
+	/**
+	 * Eats tokens from the stream until one of the given types is found.
+	 * That token is kept in the stream and will be the next one returned.
+	 *
+	 * @param type1 The first desired type.
+	 * @param type2 The second desired type.
+	 * @param type3 The third desired type
+	 * @throws IOException If an IO error occurs.
+	 * @see #eatUntilNext(int, int)
+	 */
 	public void eatUntilNext(int type1, int type2, int type3) throws IOException {
 		Token t;
 		while ((t=yylex())!=null) {
@@ -439,6 +458,14 @@ private void pushOntoStack(Token t) {
 private Stack<Stack<Token>> resetPositions;
 private Stack<Token> currentResetTokenStack;
 private int currentResetStartOffset;
+
+
+	/**
+	 * Marks a position to reset to.
+	 *
+	 * @see #resetToLastMarkedPosition()
+	 * @see #clearResetPosition()
+	 */
 	public void markResetPosition() {
 		if (s!=null) { // Hack!  We should really do something for token-only scanners
 			if (resetPositions==null) {
@@ -449,6 +476,14 @@ private int currentResetStartOffset;
 			currentResetStartOffset = s.getOffset();
 		}
 	}
+
+
+	/**
+	 * Resets to the last marked position.
+	 *
+	 * @see #markResetPosition()
+	 * @see #clearResetPosition()
+	 */
 	public void resetToLastMarkedPosition() {
 		if (s!=null) { // Hack!  We should really do something for token-only scanners
 			if (currentResetTokenStack==null) {
@@ -474,6 +509,14 @@ private int currentResetStartOffset;
 			currentResetStartOffset = -1;
 		}
 	}
+
+
+	/**
+	 * Clears the position to reset to.
+	 *
+	 * @see #markResetPosition()
+	 * @see #resetToLastMarkedPosition()
+	 */
 	public void clearResetPosition() {
 		if (s!=null) { // Hack!  We should really do something for token-only scanners
 			if (currentResetTokenStack==null) {
@@ -521,14 +564,14 @@ private int currentResetStartOffset;
 	}
 
 
+	/*
+	 * NOTE: All other lex'ing methods should call into this one.
+	 */
 	/**
 	 * Returns the next token from the input stream.
 	 *
 	 * @return The next token.
 	 * @throws IOException If an IO error occurs.
-	 */
-	/*
-	 * NOTE: All other lex'ing methods should call into this one.
 	 */
 	public Token yylex() throws IOException {
 
@@ -779,6 +822,8 @@ private int currentResetStartOffset;
 	 * Returns the next token, but does not take it off of the stream.  This
 	 * is useful for lookahead.
 	 *
+	 * @param error The error description for the exception if the end of
+	 *        stream is reached, or if the token is of an unexpected type.
 	 * @return The next token.
 	 * @throws IOException If an IO error occurs.
 	 */
@@ -796,6 +841,8 @@ private int currentResetStartOffset;
 	 * is useful for lookahead.
 	 *
 	 * @param type The type the token must be.
+	 * @param error The error description for the exception if the end of
+	 *        stream is reached, or if the token is of an unexpected type.
 	 * @return The next token.
 	 * @throws IOException If an IO error occurs, or if EOS is reached, or
 	 *         if the token is not of the specified type.
@@ -811,6 +858,8 @@ private int currentResetStartOffset;
 	 *
 	 * @param type1 One of the two types the token must be.
 	 * @param type2 The other of the two types the token must be.
+	 * @param error The error description for the exception if the end of
+	 *        stream is reached, or if the token is of an unexpected type.
 	 * @return The next token.
 	 * @throws IOException If an IO error occurs, or if EOS is reached, or
 	 *         if the token is not of the specified type.
@@ -828,6 +877,8 @@ private int currentResetStartOffset;
 	 * @param type1 One of the three types the token must be.
 	 * @param type2 Another of the three types the token must be.
 	 * @param type3 The third of the types the token must be.
+	 * @param error The error description for the exception if the end of
+	 *        stream is reached, or if the token is of an unexpected type.
 	 * @return The next token.
 	 * @throws IOException If an IO error occurs, or if EOS is reached, or
 	 *         if the token is not of the specified type.
@@ -860,9 +911,9 @@ private int currentResetStartOffset;
 
 	private static class DocumentOffset implements Offset {
 
-		public Position pos;
+		private Position pos;
 
-		public DocumentOffset(Position pos) {
+		DocumentOffset(Position pos) {
 			this.pos = pos;
 		}
 

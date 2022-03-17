@@ -23,7 +23,7 @@ import org.fife.rsta.ac.java.rjc.parser.ASTFactory;
 
 /**
  * Represents Java source in a directory, such as in a project's source folder.
- * 
+ *
  * @author Robert Futrell
  * @version 1.0
  */

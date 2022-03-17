@@ -47,7 +47,7 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 		List<Parameter> params = populateParams(methodData, showParameterType);
 		setParams(params);
 	}
-	
+
 	private static String getMethodName(MethodInfo info, CompletionProvider provider)
 	{
 		if(info.isConstructor()){
@@ -126,7 +126,7 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 		/*
 		 * This string compares the following parts of methods in this order, to
 		 * optimize sort order in completion lists.
-		 * 
+		 *
 		 * 1. First, by name 2. Next, by number of parameters. 3. Finally, by
 		 * parameter type.
 		 */
@@ -258,7 +258,7 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 	public String getEnclosingClassName(boolean fullyQualified) {
 		return methodData.getEnclosingClassName(fullyQualified);
 	}
-	
+
 	public JSMethodData getMethodData()
 	{
 		return methodData;

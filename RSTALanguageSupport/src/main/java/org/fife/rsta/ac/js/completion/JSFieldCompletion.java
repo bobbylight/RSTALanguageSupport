@@ -26,7 +26,7 @@ public class JSFieldCompletion extends VariableCompletion implements
 		this.field = fieldData.getField();
 		setRelevance(fieldData);
 	}
-	
+
 	private void setRelevance(JSFieldData data)
 	{
 		if(data.isStatic()) {
@@ -53,7 +53,7 @@ public class JSFieldCompletion extends VariableCompletion implements
 
 	@Override
 	public Icon getIcon() {
-		return fieldData.isStatic() ? IconFactory.getIcon(IconFactory.STATIC_VAR_ICON) : 
+		return fieldData.isStatic() ? IconFactory.getIcon(IconFactory.STATIC_VAR_ICON) :
 			fieldData.isPublic() ? IconFactory.getIcon(IconFactory.GLOBAL_VARIABLE_ICON) : IconFactory.getIcon(IconFactory.DEFAULT_VARIABLE_ICON);
 	}
 
@@ -94,7 +94,7 @@ public class JSFieldCompletion extends VariableCompletion implements
 		return fieldData.getType(true); /*TypeDeclarationFactory.lookupJSType(fieldData.getType(true),
 				qualified);*/
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if(obj == this) {
@@ -107,7 +107,7 @@ public class JSFieldCompletion extends VariableCompletion implements
 		}
 		return super.equals(obj);
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -127,5 +127,5 @@ public class JSFieldCompletion extends VariableCompletion implements
 	public int hashCode() {
 		return getLookupName().hashCode();
 	}
-	
+
 }

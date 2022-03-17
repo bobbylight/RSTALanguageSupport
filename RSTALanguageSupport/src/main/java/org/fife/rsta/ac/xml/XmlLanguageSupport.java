@@ -30,7 +30,7 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 /**
  * Language support for XML.  Currently supported features include:
- * 
+ *
  * <ul>
  *    <li>Squiggle underlining of basic XML structure errors.</li>
  *    <li>Usage of {@link XmlOutlineTree}, a tree view modeling the XML in
@@ -38,7 +38,7 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
  * </ul>
  *
  * Possible future features include:
- * 
+ *
  * <ul>
  *    <li>DTD/Schema validation.</li>
  *    <li>Code completion based off of other tags in the XML.</li>
@@ -138,20 +138,20 @@ public class XmlLanguageSupport extends AbstractMarkupLanguageSupport {
 		installImpl(textArea, ac);
 
 		XmlParser parser = new XmlParser(this);
-//EntityResolver resolver = new EntityResolver() {
-//	public InputSource resolveEntity(String publicId, String systemId)
-//			throws SAXException, IOException {
-//		InputStream in = getClass().getResourceAsStream("/theme.dtd");
-//		return new InputSource(in);
-//	}
-//};
-//parser.setValidationConfig(new DtdValidationConfig(resolver));
-//InputStream in = getClass().getResourceAsStream("/test.xsd");
-//try {
-//parser.setValidationConfig(new SchemaValidationConfig(XMLConstants.W3C_XML_SCHEMA_NS_URI, in));
-//} catch (IOException e) {
-//	e.printStackTrace();
-//}
+		//EntityResolver resolver = new EntityResolver() {
+		//	public InputSource resolveEntity(String publicId, String systemId)
+		//			throws SAXException, IOException {
+		//		InputStream in = getClass().getResourceAsStream("/theme.dtd");
+		//		return new InputSource(in);
+		//	}
+		//};
+		//parser.setValidationConfig(new DtdValidationConfig(resolver));
+		//InputStream in = getClass().getResourceAsStream("/test.xsd");
+		//try {
+		//parser.setValidationConfig(new SchemaValidationConfig(XMLConstants.W3C_XML_SCHEMA_NS_URI, in));
+		//} catch (IOException e) {
+		//	e.printStackTrace();
+		//}
 		textArea.addParser(parser);
 		textArea.putClientProperty(PROPERTY_LANGUAGE_PARSER, parser);
 

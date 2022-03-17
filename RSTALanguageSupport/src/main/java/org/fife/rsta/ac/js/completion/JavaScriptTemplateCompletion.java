@@ -34,12 +34,12 @@ public class JavaScriptTemplateCompletion extends JavaTemplateCompletion {
 			String shortDesc) {
 		this(provider, inputText, definitionString, template, shortDesc, null);
 	}
-	
+
 	public JavaScriptTemplateCompletion(CompletionProvider provider,
 			String inputText, String definitionString, String template,
 			String shortDesc, String summary) {
 		super(provider, inputText, definitionString, template, shortDesc, summary);
 	}
 
-	
+
 }

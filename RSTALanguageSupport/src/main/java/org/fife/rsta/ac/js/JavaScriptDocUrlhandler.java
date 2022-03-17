@@ -23,9 +23,9 @@ import org.fife.ui.autocomplete.Util;
 
 public class JavaScriptDocUrlhandler implements ExternalURLHandler {
 
-	
+
 	private JavaScriptLanguageSupport languageSupport;
-	
+
 	public JavaScriptDocUrlhandler(JavaScriptLanguageSupport languageSupport){
 		this.languageSupport = languageSupport;
 	}
@@ -52,7 +52,7 @@ public class JavaScriptDocUrlhandler implements ExternalURLHandler {
 		return clazz;
 
 	}
-	
+
 	/**
 	 * Returns the package of the specified completion.
 	 *
@@ -85,10 +85,10 @@ public class JavaScriptDocUrlhandler implements ExternalURLHandler {
 		return pkg;
 
 	}
-	
+
 	/**
 	 * Returns whether the text is a relative URL to other Javadoc.
-	 * 
+	 *
 	 * @param text A link in Javadoc.
 	 * @return Whether the link is a relative path to more Javadoc.
 	 */
@@ -103,7 +103,7 @@ public class JavaScriptDocUrlhandler implements ExternalURLHandler {
         }
 		return false;
 	}
-	
+
 	/**
 	 * Returns the parent package <code>backupCount</code> levels up from
 	 * the package specified.
@@ -168,7 +168,7 @@ public class JavaScriptDocUrlhandler implements ExternalURLHandler {
 		return args;
 
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -200,7 +200,7 @@ public class JavaScriptDocUrlhandler implements ExternalURLHandler {
 			if (isRelativeUrl(desc)) {
 				int ext = desc.indexOf(".htm");
 				if (ext>-1) {
-	
+
 					// Could be <a href="Character.html#section"> link.  A
 					// popular href format is "../../util/Formatter.html#syntax".
 					// We must determine "relative" package location.
@@ -223,7 +223,7 @@ public class JavaScriptDocUrlhandler implements ExternalURLHandler {
 							callback.showSummaryFor(cc, anchor);
 						}
 					}
-	
+
 				}
 			}
 
@@ -297,7 +297,7 @@ public class JavaScriptDocUrlhandler implements ExternalURLHandler {
 						clazz = "java.lang." + clazz.substring(lastDot+1);
 						cf = jls.getJarManager().getClassEntry(clazz);
 					}
-					
+
 					if (cf!=null) {
 
 						Completion memberCompletion = null;

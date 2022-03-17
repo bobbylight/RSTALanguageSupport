@@ -41,7 +41,7 @@ import org.mozilla.javascript.ast.ParseProblem;
 /**
  * Parses JavaScript code in an <code>RSyntaxTextArea</code>.
  * <p>
- * 
+ *
  * Like all RSTA <tt>Parser</tt>s, a <tt>JavaScriptParser</tt> instance is
  * notified when the RSTA's text content changes. After a small delay, it will
  * parse the content as JS code, building an AST and looking for any errors.
@@ -50,13 +50,13 @@ import org.mozilla.javascript.ast.ParseProblem;
  * property for the <code>AstRoot</code> built that represents the source code
  * in the text area.
  * <p>
- * 
+ *
  * This parser cannot be shared amongst multiple instances of
  * <code>RSyntaxTextArea</code>.
  * <p>
- * 
+ *
  * Please keep in mind that this class is a work-in-progress!
- * 
+ *
  * @author Robert Futrell
  * @version 1.0
  */
@@ -69,7 +69,7 @@ public class JavaScriptParser extends AbstractParser {
 	 * <code>org.mozilla.javascript.ast.AstRoot</code>.
 	 */
 	public static final String PROPERTY_AST = "AST";
-	
+
 	private RSyntaxTextArea textArea;
 	private AstRoot astRoot;
 	private JavaScriptLanguageSupport langSupport;
@@ -186,7 +186,7 @@ public class JavaScriptParser extends AbstractParser {
 	/**
 	 * Returns the AST, or <code>null</code> if the editor's content has not
 	 * yet been parsed.
-	 * 
+	 *
 	 * @return The AST, or <code>null</code>.
 	 */
 	public AstRoot getAstRoot() {
@@ -288,11 +288,11 @@ public class JavaScriptParser extends AbstractParser {
 		return result;
 
 	}
-	
+
 	public void setVariablesAndFunctions(VariableResolver variableResolver) {
 		this.variableResolver = variableResolver;
 	}
-	
+
 	public VariableResolver getVariablesAndFunctions() {
 		return variableResolver;
 	}

@@ -3,7 +3,7 @@
  *
  * XmlCompletionProvider.java - Returns XML tag names or attributes that are
  * seen elsewhere in the document.
- * 
+ *
  * This library is distributed under a modified BSD license.  See the included
  * RSyntaxTextArea.License.txt file for details.
  */
@@ -34,7 +34,7 @@ import org.fife.ui.rsyntaxtextarea.TokenTypes;
  * best guess at what completion choices the user might want for XML.  It does
  * this by looking at what XML element names and attributes have been used
  * elsewhere in the document:<p>
- * 
+ *
  * <ul>
  *    <li>If the caret is not in an XML tag, no completion choices are
  *        suggested.
@@ -53,7 +53,7 @@ class XmlCompletionProvider extends DefaultCompletionProvider {
 	private static final char[] TAG_SELF_CLOSE = { '/', '>' };
 
 
-	public XmlCompletionProvider() {
+	XmlCompletionProvider() {
 		setAutoActivationRules(false, "<");
 	}
 

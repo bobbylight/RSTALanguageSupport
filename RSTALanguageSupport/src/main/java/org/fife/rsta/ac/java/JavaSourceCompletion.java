@@ -35,10 +35,10 @@ public interface JavaSourceCompletion extends Completion {
 	/**
 	 * Used by {@link JavaCellRenderer} to render this completion choice.
 	 *
-	 * @param g
-	 * @param x
-	 * @param y
-	 * @param selected
+	 * @param g The graphics context to render to.
+	 * @param x The x-offset at which to render.
+	 * @param y The y-offset at which to render.
+	 * @param selected Whether this completion is currently selected/active.
 	 */
 	void rendererText(Graphics g, int x, int y, boolean selected);
 

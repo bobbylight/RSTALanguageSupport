@@ -4,12 +4,12 @@ package org.fife.rsta.ac.js;
 public class Logger {
 
 	private static boolean DEBUG;
-	
+
 	static
 	{
 		DEBUG = Boolean.parseBoolean(System.getProperty("javascript.debug"));
 	}
-	
+
 	/**
 	 * TODO change logging to Log4J?
 	 * Log message to console
@@ -20,7 +20,7 @@ public class Logger {
 			System.out.println(msg);
 		}
 	}
-	
+
 	public static final void logError(String msg) {
 		System.err.println(msg);
 	}

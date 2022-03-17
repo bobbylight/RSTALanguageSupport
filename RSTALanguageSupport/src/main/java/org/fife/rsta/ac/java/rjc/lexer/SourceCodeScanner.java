@@ -31,10 +31,10 @@ class SourceCodeScanner implements org.fife.rsta.ac.java.rjc.lexer.TokenTypes {
   /** lexical states */
   public static final int YYINITIAL = 0;
 
-  /** 
+  /**
    * Translates characters to character classes
    */
-  private static final String ZZ_CMAP_PACKED = 
+  private static final String ZZ_CMAP_PACKED =
     "\11\10\1\4\1\3\1\0\1\4\1\3\16\10\4\0\1\4\1\67"+
     "\1\31\1\0\1\7\1\100\1\73\1\30\1\54\1\55\1\6\1\75"+
     "\1\63\1\76\1\17\1\5\1\12\3\34\4\16\2\13\1\72\1\62"+
@@ -125,12 +125,12 @@ class SourceCodeScanner implements org.fife.rsta.ac.java.rjc.lexer.TokenTypes {
     "\32\7\12\0\132\7\3\0\6\7\2\0\6\7\2\0\6\7\2\0"+
     "\3\7\3\0\2\7\3\0\2\7\22\0\3\10\4\0";
 
-  /** 
+  /**
    * Translates characters to character classes
    */
   private static final char [] ZZ_CMAP = zzUnpackCMap(ZZ_CMAP_PACKED);
 
-  /** 
+  /**
    * Translates DFA states to action switch labels.
    */
   private static final int [] ZZ_ACTION = zzUnpackAction();
@@ -181,7 +181,7 @@ class SourceCodeScanner implements org.fife.rsta.ac.java.rjc.lexer.TokenTypes {
   }
 
 
-  /** 
+  /**
    * Translates a state to a row index in the transition table
    */
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
@@ -249,7 +249,7 @@ class SourceCodeScanner implements org.fife.rsta.ac.java.rjc.lexer.TokenTypes {
     return j;
   }
 
-  /** 
+  /**
    * The transition table of the DFA
    */
   private static final int [] ZZ_TRANS = zzUnpackTrans();
@@ -710,7 +710,7 @@ class SourceCodeScanner implements org.fife.rsta.ac.java.rjc.lexer.TokenTypes {
   private int yychar;
 
   /**
-   * the number of characters from the last newline up to the start of the 
+   * the number of characters from the last newline up to the start of the
    * matched text
    */
   private int yycolumn;
@@ -876,7 +876,7 @@ class SourceCodeScanner implements org.fife.rsta.ac.java.rjc.lexer.TokenTypes {
     this(new java.io.InputStreamReader(in));
   }
 
-  /** 
+  /**
    * Unpacks the compressed character translation table.
    *
    * @param packed   the packed character translation table
@@ -899,7 +899,7 @@ class SourceCodeScanner implements org.fife.rsta.ac.java.rjc.lexer.TokenTypes {
    * Refills the input buffer.
    *
    * @return      <code>false</code>, iff there was new input.
-   * 
+   *
    * @exception   java.io.IOException  if any I/O-Error occurs
    */
   private boolean zzRefill() throws java.io.IOException {
@@ -938,7 +938,7 @@ class SourceCodeScanner implements org.fife.rsta.ac.java.rjc.lexer.TokenTypes {
     }
   }
 
-    
+
   /**
    * Closes the input stream.
    */
@@ -955,11 +955,11 @@ class SourceCodeScanner implements org.fife.rsta.ac.java.rjc.lexer.TokenTypes {
    * Resets the scanner to read from a new input stream.
    * Does not close the old reader.
    *
-   * All internal variables are reset, the old input stream 
+   * All internal variables are reset, the old input stream
    * <b>cannot</b> be reused (internal buffer is discarded and lost).
    * Lexical state is set to <tt>ZZ_INITIAL</tt>.
    *
-   * @param reader   the new input stream 
+   * @param reader   the new input stream
    */
   public final void yyreset(java.io.Reader reader) {
     zzReader = reader;
@@ -998,12 +998,12 @@ class SourceCodeScanner implements org.fife.rsta.ac.java.rjc.lexer.TokenTypes {
 
 
   /**
-   * Returns the character at position <tt>pos</tt> from the 
-   * matched text. 
-   * 
+   * Returns the character at position <tt>pos</tt> from the
+   * matched text.
+   *
    * It is equivalent to yytext().charAt(pos), but faster
    *
-   * @param pos the position of the character to fetch. 
+   * @param pos the position of the character to fetch.
    *            A value from 0 to yylength()-1.
    *
    * @return the character at position pos
@@ -1024,8 +1024,8 @@ class SourceCodeScanner implements org.fife.rsta.ac.java.rjc.lexer.TokenTypes {
   /**
    * Reports an error that occured while scanning.
    *
-   * In a wellformed scanner (no or only correct usage of 
-   * yypushback(int) and a match-all fallback rule) this method 
+   * In a wellformed scanner (no or only correct usage of
+   * yypushback(int) and a match-all fallback rule) this method
    * will only be called with things that "Can't Possibly Happen".
    * If this method is called, something is seriously wrong
    * (e.g. a JFlex bug producing a faulty scanner etc.).
@@ -1045,7 +1045,7 @@ class SourceCodeScanner implements org.fife.rsta.ac.java.rjc.lexer.TokenTypes {
     }
 
     throw new Error(message);
-  } 
+  }
 
 
   /**
@@ -1135,9 +1135,9 @@ class SourceCodeScanner implements org.fife.rsta.ac.java.rjc.lexer.TokenTypes {
           zzEndReadL = zzEndRead;
           zzMarkedPosL = zzMarkedPos;
           zzBufferL = zzBuffer;
-          if (eof) 
+          if (eof)
             zzPeek = false;
-          else 
+          else
             zzPeek = zzBufferL[zzMarkedPosL] == '\n';
         }
         if (zzPeek) yyline--;
@@ -1145,13 +1145,13 @@ class SourceCodeScanner implements org.fife.rsta.ac.java.rjc.lexer.TokenTypes {
       zzAction = -1;
 
       zzCurrentPosL = zzCurrentPos = zzStartRead = zzMarkedPosL;
-  
+
       zzState = zzLexicalState;
 
 
       zzForAction: {
         while (true) {
-    
+
           if (zzCurrentPosL < zzEndReadL)
             zzInput = zzBufferL[zzCurrentPosL++];
           else if (zzAtEOF) {
@@ -1194,447 +1194,447 @@ class SourceCodeScanner implements org.fife.rsta.ac.java.rjc.lexer.TokenTypes {
       zzMarkedPos = zzMarkedPosL;
 
       switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
-        case 87: 
+        case 87:
           { return createToken(KEYWORD_THROWS);
           }
         case 112: break;
-        case 11: 
+        case 11:
           { return createToken(SEPARATOR_LPAREN);
           }
         case 113: break;
-        case 105: 
+        case 105:
           { return createToken(KEYWORD_VOLATILE);
           }
         case 114: break;
-        case 95: 
+        case 95:
           { return createToken(KEYWORD_PUBLIC);
           }
         case 115: break;
-        case 5: 
+        case 5:
           { return createToken(OPERATOR_TIMES);
           }
         case 116: break;
-        case 71: 
+        case 71:
           { return createToken(KEYWORD_CASE);
           }
         case 117: break;
-        case 34: 
+        case 34:
           { return createToken(OPERATOR_TIMES_EQUALS);
           }
         case 118: break;
-        case 89: 
+        case 89:
           { return createToken(KEYWORD_ASSERT);
           }
         case 119: break;
-        case 51: 
+        case 51:
           { return createToken(OPERATOR_DECREMENT);
           }
         case 120: break;
-        case 15: 
+        case 15:
           { return createToken(SEPARATOR_LBRACKET);
           }
         case 121: break;
-        case 104: 
+        case 104:
           { return createToken(KEYWORD_CONTINUE);
           }
         case 122: break;
-        case 80: 
+        case 80:
           { return createToken(KEYWORD_SHORT);
           }
         case 123: break;
-        case 26: 
+        case 26:
           { return createToken(OPERATOR_BITWISE_AND);
           }
         case 124: break;
-        case 31: 
+        case 31:
           { return createToken(OPERATOR_MOD);
           }
         case 125: break;
-        case 74: 
+        case 74:
           { return createToken(KEYWORD_VOID);
           }
         case 126: break;
-        case 62: 
+        case 62:
           { return createToken(OPERATOR_LSHIFT_EQUALS);
           }
         case 127: break;
-        case 38: 
+        case 38:
           { return createToken(OPERATOR_EQUALS_EQUALS);
           }
         case 128: break;
-        case 69: 
+        case 69:
           { return createToken(LITERAL_NULL);
           }
         case 129: break;
-        case 43: 
+        case 43:
           { return createToken(OPERATOR_NE);
           }
         case 130: break;
-        case 28: 
+        case 28:
           { return createToken(OPERATOR_PLUS);
           }
         case 131: break;
-        case 23: 
+        case 23:
           { return createToken(OPERATOR_BITWISE_NOT);
           }
         case 132: break;
-        case 7: 
+        case 7:
           { return createToken(SEPARATOR_DOT);
           }
         case 133: break;
-        case 102: 
+        case 102:
           { return createToken(KEYWORD_ABSTRACT);
           }
         case 134: break;
-        case 92: 
+        case 92:
           { return createToken(KEYWORD_NATIVE);
           }
         case 135: break;
-        case 35: 
+        case 35:
           { return createToken(LITERAL_STRING);
           }
         case 136: break;
-        case 46: 
+        case 46:
           { return createToken(OPERATOR_BITWISE_OR_EQUALS);
           }
         case 137: break;
-        case 60: 
+        case 60:
           { return createToken(OPERATOR_RSHIFT_EQUALS);
           }
         case 138: break;
-        case 91: 
+        case 91:
           { return createToken(KEYWORD_SWITCH);
           }
         case 139: break;
-        case 76: 
+        case 76:
           { return createToken(KEYWORD_THROW);
           }
         case 140: break;
-        case 75: 
+        case 75:
           { return createToken(OPERATOR_RSHIFT2_EQUALS);
           }
         case 141: break;
-        case 66: 
+        case 66:
           { return createToken(KEYWORD_ELSE);
           }
         case 142: break;
-        case 3: 
+        case 3:
           { if (returnWhitespace) {
 									return createToken(Token.WHITESPACE);
 								}
           }
         case 143: break;
-        case 54: 
+        case 54:
           { return createToken(ELIPSIS);
           }
         case 144: break;
-        case 110: 
+        case 110:
           { return createToken(KEYWORD_IMPLEMENTS);
           }
         case 145: break;
-        case 16: 
+        case 16:
           { return createToken(SEPARATOR_RBRACKET);
           }
         case 146: break;
-        case 61: 
+        case 61:
           { return createToken(OPERATOR_RSHIFT2);
           }
         case 147: break;
-        case 8: 
+        case 8:
           { return createToken(LITERAL_CHAR, true);
           }
         case 148: break;
-        case 96: 
+        case 96:
           { return createToken(KEYWORD_EXTENDS);
           }
         case 149: break;
-        case 84: 
+        case 84:
           { return createToken(KEYWORD_CONST);
           }
         case 150: break;
-        case 94: 
+        case 94:
           { return createToken(KEYWORD_DOUBLE);
           }
         case 151: break;
-        case 36: 
+        case 36:
           { return createToken(KEYWORD_IF);
           }
         case 152: break;
-        case 83: 
+        case 83:
           { return createToken(KEYWORD_CLASS);
           }
         case 153: break;
-        case 63: 
+        case 63:
           { return createToken(LITERAL_FP);
           }
         case 154: break;
-        case 39: 
+        case 39:
           { return createToken(OPERATOR_GTE);
           }
         case 155: break;
-        case 56: 
+        case 56:
           { return createToken(KEYWORD_FOR);
           }
         case 156: break;
-        case 32: 
+        case 32:
           { if (returnComments) {
 									return createToken(Token.COMMENT);
 								}
           }
         case 157: break;
-        case 70: 
+        case 70:
           { return createToken(KEYWORD_BYTE);
           }
         case 158: break;
-        case 30: 
+        case 30:
           { return createToken(OPERATOR_BITWISE_XOR);
           }
         case 159: break;
-        case 18: 
+        case 18:
           { return createToken(SEPARATOR_COMMA);
           }
         case 160: break;
-        case 14: 
+        case 14:
           { return createToken(SEPARATOR_RBRACE);
           }
         case 161: break;
-        case 41: 
+        case 41:
           { return createToken(OPERATOR_LTE);
           }
         case 162: break;
-        case 57: 
+        case 57:
           { return createToken(LITERAL_CHAR);
           }
         case 163: break;
-        case 58: 
+        case 58:
           { return createToken(KEYWORD_NEW);
           }
         case 164: break;
-        case 48: 
+        case 48:
           { return createToken(OPERATOR_PLUS_EQUALS);
           }
         case 165: break;
-        case 81: 
+        case 81:
           { return createToken(KEYWORD_BREAK);
           }
         case 166: break;
-        case 1: 
+        case 1:
           { return createToken(IDENTIFIER, true);
           }
         case 167: break;
-        case 9: 
+        case 9:
           { return createToken(LITERAL_STRING, true);
           }
         case 168: break;
-        case 4: 
+        case 4:
           { return createToken(OPERATOR_DIVIDE);
           }
         case 169: break;
-        case 29: 
+        case 29:
           { return createToken(OPERATOR_MINUS);
           }
         case 170: break;
-        case 98: 
+        case 98:
           { return createToken(KEYWORD_BOOLEAN);
           }
         case 171: break;
-        case 93: 
+        case 93:
           { return createToken(KEYWORD_IMPORT);
           }
         case 172: break;
-        case 20: 
+        case 20:
           { return createToken(OPERATOR_GT);
           }
         case 173: break;
-        case 47: 
+        case 47:
           { return createToken(OPERATOR_LOGICAL_OR);
           }
         case 174: break;
-        case 2: 
+        case 2:
           { return createToken(IDENTIFIER);
           }
         case 175: break;
-        case 53: 
+        case 53:
           { return createToken(OPERATOR_MOD_EQUALS);
           }
         case 176: break;
-        case 100: 
+        case 100:
           { return createToken(KEYWORD_PRIVATE);
           }
         case 177: break;
-        case 55: 
+        case 55:
           { return createToken(KEYWORD_TRY);
           }
         case 178: break;
-        case 25: 
+        case 25:
           { return createToken(OPERATOR_COLON);
           }
         case 179: break;
-        case 68: 
+        case 68:
           { return createToken(KEYWORD_LONG);
           }
         case 180: break;
-        case 6: 
+        case 6:
           { return createToken(LITERAL_INT);
           }
         case 181: break;
-        case 13: 
+        case 13:
           { return createToken(SEPARATOR_LBRACE);
           }
         case 182: break;
-        case 45: 
+        case 45:
           { return createToken(OPERATOR_LOGICAL_AND);
           }
         case 183: break;
-        case 21: 
+        case 21:
           { return createToken(OPERATOR_LT);
           }
         case 184: break;
-        case 78: 
+        case 78:
           { return createToken(KEYWORD_FINAL);
           }
         case 185: break;
-        case 24: 
+        case 24:
           { return createToken(OPERATOR_QUESTION);
           }
         case 186: break;
-        case 19: 
+        case 19:
           { return createToken(OPERATOR_EQUALS);
           }
         case 187: break;
-        case 108: 
+        case 108:
           { return createToken(KEYWORD_PROTECTED);
           }
         case 188: break;
-        case 65: 
+        case 65:
           { return createToken(KEYWORD_THIS);
           }
         case 189: break;
-        case 44: 
+        case 44:
           { return createToken(OPERATOR_BITWISE_AND_EQUALS);
           }
         case 190: break;
-        case 109: 
+        case 109:
           { return createToken(KEYWORD_INSTANCEOF);
           }
         case 191: break;
-        case 99: 
+        case 99:
           { return createToken(KEYWORD_DEFAULT);
           }
         case 192: break;
-        case 40: 
+        case 40:
           { return createToken(OPERATOR_RSHIFT);
           }
         case 193: break;
-        case 64: 
+        case 64:
           { return createToken(LITERAL_BOOLEAN);
           }
         case 194: break;
-        case 67: 
+        case 67:
           { return createToken(KEYWORD_ENUM);
           }
         case 195: break;
-        case 97: 
+        case 97:
           { return createToken(KEYWORD_FINALLY);
           }
         case 196: break;
-        case 79: 
+        case 79:
           { return createToken(KEYWORD_SUPER);
           }
         case 197: break;
-        case 77: 
+        case 77:
           { return createToken(KEYWORD_FLOAT);
           }
         case 198: break;
-        case 101: 
+        case 101:
           { return createToken(KEYWORD_PACKAGE);
           }
         case 199: break;
-        case 59: 
+        case 59:
           { return createToken(KEYWORD_INT);
           }
         case 200: break;
-        case 22: 
+        case 22:
           { return createToken(OPERATOR_LOGICAL_NOT);
           }
         case 201: break;
-        case 111: 
+        case 111:
           { return createToken(KEYWORD_SYNCHRONIZED);
           }
         case 202: break;
-        case 73: 
+        case 73:
           { return createToken(KEYWORD_GOTO);
           }
         case 203: break;
-        case 10: 
+        case 10:
           { return createToken(ANNOTATION_START);
           }
         case 204: break;
-        case 12: 
+        case 12:
           { return createToken(SEPARATOR_RPAREN);
           }
         case 205: break;
-        case 27: 
+        case 27:
           { return createToken(OPERATOR_BITWISE_OR);
           }
         case 206: break;
-        case 49: 
+        case 49:
           { return createToken(OPERATOR_INCREMENT);
           }
         case 207: break;
-        case 107: 
+        case 107:
           { return createToken(KEYWORD_INTERFACE);
           }
         case 208: break;
-        case 88: 
+        case 88:
           { return createToken(KEYWORD_RETURN);
           }
         case 209: break;
-        case 72: 
+        case 72:
           { return createToken(KEYWORD_CHAR);
           }
         case 210: break;
-        case 17: 
+        case 17:
           { return createToken(SEPARATOR_SEMICOLON);
           }
         case 211: break;
-        case 50: 
+        case 50:
           { return createToken(OPERATOR_MINUS_EQUALS);
           }
         case 212: break;
-        case 33: 
+        case 33:
           { return createToken(OPERATOR_DIVIDE_EQUALS);
           }
         case 213: break;
-        case 52: 
+        case 52:
           { return createToken(OPERATOR_BITWISE_XOR_EQUALS);
           }
         case 214: break;
-        case 42: 
+        case 42:
           { return createToken(OPERATOR_LSHIFT);
           }
         case 215: break;
-        case 103: 
+        case 103:
           { return createToken(KEYWORD_STRICTFP);
           }
         case 216: break;
-        case 90: 
+        case 90:
           { return createToken(KEYWORD_STATIC);
           }
         case 217: break;
-        case 85: 
+        case 85:
           { return createToken(KEYWORD_WHILE);
           }
         case 218: break;
-        case 37: 
+        case 37:
           { return createToken(KEYWORD_DO);
           }
         case 219: break;
-        case 106: 
+        case 106:
           { return createToken(KEYWORD_TRANSIENT);
           }
         case 220: break;
-        case 86: 
+        case 86:
           { if (keepLastDocComment) {
 									lastDocComment = yytext();
 								}
@@ -1643,15 +1643,15 @@ class SourceCodeScanner implements org.fife.rsta.ac.java.rjc.lexer.TokenTypes {
 								}
           }
         case 221: break;
-        case 82: 
+        case 82:
           { return createToken(KEYWORD_CATCH);
           }
         case 222: break;
-        default: 
+        default:
           if (zzInput == YYEOF && zzStartRead == zzCurrentPos) {
             zzAtEOF = true;
             return null;
-          } 
+          }
           else {
             zzScanError(ZZ_NO_MATCH);
           }

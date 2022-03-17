@@ -31,9 +31,9 @@ public class ShellFunctionCompletion extends FunctionCompletion {
 	/**
 	 * Constructor.
 	 *
-	 * @param provider
-	 * @param name
-	 * @param returnType
+	 * @param provider The completion provider.
+	 * @param name The name of the function.
+	 * @param returnType The return type of the function.
 	 */
 	public ShellFunctionCompletion(CompletionProvider provider, String name,
 			String returnType) {
@@ -41,9 +41,6 @@ public class ShellFunctionCompletion extends FunctionCompletion {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getSummary() {
 
@@ -105,7 +102,7 @@ public class ShellFunctionCompletion extends FunctionCompletion {
 
 
 	private static StringBuffer manToHtml(CharSequence text) {
-//		text = text.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+		//text = text.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 		Pattern p = Pattern.compile("(?:_\\010.)+|(?:(.)\\010\\1)+");//"(?:.\\010.)+");
 		Matcher m = p.matcher(text);
 		StringBuffer sb = new StringBuffer("<html><pre>");

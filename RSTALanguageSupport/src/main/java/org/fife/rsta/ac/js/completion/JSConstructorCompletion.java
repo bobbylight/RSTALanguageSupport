@@ -17,5 +17,5 @@ public class JSConstructorCompletion extends JSFunctionCompletion {
 	public Icon getIcon() {
 		return IconFactory.getIcon(IconFactory.FUNCTION_ICON);
 	}
-	
+
 }

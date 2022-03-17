@@ -27,13 +27,13 @@ allprojects {
 subprojects {
 
     apply plugin: 'java'
-//    apply plugin: 'checkstyle'
+    apply plugin: 'checkstyle'
 //    apply plugin: 'com.github.spotbugs'
 
-//    checkstyle {
-//        toolVersion = '9.3'
-//        configDirectory = file("$rootProject.projectDir/config/checkstyle")
-//    }
+    checkstyle {
+        toolVersion = '9.3'
+        configDirectory = file("$rootProject.projectDir/config/checkstyle")
+    }
 
 //    spotbugsMain {
 //        reports {

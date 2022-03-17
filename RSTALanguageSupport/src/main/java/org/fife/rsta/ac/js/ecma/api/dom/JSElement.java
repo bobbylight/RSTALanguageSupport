@@ -10,11 +10,11 @@ public abstract class JSElement implements Element, JS5ObjectFunctions {
 	/**
 	 * Object Element()
 	 * http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/ecma-script-binding.html
-	 * 
+	 *
 	 * @constructor
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
-	 * 
+	 *
 	 */
 	public JSElement() {
 
@@ -22,7 +22,7 @@ public abstract class JSElement implements Element, JS5ObjectFunctions {
 
 	/**
 	 * <b>property prototype</b>
-	 * 
+	 *
 	 * @type Element
 	 * @memberOf Element
 	 * @see org.fife.rsta.ac.js.ecma.api.dom.JSNode Node
@@ -33,7 +33,7 @@ public abstract class JSElement implements Element, JS5ObjectFunctions {
 
 	/**
 	 * <b>property constructor</b>
-	 * 
+	 *
 	 * @type Function
 	 * @memberOf Array
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction Function
@@ -41,5 +41,5 @@ public abstract class JSElement implements Element, JS5ObjectFunctions {
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
 	protected JSFunction constructor;
-	
+
 }

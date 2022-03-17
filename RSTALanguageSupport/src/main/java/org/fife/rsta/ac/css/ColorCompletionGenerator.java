@@ -21,7 +21,7 @@ import org.fife.ui.autocomplete.TemplateCompletion;
 
 /**
  * A generator that returns completions for CSS colors.
- * 
+ *
  * @author Robert Futrell
  * @version 1.0
  */
@@ -34,11 +34,11 @@ class ColorCompletionGenerator implements CompletionGenerator {
 
 	private static final Pattern DIGITS = Pattern.compile("\\d*");
 
-	public ColorCompletionGenerator(CompletionProvider provider) {
+	ColorCompletionGenerator(CompletionProvider provider) {
 		defaults = createDefaults(provider);
 	}
 
-//completions.add(new ColorCompletion(provider, "silver"));
+
 	private static List<Completion> createDefaults(CompletionProvider
 			provider) {
 
@@ -83,9 +83,6 @@ class ColorCompletionGenerator implements CompletionGenerator {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public List<Completion> generate(CompletionProvider provider, String input){
 
@@ -105,12 +102,12 @@ class ColorCompletionGenerator implements CompletionGenerator {
 	 */
 	private static class ColorTemplateCompletion extends TemplateCompletion {
 
-		public ColorTemplateCompletion(CompletionProvider provider,
+		ColorTemplateCompletion(CompletionProvider provider,
 				String input, String template, String desc) {
 			super(provider, input, desc, template, desc, null);
 			boolean function = template.indexOf('(')>-1;
 			setIcon(IconFactory.get().getIcon(function?FUNC_ICON_KEY:ICON_KEY));
-			
+
 		}
 
 	}
@@ -121,7 +118,7 @@ class ColorCompletionGenerator implements CompletionGenerator {
 	 */
 	private static class ColorCompletion extends BasicCssCompletion {
 
-		public ColorCompletion(CompletionProvider provider, String value) {
+		ColorCompletion(CompletionProvider provider, String value) {
 			super(provider, value, ICON_KEY);
 		}
 

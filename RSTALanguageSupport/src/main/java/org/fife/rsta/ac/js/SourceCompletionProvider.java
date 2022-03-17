@@ -53,7 +53,7 @@ import org.mozilla.javascript.ast.AstRoot;
 
 /**
  * Completion provider for JavaScript source code (not comments or strings).
- * 
+ *
  * @author Robert Futrell
  * @version 1.0
  */
@@ -66,16 +66,16 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	private JavaScriptTypesFactory javaScriptTypesFactory;
 
 	private VariableResolver variableResolver;
-	
+
 	private PreProcessingScripts preProcessing;
-	
+
 	//Shorthand completions (templates and comments)
 	private ShorthandCompletionCache shorthandCache;
-	
+
 	private boolean xmlSupported;
 	//The base class for the Completions
 	private String self;
-	
+
 	private TypeDeclarationOptions typeDeclarationOptions;
 
 	public SourceCompletionProvider(boolean xmlSupported) {
@@ -120,7 +120,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 	private String lastCompletionsAtText = null;
 	private List<Completion> lastParameterizedCompletionsAt = null;
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -193,10 +193,10 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 		comp.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 		try {
-			// reset local variables 
+			// reset local variables
 			//They maybe needed outside this method so keep them in memory and clear them at the start
 			variableResolver.resetLocalVariables();
-			
+
 			completions.clear();
 
 			dot = comp.getCaretPosition();
@@ -212,7 +212,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 			// Cut down the list to just those matching what we've typed.
 			// Note: getAlreadyEnteredText() never returns null
 			String text = getAlreadyEnteredText(comp);
-			
+
 			if (supportsPreProcessingScripts()) {
 				variableResolver.resetPreProcessingVariables(false);
 			}
@@ -223,7 +223,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 			// remove anything right of comma (if applicable) as this causes Rhino Ast Compile errors and is not required.
 			//text = JavaScriptHelper.trimFromLastParam(text.trim());
-			
+
 			boolean noDotInText = text.indexOf('.') == -1;
 
 			// need to populate completions to work out all variables available
@@ -233,19 +233,19 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 			if (noDotInText) {
 
 				// Don't add shorthand completions if they're typing something
-				// qualified 
+				// qualified
 				// only add shorthand completions if the user has started typing something in (Eclipse behaviour)
 				if (text.length() > 0) {
 					addShorthandCompletions(set);
-				} 
-				
-				
+				}
+
+
 				if (text.length() > 0) { // try to convert text by removing
 					// any if, while etc..
 					ParseText pt = JavaScriptHelper.parseEnteredText(text);
 					text = pt.text;
 					isNew = pt.isNew;
-					
+
 					if(isNew)  {
 						return handleNewFilter(set, text);
 					}
@@ -254,9 +254,9 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 						//load classes and move on
 						loadECMAClasses(set, "");
 					}
-					
+
 				}
-				
+
 				//load global object
 				parseTextAndResolve(set, "this." + text);
 				recursivelyAddLocalVars(set, block, dot, null, false, false);
@@ -277,7 +277,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 		}
 
 	}
-	
+
 	private List<Completion> handleNewFilter(Set<Completion> set, String text)
 	{
 		set.clear(); //reset as just interested in the
@@ -285,7 +285,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 		loadECMAClasses(set, text);
 		return resolveCompletions(text, set);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private List<Completion> resolveCompletions(String text, Set<Completion> set)
 	{
@@ -317,7 +317,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 		return completions.subList(start, end);
 	}
-	
+
 	/**
 	 * Load ECMA JavaScript class completions
 	 * @param set completion set
@@ -344,17 +344,17 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 			}
 		}
 	}
-	
+
 	/**
-	 * returns the Base class for the source completion provider. This is represented by a class name or ECMA lookup name 
+	 * returns the Base class for the source completion provider. This is represented by a class name or ECMA lookup name
 	 * e.g. set to 'Global' for server side or 'Window' for client JavaScript support
-     * @return base class for the completion provider 
+     * @return base class for the completion provider
      */
 	public String getSelf()
 	{
 		return self;
 	}
-	
+
 	/**
 	 * Parse Text and add completions to set
 	 */
@@ -374,9 +374,9 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 			io.printStackTrace();
 		}
 	}
-	
+
 	/**
-	 * Populate Set of completions if JavaScriptType is not null and return true, 
+	 * Populate Set of completions if JavaScriptType is not null and return true,
 	 * otherwise return false
 	 */
 	private boolean populateCompletionsFromType(JavaScriptType type,
@@ -387,7 +387,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public String getAlreadyEnteredText(JTextComponent comp) {
 		String text = super.getAlreadyEnteredText(comp);
@@ -401,7 +401,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 				Logger.log("SourceCompletionProvider:getAlreadyEnteredText()::afterTrim " + text);
 			}
 		}
-		
+
 		return text;
 	}
 
@@ -409,7 +409,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	/**
 	 * Iterates through AstRoot to extract all code blocks, functions, variables
 	 * etc... e.g. functions, if statements, variables
-	 * 
+	 *
 	 * @param root AstRoot to iterate
 	 * @param set add add completions to set (functions only TODO remove this
 	 *        and do elsewhere)
@@ -427,7 +427,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 	/**
 	 * Convenience method to call variable resolver
-	 * 
+	 *
 	 * @param name
 	 * @return
 	 */
@@ -438,14 +438,14 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 	/**
 	 * Convenience method to call variable resolver
-	 * 
+	 *
 	 * @param name
 	 * @return JavaScript variable declaration
 	 */
 	public JavaScriptVariableDeclaration findDeclaration(String name) {
 		return variableResolver.findDeclaration(name, dot);
 	}
-	
+
 	/**
 	 * Convenience method to call variable resolver for non-local variables
 	 * i.e. does NOT try to resolve name to any local variables (just pre-processed or system)
@@ -459,7 +459,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 	/**
 	 * Get the source of the node and try to resolve function node:
-	 * 
+	 *
 	 * @param functionNode
 	 * @return a.toString().getCharAt(1); returns String TypeDeclaration
 	 */
@@ -488,7 +488,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 	/**
 	 * Iterate though the CodeBlock and extract all variables within scope
-	 * 
+	 *
 	 * @param completions
 	 * @param block
 	 * @param dot
@@ -544,7 +544,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 	/**
 	 * The jar manager is used to parse the JS API for function completions
-	 * 
+	 *
 	 * @param jarManager
 	 */
 	public void setJarManager(JarManager jarManager) {
@@ -580,38 +580,38 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	private boolean supportsPreProcessingScripts() {
 		return preProcessing != null;
 	}
-	
+
 	public JavaScriptEngine getJavaScriptEngine()
 	{
 		return engine;
 	}
-	
+
 	public void setJavaScriptEngine(JavaScriptEngine engine)
 	{
 		this.engine = engine;
 	}
-	
+
 	public SourceLocation  getSourceLocForClass(String className) {
 		return jarManager.getSourceLocForClass(className);
 	}
-	
-	
+
+
 	public boolean isXMLSupported()
 	{
 		return xmlSupported;
 	}
-	
+
 	public void setXMLSupported(boolean xmlSupported)
 	{
-		this.xmlSupported = xmlSupported; 
+		this.xmlSupported = xmlSupported;
 	}
-	
-	
+
+
 	public void setSelf(String self)
 	{
 		this.self = self;
 	}
-	
+
 	public void parseDocument(int dot)
 	{
 		AstRoot ast = this.parent.getASTRoot();
@@ -619,12 +619,12 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 		variableResolver.resetLocalVariables();
 		iterateAstRoot(ast, set, "", dot, typeDeclarationOptions);
 	}
-	
+
 	public TypeDeclarationFactory getTypesFactory()
 	{
 		return engine.getTypesFactory();
 	}
-	
+
 	/**
 	 * Set type declaration options for parser
 	 * @param typeDeclarationOptions
@@ -632,7 +632,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	public void setTypeDeclationOptions(TypeDeclarationOptions typeDeclarationOptions) {
 		this.typeDeclarationOptions = typeDeclarationOptions;
 	}
-	
+
 	// TODO remove
 	public void debugCodeBlock(CodeBlock block, int tab) {
 		System.out.println();

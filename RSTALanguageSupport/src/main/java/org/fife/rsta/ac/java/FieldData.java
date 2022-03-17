@@ -28,14 +28,11 @@ class FieldData implements Data {
 	private Field field;
 
 
-	public FieldData(Field field) {
+	FieldData(Field field) {
 		this.field = field;
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getEnclosingClassName(boolean fullyQualified) {
 		// NOTE: This check isn't really necessary, but is here just in case
@@ -50,9 +47,6 @@ class FieldData implements Data {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getIcon() {
 
@@ -80,18 +74,12 @@ class FieldData implements Data {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getSignature() {
 		return field.getName();
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getSummary() {
 		String docComment = field.getDocComment();
@@ -99,9 +87,6 @@ class FieldData implements Data {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String getType() {
 		return field.getType().toString();
@@ -125,9 +110,6 @@ class FieldData implements Data {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean isDeprecated() {
 		return field.isDeprecated();

@@ -169,14 +169,14 @@ public class JavadocUrlHandler implements ExternalURLHandler {
 
 	/**
 	 * Returns whether the text is a relative URL to other Javadoc.
-	 * 
+	 *
 	 * @param text A link in Javadoc.
 	 * @return Whether the link is a relative path to more Javadoc.
 	 */
 	private boolean isRelativeUrl(String text) {
 		// Javadoc is always ".html", and we support full URL's elsewhere.
-		final String[] EXTS = { ".html", ".htm" };
-        for (String ext : EXTS) {
+		final String[] extensions = { ".html", ".htm" };
+        for (String ext : extensions) {
             if (text.endsWith(ext) || text.contains(ext + "#") ||
                     text.contains(ext + "?")) {
                 return true;
@@ -217,7 +217,7 @@ public class JavadocUrlHandler implements ExternalURLHandler {
 			if (isRelativeUrl(desc)) {
 				int ext = desc.indexOf(".htm");
 				if (ext>-1) {
-	
+
 					// Could be <a href="Character.html#section"> link.  A
 					// popular href format is "../../util/Formatter.html#syntax".
 					// We must determine "relative" package location.
@@ -240,7 +240,7 @@ public class JavadocUrlHandler implements ExternalURLHandler {
 							callback.showSummaryFor(cc, anchor);
 						}
 					}
-	
+
 				}
 			}
 

@@ -126,16 +126,16 @@ public class ASTFactory implements TokenTypes {
 	/**
 	 * Assumes <tt>t</tt> is the actual '<tt>@foobar</tt>' annotation token.
 	 *
-	 * @param cu
-	 * @param s
-	 * @return
-	 * @throws IOException
+	 * @param cu  The compilation unit.
+	 * @param s The scanner.
+	 * @return The annotation.
+	 * @throws IOException If an IO error occurs.
 	 */
-	private Annotation _getAnnotation(CompilationUnit cu, Scanner s)
+	private Annotation getAnnotation(CompilationUnit cu, Scanner s)
 									throws IOException {
 
 		s.yylexNonNull(ANNOTATION_START, "Annotation expected");
-		Type type = _getType(cu, s);
+		Type type = getType(cu, s);
 
 		if ("Deprecated".equals(type.toString())) {
 			nextMemberDeprecated = true;
@@ -152,9 +152,9 @@ public class ASTFactory implements TokenTypes {
 	}
 
 
-	private CodeBlock _getBlock(CompilationUnit cu, CodeBlock parent, Method m,
-							Scanner s, boolean isStatic) throws IOException {
-		return _getBlock(cu, parent, m, s, isStatic, 1);
+	private CodeBlock getBlock(CompilationUnit cu, CodeBlock parent, Method m,
+                               Scanner s, boolean isStatic) throws IOException {
+		return getBlock(cu, parent, m, s, isStatic, 1);
 	}
 
 
@@ -169,11 +169,11 @@ public class ASTFactory implements TokenTypes {
 	 * @param isStatic Whether this is a static code block.
 	 * @param depth The nested depth of this code block.
 	 */
-	private CodeBlock _getBlock(CompilationUnit cu, CodeBlock parent,
-			Method m, Scanner s,
-			boolean isStatic, int depth) throws IOException {
+	private CodeBlock getBlock(CompilationUnit cu, CodeBlock parent,
+                               Method m, Scanner s,
+                               boolean isStatic, int depth) throws IOException {
 
-		log("Entering _getBlock() (" + depth + ")");
+		log("Entering getBlock() (" + depth + ")");
 
 		// TODO: Implement me to get variable declarations.
 
@@ -189,7 +189,7 @@ OUTER:
 			// return the current status of the block.
 			//t = s.yylexNonNull("Unexpected end of input");
 			if ((t = s.yylex())==null) {
-				log("Exiting _getBlock() - eos (" + depth + ")");
+				log("Exiting getBlock() - eos (" + depth + ")");
 				block.setDeclarationEndOffset(s.createOffset(s.getOffset()));
 				return block;
 			}
@@ -201,7 +201,7 @@ OUTER:
 
 				case SEPARATOR_LBRACE:
 					s.yyPushback(t);
-					CodeBlock child = _getBlock(cu, block, m, s, isStatic, depth+1);
+					CodeBlock child = getBlock(cu, block, m, s, isStatic, depth+1);
 					block.add(child);
 					atStatementStart = true;
 					break;
@@ -217,7 +217,7 @@ OUTER:
 						s.eatParenPairs();
 					}
 					s.yyPeekNonNull(SEPARATOR_LBRACE, "'{' expected");
-					CodeBlock tryBlock = _getBlock(cu, block, m, s, isStatic, depth+1);
+					CodeBlock tryBlock = getBlock(cu, block, m, s, isStatic, depth+1);
 					block.add(tryBlock);
 					while (s.yyPeekCheckType()==KEYWORD_CATCH &&
 							s.yyPeekCheckType(2)==SEPARATOR_LPAREN) {
@@ -234,18 +234,18 @@ OUTER:
 								s.yylex();
 							}
 							s.yyPeekNonNull(IDENTIFIER, "Variable declarator expected");
-							exType = _getType(cu, s); // Not good for multi-catch!
+							exType = getType(cu, s); // Not good for multi-catch!
 							var = s.yylexNonNull(IDENTIFIER, OPERATOR_BITWISE_OR, "Variable declarator expected");
 							multiCatch |= var.isType(OPERATOR_BITWISE_OR);
 						} while (var.isType(OPERATOR_BITWISE_OR));
 						s.yylexNonNull(SEPARATOR_RPAREN, "')' expected");
 						s.yyPeekNonNull(SEPARATOR_LBRACE, "'{' expected");
-						CodeBlock catchBlock = _getBlock(cu, block, m, s, false, depth);
+						CodeBlock catchBlock = getBlock(cu, block, m, s, false, depth);
 						int offs = var.getOffset(); // Not actually in block!
 						if (multiCatch) {
-							// TODO: With Java 7's multi-catch, calculate
-							// least upper bound for exception type:
-							// http://cr.openjdk.java.net/~darcy/ProjectCoin/ProjectCoin-Documentation-v0.83.html#multi_catch
+							// TODO: With Java 7's multi-catch, calculate least upper bound for exception type.
+							// java.lang.Throwable is always an upper bound, but not the least.
+							// https://docs.oracle.com/javase/specs/jls/se17/html/jls-4.html#jls-4.10.4
 							exType = new Type("java");
 							exType.addIdentifier("lang", null);
 							exType.addIdentifier("Throwable", null);
@@ -257,41 +257,41 @@ OUTER:
 					}
 					break;
 
-case KEYWORD_FOR:
-	// TODO: Get local var (e.g. "int i", "Iterator i", etc.)
-	// Fall through
-case KEYWORD_WHILE:
-	int nextType = s.yyPeekCheckType();
-	while (nextType!=-1 && nextType!=SEPARATOR_LPAREN) {
-		t = s.yylex(); // Grab the (unexpected) token
-		if (t!=null) { // Should always be true
-			ParserNotice pn = new ParserNotice(t, "Unexpected token");
-			cu.addParserNotice(pn);
-		}
-		nextType = s.yyPeekCheckType();
-	}
-	if (nextType==SEPARATOR_LPAREN) {
-		s.eatParenPairs();
-	}
-	nextType = s.yyPeekCheckType();
-	if (nextType==SEPARATOR_LBRACE) {
-		child = _getBlock(cu, block, m, s, isStatic, depth+1);
-		block.add(child);
-		atStatementStart = true;
-	}
-	break;
+				case KEYWORD_FOR:
+					// TODO: Get local var (e.g. "int i", "Iterator i", etc.)
+					// Fall through
+				case KEYWORD_WHILE:
+					int nextType = s.yyPeekCheckType();
+					while (nextType!=-1 && nextType!=SEPARATOR_LPAREN) {
+						t = s.yylex(); // Grab the (unexpected) token
+						if (t!=null) { // Should always be true
+							ParserNotice pn = new ParserNotice(t, "Unexpected token");
+							cu.addParserNotice(pn);
+						}
+						nextType = s.yyPeekCheckType();
+					}
+					if (nextType==SEPARATOR_LPAREN) {
+						s.eatParenPairs();
+					}
+					nextType = s.yyPeekCheckType();
+					if (nextType==SEPARATOR_LBRACE) {
+						child = getBlock(cu, block, m, s, isStatic, depth+1);
+						block.add(child);
+						atStatementStart = true;
+					}
+					break;
 
-// NOTE: The code below is supposed to try to parse code blocks and identify
-// variable declarations.  This does work somewhat, but the problem is that
-// our parsing of type parameters isn't good enough, and lines like:
-//    for (int i=0; i<foo; i++) {
-// get incorrectly parsed as a type "i<foo>" (even though the closing '>' isn't
-// there, but that's not the big problem really!).  We should be able to check
-// whether our type parameters are well-formed, and if they aren't, then assume
-// push all tokens back, and assume that the '<' was a less-than operator.
-// It's the "push all tokens back" that's tough for us at the moment, as we've
-// lost most of the tokens (there may be an arbitrary number that have been
-// parsed and discarded).
+				// NOTE: The code below is supposed to try to parse code blocks and identify
+				// variable declarations.  This does work somewhat, but the problem is that
+				// our parsing of type parameters isn't good enough, and lines like:
+				//    for (int i=0; i<foo; i++) {
+				// get incorrectly parsed as a type "i<foo>" (even though the closing '>' isn't
+				// there, but that's not the big problem really!).  We should be able to check
+				// whether our type parameters are well-formed, and if they aren't, then assume
+				// push all tokens back, and assume that the '<' was a less-than operator.
+				// It's the "push all tokens back" that's tough for us at the moment, as we've
+				// lost most of the tokens (there may be an arbitrary number that have been
+				// parsed and discarded).
 				case KEYWORD_FINAL:
 					isFinal = true;
 					t = s.yylexNonNull("Unexpected end of file");
@@ -307,7 +307,7 @@ case KEYWORD_WHILE:
 						// TODO: This is very inefficient
 						Type varType;
 						try {
-							varType = _getType(cu, s, true);
+							varType = getType(cu, s, true);
 						} catch (IOException ioe) { // Not a var declaration
 							s.eatUntilNext(SEPARATOR_SEMICOLON, SEPARATOR_LBRACE, SEPARATOR_RBRACE);
 							// Only needed if ended on ';' or '}', but...
@@ -315,7 +315,8 @@ case KEYWORD_WHILE:
 							break;
 						}
 						if (s.yyPeekCheckType()==IDENTIFIER) {
-							while ((t=s.yylexNonNull(IDENTIFIER, "Variable name expected (type==" + varType + ")"))!=null) {
+							while ((t=s.yylexNonNull(IDENTIFIER,
+									"Variable name expected (type==" + varType + ")"))!=null) {
 								int arrayDepth = s.skipBracketPairs();
 								varType.incrementBracketPairCount(arrayDepth);
 								String varDec = varType + " " + t.getLexeme();
@@ -329,7 +330,8 @@ case KEYWORD_WHILE:
 								// A "valid" nextType would be '=', ',' or ';'.
 								// If it's an '=', skip past the assignment.
 								if (nextType==OPERATOR_EQUALS) {
-									Token temp = s.eatThroughNextSkippingBlocksAndStuffInParens(SEPARATOR_COMMA, SEPARATOR_SEMICOLON);
+									Token temp = s.eatThroughNextSkippingBlocksAndStuffInParens(SEPARATOR_COMMA,
+										SEPARATOR_SEMICOLON);
 									if (temp!=null) {
 										s.yyPushback(temp);
 									}
@@ -355,16 +357,16 @@ case KEYWORD_WHILE:
 
 		}
 
-		log("Exiting _getBlock() (" + depth + ")");
+		log("Exiting Block() (" + depth + ")");
 		return block;
 
 	}
 
 
-	private void _getClassBody(CompilationUnit cu, Scanner s,
-			NormalClassDeclaration classDec) throws IOException {
+	private void getClassBody(CompilationUnit cu, Scanner s,
+                              NormalClassDeclaration classDec) throws IOException {
 
-		log("Entering _getClassBody");
+		log("Entering getClassBody");
 
 		Token t = s.yylexNonNull(SEPARATOR_LBRACE, "'{' expected");
 		classDec.setBodyStartOffset(s.createOffset(t.getOffset()));
@@ -381,27 +383,27 @@ case KEYWORD_WHILE:
 				case KEYWORD_STATIC:
 					Token t2 = s.yyPeekNonNull("'{' or modifier expected");
 					if (t2.isType(SEPARATOR_LBRACE)) {
-						CodeBlock block = _getBlock(cu, null, null, s, true);
+						CodeBlock block = getBlock(cu, null, null, s, true);
 						classDec.addMember(block);
 						break;
 					}
 					else { // Not "static {" => must be a member.
 						s.yyPushback(t); // Put back "static"
-						Modifiers modList = _getModifierList(cu, s);
-						_getMemberDecl(cu, s, classDec, modList);
+						Modifiers modList = getModifierList(cu, s);
+						getMemberDecl(cu, s, classDec, modList);
 					}
 					break;
 
 				case SEPARATOR_LBRACE:
 					s.yyPushback(t);
-					CodeBlock block = _getBlock(cu, null, null, s, false);
+					CodeBlock block = getBlock(cu, null, null, s, false);
 					classDec.addMember(block);
 					break;
 
 				default:
 					s.yyPushback(t);
-					Modifiers modList = _getModifierList(cu, s);
-					_getMemberDecl(cu, s, classDec, modList);
+					Modifiers modList = getModifierList(cu, s);
+					getMemberDecl(cu, s, classDec, modList);
 					break;
 
 			}
@@ -420,21 +422,21 @@ case KEYWORD_WHILE:
 
 		}
 
-		log("Exiting _getClassBody");
+		log("Exiting getClassBody");
 
 	}
 
 
-	private TypeDeclaration _getClassOrInterfaceDeclaration(CompilationUnit cu,
-			Scanner s, TypeDeclarationContainer addTo, Modifiers modList)
+	private TypeDeclaration getClassOrInterfaceDeclaration(CompilationUnit cu,
+                   Scanner s, TypeDeclarationContainer addTo, Modifiers modList)
 					throws IOException {
 
-		log("Entering _getClassOrInterfaceDeclaration");
+		log("Entering getClassOrInterfaceDeclaration");
 		Token t = s.yyPeekNonNull(
 						"class, enum, interface or @interface expected");
 
 		if (modList==null) { // Not yet read in
-			modList = _getModifierList(cu, s);
+			modList = getModifierList(cu, s);
 		}
 		t = s.yylexNonNull("class, enum, interface or @interface expected");
 
@@ -443,15 +445,15 @@ case KEYWORD_WHILE:
 		switch (t.getType()) {
 
 			case KEYWORD_CLASS:
-				td = _getNormalClassDeclaration(cu, s, addTo);
+				td = getNormalClassDeclaration(cu, s, addTo);
 				break;
 
 			case KEYWORD_ENUM:
-				td = _getEnumDeclaration(cu, s, addTo);
+				td = getEnumDeclaration(cu, s, addTo);
 				break;
 
 			case KEYWORD_INTERFACE:
-				td = _getNormalInterfaceDeclaration(cu, s, addTo);
+				td = getNormalInterfaceDeclaration(cu, s, addTo);
 				break;
 
 			case ANNOTATION_START:
@@ -465,7 +467,7 @@ case KEYWORD_WHILE:
 				cu.addParserNotice(notice);
 				//return td;
 				// Assume we're a class to get more problems.
-				td = _getNormalClassDeclaration(cu, s, addTo);
+				td = getNormalClassDeclaration(cu, s, addTo);
 				break;
 
 		}
@@ -473,7 +475,7 @@ case KEYWORD_WHILE:
 		td.setModifiers(modList);
 		td.setDeprecated(checkDeprecated());
 
-		log("Exiting _getClassOrInterfaceDeclaration");
+		log("Exiting getClassOrInterfaceDeclaration");
 		return td;
 
 	}
@@ -483,6 +485,7 @@ case KEYWORD_WHILE:
 	 * Reads tokens for a Java source file from the specified lexer and returns
 	 * the structure of the source as an AST.
 	 *
+     * @param name The name of the compilation unit.
 	 * @param scanner The scanner to read from.
 	 * @return The root node of the AST.
 	 */
@@ -498,7 +501,7 @@ try {
 			if (initialAnnotations==null) {
 				initialAnnotations = new ArrayList<>(1);
 			}
-			initialAnnotations.add(_getAnnotation(cu, scanner));
+			initialAnnotations.add(getAnnotation(cu, scanner));
 		}
 
 		// Get possible "package" line.
@@ -512,7 +515,7 @@ try {
 			String qualifiedID = getQualifiedIdentifier(scanner);
 			Package pkg = new Package(scanner, offs, qualifiedID);
 			if (initialAnnotations!=null) {
-			//	pkg.setAnnotations(initialAnnotations);
+				//pkg.setAnnotations(initialAnnotations);
 				initialAnnotations = null;
 			}
 			cu.setPackage(pkg);
@@ -521,7 +524,7 @@ try {
 		}
 
 		// Go through any import statements.
-OUTER:
+		OUTER:
 		while (t!=null && t.isType(KEYWORD_IMPORT)) {
 
 			boolean isStatic = false;
@@ -587,13 +590,13 @@ OUTER:
 
 		scanner.yyPushback(t);
 		//TypeDeclaration td = null;
-		while ((/*td = */_getTypeDeclaration(cu, scanner)) != null) {
+		while ((/*td = */getTypeDeclaration(cu, scanner)) != null) {
 			if (initialAnnotations!=null) {
-			//	td.addAnnotations(initialAnnotations);
+				//td.addAnnotations(initialAnnotations);
 				initialAnnotations = null;
 			}
-//			cu.addTypeDeclaration(td);
-// Done when the type declarations are created.
+			//cu.addTypeDeclaration(td);
+			// Done when the type declarations are created.
 		}
 
 } catch (IOException ioe) {
@@ -609,7 +612,7 @@ OUTER:
 		notice = new ParserNotice(lastTokenLexed, ioe.getMessage());
 	}
 	cu.addParserNotice(notice);
-//throw ioe; // Un-comment me to get the AnnotationTypeDeclaration error count in "Main" test
+	//throw ioe; // Un-comment me to get the AnnotationTypeDeclaration error count in "Main" test
 }
 
 return cu;
@@ -617,17 +620,17 @@ return cu;
 	}
 
 
-	private EnumBody _getEnumBody(CompilationUnit cu, Scanner s,
-						EnumDeclaration enumDec) throws IOException {
+	private EnumBody getEnumBody(CompilationUnit cu, Scanner s,
+                                 EnumDeclaration enumDec) throws IOException {
 		// TODO: Implement me
-		CodeBlock block = _getBlock(cu, null, null, s, false);
+		CodeBlock block = getBlock(cu, null, null, s, false);
 		enumDec.setBodyEndOffset(s.createOffset(block.getNameEndOffset()));
 		return null;
 	}
 
 
-	private EnumDeclaration _getEnumDeclaration(CompilationUnit cu,
-			Scanner s, TypeDeclarationContainer addTo) throws IOException {
+	private EnumDeclaration getEnumDeclaration(CompilationUnit cu,
+                                               Scanner s, TypeDeclarationContainer addTo) throws IOException {
 
 		Token t = s.yylexNonNull(IDENTIFIER, "Identifier expected");
 		String enumName = t.getLexeme();
@@ -640,7 +643,7 @@ return cu;
 		if (t.isType(KEYWORD_IMPLEMENTS)) {
 			List<Type> implemented = new ArrayList<>(1); // Usually small
 			do {
-				implemented.add(_getType(cu, s));
+				implemented.add(getType(cu, s));
 				t = s.yylex();
 			} while (t != null && t.isType(SEPARATOR_COMMA));
 			// enumDesc.setImplementedInterfaces(implemented);
@@ -652,8 +655,8 @@ return cu;
 			s.yyPushback(t);
 		}
 
-		_getEnumBody(cu, s, enumDec);
-		//EnumBody enumBody = _getEnumBody(cu, s);
+		getEnumBody(cu, s, enumDec);
+		//EnumBody enumBody = getEnumBody(cu, s);
 		//enumDec.setEnumBody(enumBody);
 
 		return enumDec;
@@ -661,8 +664,8 @@ return cu;
 	}
 
 
-	private List<FormalParameter> _getFormalParameters(CompilationUnit cu,
-									List<Token> tokenList) throws IOException {
+	private List<FormalParameter> getFormalParameters(CompilationUnit cu,
+                                                      List<Token> tokenList) throws IOException {
 
 		List<FormalParameter> list = new ArrayList<>(0);
 
@@ -686,12 +689,12 @@ return cu;
 				if (annotations == null) {
 					annotations = new ArrayList<>(1); // Usually just 1
 				}
-				annotations.add(_getAnnotation(cu, s));
+				annotations.add(getAnnotation(cu, s));
 				t = s.yylexNonNull("Type expected");
 			}
 
 			s.yyPushback(t);
-			Type type = _getType(cu, s);
+			Type type = getType(cu, s);
 			Token temp = s.yylexNonNull("Argument name expected");
 			boolean elipsis = false;
 			if (temp.isType(ELIPSIS)) {
@@ -722,10 +725,10 @@ return cu;
 	}
 
 
-	private void _getInterfaceBody(CompilationUnit cu, Scanner s,
-						NormalInterfaceDeclaration iDec) throws IOException {
+	private void getInterfaceBody(CompilationUnit cu, Scanner s,
+                                  NormalInterfaceDeclaration iDec) throws IOException {
 
-		log("Entering _getInterfaceBody");
+		log("Entering getInterfaceBody");
 
 		Token t = s.yylexNonNull(SEPARATOR_LBRACE, "'{' expected");
 		iDec.setBodyStartOffset(s.createOffset(t.getOffset()));
@@ -742,13 +745,13 @@ return cu;
 				case SEPARATOR_LBRACE:
 					s.yyPushback(t);
 					// TODO: What is this?
-					_getBlock(cu, null, null, s, false);
+					getBlock(cu, null, null, s, false);
 					break;
 
 				default:
 					s.yyPushback(t);
-					Modifiers modList = _getModifierList(cu, s);
-					_getInterfaceMemberDecl(cu, s, iDec, modList);
+					Modifiers modList = getModifierList(cu, s);
+					getInterfaceMemberDecl(cu, s, iDec, modList);
 					break;
 
 			}
@@ -766,7 +769,7 @@ return cu;
 
 		}
 
-		log("Exiting _getInterfaceBody");
+		log("Exiting getInterfaceBody");
 
 	}
 
@@ -779,11 +782,11 @@ return cu;
 	 *    InterfaceDeclaration
 	 *    ClassDeclaration
 	 */
-	private void _getInterfaceMemberDecl(CompilationUnit cu, Scanner s,
-			NormalInterfaceDeclaration iDec, Modifiers modList)
+	private void getInterfaceMemberDecl(CompilationUnit cu, Scanner s,
+                                        NormalInterfaceDeclaration iDec, Modifiers modList)
 			throws IOException {
 
-		log("Entering _getInterfaceMemberDecl");
+		log("Entering getInterfaceMemberDecl");
 
 		List<Token> tokenList = new ArrayList<>(1);
 		List<Token> methodNameAndTypeTokenList = null;
@@ -826,7 +829,7 @@ OUTER:
 		if (varDecl) {
 			log("*** Variable declaration:");
 			Scanner tempScanner = new Scanner(tokenList);
-			Type type = _getType(cu, tempScanner);
+			Type type = getType(cu, tempScanner);
 			Token fieldNameToken = tempScanner.yylexNonNull(IDENTIFIER, "Identifier (field name) expected");
 			bracketPairCount = tempScanner.skipBracketPairs();
 			type.incrementBracketPairCount(bracketPairCount);
@@ -843,11 +846,11 @@ OUTER:
 			Type type = null;
 			if (methodNameAndTypeTokenList.size()>1) { // InterfaceMethodOrFieldDecl or InterfaceGenericMethodDecl
 				if (tempScanner.yyPeekCheckType()==OPERATOR_LT) { // InterfaceGenericMethodDecl
-					_getTypeParameters(cu, tempScanner);
-					type = _getType(cu, tempScanner);
+					getTypeParameters(cu, tempScanner);
+					type = getType(cu, tempScanner);
 				}
 				else { // InterfaceMethodOrFieldDecl (really just an InterfaceMethod)
-					type = _getType(cu, tempScanner);
+					type = getType(cu, tempScanner);
 				}
 			}
 			Token methodNameToken = tempScanner.yylexNonNull(IDENTIFIER, "Identifier (method name) expected");
@@ -858,7 +861,7 @@ OUTER:
 				}
 				methodParamsList.add(t);
 			}
-			List<FormalParameter> formalParams = _getFormalParameters(cu, methodParamsList);
+			List<FormalParameter> formalParams = getFormalParameters(cu, methodParamsList);
 			if (s.yyPeekCheckType()==SEPARATOR_LBRACKET) {
 				if (type==null) {
 					throw new IOException("Constructors cannot return array types");
@@ -877,16 +880,16 @@ OUTER:
 			iDec.addMember(m);
 		}
 		else if (blockDecl) {
-//			s.yyPushback(t);
-//			_getBlock(cu, s, false);
-//			// TODO: Add the member for a block...
+			//s.yyPushback(t);
+			//_getBlock(cu, s, false);
+			//// TODO: Add the member for a block...
 			// Could be a code block (static or not), or an inner class, enum,
 			// or interface...
 			if (tokenList.size()<2) {
 				for (int i=tokenList.size()-1; i>=0; i--) {
 					s.yyPushback(tokenList.get(i));
 				}
-				CodeBlock block = _getBlock(cu, null, null, s, false);
+				CodeBlock block = getBlock(cu, null, null, s, false);
 				iDec.addMember(block);
 			}
 			else { // inner class, enum, or interface (?)
@@ -894,11 +897,12 @@ OUTER:
 				for (int i=tokenList.size()-1; i>=0; i--) {
 					s.yyPushback(tokenList.get(i));
 				}
-				/*TypeDeclaration type = */_getClassOrInterfaceDeclaration(cu, s, iDec, modList);
+				/*TypeDeclaration type = */
+				getClassOrInterfaceDeclaration(cu, s, iDec, modList);
 			}
 		}
 
-		log("Exiting _getInterfaceMemberDecl");
+		log("Exiting getInterfaceMemberDecl");
 
 	}
 
@@ -912,11 +916,11 @@ OUTER:
 	 *    InterfaceDeclaration
 	 *    ClassDeclaration
 	 */
-	private void _getMemberDecl(CompilationUnit cu, Scanner s,
-			NormalClassDeclaration classDec, Modifiers modList)
+	private void getMemberDecl(CompilationUnit cu, Scanner s,
+                               NormalClassDeclaration classDec, Modifiers modList)
 			throws IOException {
 
-		log("Entering _getMemberDecl");
+		log("Entering getMemberDecl");
 
 		List<Token> tokenList = new ArrayList<>(1);
 		List<Token> methodNameAndTypeTokenList = null;
@@ -959,7 +963,7 @@ OUTER:
 		if (varDecl) {
 			log("*** Variable declaration:");
 			Scanner tempScanner = new Scanner(tokenList);
-			Type type = _getType(cu, tempScanner);
+			Type type = getType(cu, tempScanner);
 			Token fieldNameToken = tempScanner.yylexNonNull(IDENTIFIER, "Identifier (field name) expected");
 			bracketPairCount = tempScanner.skipBracketPairs();
 			type.incrementBracketPairCount(bracketPairCount);
@@ -974,18 +978,18 @@ OUTER:
 			CodeBlock block = null; // Method body
 			Scanner tempScanner = new Scanner(methodNameAndTypeTokenList);
 			Type type = null;
-			if (methodNameAndTypeTokenList.size()>1) { // GenericMethodOrConstructorDecl, or method (not a regular constructor).
+			if (methodNameAndTypeTokenList.size()>1) { // GenericMethodOrConstructorDecl or method (not reg constructor)
 				if (tempScanner.yyPeekCheckType()==OPERATOR_LT) { // GenericMethodOrConstructorDecl
-					_getTypeParameters(cu, tempScanner);
+					getTypeParameters(cu, tempScanner);
 					if (tempScanner.yyPeekCheckType(2)==-1) { // GenericConstructor
 						// Do nothing; we're good to keep going
 					}
 					else { // A generic method declaration.
-						type = _getType(cu, tempScanner);
+						type = getType(cu, tempScanner);
 					}
 				}
 				else {
-					type = _getType(cu, tempScanner); // Method (not a constructor)
+					type = getType(cu, tempScanner); // Method (not a constructor)
 				}
 			}
 			Token methodNameToken = tempScanner.yylexNonNull(IDENTIFIER,
@@ -1034,7 +1038,7 @@ OUTER:
 					methodParamsList.add(t);
 				}
 			}
-			List<FormalParameter> formalParams = _getFormalParameters(cu, methodParamsList);
+			List<FormalParameter> formalParams = getFormalParameters(cu, methodParamsList);
 			if (s.yyPeekCheckType()==SEPARATOR_LBRACKET) {
 				if (type==null) {
 					throw new IOException("Constructors cannot return array types");
@@ -1053,7 +1057,7 @@ OUTER:
 			}
 			else if (t.isType(SEPARATOR_LBRACE)) {
 				s.yyPushback(t);
-				block = _getBlock(cu, null, m, s, false);
+				block = getBlock(cu, null, m, s, false);
 			}
 			else {
 				throw new IOException("'{' or ';' expected");
@@ -1068,7 +1072,7 @@ OUTER:
 				for (int i=tokenList.size()-1; i>=0; i--) {
 					s.yyPushback(tokenList.get(i));
 				}
-				CodeBlock block = _getBlock(cu, null, null, s, false);
+				CodeBlock block = getBlock(cu, null, null, s, false);
 				classDec.addMember(block);
 			}
 			else { // inner class, enum, or interface (?)
@@ -1076,16 +1080,17 @@ OUTER:
 				for (int i=tokenList.size()-1; i>=0; i--) {
 					s.yyPushback(tokenList.get(i));
 				}
-				/*TypeDeclaration type = */_getClassOrInterfaceDeclaration(cu, s, classDec, modList);
+				/*TypeDeclaration type = */
+				getClassOrInterfaceDeclaration(cu, s, classDec, modList);
 			}
 		}
 
-		log("Exiting _getMemberDecl (next== " + s.yyPeek() + ")");
+		log("Exiting getMemberDecl (next== " + s.yyPeek() + ")");
 
 	}
 
 
-	private Modifiers _getModifierList(CompilationUnit cu, Scanner s)
+	private Modifiers getModifierList(CompilationUnit cu, Scanner s)
 										throws IOException {
 
 		Modifiers modList = null;
@@ -1112,7 +1117,7 @@ OUTER:
 				if (modList==null) {
 					modList = new Modifiers();
 				}
-				modList.addAnnotation(_getAnnotation(cu, s));
+				modList.addAnnotation(getAnnotation(cu, s));
 			}
 			else {
 				s.yyPushback(t);
@@ -1126,11 +1131,11 @@ OUTER:
 	}
 
 
-	private NormalClassDeclaration _getNormalClassDeclaration(
+	private NormalClassDeclaration getNormalClassDeclaration(
 			CompilationUnit cu, Scanner s, TypeDeclarationContainer addTo)
 			throws IOException {
 
-		log("Entering _getNormalClassDeclaration");
+		log("Entering getNormalClassDeclaration");
 		String className;
 
 		Token t = s.yylexNonNull("Identifier expected");
@@ -1151,19 +1156,19 @@ OUTER:
 		t = s.yylexNonNull("TypeParameters, extends, implements or '{' expected");
 		if (t.isType(OPERATOR_LT)) {
 			s.yyPushback(t);
-			List<TypeParameter> typeParams = _getTypeParameters(cu, s);
+			List<TypeParameter> typeParams = getTypeParameters(cu, s);
 			classDec.setTypeParameters(typeParams);
 			t = s.yylexNonNull("extends, implements or '{' expected");
 		}
 
 		if (t.isType(KEYWORD_EXTENDS)) {
-			classDec.setExtendedType(_getType(cu, s));
+			classDec.setExtendedType(getType(cu, s));
 			t = s.yylexNonNull("implements or '{' expected");
 		}
 
 		if (t.isType(KEYWORD_IMPLEMENTS)) {
 			do {
-				classDec.addImplemented(_getType(cu, s));
+				classDec.addImplemented(getType(cu, s));
 				t = s.yylex();
 			} while (t != null && t.isType(SEPARATOR_COMMA));
 			if (t != null) {
@@ -1174,15 +1179,15 @@ OUTER:
 			s.yyPushback(t);
 		}
 
-		_getClassBody(cu, s, classDec);
+		getClassBody(cu, s, classDec);
 
-		log("Exiting _getNormalClassDeclaration");
+		log("Exiting getNormalClassDeclaration");
 		return classDec;
 
 	}
 
 
-	private NormalInterfaceDeclaration _getNormalInterfaceDeclaration(
+	private NormalInterfaceDeclaration getNormalInterfaceDeclaration(
 			CompilationUnit cu, Scanner s, TypeDeclarationContainer addTo)
 			throws IOException {
 
@@ -1206,13 +1211,13 @@ OUTER:
 		t = s.yylexNonNull("TypeParameters, extends or '{' expected");
 		if (t.isType(OPERATOR_LT)) {
 			s.yyPushback(t);
-			_getTypeParameters(cu, s);
+			getTypeParameters(cu, s);
 			t = s.yylexNonNull("Interface body expected");
 		}
 
 		if (t.isType(KEYWORD_EXTENDS)) {
 			do {
-				iDec.addExtended(_getType(cu, s));
+				iDec.addExtended(getType(cu, s));
 				t = s.yylex();
 			} while (t != null && t.isType(SEPARATOR_COMMA));
 			if (t != null) {
@@ -1223,7 +1228,7 @@ OUTER:
 			s.yyPushback(t);
 		}
 
-		_getInterfaceBody(cu, s, iDec);
+		getInterfaceBody(cu, s, iDec);
 
 		return iDec;
 
@@ -1278,15 +1283,15 @@ OUTER:
 
 	// For "backwards compatibility," don't know if "false" is usually
 	// correct or not
-	private Type _getType(CompilationUnit cu, Scanner s) throws IOException {
-		return _getType(cu, s, false);
+	private Type getType(CompilationUnit cu, Scanner s) throws IOException {
+		return getType(cu, s, false);
 	}
 
 
-	private Type _getType(CompilationUnit cu, Scanner s,
-					boolean pushbackOnUnexpected) throws IOException {
+	private Type getType(CompilationUnit cu, Scanner s,
+                         boolean pushbackOnUnexpected) throws IOException {
 
-		log("Entering _getType()");
+		log("Entering getType()");
 		Type type = new Type();
 
 		Token t = s.yylexNonNull("Type expected");
@@ -1294,14 +1299,14 @@ OUTER:
 		// TODO: "void" checking is NOT in the JLS for type!  Remove me
 		if (t.isType(KEYWORD_VOID)) {
 			type.addIdentifier(t.getLexeme(), null);
-			log("Exiting _getType(): " + type);
+			log("Exiting getType(): " + type);
 			return type;
 		}
 		else if (t.isBasicType()) {
 			int arrayDepth = s.skipBracketPairs();
 			type.addIdentifier(t.getLexeme(), null);
 			type.setBracketPairCount(arrayDepth);
-			log("Exiting _getType(): " + type);
+			log("Exiting getType(): " + type);
 			return type;
 		}
 
@@ -1311,7 +1316,7 @@ OUTER:
 				case IDENTIFIER:
 					List<TypeArgument> typeArgs = null;
 					if (s.yyPeekCheckType()==OPERATOR_LT) {
-						typeArgs = _getTypeArguments(cu, s);
+						typeArgs = getTypeArguments(cu, s);
 					}
 					type.addIdentifier(t.getLexeme(), typeArgs);
 					t = s.yylexNonNull("Unexpected end of input");
@@ -1336,16 +1341,16 @@ OUTER:
 			}
 		}
 
-		log("Exiting _getType(): " + type);
+		log("Exiting getType(): " + type);
 		return type;
 
 	}
 
 
-	private TypeArgument _getTypeArgument(CompilationUnit cu, Scanner s)
+	private TypeArgument getTypeArgument(CompilationUnit cu, Scanner s)
 											throws IOException {
 
-		log("Entering _getTypeArgument()");
+		log("Entering getTypeArgument()");
 
 		TypeArgument typeArg;
 
@@ -1364,11 +1369,11 @@ OUTER:
 						s.yyPushback(t);
 						break;
 					case KEYWORD_EXTENDS:
-						Type otherType = _getType(cu, s);
+						Type otherType = getType(cu, s);
 						typeArg = new TypeArgument(null, TypeArgument.EXTENDS, otherType);
 						break;
 					default: // KEYWORD_SUPER:
-						otherType = _getType(cu, s);
+						otherType = getType(cu, s);
 						typeArg = new TypeArgument(null, TypeArgument.SUPER, otherType);
 						break;
 				}
@@ -1378,21 +1383,21 @@ OUTER:
 			}
 		}
 		else {
-			Type type = _getType(cu, s);
+			Type type = getType(cu, s);
 			typeArg = new TypeArgument(type);
 		}
 
-		log("Exiting _getTypeArgument() : " + typeArg);
+		log("Exiting getTypeArgument() : " + typeArg);
 		return typeArg;
 
 	}
 
 
-	private List<TypeArgument> _getTypeArguments(CompilationUnit cu, Scanner s)
+	private List<TypeArgument> getTypeArguments(CompilationUnit cu, Scanner s)
 									throws IOException {
 
 		s.increaseTypeArgumentsLevel();
-		log("Entering _getTypeArguments() (" + s.getTypeArgumentsLevel() + ")");
+		log("Entering getTypeArguments() (" + s.getTypeArgumentsLevel() + ")");
 
 		s.markResetPosition();
 		s.yylexNonNull(OPERATOR_LT, "'<' expected");
@@ -1401,19 +1406,20 @@ OUTER:
 
 		Token t;
 		do {
-			typeArgs.add(_getTypeArgument(cu, s));
+			typeArgs.add(getTypeArgument(cu, s));
 			t = s.yylexNonNull("',' or '>' expected");
 			if (t.getType()!=SEPARATOR_COMMA && t.getType()!=OPERATOR_GT) {
 				// Assume we're in a code block, and are simply at the (much
 				// more common) case of e.g. "if (i < 7) ...".
 				s.resetToLastMarkedPosition();
-				log("Exiting _getTypeArguments() (" + s.getTypeArgumentsLevel() + ") - NOT TYPE ARGUMENTS (" + t.getLexeme() + ")");
+				log("Exiting getTypeArguments() (" + s.getTypeArgumentsLevel() +
+                        ") - NOT TYPE ARGUMENTS (" + t.getLexeme() + ")");
 				s.decreaseTypeArgumentsLevel();
 				return null;
 			}
 		} while (t.isType(SEPARATOR_COMMA));
 
-		log("Exiting _getTypeArguments() (" + s.getTypeArgumentsLevel() + ")");
+		log("Exiting getTypeArguments() (" + s.getTypeArgumentsLevel() + ")");
 		s.decreaseTypeArgumentsLevel();
 
 		s.clearResetPosition();
@@ -1422,8 +1428,8 @@ OUTER:
 	}
 
 
-	private TypeDeclaration _getTypeDeclaration(CompilationUnit cu,
-			Scanner s) throws IOException {
+	private TypeDeclaration getTypeDeclaration(CompilationUnit cu,
+                                               Scanner s) throws IOException {
 
 		/*
 		 * TypeDeclaration:
@@ -1447,17 +1453,17 @@ OUTER:
 		s.yyPushback(t); // Probably some modifier, e.g. "public"
 
 		String docComment = s.getLastDocComment();
-		TypeDeclaration td = _getClassOrInterfaceDeclaration(cu, s, cu, null);
+		TypeDeclaration td = getClassOrInterfaceDeclaration(cu, s, cu, null);
 		td.setDocComment(docComment); // May be null
 		return td;
 
 	}
 
 
-	private TypeParameter _getTypeParameter(CompilationUnit cu, Scanner s)
+	private TypeParameter getTypeParameter(CompilationUnit cu, Scanner s)
 									throws IOException {
 
-		log("Entering _getTypeParameter()");
+		log("Entering getTypeParameter()");
 
 		Token identifier = s.yylexNonNull(IDENTIFIER, "Identifier expected");
 		TypeParameter typeParam = new TypeParameter(identifier);
@@ -1465,21 +1471,21 @@ OUTER:
 		if (s.yyPeekCheckType()==KEYWORD_EXTENDS) {
 			do {
 				s.yylex(); // Pop off "extends" or "&".
-				typeParam.addBound(_getType(cu, s));
+				typeParam.addBound(getType(cu, s));
 			} while (s.yyPeekCheckType()==OPERATOR_BITWISE_AND);
 		}
 
-		log("Exiting _getTypeParameter(): " + typeParam.getName());
+		log("Exiting getTypeParameter(): " + typeParam.getName());
 		return typeParam;
 
 	}
 
 
-	private List<TypeParameter> _getTypeParameters(CompilationUnit cu,
-						Scanner s) throws IOException {
+	private List<TypeParameter> getTypeParameters(CompilationUnit cu,
+                                                  Scanner s) throws IOException {
 
 		s.increaseTypeArgumentsLevel();
-		log("Entering _getTypeParameters() (" + s.getTypeArgumentsLevel() + ")");
+		log("Entering getTypeParameters() (" + s.getTypeArgumentsLevel() + ")");
 
 		s.markResetPosition();
 		Token t = s.yylexNonNull(OPERATOR_LT, "TypeParameters expected");
@@ -1487,12 +1493,12 @@ OUTER:
 		List<TypeParameter> typeParams = new ArrayList<>(1);
 
 		do {
-			TypeParameter typeParam = _getTypeParameter(cu, s);
+			TypeParameter typeParam = getTypeParameter(cu, s);
 			typeParams.add(typeParam);
 			t = s.yylexNonNull(SEPARATOR_COMMA, OPERATOR_GT, "',' or '>' expected");
 		} while (t.isType(SEPARATOR_COMMA));
 
-		log("Exiting _getTypeParameters() (" + s.getTypeArgumentsLevel() + ")");
+		log("Exiting getTypeParameters() (" + s.getTypeArgumentsLevel() + ")");
 		s.decreaseTypeArgumentsLevel();
 
 		return typeParams;

@@ -28,7 +28,7 @@ import org.fife.rsta.ac.java.classreader.ClassFile;
  * add to the "build path."  This type of container is useful if your
  * application ships with specific classes you want included in code
  * completion, but you don't want to add the entire jar to the build path.<p>
- * 
+ *
  * Since there is no real way to determine all classes in a package via
  * reflection, you must explicitly enumerate all classes that are on the
  * classpath that you want on the build path.  To make this easier, you can
@@ -213,7 +213,7 @@ public class ClasspathLibraryInfo extends LibraryInfo {
 
 
 	@Override
-	public int hashCode() {
+	public int hashCodeImpl() {
 		return classNameToClassFile.hashCode();
 	}
 
