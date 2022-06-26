@@ -97,7 +97,10 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 		setAutoActivationEnabled(true);
 		setParameterAssistanceEnabled(true);
 		setShowDescWindow(true);
-		setLanguageVersion(Integer.MIN_VALUE); // Take Rhino's default
+		// Rhino keeps its pre-ES6 defualt for backwards compatibility,
+		// but most modern apps want to use the latest language
+		// features
+		setLanguageVersion(Context.VERSION_ES6);
 	}
 
 
@@ -426,15 +429,15 @@ return DEFAULT;
      * This parameter is ignored if the error parser is set to
      * {@link JsErrorParser#RHINO}.
 	 *
-	 * @param languageVersion  The JS version.  This should be one of the
+	 * @param languageVersion The JS version.  This should be one of the
 	 *        <code>VERSION_xxx</code> constants in Rhino's {@link Context}
-	 *        class.  If this is set to a value unknown to Rhino, then Rhino's
-	 *        default value is used (<code>VERSION_DEFAULT</code>).
+	 *        class.  If this is set to a value less than zero, then ES6
+	 *        is used (<code>VERSION_ES6</code>).
 	 * @see #getLanguageVersion()
 	 */
 	public void setLanguageVersion(int languageVersion) {
 		if (languageVersion<0) {
-			languageVersion = Context.VERSION_UNKNOWN;
+			languageVersion = Context.VERSION_ES6;
 		}
 		this.languageVersion = languageVersion;
 	}

@@ -11,7 +11,7 @@ archivesBaseName = 'languagesupport'
 dependencies {
     api 'com.fifesoft:rsyntaxtextarea:3.2.0'
     api 'com.fifesoft:autocomplete:3.2.0'
-    implementation 'org.mozilla:rhino:1.7.6'
+    implementation 'org.mozilla:rhino:1.7.14'
     testImplementation 'junit:junit:4.13.2'
 }
 
