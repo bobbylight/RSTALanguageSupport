@@ -11,6 +11,7 @@
 package org.fife.rsta.ac.java.buildpath;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 
 import org.fife.rsta.ac.java.JarManager;
@@ -171,6 +172,28 @@ public abstract class LibraryInfo implements Comparable<LibraryInfo>,
 	 * @see #getMainJreJarInfo()
 	 */
 	public static LibraryInfo getJreJarInfo(File jreHome) {
+		// Check if the Jre is made of modules
+		File mods = new File(jreHome,"jmods");
+		if(mods.isDirectory()) {
+			File[] files = mods.listFiles( new FileFilter() {
+				@Override
+				public boolean accept(File pathname) {
+					if(pathname.isFile()) {
+						String name = pathname.getName();
+						return name.endsWith(".jmod") && (name.startsWith("java.") || name.startsWith("jdk."));
+					}
+					return false;
+				}
+			});
+
+			LibraryInfo info = new Jdk9LibraryInfo(files);
+			File sourceZip = new File(jreHome,"lib"+File.separator+"src.zip");
+			if (sourceZip.isFile()) { // Make sure our last guess actually exists
+				info.setSourceLocation(new ZipSourceLocation(sourceZip));
+			}
+
+			return info;
+		}
 
 		LibraryInfo info = null;
 
