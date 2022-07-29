@@ -64,11 +64,13 @@ public class Jdk9LibraryInfo extends LibraryInfo {
 				ioe.printStackTrace();
 			}
 		}
+		bulkCreateJmods = null;
 	}
 
 
 	@Override
 	public void bulkClassFileCreationStart() {
+		bulkCreateJmods = new JarFile[jmodFiles.length];
 		for(int i = 0; i< jmodFiles.length; i++) {
 			File jarFile = jmodFiles[i];
 			try {
