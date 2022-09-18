@@ -303,7 +303,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 	/**
 	 * Refreshes what children are visible in the tree.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings("unchecked")
 	private void refreshVisibleChildren() {
 		visibleChildren.clear();
 		if (children!=null) {
@@ -318,7 +318,6 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 						String text = node.toString();
 						text = Util.stripHtml(text);
 						if (!pattern.matcher(text).find()) {
-							//System.out.println(pattern + ": Removing tree node: " + text);
 							i.remove();
 						}
 					}

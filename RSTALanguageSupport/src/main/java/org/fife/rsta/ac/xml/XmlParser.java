@@ -170,7 +170,6 @@ new ValidationConfigSniffer().sniff(doc);
 			return result;
 		}
 
-		//long start = System.currentTimeMillis();
 		try {
 			if (sp==null) { // New or reset for different validation
 				sp = spf.newSAXParser();
@@ -188,8 +187,6 @@ new ValidationConfigSniffer().sniff(doc);
 			// file
 			// Fall through
 		}
-		//long time = System.currentTimeMillis() - start;
-		//System.err.println("DEBUG: IconGroupLoader parsing: " + time + " ms");
 
 		if (locator!=null) {
 			try {

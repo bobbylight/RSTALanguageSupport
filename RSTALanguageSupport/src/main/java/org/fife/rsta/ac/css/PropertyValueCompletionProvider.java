@@ -441,7 +441,6 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 	private List<Completion> loadFromXML(InputStream in, ClassLoader cl)
 			throws IOException {
 
-		//long start = System.currentTimeMillis();
 		List<Completion> completions;
 
 		SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -455,8 +454,6 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
         } catch (SAXException | ParserConfigurationException e) {
             throw new IOException(e.toString());
         }
-        //long time = System.currentTimeMillis() - start;
-        //System.out.println("XML loaded in: " + time + "ms");
 
         return completions;
 	}

@@ -23,13 +23,6 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
  */
 public interface LanguageSupport {
 
-	///**
-	// * Client property set on <code>RSyntaxTextArea</code>s referencing the
-	// * <code>AutoCompletion</code> instance providing its completion choices.
-	// */
-	//static final String PROPERTY_AUTO_COMPLETION	=
-	//									"org.fife.rsta.ac.AutoCompletion";
-
 	/**
 	 * Client property set on <code>RSyntaxTextArea</code>s referencing the
 	 * <code>Parser</code> instance parsing its source code.  This will be
