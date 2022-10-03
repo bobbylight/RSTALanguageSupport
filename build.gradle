@@ -1,5 +1,5 @@
 //plugins {
-//    id 'com.github.spotbugs' version '4.7.1'
+//    id 'com.github.spotbugs' version '5.0.12'
 //}
 
 group = 'com.fifesoft'
@@ -16,7 +16,7 @@ allprojects {
     }
 
     wrapper {
-        gradleVersion = '7.4.1'
+        gradleVersion = '7.5.1'
     }
 
 	tasks.withType(Javadoc) {

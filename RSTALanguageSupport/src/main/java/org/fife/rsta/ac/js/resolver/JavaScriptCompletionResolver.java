@@ -1,7 +1,5 @@
 package org.fife.rsta.ac.js.resolver;
 
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -65,7 +63,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	 * @param text to compile and resolve
 	 */
 	@Override
-	public JavaScriptType compileText(String text) throws IOException {
+	public JavaScriptType compileText(String text) {
 		CompilerEnvirons env = JavaScriptParser.createCompilerEnvironment(new JavaScriptParser.JSErrorReporter(), provider.getLanguageSupport());
 
 		String parseText = JavaScriptHelper.removeLastDotFromText(text);
@@ -73,8 +71,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 		int charIndex = JavaScriptHelper.findIndexOfFirstOpeningBracket(parseText);
 		env.setRecoverFromErrors(true);
 		Parser parser = new Parser(env);
-		StringReader r = new StringReader(parseText);
-		AstRoot root = parser.parse(r, null, 0);
+		AstRoot root = parser.parse(parseText, null, 0);
 		CompilerNodeVisitor visitor = new CompilerNodeVisitor(charIndex == 0);
 		root.visitAll(visitor);
 		return lastJavaScriptType;
@@ -86,17 +83,15 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	 * @return TypeDeclaration for node or null if not found.
 	 */
 	@Override
-	public TypeDeclaration resolveParamNode(String text) throws IOException {
+	public TypeDeclaration resolveParamNode(String text) {
 
 		if(text != null) {
 			CompilerEnvirons env = JavaScriptParser.createCompilerEnvironment(new JavaScriptParser.JSErrorReporter(), provider.getLanguageSupport());
 
-
 			int charIndex = JavaScriptHelper.findIndexOfFirstOpeningBracket(text);
 			env.setRecoverFromErrors(true);
 			Parser parser = new Parser(env);
-			StringReader r = new StringReader(text);
-			AstRoot root = parser.parse(r, null, 0);
+			AstRoot root = parser.parse(text, null, 0);
 			CompilerNodeVisitor visitor = new CompilerNodeVisitor(charIndex == 0);
 			root.visitAll(visitor);
 		}
@@ -553,7 +548,6 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 			all.add(node);
 			return true;
 		}
-
 
 		public ArrayList<AstNode> getAllNodes() {
 			return all;

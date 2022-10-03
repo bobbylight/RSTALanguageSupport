@@ -9,8 +9,8 @@ assert JavaVersion.current().isJava8Compatible()
 archivesBaseName = 'languagesupport'
 
 dependencies {
-    api 'com.fifesoft:rsyntaxtextarea:3.2.1-SNAPSHOT'
-    api 'com.fifesoft:autocomplete:3.2.0'
+    api 'com.fifesoft:rsyntaxtextarea:3.3.0'
+    api 'com.fifesoft:autocomplete:3.3.0'
     implementation 'org.mozilla:rhino:1.7.14'
     testImplementation 'junit:junit:4.13.2'
 }

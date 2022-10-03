@@ -34,15 +34,9 @@ public class PreProcessingScripts {
 		{
 			CompilerEnvirons env = JavaScriptParser.createCompilerEnvironment(new JavaScriptParser.JSErrorReporter(), provider.getLanguageSupport());
 			Parser parser = new Parser(env);
-			StringReader r = new StringReader(scriptText);
-			try {
-				AstRoot root = parser.parse(r, null, 0);
-				CodeBlock block = provider.iterateAstRoot(root, preProcessingCompletions, "", Integer.MAX_VALUE, options);
-				provider.recursivelyAddLocalVars(preProcessingCompletions, block, 0, null, false, true);
-			}
-			catch(IOException io) {
-				//ignore this
-			}
+			AstRoot root = parser.parse(scriptText, null, 0);
+			CodeBlock block = provider.iterateAstRoot(root, preProcessingCompletions, "", Integer.MAX_VALUE, options);
+			provider.recursivelyAddLocalVars(preProcessingCompletions, block, 0, null, false, true);
 		}
 	}
 

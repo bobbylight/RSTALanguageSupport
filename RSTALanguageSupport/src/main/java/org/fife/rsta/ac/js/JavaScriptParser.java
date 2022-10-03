@@ -18,7 +18,6 @@ import java.util.List;
 
 import javax.swing.text.Element;
 
-import org.fife.io.DocumentReader;
 import org.fife.rsta.ac.js.ast.VariableResolver;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
@@ -243,18 +242,15 @@ public class JavaScriptParser extends AbstractParser {
 		int lineCount = root.getElementCount();
 		result.setParsedLines(0, lineCount - 1);
 
-		DocumentReader r = new DocumentReader(doc);
 		ErrorCollector errorHandler = new ErrorCollector();
 		CompilerEnvirons env = createCompilerEnvironment(errorHandler, langSupport);
 		long start = System.currentTimeMillis();
 		try {
 			Parser parser = new Parser(env);
-			astRoot = parser.parse(r, null, 0);
+			String text = doc.getText(0, doc.getLength());
+			astRoot = parser.parse(text, null, 0);
 			long time = System.currentTimeMillis() - start;
 			result.setParseTime(time);
-		} catch (IOException ioe) { // Never happens
-			result.setError(ioe);
-			ioe.printStackTrace();
 		} catch (RhinoException re) {
 			// Shouldn't happen since we're passing an ErrorCollector in
 			int line = re.lineNumber();
@@ -268,8 +264,6 @@ public class JavaScriptParser extends AbstractParser {
 		} catch (Exception e) {
 			result.setError(e); // catch all
 		}
-
-		r.close();
 
 		// Get any parser errors.
 		switch (langSupport.getErrorParser()) {

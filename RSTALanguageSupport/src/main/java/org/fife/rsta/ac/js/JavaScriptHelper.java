@@ -97,10 +97,9 @@ public class JavaScriptHelper {
 		});
 		env.setRecoverFromErrors(true);
 		Parser parser = new Parser(env);
-		StringReader r = new StringReader(text);
 		ParseText pt = new ParseText();
 		try {
-			AstRoot root = parser.parse(r, null, 0);
+			AstRoot root = parser.parse(text, null, 0);
 			ParseTextVisitor visitor = new ParseTextVisitor(text);
 			root.visitAll(visitor);
 			pt.isNew = visitor.isNew();
