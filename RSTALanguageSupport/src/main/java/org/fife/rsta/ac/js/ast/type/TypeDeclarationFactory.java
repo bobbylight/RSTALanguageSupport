@@ -16,7 +16,7 @@ import java.util.Set;
 import org.fife.rsta.ac.js.ast.type.ecma.TypeDeclarations;
 import org.fife.rsta.ac.js.ast.type.ecma.TypeDeclarations.JavaScriptObject;
 import org.fife.rsta.ac.js.ast.type.ecma.client.ClientBrowserAdditions;
-import org.fife.rsta.ac.js.ast.type.ecma.client.DOMAddtions;
+import org.fife.rsta.ac.js.ast.type.ecma.client.DOMAdditions;
 import org.fife.rsta.ac.js.ast.type.ecma.client.HTMLDOMAdditions;
 import org.fife.rsta.ac.js.ast.type.ecma.e4x.ECMAvE4xAdditions;
 import org.fife.rsta.ac.js.ast.type.ecma.v5.TypeDeclarationsECMAv5;
@@ -62,7 +62,7 @@ public class TypeDeclarationFactory {
 		if(client) {
 			//for client we are going to add DOM, HTML DOM and Browser attributes/methods
 			new ClientBrowserAdditions().addAdditionalTypes(ecma);
-			new DOMAddtions().addAdditionalTypes(ecma);
+			new DOMAdditions().addAdditionalTypes(ecma);
 			new HTMLDOMAdditions().addAdditionalTypes(ecma);
 		}
 
@@ -149,8 +149,7 @@ public class TypeDeclarationFactory {
 			if (!qualified) {
 				if (lookupName != null && lookupName.contains(".")) {
 					return lookupName.substring(
-							lookupName.lastIndexOf(".") + 1, lookupName
-									.length());
+							lookupName.lastIndexOf(".") + 1);
 				}
 			}
 		}

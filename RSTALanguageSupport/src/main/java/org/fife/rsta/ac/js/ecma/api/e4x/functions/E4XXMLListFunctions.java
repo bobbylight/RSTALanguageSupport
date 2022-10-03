@@ -93,7 +93,7 @@ public interface E4XXMLListFunctions extends JSObjectFunctions {
 	/**
 	 * <b>function descendants(name)</b> calls the descendants method of each XML object in this XMLList object with the optional parameter name (or the string "*" if name is omitted) and returns an XMLList containing the results concatenated in order.
 	 * @returns all the XML valued descendants (children, grandchildren, great-grandchildren, etc.) of this XMLList object with the given name. If the name parameter is omitted, it returns all descendants of this XMLList object.
-	 * @param name optional parameter to identity the decendants. If omitted all decendants are returned.
+	 * @param name optional parameter to identity the descendants. If omitted all descendants are returned.
 	 * @memberOf XMLList
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXMLList XMLList
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.functions.E4XXMLFunctions#descendants(JSString) XML.descendants();

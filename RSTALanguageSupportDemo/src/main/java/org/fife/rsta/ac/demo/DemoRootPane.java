@@ -237,7 +237,6 @@ setContentPane(cp);
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 			UIManager.getLookAndFeel().provideErrorFeedback(this);
-			return;
 		}
 	}
 

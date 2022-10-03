@@ -1,14 +1,12 @@
 package org.fife.rsta.ac.js.ast;
 
 
-
 /**
  * Object that represents options associated with JavaScriptDeclaration. These can be used to ask questions:
- *
- * 1) Which script the JavaScriptDeclaration belongs to.
- * 2) Whether the JavaScriptDeclaration supports searchable hyperlinks
- *
- *
+ * <ol>
+ *   <li>Which script the JavaScriptDeclaration belongs to.
+ *   <li>Whether the JavaScriptDeclaration supports searchable hyperlinks
+ * </ol>
  */
 public class TypeDeclarationOptions
 {

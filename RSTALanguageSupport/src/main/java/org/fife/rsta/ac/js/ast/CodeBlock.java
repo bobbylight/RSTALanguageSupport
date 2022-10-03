@@ -32,7 +32,7 @@ public class CodeBlock {
 	private int end;
 	private CodeBlock parent;
 	private List<CodeBlock> children;
-	private List<JavaScriptVariableDeclaration> varDecs;
+	private List<JavaScriptVariableDeclaration> varDeclarations;
 
 
 	/**
@@ -69,10 +69,10 @@ public class CodeBlock {
 	 * @param varDec The variable declaration.
 	 */
 	public void addVariable(JavaScriptVariableDeclaration varDec) {
-		if (varDecs == null) {
-			varDecs = new ArrayList<>();
+		if (varDeclarations == null) {
+			varDeclarations = new ArrayList<>();
 		}
-		varDecs.add(varDec);
+		varDeclarations.add(varDec);
 	}
 
 
@@ -151,7 +151,7 @@ public class CodeBlock {
 	 * @see #getVariableDeclarationCount()
 	 */
 	public JavaScriptVariableDeclaration getVariableDeclaration(int index) {
-		return varDecs.get(index);
+		return varDeclarations.get(index);
 	}
 
 
@@ -162,7 +162,7 @@ public class CodeBlock {
 	 * @see #getVariableDeclaration(int)
 	 */
 	public int getVariableDeclarationCount() {
-		return varDecs == null ? 0 : varDecs.size();
+		return varDeclarations == null ? 0 : varDeclarations.size();
 	}
 
 
@@ -201,11 +201,11 @@ public class CodeBlock {
 			tabs.append("\t");
 		}
 		sb.append(tabs);
-		sb.append("start: " + block.getStartOffset() + "\n");
+		sb.append("start: ").append(block.getStartOffset()).append("\n");
 		sb.append(tabs);
-		sb.append("end: " + block.getEndOffset() + "\n");
+		sb.append("end: ").append(block.getEndOffset()).append("\n");
 		sb.append(tabs);
-		sb.append("var count: " + block.getVariableDeclarationCount()+ "\n"+ "\n");
+		sb.append("var count: ").append(block.getVariableDeclarationCount()).append("\n").append("\n");
 		for(int i = 0; i < block.getChildCodeBlockCount(); i++) {
 			CodeBlock childBlock = block.getChildCodeBlock(i);
 			outputChild(sb, childBlock, tab++);

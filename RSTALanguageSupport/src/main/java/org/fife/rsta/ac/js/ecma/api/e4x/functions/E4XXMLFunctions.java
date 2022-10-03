@@ -133,7 +133,7 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	 * <pre>
 	 * // Get child elements of first employee: returns an XMLList containing:
 	 * // <name>Jim</name>, <age>25</age> and <hobby>Snorkeling</hobby>
-	 * var emps = e.employee[0].children();
+	 * var employees = e.employee[0].children();
 	 * </pre>
 	 * @returns an XMLList containing all the properties of this XML object in order.
 	 * @memberOf XML

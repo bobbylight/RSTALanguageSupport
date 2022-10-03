@@ -34,7 +34,7 @@ public abstract class JSArray implements JSArrayFunctions {
 	}
 
 	/**
-	 * Object Array(element0, ... elementn)
+	 * Object Array(element0, ... elementN)
 	 *
 	 * @constructor
 	 * @extends Object
@@ -42,7 +42,7 @@ public abstract class JSArray implements JSArrayFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public JSArray(JSObject element0, JSObject elementn) {
+	public JSArray(JSObject element0, JSObject elementN) {
 
 	}
 

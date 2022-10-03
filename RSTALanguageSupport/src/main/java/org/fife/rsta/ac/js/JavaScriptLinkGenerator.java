@@ -74,7 +74,7 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 	}
 
 	/**
-	 * @return LinkGeneratorResult based on the JavaScriptDeclaraton and the position
+	 * @return LinkGeneratorResult based on the JavaScriptDeclaration and the position
 	 */
 	protected LinkGeneratorResult createSelectedRegionResult(RSyntaxTextArea textArea, Token t, JavaScriptDeclaration dec) {
 		if(dec.getTypeDeclarationOptions() != null && !dec.getTypeDeclarationOptions().isSupportsLinks()) {
@@ -110,7 +110,7 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 	 * e.g.
 	 * Token may contain the function:
 	 * addTwoNumbers(num1, num2);
-	 *
+	 * <p>
 	 * The return result will be:
 	 * addTwoNumbers(p,p);
 	 *

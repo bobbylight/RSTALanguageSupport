@@ -30,7 +30,7 @@ public class CodeBlock {
 	private int end;
 	private CodeBlock parent;
 	private List<CodeBlock> children;
-	private List<VariableDeclaration> varDecs;
+	private List<VariableDeclaration> varDeclarations;
 
 
 	/**
@@ -67,10 +67,10 @@ public class CodeBlock {
 	 * @param varDec The variable declaration.
 	 */
 	public void addVariable(VariableDeclaration varDec) {
-		if (varDecs==null) {
-			varDecs = new ArrayList<>();
+		if (varDeclarations ==null) {
+			varDeclarations = new ArrayList<>();
 		}
-		varDecs.add(varDec);
+		varDeclarations.add(varDec);
 	}
 
 
@@ -172,7 +172,7 @@ public class CodeBlock {
 	 * @see #getVariableDeclarationCount()
 	 */
 	public VariableDeclaration getVariableDeclaration(int index) {
-		return varDecs.get(index);
+		return varDeclarations.get(index);
 	}
 
 
@@ -183,7 +183,7 @@ public class CodeBlock {
 	 * @see #getVariableDeclaration(int)
 	 */
 	public int getVariableDeclarationCount() {
-		return varDecs==null ? 0 : varDecs.size();
+		return varDeclarations ==null ? 0 : varDeclarations.size();
 	}
 
 

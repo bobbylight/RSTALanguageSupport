@@ -237,7 +237,7 @@ public abstract class AbstractTypeDeclarationNode extends AbstractASTNode
 	 */
 	@Override
 	public boolean isStatic() {
-		return modifiers==null ? false : modifiers.isStatic();
+		return modifiers != null && modifiers.isStatic();
 	}
 
 

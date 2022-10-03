@@ -17,9 +17,8 @@ import org.mozilla.javascript.ast.AstRoot;
 
 
 /**
- * Rhino specific JavaScriptAstParser
- *
- * reads the importPackage and importClass from the parsed document and adds to the RhinoJavaScriptTypesFactory
+ * Rhino specific JavaScriptAstParser. Reads the importPackage and importClass from the parsed document
+ * and adds to the RhinoJavaScriptTypesFactory.
  */
 public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 

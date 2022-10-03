@@ -154,7 +154,7 @@ public class GoToMemberWindow extends JWindow {
 		listener.uninstall();
 		super.dispose();
 		// Force refocus of text area to prevent NPE in GoToMemberAction's
-		// (TextAction's) getTextComponent(ActinEvent) when a different
+		// (TextAction's) getTextComponent(ActionEvent) when a different
 		// component is focused and this action is executed twice.
 		textArea.requestFocusInWindow();
 	}

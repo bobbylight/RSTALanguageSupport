@@ -12,14 +12,12 @@ import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 
 
 /**
- * Rhino Specific JavaScriptTypesFactory
- *
- * Supports: importPackage and importClass
- *
- * importPackage(java.util)
- * importClass(java.util.HashSet)
- *
- * Clears the cache every time document is parsed for importPackage and importClass to work properly
+ * Rhino Specific JavaScriptTypesFactory. Supports {@code importPackage} and {@code importClass}.
+ * <code>
+ *   importPackage(java.util)
+ *   importClass(java.util.HashSet)
+ * </code>
+ * Clears the cache every time document is parsed for importPackage and importClass to work properly.
  */
 public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 

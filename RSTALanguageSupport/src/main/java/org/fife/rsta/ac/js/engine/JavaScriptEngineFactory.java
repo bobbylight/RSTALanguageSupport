@@ -6,7 +6,7 @@ import java.util.HashMap;
 public class JavaScriptEngineFactory {
 
 
-	public static final String DEFAULT = EMCAJavaScriptEngine.EMCA_ENGINE;
+	public static final String DEFAULT = ECMAJavaScriptEngine.ECMA_ENGINE;
 
 	private HashMap<String, JavaScriptEngine> supportedEngines =
             new HashMap<>();
@@ -14,7 +14,7 @@ public class JavaScriptEngineFactory {
 	private static JavaScriptEngineFactory Instance = new JavaScriptEngineFactory();
 
 	static {
-		Instance().addEngine(EMCAJavaScriptEngine.EMCA_ENGINE, new EMCAJavaScriptEngine());
+		Instance().addEngine(ECMAJavaScriptEngine.ECMA_ENGINE, new ECMAJavaScriptEngine());
 		Instance().addEngine(JSR223JavaScriptEngine.JSR223_ENGINE, new JSR223JavaScriptEngine());
 		Instance().addEngine(RhinoJavaScriptEngine.RHINO_ENGINE, new RhinoJavaScriptEngine());
 	}

@@ -306,7 +306,7 @@ public class JavaScriptFunctionType {
 
 
 	/**
-	 * Converts TypeDeclation qualified name to Java Class
+	 * Converts TypeDeclaration qualified name to Java Class
 	 * @param name
 	 * @return
 	 * @throws ClassNotFoundException

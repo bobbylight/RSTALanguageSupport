@@ -208,11 +208,11 @@ public abstract class TypeDeclarations {
 		if (name == null)
 			return null;
 
-		TypeDeclaration typeDeclation = types.get(name);
-		if (typeDeclation == null) {
-			typeDeclation = getJSType(name);
+		TypeDeclaration typeDeclaration = types.get(name);
+		if (typeDeclaration == null) {
+			typeDeclaration = getJSType(name);
 		}
-		return typeDeclation;
+		return typeDeclaration;
 	}
 
 

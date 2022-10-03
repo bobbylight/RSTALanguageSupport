@@ -40,7 +40,6 @@ import org.fife.rsta.ac.js.ast.parser.JavaScriptParser;
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
 import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 import org.fife.rsta.ac.js.ast.type.ecma.TypeDeclarations;
-import org.fife.rsta.ac.js.completion.JSCompletion;
 import org.fife.rsta.ac.js.completion.JSVariableCompletion;
 import org.fife.rsta.ac.js.engine.JavaScriptEngine;
 import org.fife.rsta.ac.js.engine.JavaScriptEngineFactory;
@@ -337,9 +336,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 			}
 			else {
 				if(type.getType().getJSName().startsWith(text)) {
-					for (JSCompletion jsc : type.getConstructorCompletions().values()) {
-						set.add(jsc);
-					}
+					set.addAll(type.getConstructorCompletions().values());
 				}
 			}
 		}
@@ -393,7 +390,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 		String text = super.getAlreadyEnteredText(comp);
 		if(text != null) {
 			int charIndex = JavaScriptHelper.findIndexOfFirstOpeningBracket(text);
-			text = text.substring(charIndex, text.length());
+			text = text.substring(charIndex);
 			int sqIndex = JavaScriptHelper.findIndexOfFirstOpeningSquareBracket(text);
 			text = text.substring(sqIndex).trim();
 			if(charIndex > 0 || sqIndex > 0) {

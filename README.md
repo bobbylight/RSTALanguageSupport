@@ -39,7 +39,7 @@ Languages supported in this library include:
         * Imported classes
         * Methods and fields.
         * Local variables (when in a method body)
-    * Method parameter assistance; that is, code-complete a method name, and any parameters will have a drop-downl ist of fields and local variables of the proper type for that parameter.  This feature is currently very limited.
+    * Method parameter assistance; that is, code-complete a method name, and any parameters will have a drop-down list of fields and local variables of the proper type for that parameter.  This feature is currently very limited.
     * Ctrl+Shift+O (Cmd+Shift+O on OS X) opens a "Go to Member" popup, a la Eclipse.
     * JavaOutlineTree component provides a tree view of a Java file that is updated live with edits.
 * JavaScript

@@ -445,7 +445,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 		}
 		if (!fullyQualified) {
 			if(returnType != null && returnType.contains(".")) {
-				return returnType.substring(returnType.lastIndexOf(".") +1, returnType.length());
+				return returnType.substring(returnType.lastIndexOf(".") +1);
 			}
 		}
 		return returnType;

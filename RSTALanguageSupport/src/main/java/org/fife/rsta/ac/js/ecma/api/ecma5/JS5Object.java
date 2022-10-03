@@ -119,7 +119,7 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
      *
      * @param o The object that is to have its property attributes queried.
      * @param name The name of the property to query.
-     * @returns A property descriptor object for the specified property or <b><i>undefined</b></i> if no such property exitsts.
+     * @returns A property descriptor object for the specified property or <b><i>undefined</b></i> if no such property exists.
      * @see  org.fife.rsta.ac.js.ecma.api.ecma5.JS5Object Object
      * @see #defineProperty(JS5Object, JS5String, JS5Object) defineProperty()
      * @since   Standard ECMA-262 5th. Edition

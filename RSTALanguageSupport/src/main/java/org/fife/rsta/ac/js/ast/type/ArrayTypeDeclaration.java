@@ -6,7 +6,7 @@ package org.fife.rsta.ac.js.ast.type;
  * var a = [1, 2, 3]; //Array Type - Number
  * var b = ["","",""]; //Array Type - String
  * var c = [1, "", true] //Array Type - any (Default)
- *
+ * <p>
  * This is used to determine the type of object in the array when setting variables:
  * e.g.
  * var a = [1, 2, 3]; //Array Type - Number

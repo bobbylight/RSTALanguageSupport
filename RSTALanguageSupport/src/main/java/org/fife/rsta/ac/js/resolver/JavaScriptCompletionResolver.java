@@ -30,11 +30,13 @@ import org.mozilla.javascript.ast.PropertyGet;
 
 /**
  * Compiles the entered text using Rhino and tries to resolve the JavaScriptType
- * from the AstRoot e.g. var a = ""; "" --&gt; String JavaScriptType var b =
+ * from the AstRoot e.g.
+ * <code>
+ * var a = ""; "" --&gt; String JavaScriptType var b =
  * a.toString() a.toString --&gt; String JavaScriptType
- *
+ * </code>
  * etc.
- *
+ * <p>
  * Note, will resolve any type added to JavaScriptTypesFactory
  *
  */

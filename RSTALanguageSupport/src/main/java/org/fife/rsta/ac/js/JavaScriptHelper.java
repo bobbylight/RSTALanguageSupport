@@ -44,13 +44,13 @@ public class JavaScriptHelper {
 	 * being initialised. This is not possible.
 	 *
 	 * @param target Name of variable being created
-	 * @param initialiser name of initialiser
+	 * @param initializer name of initializer
 	 * @return true if name is different
 	 */
-	public static boolean canResolveVariable(AstNode target, AstNode initialiser) {
+	public static boolean canResolveVariable(AstNode target, AstNode initializer) {
 		String varName = target.toSource();
 		try {
-			String init = initialiser.toSource();
+			String init = initializer.toSource();
 			String[] splitInit = init.split("\\.");
 			if (splitInit.length > 0) {
 				return !varName.equals(splitInit[0]);
@@ -125,13 +125,14 @@ public class JavaScriptHelper {
 
 
 	/**
-	 * Iterate back up through parent nodes and check whether inside a function
+	 * Iterate back up through parent nodes and check whether inside a function.
 	 *
 	 * If the node is a function, then the Parsed parent node structure is:
+	 * <code>
 	 * FunctionCall
 	 *   --&gt; PropertyGet
 	 *    --&gt; Name
-	 *
+	 * </code>
 	 * Anything other structure should be rejected.
 	 *
 	 * @param node
@@ -330,7 +331,7 @@ case Token.EXPR_RESULT:
 		String pName = newName.indexOf('.') > 0 ? newName.substring(0,
 				newName.lastIndexOf('.')) : "";
 		String cName = newName.indexOf('.') > 0 ? newName.substring(
-				newName.lastIndexOf('.') + 1, newName.length())
+				newName.lastIndexOf('.') + 1)
 				: newName;
 		return new TypeDeclaration(pName, cName, newName);
 	}
@@ -571,7 +572,7 @@ case Token.EXPR_RESULT:
 						break;
 					case ',': {
 						if(i1 == 0 && i2 ==0) {
-							return text.substring(i+1, text.length()).trim();
+							return text.substring(i+1).trim();
 						}
 						break;
 					}
@@ -581,7 +582,7 @@ case Token.EXPR_RESULT:
 			trim = text.lastIndexOf(',') + 1;
 		}
 		//all else fails, trim
-		String parseText = text.substring(trim, text.length());
+		String parseText = text.substring(trim);
 
 		return parseText.trim();
 	}

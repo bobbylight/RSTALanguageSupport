@@ -4446,7 +4446,7 @@ and the month of the year, may not necessarily be three characters wide.</p>
 by-name access mechanism to the gmtime() and localtime() functions,
 respectively.</p>
 <p>For a comprehensive date and time representation look at the
-<a href="http://search.cpan.org/perldoc/DateTime">DateTime</a> module on CPAN.
+<a href="https://metacpan.org/pod/DateTime">DateTime</a> module on CPAN.
 -----
 
 function localtime
@@ -4505,7 +4505,7 @@ and the month of the year, may not necessarily be three characters wide.</p>
 by-name access mechanism to the gmtime() and localtime() functions,
 respectively.</p>
 <p>For a comprehensive date and time representation look at the
-<a href="http://search.cpan.org/perldoc/DateTime">DateTime</a> module on CPAN.
+<a href="https://metacpan.org/pod/DateTime">DateTime</a> module on CPAN.
 -----
 
 function lock
@@ -10925,7 +10925,7 @@ gettimeofday(2), you may be able to use the <code class="inline"><a class="l_k" 
 See <a href="../perlfaq8.html">perlfaq8</a> for details.</p>
 <p>For date and time processing look at the many related modules on CPAN.
 For a comprehensive date and time representation look at the
-<a href="http://search.cpan.org/perldoc/DateTime">DateTime</a> module.
+<a href="https://metacpan.org/pod/DateTime">DateTime</a> module.
 -----
 
 function times
