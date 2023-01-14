@@ -128,6 +128,12 @@ public class JavaScriptAstParser extends JavaScriptParser {
 				case Token.VAR:
 					processVariableNode(child, block, set, entered, offset);
 					break;
+                case Token.LET:
+                    processVariableNode(child, block, set, entered, offset);
+                    break;
+                case Token.CONST:
+                    processVariableNode(child, block, set, entered, offset);
+                    break;
 				case Token.FOR: {
 					processForNode(child, block, set, entered, offset);
 					break;
