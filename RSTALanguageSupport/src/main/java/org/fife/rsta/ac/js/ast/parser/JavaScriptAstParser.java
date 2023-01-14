@@ -539,6 +539,8 @@ public class JavaScriptAstParser extends JavaScriptParser {
 			List<VariableInitializer> vars = varDec.getVariables();
 			for (VariableInitializer var : vars) {
 				extractVariableFromNode(var, block, offset);
+                // we still need to process the initializer code, it may contain other functions
+                iterateNode(var.getInitializer(), set, entered, block, offset);
 			}
 		}
 	}
