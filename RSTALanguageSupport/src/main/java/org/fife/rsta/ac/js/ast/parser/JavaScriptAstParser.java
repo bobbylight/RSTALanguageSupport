@@ -176,7 +176,6 @@ public class JavaScriptAstParser extends JavaScriptParser {
 				case Token.NAME:
 				case Token.CATCH:
 				case Token.ERROR:
-				case Token.RETURN:
 				case Token.NEW:
 				case Token.GETPROP:
 					// xml support -- ignore these
@@ -185,6 +184,10 @@ public class JavaScriptAstParser extends JavaScriptParser {
 					break;
                 case Token.CALL:
                     processCallStatement(child, block, set, entered,
+                            offset);
+                    break;
+                case Token.RETURN:
+                    processReturnStatement(child, block, set, entered,
                             offset);
                     break;
 				case Token.EXPR_RESULT:
@@ -217,6 +220,11 @@ public class JavaScriptAstParser extends JavaScriptParser {
         }
     }
 
+    private void processReturnStatement(Node child, CodeBlock block,
+                                      Set<Completion> set, String entered, int offset) {
+        ReturnStatement returnStatement = (ReturnStatement) child;
+        iterateNode(returnStatement.getReturnValue(), set, entered, block, offset);
+    }
 
 	private void reassignVariable(AstNode assign, CodeBlock block,
 			int locationOffSet) {
