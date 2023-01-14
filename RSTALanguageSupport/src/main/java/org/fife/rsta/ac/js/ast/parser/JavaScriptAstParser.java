@@ -29,10 +29,12 @@ import org.mozilla.javascript.ast.ExpressionStatement;
 import org.mozilla.javascript.ast.ForInLoop;
 import org.mozilla.javascript.ast.ForLoop;
 import org.mozilla.javascript.ast.FunctionNode;
+import org.mozilla.javascript.ast.FunctionCall;
 import org.mozilla.javascript.ast.IfStatement;
 import org.mozilla.javascript.ast.InfixExpression;
 import org.mozilla.javascript.ast.Name;
 import org.mozilla.javascript.ast.NodeVisitor;
+import org.mozilla.javascript.ast.ParenthesizedExpression;
 import org.mozilla.javascript.ast.ReturnStatement;
 import org.mozilla.javascript.ast.SwitchCase;
 import org.mozilla.javascript.ast.SwitchStatement;
@@ -171,22 +173,32 @@ public class JavaScriptAstParser extends JavaScriptParser {
 				// ignore
 				case Token.BREAK:
 				case Token.CONTINUE:
-				case Token.CALL:
 				case Token.EMPTY:
 				case Token.NAME:
 				case Token.CATCH:
 				case Token.ERROR:
-				case Token.RETURN:
 				case Token.NEW:
 				case Token.GETPROP:
 					// xml support -- ignore these
 				case Token.DEFAULTNAMESPACE:
 				case Token.XMLATTR:
 					break;
+                case Token.CALL:
+                    processCallStatement(child, block, set, entered,
+                            offset);
+                    break;
+                case Token.RETURN:
+                    processReturnStatement(child, block, set, entered,
+                            offset);
+                    break;
 				case Token.EXPR_RESULT:
 					processExpressionStatement(child, block, set, entered,
 							offset);
 					break;
+                case Token.LP:
+                    processParenthesizedExpression(child, block, set, entered,
+                            offset);
+                    break;
 				default:
 					Logger.log("Unhandled: " + child.getClass() + " (\""
 							+ child + "\":" + child.getLineno());
@@ -205,6 +217,28 @@ public class JavaScriptAstParser extends JavaScriptParser {
 		iterateNode(expNode, set, entered, block, offset);
 	}
 
+    private void processParenthesizedExpression(Node child, CodeBlock block,
+            Set<Completion> set, String entered, int offset) {
+        ParenthesizedExpression exp = (ParenthesizedExpression) child;
+
+        AstNode expNode = exp.getExpression();
+        iterateNode(expNode, set, entered, block, offset);
+    }
+
+    private void processCallStatement(Node child, CodeBlock block,
+            Set<Completion> set, String entered, int offset) {
+        FunctionCall functionCall = (FunctionCall) child;
+        iterateNode(functionCall.getTarget(), set, entered, block, offset);
+        for (AstNode arg: functionCall.getArguments()) {
+            iterateNode(arg, set, entered, block, offset);
+        }
+    }
+
+    private void processReturnStatement(Node child, CodeBlock block,
+                                      Set<Completion> set, String entered, int offset) {
+        ReturnStatement returnStatement = (ReturnStatement) child;
+        iterateNode(returnStatement.getReturnValue(), set, entered, block, offset);
+    }
 
 	private void reassignVariable(AstNode assign, CodeBlock block,
 			int locationOffSet) {
@@ -533,6 +567,8 @@ public class JavaScriptAstParser extends JavaScriptParser {
 			List<VariableInitializer> vars = varDec.getVariables();
 			for (VariableInitializer var : vars) {
 				extractVariableFromNode(var, block, offset);
+                // we still need to process the initializer code, it may contain other functions
+                iterateNode(var.getInitializer(), set, entered, block, offset);
 			}
 		}
 	}
