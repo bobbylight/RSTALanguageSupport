@@ -34,6 +34,7 @@ import org.mozilla.javascript.ast.IfStatement;
 import org.mozilla.javascript.ast.InfixExpression;
 import org.mozilla.javascript.ast.Name;
 import org.mozilla.javascript.ast.NodeVisitor;
+import org.mozilla.javascript.ast.ParenthesizedExpression;
 import org.mozilla.javascript.ast.ReturnStatement;
 import org.mozilla.javascript.ast.SwitchCase;
 import org.mozilla.javascript.ast.SwitchStatement;
@@ -200,6 +201,10 @@ public class JavaScriptAstParser extends JavaScriptParser {
 					processExpressionStatement(child, block, set, entered,
 							offset);
 					break;
+                case Token.LP:
+                    processParenthesizedExpression(child, block, set, entered,
+                            offset);
+                    break;
 				default:
 					Logger.log("Unhandled: " + child.getClass() + " (\""
 							+ child + "\":" + child.getLineno());
@@ -218,9 +223,18 @@ public class JavaScriptAstParser extends JavaScriptParser {
 		iterateNode(expNode, set, entered, block, offset);
 	}
 
+    private void processParenthesizedExpression(Node child, CodeBlock block,
+            Set<Completion> set, String entered, int offset) {
+        ParenthesizedExpression exp = (ParenthesizedExpression) child;
+
+        AstNode expNode = exp.getExpression();
+        iterateNode(expNode, set, entered, block, offset);
+    }
+
     private void processCallStatement(Node child, CodeBlock block,
             Set<Completion> set, String entered, int offset) {
         FunctionCall functionCall = (FunctionCall) child;
+        iterateNode(functionCall.getTarget(), set, entered, block, offset);
         for (AstNode arg: functionCall.getArguments()) {
             iterateNode(arg, set, entered, block, offset);
         }
