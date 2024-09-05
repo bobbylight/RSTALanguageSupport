@@ -9,8 +9,8 @@ assert JavaVersion.current().isJava8Compatible()
 archivesBaseName = 'languagesupport'
 
 dependencies {
-    api 'com.fifesoft:rsyntaxtextarea:3.3.0'
-    api 'com.fifesoft:autocomplete:3.3.0'
+    api 'com.fifesoft:rsyntaxtextarea:3.5.1'
+    api 'com.fifesoft:autocomplete:3.3.1'
     implementation 'org.mozilla:rhino:1.7.14'
     testImplementation 'junit:junit:4.13.2'
 }
@@ -91,7 +91,7 @@ signing {
     required { gradle.taskGraph.hasTask('publish') && isReleaseVersion }
     sign publishing.publications.maven
 }
-tasks.withType(Sign) {
+tasks.withType(Sign).configureEach {
     onlyIf { isReleaseVersion }
 }
 

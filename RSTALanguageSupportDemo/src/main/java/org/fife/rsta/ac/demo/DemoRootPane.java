@@ -11,6 +11,8 @@
 package org.fife.rsta.ac.demo;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -18,24 +20,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
-import javax.swing.Action;
-import javax.swing.ButtonGroup;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JRootPane;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTree;
-import javax.swing.SwingUtilities;
-import javax.swing.ToolTipManager;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.tree.TreeNode;
@@ -67,6 +57,9 @@ class DemoRootPane extends JRootPane implements HyperlinkListener,
 	private AbstractSourceTree tree;
 	private RSyntaxTextArea textArea;
 
+	private Timer refreshTimer;
+	private static final int REFRESH_DELAY = 100;
+
 
 	DemoRootPane() {
 
@@ -91,6 +84,23 @@ class DemoRootPane extends JRootPane implements HyperlinkListener,
 		scrollPane.setIconRowHeaderEnabled(true);
 		scrollPane.getGutter().setBookmarkingEnabled(true);
 
+		textArea.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				scheduleRefresh();
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				scheduleRefresh();
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				scheduleRefresh();
+			}
+		});
+
 		final JSplitPane sp = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 										treeSP, scrollPane);
 		SwingUtilities.invokeLater(() -> sp.setDividerLocation(0.25));
@@ -105,6 +115,24 @@ JPanel cp = new JPanel(new BorderLayout());
 cp.add(sp);
 cp.add(errorStrip, BorderLayout.LINE_END);
 setContentPane(cp);
+	}
+
+
+	private void scheduleRefresh() {
+		if (refreshTimer != null) {
+			refreshTimer.restart();
+		} else {
+			startRefreshTimer();
+		}
+	}
+
+	private void startRefreshTimer() {
+		refreshTimer = new Timer(REFRESH_DELAY, e -> {
+			refreshSourceTree();
+			refreshTimer.stop(); // Stop the timer after the refresh
+		});
+		refreshTimer.setRepeats(false); // Ensures it only runs once
+		refreshTimer.start();
 	}
 
 
@@ -246,36 +274,30 @@ setContentPane(cp);
 	 * current programming language.
 	 */
 	private void refreshSourceTree() {
+		SwingUtilities.invokeLater(() -> {
+			if (tree != null) {
+				tree.uninstall();
+			}
 
-		if (tree!=null) {
-			tree.uninstall();
-		}
+			String language = textArea.getSyntaxEditingStyle();
+			switch (language) {
+				case SyntaxConstants.SYNTAX_STYLE_JAVA -> tree = new JavaOutlineTree();
+				case SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT -> tree = new JavaScriptOutlineTree();
+				case SyntaxConstants.SYNTAX_STYLE_XML -> tree = new XmlOutlineTree();
+				case null, default -> tree = null;
+			}
 
-		String language = textArea.getSyntaxEditingStyle();
-		if (SyntaxConstants.SYNTAX_STYLE_JAVA.equals(language)) {
-			tree = new JavaOutlineTree();
-		}
-		else if (SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT.equals(language)) {
-			tree = new JavaScriptOutlineTree();
-		}
-		else if (SyntaxConstants.SYNTAX_STYLE_XML.equals(language)) {
-			tree = new XmlOutlineTree();
-		}
-		else {
-			tree = null;
-		}
-
-		if (tree!=null) {
-			tree.listenTo(textArea);
-			treeSP.setViewportView(tree);
-		}
-		else {
-			JTree dummy = new JTree((TreeNode)null);
-			treeSP.setViewportView(dummy);
-		}
-		treeSP.revalidate();
-
+			if (tree != null) {
+				tree.listenTo(textArea);
+				treeSP.setViewportView(tree);
+			} else {
+				JTree dummy = new JTree((TreeNode) null);
+				treeSP.setViewportView(dummy);
+			}
+			treeSP.revalidate();
+		});
 	}
+
 
 
 	/**
@@ -293,13 +315,15 @@ setContentPane(cp);
 		try {
 
 			r = new BufferedReader(new InputStreamReader(
-					cl.getResourceAsStream("examples/" + resource), StandardCharsets.UTF_8));
+				Objects.requireNonNull(cl.getResourceAsStream("examples/" + resource)), StandardCharsets.UTF_8));
 			textArea.read(r, null);
 			r.close();
 			textArea.setCaretPosition(0);
 			textArea.discardAllEdits();
 
-			refreshSourceTree();
+//			refreshSourceTree();
+			// instead calling scheduleRefresh
+			scheduleRefresh();
 
 		} catch (RuntimeException re) {
 			throw re; // FindBugs

@@ -88,7 +88,7 @@ interface Actions {
 			this.demo = demo;
 			putValue(NAME, "Open...");
 			putValue(MNEMONIC_KEY, (int)'O');
-			int mods = demo.getToolkit().getMenuShortcutKeyMask();
+			int mods = demo.getToolkit().getMenuShortcutKeyMaskEx();
 			KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_O, mods);
 			putValue(ACCELERATOR_KEY, ks);
 		}

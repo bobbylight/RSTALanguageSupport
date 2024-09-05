@@ -66,8 +66,7 @@ public class GoToMemberAction extends TextAction {
 			return;
 		}
 		JTextComponent tc = getTextComponent(e);
-		if (tc instanceof RSyntaxTextArea) {
-			RSyntaxTextArea textArea = (RSyntaxTextArea)tc;
+		if (tc instanceof RSyntaxTextArea textArea) {
 			Window parent = SwingUtilities.getWindowAncestor(textArea);
 			GoToMemberWindow gtmw = new GoToMemberWindow(parent, textArea, tree);
 			setLocationBasedOn(gtmw, textArea);
@@ -87,7 +86,7 @@ public class GoToMemberAction extends TextAction {
 	private AbstractSourceTree createTree() {
 		AbstractSourceTree tree = null;
 		try {
-			tree = (AbstractSourceTree)outlineTreeClass.newInstance();
+			tree = (AbstractSourceTree)outlineTreeClass.getDeclaredConstructor().newInstance();
 			tree.setSorted(true);
 		} catch (RuntimeException re) { // FindBugs
 			throw re;

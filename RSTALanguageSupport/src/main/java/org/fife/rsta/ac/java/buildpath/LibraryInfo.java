@@ -183,23 +183,26 @@ public abstract class LibraryInfo implements Comparable<LibraryInfo>,
 				// Might be a JRE inside a JDK
 				sourceZip = new File(jreHome, "../src.zip");
 			}
-		}
-
-		else { // Might be OS X
+		} else { // Might be OS X
 			mainJar = new File(jreHome, "../Classes/classes.jar");
 			// ${java.home}/src.jar is the common location on OS X.
 			sourceZip = new File(jreHome, "src.jar");
 		}
+
+		//////////////////////////////////////////////////
+		if (!mainJar.isFile()) { // Java 11 and later
+			mainJar = new File(jreHome, "lib/jrt-fs.jar");
+			sourceZip = new File(jreHome, "src.zip");
+		}
+		//////////////////////////////////////////////////
 
 		if (mainJar.isFile()) {
 			info = new JarLibraryInfo(mainJar);
 			if (sourceZip.isFile()) { // Make sure our last guess actually exists
 				info.setSourceLocation(new ZipSourceLocation(sourceZip));
 			}
-		}
-		else {
-			System.err.println("[ERROR]: Cannot locate JRE jar in " +
-								jreHome.getAbsolutePath());
+		} else {
+			System.err.println("[ERROR]: Cannot locate JRE jar in " + jreHome.getAbsolutePath());
 			mainJar = null;
 		}
 
