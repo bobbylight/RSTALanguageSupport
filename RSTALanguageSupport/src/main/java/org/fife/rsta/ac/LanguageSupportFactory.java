@@ -178,22 +178,6 @@ public final class LanguageSupportFactory implements PropertyChangeListener {
 	}
 
 	/**
-	 * Installs language support on an RSTA depending on its syntax style.
-	 *
-	 * @param textArea The text area to install language support on.
-	 * @see #uninstallSupport(RSyntaxTextArea)
-	 */
-	private void installSupport(RSyntaxTextArea textArea,KeyStroke keyStroke) {
-		String style = textArea.getSyntaxEditingStyle();
-		LanguageSupport support = getSupportFor(style);
-		if (support!=null) {
-			support.install(textArea,keyStroke);
-		}
-		textArea.putClientProperty(LANGUAGE_SUPPORT_PROPERTY, support);
-	}
-
-
-	/**
 	 * Listens for RSyntaxTextAreas to change what language they're
 	 * highlighting, so language support can be updated appropriately.
 	 *
@@ -224,21 +208,6 @@ public final class LanguageSupportFactory implements PropertyChangeListener {
 		installSupport(textArea);
 		textArea.addPropertyChangeListener(
 				RSyntaxTextArea.SYNTAX_STYLE_PROPERTY, this);
-	}
-
-	/**
-	 * Registers an RSyntaxTextArea to receive language support.  The text area
-	 * will get support for the currently highlighted language, and if it
-	 * changes what language it is highlighting, the support will change as
-	 * appropriate.
-	 *
-	 * @param textArea The text area to register.
-	 */
-	public void register(RSyntaxTextArea textArea, KeyStroke keyStroke){
-		installSupport(textArea,keyStroke);
-		textArea.addPropertyChangeListener(
-			RSyntaxTextArea.SYNTAX_STYLE_PROPERTY, this
-		);
 	}
 
 

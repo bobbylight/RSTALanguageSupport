@@ -31,6 +31,7 @@ import javax.swing.tree.TreeNode;
 import org.fife.rsta.ac.AbstractSourceTree;
 import org.fife.rsta.ac.LanguageSupport;
 import org.fife.rsta.ac.LanguageSupportFactory;
+import org.fife.rsta.ac.c.CLanguageSupport;
 import org.fife.rsta.ac.java.JavaLanguageSupport;
 import org.fife.rsta.ac.java.tree.JavaOutlineTree;
 import org.fife.rsta.ac.js.tree.JavaScriptOutlineTree;
@@ -62,7 +63,7 @@ class DemoRootPane extends JRootPane implements HyperlinkListener,
 	DemoRootPane() {
 		LanguageSupportFactory lsf = LanguageSupportFactory.get();
 		LanguageSupport support = lsf.getSupportFor(SYNTAX_STYLE_JAVA);
-		JavaLanguageSupport jls = (JavaLanguageSupport)support;
+		JavaLanguageSupport jls = (JavaLanguageSupport) support;
 		// TODO: This API will change!  It will be easier to do per-editor
 
 		try {
@@ -76,7 +77,7 @@ class DemoRootPane extends JRootPane implements HyperlinkListener,
 		treeSP = new JScrollPane(dummy);
 
 		textArea = createTextArea();
-		jls.install(textArea,KeyStroke.getKeyStroke("TAB"));
+		support.install(textArea,KeyStroke.getKeyStroke("TAB"));
 		setText("CExample.txt", SYNTAX_STYLE_C);
 		RTextScrollPane scrollPane = new RTextScrollPane(textArea, true);
 		scrollPane.setIconRowHeaderEnabled(true);
@@ -155,7 +156,6 @@ setContentPane(cp);
 		ButtonGroup bg = new ButtonGroup();
         addItem(new StyleAction(this, "6502 Assembly","Asm6502Example.txt",    SYNTAX_STYLE_ASSEMBLER_6502), bg, menu);
 		addItem(new StyleAction(this, "C",          "CExample.txt",      SYNTAX_STYLE_C), bg, menu);
-		addItem(new StyleAction(this, "Cpp",        "CppExample.txt",      SYNTAX_STYLE_CPLUSPLUS), bg, menu);
 		addItem(new StyleAction(this, "CSS",        "CssExample.txt",    SYNTAX_STYLE_CSS), bg, menu);
 		addItem(new StyleAction(this, "Groovy",     "GroovyExample.txt", SYNTAX_STYLE_GROOVY), bg, menu);
 		addItem(new StyleAction(this, "Java",       "JavaExample.txt",   SYNTAX_STYLE_JAVA), bg, menu);
