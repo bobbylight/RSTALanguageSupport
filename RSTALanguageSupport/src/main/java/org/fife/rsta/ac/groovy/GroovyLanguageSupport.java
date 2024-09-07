@@ -16,6 +16,8 @@ import org.fife.rsta.ac.AbstractLanguageSupport;
 import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
+import javax.swing.*;
+
 
 /**
  * Language support for Groovy.
@@ -58,6 +60,16 @@ public class GroovyLanguageSupport extends AbstractLanguageSupport {
 
 		textArea.setToolTipSupplier(provider);
 
+	}
+
+	@Override
+	public void install(RSyntaxTextArea textArea, KeyStroke keyStroke) {
+		GroovyCompletionProvider provider = getProvider();
+		AutoCompletion ac = createAutoCompletion(provider);
+		ac.install(textArea);
+		installImpl(textArea, ac);
+		ac.setTriggerKey(keyStroke);
+		textArea.setToolTipSupplier(provider);
 	}
 
 

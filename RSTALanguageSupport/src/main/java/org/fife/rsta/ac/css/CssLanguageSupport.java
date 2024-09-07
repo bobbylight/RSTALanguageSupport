@@ -10,7 +10,7 @@
  */
 package org.fife.rsta.ac.css;
 
-import javax.swing.ListCellRenderer;
+import javax.swing.*;
 
 import org.fife.rsta.ac.AbstractLanguageSupport;
 import org.fife.ui.autocomplete.AutoCompletion;
@@ -77,6 +77,18 @@ public class CssLanguageSupport extends AbstractLanguageSupport {
 		AutoCompletion ac = createAutoCompletion(provider);
 		ac.install(textArea);
 		installImpl(textArea, ac);
+
+		textArea.setToolTipSupplier(provider);
+
+	}
+
+	@Override
+	public void install(RSyntaxTextArea textArea, KeyStroke keyStroke) {
+		CssCompletionProvider provider = getProvider();
+		AutoCompletion ac = createAutoCompletion(provider);
+		ac.install(textArea);
+		installImpl(textArea, ac);
+		ac.setTriggerKey(keyStroke);
 
 		textArea.setToolTipSupplier(provider);
 

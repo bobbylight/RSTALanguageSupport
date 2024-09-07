@@ -17,6 +17,8 @@ import java.util.Set;
 
 import org.fife.rsta.ac.java.buildpath.LibraryInfo;
 import org.fife.rsta.ac.java.classreader.ClassFile;
+import org.fife.rsta.ac.java.classreader.FieldInfo;
+import org.fife.rsta.ac.java.classreader.MethodInfo;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
 
@@ -44,6 +46,8 @@ class JarReader {
 	private PackageMapNode packageMap;
 
 	private long lastModified;
+
+
 
 
 	/**
@@ -132,6 +136,38 @@ class JarReader {
 		return res;
 	}
 
+	/**
+	 * Returns the <code>ClassFile</code> object for a specific field by its name.
+	 *
+	 * @param className The fully qualified class name.
+	 * @param fieldName The name of the field.
+	 * @return The <code>ClassFile</code> object containing the field info, or
+	 *         <code>null</code> if the field is not found.
+	 */
+	public ClassFile getClassFileWithField(String className, String fieldName) {
+		ClassFile classFile = getClassEntry(className.split("\\."));
+		if (classFile != null) {
+			FieldInfo fieldInfo = classFile.getFieldInfoByName(fieldName);
+			if (fieldInfo != null) {
+				return classFile;
+			}
+		}
+		return null;
+	}
+
+
+	public List<ClassFile> getClassFiles(String className) {
+		List<ClassFile> result = new ArrayList<>();
+		String[] classNameParts = className.split("\\.");
+
+		ClassFile classFile = getClassEntry(classNameParts);
+		if (classFile != null) {
+			result.add(classFile);
+		}
+		return result;
+	}
+
+
 
 	/**
 	 * Returns the physical file on disk.<p>
@@ -157,6 +193,5 @@ class JarReader {
 	public String toString() {
 		return "[JarReader: " + getLibraryInfo() + "]";
 	}
-
 
 }

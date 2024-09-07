@@ -74,7 +74,7 @@ public class DirSourceLocation implements SourceLocation {
             try (BufferedReader r = new BufferedReader(new FileReader(file))) {
                 Scanner s = new Scanner(r);
                 cu = new ASTFactory().getCompilationUnit(entryName, s);
-                //System.out.println("DEBUG: cu: " + cu);
+                System.out.println("DEBUG: cu: " + cu);
             }
 		}
 

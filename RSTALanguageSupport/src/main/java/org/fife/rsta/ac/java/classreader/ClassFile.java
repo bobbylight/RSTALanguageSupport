@@ -11,9 +11,7 @@
 package org.fife.rsta.ac.java.classreader;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.fife.rsta.ac.java.classreader.attributes.*;
 import org.fife.rsta.ac.java.classreader.constantpool.*;
@@ -534,58 +532,52 @@ public class ClassFile implements AccessFlags {
 		String attrName = getUtf8ValueFromConstantPool(attributeNameIndex);
 		debugPrint("Found class attribute: " + attrName);
 
-		if (SOURCE_FILE.equals(attrName)) { // 4.7.7
-			int sourceFileIndex = in.readUnsignedShort();
-            ai = new SourceFile(this, sourceFileIndex);
-		}
+		switch (attrName) {
+			case SOURCE_FILE -> {
+				int sourceFileIndex = in.readUnsignedShort();
+				ai = new SourceFile(this, sourceFileIndex);
+			}
+			case BOOTSTRAP_METHODS ->  // 4.7.23
+				//String name = getClassFile().getClassName(false) + "." + getName();
+				//System.out.println(name + ": Attribute " + attrName + " not supported");
+				Util.skipBytes(in, attributeLength);
 
-		else if (BOOTSTRAP_METHODS.equals(attrName)) { // 4.7.23
-            //String name = getClassFile().getClassName(false) + "." + getName();
-            //System.out.println(name + ": Attribute " + attrName + " not supported");
-            Util.skipBytes(in, attributeLength);
-            //ai = null;
-        }
-
-		else if (SIGNATURE.equals(attrName)) { // 4.8.8
-			int signatureIndex = in.readUnsignedShort();
-			String sig = getUtf8ValueFromConstantPool(signatureIndex);
-			//System.out.println("... Signature: " + sig);
-			ai = new Signature(this, sig);
-			paramTypes = ((Signature)ai).getClassParamTypes();
-		}
-
-		else if (INNER_CLASSES.equals(attrName)) { // 4.8.5
-			//String name = getClassName(false) + "." + getName();
-			//System.out.println(name + ": Attribute " + attrName + " not supported");
-			Util.skipBytes(in, attributeLength);
 			//ai = null;
-		}
+			case SIGNATURE -> {
+				int signatureIndex = in.readUnsignedShort();
+				String sig = getUtf8ValueFromConstantPool(signatureIndex);
+				//System.out.println("... Signature: " + sig);
+				ai = new Signature(this, sig);
+				paramTypes = ((Signature) ai).getClassParamTypes();
+			}
+			case INNER_CLASSES ->  // 4.8.5
+				//String name = getClassName(false) + "." + getName();
+				//System.out.println(name + ": Attribute " + attrName + " not supported");
+				Util.skipBytes(in, attributeLength);
 
-		else if (ENCLOSING_METHOD.equals(attrName)) { // 4.8.6
-			//String name = getClassName(false) + "." + getName();
-			//System.out.println(name + ": Attribute " + attrName + " not supported");
-			Util.skipBytes(in, attributeLength); // 2 u2's, class_index and method_index
 			//ai = null;
-		}
+			case ENCLOSING_METHOD ->  // 4.8.6
+				//String name = getClassName(false) + "." + getName();
+				//System.out.println(name + ": Attribute " + attrName + " not supported");
+				Util.skipBytes(in, attributeLength); // 2 u2's, class_index and method_index
 
-		else if (DEPRECATED.equals(attrName)) { // 4.7.10
-			// No need to read anything else, attributeLength==0
-			deprecated = true;
-		}
 
-		else if (RUNTIME_VISIBLE_ANNOTATIONS.equals(attrName)) { // 4.8.15
-			//String name = getClassFile().getClassName(false) + "." + getName();
-			//System.out.println(name + ": Attribute " + attrName + " not supported");
-			Util.skipBytes(in, attributeLength);
 			//ai = null;
-		}
+			case DEPRECATED ->  // 4.7.10
+				// No need to read anything else, attributeLength==0
+				deprecated = true;
+			case RUNTIME_VISIBLE_ANNOTATIONS ->  // 4.8.15
+				//String name = getClassFile().getClassName(false) + "." + getName();
+				//System.out.println(name + ": Attribute " + attrName + " not supported");
+				Util.skipBytes(in, attributeLength);
 
-		// TODO: Handle other useful Attribute types, if any.
-
-		else { // An unknown/unsupported attribute.
-			debugPrint("Unsupported class attribute: "+  attrName);
-			ai = AttributeInfo.readUnsupportedAttribute(this, in, attrName,
+			//ai = null;
+			// TODO: Handle other useful Attribute types, if any.
+			case null, default -> {
+				debugPrint("Unsupported class attribute: " + attrName);
+				ai = AttributeInfo.readUnsupportedAttribute(this, in, attrName,
 					attributeLength);
+			}
 		}
 
 		return ai;
@@ -755,6 +747,28 @@ public class ClassFile implements AccessFlags {
 		return "[ClassFile: " +
 			"accessFlags=" + accessFlags +
 			"]";
+	}
+
+	/**
+	 * Returns a list of MethodInfo objects for methods declared in this class file.
+	 *
+	 * @return A list of MethodInfo objects.
+	 */
+	public List<MethodInfo> getMethods() {
+		List<MethodInfo> methodInfos = new ArrayList<>();
+		Collections.addAll(methodInfos, methods);
+		return methodInfos;
+	}
+
+	/**
+	 * Returns a list of FieldInfo objects for fields declared in this class file.
+	 *
+	 * @return A list of FieldInfo objects.
+	 */
+	public List<FieldInfo> getFields() {
+		List<FieldInfo> fieldInfos = new ArrayList<>();
+		Collections.addAll(fieldInfos, fields);
+		return fieldInfos;
 	}
 
 

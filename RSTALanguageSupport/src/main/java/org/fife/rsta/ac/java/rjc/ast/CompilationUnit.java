@@ -151,12 +151,10 @@ public class CompilationUnit extends AbstractASTNode
 
 			if (offs>=start && offs<=end) {
 
-				if (td instanceof NormalClassDeclaration) {
-					NormalClassDeclaration ncd = (NormalClassDeclaration)td;
+				if (td instanceof NormalClassDeclaration ncd) {
 					for (Iterator<Member> j=ncd.getMemberIterator(); j.hasNext();) {
 						Member m = j.next();
-						if (m instanceof Method) {
-							Method method = (Method)m;
+						if (m instanceof Method method) {
 							CodeBlock body = method.getBody();
 							if (body!=null) {
 								int start2 = method.getNameStartOffset();

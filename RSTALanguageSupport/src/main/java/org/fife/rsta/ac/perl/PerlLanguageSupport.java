@@ -11,7 +11,7 @@
 package org.fife.rsta.ac.perl;
 
 import java.io.File;
-import javax.swing.ListCellRenderer;
+import javax.swing.*;
 
 import org.fife.rsta.ac.AbstractLanguageSupport;
 import org.fife.rsta.ac.IOUtil;
@@ -245,6 +245,21 @@ public class PerlLanguageSupport extends AbstractLanguageSupport {
 		textArea.addParser(parser);
 		textArea.putClientProperty(PROPERTY_LANGUAGE_PARSER, parser);
 
+	}
+
+	@Override
+	public void install(RSyntaxTextArea textArea, KeyStroke keyStroke) {
+		PerlCompletionProvider provider = getProvider();
+		AutoCompletion ac = createAutoCompletion(provider);
+		ac.install(textArea);
+		installImpl(textArea, ac);
+		ac.setTriggerKey(keyStroke);
+
+		textArea.setToolTipSupplier(provider);
+
+		PerlParser parser = getParser();
+		textArea.addParser(parser);
+		textArea.putClientProperty(PROPERTY_LANGUAGE_PARSER, parser);
 	}
 
 

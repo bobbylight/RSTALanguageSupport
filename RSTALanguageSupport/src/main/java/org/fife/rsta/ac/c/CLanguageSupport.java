@@ -10,9 +10,10 @@
  */
 package org.fife.rsta.ac.c;
 
-import javax.swing.ListCellRenderer;
+import javax.swing.*;
 
 import org.fife.rsta.ac.AbstractLanguageSupport;
+import org.fife.rsta.ac.asm6502.Asm6502CompletionProvider;
 import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
@@ -48,6 +49,13 @@ public class CLanguageSupport extends AbstractLanguageSupport {
 		return new CCellRenderer();
 	}
 
+	@Override
+	public void install(RSyntaxTextArea textArea, KeyStroke keyStroke) {
+		AutoCompletion ac= defaultInstallation(textArea);
+		ac.setTriggerKey(keyStroke);
+
+	}
+
 
 	private CCompletionProvider getProvider() {
 		if (provider==null) {
@@ -62,13 +70,7 @@ public class CLanguageSupport extends AbstractLanguageSupport {
 	 */
 	@Override
 	public void install(RSyntaxTextArea textArea) {
-
-		CCompletionProvider provider = getProvider();
-		AutoCompletion ac = createAutoCompletion(provider);
-		ac.install(textArea);
-		installImpl(textArea, ac);
-
-		textArea.setToolTipSupplier(provider);
+		defaultInstallation(textArea);
 
 	}
 
@@ -82,5 +84,13 @@ public class CLanguageSupport extends AbstractLanguageSupport {
 		textArea.setToolTipSupplier(null);
 	}
 
+	private AutoCompletion defaultInstallation(RSyntaxTextArea textArea) {
+		CCompletionProvider provider = getProvider();
+		AutoCompletion ac = createAutoCompletion(provider);
+		ac.install(textArea);
+		installImpl(textArea, ac);
+		textArea.setToolTipSupplier(provider);
+		return ac;
+	}
 
 }

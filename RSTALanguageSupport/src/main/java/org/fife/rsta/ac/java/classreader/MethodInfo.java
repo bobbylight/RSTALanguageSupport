@@ -14,6 +14,7 @@ import java.io.*;
 import java.util.*;
 
 import org.fife.rsta.ac.java.classreader.attributes.*;
+import org.fife.rsta.ac.java.classreader.constantpool.ConstantUtf8Info;
 
 
 /**
@@ -444,7 +445,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 			}
 		}
 		if (!fullyQualified) {
-			if(returnType != null && returnType.contains(".")) {
+			if(returnType.contains(".")) {
 				return returnType.substring(returnType.lastIndexOf(".") +1);
 			}
 		}
@@ -520,9 +521,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 
 		}
 
-		for (int i=0; i<braceCount; i++) {
-			sb.append("[]");
-		}
+		sb.append("[]".repeat(braceCount));
 
 		return sb.toString();
 
@@ -572,9 +571,8 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 
 		// "throws" clause.
 		for (AttributeInfo ai : attributes) {
-			if (ai instanceof Exceptions) { // At most 1 Exceptions attribute
+			if (ai instanceof Exceptions ex) { // At most 1 Exceptions attribute
 				sb.append(" throws ");
-				Exceptions ex = (Exceptions)ai;
 				for (int j=0; j<ex.getExceptionCount(); j++) {
 					sb.append(ex.getException(j));
 					if (j<ex.getExceptionCount()-1) {

@@ -222,8 +222,7 @@ public class JavaOutlineTree extends AbstractSourceTree {
 
 		TypeDeclarationTreeNode dmtn = new TypeDeclarationTreeNode(td);
 
-		if (td instanceof NormalClassDeclaration) {
-			NormalClassDeclaration ncd = (NormalClassDeclaration)td;
+		if (td instanceof NormalClassDeclaration ncd) {
 			for (int j=0; j<ncd.getChildTypeCount(); j++) {
 				TypeDeclaration td2 = ncd.getChildType(j);
 				TypeDeclarationTreeNode tdn = createTypeDeclarationNode(td2);
@@ -235,8 +234,7 @@ public class JavaOutlineTree extends AbstractSourceTree {
 			}
 		}
 
-		else if (td instanceof NormalInterfaceDeclaration) {
-			NormalInterfaceDeclaration nid = (NormalInterfaceDeclaration)td;
+		else if (td instanceof NormalInterfaceDeclaration nid) {
 			for (int j=0; j<nid.getChildTypeCount(); j++) {
 				TypeDeclaration td2 = nid.getChildType(j);
 				TypeDeclarationTreeNode tdn = createTypeDeclarationNode(td2);
@@ -284,8 +282,7 @@ public class JavaOutlineTree extends AbstractSourceTree {
 		DefaultMutableTreeNode node = (DefaultMutableTreeNode)path.
 													getLastPathComponent();
 		Object obj = node.getUserObject();
-		if (obj instanceof ASTNode) {
-			ASTNode astNode = (ASTNode)obj;
+		if (obj instanceof ASTNode astNode) {
 			int start = astNode.getNameStartOffset();
 			int end = astNode.getNameEndOffset();
 			DocumentRange range = new DocumentRange(start, end);

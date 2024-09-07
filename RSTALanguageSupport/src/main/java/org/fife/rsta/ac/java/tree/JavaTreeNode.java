@@ -74,8 +74,7 @@ class JavaTreeNode extends SourceTreeNode {
 	@Override
 	public int compareTo(SourceTreeNode obj) {
 		int res = -1;
-		if (obj instanceof JavaTreeNode) {
-			JavaTreeNode jtn2 = (JavaTreeNode)obj;
+		if (obj instanceof JavaTreeNode jtn2) {
 			res = getSortPriority() - jtn2.getSortPriority();
 			if (res==0 && ((SourceTreeNode)getParent()).isSorted()) {
 				res = getText(false).compareToIgnoreCase(jtn2.getText(false));

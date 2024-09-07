@@ -303,7 +303,6 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 	/**
 	 * Refreshes what children are visible in the tree.
 	 */
-	@SuppressWarnings("unchecked")
 	private void refreshVisibleChildren() {
 		visibleChildren.clear();
 		if (children!=null) {

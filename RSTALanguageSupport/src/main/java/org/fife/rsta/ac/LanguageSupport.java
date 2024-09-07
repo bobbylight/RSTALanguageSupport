@@ -10,9 +10,10 @@
  */
 package org.fife.rsta.ac;
 
-import javax.swing.ListCellRenderer;
+import javax.swing.*;
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+
 
 
 /**
@@ -97,6 +98,13 @@ public interface LanguageSupport {
 	 */
 	void install(RSyntaxTextArea textArea);
 
+	/**
+	 * Installs this support.
+	 *
+	 * @param textArea The text area to install onto.
+	 * @see #uninstall(RSyntaxTextArea)
+	 */
+	void install(RSyntaxTextArea textArea,KeyStroke keyStroke);
 
 	/**
 	 * Returns whether parameter assistance is enabled for editors of this
@@ -183,6 +191,5 @@ public interface LanguageSupport {
 	 * @see #install(RSyntaxTextArea)
 	 */
 	void uninstall(RSyntaxTextArea textArea);
-
 
 }

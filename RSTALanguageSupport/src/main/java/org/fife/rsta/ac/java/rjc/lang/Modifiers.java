@@ -10,6 +10,7 @@
  */
 package org.fife.rsta.ac.java.rjc.lang;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -45,8 +46,9 @@ public class Modifiers {
 
 
 	private static final Map<Integer, String> MODIFIER_TEXT
-			= new HashMap<Integer, String>() {
+			= new HashMap<>() {
 
+		@Serial
 		private static final long serialVersionUID = 1L;
 
 		{
@@ -90,49 +92,22 @@ public class Modifiers {
 	 */
 	public boolean addModifier(int tokenType) {
 
-		Integer key;
-
-		switch (tokenType) {
-			case TokenTypes.KEYWORD_ABSTRACT:
-				key = ABSTRACT;
-				break;
-			case TokenTypes.KEYWORD_FINAL:
-				key = FINAL;
-				break;
-			case TokenTypes.KEYWORD_INTERFACE:
-				key = INTERFACE;
-				break;
-			case TokenTypes.KEYWORD_NATIVE:
-				key = NATIVE;
-				break;
-			case TokenTypes.KEYWORD_PRIVATE:
-				key = PRIVATE;
-				break;
-			case TokenTypes.KEYWORD_PROTECTED:
-				key = PROTECTED;
-				break;
-			case TokenTypes.KEYWORD_PUBLIC:
-				key = PUBLIC;
-				break;
-			case TokenTypes.KEYWORD_STATIC:
-				key = STATIC;
-				break;
-			case TokenTypes.KEYWORD_STRICTFP:
-				key = STRICTFP;
-				break;
-			case TokenTypes.KEYWORD_SYNCHRONIZED:
-				key = SYNCHRONIZED;
-				break;
-			case TokenTypes.KEYWORD_TRANSIENT:
-				key = TRANSIENT;
-				break;
-			case TokenTypes.KEYWORD_VOLATILE:
-				key = VOLATILE;
-				break;
-			default:
-				throw new IllegalArgumentException("Invalid tokenType: " +
-												tokenType);
-		}
+		Integer key = switch (tokenType) {
+			case TokenTypes.KEYWORD_ABSTRACT -> ABSTRACT;
+			case TokenTypes.KEYWORD_FINAL -> FINAL;
+			case TokenTypes.KEYWORD_INTERFACE -> INTERFACE;
+			case TokenTypes.KEYWORD_NATIVE -> NATIVE;
+			case TokenTypes.KEYWORD_PRIVATE -> PRIVATE;
+			case TokenTypes.KEYWORD_PROTECTED -> PROTECTED;
+			case TokenTypes.KEYWORD_PUBLIC -> PUBLIC;
+			case TokenTypes.KEYWORD_STATIC -> STATIC;
+			case TokenTypes.KEYWORD_STRICTFP -> STRICTFP;
+			case TokenTypes.KEYWORD_SYNCHRONIZED -> SYNCHRONIZED;
+			case TokenTypes.KEYWORD_TRANSIENT -> TRANSIENT;
+			case TokenTypes.KEYWORD_VOLATILE -> VOLATILE;
+			default -> throw new IllegalArgumentException("Invalid tokenType: " +
+				tokenType);
+		};
 
 		int pos = Collections.binarySearch(modifiers, key);
 		if (pos<0) {
@@ -186,7 +161,7 @@ public class Modifiers {
 		StringBuilder sb = new StringBuilder();
 		for (int i=0; i<annotations.size(); i++) {
 			sb.append(annotations.get(i).toString());
-			if (i<annotations.size()-1 || modifiers.size()>0) {
+			if (i<annotations.size()-1 || !modifiers.isEmpty()) {
 				sb.append(' ');
 			}
 		}

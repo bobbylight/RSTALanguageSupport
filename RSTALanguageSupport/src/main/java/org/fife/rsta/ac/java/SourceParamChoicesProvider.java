@@ -11,6 +11,7 @@
 package org.fife.rsta.ac.java;
 
 import java.awt.Graphics;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -20,17 +21,10 @@ import javax.swing.text.JTextComponent;
 
 import org.fife.rsta.ac.LanguageSupport;
 import org.fife.rsta.ac.LanguageSupportFactory;
-import org.fife.rsta.ac.java.rjc.ast.CodeBlock;
-import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
-import org.fife.rsta.ac.java.rjc.ast.Field;
-import org.fife.rsta.ac.java.rjc.ast.FormalParameter;
-import org.fife.rsta.ac.java.rjc.ast.LocalVariable;
-import org.fife.rsta.ac.java.rjc.ast.Member;
-import org.fife.rsta.ac.java.rjc.ast.Method;
-import org.fife.rsta.ac.java.rjc.ast.NormalClassDeclaration;
-import org.fife.rsta.ac.java.rjc.ast.NormalInterfaceDeclaration;
+import org.fife.rsta.ac.java.classreader.FieldInfo;
+import org.fife.rsta.ac.java.classreader.MethodInfo;
+import org.fife.rsta.ac.java.rjc.ast.*;
 import org.fife.rsta.ac.java.rjc.ast.Package;
-import org.fife.rsta.ac.java.rjc.ast.TypeDeclaration;
 import org.fife.rsta.ac.java.rjc.lang.Type;
 import org.fife.ui.autocomplete.BasicCompletion;
 import org.fife.ui.autocomplete.Completion;
@@ -40,6 +34,9 @@ import org.fife.ui.autocomplete.ParameterChoicesProvider;
 import org.fife.ui.autocomplete.ParameterizedCompletion;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+
+import static org.fife.rsta.ac.java.classreader.AccessFlags.ACC_PROTECTED;
+import static org.fife.rsta.ac.java.classreader.AccessFlags.ACC_PUBLIC;
 
 
 /**
@@ -68,11 +65,41 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 	 * @param list The list of completions to add to.
 	 */
 	private void addPublicAndProtectedFieldsAndGetters(Type type, JarManager jm,
-			Package pkg, List<Completion> list) {
+													   Package pkg, List<Completion> list) {
+		if (type == null || jm == null || pkg == null || list == null) {
+			throw new IllegalArgumentException("Arguments cannot be null");
+		}
 
-		// TODO: Implement me.
+		System.out.println("Processing type: " + type.getName(true));
 
+		// Get the class name from the type
+		String className = type.getName(true);
+
+		// Retrieve all fields and methods from the class
+		List<MethodInfo> methods = jm.getMethodsForClass(className);
+		List<FieldInfo> fields = jm.getFieldsForClass(className);
+
+		// Process fields
+		for (FieldInfo field : fields) {
+			if (field.getAccessFlags() == ACC_PUBLIC || field.getAccessFlags() == ACC_PROTECTED) {
+				Completion fieldCompletion = new FieldCompletion(provider, field);
+				list.add(fieldCompletion);
+				System.out.println("Added field: " + field.getName());
+			}
+		}
+
+		// Process methods
+		for (MethodInfo method : methods) {
+			if (method.getClass().getModifiers() == Modifier.PUBLIC || method.getClass().getModifiers() == Modifier.PROTECTED) {
+				if (isGetter(method)) {
+					Completion methodCompletion = new MethodCompletion(provider, method);
+					list.add(methodCompletion);
+					System.out.println("Added method: " + method.getName());
+				}
+			}
+		}
 	}
+
 
 
 	/**
@@ -156,15 +183,14 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 
 	}
 
-
 	@Override
 	public List<Completion> getParameterChoices(JTextComponent tc,
-								ParameterizedCompletion.Parameter param) {
+												ParameterizedCompletion.Parameter param) {
 
 		// Get the language support for Java
 		LanguageSupportFactory lsf = LanguageSupportFactory.get();
 		LanguageSupport support = lsf.getSupportFor(SyntaxConstants.
-													SYNTAX_STYLE_JAVA);
+			SYNTAX_STYLE_JAVA);
 		JavaLanguageSupport jls = (JavaLanguageSupport)support;
 		JarManager jm = jls.getJarManager();
 
@@ -190,10 +216,9 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 		provider = jls.getCompletionProvider(textArea);
 
 		// If we're in a class, we'll have to check for local variables, etc.
-		if (typeDec instanceof NormalClassDeclaration) {
+		if (typeDec instanceof NormalClassDeclaration ncd) {
 
 			// Get accessible members of this type.
-			NormalClassDeclaration ncd = (NormalClassDeclaration)typeDec;
 			list = getLocalVarsFieldsAndGetters(ncd, param.getType(), dot);
 			//list = typeDec.getAccessibleMembersOfType(param.getType(), dot);
 
@@ -231,8 +256,7 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 		// "null" for Objects, etc.
 		Object typeObj = param.getTypeObject();
 		// TODO: Not all Parameters have typeObj set to a Type yet!  Make me so
-		if (typeObj instanceof Type) {
-			Type type = (Type)typeObj;
+		if (typeObj instanceof Type type) {
 			if (type.isBasicType()) {
 				if (isPrimitiveNumericType(type)) {
 					list.add(new SimpleCompletion(provider, "0"));
@@ -275,34 +299,43 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 
 	/**
 	 * Returns whether a <code>Type</code> and a type name are type
-	 * compatible.  This method currently is a sham!
+	 * compatible. This method now handles generics and array types.
 	 *
 	 * @param type The type to check.
 	 * @param typeName The name of a type to check.
 	 * @return Whether the two are compatible.
 	 */
-	// TODO: Get me working!  Probably need better parameters passed in!!!
 	private boolean isTypeCompatible(Type type, String typeName) {
 
+		// Get the name of the type
 		String typeName2 = type.getName(false);
 
-		// Remove generics info for now
-		// TODO: Handle messy generics cases
-		int lt = typeName2.indexOf('<');
-		if (lt>-1) {
-			String arrayDepth = null;
-			int brackets = typeName2.indexOf('[', lt);
-			if (brackets>-1) {
-				arrayDepth = typeName2.substring(brackets);
-			}
-			typeName2 = typeName2.substring(lt);
-			if (arrayDepth!=null) {
-				typeName2 += arrayDepth;
-			}
+		// Handle array types
+		StringBuilder normalizedTypeName = new StringBuilder(typeName2);
+		while (normalizedTypeName.indexOf("[") != -1) {
+			normalizedTypeName.setLength(normalizedTypeName.indexOf("["));
 		}
 
-		return typeName2.equalsIgnoreCase(typeName);
+		// Handle generics
+		int lt = normalizedTypeName.indexOf("<");
+		if (lt > -1) {
+			normalizedTypeName.setLength(lt);
+		}
 
+		// Normalize for comparison
+		String normalizedTypeName2 = normalizedTypeName.toString();
+
+		// Handle primitive types (e.g., "int" vs "Integer")
+		if (typeName.equalsIgnoreCase(normalizedTypeName2)) {
+			return true;
+		}
+
+		// Handle special cases like arrays
+		if (typeName.endsWith("[]") && normalizedTypeName2.endsWith("[]")) {
+			return normalizedTypeName2.equals(typeName.substring(0, typeName.length() - 2));
+		}
+
+		return false;
 	}
 
 
@@ -331,6 +364,17 @@ class SourceParamChoicesProvider implements ParameterChoicesProvider {
 			// Never called
 		}
 
+	}
+
+	/**
+	 * Checks if the method is a getter.
+	 *
+	 * @param method The method to check.
+	 * @return true if the method is a getter, false otherwise.
+	 */
+	private boolean isGetter(MethodInfo method) {
+		String methodName = method.getName();
+		return methodName.startsWith("get") && method.getParameterCount() == 0;
 	}
 
 

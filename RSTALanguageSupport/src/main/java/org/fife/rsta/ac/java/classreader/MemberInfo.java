@@ -154,30 +154,27 @@ public abstract class MemberInfo {
 
 		AttributeInfo ai = null;
 
-		if (DEPRECATED.equals(attrName)) { // 4.7.10
-			// No need to read anything else, attributeLength==0
-			deprecated = true;
-		}
+		switch (attrName) {
+			case DEPRECATED ->  // 4.7.10
+				// No need to read anything else, attributeLength==0
+				deprecated = true;
+			case SIGNATURE -> {
+				//System.err.println(">>> " + attributeLength);
+				int signatureIndex = in.readUnsignedShort();
+				String typeSig = cf.getUtf8ValueFromConstantPool(signatureIndex);
+				ai = new Signature(cf, typeSig);
+			}
+			case RUNTIME_VISIBLE_ANNOTATIONS ->  // 4.8.15
+				//String name = getClassFile().getClassName(false) + "." + getName();
+				//System.out.println(name + ": Attribute " + attrName + " not supported");
+				Util.skipBytes(in, attrLength);
 
-		else if (SIGNATURE.equals(attrName)) { // 4.8.8
-			//System.err.println(">>> " + attributeLength);
-			int signatureIndex = in.readUnsignedShort();
-			String typeSig = cf.getUtf8ValueFromConstantPool(signatureIndex);
-			ai = new Signature(cf, typeSig);
-		}
-
-		else if (RUNTIME_VISIBLE_ANNOTATIONS.equals(attrName)) { // 4.8.15
-			//String name = getClassFile().getClassName(false) + "." + getName();
-			//System.out.println(name + ": Attribute " + attrName + " not supported");
-			Util.skipBytes(in, attrLength);
 			//ai = null;
-		}
-
-		else {
-			//String name = getClassFile().getClassName(false) + "." + getName();
-			//System.out.println(name + ": Unsupported attribute: " + attrName);
-			ai = AttributeInfo.readUnsupportedAttribute(cf, in, attrName,
-				attrLength);
+			case null, default ->
+				//String name = getClassFile().getClassName(false) + "." + getName();
+				//System.out.println(name + ": Unsupported attribute: " + attrName);
+				ai = AttributeInfo.readUnsupportedAttribute(cf, in, attrName,
+					attrLength);
 		}
 
 		return ai;

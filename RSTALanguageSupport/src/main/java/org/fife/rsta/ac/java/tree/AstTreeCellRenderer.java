@@ -32,8 +32,7 @@ class AstTreeCellRenderer extends DefaultTreeCellRenderer {
 							int row, boolean hasFocus) {
 		super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf,
 											row, hasFocus);
-		if (value instanceof JavaTreeNode) { // Should always be true
-			JavaTreeNode node = (JavaTreeNode)value;
+		if (value instanceof JavaTreeNode node) { // Should always be true
 			setText(node.getText(sel));
 			setIcon(node.getIcon());
 		}

@@ -1,4 +1,4 @@
-/*
+package org.fife.rsta.ac.java.rjc.lang;/*
  * 03/21/2010
  *
  * Copyright (C) 2010 Robert Futrell
@@ -8,11 +8,14 @@
  * This library is distributed under a modified BSD license.  See the included
  * RSTALanguageSupport.License.txt file for details.
  */
-package org.fife.rsta.ac.java.rjc.lang;
+import org.fife.rsta.ac.java.rjc.ast.Member;
+import org.fife.rsta.ac.java.rjc.ast.Method;
+import org.fife.rsta.ac.java.rjc.ast.NormalClassDeclaration;
+import org.fife.rsta.ac.java.rjc.ast.TypeDeclaration;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-
 
 /**
  * A type.
@@ -32,18 +35,15 @@ public class Type {
 	private List<List<TypeArgument>> typeArguments;
 	private int bracketPairCount;
 
-
 	public Type() {
 		identifiers = new ArrayList<>(1);
 		typeArguments = new ArrayList<>(1);
 	}
 
-
 	public Type(String identifier) {
 		this();
 		addIdentifier(identifier, null);
 	}
-
 
 	public Type(String identifier, int bracketPairCount) {
 		this();
@@ -51,12 +51,11 @@ public class Type {
 		setBracketPairCount(bracketPairCount);
 	}
 
-
 	/**
 	 * Adds an identifier to this type.
 	 *
 	 * @param identifier The identifier.
-	 * @param typeArgs The type arguments for the identifier.  This may be
+	 * @param typeArgs The type arguments for the identifier. This may be
 	 *        <code>null</code> or an empty list if there are none.
 	 */
 	public void addIdentifier(String identifier, List<TypeArgument> typeArgs) {
@@ -64,25 +63,22 @@ public class Type {
 		typeArguments.add(typeArgs);
 	}
 
-
 	public int getIdentifierCount() {
 		return identifiers.size();
 	}
-
 
 	/**
 	 * Returns the name of this type.
 	 *
 	 * @param fullyQualified Whether the returned value should be
 	 *        fully qualified.
-	 * @return The name of this type.  This will include type arguments,
+	 * @return The name of this type. This will include type arguments,
 	 *         if any.
 	 * @see #getName(boolean, boolean)
 	 */
 	public String getName(boolean fullyQualified) {
 		return getName(fullyQualified, true);
 	}
-
 
 	/**
 	 * Returns the name of this type.
@@ -95,42 +91,36 @@ public class Type {
 	 * @see #getName(boolean)
 	 */
 	public String getName(boolean fullyQualified, boolean addTypeArgs) {
-
 		StringBuilder sb = new StringBuilder();
 
 		int count = identifiers.size();
-		int start = fullyQualified ? 0 : count-1;
-		for (int i=start; i<count; i++) {
+		int start = fullyQualified ? 0 : count - 1;
+		for (int i = start; i < count; i++) {
 			sb.append(identifiers.get(i));
-			if (addTypeArgs && typeArguments.get(i)!=null) {
+			if (addTypeArgs && typeArguments.get(i) != null) {
 				List<TypeArgument> typeArgs = typeArguments.get(i);
 				int typeArgCount = typeArgs.size();
-				if (typeArgCount>0) {
+				if (typeArgCount > 0) {
 					sb.append('<');
-					for (int j=0; j<typeArgCount; j++) {
+					for (int j = 0; j < typeArgCount; j++) {
 						TypeArgument typeArg = typeArgs.get(j);
-						//if (typeA)
 						sb.append(typeArg.toString());
-						if (j<typeArgCount-1) {
+						if (j < typeArgCount - 1) {
 							sb.append(", ");
 						}
 					}
 					sb.append('>');
 				}
 			}
-			if (i<count-1) {
+			if (i < count - 1) {
 				sb.append('.');
 			}
 		}
 
-		for (int i=0; i<bracketPairCount; i++) {
-			sb.append("[]");
-		}
+		sb.append("[]".repeat(Math.max(0, bracketPairCount)));
 
 		return sb.toString();
-
 	}
-
 
 	/**
 	 * Returns a set of type arguments by index.
@@ -141,7 +131,6 @@ public class Type {
 	public List<TypeArgument> getTypeArguments(int index) {
 		return typeArguments.get(index);
 	}
-
 
 	/*
 	 * MethodDeclaratorRest allows bracket pairs after its FormalParameters,
@@ -156,45 +145,41 @@ public class Type {
 		bracketPairCount += count;
 	}
 
-
 	/**
 	 * Returns whether this type is an array.
 	 *
 	 * @return Whether this type is an array.
 	 */
 	public boolean isArray() {
-		return bracketPairCount>0;
+		return bracketPairCount > 0;
 	}
-
 
 	/**
 	 * Returns whether this is a basic type (e.g. a primitive type).
 	 *
-	 * @return Whther this is a basic type.
+	 * @return Whether this is a basic type.
 	 */
 	public boolean isBasicType() {
 		boolean basicType = false;
-		if (!isArray() && identifiers.size()==1 && typeArguments.get(0)==null) {
+		if (!isArray() && identifiers.size() == 1 && typeArguments.get(0) == null) {
 			String str = identifiers.get(0);
 			basicType = "byte".equals(str) ||
-						"float".equals(str) ||
-						"double".equals(str) ||
-						"int".equals(str) ||
-						"short".equals(str) ||
-						"long".equals(str) ||
-						"boolean".equals(str);
+				"float".equals(str) ||
+				"double".equals(str) ||
+				"int".equals(str) ||
+				"short".equals(str) ||
+				"long".equals(str) ||
+				"boolean".equals(str);
 		}
 		return basicType;
 	}
-
 
 	public void setBracketPairCount(int count) {
 		bracketPairCount = count;
 	}
 
-
 	/**
-	 * Returns a string representation of this type.  The type name will be
+	 * Returns a string representation of this type. The type name will be
 	 * fully qualified.
 	 *
 	 * @return A string representation of this type.
@@ -205,5 +190,22 @@ public class Type {
 		return getName(true);
 	}
 
-
+	/**
+	 * Gets the methods from the enclosing type.
+	 *
+	 * @param typeDeclaration The type declaration of the enclosing type.
+	 * @return A list of methods from the enclosing type.
+	 */
+	public List<Method> getMethods(TypeDeclaration typeDeclaration) {
+		List<Method> methods = new ArrayList<>();
+		if (typeDeclaration instanceof NormalClassDeclaration classDecl) {
+			for (Iterator<Member> i = classDecl.getMemberIterator(); i.hasNext(); ) {
+				Member member = i.next();
+				if (member instanceof Method) {
+					methods.add((Method) member);
+				}
+			}
+		}
+		return methods;
+	}
 }

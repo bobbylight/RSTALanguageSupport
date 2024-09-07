@@ -37,8 +37,7 @@ class TypeDeclarationTreeNode extends JavaTreeNode {
 		String iconName = null;
 		int priority = PRIORITY_TYPE;
 
-		if (typeDec instanceof NormalClassDeclaration) {
-			NormalClassDeclaration ncd = (NormalClassDeclaration)typeDec;
+		if (typeDec instanceof NormalClassDeclaration ncd) {
 			if (ncd.getModifiers()!=null) {
 				if (ncd.getModifiers().isPublic()) {
 					iconName = IconFactory.CLASS_ICON;
@@ -58,8 +57,7 @@ class TypeDeclarationTreeNode extends JavaTreeNode {
 				iconName = IconFactory.DEFAULT_CLASS_ICON;
 			}
 		}
-		else if (typeDec instanceof NormalInterfaceDeclaration) {
-			NormalInterfaceDeclaration nid = (NormalInterfaceDeclaration)typeDec;
+		else if (typeDec instanceof NormalInterfaceDeclaration nid) {
 			if (nid.getModifiers()!=null && nid.getModifiers().isPublic()) {
 				iconName = IconFactory.INTERFACE_ICON;
 			}
@@ -67,8 +65,7 @@ class TypeDeclarationTreeNode extends JavaTreeNode {
 				iconName = IconFactory.DEFAULT_INTERFACE_ICON;
 			}
 		}
-		else if (typeDec instanceof EnumDeclaration) {
-			EnumDeclaration ed = (EnumDeclaration)typeDec;
+		else if (typeDec instanceof EnumDeclaration ed) {
 			if (ed.getModifiers()!=null) {
 				if (ed.getModifiers().isPublic()) {
 					iconName = IconFactory.ENUM_ICON;

@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.logging.Level;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.JTextComponent;
 
@@ -697,13 +698,13 @@ public SourceLocation  getSourceLocForClass(String className) {
 	/**
 	 * Loads completions based on the current caret location in the source.
 	 * This method is called when the caret is found to be in a specific type
-	 * declaration.  This method checks if the caret is in a child type
+	 * declaration. This method checks if the caret is in a child type
 	 * declaration first, then adds completions for itself next.
 	 *
 	 * <ul>
 	 *   <li>If the caret is anywhere in a class, the names of all methods and
-	 *       fields in the class are loaded.  Methods and fields in super
-	 *       classes are also loaded.  TODO: Get super methods/fields added
+	 *       fields in the class are loaded. Methods and fields in super
+	 *       classes are also loaded. TODO: Get super methods/fields added
 	 *       correctly by access!
 	 *   <li>If the caret is in a field, local variables currently accessible
 	 *       are loaded.
@@ -718,88 +719,94 @@ public SourceLocation  getSourceLocForClass(String className) {
 	 * @param caret The caret position.
 	 */
 	private void loadCompletionsForCaretPosition(CompilationUnit cu,
-			JTextComponent comp, String alreadyEntered, Set<Completion> retVal,
-			TypeDeclaration td, String prefix, int caret) {
+												 JTextComponent comp, String alreadyEntered, Set<Completion> retVal,
+												 TypeDeclaration td, String prefix, int caret) {
 
-		// Do any child types first, so if any vars, etc. have duplicate names,
-		// we pick up the one "closest" to us first.
-		for (int i=0; i<td.getChildTypeCount(); i++) {
+		// Process child types first
+		for (int i = 0; i < td.getChildTypeCount(); i++) {
 			TypeDeclaration childType = td.getChildType(i);
 			loadCompletionsForCaretPosition(cu, comp, alreadyEntered, retVal,
-					childType, prefix, caret);
+				childType, prefix, caret);
 		}
 
 		Method currentMethod = null;
-
 		Map<String, String> typeParamMap = new HashMap<>();
-		if (td instanceof NormalClassDeclaration) {
-			NormalClassDeclaration ncd = (NormalClassDeclaration)td;
+
+		if (td instanceof NormalClassDeclaration ncd) {
 			List<TypeParameter> typeParams = ncd.getTypeParameters();
-			if (typeParams!=null) {
+			if (typeParams != null) {
 				for (TypeParameter typeParam : typeParams) {
 					String typeVar = typeParam.getName();
-					// For non-qualified completions, use type var name.
 					typeParamMap.put(typeVar, typeVar);
 				}
 			}
 		}
 
-		// Get completions for this class's methods, fields and local
-		// vars.  Do this before checking super classes so that, if
-		// we overrode anything, we get the "newest" version.
+		// Get completions for this class's methods, fields and local vars
 		String pkg = cu.getPackageName();
-		Iterator<Member> j = td.getMemberIterator();
-		while (j.hasNext()) {
-			Member m = j.next();
-			if (m instanceof Method) {
-				Method method = (Method)m;
-				if (prefix==null || THIS.equals(prefix)) {
-					retVal.add(new MethodCompletion(this, method));
-				}
-				if (caret>=method.getBodyStartOffset() && caret<method.getBodyEndOffset()) {
+		Iterator<Member> memberIterator = td.getMemberIterator();
+		while (memberIterator.hasNext()) {
+			Member member = memberIterator.next();
+			if (member instanceof Method method) {
+				handleMethod(method, prefix, caret, retVal);
+				if (caret >= method.getBodyStartOffset() && caret < method.getBodyEndOffset()) {
 					currentMethod = method;
-					// Don't add completions for local vars if there is
-					// a prefix, even "this".
-					if (prefix==null) {
+					if (prefix == null) {
 						addLocalVarCompletions(retVal, method, caret);
 					}
 				}
-			}
-			else if (m instanceof Field) {
-				if (prefix==null || THIS.equals(prefix)) {
-					Field field = (Field)m;
-					retVal.add(new FieldCompletion(this, field));
-				}
+			} else if (member instanceof Field field) {
+				handleField(field, prefix, retVal);
 			}
 		}
 
-		// Completions for superclass methods.
-		// TODO: Implement me better
-		if (prefix==null || THIS.equals(prefix)) {
-			if (td instanceof NormalClassDeclaration) {
-				NormalClassDeclaration ncd = (NormalClassDeclaration)td;
+		// Completions for superclass methods
+		if (prefix == null || THIS.equals(prefix)) {
+			if (td instanceof NormalClassDeclaration ncd) {
 				Type extended = ncd.getExtendedType();
-				if (extended!=null) { // e.g., not java.lang.Object
+				if (extended != null) {
 					String superClassName = extended.toString();
-					ClassFile cf = getClassFileFor(cu, superClassName);
-					if (cf!=null) {
-						addCompletionsForExtendedClass(retVal, cu, cf, pkg, null);
-					}
-					else {
-						System.out.println("[DEBUG]: Couldn't find ClassFile for: " + superClassName);
+					ClassFile classFile = getClassFileFor(cu, superClassName);
+					if (classFile != null) {
+						addCompletionsForExtendedClass(retVal, cu, classFile, pkg, null);
+					} else {
+						System.out.println("Couldn't find ClassFile for: {0}" +superClassName);
 					}
 				}
 			}
 		}
 
-		// Completions for methods of fields, return values of methods,
-		// static fields/methods, etc.
-		if (prefix!=null && !THIS.equals(prefix)) {
-			loadCompletionsForCaretPositionQualified(cu,
-					alreadyEntered, retVal,
-					td, currentMethod, prefix, caret);
+		// Completions for methods of fields, return values of methods, etc.
+		if (prefix != null && !THIS.equals(prefix)) {
+			loadCompletionsForCaretPositionQualified(cu, alreadyEntered, retVal, td, currentMethod, prefix, caret);
 		}
+	}
 
+	/**
+	 * Handles completions for fields.
+	 *
+	 * @param field The field to handle.
+	 * @param prefix The prefix used for filtering completions.
+	 * @param retVal The set of returned completions.
+	 */
+	private void handleField(Field field, String prefix, Set<Completion> retVal) {
+		if (prefix == null || THIS.equals(prefix)) {
+			retVal.add(new FieldCompletion(this, field));
+		}
+	}
+
+	/**
+	 * Handles completions for methods.
+	 *
+	 * @param method The method to handle.
+	 * @param prefix The prefix used for filtering completions.
+	 * @param caret The caret position.
+	 * @param retVal The set of returned completions.
+	 */
+	private void handleMethod(Method method, String prefix, int caret, Set<Completion> retVal) {
+		if (prefix == null || THIS.equals(prefix)) {
+			retVal.add(new MethodCompletion(this, method));
+		}
 	}
 
 
@@ -844,9 +851,7 @@ public SourceLocation  getSourceLocForClass(String className) {
 			Member m = j.next();
 
 			// The prefix might be a field in the local class.
-			if (m instanceof Field) {
-
-				Field field = (Field)m;
+			if (m instanceof Field field) {
 
 				if (field.getName().equals(prefix)) {
 					//System.out.println("FOUND: " + prefix + " (" + pkg + ")");

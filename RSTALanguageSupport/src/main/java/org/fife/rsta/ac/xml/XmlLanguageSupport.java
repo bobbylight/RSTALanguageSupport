@@ -159,6 +159,21 @@ public class XmlLanguageSupport extends AbstractMarkupLanguageSupport {
 
 	}
 
+	@Override
+	public void install(RSyntaxTextArea textArea, KeyStroke keyStroke) {
+		XmlCompletionProvider provider = getProvider();
+		AutoCompletion ac = createAutoCompletion(provider);
+		ac.install(textArea);
+		installImpl(textArea, ac);
+		ac.setTriggerKey(keyStroke);
+
+		XmlParser parser = new XmlParser(this);
+		textArea.addParser(parser);
+		textArea.putClientProperty(PROPERTY_LANGUAGE_PARSER, parser);
+
+		installKeyboardShortcuts(textArea);
+	}
+
 
 	/**
 	 * {@inheritDoc}

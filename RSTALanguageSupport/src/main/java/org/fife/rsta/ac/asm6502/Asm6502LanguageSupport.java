@@ -8,6 +8,8 @@ import org.fife.rsta.ac.AbstractLanguageSupport;
 import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
+import javax.swing.*;
+
 
 /**
  * Language support for 6502 assembler.
@@ -33,6 +35,13 @@ public class Asm6502LanguageSupport extends AbstractLanguageSupport {
 		//setShowDescWindow(true);
 	}
 
+	@Override
+	public void install(RSyntaxTextArea textArea, KeyStroke keyStroke) {
+		AutoCompletion ac = defaultInstallation(textArea);
+		ac.setTriggerKey(keyStroke);
+
+	}
+
 
 	//@Override
 	//protected ListCellRenderer<Object> createDefaultCompletionCellRenderer() {
@@ -50,14 +59,7 @@ public class Asm6502LanguageSupport extends AbstractLanguageSupport {
 
 	@Override
 	public void install(RSyntaxTextArea textArea) {
-
-        Asm6502CompletionProvider provider = getProvider();
-		AutoCompletion ac = createAutoCompletion(provider);
-		ac.install(textArea);
-		installImpl(textArea, ac);
-
-		textArea.setToolTipSupplier(provider);
-
+		defaultInstallation(textArea);
 	}
 
 
@@ -67,5 +69,14 @@ public class Asm6502LanguageSupport extends AbstractLanguageSupport {
 		textArea.setToolTipSupplier(null);
 	}
 
+
+	private AutoCompletion defaultInstallation(RSyntaxTextArea textArea) {
+		Asm6502CompletionProvider provider = getProvider();
+		AutoCompletion ac = createAutoCompletion(provider);
+		ac.install(textArea);
+		installImpl(textArea, ac);
+		textArea.setToolTipSupplier(provider);
+		return ac;
+	}
 
 }

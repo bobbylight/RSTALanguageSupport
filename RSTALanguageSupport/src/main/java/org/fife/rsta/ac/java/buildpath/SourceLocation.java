@@ -26,6 +26,7 @@ import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
  * @see ZipSourceLocation
  * @see ClasspathSourceLocation
  */
+
 public interface SourceLocation {
 
 

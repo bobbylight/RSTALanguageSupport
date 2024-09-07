@@ -18,6 +18,8 @@ import java.util.Map;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
+import javax.swing.*;
+
 
 /**
  * Provides language support (code completion, etc.) for programming
@@ -175,6 +177,21 @@ public final class LanguageSupportFactory implements PropertyChangeListener {
 		textArea.putClientProperty(LANGUAGE_SUPPORT_PROPERTY, support);
 	}
 
+	/**
+	 * Installs language support on an RSTA depending on its syntax style.
+	 *
+	 * @param textArea The text area to install language support on.
+	 * @see #uninstallSupport(RSyntaxTextArea)
+	 */
+	private void installSupport(RSyntaxTextArea textArea,KeyStroke keyStroke) {
+		String style = textArea.getSyntaxEditingStyle();
+		LanguageSupport support = getSupportFor(style);
+		if (support!=null) {
+			support.install(textArea,keyStroke);
+		}
+		textArea.putClientProperty(LANGUAGE_SUPPORT_PROPERTY, support);
+	}
+
 
 	/**
 	 * Listens for RSyntaxTextAreas to change what language they're
@@ -209,6 +226,21 @@ public final class LanguageSupportFactory implements PropertyChangeListener {
 				RSyntaxTextArea.SYNTAX_STYLE_PROPERTY, this);
 	}
 
+	/**
+	 * Registers an RSyntaxTextArea to receive language support.  The text area
+	 * will get support for the currently highlighted language, and if it
+	 * changes what language it is highlighting, the support will change as
+	 * appropriate.
+	 *
+	 * @param textArea The text area to register.
+	 */
+	public void register(RSyntaxTextArea textArea, KeyStroke keyStroke){
+		installSupport(textArea,keyStroke);
+		textArea.addPropertyChangeListener(
+			RSyntaxTextArea.SYNTAX_STYLE_PROPERTY, this
+		);
+	}
+
 
 	/**
 	 * Uninstalls the language support on an RSyntaxTextArea, if any.
@@ -238,5 +270,4 @@ public final class LanguageSupportFactory implements PropertyChangeListener {
 				RSyntaxTextArea.SYNTAX_STYLE_PROPERTY, this);
 	}
 
-
-}
+	}

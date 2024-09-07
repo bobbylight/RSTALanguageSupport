@@ -12,7 +12,7 @@ package org.fife.rsta.ac.jsp;
 
 import java.util.HashSet;
 import java.util.Set;
-import javax.swing.ListCellRenderer;
+import javax.swing.*;
 
 import org.fife.rsta.ac.AbstractMarkupLanguageSupport;
 import org.fife.rsta.ac.html.HtmlCellRenderer;
@@ -89,6 +89,18 @@ public class JspLanguageSupport extends AbstractMarkupLanguageSupport {
 
 		textArea.setToolTipSupplier(null);
 
+	}
+
+	@Override
+	public void install(RSyntaxTextArea textArea, KeyStroke keyStroke) {
+		HtmlCompletionProvider provider = getProvider();
+		AutoCompletion ac = createAutoCompletion(provider);
+		ac.install(textArea);
+		installImpl(textArea, ac);
+		ac.setTriggerKey(keyStroke);
+		installKeyboardShortcuts(textArea);
+
+		textArea.setToolTipSupplier(null);
 	}
 
 

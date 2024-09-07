@@ -20,10 +20,7 @@ import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import javax.swing.ActionMap;
-import javax.swing.InputMap;
-import javax.swing.KeyStroke;
-import javax.swing.Timer;
+import javax.swing.*;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.text.BadLocationException;
@@ -126,12 +123,13 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		return null;
 	}
 
-
 	/**
-	 * {@inheritDoc}
+	 *
+	 * @param textArea The text area to install onto.
+	 * @param keyStroke to trigger the autocompletion
 	 */
 	@Override
-	public void install(RSyntaxTextArea textArea) {
+	public void install(RSyntaxTextArea textArea,KeyStroke keyStroke) {
 
 		JavaCompletionProvider p = new JavaCompletionProvider(jarManager);
 		// Can't use createAutoCompletion(), as Java's is "special."
@@ -144,8 +142,10 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		ac.setParameterAssistanceEnabled(isParameterAssistanceEnabled());
 		ac.setParamChoicesRenderer(new JavaParamListCellRenderer());
 		ac.setShowDescWindow(getShowDescWindow());
+
 		ac.install(textArea);
 		installImpl(textArea, ac);
+		ac.setTriggerKey(keyStroke);
 
 		textArea.setToolTipSupplier(p);
 
@@ -176,6 +176,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 
 		InputMap im = textArea.getInputMap();
 		ActionMap am = textArea.getActionMap();
+
 		int c = textArea.getToolkit().getMenuShortcutKeyMaskEx();
 		int shift = InputEvent.SHIFT_DOWN_MASK;
 
@@ -184,6 +185,44 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 
 	}
 
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void install(RSyntaxTextArea textArea) {
+		JavaCompletionProvider p = new JavaCompletionProvider(jarManager);
+		// Can't use createAutoCompletion(), as Java's is "special."
+		AutoCompletion ac = new JavaAutoCompletion(p, textArea);
+		ac.setListCellRenderer(new JavaCellRenderer());
+		ac.setAutoCompleteEnabled(isAutoCompleteEnabled());
+		ac.setAutoActivationEnabled(isAutoActivationEnabled());
+		ac.setAutoActivationDelay(getAutoActivationDelay());
+		ac.setExternalURLHandler(new JavadocUrlHandler());
+		ac.setParameterAssistanceEnabled(isParameterAssistanceEnabled());
+		ac.setParamChoicesRenderer(new JavaParamListCellRenderer());
+		ac.setShowDescWindow(getShowDescWindow());
+
+		ac.install(textArea);
+		installImpl(textArea, ac);
+
+		textArea.setToolTipSupplier(p);
+
+		Listener listener = new Listener(textArea);
+		textArea.putClientProperty(PROPERTY_LISTENER, listener);
+
+		JavaParser parser = new JavaParser(textArea);
+		textArea.putClientProperty(PROPERTY_LANGUAGE_PARSER, parser);
+		textArea.addParser(parser);
+		textArea.setToolTipSupplier(p);
+
+		Info info = new Info(textArea, p, parser);
+		parserToInfoMap.put(parser, info);
+
+		installKeyboardShortcuts(textArea);
+
+		textArea.setLinkGenerator(new JavaLinkGenerator(this));
+	}
 
 	@Override
 	public void uninstall(RSyntaxTextArea textArea) {
@@ -210,7 +249,6 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		textArea.setLinkGenerator(null);
 
 	}
-
 
 	/**
 	 * Uninstalls any keyboard shortcuts specific to this language support.
@@ -346,7 +384,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		/**
 		 * Determines whether the class name being completed has been imported,
 		 * and if it hasn't, returns the import statement that should be added
-		 * for it.  Alternatively, if the class hasn't been imported, but a
+		 * for it. Alternatively, if the class hasn't been imported, but a
 		 * class with the same (unqualified) name HAS been imported, this
 		 * method sets things up so the fully-qualified version of this class's
 		 * name is inserted.<p>
@@ -364,14 +402,13 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 			// Make sure we're not currently typing an import statement.
 			if (!text.startsWith("import ")) {
 
-				JavaCompletionProvider provider = (JavaCompletionProvider)
-													getCompletionProvider();
+				JavaCompletionProvider provider = (JavaCompletionProvider) getCompletionProvider();
 				CompilationUnit cu = provider.getCompilationUnit();
 				int offset = 0;
 				boolean alreadyImported = false;
 
 				// Try to bail early, if possible.
-				if (cu==null) { // Can never happen, right?
+				if (cu == null) {
 					return null;
 				}
 				if ("java.lang".equals(cc.getPackageName())) {
@@ -382,25 +419,23 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 				String className = cc.getClassName(false);
 				String fqClassName = cc.getClassName(true);
 
-				// If the completion is in the same package as the source we're
-				// editing (or both are in the default package), bail.
+				// If the completion is in the same package as the source we're editing (or both are in the default package), bail.
 				int lastClassNameDot = fqClassName.lastIndexOf('.');
-				boolean ccInPackage = lastClassNameDot>-1;
+				boolean ccInPackage = lastClassNameDot > -1;
 				Package pkg = cu.getPackage();
-				if (ccInPackage && pkg!=null) {
+				if (ccInPackage && pkg != null) {
 					String ccPkg = fqClassName.substring(0, lastClassNameDot);
 					String pkgName = pkg.getName();
 					if (ccPkg.equals(pkgName)) {
 						return null;
 					}
-				}
-				else if (!ccInPackage && pkg==null) {
+				} else if (!ccInPackage && pkg == null) {
 					return null;
 				}
 
 				// Loop through all import statements.
 				Iterator<ImportDeclaration> i = cu.getImportIterator();
-				for (; i.hasNext();) {
+				while (i.hasNext()) {
 
 					ImportDeclaration id = i.next();
 					offset = id.getNameEndOffset() + 1;
@@ -412,8 +447,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 
 					// Importing all classes in the package...
 					else if (id.isWildcard()) {
-						// NOTE: Class may be in default package...
-						if (lastClassNameDot>-1) {
+						if (lastClassNameDot > -1) {
 							String imported = id.getName();
 							int dot = imported.lastIndexOf('.');
 							String importedPkg = imported.substring(0, dot);
@@ -430,15 +464,10 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 
 						String fullyImportedClassName = id.getName();
 						int dot = fullyImportedClassName.lastIndexOf('.');
-						String importedClassName = fullyImportedClassName.
-													substring(dot + 1);
+						String importedClassName = fullyImportedClassName.substring(dot + 1);
 
-						// If they explicitly imported a class with the
-						// same name, but it's in a different package, then
-						// the user is required to fully-qualify the class
-						// in their code (if unqualified, it would be
-						// assumed to be of the type of the qualified
-						// class).
+						// If they explicitly imported a class with the same name, but it's in a different package,
+						// the user must fully qualify the class in their code.
 						if (className.equals(importedClassName)) {
 							offset = -1; // Means "must fully qualify"
 							if (fqClassName.equals(fullyImportedClassName)) {
@@ -446,61 +475,58 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 							}
 							break;
 						}
-
 					}
-
 				}
 
-				// If the class wasn't imported, we'll need to add an
-				// import statement!
+				// If the class wasn't imported, we'll need to add an import statement!
 				if (!alreadyImported) {
 
 					StringBuilder importToAdd = new StringBuilder();
 
-					// If there are no previous imports, add the import
-					// statement after the package line (if any).
+					// If there are no previous imports, add the import statement after the package line (if any).
 					if (offset == 0) {
-						if (pkg!=null) {
+						if (pkg != null) {
 							offset = pkg.getNameEndOffset() + 1;
-							// Keep an empty line between package and imports.
 							importToAdd.append('\n');
 						}
 					}
 
-					// We read through all imports, but didn't find our class.
-					// Add a new import statement after the last one.
+					// We read through all imports, but didn't find our class. Add a new import statement after the last one.
 					if (offset > -1) {
-						//System.out.println(classCompletion.getAlreadyEntered(textArea));
-						if (offset>0) {
-							importToAdd.append("\nimport ").append(fqClassName).append(';');
+						// Determine whether imports are alphabetical, and if so, add the new one alphabetically.
+						Iterator<ImportDeclaration> iterator = cu.getImportIterator();
+						ImportDeclaration previousImport = null;
+						while (iterator.hasNext()) {
+							ImportDeclaration currentImport = iterator.next();
+							if (currentImport.getName().compareTo(fqClassName) > 0) {
+								// Insert before the current import if alphabetical order is broken
+								if (previousImport != null) {
+									offset = previousImport.getNameEndOffset() + 1;
+								}
+								break;
+							}
+							previousImport = currentImport;
 						}
-						else {
+						if (offset > 0) {
+							importToAdd.append("\nimport ").append(fqClassName).append(';');
+						} else {
 							importToAdd.append("import ").append(fqClassName).append(";\n");
 						}
-						// TODO: Determine whether the imports are alphabetical,
-						// and if so, add the new one alphabetically.
 						return new ImportToAddInfo(offset, importToAdd.toString());
 					}
 
-					// Otherwise, either the class was imported, or a class
-					// with the same name was explicitly imported.
+					// Otherwise, either the class was imported, or a class with the same name was explicitly imported.
 					else {
-						// Another class with the same name was imported.
-						// We must insert the fully-qualified class name
-						// so the compiler resolves the correct class.
 						int dot = fqClassName.lastIndexOf('.');
-						if (dot>-1) {
-                            replacementTextPrefix = fqClassName.substring(0, dot+1);
+						if (dot > -1) {
+							replacementTextPrefix = fqClassName.substring(0, dot + 1);
 						}
 					}
-
 				}
-
 			}
-
 			return null;
-
 		}
+
 
 		/**
 		 * Overridden to handle special cases, because sometimes Java code
@@ -614,6 +640,5 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		}
 
 	}
-
 
 }

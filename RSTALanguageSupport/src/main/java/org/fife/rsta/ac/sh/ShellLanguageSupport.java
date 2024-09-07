@@ -11,7 +11,7 @@
 package org.fife.rsta.ac.sh;
 
 import java.io.File;
-import javax.swing.ListCellRenderer;
+import javax.swing.*;
 
 import org.fife.rsta.ac.AbstractLanguageSupport;
 import org.fife.ui.autocomplete.AutoCompletion;
@@ -98,6 +98,17 @@ public class ShellLanguageSupport extends AbstractLanguageSupport {
 
 		textArea.setToolTipSupplier(provider);
 
+	}
+
+	@Override
+	public void install(RSyntaxTextArea textArea, KeyStroke keyStroke) {
+		ShellCompletionProvider provider = getProvider();
+		AutoCompletion ac = createAutoCompletion(provider);
+		ac.install(textArea);
+		installImpl(textArea, ac);
+		ac.setTriggerKey(keyStroke);
+
+		textArea.setToolTipSupplier(provider);
 	}
 
 

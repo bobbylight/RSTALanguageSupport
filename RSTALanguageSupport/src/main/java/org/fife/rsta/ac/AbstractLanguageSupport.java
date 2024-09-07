@@ -13,9 +13,7 @@ package org.fife.rsta.ac;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.ListCellRenderer;
-import javax.swing.UIManager;
+import javax.swing.*;
 
 import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.autocomplete.CompletionCellRenderer;
@@ -108,6 +106,7 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	}
 
 
+
 	/**
 	 * Creates the default cell renderer to use when none is specified.
 	 * Subclasses can override this method if there is a "better" default
@@ -182,10 +181,10 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	 * so that this language support can update all of them at once.
 	 *
 	 * @param textArea The text area that just installed the auto-completion.
-	 * @param ac The auto-completion instance.
+//	 * @param ac The auto-completion instance.
 	 * @see #uninstallImpl(RSyntaxTextArea)
 	 */
-	protected void installImpl(RSyntaxTextArea textArea, AutoCompletion ac) {
+	protected void installImpl(RSyntaxTextArea textArea,AutoCompletion ac) {
 		textAreaToAutoCompletion.put(textArea, ac);
 	}
 
@@ -298,5 +297,5 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 		textAreaToAutoCompletion.remove(textArea);
 	}
 
-
+//	public abstract void install(RSyntaxTextArea textArea, KeyStroke keyStroke);
 }

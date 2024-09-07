@@ -16,7 +16,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.Set;
-import javax.swing.ListCellRenderer;
+import javax.swing.*;
 
 import org.fife.rsta.ac.AbstractMarkupLanguageSupport;
 import org.fife.ui.autocomplete.AutoCompletion;
@@ -124,6 +124,19 @@ public class HtmlLanguageSupport extends AbstractMarkupLanguageSupport {
 		ac.install(textArea);
 		installImpl(textArea, ac);
 		installKeyboardShortcuts(textArea);
+
+		textArea.setToolTipSupplier(null);
+
+	}
+
+	@Override
+	public void install(RSyntaxTextArea textArea, KeyStroke keyStroke) {
+		HtmlCompletionProvider provider = getProvider();
+		AutoCompletion ac = createAutoCompletion(provider);
+		ac.install(textArea);
+		installImpl(textArea, ac);
+		installKeyboardShortcuts(textArea);
+		ac.setTriggerKey(keyStroke);
 
 		textArea.setToolTipSupplier(null);
 

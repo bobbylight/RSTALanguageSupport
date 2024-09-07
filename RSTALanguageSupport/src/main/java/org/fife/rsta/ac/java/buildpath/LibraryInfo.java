@@ -159,16 +159,22 @@ public abstract class LibraryInfo implements Comparable<LibraryInfo>,
 	}
 
 
+
 	/**
-	 * Returns information on the "main" jar for a JRE.  This will be
+	 * Returns information on the "main" jar for a JRE. This will be
 	 * <tt>rt.jar</tt> everywhere except OS X, where it will be
-	 * <tt>classes.jar</tt>.  The associated source zip/jar file is also
+	 * <tt>classes.jar</tt>. The associated source zip/jar file is also
 	 * checked for.
+	 *
+	 * <p>This method has been extended to handle JDK 9+ environments, which
+	 * use <tt>jrt-fs.jar</tt> instead of <tt>rt.jar</tt>.</p>
 	 *
 	 * @param jreHome The location of the JRE.
 	 * @return The information, or <code>null</code> if there is not a JRE in
 	 *         the specified directory.
 	 * @see #getMainJreJarInfo()
+	 * possible due to assistance of kovadam69
+	 * now method is handling java 9+ also.
 	 */
 	public static LibraryInfo getJreJarInfo(File jreHome) {
 
@@ -197,7 +203,13 @@ public abstract class LibraryInfo implements Comparable<LibraryInfo>,
 		//////////////////////////////////////////////////
 
 		if (mainJar.isFile()) {
-			info = new JarLibraryInfo(mainJar);
+			if (mainJar.getName().equals("jrt-fs.jar")) {
+				// Handle JDK 9+ using JRT file system
+				info = new JDK9ClasspathLibraryInfo();
+			} else {
+				// Handle pre-JDK 9 JARs
+				info = new JarLibraryInfo(mainJar);
+			}
 			if (sourceZip.isFile()) { // Make sure our last guess actually exists
 				info.setSourceLocation(new ZipSourceLocation(sourceZip));
 			}
@@ -207,8 +219,8 @@ public abstract class LibraryInfo implements Comparable<LibraryInfo>,
 		}
 
 		return info;
-
 	}
+
 
 
 	/**

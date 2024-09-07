@@ -21,6 +21,8 @@ import org.fife.rsta.ac.java.buildpath.JarLibraryInfo;
 import org.fife.rsta.ac.java.buildpath.LibraryInfo;
 import org.fife.rsta.ac.java.buildpath.SourceLocation;
 import org.fife.rsta.ac.java.classreader.ClassFile;
+import org.fife.rsta.ac.java.classreader.FieldInfo;
+import org.fife.rsta.ac.java.classreader.MethodInfo;
 import org.fife.rsta.ac.java.rjc.ast.ImportDeclaration;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.CompletionProvider;
@@ -77,7 +79,7 @@ public class JarManager {
 			jar.addCompletions(p, pkgNames, addTo);
 		}
 		*/
-		if (text.length()==0) {
+		if (text.isEmpty()) {
 			return;
 		}
 
@@ -436,6 +438,28 @@ public class JarManager {
 	 */
 	public static void setCheckModifiedDatestamps(boolean check) {
 		checkModified = check;
+	}
+
+	public List<MethodInfo> getMethodsForClass(String className) {
+		List<MethodInfo> methods = new ArrayList<>();
+		for (JarReader jar : classFileSources) {
+			List<ClassFile> classFiles = jar.getClassFiles(className);
+			for (ClassFile cf : classFiles) {
+				methods.addAll(cf.getMethods());
+			}
+		}
+		return methods;
+	}
+
+	public List<FieldInfo> getFieldsForClass(String className) {
+		List<FieldInfo> fields = new ArrayList<>();
+		for (JarReader jar : classFileSources) {
+			List<ClassFile> classFiles = jar.getClassFiles(className);
+			for (ClassFile cf : classFiles) {
+				fields.addAll(cf.getFields());
+			}
+		}
+		return fields;
 	}
 
 

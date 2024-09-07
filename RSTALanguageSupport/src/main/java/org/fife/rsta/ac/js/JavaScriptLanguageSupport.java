@@ -304,6 +304,39 @@ return DEFAULT;
 		textArea.setLinkGenerator(new JavaScriptLinkGenerator(this));
 	}
 
+	@Override
+	public void install(RSyntaxTextArea textArea, KeyStroke keyStroke) {
+		AutoCompletion ac = new JavaScriptAutoCompletion(provider, textArea);
+		ac.setListCellRenderer(getDefaultCompletionCellRenderer());
+		ac.setAutoCompleteEnabled(isAutoCompleteEnabled());
+		ac.setAutoActivationEnabled(isAutoActivationEnabled());
+		ac.setAutoActivationDelay(getAutoActivationDelay());
+		ac.setParameterAssistanceEnabled(isParameterAssistanceEnabled());
+		ac.setExternalURLHandler(new JavaScriptDocUrlhandler(this));
+		ac.setShowDescWindow(getShowDescWindow());
+		ac.install(textArea);
+		installImpl(textArea, ac);
+		ac.setTriggerKey(keyStroke);
+
+		Listener listener = new Listener(textArea);
+		textArea.putClientProperty(PROPERTY_LISTENER, listener);
+
+		parser = new JavaScriptParser(this, textArea);
+		textArea.putClientProperty(PROPERTY_LANGUAGE_PARSER, parser);
+		textArea.addParser(parser);
+		//textArea.setToolTipSupplier(provider);
+
+		Info info = new Info(provider, parser);
+		parserToInfoMap.put(parser, info);
+
+		installKeyboardShortcuts(textArea);
+
+		// Set XML on JavascriptTokenMaker
+		JavaScriptTokenMaker.setE4xSupported(isXmlAvailable());
+
+		textArea.setLinkGenerator(new JavaScriptLinkGenerator(this));
+	}
+
 
 	/**
 	 * Installs extra keyboard shortcuts supported by this language support.

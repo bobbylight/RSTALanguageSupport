@@ -10,6 +10,8 @@ import org.fife.rsta.ac.AbstractLanguageSupport;
 import org.fife.ui.autocomplete.AutoCompletion;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
+import javax.swing.*;
+
 /**
  * Language support for TypeScript.
  *
@@ -52,6 +54,14 @@ public class TypeScriptLanguageSupport extends AbstractLanguageSupport {
 		//installKeyboardShortcuts(textArea);
 
 		//textArea.setLinkGenerator(new JavaScriptLinkGenerator(this));
+	}
+
+	@Override
+	public void install(RSyntaxTextArea textArea, KeyStroke keyStroke) {
+		AutoCompletion ac = createAutoCompletion();
+		ac.install(textArea);
+		installImpl(textArea, ac);
+		ac.setTriggerKey(keyStroke);
 	}
 
 

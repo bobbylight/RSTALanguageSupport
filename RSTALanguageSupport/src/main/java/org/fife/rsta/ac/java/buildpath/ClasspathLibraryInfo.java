@@ -122,8 +122,7 @@ public class ClasspathLibraryInfo extends LibraryInfo {
 		}
 		int res = -1;
 
-		if (info instanceof ClasspathLibraryInfo) {
-			ClasspathLibraryInfo other = (ClasspathLibraryInfo)info;
+		if (info instanceof ClasspathLibraryInfo other) {
 			res = classNameToClassFile.size() -
 					other.classNameToClassFile.size();
 			if (res==0) {
