@@ -96,6 +96,14 @@ PerlLanguageSupport support = (PerlLanguageSupport)lsf.
                         getSupportFor(SyntaxConstants.SYNTAX_STYLE_PERL);
 ```
 
+For custom AutoCompletionTrigger key you can pass keystore with install method
+```java
+LanguageSupportFactory lsf = LanguageSupportFactory.get();
+LanguageSupport support = lsf.getSupportFor(SYNTAX_STYLE_JAVA);
+RSyntaxTextArea textArea = new RSyntaxTextArea(25, 80);
+support.install(textArea,KeyStroke.getKeyStroke("TAB"));
+```
+
 Now, you can tweak language-specific options.  For example, `PerlLanguageSupport`
 has a method named `setUseParensWithFunctions(boolean)` that toggles whether
 parens are used to wrap parameters inserted via parameter assistance.  This
