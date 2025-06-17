@@ -104,9 +104,6 @@ public class JavaScriptInScriptFunctionCompletion extends FunctionCompletion
 		return getLookupName();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public int compareTo(Completion other) {
 		if (other==this) {

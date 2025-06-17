@@ -26,9 +26,6 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 		this.findLocal = true;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public LinkGeneratorResult isLinkAtOffset(RSyntaxTextArea textArea, int offs) {
 

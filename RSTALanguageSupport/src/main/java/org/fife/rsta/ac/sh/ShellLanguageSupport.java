@@ -48,9 +48,6 @@ public class ShellLanguageSupport extends AbstractLanguageSupport {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected ListCellRenderer<Object> createDefaultCompletionCellRenderer() {
 		return new CompletionCellRenderer();
@@ -85,9 +82,6 @@ public class ShellLanguageSupport extends AbstractLanguageSupport {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void install(RSyntaxTextArea textArea) {
 

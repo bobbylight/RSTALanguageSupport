@@ -35,9 +35,6 @@ public class JavaScriptCellRenderer extends CompletionCellRenderer {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void prepareForOtherCompletion(JList list, Completion c,
 			int index, boolean selected, boolean hasFocus) {
@@ -46,9 +43,6 @@ public class JavaScriptCellRenderer extends CompletionCellRenderer {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void prepareForTemplateCompletion(JList list,
 		TemplateCompletion tc, int index, boolean selected, boolean hasFocus) {
@@ -57,9 +51,6 @@ public class JavaScriptCellRenderer extends CompletionCellRenderer {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void prepareForVariableCompletion(JList list,
 			VariableCompletion vc, int index, boolean selected, boolean hasFocus) {
@@ -68,9 +59,6 @@ public class JavaScriptCellRenderer extends CompletionCellRenderer {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void prepareForFunctionCompletion(JList list,
 			FunctionCompletion fc, int index, boolean selected, boolean hasFocus) {

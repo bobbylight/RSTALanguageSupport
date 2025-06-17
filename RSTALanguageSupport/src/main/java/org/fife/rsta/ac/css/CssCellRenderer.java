@@ -39,9 +39,6 @@ class CssCellRenderer extends CompletionCellRenderer {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void prepareForFunctionCompletion(JList list,
 			FunctionCompletion fc, int index, boolean selected,
@@ -52,9 +49,6 @@ class CssCellRenderer extends CompletionCellRenderer {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void prepareForMarkupTagCompletion(JList list,
 		MarkupTagCompletion c, int index, boolean selected, boolean hasFocus) {

@@ -77,7 +77,10 @@ class DemoRootPane extends JRootPane implements HyperlinkListener,
 		// changes to the build path.
 		try {
 			jls.getJarManager().addCurrentJreClassFileSource();
-		} catch (IOException ioe) {
+		} catch (IllegalArgumentException | IOException ioe) {
+			JOptionPane.showMessageDialog(this,
+					"Error adding JRE class file source: " + ioe.getMessage(),
+					"Error", JOptionPane.ERROR_MESSAGE);
 			ioe.printStackTrace();
 		}
 

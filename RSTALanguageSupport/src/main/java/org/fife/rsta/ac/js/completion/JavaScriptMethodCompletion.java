@@ -106,9 +106,6 @@ public class JavaScriptMethodCompletion extends FunctionCompletion implements
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String toString() {
 		return getSignature();
@@ -121,9 +118,6 @@ public class JavaScriptMethodCompletion extends FunctionCompletion implements
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public int compareTo(Completion other) {
 		int rc = -1;

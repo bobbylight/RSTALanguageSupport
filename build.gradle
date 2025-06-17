@@ -2,8 +2,12 @@
 //    id 'com.github.spotbugs' version '5.0.12'
 //}
 
+// We require building with JDK 17 or later. Built artifact compatibility
+// is controlled by javaLanguageVersion
+assert JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)
+
 group = 'com.fifesoft'
-// NOTE: Local Java 8:  /Library/Java/JavaVirtualMachines/jdk1.8.0_191.jdk/Contents/Home
+// NOTE: Local Java 17: /Library/Java/JavaVirtualMachines/jdk-17.0.13+11/Contents/Home
 
 allprojects {
 
@@ -11,12 +15,12 @@ allprojects {
         mavenLocal()
         mavenCentral()
         maven {
-            url 'https://oss.sonatype.org/content/repositories/snapshots'
+            url = 'https://oss.sonatype.org/content/repositories/snapshots'
         }
     }
 
     wrapper {
-        gradleVersion = '7.5.1'
+        gradleVersion = '8.13'
     }
 
 	tasks.withType(Javadoc) {
@@ -57,8 +61,7 @@ subprojects {
 //    }
 
     compileJava {
-        sourceCompatibility javaVersion.toString()
-        targetCompatibility javaVersion.toString()
+        options.release = Integer.parseInt(javaLanguageVersion)
         options.debug = true
         options.debugOptions.debugLevel = 'source,vars,lines'
         options.compilerArgs << '-Xlint:deprecation' << '-Xlint:unchecked'

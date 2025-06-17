@@ -73,9 +73,6 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public int compareTo(Completion other) {
 		int rc = -1;
@@ -217,9 +214,6 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public String toString() {
 		return getSignature();

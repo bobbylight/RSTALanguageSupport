@@ -40,9 +40,6 @@ public class CLanguageSupport extends AbstractLanguageSupport {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected ListCellRenderer<Object> createDefaultCompletionCellRenderer() {
 		return new CCellRenderer();
@@ -57,9 +54,6 @@ public class CLanguageSupport extends AbstractLanguageSupport {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void install(RSyntaxTextArea textArea) {
 
@@ -73,9 +67,6 @@ public class CLanguageSupport extends AbstractLanguageSupport {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void uninstall(RSyntaxTextArea textArea) {
 		uninstallImpl(textArea);

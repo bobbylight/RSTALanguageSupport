@@ -4,34 +4,31 @@ plugins {
 
 ['java', 'distribution', 'maven-publish', 'signing'].each { apply plugin: it }
 
-assert JavaVersion.current().isJava8Compatible()
-
-archivesBaseName = 'languagesupport'
-
 dependencies {
     api 'com.fifesoft:rsyntaxtextarea:3.3.0'
     api 'com.fifesoft:autocomplete:3.3.0'
-    implementation 'org.mozilla:rhino:1.7.14'
+    implementation 'org.mozilla:rhino-all:1.8.0'
     testImplementation 'junit:junit:4.13.2'
 }
 
-ext.isReleaseVersion = !project.version.endsWith('SNAPSHOT')
-
-ext.sharedManifest = manifest {
-    attributes('Main-Class': 'org.fife.rsta.ac.demo.DemoApp',
-            'Class-Path': 'rsyntaxtextarea.jar autocomplete.jar rhino-1.7.14.jar',
-            'Specification-Title': 'RSyntaxTextArea Language Support',
-            'Specification-Version': version,
-            'Implementation-Title': 'org.fife.ui',
-            'Implementation-Version': version)
+base {
+    archivesName = 'languagesupport'
 }
+ext.isReleaseVersion = !project.version.endsWith('SNAPSHOT')
 
 java {
     withSourcesJar()
     withJavadocJar()
 }
 jar {
-    manifest { from sharedManifest }
+    manifest {
+        attributes('Main-Class': 'org.fife.rsta.ac.demo.DemoApp',
+                'Class-Path': 'rsyntaxtextarea.jar autocomplete.jar rhino-1.7.14.jar',
+                'Specification-Title': 'RSyntaxTextArea Language Support',
+                'Specification-Version': version,
+                'Implementation-Title': 'org.fife.ui',
+                'Implementation-Version': version)
+    }
 }
 
 publishing {
@@ -88,7 +85,7 @@ publishing {
 
 signing {
     // Don't require signing for e.g. ./gradlew install
-    required { gradle.taskGraph.hasTask('publish') && isReleaseVersion }
+    required = gradle.taskGraph.hasTask('publish') && isReleaseVersion
     sign publishing.publications.maven
 }
 tasks.withType(Sign) {

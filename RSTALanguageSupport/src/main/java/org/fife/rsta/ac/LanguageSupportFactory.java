@@ -143,7 +143,7 @@ public final class LanguageSupportFactory implements PropertyChangeListener {
 			if (supportClazz!=null) {
 				try {
 					Class<?> clazz = Class.forName(supportClazz);
-					support = (LanguageSupport)clazz.newInstance();
+					support = (LanguageSupport)clazz.getDeclaredConstructor().newInstance();
 				} catch (RuntimeException re) { // FindBugs
 					throw re;
 				} catch (Exception e) {
