@@ -122,9 +122,6 @@ public class JavaScriptOutlineTree extends AbstractSourceTree {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void expandInitialNodes() {
 
@@ -163,9 +160,6 @@ public class JavaScriptOutlineTree extends AbstractSourceTree {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public boolean gotoSelectedElement() {
 		TreePath path = getLeadSelectionPath();//e.getNewLeadSelectionPath();
@@ -177,9 +171,6 @@ public class JavaScriptOutlineTree extends AbstractSourceTree {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void listenTo(RSyntaxTextArea textArea) {
 
@@ -203,9 +194,6 @@ public class JavaScriptOutlineTree extends AbstractSourceTree {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void uninstall() {
 

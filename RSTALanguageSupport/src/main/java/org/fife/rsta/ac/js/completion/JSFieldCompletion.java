@@ -108,9 +108,6 @@ public class JSFieldCompletion extends VariableCompletion implements
 		return super.equals(obj);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public int compareTo(Completion o) {
 		if (o==this) {

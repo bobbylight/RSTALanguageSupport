@@ -120,9 +120,6 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	private String lastCompletionsAtText = null;
 	private List<Completion> lastParameterizedCompletionsAt = null;
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public List<Completion> getCompletionsAt(JTextComponent tc, Point p) {
 
@@ -184,9 +181,6 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected List<Completion> getCompletionsImpl(JTextComponent comp) {
 

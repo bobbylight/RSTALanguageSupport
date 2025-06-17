@@ -147,9 +147,6 @@ public class JSBeanCompletion extends VariableCompletion implements
 		return getName().hashCode();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public int compareTo(Completion o) {
 		if (o==this) {

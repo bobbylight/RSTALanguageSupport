@@ -36,18 +36,12 @@ public class ShellCompletionProvider extends CCompletionProvider {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected void addShorthandCompletions(DefaultCompletionProvider codeCP) {
 		// Add nothing for now.
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected CompletionProvider createStringCompletionProvider() {
         return new DefaultCompletionProvider();

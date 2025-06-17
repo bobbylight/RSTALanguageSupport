@@ -70,9 +70,6 @@ public class JsDocCompletionProvider extends DefaultCompletionProvider {
 	}
 
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	protected boolean isValidChar(char ch) {
 		return Character.isLetterOrDigit(ch) || ch=='_' || ch=='@' ||
