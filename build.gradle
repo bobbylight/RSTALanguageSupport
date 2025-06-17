@@ -11,12 +11,12 @@ allprojects {
         mavenLocal()
         mavenCentral()
         maven {
-            url 'https://oss.sonatype.org/content/repositories/snapshots'
+            url = 'https://oss.sonatype.org/content/repositories/snapshots'
         }
     }
 
     wrapper {
-        gradleVersion = '7.5.1'
+        gradleVersion = '8.13'
     }
 
 	tasks.withType(Javadoc) {
@@ -57,8 +57,8 @@ subprojects {
 //    }
 
     compileJava {
-        sourceCompatibility javaVersion.toString()
-        targetCompatibility javaVersion.toString()
+        sourceCompatibility = javaVersion.toString()
+        targetCompatibility = javaVersion.toString()
         options.debug = true
         options.debugOptions.debugLevel = 'source,vars,lines'
         options.compilerArgs << '-Xlint:deprecation' << '-Xlint:unchecked'
