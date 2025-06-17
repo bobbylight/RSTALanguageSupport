@@ -314,7 +314,7 @@ return DEFAULT;
 
 		InputMap im = textArea.getInputMap();
 		ActionMap am = textArea.getActionMap();
-		int c = textArea.getToolkit().getMenuShortcutKeyMask();
+		int c = textArea.getToolkit().getMenuShortcutKeyMaskEx();
 		int shift = InputEvent.SHIFT_DOWN_MASK;
 
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_O, c | shift), "GoToType");
@@ -514,7 +514,7 @@ return DEFAULT;
 
 		InputMap im = textArea.getInputMap();
 		ActionMap am = textArea.getActionMap();
-		int c = textArea.getToolkit().getMenuShortcutKeyMask();
+		int c = textArea.getToolkit().getMenuShortcutKeyMaskEx();
 		int shift = InputEvent.SHIFT_DOWN_MASK;
 
 		im.remove(KeyStroke.getKeyStroke(KeyEvent.VK_O, c | shift));
