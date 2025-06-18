@@ -595,7 +595,7 @@ System.out.println("Unmatched linkContent: " + linkContent);
 		lastCUClassFileParam = cf;
 		CompilationUnit cu = null;
 
-		if(loc != null) {
+		if (loc != null) {
 			try {
 				cu = loc.getCompilationUnit(cf);
 			} catch (IOException ioe) {

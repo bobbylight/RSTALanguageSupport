@@ -189,7 +189,7 @@ private CaseInsensitiveComparator comparator = new CaseInsensitiveComparator();
 	 * A comparator that compares the input text of two {@link Completion}s
 	 * lexicographically, ignoring case.
 	 */
-	private static class CaseInsensitiveComparator
+	private static final class CaseInsensitiveComparator
 			implements Comparator<Completion>, Serializable {
 
 		@Override

@@ -71,7 +71,7 @@ public class SourceTreeNode extends DefaultMutableTreeNode
 	@Override
 	public void add(MutableTreeNode child) {
 		//super.add(child);
-		if(child!=null && child.getParent()==this) {
+		if (child!=null && child.getParent()==this) {
 			insert(child, super.getChildCount() - 1);
 		}
 		else {

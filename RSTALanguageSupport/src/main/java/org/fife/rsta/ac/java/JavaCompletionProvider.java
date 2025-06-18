@@ -160,7 +160,7 @@ public class JavaCompletionProvider extends LanguageAwareCompletionProvider {
 
 	private void setCommentCompletions(ShorthandCompletionCache shorthandCache) {
 		AbstractCompletionProvider provider = shorthandCache.getCommentProvider();
-		if(provider != null) {
+		if (provider != null) {
 			for (Completion c : shorthandCache.getCommentCompletions()) {
 				provider.addCompletion(c);
 			}

@@ -306,7 +306,7 @@ public class CompilationUnit extends AbstractASTNode
 	/**
 	 * An offset that always returns 0.
 	 */
-	private static class ZeroOffset implements Offset {
+	private static final class ZeroOffset implements Offset {
 
 		@Override
 		public int getOffset() {

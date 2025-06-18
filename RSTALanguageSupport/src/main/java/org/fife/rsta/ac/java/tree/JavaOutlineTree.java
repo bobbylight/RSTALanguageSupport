@@ -362,7 +362,7 @@ public class JavaOutlineTree extends AbstractSourceTree {
 	 * Listens for events this tree is interested in (events in the associated
 	 * editor, for example), as well as events in this tree.
 	 */
-	private class Listener implements PropertyChangeListener,
+	private final class Listener implements PropertyChangeListener,
 							TreeSelectionListener {
 
 		/**
