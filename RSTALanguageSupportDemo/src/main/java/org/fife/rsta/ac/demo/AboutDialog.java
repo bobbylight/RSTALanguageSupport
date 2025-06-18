@@ -250,7 +250,7 @@ public class AboutDialog extends JDialog {
 	/**
 	 * The border of the "top section" of the About dialog.
 	 */
-	private static class TopBorder extends AbstractBorder {
+	private static final class TopBorder extends AbstractBorder {
 
 		@Override
 		public Insets getBorderInsets(Component c) {

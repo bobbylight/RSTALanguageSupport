@@ -242,7 +242,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	 * @param set The set to add to.
 	 */
 	private void addShorthandCompletions(Set<Completion> set) {
-		if(shorthandCache != null) {
+		if (shorthandCache != null) {
 			set.addAll(shorthandCache.getShorthandCompletions());
 		}
 	}

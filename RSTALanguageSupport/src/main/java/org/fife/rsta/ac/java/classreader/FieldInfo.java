@@ -196,7 +196,7 @@ public class FieldInfo extends MemberInfo {
 			case 'L':
 				String clazz = descriptor.substring(braceCount+1,
 													descriptor.length()-1);
-				if(qualified) {
+				if (qualified) {
 					clazz = clazz.replace('/', '.');
 				}
 				else {

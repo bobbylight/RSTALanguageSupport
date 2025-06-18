@@ -92,7 +92,7 @@ class XmlTreeCellRenderer extends DefaultTreeCellRenderer {
 	 * much faster (~ 4x faster), but still doesn't eliminate the issue for
 	 * huge trees.
 	 */
-	private static class XmlTreeCellUI extends BasicLabelUI {
+	private static final class XmlTreeCellUI extends BasicLabelUI {
 
 		@Override
 		protected void installDefaults(JLabel label) {

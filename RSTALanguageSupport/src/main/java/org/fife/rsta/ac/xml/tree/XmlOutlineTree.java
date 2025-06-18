@@ -219,7 +219,7 @@ public class XmlOutlineTree extends AbstractSourceTree {
 	 * Listens for events this tree is interested in (events in the associated
 	 * editor, for example), as well as events in this tree.
 	 */
-	private class XmlEditorListener implements PropertyChangeListener,
+	private final class XmlEditorListener implements PropertyChangeListener,
 							TreeSelectionListener {
 
 		/**

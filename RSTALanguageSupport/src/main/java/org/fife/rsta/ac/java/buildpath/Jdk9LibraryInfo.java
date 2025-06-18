@@ -57,7 +57,7 @@ public class Jdk9LibraryInfo extends LibraryInfo {
 
 	@Override
 	public void bulkClassFileCreationEnd() {
-		for( JarFile bulkCreateJar: bulkCreateJmods) {
+		for (JarFile bulkCreateJar: bulkCreateJmods) {
 			try {
 				bulkCreateJar.close();
 			} catch (IOException ioe) {
@@ -71,7 +71,7 @@ public class Jdk9LibraryInfo extends LibraryInfo {
 	@Override
 	public void bulkClassFileCreationStart() {
 		bulkCreateJmods = new JarFile[jmodFiles.length];
-		for(int i = 0; i< jmodFiles.length; i++) {
+		for (int i = 0; i < jmodFiles.length; i++) {
 			File jarFile = jmodFiles[i];
 			try {
 				bulkCreateJmods[i] = new JarFile(jarFile);
@@ -105,10 +105,10 @@ public class Jdk9LibraryInfo extends LibraryInfo {
 
 	@Override
 	public ClassFile createClassFile(String entryName) throws IOException {
-		for(File jarFile: jmodFiles) {
+		for (File jarFile: jmodFiles) {
 			try (JarFile jar = new JarFile(jarFile)) {
 				ClassFile c = createClassFileImpl(jar, entryName);
-				if(c!=null) {
+				if (c!=null) {
 					return c;
 				}
 			}
@@ -120,9 +120,9 @@ public class Jdk9LibraryInfo extends LibraryInfo {
 
 	@Override
 	public ClassFile createClassFileBulk(String entryName) throws IOException {
-		for( JarFile bulkCreateJar: bulkCreateJmods) {
+		for (JarFile bulkCreateJar: bulkCreateJmods) {
 			ClassFile c = createClassFileImpl(bulkCreateJar, entryName);
-			if(c!=null) {
+			if (c!=null) {
 				return c;
 			}
 		}
@@ -153,14 +153,14 @@ public class Jdk9LibraryInfo extends LibraryInfo {
 	public PackageMapNode createPackageMap() throws IOException {
 		PackageMapNode root = new PackageMapNode();
 
-		for( File jarFile: jmodFiles) {
+		for (File jarFile: jmodFiles) {
 			try (JarFile jar = new JarFile(jarFile)) {
 
 				Enumeration<JarEntry> e = jar.entries();
 				while (e.hasMoreElements()) {
 					ZipEntry entry = e.nextElement();
 					String entryName = entry.getName();
-					if(entryName.startsWith("classes/")) {
+					if (entryName.startsWith("classes/")) {
 						entryName = entryName.substring(8);
 						if (entryName.endsWith(".class")) {
 							root.add(entryName);
@@ -191,7 +191,7 @@ public class Jdk9LibraryInfo extends LibraryInfo {
 	@Override
 	public int hashCodeImpl() {
 		int h = 0;
-		for( File jarFile: jmodFiles) {
+		for (File jarFile: jmodFiles) {
 			h += jarFile.hashCode();
 		}
 		return h;
@@ -204,7 +204,7 @@ public class Jdk9LibraryInfo extends LibraryInfo {
 	 * @param jmodFiles The jar files location.  This cannot be <code>null</code>.
 	 */
 	private void setJmodFiles(File[] jmodFiles) {
-		for( File jarFile: jmodFiles) {
+		for (File jarFile: jmodFiles) {
 			if (jarFile==null || !jarFile.exists()) {
 				String name = jarFile==null ? "null" : jarFile.getAbsolutePath();
 				throw new IllegalArgumentException("Jar does not exist: " + name);

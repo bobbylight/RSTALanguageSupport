@@ -184,7 +184,7 @@ public class GoToMemberWindow extends JWindow {
 	/**
 	 * Listens for events in this window.
 	 */
-	private class Listener extends MouseAdapter implements WindowFocusListener,
+	private final class Listener extends MouseAdapter implements WindowFocusListener,
 			ComponentListener, DocumentListener, ActionListener, KeyListener {
 
 		@Override
@@ -283,7 +283,7 @@ public class GoToMemberWindow extends JWindow {
 	/**
 	 * The border for the filtering text field.
 	 */
-	private static class TextFieldBorder implements Border {
+	private static final class TextFieldBorder implements Border {
 
 		@Override
 		public Insets getBorderInsets(Component c) {
