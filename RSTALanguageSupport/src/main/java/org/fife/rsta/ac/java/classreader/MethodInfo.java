@@ -69,7 +69,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	/**
 	 * Cached return type.
 	 */
-	private String returnType;
+	private String fullyQualifiedReturnType;
 
 	/**
 	 * Cached string representing the name and parameters for this method.
@@ -138,7 +138,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 */
 	void clearParamTypeInfo() {
 		paramTypes = null;
-		returnType = null;
+		fullyQualifiedReturnType = null;
 	}
 
 
@@ -437,18 +437,18 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 * @return The return type of this method.
 	 */
 	public String getReturnTypeString(boolean fullyQualified) {
-		if (returnType==null) {
-			returnType = getReturnTypeStringFromTypeSignature(fullyQualified);
-			if (returnType==null) {
-				returnType = getReturnTypeStringFromDescriptor(fullyQualified);
+		if (fullyQualifiedReturnType == null) {
+			fullyQualifiedReturnType = getReturnTypeStringFromTypeSignature(true);
+			if (fullyQualifiedReturnType == null) {
+				fullyQualifiedReturnType = getReturnTypeStringFromDescriptor(true);
 			}
 		}
 		if (!fullyQualified) {
-			if (returnType != null && returnType.contains(".")) {
-				return returnType.substring(returnType.lastIndexOf(".") +1);
+			if (fullyQualifiedReturnType != null && fullyQualifiedReturnType.contains(".")) {
+				return fullyQualifiedReturnType.substring(fullyQualifiedReturnType.lastIndexOf(".") +1);
 			}
 		}
-		return returnType;
+		return fullyQualifiedReturnType;
 	}
 
 
