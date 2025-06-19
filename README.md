@@ -1,6 +1,7 @@
 # RSTALanguageSupport
 ![Build](https://github.com/bobbylight/RSTALanguageSupport/actions/workflows/gradle.yml/badge.svg)
 ![CodeQL](https://github.com/bobbylight/RSTALanguageSupport/actions/workflows/codeql-analysis.yml/badge.svg)
+![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.fifesoft/languagesupport/badge.svg)
 
 This library contains "language support" for various languages for RSyntaxTextArea.
 "Language support" is a little vague, but it generally means auto-completion of function
