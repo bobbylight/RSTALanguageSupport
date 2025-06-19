@@ -8,7 +8,6 @@ dependencies {
     api 'com.fifesoft:rsyntaxtextarea:3.3.0'
     api 'com.fifesoft:autocomplete:3.3.0'
     implementation 'org.mozilla:rhino-all:1.8.0'
-    testImplementation 'junit:junit:4.13.2'
 }
 
 base {
@@ -28,6 +27,18 @@ jar {
                 'Specification-Version': version,
                 'Implementation-Title': 'org.fife.ui',
                 'Implementation-Version': version)
+    }
+}
+test {
+    testLogging {
+        events 'failed' //, 'passed', 'skipped', 'standardOut', 'standardError'
+
+        showExceptions = true
+        exceptionFormat = 'full'
+        showCauses = true
+        showStackTraces = true
+
+        showStandardStreams = false
     }
 }
 

@@ -16,8 +16,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-import junit.framework.TestCase;
-
 import org.fife.rsta.ac.java.rjc.ast.CodeBlock;
 import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
 import org.fife.rsta.ac.java.rjc.ast.Field;
@@ -28,6 +26,10 @@ import org.fife.rsta.ac.java.rjc.ast.Member;
 import org.fife.rsta.ac.java.rjc.ast.Method;
 import org.fife.rsta.ac.java.rjc.ast.TypeDeclaration;
 import org.fife.rsta.ac.java.rjc.lexer.Scanner;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
 /**
@@ -42,18 +44,9 @@ import org.fife.rsta.ac.java.rjc.lexer.Scanner;
  * @author Robert Futrell
  * @version 1.0
  */
-public class ClassAndLocalVariablesTest extends TestCase {
+class ClassAndLocalVariablesTest {
 
 	private CompilationUnit cu;
-
-
-	public ClassAndLocalVariablesTest() {
-		try {
-			cu = createCompilationUnit();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
-	}
 
 
 	private CompilationUnit createCompilationUnit() throws IOException {
@@ -68,19 +61,17 @@ public class ClassAndLocalVariablesTest extends TestCase {
 	}
 
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
+	@BeforeEach
+	void setUp() {
+		try {
+			cu = createCompilationUnit();
+		} catch (IOException ioe) {
+			fail("Failed to create CompilationUnit for test", ioe);
+		}
 	}
 
-
-	@Override
-	protected void tearDown() throws Exception {
-		super.tearDown();
-	}
-
-
-	public void testImports() {
+	@Test
+	void testImports() {
 
 		assertEquals(4, cu.getImportCount());
 
@@ -111,7 +102,8 @@ public class ClassAndLocalVariablesTest extends TestCase {
 	}
 
 
-	public void testMembers() {
+	@Test
+	void testMembers() {
 
 		// A single class is defined
 		assertEquals(1, cu.getTypeDeclarationCount());
@@ -129,7 +121,7 @@ public class ClassAndLocalVariablesTest extends TestCase {
 		Iterator<Member> i = typeDec.getMemberIterator();
 
 		Member member = i.next();
-		assertTrue(member instanceof Field);
+		assertInstanceOf(Field.class, member);
 		Field field = (Field)member;
 		assertEquals("int", field.getType().toString());
 		assertEquals("classInt1", field.getName());
@@ -138,7 +130,7 @@ public class ClassAndLocalVariablesTest extends TestCase {
                 field.getDocComment().contains("A member int variable."));
 
 		member = i.next();
-		assertTrue(member instanceof Field);
+		assertInstanceOf(Field.class, member);
 		field = (Field)member;
 		assertEquals("int", field.getType().toString());
 		assertEquals("classInt2", field.getName());
@@ -146,7 +138,7 @@ public class ClassAndLocalVariablesTest extends TestCase {
         assertNull(field.getDocComment());
 
 		member = i.next();
-		assertTrue(member instanceof Field);
+		assertInstanceOf(Field.class, member);
 		field = (Field)member;
 		assertEquals("String", field.getType().toString());
 		assertEquals("classStr1", field.getName());
@@ -155,7 +147,7 @@ public class ClassAndLocalVariablesTest extends TestCase {
                 field.getDocComment().contains("A string member variable."));
 
 		member = i.next();
-		assertTrue(member instanceof Field);
+		assertInstanceOf(Field.class, member);
 		field = (Field)member;
 		assertEquals("list", field.getName());
 		assertEquals("List<Double>", field.getType().toString());
@@ -163,14 +155,14 @@ public class ClassAndLocalVariablesTest extends TestCase {
         assertNull(field.getDocComment());
 
 		member = i.next();
-		assertTrue(member instanceof Method);
+		assertInstanceOf(Method.class, member);
 		Method method = (Method)member;
 		assertEquals("SimpleClass", method.getName());
 		assertTrue(method.getModifiers().isPublic());
 		assertTrue(method.isConstructor());
 
 		member = i.next();
-		assertTrue(member instanceof Method);
+		assertInstanceOf(Method.class, member);
 		method = (Method)member;
 		assertEquals("getValue", method.getName());
 		assertTrue(method.getModifiers().isPublic());
@@ -178,14 +170,14 @@ public class ClassAndLocalVariablesTest extends TestCase {
                 method.getDocComment().contains("Returns a value."));
 
 		member = i.next();
-		assertTrue(member instanceof Method);
+		assertInstanceOf(Method.class, member);
 		method = (Method)member;
 		assertEquals("computeValue", method.getName());
 		assertTrue(method.getModifiers().isPrivate());
 		assertNull(method.getDocComment());
 
 		member = i.next();
-		assertTrue(member instanceof Method);
+		assertInstanceOf(Method.class, member);
 		method = (Method)member;
 		assertEquals("localVarsComplex", method.getName());
 		assertTrue(method.getModifiers().isPublic());
@@ -197,7 +189,7 @@ public class ClassAndLocalVariablesTest extends TestCase {
 		assertEquals("unused", param.getName());
 
 		member = i.next();
-		assertTrue(member instanceof Method);
+		assertInstanceOf(Method.class, member);
 		method = (Method)member;
 		assertEquals("localVarsSimple", method.getName());
 		assertTrue(method.getModifiers().isPublic());
@@ -205,7 +197,8 @@ public class ClassAndLocalVariablesTest extends TestCase {
 	}
 
 
-	public void testLocalVariablesComplex() {
+	@Test
+	void testLocalVariablesComplex() {
 
 		TypeDeclaration td = cu.getTypeDeclaration(0);
 		List<Method> methods = td.getMethodsByName("localVarsComplex");
@@ -227,7 +220,8 @@ public class ClassAndLocalVariablesTest extends TestCase {
 	}
 
 
-	public void testLocalVariablesSimple() {
+	@Test
+	void testLocalVariablesSimple() {
 
 		TypeDeclaration td = cu.getTypeDeclaration(0);
 		List<Method> methods = td.getMethodsByName("localVarsSimple");
