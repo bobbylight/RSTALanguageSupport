@@ -356,7 +356,10 @@ public class PackageMapNode {
 
 	/**
 	 * Method used to recursively scan our package map for classes whose names
-	 * start with a given prefix, ignoring case.
+	 * start with a given prefix, ignoring case.<p>
+	 *
+	 * Note: This method assumes you are fetching class files in bulk from the
+	 * {@code LibraryInfo} instance.
 	 *
 	 * @param prefix The prefix that the unqualified class names must match
 	 *        (ignoring case).
@@ -387,7 +390,7 @@ public class PackageMapNode {
 				if (cf==null) {
 					String fqClassName = currentPkg + className + ".class";
 					try {
-						cf = info.createClassFile(fqClassName);
+						cf = info.createClassFileBulk(fqClassName);
 						cfEntry.setValue(cf); // Update the map
 					} catch (IOException ioe) {
 						ioe.printStackTrace();

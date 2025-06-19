@@ -46,7 +46,7 @@ public class JarReaderTest {
         LibraryInfo mockInfo = Mockito.mock(LibraryInfo.class);
         doReturn(System.currentTimeMillis()).when(mockInfo).getLastModified();
         doReturn(packageMap).when(mockInfo).createPackageMap();
-        when(mockInfo.createClassFile(anyString())).thenAnswer(input -> {
+        when(mockInfo.createClassFileBulk(anyString())).thenAnswer(input -> {
             ClassFile cf = Mockito.mock(ClassFile.class);
             doReturn(input.getArgument(0)).when(cf).getClassName(anyBoolean());
             return cf;
