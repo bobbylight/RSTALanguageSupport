@@ -1,5 +1,6 @@
 *.java~
 build
 .gradle
+bin/
 out/
 .idea
