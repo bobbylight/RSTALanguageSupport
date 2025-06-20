@@ -91,8 +91,6 @@ public class PhpCompletionProvider extends HtmlCompletionProvider {
 	 */
 	public void loadPhpCompletionsFromXML(InputStream in) throws IOException {
 
-		long start = System.currentTimeMillis();
-
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		CompletionXMLParser handler = new CompletionXMLParser(this);
         try (BufferedInputStream bin = new BufferedInputStream(in)) {
@@ -109,9 +107,6 @@ public class PhpCompletionProvider extends HtmlCompletionProvider {
             }
         } catch (SAXException | ParserConfigurationException e) {
             throw new IOException(e.toString());
-        } finally {
-            long time = System.currentTimeMillis() - start;
-            System.out.println("XML loaded in: " + time + "ms");
         }
 
 	}

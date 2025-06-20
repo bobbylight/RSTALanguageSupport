@@ -12,6 +12,7 @@ package org.fife.rsta.ac.java.rjc.parser;
 
 import java.io.EOFException;
 import java.io.IOException;
+import java.lang.System.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +49,9 @@ import org.fife.rsta.ac.java.rjc.notices.ParserNotice;
  * @version 1.0
  */
 public class ASTFactory implements TokenTypes {
+
+	private static final Logger LOG =
+		System.getLogger(ASTFactory.class.getName());
 
 	private static final boolean DEBUG = false;
 
@@ -1533,7 +1537,7 @@ OUTER:
 
 	private static void log(String msg) {
 		if (DEBUG) {
-			System.out.println(msg);
+			LOG.log(System.Logger.Level.INFO, msg);
 		}
 	}
 

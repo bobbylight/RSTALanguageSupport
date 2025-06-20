@@ -382,7 +382,6 @@ public final class Util {
 		}
 
 		else { // Malformed link tag
-System.out.println("Unmatched linkContent: " + linkContent);
 			appendTo.append(linkContent);
 		}
 

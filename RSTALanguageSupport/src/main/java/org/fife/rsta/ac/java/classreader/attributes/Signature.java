@@ -10,6 +10,7 @@
  */
 package org.fife.rsta.ac.java.classreader.attributes;
 
+import java.lang.System.Logger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +30,9 @@ import org.fife.rsta.ac.java.classreader.MethodInfo;
  * @version 1.0
  */
 public class Signature extends AttributeInfo {
+
+	private static final Logger LOG =
+		System.getLogger(Signature.class.getName());
 
 	private String signature;
 
@@ -76,12 +80,14 @@ public class Signature extends AttributeInfo {
 						colon = temp.indexOf(':', offs);
 					}
 					else {
-						System.err.println("WARN: Can't parse signature (1): " + signature);
+						LOG.log(System.Logger.Level.WARNING,
+							"Can't parse signature (1): " + signature);
 						break;
 					}
 				}
 				else {
-					System.err.println("WARN: Can't parse signature (2): " + signature);
+					LOG.log(System.Logger.Level.WARNING,
+						"Can't parse signature (2): " + signature);
 					break;
 				}
 			}
@@ -161,8 +167,9 @@ public class Signature extends AttributeInfo {
 			}
 
 			else {
-				System.out.println("TODO: Unhandled method signature for " +
-						mi.getName() + ": " + signature);
+				LOG.log(System.Logger.Level.INFO,
+					"TODO: Unhandled method signature for " + mi.getName() +
+					": " + signature);
 			}
 
 		}
@@ -208,8 +215,9 @@ public class Signature extends AttributeInfo {
 			}
 
 			else {
-				System.out.println("TODO: Unhandled method signature for " +
-						mi.getName() + ": " + signature);
+				LOG.log(System.Logger.Level.INFO,
+					"TODO: Unhandled method signature for " + mi.getName() +
+					": " + signature);
 			}
 
 		}
@@ -334,8 +342,8 @@ public class Signature extends AttributeInfo {
 					int offs = skipLtGt(str, lt+1);
 					// There should be a ';' after type parameters
 					if (offs==str.length() || str.charAt(offs)!=';') {
-						System.out.println("TODO: " + errorDesc +
-								mi.getName() + ": " + signature);
+						LOG.log(System.Logger.Level.INFO, "TODO: " + errorDesc +
+							mi.getName() + ": " + signature);
 						type = "ERROR_PARSING_METHOD_SIG";
 					}
 					else {

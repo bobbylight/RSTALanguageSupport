@@ -10,6 +10,7 @@
  */
 package org.fife.rsta.ac.java;
 
+import java.lang.System.Logger;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -39,6 +40,8 @@ import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
  */
 public class JavadocUrlHandler implements ExternalURLHandler {
 
+	private static final Logger LOG =
+		System.getLogger(JavadocUrlHandler.class.getName());
 
 	/**
 	 * Returns the parent package <code>backupCount</code> levels up from
@@ -124,7 +127,7 @@ public class JavadocUrlHandler implements ExternalURLHandler {
 			clazz = mc.getEnclosingClassName(true);
 		}
 		else {
-			System.err.println("Can't determine class from completion type: " +
+			logError("Can't determine class from completion type: " +
 					c.getClass() + " (" + c + ") - href: " + desc);
 		}
 
@@ -158,7 +161,7 @@ public class JavadocUrlHandler implements ExternalURLHandler {
 			}
 		}
 		else {
-			System.err.println("Can't determine package from completion type: " +
+			logError("Can't determine package from completion type: " +
 					c.getClass() + " (" + c + ") - href: " + desc);
 		}
 
@@ -186,6 +189,10 @@ public class JavadocUrlHandler implements ExternalURLHandler {
 	}
 
 
+	private static void logError(String text) {
+		LOG.log(System.Logger.Level.ERROR, text);
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -211,7 +218,6 @@ public class JavadocUrlHandler implements ExternalURLHandler {
 		// Class should be in the same package as the one we're currently
 		// viewing.  Example:  java.lang.String class documentation
 		String desc = e.getDescription();
-		//System.out.println(desc);
 		if (desc!=null) {
 
 			if (isRelativeUrl(desc)) {
@@ -281,7 +287,7 @@ public class JavadocUrlHandler implements ExternalURLHandler {
 					}
 					else {
 						UIManager.getLookAndFeel().provideErrorFeedback(null);
-						System.err.println("Unknown class: " + clazz);
+						logError("Unknown class: " + clazz);
 					}
 				}
 
@@ -340,7 +346,7 @@ public class JavadocUrlHandler implements ExternalURLHandler {
 							if (miList!=null && miList.size()>0) {
 								if (miList.size()>1) {
 									// TODO: Pick correct overload based on args
-									System.err.println("Multiple overload support not yet implemented");
+									logError("Multiple overload support not yet implemented");
 								}
 								else {
 									MethodInfo mi = miList.get(0);
@@ -356,7 +362,7 @@ public class JavadocUrlHandler implements ExternalURLHandler {
 					}
 					else {
 						UIManager.getLookAndFeel().provideErrorFeedback(null);
-						System.err.println("Unknown class: " + clazz +
+						logError("Unknown class: " + clazz +
 								" (href: " + desc + ")");
 					}
 

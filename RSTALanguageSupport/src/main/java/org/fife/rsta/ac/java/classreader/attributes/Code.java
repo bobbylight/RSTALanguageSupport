@@ -11,6 +11,7 @@
 package org.fife.rsta.ac.java.classreader.attributes;
 
 import java.io.*;
+import java.lang.System.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +33,8 @@ import org.fife.rsta.ac.java.classreader.*;
  * @version 1.0
  */
 public class Code extends AttributeInfo {
+
+	private static final Logger LOG = System.getLogger(Code.class.getName());
 
 	/**
 	 * The parent method.
@@ -292,7 +295,8 @@ public class Code extends AttributeInfo {
 		}
 
 		else {
-			System.out.println("Unsupported Code attribute: " +  attrName);
+			LOG.log(System.Logger.Level.INFO, "Unsupported Code attribute: " +
+				attrName);
 			ai = AttributeInfo.readUnsupportedAttribute(cf, in, attrName,
 														attributeLength);
 		}

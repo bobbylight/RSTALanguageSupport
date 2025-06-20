@@ -164,7 +164,6 @@ public class PerlCompletionProvider extends CCompletionProvider {
 		String text = p.getAlreadyEnteredText(comp);
 		char firstChar = text.length()==0 ? 0 : text.charAt(0);
 		if (firstChar!='$' && firstChar!='@' && firstChar!='%') {
-			System.out.println("DEBUG: No use matching variables, exiting");
 			return null;
 		}
 

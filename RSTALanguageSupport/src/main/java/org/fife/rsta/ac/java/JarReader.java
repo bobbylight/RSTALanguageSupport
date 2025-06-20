@@ -11,6 +11,7 @@
 package org.fife.rsta.ac.java;
 
 import java.io.IOException;
+import java.lang.System.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -32,6 +33,9 @@ import org.fife.ui.autocomplete.CompletionProvider;
  * @version 1.0
  */
 class JarReader {
+
+	private static final Logger LOG =
+		System.getLogger(JarReader.class.getName());
 
 	/**
 	 * Information about the jar or directory we're reading classes from.
@@ -86,7 +90,8 @@ class JarReader {
 		if (newLastModified!=0 && newLastModified!=lastModified) {
 			int count;
 			count = packageMap.clearClassFiles();
-			System.out.println("DEBUG: Cleared " + count + " cached ClassFiles");
+			LOG.log(System.Logger.Level.DEBUG,
+				"Cleared " + count + " cached ClassFiles");
 			lastModified = newLastModified;
 		}
 	}

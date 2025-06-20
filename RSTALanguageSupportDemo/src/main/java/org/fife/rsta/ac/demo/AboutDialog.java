@@ -198,13 +198,12 @@ public class AboutDialog extends JDialog {
 		SpringLayout layout;
 		try {
 			layout = (SpringLayout)parent.getLayout();
-		} catch (ClassCastException cce) {
-			System.err.println("The first argument to makeCompactGrid " +
-							"must use SpringLayout.");
+		} catch (ClassCastException cce) { // Never happens
+			cce.printStackTrace();
 			return;
 		}
 
-		//Align all cells in each column and make them the same width.
+		// Align all cells in each column and make them the same width.
 		Spring x = Spring.constant(initialX);
 		for (int c = 0; c < cols; c++) {
 			Spring width = Spring.constant(0);

@@ -107,21 +107,18 @@ public class ShellFunctionCompletion extends FunctionCompletion {
 		Matcher m = p.matcher(text);
 		StringBuffer sb = new StringBuffer("<html><pre>");
 		while ((m.find())) {
-			System.out.println("... found '" + m.group() + "'");
 			String group = m.group();
 			if (group.startsWith("_")) {
 				sb.append("<u>");
 				String replacement = group.replaceAll("_\\010", "");
 				replacement = quoteReplacement(replacement);
 				m.appendReplacement(sb, replacement);
-				System.out.println("--- '" + replacement);
 				sb.append("</u>");
 			}
 			else {
 				String replacement = group.replaceAll(".\\010.", "");
 				replacement = quoteReplacement(replacement);
 				m.appendReplacement(sb, replacement);
-				System.out.println("--- '" + replacement);
 			}
 		}
 		m.appendTail(sb);

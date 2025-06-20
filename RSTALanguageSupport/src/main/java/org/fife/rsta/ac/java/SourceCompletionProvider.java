@@ -14,6 +14,7 @@ import java.awt.Cursor;
 import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
+import java.lang.System.Logger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -69,6 +70,9 @@ import org.fife.ui.rsyntaxtextarea.Token;
  * @version 1.0
  */
 class SourceCompletionProvider extends DefaultCompletionProvider {
+
+	private static final Logger LOG =
+		System.getLogger(SourceCompletionProvider.class.getName());
 
 	/**
 	 * The parent completion provider.
@@ -423,7 +427,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 			RSyntaxTextArea textArea = (RSyntaxTextArea)comp;
 			RSyntaxDocument doc = (RSyntaxDocument)textArea.getDocument();
 			try {
-				//System.out.println(doc.charAt(offs) + ", " + doc.charAt(offs+1));
+				//log(doc.charAt(offs) + ", " + doc.charAt(offs+1));
 				if (doc.charAt(offs)=='"' && doc.charAt(offs+1)=='.') {
 					int curLine = textArea.getLineOfOffset(offs);
 					Token list = textArea.getTokenListForLine(curLine);
@@ -434,9 +438,6 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 						addCompletionsForExtendedClass(set, cu, cf,
 													cu.getPackageName(), null);
 						stringLiteralMember = true;
-					}
-					else {
-						System.out.println(prevToken);
 					}
 				}
 			} catch (BadLocationException ble) { // Never happens
@@ -541,7 +542,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 			//long startTime = System.currentTimeMillis();
 			jarManager.addCompletions(this, text, set);
 			//long time = System.currentTimeMillis() - startTime;
-			//System.out.println("jar completions loaded in: " + time);
+			//log("jar completions loaded in: " + time);
 
 			// Loop through all types declared in this source, and provide
 			// completions depending on in what type/method/etc. the caret's in.
@@ -599,7 +600,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 
 
 
-public SourceLocation  getSourceLocForClass(String className) {
+public SourceLocation getSourceLocForClass(String className) {
 	return jarManager.getSourceLocForClass(className);
 }
 
@@ -689,7 +690,7 @@ public SourceLocation  getSourceLocForClass(String className) {
 		}
 
 		//long time = System.currentTimeMillis() - startTime;
-		//System.out.println("methods/fields/localvars loaded in: " + time);
+		//log("methods/fields/localvars loaded in: " + time);
 
 	}
 
@@ -786,7 +787,7 @@ public SourceLocation  getSourceLocForClass(String className) {
 						addCompletionsForExtendedClass(retVal, cu, cf, pkg, null);
 					}
 					else {
-						System.out.println("[DEBUG]: Couldn't find ClassFile for: " + superClassName);
+						log("[DEBUG]: Couldn't find ClassFile for: " + superClassName);
 					}
 				}
 			}
@@ -826,13 +827,13 @@ public SourceLocation  getSourceLocForClass(String className) {
 		// TODO: Remove this restriction.
 		int dot = prefix.indexOf('.');
 		if (dot>-1) {
-			System.out.println("[DEBUG]: Qualified non-this completions currently only go 1 level deep");
+			log("[DEBUG]: Qualified non-this completions currently only go 1 level deep");
 			return;
 		}
 
 		// TODO: Remove this restriction.
 		else if (!prefix.matches("[A-Za-z_][A-Za-z0-9_\\$]*")) {
-			System.out.println("[DEBUG]: Only identifier non-this completions are currently supported");
+			log("[DEBUG]: Only identifier non-this completions are currently supported");
 			return;
 		}
 
@@ -849,7 +850,7 @@ public SourceLocation  getSourceLocForClass(String className) {
 				Field field = (Field)m;
 
 				if (field.getName().equals(prefix)) {
-					//System.out.println("FOUND: " + prefix + " (" + pkg + ")");
+					//log("FOUND: " + prefix + " (" + pkg + ")");
 					Type type = field.getType();
 					if (type.isArray()) {
 						ClassFile cf = getClassFileFor(cu, "java.lang.Object");
@@ -870,7 +871,7 @@ public SourceLocation  getSourceLocForClass(String className) {
 							for (int i=0; i<cf.getImplementedInterfaceCount(); i++) {
 								String inter = cf.getImplementedInterfaceName(i, true);
 								cf = getClassFileFor(cu, inter);
-								System.out.println(cf);
+								log(cf.toString());
 							}
 						}
 					}
@@ -1026,8 +1027,13 @@ public SourceLocation  getSourceLocForClass(String className) {
 		//Collections.sort(completions);
 
 		//long time = System.currentTimeMillis() - startTime;
-		//System.out.println("imports loaded in: " + time);
+		//log("imports loaded in: " + time);
 
+	}
+
+
+	private static void log(String text) {
+		LOG.log(System.Logger.Level.INFO, text);
 	}
 
 

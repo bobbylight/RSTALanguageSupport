@@ -10,6 +10,7 @@
  */
 package org.fife.rsta.ac.java.classreader;
 
+import java.lang.System.Logger;
 import java.util.*;
 
 import org.fife.rsta.ac.java.classreader.attributes.Code;
@@ -23,6 +24,8 @@ import org.fife.rsta.ac.java.classreader.attributes.Code;
  * @version 1.0
  */
 public class Frame {
+
+	private static final Logger LOG = System.getLogger(Frame.class.getName());
 
 	private Stack<String> operandStack;
 	private LocalVarInfo[] localVars;
@@ -64,7 +67,8 @@ public class Frame {
 
 		// NOTE: Other local vars will still be "null" here!  We need to
 		// infer their types from their usage during disassembly/decompilation.
-		System.out.println("NOTE: " + (localVars.length-i) + " unknown localVars slots");
+		LOG.log(System.Logger.Level.DEBUG,
+			"NOTE: " + (localVars.length-i) + " unknown localVars slots");
 
 	}
 

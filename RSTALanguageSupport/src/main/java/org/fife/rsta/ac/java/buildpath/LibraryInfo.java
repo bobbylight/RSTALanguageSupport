@@ -12,6 +12,7 @@ package org.fife.rsta.ac.java.buildpath;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.System.Logger;
 
 import org.fife.rsta.ac.java.JarManager;
 import org.fife.rsta.ac.java.PackageMapNode;
@@ -37,6 +38,9 @@ import org.fife.rsta.ac.java.classreader.ClassFile;
  */
 public abstract class LibraryInfo implements Comparable<LibraryInfo>,
 		Cloneable {
+
+	private static final Logger LOG = System.
+		getLogger(LibraryInfo.class.getName());
 
 	/**
 	 * The location of the source files corresponding to this library.  This
@@ -219,7 +223,7 @@ public abstract class LibraryInfo implements Comparable<LibraryInfo>,
 			}
 		}
 		else {
-			System.err.println("[ERROR]: Cannot locate JRE jar in " +
+			LOG.log(System.Logger.Level.ERROR, "Cannot locate JRE jar in " +
 								jreHome.getAbsolutePath());
 			mainJar = null;
 		}

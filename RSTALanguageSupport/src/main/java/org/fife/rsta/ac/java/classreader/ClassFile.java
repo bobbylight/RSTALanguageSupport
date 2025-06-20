@@ -11,6 +11,7 @@
 package org.fife.rsta.ac.java.classreader;
 
 import java.io.*;
+import java.lang.System.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,10 @@ import org.fife.rsta.ac.java.classreader.constantpool.*;
  */
 public class ClassFile implements AccessFlags {
 
-	private static final boolean DEBUG = false;
+	private static final Logger LOG =
+		System.getLogger(ClassFile.class.getName());
+
+		private static final boolean DEBUG = false;
 
 	/**
 	 * The class file's minor version number.
@@ -136,7 +140,7 @@ public class ClassFile implements AccessFlags {
 
 	private void debugPrint(String text) {
 		if (DEBUG) {
-			System.out.println(text);
+			LOG.log(System.Logger.Level.INFO, text);
 		}
 	}
 

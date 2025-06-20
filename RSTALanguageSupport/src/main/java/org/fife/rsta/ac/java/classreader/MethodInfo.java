@@ -702,7 +702,8 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 		else {
 			ai = super.readAttribute(in, attrName, attributeLength);
 			//if (ai!=null) { // "Deprecated" attribute returns null
-			//	System.out.println("-------------- " + ai.getName());
+			//	LOG.log(System.Logger.Level.WARNING,
+			//    "-------------- " + ai.getName());
 			//}
 		}
 

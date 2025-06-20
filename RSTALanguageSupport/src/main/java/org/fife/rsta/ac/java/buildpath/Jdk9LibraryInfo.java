@@ -113,7 +113,7 @@ public class Jdk9LibraryInfo extends LibraryInfo {
 				}
 			}
 		}
-		System.err.println("ERROR: Invalid entry: " + entryName);
+		// TODO: Throw an exception in 4.0.0 release
 		return null;
 	}
 
@@ -126,7 +126,7 @@ public class Jdk9LibraryInfo extends LibraryInfo {
 				return c;
 			}
 		}
-		System.err.println("ERROR: Invalid entry: " + entryName);
+		// TODO: Throw an exception in 4.0.0 release
 		return null;
 	}
 
