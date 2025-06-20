@@ -13,6 +13,7 @@ package org.fife.rsta.ac.java.rjc.lexer;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.Reader;
+import java.lang.System.Logger;
 import java.util.List;
 import java.util.Stack;
 import javax.swing.text.BadLocationException;
@@ -28,6 +29,9 @@ import javax.swing.text.Position;
  * @version 1.0
  */
 public class Scanner {
+
+	private static final Logger LOG =
+		System.getLogger(Scanner.class.getName());
 
 	private static final boolean DEBUG = false;
 
@@ -157,10 +161,10 @@ private void pushOntoStack(Token t) {
 	private void debugPrintToken(Token t) {
 		if (DEBUG) {
 			if (t==null) {
-				System.out.println("... null");
+				LOG.log(System.Logger.Level.INFO, "... null");
 			}
 			else {
-				System.out.println("... " + t);
+				LOG.log(System.Logger.Level.INFO, "... " + t);
 			}
 		}
 	}

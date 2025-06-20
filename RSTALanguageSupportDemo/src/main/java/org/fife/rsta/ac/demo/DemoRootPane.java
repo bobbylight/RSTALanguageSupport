@@ -211,7 +211,6 @@ setContentPane(cp);
 	 */
 	@Override
 	public void hyperlinkUpdate(HyperlinkEvent e) {
-	    System.out.println("Hyperlink event: " + e.getEventType());
 		if (e.getEventType()==HyperlinkEvent.EventType.ACTIVATED) {
 			URL url = e.getURL();
 			if (url==null) {

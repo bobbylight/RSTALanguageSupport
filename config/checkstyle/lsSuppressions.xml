@@ -20,4 +20,7 @@
 
     <!-- Types that are capitalized as defined in the JVM specification. -->
     <suppress files=".*src[\\/]main[\\/]java[\\/]org[\\/]fife[\\/]rsta[\\/]ac[\\/]java[\\/]classreader[\\/]constantpool[\\/]ConstantTypes.*" checks="ConstantName"/>
+
+    <!-- Files that have legitimate reasons to include the text "System.(out|error).println" -->
+    <suppress files=".*src[\\/]main[\\/]java[\\/]org[\\/]fife[\\/]rsta[\\/]ac[\\/]java[\\/]JavaShorthandCompletionCache.*" checks="RegexpSingleline"/>
 </suppressions>

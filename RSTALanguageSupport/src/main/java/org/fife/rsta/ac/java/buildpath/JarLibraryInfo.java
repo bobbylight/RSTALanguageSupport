@@ -111,7 +111,7 @@ public class JarLibraryInfo extends LibraryInfo {
 			String entryName) throws IOException {
 		JarEntry entry = (JarEntry)jar.getEntry(entryName);
 		if (entry==null) {
-			System.err.println("ERROR: Invalid entry: " + entryName);
+			// TODO: Throw an exception in 4.0.0 release
 			return null;
 		}
 		DataInputStream in = new DataInputStream(

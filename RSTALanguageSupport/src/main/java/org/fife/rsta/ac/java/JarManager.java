@@ -12,6 +12,7 @@ package org.fife.rsta.ac.java;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.System.Logger;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -34,6 +35,9 @@ import org.fife.ui.autocomplete.CompletionProvider;
  * @version 1.0
  */
 public class JarManager {
+
+	private static final Logger LOG =
+		System.getLogger(JarManager.class.getName());
 
 	/**
 	 * Locations of class files to get completions from.
@@ -297,7 +301,8 @@ public class JarManager {
 							result.add(entry);
 						}
 						else {
-							System.err.println("ERROR: Class not found! - " + name2);
+							LOG.log(System.Logger.Level.ERROR,
+								"Class not found! - " + name2);
 						}
 					}
 				}

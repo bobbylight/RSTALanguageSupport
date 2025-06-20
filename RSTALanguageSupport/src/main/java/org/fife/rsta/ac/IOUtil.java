@@ -60,9 +60,9 @@ public final class IOUtil {
 
 
 	/**
-	 * Returns the value of an environment variable.  This method is here so
-	 * we don't get an exception when calling <tt>System.getenv()</tt> in Java
-	 * 1.4 (which we support).
+	 * Returns the value of an environment variable. This method is a holdover
+	 * from when we supported Java 1.4 and will be removed in the next major
+	 * release. Prefer calling {@code System.getenv(String)} directly.
 	 *
 	 * @param var The environment variable.
 	 * @return The value of the variable, or <code>null</code> if it is not
@@ -153,19 +153,6 @@ public final class IOUtil {
 
 		return rc;
 
-	}
-
-
-	/**
-	 * Utility testing method.
-	 *
-	 * @param args Command line arguments.
-	 */
-	public static void main(String[] args) {
-        for (String arg : args) {
-            String value = IOUtil.getEnvSafely(arg);
-            System.out.println(arg + "=" + value);
-        }
 	}
 
 

@@ -11,6 +11,7 @@
 package org.fife.rsta.ac.java.rjc.parser;
 
 import java.io.*;
+import java.lang.System.Logger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -26,6 +27,8 @@ import org.fife.rsta.ac.java.rjc.lexer.Scanner;
  * @version 1.0
  */
 public final class Main {
+
+	private static final Logger LOGGER = System.getLogger(Main.class.getName());
 
 	/**
 	 * If this system property is set to "<code>true</code>",
@@ -47,7 +50,7 @@ public final class Main {
 
 	private static void log(Object text) {
 		if (LOG) {
-			System.out.println(text);
+			LOGGER.log(System.Logger.Level.INFO, text);
 		}
 	}
 
@@ -124,7 +127,7 @@ public final class Main {
 				//log(cu);
 				log(file.getAbsolutePath() + " (" + file.length() + "): " + time + " ms");
 			} catch (InternalError ie) {
-				System.err.println(file.getAbsolutePath());
+				log(file.getAbsolutePath());
 				ie.printStackTrace();
 				System.exit(1);
 			}

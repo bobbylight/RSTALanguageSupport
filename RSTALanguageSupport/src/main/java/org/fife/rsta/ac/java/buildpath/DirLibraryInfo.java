@@ -96,7 +96,7 @@ public class DirLibraryInfo extends LibraryInfo {
 	public ClassFile createClassFileBulk(String entryName) throws IOException {
 		File file = new File(dir, entryName);
 		if (!file.isFile()) {
-			System.err.println("ERROR: Invalid class file: " + file.getAbsolutePath());
+			// TODO: Throw an exception in 4.0.0 release
 			return null;
 		}
 		return new ClassFile(file);

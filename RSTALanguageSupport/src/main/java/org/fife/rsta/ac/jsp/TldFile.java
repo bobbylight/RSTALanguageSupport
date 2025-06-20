@@ -110,11 +110,6 @@ public class TldFile {
 				//System.out.println(entry.getName());
 				InputStream in = jar.getInputStream(entry);
 				elems = parseTld(in);
-				/*
-				for (int i=0; i<elems.size(); i++) {
-					System.out.println(elems.get(i));
-				}
-				*/
 				in.close();
 			}
 		}
@@ -130,13 +125,6 @@ public class TldFile {
 		List<TldElement> tldElems = new ArrayList<>();
 
 		BufferedInputStream bin = new BufferedInputStream(in);
-		//BufferedReader r = new BufferedReader(new InputStreamReader(bin));
-		//String line = null;
-		//while ((line=r.readLine())!=null) {
-		//	System.out.println(line);
-		//}
-		//r.close();
-		//System.exit(0);
 
 		Document doc;
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();

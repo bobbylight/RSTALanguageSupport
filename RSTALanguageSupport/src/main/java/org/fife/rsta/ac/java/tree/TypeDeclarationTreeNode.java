@@ -92,10 +92,7 @@ class TypeDeclarationTreeNode extends JavaTreeNode {
 		IconFactory fact = IconFactory.get();
 		Icon mainIcon = fact.getIcon(iconName);
 
-		if (mainIcon==null) { // Unknown type ???
-			System.out.println("*** " + typeDec);
-		}
-		else {
+		if (mainIcon!=null) { // TODO: Better handling for unknown types
 			DecoratableIcon di = new DecoratableIcon(mainIcon);
 			di.setDeprecated(typeDec.isDeprecated());
 			Modifiers mods = typeDec.getModifiers();
