@@ -23,8 +23,8 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 
 	public static final String PACKAGES = "Packages.";
 
-	private LinkedHashSet<String> importClasses = new LinkedHashSet<>();
-	private LinkedHashSet<String> importPackages = new LinkedHashSet<>();
+	private Set<String> importClasses = new LinkedHashSet<>();
+	private Set<String> importPackages = new LinkedHashSet<>();
 
 	public RhinoJavaScriptAstParser(SourceCompletionProvider provider, int dot,
 			TypeDeclarationOptions options) {

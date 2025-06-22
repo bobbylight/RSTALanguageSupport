@@ -40,7 +40,7 @@ public abstract class TypeDeclarations {
 
 	// reverse lookup for Java types to Javascript types
 	private final Map<String, String> javascriptReverseLookup = new HashMap<>();
-	private final HashSet<JavaScriptObject> ecmaObjects = new HashSet<>();
+	private final Set<JavaScriptObject> ecmaObjects = new HashSet<>();
 
 
 	public TypeDeclarations() {

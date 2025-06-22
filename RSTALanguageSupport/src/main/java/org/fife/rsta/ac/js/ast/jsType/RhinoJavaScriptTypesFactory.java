@@ -22,8 +22,8 @@ import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
  */
 public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 
-	private LinkedHashSet<String> importClasses = new LinkedHashSet<>();
-	private LinkedHashSet<String> importPackages = new LinkedHashSet<>();
+	private Set<String> importClasses = new LinkedHashSet<>();
+	private Set<String> importPackages = new LinkedHashSet<>();
 
 	public RhinoJavaScriptTypesFactory(TypeDeclarationFactory typesFactory) {
 		super(typesFactory);
@@ -43,9 +43,9 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 		mergeImports(classes, importClasses, false);
 	}
 
-	private void mergeImports(Set<String> newImports, LinkedHashSet<String> oldImports, boolean packages) {
+	private void mergeImports(Set<String> newImports, Set<String> oldImports, boolean packages) {
 		//iterate through the old imports and check whether the import exists in new. If not then add to remove and remove all types for that package/class
-		HashSet<String> remove = new HashSet<>();
+		Set<String> remove = new HashSet<>();
 		for (String obj : oldImports) {
 			if (!newImports.contains(obj)) {
 				remove.add(obj);
@@ -55,7 +55,7 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 
 		//now iterate through the remove list and remove imports not needed
 		if (!remove.isEmpty()) {
-			HashSet<TypeDeclaration> removeTypes = new HashSet<>();
+			Set<TypeDeclaration> removeTypes = new HashSet<>();
 			for (String name : remove) {
 				for (TypeDeclaration dec : cachedTypes.keySet()) {
 					if ((packages && dec.getQualifiedName().startsWith(name)) || (!packages && dec.getQualifiedName().equals(name))) {
@@ -84,7 +84,7 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 	 * @param oldImports
 	 * @return
 	 */
-	private boolean canClearCache(Set<String> newImports, LinkedHashSet<String> oldImports) {
+	private boolean canClearCache(Set<String> newImports, Set<String> oldImports) {
 		if (newImports.size() != oldImports.size()) {
 			return true;
 		}
@@ -105,7 +105,7 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 	}
 
 	private void clearAllImportTypes() {
-		HashSet<TypeDeclaration> removeTypes = new HashSet<>();
+		Set<TypeDeclaration> removeTypes = new HashSet<>();
 		//clear all non ECMA (JavaScript types) for importPackage and importClass to work properly
         for (TypeDeclaration dec : cachedTypes.keySet()) {
             if (!typesFactory.isJavaScriptType(dec) && !dec.equals(typesFactory.getDefaultTypeDeclaration())) {
