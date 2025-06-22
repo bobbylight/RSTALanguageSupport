@@ -43,7 +43,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 
 
 	protected JavaScriptType lastJavaScriptType;
-	protected String lastLookupName = null;
+	protected String lastLookupName;
 
 
 	/**
