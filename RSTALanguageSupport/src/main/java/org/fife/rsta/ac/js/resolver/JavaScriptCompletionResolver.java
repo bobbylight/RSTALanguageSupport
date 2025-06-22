@@ -82,6 +82,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 
 	/**
 	 * Resolve node type to TypeDeclaration. Called instead of #compileText(String text) when document is already parsed
+	 *
 	 * @param text The node to resolve
 	 * @return TypeDeclaration for node or null if not found.
 	 */
@@ -140,6 +141,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	/**
 	 * Test whether the node can be resolved as a static Java class.
 	 * Only looks for Token.NAME nodes to test
+	 *
 	 * @param node node to test
 	 * @return The type declaration.
 	 */
@@ -153,6 +155,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 
 	/**
 	 * Try to resolve the Token.NAME AstNode and return a TypeDeclaration.
+	 *
 	 * @param node node to resolve
 	 * @return TypeDeclaration if the name can be resolved as a Java Class else null
 	 */
@@ -498,6 +501,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 
 	/**
 	 * Creates a new JavaScriptType based on the String type.
+	 *
 	 * @param provider SourceCompletionProvider
 	 * @param type type of JavaScript type to create e.g. java.sql.Connection
 	 * @param text Text entered from the user to resolve the node. This will be null if resolveNode(AstNode node) is called
@@ -523,6 +527,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	 * Method called if the lastJavaScriptType is not null. i.e. has gone through one iteration at least.
 	 * Resolves TypeDeclaration for parts of a variable past the first part. e.g. "".toString() //resolve toString()
 	 * In some circumstances this is useful to resolve this. e.g. for Custom Object completions
+	 *
 	 * @param node Node to resolve
 	 * @return Type Declaration
 	 *

@@ -4,7 +4,8 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.functions.JSObjectFunctions;
 
 
 /**
- * Object Error
+ * Object Error.
+ *
  * @since Standard ECMA-262 3rd. Edition
  */
 public abstract class JSError implements JSObjectFunctions {

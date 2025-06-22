@@ -3,7 +3,8 @@ package org.fife.rsta.ac.js.ecma.api.ecma3;
 import org.fife.rsta.ac.js.ecma.api.ecma3.functions.JSArrayFunctions;
 
 /**
- * Object Array
+ * Object Array.
+ *
  * @since Standard ECMA-262 3rd. Edition
  */
 public abstract class JSArray implements JSArrayFunctions {

@@ -105,6 +105,7 @@ public class JavaScriptParser extends AbstractParser {
 	 * Creates options for Rhino based off of the user's preferences.
 	 *
 	 * @param errorHandler The container for errors found while parsing.
+	 * @param langSupport The language support to configure, which may be {@code null}.
 	 * @return The properties for the JS compiler to use.
 	 */
 	public static CompilerEnvirons createCompilerEnvironment(ErrorReporter

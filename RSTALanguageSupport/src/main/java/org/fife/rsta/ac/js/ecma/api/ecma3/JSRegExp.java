@@ -4,7 +4,8 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.functions.JSRegExpFunctions;
 
 
 /**
- * Object RegExp
+ * Object RegExp.
+ *
  * @since Standard ECMA-262 3rd. Edition
  */
 public abstract class JSRegExp implements JSRegExpFunctions {

@@ -183,8 +183,8 @@ public abstract class TypeDeclarations {
 	/**
 	 * Returns whether the qualified name is a built-in JavaScript type
 	 *
-	 * @param td
-	 * @return
+	 * @param td The type declaration, which may be {@code null}.
+	 * @return Whether it is a built-in JS type.
 	 */
 	public boolean isJavaScriptType(TypeDeclaration td) {
 		return td != null && td.getPackageName() != null
@@ -255,8 +255,9 @@ public abstract class TypeDeclarations {
 	/**
 	 * Answers the question whether an object can be instantiated (i.e. has a constructor)
 	 * Note, only tests ECMA objects
-	 * @param name name of class to test
 	 *
+	 * @param name name of class to test
+	 * @return Whether the object can be instantiated.
 	 */
 	public boolean canECMAObjectBeInstantiated(String name) {
 		String tempName = javascriptReverseLookup.get(name);

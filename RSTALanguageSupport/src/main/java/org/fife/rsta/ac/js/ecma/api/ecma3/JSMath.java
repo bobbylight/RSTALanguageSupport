@@ -2,7 +2,8 @@ package org.fife.rsta.ac.js.ecma.api.ecma3;
 
 
 /**
- * Object Math
+ * Object Math.
+ *
  * @since Standard ECMA-262 3rd. Edition
  */
 public abstract class JSMath {
@@ -173,6 +174,7 @@ public abstract class JSMath {
 	 * c = Math.ceil(1.0) //returns 1.0
 	 * d = Math.ceil(-1.99); //returns -1.0
 	 * </pre>
+	*
      * @memberOf Math
      * @param x any number or numeric value.
      * @type Number
@@ -225,6 +227,7 @@ public abstract class JSMath {
 	 * c = Math.floor(1.0) //returns 1.0
 	 * d = Math.floor(-1.99); //returns -2.0
 	 * </pre>
+	*
      * @memberOf Math
      * @param x any number or numeric value.
      * @type Number

@@ -4,7 +4,8 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.functions.JSObjectFunctions;
 
 
 /**
- * Base JavaScript Object
+ * Base JavaScript Object.
+ *
  * @since Standard ECMA-262 3rd. Edition
  *
  */

@@ -79,6 +79,7 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 
 	/**
 	 * Validate whether the newImports and old imports contain the same values
+	 *
 	 * @param newImports
 	 * @param oldImports
 	 * @return
@@ -117,6 +118,7 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 
 	/**
 	 * Remove all TypeDeclarations from the TypeDeclarationFactory from the JavaScriptType and all it's extended classes
+	 *
 	 * @param type
 	 */
 	private void removeAllTypes(JavaScriptType type) {
@@ -157,6 +159,7 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 
 	/**
 	 * Look for class file using imported classes
+	 *
 	 * @param manager
 	 * @param name
 	 * @return
@@ -174,7 +177,8 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 	}
 
 	/**
-	 * Look for class file using imported packages
+	 * Look for class file using imported packages.
+	 *
 	 * @param manager
 	 * @param name
 	 * @return

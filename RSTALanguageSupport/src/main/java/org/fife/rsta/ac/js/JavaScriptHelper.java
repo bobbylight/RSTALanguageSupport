@@ -119,6 +119,7 @@ public final class JavaScriptHelper {
 
 	/**
 	 * @param node AstNode to look for function
+	 * @param provider The provider to look it up in.
 	 * @return function lookup name from it's AstNode. i.e. concat function name
 	 *         and parameters. If no function is found, then return null
 	 */
@@ -233,6 +234,7 @@ case Token.EXPR_RESULT:
 	 * e.g
 	 * var a = [1, 2, 3];
 	 * var b = a[1]; //b resolves to Number
+	 *
 	 * @param node
 	 * @param provider
 	 * @return
@@ -255,6 +257,7 @@ case Token.EXPR_RESULT:
 
 	/**
 	 * Create array type from AstNode and try to determine the array type
+	 *
 	 * @param typeNode
 	 * @param provider
 	 * @return
@@ -276,6 +279,7 @@ case Token.EXPR_RESULT:
 
 	/**
 	 * Find the array type from ArrayLiteral. Iterates through elements and checks all the types are the same
+	 *
 	 * @param arrayLit
 	 * @param provider
 	 * @return TypeDeclaration if all elements are of the same type else TypeDeclarationFactory.getDefaultTypeDeclaration();
@@ -495,8 +499,9 @@ case Token.EXPR_RESULT:
 	 * Convenience method to lookup TypeDeclaration through the
 	 * TypeDeclarationFactory.
 	 *
-	 * @param name
-	 * @return
+	 * @param name The type declaration to look up.
+	 * @param provider The provider to look it up in.
+	 * @return The type declaration.
 	 */
 	public static TypeDeclaration getTypeDeclaration(String name, SourceCompletionProvider provider) {
 		return provider.getTypesFactory().getTypeDeclaration(name);
@@ -538,8 +543,8 @@ case Token.EXPR_RESULT:
 	 *
 	 * String should be trimmed at the 1, not the 2,
 	 *
-	 * @param text
-	 * @return
+	 * @param text The text to trim.
+	 * @return The trimmed text.
 	 */
 	public static String trimFromLastParam(String text) {
 		int trim = 0;

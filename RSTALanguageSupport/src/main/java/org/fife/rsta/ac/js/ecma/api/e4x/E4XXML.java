@@ -123,6 +123,7 @@ public abstract class E4XXML implements E4XXMLFunctions {
 	 *   return comments;
 	 * }
      * </pre>
+	 *
      * @return an object containing the properties of the XML constructor used for storing XML settings.
      * @memberOf XML
      * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML

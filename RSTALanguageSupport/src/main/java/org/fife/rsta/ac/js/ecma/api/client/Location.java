@@ -8,7 +8,8 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.JSString;
 public abstract class Location implements LocationFunctions {
 
 	/**
-	  * Object Location()
+	  * Object Location().
+	  *
 	  * @super Object
 	  * @constructor
 	  * @since Common Usage, no standard
@@ -16,7 +17,7 @@ public abstract class Location implements LocationFunctions {
 	public Location(){}
 
     /**
-     * <b>property constructor</b>
+     * <b>property constructor</b>.
      *
      * @type Function
      * @memberOf Object
@@ -27,7 +28,7 @@ public abstract class Location implements LocationFunctions {
     protected JSFunction constructor;
 
     /**
-     * <b>property prototype</b>
+     * <b>property prototype</b>.
      *
      * @type Location
      * @memberOf Location
@@ -36,7 +37,7 @@ public abstract class Location implements LocationFunctions {
     public Location prototype;
 
     /**
-     * <b>property location</b>
+     * <b>property location</b>.
      *
      * @type Location
      * @memberOf Location
@@ -45,42 +46,48 @@ public abstract class Location implements LocationFunctions {
     public Location location;
 
     /**
-	 * Property hash
+	 * Property hash.
+	 *
 	 * @type String
 	 * @memberOf Location
 	 */
 	public JSString hash;
 
 	/**
-	 * Property host
+	 * Property host.
+	 *
 	 * @type String
 	 * @memberOf Location
 	 */
 	public JSString host;
 
 	/**
-	 * Property hostname
+	 * Property hostname.
+	 *
 	 * @type String
 	 * @memberOf Location
 	 */
 	public JSString hostname;
 
 	/**
-	 * Property href
+	 * Property href.
+	 *
 	 * @type String
 	 * @memberOf Location
 	 */
 	public JSString href;
 
 	/**
-	 * Property pathname
+	 * Property pathname.
+	 *
 	 * @type String
 	 * @memberOf Location
 	 */
 	public JSString pathname;
 
 	/**
-	 * Property port
+	 * Property port.
+	 *
 	 * @type String
 	 * @memberOf Location
 	 */
@@ -88,13 +95,15 @@ public abstract class Location implements LocationFunctions {
 
 	/**
 	 * Property protocol
+	 *
 	 * @type String
 	 * @memberOf Location
 	 */
 	public JSString protocol;
 
 	/**
-	 * Property search
+	 * Property search.
+	 *
 	 * @type String
 	 * @memberOf Location
 	 */

@@ -55,6 +55,7 @@ public abstract class JavaScriptDeclaration {
 
 	/**
 	 * Sets the start offset of this declaration.
+	 *
 	 * @param start the start offset
 	 * @see #getStartOffSet()
 	 */
@@ -82,6 +83,7 @@ public abstract class JavaScriptDeclaration {
 	/**
 	 * Set the JavaScript options associated with this declaration.
 	 * These are used to defined whether options are available to
+	 *
 	 * @param options
 	 */
 	public void setTypeDeclarationOptions(TypeDeclarationOptions options) {

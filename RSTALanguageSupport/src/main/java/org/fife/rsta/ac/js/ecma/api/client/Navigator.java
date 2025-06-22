@@ -10,7 +10,8 @@ import org.fife.rsta.ac.js.ecma.api.ecma5.JS5Array;
 public abstract class Navigator implements NavigatorFunctions {
 
 	/**
-	 * Object Navigator()
+	 * Object Navigator().
+	 *
 	 * @super Object
 	 * @constructor
 	 * @since Common Usage, no standard
@@ -38,56 +39,64 @@ public abstract class Navigator implements NavigatorFunctions {
    public Navigator prototype;
 
 	/**
-	 * Property appCodeName
+	 * Property appCodeName.
+	 *
 	 * @type String
 	 * @memberOf Navigator
 	 */
 	public JSString appCodeName;
 
 	/**
-	 * Property appName
+	 * Property appName.
+	 *
 	 * @type String
 	 * @memberOf Navigator
 	 */
 	public JSString appName;
 
 	/**
-	 * Property appVersion
+	 * Property appVersion.
+	 *
 	 * @type String
 	 * @memberOf Navigator
 	 */
 	public JSString appVersion;
 
 	/**
-	 * Property cookieEnabled
+	 * Property cookieEnabled.
+	 *
 	 * @type Boolean
 	 * @memberOf Navigator
 	 */
 	public JSBoolean cookieEnabled;
 
 	/**
-	 * Property mimeTypes
+	 * Property mimeTypes.
+	 *
 	 * @type Array
 	 * @memberOf Navigator
 	 */
 	public JS5Array mimeTypes;
 
 	/**
-	 * Property platform
+	 * Property platform.
+	 *
 	 * @type String
 	 * @memberOf Navigator
 	 */
 	public JSString platform;
 
 	/**
-	 * Property plugins
+	 * Property plugins.
+	 *
 	 * @type Array
 	 * @memberOf Navigator
 	 */
 	public JS5Array plugins;
 
 	/**
-	 * Property userAgent
+	 * Property userAgent.
+	 *
 	 * @type String
 	 * @memberOf Navigator
 	 */

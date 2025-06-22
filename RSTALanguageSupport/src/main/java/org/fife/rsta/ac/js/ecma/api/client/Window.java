@@ -13,7 +13,7 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.JSString;
 public abstract class Window extends JSGlobal implements WindowFunctions {
 
 	/**
-     * Object Window()
+     * Object Window().
      *
      * @constructor
      * @extends Global
@@ -21,7 +21,7 @@ public abstract class Window extends JSGlobal implements WindowFunctions {
 	public Window(){}
 
 	/**
-     * <b>property constructor</b>
+     * <b>property constructor</b>.
      *
      * @type Function
      * @memberOf Object
@@ -32,7 +32,7 @@ public abstract class Window extends JSGlobal implements WindowFunctions {
     protected JSFunction constructor;
 
     /**
-     * <b>property prototype</b>
+     * <b>property prototype</b>.
      *
      * @type Window
      * @memberOf Window
@@ -43,63 +43,72 @@ public abstract class Window extends JSGlobal implements WindowFunctions {
     public Window prototype;
 
 	/**
-	 * Property closed
+	 * Property closed.
+	 *
 	 * @type Boolean
 	 * @memberOf Window
 	 */
 	public JSBoolean closed;
 
 	/**
-	 * Property window
+	 * Property window.
+	 *
 	 * @type Window
 	 * @memberOf Window
 	 */
 	public Window window;
 
 	/**
-	 * Property frames
+	 * Property frames.
+	 *
 	 * @type Array
 	 * @memberOf Window
 	 */
 	public JSArray frames;
 
 	/**
-	 * Property defaultStatus
+	 * Property defaultStatus.
+	 *
 	 * @type String
 	 * @memberOf Window
 	 */
 	public JSString defaultStatus;
 
 	/**
-	 * Property document
+	 * Property document.
+	 *
 	 * @type Document
 	 * @memberOf Window
 	 */
 	public JSHTMLDocument document;
 
 	/**
-	 * Property history
+	 * Property history.
+	 *
 	 * @type History
 	 * @memberOf Window
 	 */
 	public History history;
 
 	/**
-	 * Property location
+	 * Property location.
+	 *
 	 * @type Location
 	 * @memberOf Window
 	 */
 	public Location location;
 
 	/**
-	 * Property name
+	 * Property name.
+	 *
 	 * @type String
 	 * @memberOf Window
 	 */
 	public JSString name;
 
 	/**
-	 * Property navigator
+	 * Property navigator.
+	 *
 	 * @type Navigator
 	 * @memberOf Window
 	 */
@@ -107,217 +116,248 @@ public abstract class Window extends JSGlobal implements WindowFunctions {
 
 
 	/**
-	 * Property opener
+	 * Property opener.
+	 *
 	 * @type Window
 	 * @memberOf Window
 	 */
 	public Window opener;
 
 	/**
-	 * Property outerWidth
+	 * Property outerWidth.
+	 *
 	 * @type Number
 	 * @memberOf Window
 	 */
 	public JSNumber outerWidth;
 
 	/**
-	 * Property outerHeight
+	 * Property outerHeight.
+	 *
 	 * @type Number
 	 * @memberOf Window
 	 */
 	public JSNumber outerHeight;
 
 	/**
-	 * Property pageXOffset
+	 * Property pageXOffset.
+	 *
 	 * @type Number
 	 * @memberOf Window
 	 */
 	public JSNumber pageXOffset;
 
 	/**
-	 * Property pageYOffset
+	 * Property pageYOffset.
+	 *
 	 * @type Number
 	 * @memberOf Window
 	 */
 	public JSNumber pageYOffset;
 
 	/**
-	 * Property parent
+	 * Property parent.
+	 *
 	 * @type Window
 	 * @memberOf Window
 	 */
 	public Window parent;
 
 	/**
-	 * Property screen
+	 * Property screen.
+	 *
 	 * @type Screen
 	 * @memberOf Window
 	 */
 	public Screen screen;
 
 	/**
-	 * Property status
+	 * Property status.
+	 *
 	 * @type String
 	 * @memberOf Window
 	 */
 	public JSString status;
 
 	/**
-	 * Property top
+	 * Property top.
+	 *
 	 * @type Window
 	 * @memberOf Window
 	 */
 	public Window top;
 
 	 /**
-	 * Property innerWidth
+	 * Property innerWidth.
+	  *
 	 * @type Number
 	 * @memberOf Window
 	 */
 	public JSNumber innerWidth;
 
 	/**
-	 * Property innerHeight
+	 * Property innerHeight.
+	 *
 	 * @type Number
 	 * @memberOf Window
 	 */
 	public JSNumber innerHeight;
 
 	/**
-	 * Property screenX
+	 * Property screenX.
+	 *
 	 * @type Number
 	 * @memberOf Window
 	 */
 	public JSNumber screenX;
 
 	/**
-	 * Property screenY
+	 * Property screenY.
+	 *
 	 * @type Number
 	 * @memberOf Window
 	 */
 	public JSNumber screenY;
 
 	/**
-	 * Property screenLeft
+	 * Property screenLeft.
+	 *
 	 * @type Number
 	 * @memberOf Window
 	 */
 	public JSNumber screenLeft;
 
 	/**
-	 * Property screenTop
+	 * Property screenTop.
+	 *
 	 * @type Number
 	 * @memberOf Window
 	 */
 	public JSNumber screenTop;
 
 	/**
-	 * Property length
+	 * Property length.
+	 *
 	 * @type Number
 	 * @memberOf Window
 	 */
 	public JSNumber length;
 
 	/**
-	 * Property scrollbars
+	 * Property scrollbars.
+	 *
 	 * @type BarProp
 	 * @memberOf Window
 	 */
 	public BarProp scrollbars;
 
 	/**
-	 * Property scrollX
+	 * Property scrollX.
+	 *
 	 * @type Number
 	 * @memberOf Window
 	 */
 	public JSNumber scrollX;
 
 	/**
-	 * Property scrollY
+	 * Property scrollY.
+	 *
 	 * @type Number
 	 * @memberOf Window
 	 */
 	public JSNumber scrollY;
 
 	/**
-	 * Property content
+	 * Property content.
+	 *
 	 * @type Window
 	 * @memberOf Window
 	 */
 	public Window content;
 
 	/**
-	 * Property menubar
+	 * Property menubar.
+	 *
 	 * @type BarProp
 	 * @memberOf Window
 	 */
 	public BarProp menubar;
 
 	/**
-	 * Property toolbar
+	 * Property toolbar.
+	 *
 	 * @type BarProp
 	 * @memberOf Window
 	 */
 	public BarProp toolbar;
 
 	/**
-	 * Property locationbar
+	 * Property locationbar.
+	 *
 	 * @type BarProp
 	 * @memberOf Window
 	 */
 	public BarProp locationbar;
 
 	/**
-	 * Property personalbar
+	 * Property personalbar.
+	 *
 	 * @type BarProp
 	 * @memberOf Window
 	 */
 	public BarProp personalbar;
 
 	/**
-	 * Property statusbar
+	 * Property statusbar.
+	 *
 	 * @type BarProp
 	 * @memberOf Window
 	 */
 	public BarProp statusbar;
 
 	/**
-	 * Property directories
+	 * Property directories.
+	 *
 	 * @type BarProp
 	 * @memberOf Window
 	 */
 	public BarProp directories;
 
 	/**
-	 * Property scrollMaxX
+	 * Property scrollMaxX.
+	 *
 	 * @type Number
 	 * @memberOf Window
 	 */
 	public JSNumber scrollMaxX;
 
 	/**
-	 * Property scrollMaxY
+	 * Property scrollMaxY.
+	 *
 	 * @type Number
 	 * @memberOf Window
 	 */
 	public JSNumber scrollMaxY;
 
 	/**
-	 * Property fullScreen
+	 * Property fullScreen.
+	 *
 	 * @type String
 	 * @memberOf Window
 	 */
 	public JSString fullScreen;
 
 	/**
-	 * Property frameElement
+	 * Property frameElement.
+	 *
 	 * @type String
 	 * @memberOf Window
 	 */
 	public JSString frameElement;
 
 	/**
-	 * Property sessionStorage
+	 * Property sessionStorage.
+	 *
 	 * @type String
 	 * @memberOf Window
 	 */

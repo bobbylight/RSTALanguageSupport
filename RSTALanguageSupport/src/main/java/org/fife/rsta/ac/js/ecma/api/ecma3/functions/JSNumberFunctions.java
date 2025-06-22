@@ -17,6 +17,7 @@ public interface JSNumberFunctions extends JSObjectFunctions {
 	 * n.toFixed(6); //returns 12345.678900: note zeros
 	 * (1.23e+20).toFixed(2); //returns 123000000000000000000.00
 	 * </pre>
+	 *
      * @memberOf Number
      * @param fractionDigits The number of digits to appear after the decimal point. If omitted it is treated as 0.
      * @returns A string representation of <b><i>number</i></b> that does not use exponential notation and has exactly the digits applied.
@@ -37,6 +38,7 @@ public interface JSNumberFunctions extends JSObjectFunctions {
 	 * n.toExponential(10); //returns 1.2345678900e+4
 	 * n.toExponential(); //returns 1.23456789e+4
 	 * </pre>
+	 *
      * @memberOf Number
      * @param fractionDigits The number of digits that appear after the decimal point.
      * @returns a string representation of <b><i>number</i></b> in exponential notation.
@@ -57,6 +59,7 @@ public interface JSNumberFunctions extends JSObjectFunctions {
 	 * n.toPrecision(5); //returns 12346
 	 * n.toPrecision(10); //returns 12345.67890
 	 * </pre>
+	 *
      * @memberOf Number
      * @param fractionDigits The number of significant digits to appear in the returned string.
      * @returns a string representation of <b><i>number</i></b> that contains the number significant digits.

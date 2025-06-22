@@ -15,6 +15,7 @@ public interface JSFunctionFunctions extends JSObjectFunctions {
 	 * //overrides it with its own version of the method
 	 * Object.prototype.toString().apply(o);
 	 * </pre>
+	 *
      * @param thisObject The object to which the <b><i>function</i></b> is applied.
      * @param argArray An array of arguments to be passed to <b><i>function</i></b>
      * @return Whatever value is returned by <b><i>function</i></b>
@@ -33,6 +34,7 @@ public interface JSFunctionFunctions extends JSObjectFunctions {
 	 * //overrides it with its own version of the method
 	 * Object.prototype.toString().call(o);
 	 * </pre>
+	 *
      *  @param thisObject The object to which the <b><i>function</i></b> is applied.
      *  @param args An array of arguments to be passed to <b><i>function</i></b>
      *  @return Whatever value is returned by <b><i>function</i></b>

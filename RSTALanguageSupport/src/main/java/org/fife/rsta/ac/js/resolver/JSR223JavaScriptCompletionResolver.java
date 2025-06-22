@@ -21,6 +21,7 @@ public class JSR223JavaScriptCompletionResolver extends
 	 * RhinoCompletionProvider constructor
 	 * - resolves Rhino specific types
 	 * Used to resolve Static class e.g. java.lag.String methods and fields
+	 *
 	 * @param provider
 	 */
 	public JSR223JavaScriptCompletionResolver(SourceCompletionProvider provider) {
@@ -100,6 +101,7 @@ public class JSR223JavaScriptCompletionResolver extends
 
 	/**
 	 * Try to resolve the Token.NAME AstNode and return a TypeDeclaration.
+	 *
 	 * @param node node to resolve
 	 * @return TypeDeclaration if the name can be resolved as a Java Class else null
 	 */

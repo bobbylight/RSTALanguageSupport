@@ -90,6 +90,7 @@ public class TypeDeclarationFactory {
 
 	/**
 	 * Returns whether the qualified name is a built-in JavaScript type
+	 *
 	 * @param td The type declaration to check.
 	 * @return Whether it is a built-in JS type.
 	 */
@@ -100,6 +101,7 @@ public class TypeDeclarationFactory {
 
 	/**
 	 * Returns the type declaration.
+	 *
 	 * @param name
 	 * @return Lookup type declaration from name. If the
 	 *         <code>TypeDeclaration</code> cannot be found, then lookup using
@@ -123,9 +125,12 @@ public class TypeDeclarationFactory {
 
 	/**
 	 * The API may have its own types, so these need converting back to
-	 * JavaScript types e.g. JSString == String, JSNumber == Number
+	 * JavaScript types e.g. JSString == String, JSNumber == Number.
+	 *
+	 * @param lookupName The name to look up.
+	 * @param qualified Whether it is fully qualified.
+	 * @return The type.
 	 */
-
 	public String convertJavaScriptType(String lookupName, boolean qualified) {
 		if (lookupName != null) {
 			if (TypeDeclarations.NULL_TYPE.equals(lookupName)) { // void has no type
@@ -183,8 +188,9 @@ public class TypeDeclarationFactory {
 
 	/**
 	 * Answers the question whether an object can be instantiated (i.e. has a constructor)
-	 * @param name name of class to test
 	 *
+	 * @param name name of class to test
+	 * @return Whether the object can be instantiated.
 	 */
 	public boolean canJavaScriptBeInstantiated(String name) {
 		return ecma.canECMAObjectBeInstantiated(name);
