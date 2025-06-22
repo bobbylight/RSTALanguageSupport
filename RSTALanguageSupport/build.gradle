@@ -5,8 +5,8 @@ plugins {
 ['java', 'distribution', 'maven-publish', 'signing'].each { apply plugin: it }
 
 dependencies {
-    api 'com.fifesoft:rsyntaxtextarea:3.3.0'
-    api 'com.fifesoft:autocomplete:3.3.0'
+    api 'com.fifesoft:rsyntaxtextarea:3.6.0'
+    api 'com.fifesoft:autocomplete:3.3.2'
     implementation 'org.mozilla:rhino-all:1.8.0'
 }
 
