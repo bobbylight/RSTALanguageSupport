@@ -423,11 +423,10 @@ case Token.EXPR_RESULT:
 
 
 	/**
+	 * Returns the index of the first {@code "("}, working backwards if there is no
+	 * matching closing bracket.
 	 *
-	 * Returns the index of the first ( working backwards if there is no
-	 * matching closing bracket
-	 *
-	 * @param text
+	 * @param text The text to search through which may be {@code null}.
 	 */
 	public static int findIndexOfFirstOpeningBracket(String text) {
 		int index = 0;
