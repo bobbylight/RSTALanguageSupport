@@ -13,34 +13,35 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.JSString;
 public abstract class Window extends JSGlobal implements WindowFunctions {
 
 	/**
-     * Object Window().
-     *
-     * @constructor
-     * @extends Global
-     */
-	public Window(){}
+	 * Object Window().
+	 *
+	 * @constructor
+	 * @extends Global
+	 */
+	public Window() {
+	}
 
 	/**
-     * <b>property constructor</b>.
-     *
-     * @type Function
-     * @memberOf Object
-     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction Function
-     * @since Standard ECMA-262 3rd. Edition
-     * @since Level 2 Document Object Model Core Definition.
-     */
-    protected JSFunction constructor;
+	 * <b>property constructor</b>.
+	 *
+	 * @type Function
+	 * @memberOf Object
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction Function
+	 * @since Standard ECMA-262 3rd. Edition
+	 * @since Level 2 Document Object Model Core Definition.
+	 */
+	protected JSFunction constructor;
 
-    /**
-     * <b>property prototype</b>.
-     *
-     * @type Window
-     * @memberOf Window
-     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSObject Object
-     * @since Standard ECMA-262 3rd. Edition
-     * @since Level 2 Document Object Model Core Definition.
-     */
-    public Window prototype;
+	/**
+	 * <b>property prototype</b>.
+	 *
+	 * @type Window
+	 * @memberOf Window
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSObject Object
+	 * @since Standard ECMA-262 3rd. Edition
+	 * @since Level 2 Document Object Model Core Definition.
+	 */
+	public Window prototype;
 
 	/**
 	 * Property closed.
@@ -187,9 +188,9 @@ public abstract class Window extends JSGlobal implements WindowFunctions {
 	 */
 	public Window top;
 
-	 /**
+	/**
 	 * Property innerWidth.
-	  *
+	 *
 	 * @type Number
 	 * @memberOf Window
 	 */

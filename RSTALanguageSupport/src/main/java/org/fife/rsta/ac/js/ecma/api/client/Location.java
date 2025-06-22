@@ -8,44 +8,45 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.JSString;
 public abstract class Location implements LocationFunctions {
 
 	/**
-	  * Object Location().
-	  *
-	  * @super Object
-	  * @constructor
-	  * @since Common Usage, no standard
+	 * Object Location().
+	 *
+	 * @super Object
+	 * @constructor
+	 * @since Common Usage, no standard
 	 */
-	public Location(){}
+	public Location() {
+	}
 
-    /**
-     * <b>property constructor</b>.
-     *
-     * @type Function
-     * @memberOf Object
-     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction Function
-     * @since Standard ECMA-262 3rd. Edition
-     * @since Level 2 Document Object Model Core Definition.
-     */
-    protected JSFunction constructor;
+	/**
+	 * <b>property constructor</b>.
+	 *
+	 * @type Function
+	 * @memberOf Object
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction Function
+	 * @since Standard ECMA-262 3rd. Edition
+	 * @since Level 2 Document Object Model Core Definition.
+	 */
+	protected JSFunction constructor;
 
-    /**
-     * <b>property prototype</b>.
-     *
-     * @type Location
-     * @memberOf Location
-     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSObject Object
-     */
-    public Location prototype;
+	/**
+	 * <b>property prototype</b>.
+	 *
+	 * @type Location
+	 * @memberOf Location
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSObject Object
+	 */
+	public Location prototype;
 
-    /**
-     * <b>property location</b>.
-     *
-     * @type Location
-     * @memberOf Location
-     * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSObject Object
-     */
-    public Location location;
+	/**
+	 * <b>property location</b>.
+	 *
+	 * @type Location
+	 * @memberOf Location
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSObject Object
+	 */
+	public Location location;
 
-    /**
+	/**
 	 * Property hash.
 	 *
 	 * @type String

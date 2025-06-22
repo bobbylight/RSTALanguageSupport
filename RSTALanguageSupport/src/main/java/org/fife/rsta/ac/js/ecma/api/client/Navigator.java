@@ -15,28 +15,29 @@ public abstract class Navigator implements NavigatorFunctions {
 	 * @super Object
 	 * @constructor
 	 * @since Common Usage, no standard
-	*/
-	public Navigator(){}
+	 */
+	public Navigator() {
+	}
 
-    /**
-    * <b>property constructor</b>
-    *
-    * @type Function
-    * @memberOf Object
-    * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction Function
-    * @since Standard ECMA-262 3rd. Edition
-    * @since Level 2 Document Object Model Core Definition.
-    */
-   protected JSFunction constructor;
+	/**
+	 * <b>property constructor</b>
+	 *
+	 * @type Function
+	 * @memberOf Object
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction Function
+	 * @since Standard ECMA-262 3rd. Edition
+	 * @since Level 2 Document Object Model Core Definition.
+	 */
+	protected JSFunction constructor;
 
-   /**
-    * <b>property prototype</b>
-    *
-    * @type Navigator
-    * @memberOf Navigator
-    * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSObject Object
-    */
-   public Navigator prototype;
+	/**
+	 * <b>property prototype</b>
+	 *
+	 * @type Navigator
+	 * @memberOf Navigator
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSObject Object
+	 */
+	public Navigator prototype;
 
 	/**
 	 * Property appCodeName.

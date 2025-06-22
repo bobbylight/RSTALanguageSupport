@@ -16,7 +16,7 @@ public abstract class Screen implements JS5ObjectFunctions {
 	 */
 	public Screen(){}
 
-    /**
+	/**
 	 * <b>property constructor</b>
 	 *
 	 * @type Function
@@ -25,16 +25,16 @@ public abstract class Screen implements JS5ObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-   protected JSFunction constructor;
+	protected JSFunction constructor;
 
-   /**
+	/**
 	 * <b>property prototype</b>
 	 *
 	 * @type Location
 	 * @memberOf Location
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSObject Object
 	 */
-   public Screen prototype;
+	public Screen prototype;
 
 
 	/**
