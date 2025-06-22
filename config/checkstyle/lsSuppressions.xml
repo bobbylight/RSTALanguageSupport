@@ -11,7 +11,7 @@
          For now we're ignoring several issues that will take some time to address.
          TODO: Remove these issues one by one.
     -->
-    <suppress files=".*src[\\/]main[\\/]java[\\/]org[\\/]fife[\\/]rsta[\\/]ac[\\/]js[\\/].*" checks="AvoidNestedBlocks|CommentsIndentation|ExplicitInitialization|IllegalType|JavadocTagContinuationIndentation|JavadocMethod|JavadocPackage|JavadocStyle|LineLength|MissingJavadocMethod|MissingJavadocType|NeedBraces|NonEmptyAtclauseDescription|OperatorWrap|StaticVariableName|VisibilityModifier"/>
+    <suppress files=".*src[\\/]main[\\/]java[\\/]org[\\/]fife[\\/]rsta[\\/]ac[\\/]js[\\/].*" checks="AvoidNestedBlocks|CommentsIndentation|ExplicitInitialization|JavadocTagContinuationIndentation|JavadocMethod|JavadocPackage|JavadocStyle|LineLength|MissingJavadocMethod|MissingJavadocType|NeedBraces|NonEmptyAtclauseDescription|OperatorWrap|StaticVariableName|VisibilityModifier"/>
 
     <!-- Lots of blocks are empty with "TODO" comments describing future implementations -->
     <suppress files=".*src[\\/]main[\\/]java[\\/]org[\\/]fife[\\/]rsta[\\/]ac[\\/].*" checks="EmptyBlock"/>
