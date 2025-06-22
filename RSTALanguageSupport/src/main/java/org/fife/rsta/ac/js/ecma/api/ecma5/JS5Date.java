@@ -6,7 +6,8 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.JSString;
 import org.fife.rsta.ac.js.ecma.api.ecma5.functions.JS5DateFunctions;
 
 /**
- * Object Boolean
+ * Object Date.
+ *
  * @since Standard ECMA-262 3rd. Edition
  */
 public abstract class JS5Date extends JSDate implements JS5DateFunctions {

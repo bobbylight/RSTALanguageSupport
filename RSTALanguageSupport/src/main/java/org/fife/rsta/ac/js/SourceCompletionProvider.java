@@ -312,7 +312,8 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	}
 
 	/**
-	 * Load ECMA JavaScript class completions
+	 * Load ECMA JavaScript class completions.
+	 *
 	 * @param set completion set
 	 * @param text
 	 */
@@ -337,7 +338,8 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 	/**
 	 * returns the Base class for the source completion provider. This is represented by a class name or ECMA lookup name
-	 * e.g. set to 'Global' for server side or 'Window' for client JavaScript support
+	 * e.g. set to 'Global' for server side or 'Window' for client JavaScript support.
+	 *
      * @return base class for the completion provider
      */
 	public String getSelf() {
@@ -436,7 +438,8 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 	/**
 	 * Convenience method to call variable resolver for non-local variables
-	 * i.e. does NOT try to resolve name to any local variables (just pre-processed or system)
+	 * i.e. does NOT try to resolve name to any local variables (just pre-processed or system).
+	 *
 	 * @param name
 	 * @return JavaScript variable declaration
 	 */
@@ -607,7 +610,8 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	}
 
 	/**
-	 * Set type declaration options for parser
+	 * Set type declaration options for parser.
+	 *
 	 * @param typeDeclarationOptions
 	 */
 	public void setTypeDeclationOptions(TypeDeclarationOptions typeDeclarationOptions) {

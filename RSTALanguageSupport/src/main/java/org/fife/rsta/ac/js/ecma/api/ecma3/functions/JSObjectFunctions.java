@@ -10,6 +10,7 @@ public interface JSObjectFunctions {
 
     /**
      * <b>function toString()</b> define an objects string representation.
+	 *
      * @memberOf Object
      * @returns a string representing the object
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSObject Object
@@ -23,6 +24,7 @@ public interface JSObjectFunctions {
 
     /**
      * <b>function toLocaleString()</b> return an object localized string representation.
+	 *
      * @memberOf Object
      * @returns A string representing the object
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSObject Object
@@ -34,6 +36,7 @@ public interface JSObjectFunctions {
 
     /**
      * <b>function valueOf()</b> the primitive value of a specified object.
+	 *
      * @memberOf Object
      * @returns The primitive value associated with the <b><i>object</i></b>, if any.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSObject Object.
@@ -54,6 +57,7 @@ public interface JSObjectFunctions {
 	 * o.hasOwnProperty("y"); //return false; o does not have property y.
 	 * o.hasOwnProperty("toString"); //return false; o inherits toString.
 	 * </pre>
+	 *
      * @memberOf Object
      * @param name A string that contains the name of a property of <b><i>object</i></b>.
      * @returns <b><i>true</i></b> if <b><i>object</i></b> has a noninherited property with the name specified by <b><i>name</i></b>.
@@ -76,6 +80,7 @@ public interface JSObjectFunctions {
 	 * Function.prototype.isPrototypeOf(o.toString(); //return true: toString is a function.
 	 * Array.prototype.isPrototypeOf([1,2,3]; //return true: [1,2,3] is an Array.
 	 * </pre>
+	 *
      * @memberOf Object
      * @param o Any object
      * @returns <b><i>true</i></b> if <b><i>object</i></b> is prototype of o. <b><i>false</i></b> is not an object or if <b><i>object</i></b>
@@ -97,6 +102,7 @@ public interface JSObjectFunctions {
 	 * o.propertyIsEnumerable("y"); //return false; o does not have property y.
 	 * o.propertyIsEnumerable("toString"); //return false; o inherits toString.
 	 * </pre>
+	 *
      * @memberOf Object
      * @param name A string that contains the name of a property of <b><i>object</i></b>.
      * @returns <b><i>true</i></b> if <b><i>object</i></b> has a noninherited property with the name specified by <b><i>name</i></b> and

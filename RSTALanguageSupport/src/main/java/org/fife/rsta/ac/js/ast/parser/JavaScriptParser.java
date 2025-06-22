@@ -42,6 +42,7 @@ public abstract class JavaScriptParser {
 
 	/**
 	 * If options are null, then it is assumed that the main editor text is being parsed.
+	 *
 	 * @return whether options is not null and is in pre-processing mode.
 	 *
 	 */

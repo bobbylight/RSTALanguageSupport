@@ -101,6 +101,7 @@ public class JavaScriptType {
 
 	/**
 	 * Set the class type completion e.g. String, Number
+	 *
 	 * @param classType Completion to format the class
 	 */
 	public void setClassTypeCompletion(JSCompletion classType) {

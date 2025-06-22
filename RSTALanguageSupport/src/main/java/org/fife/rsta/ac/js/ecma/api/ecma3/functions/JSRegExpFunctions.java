@@ -18,6 +18,7 @@ public interface JSRegExpFunctions extends JSObjectFunctions {
 	 *   alert("Matched: " + result[0]);
 	 * }
 	 * </pre>
+	 *
 	 * @param string The string to be searched
 	 * @returns An array containing results on the match or <b><i>null</i></b> if no match is found.
 	 * @type Array
@@ -39,6 +40,7 @@ public interface JSRegExpFunctions extends JSObjectFunctions {
 	 * r.test("JavaScript"); //returns true
 	 * r.test("ECMAScript"); //returns false
 	 * </pre>
+	 *
 	 * @param string The string to be tested
 	 * @returns <b><i>true</i></b> if <b><i>string</i></b> contains text that matches <b><i>regexp</i></b>, otherwise <b><i>false</i></b>.
 	 * @type Boolean

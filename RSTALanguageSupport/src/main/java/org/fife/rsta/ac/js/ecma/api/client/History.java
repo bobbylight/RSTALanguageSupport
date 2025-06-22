@@ -9,7 +9,8 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.JSNumber;
 public abstract class History implements HistoryFunctions {
 
 	/**
-	  * Object History()
+	  * Object History().
+	 *
 	  * @super Object
 	  * @constructor
 	  * @since Common Usage, no standard
@@ -39,7 +40,8 @@ public abstract class History implements HistoryFunctions {
     public History prototype;
 
 	/**
-	 * Property length
+	 * Property length.
+	 *
 	 * @type Number
 	 * @memberOf History
 	 */

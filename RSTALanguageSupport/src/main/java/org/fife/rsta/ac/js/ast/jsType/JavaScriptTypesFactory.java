@@ -254,6 +254,7 @@ public abstract class JavaScriptTypesFactory {
 	 * 			<LI>!staticsOnly && public return true; //All public methods and fields</LI>
 	 * 			<LI>Built in JavaScript type and public or protected return true; //All public/protected built in JSType (org.fife.rsta.ac.js.ecma.api.ecma3 package) methods and fields</LI>
 	 * 		</OL>
+	 *
 	 * @param access - access flag to test
 	 * @param staticsOnly - whether loading static methods and fields only
 	 * @param isJSType - is a built in JavasScript type

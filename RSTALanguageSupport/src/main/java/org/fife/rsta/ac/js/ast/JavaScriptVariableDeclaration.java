@@ -32,6 +32,7 @@ public class JavaScriptVariableDeclaration extends JavaScriptDeclaration {
 	 * @param name of the variable
 	 * @param offset position within script
 	 * @param provider JavaScript source provider
+	 * @param block The code block.
 	 */
 	public JavaScriptVariableDeclaration(String name, int offset,
 			SourceCompletionProvider provider, CodeBlock block) {
@@ -51,7 +52,8 @@ public class JavaScriptVariableDeclaration extends JavaScriptDeclaration {
 	}
 
 	/**
-	 * Set the TypeDeclaration for the AstNode. Stores the original value so it can be reset
+	 * Set the TypeDeclaration for the AstNode. Stores the original value so it can be reset.
+	 *
 	 * @param typeNode
 	 * @param overrideOriginal
 	 * @see #resetVariableToOriginalType()

@@ -6,13 +6,14 @@ import org.fife.rsta.ac.js.ecma.api.ecma5.functions.JS5ObjectFunctions;
 
 
 /**
- * Base JavaScript Object
+ * Base JavaScript Object.
+ *
  * @since Standard ECMA-262 3rd. Edition
  */
 public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
 
 	/**
-     * Object Object()
+     * Object Object().
      *
      * <p>Creates a new object instance</p>
      *
@@ -24,7 +25,7 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
     }
 
     /**
-     * Object Object(value)
+     * Object Object(value).
      *
      *
      * @constructor
@@ -45,6 +46,7 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
 	 *   y: { value: 2, writable, false, enumerable:true. configurable:true},
 	 * });
 	 * </pre>
+	 *
      * @param proto The prototype of the newly created object, or null.
      * @param descriptors An optional object that maps property names to property descriptors.
      * @returns A newly created object that inherits from {@code proto} and has properties described by <b><i>descriptors</i></b>
@@ -70,6 +72,7 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
 	 *   y: { value: 2, writable, false, enumerable:true. configurable:true},
 	 * });
 	 * </pre>
+	 *
      * @param o The object on which properties are to be created or configured.
      * @param descriptors An object that maps property names to property descriptors.
      * @returns The object {@code o}
@@ -93,6 +96,7 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
 	 *   Object.defineProperty (o, n, { value: v, writable, false, enumerable:true. configurable:true});
 	 * }
 	 * </pre>
+	 *
      * @param o The object on which a property is to be created or configured.
      * @param name The name of the property created or configured.
      * @param desc A property descriptor object that describes the new property.
@@ -144,6 +148,7 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
 	 * <pre>
 	 * Object.getOwnPropertyNames([]); //returns [length]: "length" is non enumerable
 	 * </pre>
+	 *
      * @param o An object
      * @returns An array that contains the names of all non-inherited properties of {@code o}, including non-enumerable properties.
      * @see  org.fife.rsta.ac.js.ecma.api.ecma5.JS5Object Object
@@ -165,6 +170,7 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
 	 * var o = Object.create(p); //an object inherited from p
 	 * Object.getPrototypeOf(o); //=&gt; p
 	 * </pre>
+	 *
      * @param o An object.
      * @returns The prototype of object {@code o}.
      * @see  org.fife.rsta.ac.js.ecma.api.ecma5.JS5Object Object
@@ -186,6 +192,7 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
 	 * Object.preventExtensions(o); //Make it non-extensible
 	 * Object.isExtensible(o); //=&gt; false
 	 * </pre>
+	 *
      * @param o The object to be checked for extensibility
      * @returns {code true} if the object can be extended with new properties, otherwise {code false}.
      * @see  org.fife.rsta.ac.js.ecma.api.ecma5.JS5Object Object
@@ -241,6 +248,7 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
 	 * <pre>
 	 * Object.keys({x:1, y:2}); // =&gt; ["x", "y"]
 	 * </pre>
+	 *
      * @param o an object
      * @returns An array that contains the names of all enumerable own (non-inherited) properties of {@code o}.
      * @see  org.fife.rsta.ac.js.ecma.api.ecma5.JS5Object Object

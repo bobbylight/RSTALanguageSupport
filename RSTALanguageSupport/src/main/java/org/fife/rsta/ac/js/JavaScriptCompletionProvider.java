@@ -97,7 +97,8 @@ public class JavaScriptCompletionProvider extends
 	}
 
 	/**
-	 * load the comment completions from the shorthand cache
+	 * load the comment completions from the shorthand cache.
+	 *
 	 * @param shorthandCache
 	 */
 	private void setCommentCompletions(ShorthandCompletionCache shorthandCache){

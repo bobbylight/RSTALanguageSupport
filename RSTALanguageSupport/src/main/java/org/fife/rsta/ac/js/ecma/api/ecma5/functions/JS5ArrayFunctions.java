@@ -19,6 +19,7 @@ public interface JS5ArrayFunctions extends JS5ObjectFunctions, JSArrayFunctions 
 	 * [1,2,3].every(function(x){return x &lt; 2;} //=&gt;false
 	 * [].every(function(x){return false;} //=&gt;true, always true for []
 	 * </pre>
+	 *
 	 * @param predicate A predicate function to test array elements
 	 * @param o The optional <b><i>this</i></b> value for invocations of <b><i>predicate</i></b>.
 	 * @returns <b><i>true</i></b> if <b><i>predicate</i></b> is true for every element of the <b>array</b> or <b><i>false</i></b>
@@ -39,6 +40,7 @@ public interface JS5ArrayFunctions extends JS5ObjectFunctions, JSArrayFunctions 
 	 * <pre>
 	 * [1,2,3].filter(function(x){return x &gt; 1}); // returns [2,3]
 	 * </pre>
+	 *
 	 * @param predicate The function to invoke to determine whether an element of <b>array</b> will be included in the returned array.
 	 * @param o An optional value on which <b><i>predicate</i></b> is invoked
 	 * @returns a new <b>array</b> containing only those elements of <b>array</b> for which <b><i>predicate</i></b> returned <b><i>true</i></b>
@@ -62,6 +64,7 @@ public interface JS5ArrayFunctions extends JS5ObjectFunctions, JSArrayFunctions 
 	 * var a = [1,2,3];
 	 * a.forEach(function(x,i,a){a[i]++;}); //a is now [2,3,4]
 	 * </pre>
+	 *
 	 * @param f The function to invoke for each element of <b>array</b>
 	 * @param o An optional value on which {@code f} is invoked
 	 * @memberOf Array
@@ -80,6 +83,7 @@ public interface JS5ArrayFunctions extends JS5ObjectFunctions, JSArrayFunctions 
 	 * ['a','b','c'].indexOf('d'); //returns -1
 	 * ['a','b','c'].indexOf('a',1); //returns -1
 	 * </pre>
+	 *
 	 * @param value The value to search <b>array</b> for.
 	 * @param start An optional array index at which to begin the search. If omitted, 0 is used.
 	 * @returns The <i>lowest</i> index => start of <b>array</b> at which the element matches <b><i>value</i></b>. Or -1 if no match is found
@@ -112,6 +116,7 @@ public interface JS5ArrayFunctions extends JS5ObjectFunctions, JSArrayFunctions 
 	 * <pre>
 	 * [1,2,3].map(function(x){return x*x;}); //returns [1,4,9]
 	 * </pre>
+	 *
 	 * @param f The function to invoke for each element of <b>array</b>. Its return becomes the elements of the returned array
 	 * @param o An optional value of which <b><i>f</i></b> is invoked
 	 * @returns A new array with elements computed by function <b><i>f</i></b>
@@ -132,6 +137,7 @@ public interface JS5ArrayFunctions extends JS5ObjectFunctions, JSArrayFunctions 
 	 * <pre>
 	 * [1,2,3].reduce(function(x,y){return x*y;}); //returns 6 ((1*2(*3))
 	 * </pre>
+	 *
 	 * @param f A function that combines two values and returns a "reduced" value
 	 * @param initial An optional initial value to see the array reduction with.
 	 * @returns The reduced value of an array.
@@ -152,6 +158,7 @@ public interface JS5ArrayFunctions extends JS5ObjectFunctions, JSArrayFunctions 
 	 * <pre>
 	 * [2,10,60].reduceRight(function(x,y){return x/y;}); //returns 3 (60/10)/2
 	 * </pre>
+	 *
 	 * @param f A function that combines two values and returns a "reduced" value
 	 * @param initial An optional initial value to see the array reduction with.
 	 * @returns The reduced value of an array.
@@ -172,6 +179,7 @@ public interface JS5ArrayFunctions extends JS5ObjectFunctions, JSArrayFunctions 
 	 * [1,2,3].some(function(x){return x &gt; 2;} //=&gt;true
 	 * [].some(function(x){return true;} //=&gt;false, always false for []
 	 * </pre>
+	 *
 	 * @param predicate A predicate function to test array elements.
 	 * @param o The optional <b><i>this</i></b> value for the invocations of  <b><i>predicate</i></b>.
 	 * @returns <b><i>true</i></b> if <b><i>predicate</i></b> returns <b><i>true</i></b> for at least one element of <b>array</b>, otherwise <b><i>false</i></b>

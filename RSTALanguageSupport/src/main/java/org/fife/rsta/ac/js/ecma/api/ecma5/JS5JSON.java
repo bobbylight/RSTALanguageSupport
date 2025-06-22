@@ -1,7 +1,8 @@
 package org.fife.rsta.ac.js.ecma.api.ecma5;
 
 /**
- * Object JSON
+ * Object JSON.
+ *
  * @since Standard ECMA-262 5th. Edition
  */
 public abstract class JS5JSON  {

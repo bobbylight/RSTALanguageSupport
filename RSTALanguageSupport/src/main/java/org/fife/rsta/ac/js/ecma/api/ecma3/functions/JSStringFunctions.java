@@ -84,6 +84,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
 	 * var string;//array of string initialised somewhere
 	 * strings.sort(function(a,b){return a.localCompare(b);});
 	 * </pre>
+	 *
      * @memberOf String
      * @param otherString A <b><i>string</i></b> to be compared, in a locale-sensitive fashion, with <b><i>string</i></b>.
      * @returns A number that indicates the result of the comparison.
@@ -142,6 +143,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
 	 * s.slice(3, -1); //returns "def"
 	 * s.slice(3,-2); //returns "de"
 	 * </pre>
+	 *
      * @memberOf String
      * @param start The start index where the slice if to begin.
      * @param end Optional end index where the slice is to end.
@@ -160,6 +162,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
      * "1|2|3|4".split("|"); //returns ["1","2","3","4"]
 	 * "%1%2%3%4%".split("%"); //returns ["","1","2","3","4",""]
 	 * </pre>
+	 *
      * @memberOf String
      * @param separator The string or regular expression at which the <b><i>string</i></b> splits
      * @param limit Optional value that specifies the maximum length of the returned array.

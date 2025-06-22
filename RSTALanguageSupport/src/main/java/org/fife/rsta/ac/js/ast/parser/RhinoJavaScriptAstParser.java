@@ -33,6 +33,7 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 
 	/**
 	 * Clear the importPackage and importClass cache
+	 *
 	 * @param provider SourceCompletionProvider
 	 */
 	public void clearImportCache(SourceCompletionProvider provider) {

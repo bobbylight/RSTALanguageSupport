@@ -4,7 +4,8 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.functions.JSStringFunctions;
 
 
 /**
- * Object String
+ * Object String.
+ *
  * @since Standard ECMA-262 3rd. Edition
  */
 public abstract class JSString implements JSStringFunctions {
@@ -62,6 +63,7 @@ public abstract class JSString implements JSStringFunctions {
 	 * <pre>
      * var s = String.fromCharCode(104,101,108,108,111); //returns the string hello
 	 * </pre>
+	 *
      * @memberOf String
      * @param charCode Zero or more integers that specify Unicode encodings of the characters in the string to be created.
      * @returns A new string containing characters with the specified encoding.

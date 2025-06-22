@@ -28,6 +28,8 @@ public class TypeDeclarationOptions {
 
 	/**
 	 * set the owner script name.
+	 *
+	 * @param ownerScriptName The name of the script that owns this type declaration.
 	 */
 	public void setOwnerScriptName(String ownerScriptName) {
 		this.ownerScriptName = ownerScriptName;
@@ -42,6 +44,8 @@ public class TypeDeclarationOptions {
 
 	/**
 	 * set whether the type declaration supports hyperlinks.
+	 *
+	 * @param supportsLinks Whether the type declaration supports hyperlinks.
 	 */
 	public void setSupportsLinks(boolean supportsLinks) {
 		this.supportsLinks = supportsLinks;
@@ -55,7 +59,9 @@ public class TypeDeclarationOptions {
 	}
 
 	/**
-	 * set whether the type declaration has been created from a pre-processed script.
+	 * Set whether the type declaration has been created from a pre-processed script.
+	 *
+	 * @param preProcessing Whether the script was pre-processed.
 	 */
 	public void setPreProcessing(boolean preProcessing) {
 		this.preProcessing = preProcessing;

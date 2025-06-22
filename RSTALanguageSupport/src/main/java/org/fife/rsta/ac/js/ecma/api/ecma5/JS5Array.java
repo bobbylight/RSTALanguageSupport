@@ -8,7 +8,8 @@ import org.fife.rsta.ac.js.ecma.api.ecma5.functions.JS5ArrayFunctions;
 
 
 /**
- * Object Array
+ * Object Array.
+ *
  * @since Standard ECMA-262 3rd. Edition
  */
 public abstract class JS5Array extends JSArray implements JS5ArrayFunctions {
@@ -44,6 +45,7 @@ public abstract class JS5Array extends JSArray implements JS5ArrayFunctions {
 	 * @constructor
 	 * @extends Object
 	 * @param element0  An argument list of two or more values. The <b>length</b> field set to the number of arguments.
+	 * @param elementn The nth argument.
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */

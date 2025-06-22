@@ -96,6 +96,7 @@ public final class JavaScriptFunctionType {
 	/**
 	 * Compare this JavaScriptFunctionType with another and return a weight integer based on the parameters matching or
 	 * whether the parameters are compatible.
+	 *
 	 * @param compareType method to compare with this
 	 * @param provider SourceCompletionProvider
 	 * @param isJavaScriptType TODO
@@ -135,6 +136,7 @@ public final class JavaScriptFunctionType {
 
 	/**
 	 * Convert parameter into TypeDeclaration.
+	 *
 	 * @param type
 	 * @param provider
 	 * @return
@@ -154,6 +156,7 @@ public final class JavaScriptFunctionType {
 	/**
 	 * Converts TypeDeclaration into Java Class and  compares whether another parameter is compatible based
 	 * on JSR-223.
+	 *
 	 * @param param parameter to compare
 	 * @param compareParam compare parameter
 	 * @param provider SourceCompletionProvider
@@ -310,6 +313,7 @@ public final class JavaScriptFunctionType {
 
 	/**
 	 * Converts TypeDeclaration qualified name to Java Class.
+	 *
 	 * @param name
 	 * @return
 	 * @throws ClassNotFoundException
@@ -377,6 +381,7 @@ public final class JavaScriptFunctionType {
 
 	/**
 	 * Convenience method to parse function string and converts to JavaScriptFunctionType
+	 *
 	 * @param function String to parse e.g. convertValue(java.util.String val);
 	 * @param provider used for type conversions
 	 * @return The function type.
@@ -417,6 +422,7 @@ public final class JavaScriptFunctionType {
 
 	/**
 	 * Converts JavaScript class name to integer code.
+	 *
 	 * @param clsName
 	 * @return
 	 * @throws ClassNotFoundException

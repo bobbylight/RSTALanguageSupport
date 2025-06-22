@@ -181,6 +181,7 @@ public class CodeBlock {
 
 	/**
 	 * Sets the start offset of this code block.
+	 *
 	 * @param start the start offset
 	 * @see #getStartOffset()
 	 */

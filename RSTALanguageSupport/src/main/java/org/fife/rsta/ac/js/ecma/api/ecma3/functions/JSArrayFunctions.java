@@ -59,6 +59,7 @@ public interface JSArrayFunctions extends JSObjectFunctions {
 	 * stack.pop(); // returns 2,  stack [1]
 	 * stack.pop(); // returns 1,  stack []
 	 * </pre>
+	 *
 	 * @returns The last element of the <b>array</b>.
 	 * @memberOf Array
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSArray Array
@@ -77,6 +78,7 @@ public interface JSArrayFunctions extends JSObjectFunctions {
 	 * var vals = [];
 	 * vals.push(1,2,3); // returns new array [1,2,3]
 	 * </pre>
+	 *
 	 * @param array One or more values to be appended to the end of the <b>array</b>.
 	 * @memberOf Array
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSArray Array
@@ -95,6 +97,7 @@ public interface JSArrayFunctions extends JSObjectFunctions {
 	 * var r = [1,2,3];
 	 * r.reverse(); // r is now [3,2,1]
 	 * </pre>
+	 *
 	 * @returns The <b>array</b> after it has been reversed.
 	 * @memberOf Array
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSArray Array
@@ -113,6 +116,7 @@ public interface JSArrayFunctions extends JSObjectFunctions {
 	 * s.shift(); // Returns 1; s = [2,3]
 	 * s.shift(); // Returns 2; s = [3]
 	 * </pre>
+	 *
 	 * @returns The former first element of the <b>array</b>
 	 * @memberOf Array
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSArray Array
@@ -134,6 +138,7 @@ public interface JSArrayFunctions extends JSObjectFunctions {
 	 * s.slice(3); // Returns [4,5]
 	 * s.slice(1,-1); // Returns [2,3,4]
 	 * </pre>
+	 *
 	 * @param start The array index from where to begin.  If negative, this argument specifies a position measured from the end of the array.
 	 * @param end The array index immediately after the end of the slice. If not specified then the slice includes all the array elements from the start to the end of the array.
 	 * @returns A new <b>array</b> containing elements from the {@code start} up to, but not including the <b><i>end</i></b> of the slice.
@@ -156,6 +161,7 @@ public interface JSArrayFunctions extends JSObjectFunctions {
 	 * s.sort(); //Alphabetical order : 1111,22,33,4,55
 	 * s.sort(numbersort); //Numerical order : 4, 22, 33, 55, 1111
 	 * </pre>
+	 *
 	 * @param function an optional function used to specify the sorting order
 	 * @returns A reference to the <b>array</b>
 	 * @memberOf Array
@@ -176,6 +182,7 @@ public interface JSArrayFunctions extends JSObjectFunctions {
 	 * s.splice(1,1); //Returns [4]; s is [1]
 	 * s.splice(1,0,2,3); //Returns []; s is [1 2 3]
 	 * </pre>
+	 *
 	 * @param start the <b>array</b> element at which the insertion and/or deletion is to begin
 	 * @param deletecount The number of elements starting with and including <i><b>start</b></i>.
 	 * @param items zero or more items to be inserted into the <b>array</b>
@@ -199,6 +206,7 @@ public interface JSArrayFunctions extends JSObjectFunctions {
 	 * s.unshift(22); //Returns 3; s is [22,1,2]
 	 * s.shift(); //Returns 22; s is [1,2]
 	 * </pre>
+	 *
 	 * @param value One or more values to insert at the beginning of the <b>array</b>
 	 * @returns The new length of the array
 	 * @memberOf Array
