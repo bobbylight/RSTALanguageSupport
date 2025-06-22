@@ -28,7 +28,7 @@ public interface JSRegExpFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-    JSArray exec(String string);
+	JSArray exec(String string);
 
 
 	/**
@@ -50,6 +50,6 @@ public interface JSRegExpFunctions extends JSObjectFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-    JSBoolean test(String string);
+	JSBoolean test(String string);
 
 }

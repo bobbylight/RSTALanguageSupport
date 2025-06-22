@@ -15,8 +15,8 @@ import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 /**
  * Rhino Specific JavaScriptTypesFactory. Supports {@code importPackage} and {@code importClass}.
  * <code>
- *   importPackage(java.util)
- *   importClass(java.util.HashSet)
+ * importPackage(java.util)
+ * importClass(java.util.HashSet)
  * </code>
  * Clears the cache every time document is parsed for importPackage and importClass to work properly.
  */
@@ -107,12 +107,12 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 	private void clearAllImportTypes() {
 		Set<TypeDeclaration> removeTypes = new HashSet<>();
 		//clear all non ECMA (JavaScript types) for importPackage and importClass to work properly
-        for (TypeDeclaration dec : cachedTypes.keySet()) {
-            if (!typesFactory.isJavaScriptType(dec) && !dec.equals(typesFactory.getDefaultTypeDeclaration())) {
-                removeAllTypes(cachedTypes.get(dec));
-                removeTypes.add(dec);
-            }
-        }
+		for (TypeDeclaration dec : cachedTypes.keySet()) {
+			if (!typesFactory.isJavaScriptType(dec) && !dec.equals(typesFactory.getDefaultTypeDeclaration())) {
+				removeAllTypes(cachedTypes.get(dec));
+				removeTypes.add(dec);
+			}
+		}
 		cachedTypes.keySet().removeAll(removeTypes);
 	}
 
@@ -125,9 +125,9 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 		if (type != null) {
 			typesFactory.removeType(type.getType().getQualifiedName());
 			if (!type.getExtendedClasses().isEmpty()) {
-                for (JavaScriptType extendedType : type.getExtendedClasses()) {
-                    removeAllTypes(extendedType);
-                }
+				for (JavaScriptType extendedType : type.getExtendedClasses()) {
+					removeAllTypes(extendedType);
+				}
 			}
 		}
 	}

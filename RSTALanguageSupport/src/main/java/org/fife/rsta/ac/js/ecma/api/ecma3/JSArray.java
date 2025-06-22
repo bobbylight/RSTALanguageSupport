@@ -24,9 +24,9 @@ public abstract class JSArray implements JSArrayFunctions {
 	/**
 	 * Object Array(size)
 	 *
+	 * @param size The desired number of elements in the array. The returned value has its <b>length</b> field set to {@code size}
 	 * @constructor
 	 * @extends Object
-	 * @param size The desired number of elements in the array. The returned value has its <b>length</b> field set to {@code size}
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
@@ -37,9 +37,9 @@ public abstract class JSArray implements JSArrayFunctions {
 	/**
 	 * Object Array(element0, ... elementN)
 	 *
+	 * @param element0 An argument list of two or more values. The <b>length</b> field set to the number of arguments.
 	 * @constructor
 	 * @extends Object
-	 * @param element0  An argument list of two or more values. The <b>length</b> field set to the number of arguments.
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
@@ -60,26 +60,26 @@ public abstract class JSArray implements JSArrayFunctions {
 	public JSNumber length;
 
 	/**
-    * <b>property prototype</b>
-    *
-    * @type Array
-    * @memberOf Array
-    * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSArray Array
-    * @since Standard ECMA-262 3rd. Edition
-    * @since Level 2 Document Object Model Core Definition.
-    */
-   public JSArray prototype;
+	 * <b>property prototype</b>
+	 *
+	 * @type Array
+	 * @memberOf Array
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSArray Array
+	 * @since Standard ECMA-262 3rd. Edition
+	 * @since Level 2 Document Object Model Core Definition.
+	 */
+	public JSArray prototype;
 
-   /**
-    * <b>property constructor</b>
-    *
-    * @type Function
-    * @memberOf Array
-    * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction Function
-    * @since Standard ECMA-262 3rd. Edition
-    * @since Level 2 Document Object Model Core Definition.
-    */
-   protected JSFunction constructor;
+	/**
+	 * <b>property constructor</b>
+	 *
+	 * @type Function
+	 * @memberOf Array
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction Function
+	 * @since Standard ECMA-262 3rd. Edition
+	 * @since Level 2 Document Object Model Core Definition.
+	 */
+	protected JSFunction constructor;
 
 
 }

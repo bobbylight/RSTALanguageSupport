@@ -11,53 +11,52 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.functions.JSObjectFunctions;
 public abstract class JSError implements JSObjectFunctions {
 
 	/**
-	* Object Error()
-	*
-	* @super Object
-	* @constructor
-	*
-	* @memberOf Error
-	* @since Standard ECMA-262 3rd. Edition
-	* @since Level 2 Document Object Model Core Definition.
-	*/
+	 * Object Error()
+	 *
+	 * @super Object
+	 * @constructor
+	 * @memberOf Error
+	 * @since Standard ECMA-262 3rd. Edition
+	 * @since Level 2 Document Object Model Core Definition.
+	 */
 	public JSError() {
 
 	}
 
 	/**
-	* Object Error(message)
-	*
-	* @super Object
-	* @constructor
-	* @param message An optional error message that provides details about the exception
-	* @memberOf Error
-	* @since Standard ECMA-262 3rd. Edition
-	* @since Level 2 Document Object Model Core Definition.
-	*/
+	 * Object Error(message)
+	 *
+	 * @param message An optional error message that provides details about the exception
+	 * @super Object
+	 * @constructor
+	 * @memberOf Error
+	 * @since Standard ECMA-262 3rd. Edition
+	 * @since Level 2 Document Object Model Core Definition.
+	 */
 	public JSError(JSString message) {
 	}
 
 	/**
-    * Property <b>prototype</b>
-    *
-    * @type Error
-    * @memberOf Error
-    * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSError Error
-    * @since Standard ECMA-262 3rd. Edition
-    * @since Level 2 Document Object Model Core Definition.
-    */
-   public JSError prototype;
+	 * Property <b>prototype</b>
+	 *
+	 * @type Error
+	 * @memberOf Error
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSError Error
+	 * @since Standard ECMA-262 3rd. Edition
+	 * @since Level 2 Document Object Model Core Definition.
+	 */
+	public JSError prototype;
 
-   /**
-    * Property constructor.
-    *
-    * @type Function
-    * @memberOf Error
-    * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction Function
-    * @since Standard ECMA-262 3rd. Edition
-    * @since Level 2 Document Object Model Core Definition.
-    */
-   protected JSFunction constructor;
+	/**
+	 * Property constructor.
+	 *
+	 * @type Function
+	 * @memberOf Error
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSFunction Function
+	 * @since Standard ECMA-262 3rd. Edition
+	 * @since Level 2 Document Object Model Core Definition.
+	 */
+	protected JSFunction constructor;
 
 	/**
 	 * <b>property name</b>
@@ -80,7 +79,6 @@ public abstract class JSError implements JSObjectFunctions {
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
 	protected JSString message;
-
 
 
 }

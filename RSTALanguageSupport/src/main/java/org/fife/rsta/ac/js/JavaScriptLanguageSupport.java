@@ -221,7 +221,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 return defaultValue;
 	}
 
-/*
+	/*
 	private void loadFile(File file, RSyntaxDocument doc) throws IOException {
 		BufferedReader r = new BufferedReader(new FileReader(file));
 		try {
@@ -232,7 +232,7 @@ return defaultValue;
 			r.close();
 		}
 	}
-*/
+	*/
 
 	/**
 	 * Sets the JS version to use when parsing the code.

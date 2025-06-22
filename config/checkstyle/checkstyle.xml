@@ -268,7 +268,9 @@
 		<!-- See https://checkstyle.sourceforge.io/checks/misc/index.html -->
 		<module name="ArrayTypeStyle"/>
 		<module name="AvoidEscapedUnicodeCharacters"/>
-		<module name="CommentsIndentation"/>
+		<module name="CommentsIndentation">
+			<property name="tokens" value="BLOCK_COMMENT_BEGIN"/>
+		</module>
 		<!--<module name="FinalParameters"/>-->
 		<!-- <module name="TodoComment"/> -->
 		<module name="UpperEll"/>

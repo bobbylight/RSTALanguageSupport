@@ -150,11 +150,11 @@ public class JavaScriptType {
 		JSCompletion completion = cachedType.getCompletionImpl(completionLookup, provider);
 		if (completion == null) {
 			// try the extended types
-            for (JavaScriptType javaScriptType : cachedType.getExtendedClasses()) {
-                completion = getCompletion(javaScriptType, completionLookup, provider);
-                if (completion != null)
-                    break;
-            }
+			for (JavaScriptType javaScriptType : cachedType.getExtendedClasses()) {
+				completion = getCompletion(javaScriptType, completionLookup, provider);
+				if (completion != null)
+					break;
+				}
 		}
 		return completion;
 	}

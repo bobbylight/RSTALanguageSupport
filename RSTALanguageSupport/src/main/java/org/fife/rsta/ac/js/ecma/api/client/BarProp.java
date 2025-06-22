@@ -17,14 +17,14 @@ public abstract class BarProp extends JS5Array {
 	}
 
 	/**
-    * <b>property prototype</b>
-    *
-    * @type Array
-    * @memberOf Array
-    * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSArray Array
-    * @since Standard ECMA-262 3rd. Edition
-    * @since Level 2 Document Object Model Core Definition.
-    */
-   public BarProp prototype;
+	 * <b>property prototype</b>
+	 *
+	 * @type Array
+	 * @memberOf Array
+	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSArray Array
+	 * @since Standard ECMA-262 3rd. Edition
+	 * @since Level 2 Document Object Model Core Definition.
+	 */
+	public BarProp prototype;
 
 }
