@@ -355,7 +355,7 @@ case Token.EXPR_RESULT:
 	 */
 	private static final class InfixVisitor implements NodeVisitor {
 
-		private String type = null;
+		private String type;
 		private SourceCompletionProvider provider;
 
 		private InfixVisitor(SourceCompletionProvider provider) {

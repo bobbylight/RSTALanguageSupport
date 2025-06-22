@@ -30,12 +30,12 @@ public final class JavaScriptFunctionType {
 	public static Class<?> ShortClass = Kit.classOrNull("java.lang.Short");
 	public static Class<?> StringClass = Kit.classOrNull("java.lang.String");
 	public static Class<?> DateClass = Kit.classOrNull("java.util.Date");
-	public static Class<?> JSBooleanClass = null;
-	public static Class<?> JSStringClass = null;
-	public static Class<?> JSNumberClass = null;
-	public static Class<?> JSObjectClass = null;
-	public static Class<?> JSDateClass = null;
-	public static Class<?> JSArray = null;
+	public static Class<?> JSBooleanClass;
+	public static Class<?> JSStringClass;
+	public static Class<?> JSNumberClass;
+	public static Class<?> JSObjectClass;
+	public static Class<?> JSDateClass;
+	public static Class<?> JSArray;
 
 	private String name;
 	private List<TypeDeclaration> arguments;

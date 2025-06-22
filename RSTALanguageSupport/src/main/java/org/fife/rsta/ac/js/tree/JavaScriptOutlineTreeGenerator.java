@@ -52,7 +52,7 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 
 	private JavaScriptTreeNode curScopeTreeNode;
 
-	private Map<String, List<JavaScriptTreeNode>> prototypeAdditions = null;
+	private Map<String, List<JavaScriptTreeNode>> prototypeAdditions;
 
 
 	JavaScriptOutlineTreeGenerator(RSyntaxTextArea textArea,
