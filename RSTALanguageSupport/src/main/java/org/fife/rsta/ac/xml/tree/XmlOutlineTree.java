@@ -103,7 +103,7 @@ public class XmlOutlineTree extends AbstractSourceTree {
 													SYNTAX_STYLE_XML);
 		XmlLanguageSupport xls = (XmlLanguageSupport)support;
 
-		// Listen for re-parsing of the editor, and update the tree accordingly
+		// Listen for reparsing of the editor, and update the tree accordingly
 		parser = xls.getParser(textArea);
 		if (parser!=null) { // Should always be true
 			parser.addPropertyChangeListener(XmlParser.PROPERTY_AST, listener);
@@ -224,7 +224,7 @@ public class XmlOutlineTree extends AbstractSourceTree {
 
 		/**
 		 * Called whenever the text area's syntax style changes, as well as
-		 * when it is re-parsed.
+		 * when it is reparsed.
 		 */
 		@Override
 		public void propertyChange(PropertyChangeEvent e) {

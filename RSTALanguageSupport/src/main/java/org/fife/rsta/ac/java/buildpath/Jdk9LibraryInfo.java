@@ -25,11 +25,14 @@ import java.util.zip.ZipEntry;
 
 /**
  * Information about the JDK 9+ runtime classes to add to the "build path".
- *
+ * <p>
  * Note: this introspects the modules delivered as prt of the JDJ, in jmods.
- * A more complete implementation could look into the ct.sym file and rely on
- * a JDK version to find the proper signatures:
+ * A more complete implementation could look into the {@code ct.sym} file and rely on
+ * a JDK version to find the proper signatures:<p>
+ *
+ * <a href="https://www.morling.dev/blog/the-anatomy-of-ct-sym-how-javac-ensures-backwards-compatibility/">
  *   https://www.morling.dev/blog/the-anatomy-of-ct-sym-how-javac-ensures-backwards-compatibility/
+ * </a>
  *
  *
  * @author Robert Futrell
@@ -173,6 +176,22 @@ public class Jdk9LibraryInfo extends LibraryInfo {
 
 		return root;
 
+	}
+
+
+	/**
+	 * Returns the JRE home directory, if it can be determined.
+	 *
+	 * @return The JRE home directory, or {@code null} if it can't be determined.
+	 */
+	public File getJreHome() {
+		if (jmodFiles != null && jmodFiles.length > 0) {
+			File firstJmodFile = jmodFiles[0];
+			if (firstJmodFile != null) {
+				return firstJmodFile.getParentFile().getParentFile();
+			}
+		}
+		return null;
 	}
 
 

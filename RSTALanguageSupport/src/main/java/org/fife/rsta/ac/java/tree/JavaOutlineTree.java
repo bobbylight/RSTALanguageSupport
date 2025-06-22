@@ -167,7 +167,7 @@ public class JavaOutlineTree extends AbstractSourceTree {
 													SYNTAX_STYLE_JAVA);
 		JavaLanguageSupport jls = (JavaLanguageSupport)support;
 
-		// Listen for re-parsing of the editor, and update the tree accordingly
+		// Listen for reparsing of the editor, and update the tree accordingly
 		parser = jls.getParser(textArea);
 		if (parser!=null) { // Should always be true
 			parser.addPropertyChangeListener(
@@ -367,7 +367,7 @@ public class JavaOutlineTree extends AbstractSourceTree {
 
 		/**
 		 * Called whenever the text area's syntax style changes, as well as
-		 * when it is re-parsed.
+		 * when it is reparsed.
 		 */
 		@Override
 		public void propertyChange(PropertyChangeEvent e) {

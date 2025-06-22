@@ -232,7 +232,7 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
 
 	/**
 	 * <b>function keys(o)</b> return enumerable property names.
-	 *
+	 * <p>
 	 * <strong>Example</strong>
 	 * <pre>
 	 * Object.keys({x:1, y:2}); // =&gt; ["x", "y"]

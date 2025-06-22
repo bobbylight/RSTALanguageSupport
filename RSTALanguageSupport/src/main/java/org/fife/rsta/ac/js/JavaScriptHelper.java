@@ -131,7 +131,6 @@ public final class JavaScriptHelper {
 
 	/**
 	 * Iterate back up through parent nodes and check whether inside a function.
-	 *
 	 * If the node is a function, then the Parsed parent node structure is:
 	 * <code>
 	 * FunctionCall
@@ -231,9 +230,11 @@ case Token.EXPR_RESULT:
 
 	/**
 	 * Check the Get Element and extract the Array type from the variable
-	 * e.g
+	 * e.g.
+	 * <pre>
 	 * var a = [1, 2, 3];
 	 * var b = a[1]; //b resolves to Number
+	 * </pre>
 	 *
 	 * @param node
 	 * @param provider
@@ -349,7 +350,7 @@ case Token.EXPR_RESULT:
 	 * Visitor for infix expression to work out whether the variable should be a
 	 * string number literal Only works by determining the presence of
 	 * StringLiterals and NumberLiterals. StringLiteral will override type to
-	 * evaluate to String.
+	 * evaluate to String.<p>
 	 *
 	 * TODO most probably need some work on this
 	 */
@@ -534,13 +535,14 @@ case Token.EXPR_RESULT:
 	}
 
 	/**
-	 * Trims the text from the last , from the string
-	 * Looks for {@code (} or {@code [} starting at the end of the string to find out where in the string to substring.
-	 * Do not need to trim off if inside either () or [].
-	 * e.g
-	 * 1, "".charAt(position).indexOf(2, "")
-	 *
-	 * String should be trimmed at the 1, not the 2,
+	 * Trims the text from the last {@code ,} from the string.
+	 * Looks for parens and square brackets ({@code (}) or {@code [}) starting at the end of the string to
+	 * find out where in the string to substring.
+	 * This method doesn't trim at commas found in either () or [].
+	 * e.g. for this string:<p>
+	 * {@code 1, "".charAt(position).indexOf(2, "")}
+	 * <p>
+	 * We should trim at the {@code 1,} not the {@code 2,}.
 	 *
 	 * @param text The text to trim.
 	 * @return The trimmed text.

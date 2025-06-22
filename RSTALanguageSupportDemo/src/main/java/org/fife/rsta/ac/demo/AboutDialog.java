@@ -34,6 +34,7 @@ import javax.swing.UIManager;
 import javax.swing.border.AbstractBorder;
 
 import org.fife.rsta.ac.java.buildpath.JarLibraryInfo;
+import org.fife.rsta.ac.java.buildpath.Jdk9LibraryInfo;
 import org.fife.rsta.ac.java.buildpath.LibraryInfo;
 import org.fife.rsta.ac.perl.PerlLanguageSupport;
 
@@ -71,21 +72,7 @@ public class AboutDialog extends JDialog {
 		addLeftAligned(label, box2);
 		box2.add(Box.createVerticalStrut(5));
 
-		JTextArea textArea = new JTextArea(6, 60);
-		// Windows LAF picks a bad font for text areas, for some reason.
-		textArea.setFont(labelFont);
-		textArea.setText("Version 0.2\n\n" +
-			"Demonstrates basic features of the RSTALanguageSupport library.\n" +
-			"Note that some features for some languages may not work unless your system " +
-			"is set up properly.\nFor example, Java code completion requires a JRE on " +
-			"your PATH, and Perl completion requires the Perl executable to be on your " +
-			"PATH.");
-		textArea.setEditable(false);
-		textArea.setBackground(Color.white);
-		textArea.setLineWrap(true);
-		textArea.setWrapStyleWord(true);
-		textArea.setBorder(null);
-		box2.add(textArea);
+		box2.add(createAboutTextArea(labelFont));
 
 		box.add(box2);
 		box.add(Box.createVerticalStrut(5));
@@ -99,9 +86,14 @@ public class AboutDialog extends JDialog {
 		JLabel javaLabel = new JLabel("Java home:");
 		String jre = null;
 		LibraryInfo info = LibraryInfo.getMainJreJarInfo();
-		if (info!=null) { // Should always be true
+		if (info instanceof JarLibraryInfo) { // Java 8 and earlier
 			File jarFile = ((JarLibraryInfo)info).getJarFile();
 			jre = jarFile.getParentFile().getParentFile().getAbsolutePath();
+		} else if (info instanceof Jdk9LibraryInfo) { // Java 9 and later
+			File jreHome = ((Jdk9LibraryInfo)info).getJreHome();
+			if (jreHome!=null) {
+				jre = jreHome.getAbsolutePath();
+			}
 		}
 		JTextField javaField = createTextField(jre);
 
@@ -142,6 +134,25 @@ public class AboutDialog extends JDialog {
 		temp.setOpaque(false); // For ones on white background.
 		temp.add(toAdd, BorderLayout.LINE_START);
 		addTo.add(temp);
+	}
+
+
+	private static JTextArea createAboutTextArea(Font labelFont) {
+		JTextArea textArea = new JTextArea(6, 60);
+		// Windows LAF picks a bad font for text areas, for some reason.
+		textArea.setFont(labelFont);
+		textArea.setText("Version 0.2\n\n" +
+			"Demonstrates basic features of the RSTALanguageSupport library.\n" +
+			"Note that some features for some languages may not work unless your system " +
+			"is set up properly.\nFor example, Java code completion requires a JRE on " +
+			"your PATH, and Perl completion requires the Perl executable to be on your " +
+			"PATH.");
+		textArea.setEditable(false);
+		textArea.setBackground(Color.WHITE);
+		textArea.setLineWrap(true);
+		textArea.setWrapStyleWord(true);
+		textArea.setBorder(null);
+		return textArea;
 	}
 
 

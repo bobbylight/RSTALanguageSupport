@@ -624,9 +624,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 		tab++;
 		if (block != null) {
 			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < tab; i++) {
-				sb.append("  ");
-			}
+			sb.append("  ".repeat(Math.max(0, tab)));
 			sb.append("Start: ").append(block.getStartOffset()).append(" end:").append(block.getEndOffset());
 			for (int ii = 0; ii < block.getVariableDeclarationCount(); ii++) {
 				JavaScriptVariableDeclaration vd = block

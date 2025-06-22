@@ -60,7 +60,7 @@ import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
 public class XmlParser extends AbstractParser {
 
 	/**
-	 * The property change event that's fired when the document is re-parsed.
+	 * The property change event that's fired when the document is reparsed.
 	 * Applications can listen for this property change and update themselves
 	 * accordingly.  The property's "new value" will be an {@link XmlTreeNode}
 	 * representing the root of a tree modeling the XML content.  The "old

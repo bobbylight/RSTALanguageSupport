@@ -44,7 +44,7 @@ public abstract class JavaScriptTypesFactory {
 	private static final List<String> UNSUPPORTED_COMPLETIONS;
 	private static final String SPECIAL_METHOD = "<clinit>";
 
-	//list of unsupported completions e.g. java.lang.Object as JavaScript has it's own
+	//list of unsupported completions e.g. java.lang.Object as JavaScript has its own
 	static {
 		UNSUPPORTED_COMPLETIONS = new ArrayList<>();
 		UNSUPPORTED_COMPLETIONS.add("java.lang.Object");

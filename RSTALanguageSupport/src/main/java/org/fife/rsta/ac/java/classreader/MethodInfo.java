@@ -520,10 +520,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 
 		}
 
-		for (int i=0; i<braceCount; i++) {
-			sb.append("[]");
-		}
-
+		sb.append("[]".repeat(braceCount));
 		return sb.toString();
 
 	}

@@ -4,11 +4,10 @@
    class file format?
 2. Make "prefix" go more than "1 level deep" when getting completions at caret
    position.
-3. Improve performance of first ctrl+space - have a "pre-load package list?"
-4. Make pre-loading everything an option (vs. old behavior of just imports)
+3. Make pre-loading everything an option (vs. old behavior of just imports)
    instead of the only choice.
-5. Java 7: add parsing support for auto-closable try-blocks.
-6. Javadoc links: unqualified @see/@link tags should scan imports to identify
+4. Java 7: add parsing support for auto-closable try-blocks.
+5. Javadoc links: unqualified @see/@link tags should scan imports to identify
    the actual class being linked to.
 
 ***** rjc (parsing) *****

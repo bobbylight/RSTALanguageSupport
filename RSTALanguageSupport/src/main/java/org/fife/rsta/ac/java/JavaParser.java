@@ -52,7 +52,7 @@ import org.fife.ui.rsyntaxtextarea.parser.ParseResult;
 public class JavaParser extends AbstractParser {
 
 	/**
-	 * The property change event that's fired when the document is re-parsed.
+	 * The property change event that's fired when the document is reparsed.
 	 * Applications can listen for this property change and update themselves
 	 * accordingly.
 	 */

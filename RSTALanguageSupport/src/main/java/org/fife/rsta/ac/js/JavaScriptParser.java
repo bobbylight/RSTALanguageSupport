@@ -62,7 +62,7 @@ import org.mozilla.javascript.ast.ParseProblem;
 public class JavaScriptParser extends AbstractParser {
 
 	/**
-	 * The property change event that's fired when the document is re-parsed.
+	 * The property change event that's fired when the document is reparsed.
 	 * Applications can listen for this property change and update themselves
 	 * accordingly.  The "new" value of this property will be an instance of
 	 * <code>org.mozilla.javascript.ast.AstRoot</code>.

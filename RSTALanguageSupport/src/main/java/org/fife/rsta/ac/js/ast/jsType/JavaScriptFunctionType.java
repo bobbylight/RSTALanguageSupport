@@ -408,7 +408,6 @@ public final class JavaScriptFunctionType {
                         functionType.addArgument(type);
                     }
                     else {
-
                         functionType.addArgument(JavaScriptHelper
                                 .createNewTypeDeclaration(param));
                     }

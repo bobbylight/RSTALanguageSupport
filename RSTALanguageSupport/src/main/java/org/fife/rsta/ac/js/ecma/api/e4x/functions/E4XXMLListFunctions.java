@@ -90,7 +90,7 @@ public interface E4XXMLListFunctions extends JSObjectFunctions {
 	/**
 	 * <b>function copy()</b> returns a deep copy of the XMLList object.
 	 *
-	 * @returns the copy method returns a deep copy of this XMLList object..
+	 * @returns the copy method returns a deep copy of this XMLList object.
 	 * @memberOf XMLList
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXMLList XMLList
 	 * @since Standard ECMA-357 2nd. Edition

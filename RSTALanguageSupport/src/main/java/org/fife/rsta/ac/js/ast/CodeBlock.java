@@ -198,9 +198,7 @@ public class CodeBlock {
 
 	private void outputChild(StringBuilder sb, CodeBlock block, int tab) {
 		StringBuilder tabs = new StringBuilder();
-		for (int i=0; i<tab; i++) {
-			tabs.append("\t");
-		}
+		tabs.append("\t".repeat(Math.max(0, tab)));
 		sb.append(tabs);
 		sb.append("start: ").append(block.getStartOffset()).append("\n");
 		sb.append(tabs);

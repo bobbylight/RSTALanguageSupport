@@ -73,7 +73,7 @@ class JavaShorthandCompletion extends ShorthandCompletion implements
 
 
 	/**
-	 * Renders a completion in the style of a short-hand completion.
+	 * Renders a completion in the style of a shorthand completion.
 	 *
 	 * @param g The graphics context.
 	 * @param input The text the user enters to display this completion.

@@ -404,7 +404,7 @@ public interface JSDateFunctions extends JSObjectFunctions {
 	 * @param min Optional minute field expressed in local time, to be set in {@code date}.
 	 * @param sec Optional second field expressed in local time, to be set in {@code date}.
 	 * @param ms Optional millisecond field expressed in local time, to be set in {@code date}.
-	 * @returns {The millisecond representation of the adjusted date.
+	 * @returns The millisecond representation of the adjusted date.
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSDate Date
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.

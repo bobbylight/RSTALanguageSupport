@@ -458,7 +458,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 
 	/**
-	 * Extract variable from binary operator e.g. <, >, = etc..
+	 * Extract variable from binary operator e.g. <, >, = etc.
 	 */
 	private void processInfix(Node child, CodeBlock block,
 			Set<Completion> set, String entered, int offset) {
