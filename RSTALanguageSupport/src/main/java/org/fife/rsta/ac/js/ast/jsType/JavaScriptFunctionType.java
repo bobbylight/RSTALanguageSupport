@@ -12,30 +12,30 @@ import org.fife.rsta.ac.js.ast.type.ecma.TypeDeclarations;
 import org.mozilla.javascript.Kit;
 
 
-public class JavaScriptFunctionType {
+public final class JavaScriptFunctionType {
 
 	public static int CONVERSION_NONE = 999;
 	public static int CONVERSION_JS = 99;
 
-	public static Class<?> BooleanClass = Kit.classOrNull("java.lang.Boolean"),
-							  ByteClass = Kit.classOrNull("java.lang.Byte"),
-							  CharacterClass = Kit.classOrNull("java.lang.Character"),
-							  ClassClass = Kit.classOrNull("java.lang.Class"),
-							  DoubleClass = Kit.classOrNull("java.lang.Double"),
-							  FloatClass = Kit.classOrNull("java.lang.Float"),
-							  IntegerClass = Kit.classOrNull("java.lang.Integer"),
-							  LongClass = Kit.classOrNull("java.lang.Long"),
-							  NumberClass = Kit.classOrNull("java.lang.Number"),
-							  ObjectClass = Kit.classOrNull("java.lang.Object"),
-							  ShortClass = Kit.classOrNull("java.lang.Short"),
-							  StringClass = Kit.classOrNull("java.lang.String"),
-							  DateClass = Kit.classOrNull("java.util.Date"),
-							  JSBooleanClass = null,
-							  JSStringClass = null,
-							  JSNumberClass = null,
-							  JSObjectClass = null,
-							  JSDateClass = null,
-							  JSArray = null;
+	public static Class<?> BooleanClass = Kit.classOrNull("java.lang.Boolean");
+	public static Class<?> ByteClass = Kit.classOrNull("java.lang.Byte");
+	public static Class<?> CharacterClass = Kit.classOrNull("java.lang.Character");
+	public static Class<?> ClassClass = Kit.classOrNull("java.lang.Class");
+	public static Class<?> DoubleClass = Kit.classOrNull("java.lang.Double");
+	public static Class<?> FloatClass = Kit.classOrNull("java.lang.Float");
+	public static Class<?> IntegerClass = Kit.classOrNull("java.lang.Integer");
+	public static Class<?> LongClass = Kit.classOrNull("java.lang.Long");
+	public static Class<?> NumberClass = Kit.classOrNull("java.lang.Number");
+	public static Class<?> ObjectClass = Kit.classOrNull("java.lang.Object");
+	public static Class<?> ShortClass = Kit.classOrNull("java.lang.Short");
+	public static Class<?> StringClass = Kit.classOrNull("java.lang.String");
+	public static Class<?> DateClass = Kit.classOrNull("java.util.Date");
+	public static Class<?> JSBooleanClass = null;
+	public static Class<?> JSStringClass = null;
+	public static Class<?> JSNumberClass = null;
+	public static Class<?> JSObjectClass = null;
+	public static Class<?> JSDateClass = null;
+	public static Class<?> JSArray = null;
 
 	private String name;
 	private List<TypeDeclaration> arguments;
@@ -98,9 +98,11 @@ public class JavaScriptFunctionType {
 	 * whether the parameters are compatible.
 	 * @param compareType method to compare with this
 	 * @param provider SourceCompletionProvider
+	 * @param isJavaScriptType TODO
 	 * @return weight based on the compatibleness of method to compare
 	 */
-	public int compare(JavaScriptFunctionType compareType, SourceCompletionProvider provider, boolean isJavaScriptType) {
+	public int compare(JavaScriptFunctionType compareType, SourceCompletionProvider provider,
+					   boolean isJavaScriptType) {
 		//first check name
 		if (!compareType.getName().equals(getName())) {
 			return CONVERSION_NONE;
@@ -112,7 +114,8 @@ public class JavaScriptFunctionType {
 		//if Java type and args do not match... cannot match
 		if (!isJavaScriptType && !argsMatch) {
 			return CONVERSION_NONE;
-		} else if(isJavaScriptType && !argsMatch) { //is javascript type and args do not match, return higher compare number
+		} else if (isJavaScriptType && !argsMatch) {
+			//if javascript type and args don't match, return higher compare number
 			return CONVERSION_JS;
 		}
 
@@ -131,7 +134,7 @@ public class JavaScriptFunctionType {
 
 
 	/**
-	 * Convert parameter into TypeDeclaration
+	 * Convert parameter into TypeDeclaration.
 	 * @param type
 	 * @param provider
 	 * @return
@@ -150,7 +153,7 @@ public class JavaScriptFunctionType {
 
 	/**
 	 * Converts TypeDeclaration into Java Class and  compares whether another parameter is compatible based
-	 * on JSR-223
+	 * on JSR-223.
 	 * @param param parameter to compare
 	 * @param compareParam compare parameter
 	 * @param provider SourceCompletionProvider
@@ -306,7 +309,7 @@ public class JavaScriptFunctionType {
 
 
 	/**
-	 * Converts TypeDeclaration qualified name to Java Class
+	 * Converts TypeDeclaration qualified name to Java Class.
 	 * @param name
 	 * @return
 	 * @throws ClassNotFoundException
@@ -314,7 +317,7 @@ public class JavaScriptFunctionType {
 	private Class<?> convertClassToJavaClass(String name, TypeDeclarationFactory typesFactory)
 			throws ClassNotFoundException {
 
-		if (name.equals("any"))
+		if ("any".equals(name))
 			return ObjectClass;
 
 		// check type is converted properly
@@ -359,7 +362,7 @@ public class JavaScriptFunctionType {
 			// strip parameters and resolve types
 			String paramsStr = function.substring(paramStartIndex + 1,
 					paramEndIndex).trim();
-			if(paramsStr.length() > 0) {
+			if (paramsStr.length() > 0) {
 				// iterate through params
 				String[] params = paramsStr.split(",");
 				for (int i = 0; i < params.length; i++) {
@@ -376,7 +379,7 @@ public class JavaScriptFunctionType {
 	 * Convenience method to parse function string and converts to JavaScriptFunctionType
 	 * @param function String to parse e.g. convertValue(java.util.String val);
 	 * @param provider used for type conversions
-	 * @return
+	 * @return The function type.
 	 */
 	public static JavaScriptFunctionType parseFunction(String function,
 			SourceCompletionProvider provider) {
@@ -390,7 +393,7 @@ public class JavaScriptFunctionType {
 			String paramsStr = function.substring(paramStartIndex + 1,
 					paramEndIndex).trim();
 			// iterate through params
-			if(paramsStr.length() > 0) {
+			if (!paramsStr.isEmpty()) {
 				String[] params = paramsStr.split(",");
                 for (String s : params) {
                     String param = provider.getTypesFactory().convertJavaScriptType(
@@ -413,7 +416,7 @@ public class JavaScriptFunctionType {
 
 
 	/**
-	 * Converts JavaScript class name to integer code
+	 * Converts JavaScript class name to integer code.
 	 * @param clsName
 	 * @return
 	 * @throws ClassNotFoundException
@@ -421,7 +424,7 @@ public class JavaScriptFunctionType {
 	private static int getJSTypeCode(String clsName, TypeDeclarationFactory typesFactory)
 			throws ClassNotFoundException {
 
-		if (clsName.equals("any")) {
+		if ("any".equals(clsName)) {
 			return JSTYPE_UNDEFINED;
 		}
 

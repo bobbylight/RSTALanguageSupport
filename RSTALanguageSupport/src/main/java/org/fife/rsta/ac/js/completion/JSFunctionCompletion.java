@@ -48,9 +48,8 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 		setParams(params);
 	}
 
-	private static String getMethodName(MethodInfo info, CompletionProvider provider)
-	{
-		if(info.isConstructor()){
+	private static String getMethodName(MethodInfo info, CompletionProvider provider) {
+		if (info.isConstructor()){
 			return ((SourceCompletionProvider) provider).getTypesFactory().convertJavaScriptType(info.getClassFile().getClassName(true), false);
 		} else {
 			return info.getName();
@@ -253,8 +252,7 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 		return methodData.getEnclosingClassName(fullyQualified);
 	}
 
-	public JSMethodData getMethodData()
-	{
+	public JSMethodData getMethodData() {
 		return methodData;
 	}
 

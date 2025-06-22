@@ -1,22 +1,23 @@
 package org.fife.rsta.ac.js.engine;
 
 import java.util.HashMap;
+import java.util.Map;
 
 
-public class JavaScriptEngineFactory {
+public final class JavaScriptEngineFactory {
 
 
 	public static final String DEFAULT = ECMAJavaScriptEngine.ECMA_ENGINE;
 
-	private HashMap<String, JavaScriptEngine> supportedEngines =
+	private Map<String, JavaScriptEngine> supportedEngines =
             new HashMap<>();
 
-	private static JavaScriptEngineFactory Instance = new JavaScriptEngineFactory();
+	private static final JavaScriptEngineFactory INSTANCE = new JavaScriptEngineFactory();
 
 	static {
-		Instance().addEngine(ECMAJavaScriptEngine.ECMA_ENGINE, new ECMAJavaScriptEngine());
-		Instance().addEngine(JSR223JavaScriptEngine.JSR223_ENGINE, new JSR223JavaScriptEngine());
-		Instance().addEngine(RhinoJavaScriptEngine.RHINO_ENGINE, new RhinoJavaScriptEngine());
+		instance().addEngine(ECMAJavaScriptEngine.ECMA_ENGINE, new ECMAJavaScriptEngine());
+		instance().addEngine(JSR223JavaScriptEngine.JSR223_ENGINE, new JSR223JavaScriptEngine());
+		instance().addEngine(RhinoJavaScriptEngine.RHINO_ENGINE, new RhinoJavaScriptEngine());
 	}
 
 
@@ -24,13 +25,13 @@ public class JavaScriptEngineFactory {
 	}
 
 
-	public static JavaScriptEngineFactory Instance() {
-		return Instance;
+	public static JavaScriptEngineFactory instance() {
+		return INSTANCE;
 	}
 
 
 	public JavaScriptEngine getEngineFromCache(String name) {
-		if(name == null) {
+		if (name == null) {
 			name = DEFAULT;
 		}
 		return supportedEngines.get(name);

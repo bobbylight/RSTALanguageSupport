@@ -77,8 +77,8 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 
 	/**
-	 * for each child of parent AstNode add a new code block and add completions
-	 * for each block of code
+	 * For each child of parent AstNode add a new code block and add completions
+	 * for each block of code.
 	 *
 	 * @param parent AstNode to iterate children
 	 * @param set completions set to add to
@@ -89,7 +89,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	private void addCodeBlock(Node parent, Set<Completion> set,
 			String entered, CodeBlock codeBlock, int offset) {
 
-		if(parent == null)
+		if (parent == null)
 			return;
 
 		Node child = parent.getFirstChild();
@@ -290,7 +290,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 			dec.setTypeDeclaration(target);
 		}
 		else {
-			if(dec != null) {
+			if (dec != null) {
 				dec.setTypeDeclaration(provider.getTypesFactory().getDefaultTypeDeclaration());
 			}
 		}
@@ -321,7 +321,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 		if (canProcessNode(switchCase)) {
 			block = block.addChildCodeBlock(start);
 			block.setEndOffset(offset);
-			if(statements != null) {
+			if (statements != null) {
 				for (AstNode node : statements) {
 					iterateNode(node, set, entered, block, offset);
 				}
@@ -330,13 +330,13 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	}
 
 
-	/** Extract local variables from switch node* */
+	/** Extract local variables from switch node. */
 	private void processSwitchNode(Node child, CodeBlock block,
 			Set<Completion> set, String entered, int offset) {
 		SwitchStatement switchStatement = (SwitchStatement) child;
 		if (canProcessNode(switchStatement)) {
 			List<SwitchCase> cases = switchStatement.getCases();
-			if(cases != null) {
+			if (cases != null) {
 				for (SwitchCase switchCase : cases) {
 						iterateNode(switchCase, set, entered, block, offset);
 				}
@@ -346,7 +346,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 
 	/**
-	 * Extract variables from try/catch node(s)
+	 * Extract variables from try/catch node(s).
 	 */
 	private void processTryCatchNode(Node child, CodeBlock block,
 			Set<Completion> set, String entered, int offset) {
@@ -397,7 +397,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 
 	/**
-	 * Extract variables from if/else node(s)
+	 * Extract variables from if/else node(s).
 	 */
 	private void processIfThenElse(Node child, CodeBlock block,
 			Set<Completion> set, String entered, int offset) {
@@ -420,7 +420,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 
 	/**
-	 * Extract completions from expression node
+	 * Extract completions from expression node.
 	 */
 	private void processExpressionNode(Node child, CodeBlock block,
 			Set<Completion> set, String entered, int offset) {
@@ -432,7 +432,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 
 	/**
-	 * Extract while loop from node and add new code block
+	 * Extract while loop from node and add new code block.
 	 */
 	private void processWhileNode(Node child, CodeBlock block,
 			Set<Completion> set, String entered, int offset) {
@@ -445,7 +445,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 
 	/**
-	 * Extract while loop from node and add new code block
+	 * Extract while loop from node and add new code block.
 	 */
 	private void processDoNode(Node child, CodeBlock block,
 			Set<Completion> set, String entered, int offset) {
@@ -473,7 +473,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 	/**
 	 * Add function to completions set and extract local variables to add to
-	 * code block TODO: functions can have local scope, so add function to it's
+	 * code block. TODO: functions can have local scope, so add function to it's
 	 * own codeblock when applicable
 	 */
 	private void processFunctionNode(Node child, CodeBlock block,
@@ -535,7 +535,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	private JavaScriptFunctionDeclaration createJavaScriptFunction(String lookupName, int offset, CodeBlock block, TypeDeclaration returnType, FunctionNode fn) {
 		Name name = fn.getFunctionName();
 		JavaScriptFunctionDeclaration function = new JavaScriptFunctionDeclaration(lookupName, offset, block, returnType);
-		if(name != null) {
+		if (name != null) {
 			int start = name.getAbsolutePosition();
 			int end = start + name.getLength();
 			function.setStartOffset(start);
@@ -562,13 +562,12 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 
 	/**
-	 * Extract variable from node and add to code block
+	 * Extract variable from node and add to code block.
 	 */
 	private void processVariableNode(Node child, CodeBlock block,
 			Set<Completion> set, String entered, int offset) {
 		//check block can resolve variable or is pre-processing variables
-		if(block.contains(dot) || isPreProcessing())
-		{
+		if (block.contains(dot) || isPreProcessing()) {
 			VariableDeclaration varDec = (VariableDeclaration) child;
 			List<VariableInitializer> vars = varDec.getVariables();
 			for (VariableInitializer var : vars) {
@@ -601,12 +600,10 @@ public class JavaScriptAstParser extends JavaScriptParser {
 				AstNode iteratedObject = loop.getIteratedObject();
 				AstNode iterator = loop.getIterator();
 				if (iterator != null) {
-					if (iterator.getType() == Token.VAR) // expected
-					{
+					if (iterator.getType() == Token.VAR) { // expected
 						VariableDeclaration vd = (VariableDeclaration) iterator;
 						List<VariableInitializer> variables = vd.getVariables();
-						if (variables.size() == 1) // expected
-						{
+						if (variables.size() == 1) { // expected
 							VariableInitializer vi = variables.get(0);
 							if (loop.isForEach()) {
 								extractVariableForForEach(vi, block, offset,
@@ -626,7 +623,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 
 	/**
-	 * Extract the variable from the Variable initializer and set the Type
+	 * Extract the variable from the Variable initializer and set the Type.
 	 *
 	 * @param initializer AstNode from which to extract the variable
 	 * @param block code block to add the variable too
@@ -746,7 +743,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 
 	/**
-	 * Extract the variable from the Rhino node and add to the CodeBlock
+	 * Extract the variable from the Rhino node and add to the CodeBlock.
 	 *
 	 * @param node AstNode node from which to extract the variable
 	 * @param block code block to add the variable too
@@ -759,7 +756,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 
 	/**
-	 * Extract the variable from the Rhino node and add to the CodeBlock
+	 * Extract the variable from the Rhino node and add to the CodeBlock.
 	 *
 	 * @param node AstNode node from which to extract the variable
 	 * @param block code block to add the variable too
@@ -817,7 +814,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 	}
 
 
-	private class FunctionReturnVisitor implements NodeVisitor {
+	private final class FunctionReturnVisitor implements NodeVisitor {
 
 		private ArrayList<ReturnStatement> returnStatements = new ArrayList<>();
 

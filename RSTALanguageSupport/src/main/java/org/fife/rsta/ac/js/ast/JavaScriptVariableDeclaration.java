@@ -16,7 +16,7 @@ import org.mozilla.javascript.ast.AstNode;
 
 
 /**
- * JavaScript Variable Declaration class <code>TypeDeclarations</code>
+ * JavaScript Variable Declaration class <code>TypeDeclarations</code>.
  */
 public class JavaScriptVariableDeclaration extends JavaScriptDeclaration {
 
@@ -41,7 +41,7 @@ public class JavaScriptVariableDeclaration extends JavaScriptDeclaration {
 
 
 	/**
-	 * Lookup TypeDeclaration from the Rhino <code>AstNode</code>
+	 * Lookup TypeDeclaration from the Rhino <code>AstNode</code>.
 	 *
 	 * @param typeNode - Rhino AstNode linked to this variable
 	 */
@@ -72,7 +72,7 @@ public class JavaScriptVariableDeclaration extends JavaScriptDeclaration {
 	}
 
 	/**
-	 * Resets the TypeDeclaration to the original value
+	 * Resets the TypeDeclaration to the original value.
 	 */
 	public void resetVariableToOriginalType() {
 		if (reassigned) {
@@ -84,7 +84,7 @@ public class JavaScriptVariableDeclaration extends JavaScriptDeclaration {
 
 
 	/**
-	 * Set TypeDeclaration
+	 * Set TypeDeclaration.
 	 *
 	 * @param typeDec
 	 */

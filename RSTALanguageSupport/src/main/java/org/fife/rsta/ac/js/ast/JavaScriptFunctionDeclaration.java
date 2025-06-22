@@ -24,8 +24,7 @@ public class JavaScriptFunctionDeclaration extends JavaScriptDeclaration {
 		this.functionName = functionName;
 	}
 
-	public String getFunctionName()
-	{
+	public String getFunctionName() {
 		return functionName;
 	}
 

@@ -28,6 +28,8 @@ import java.util.List;
  */
 public class CodeBlock {
 
+	private static final System.Logger LOG = System.getLogger(CodeBlock.class.getName());
+
 	private int start;
 	private int end;
 	private CodeBlock parent;
@@ -182,8 +184,7 @@ public class CodeBlock {
 	 * @param start the start offset
 	 * @see #getStartOffset()
 	 */
-	public void setStartOffSet(int start)
-	{
+	public void setStartOffSet(int start) {
 		this.start = start;
 	}
 
@@ -191,13 +192,12 @@ public class CodeBlock {
 	public void debug() {
 		StringBuilder sb = new StringBuilder();
 		outputChild(sb, this, 0);
-		System.out.println(sb);
+		LOG.log(System.Logger.Level.DEBUG, sb.toString());
 	}
 
 	private void outputChild(StringBuilder sb, CodeBlock block, int tab) {
 		StringBuilder tabs = new StringBuilder();
-		for(int i=0; i<tab; i++)
-		{
+		for (int i=0; i<tab; i++) {
 			tabs.append("\t");
 		}
 		sb.append(tabs);
@@ -206,7 +206,7 @@ public class CodeBlock {
 		sb.append("end: ").append(block.getEndOffset()).append("\n");
 		sb.append(tabs);
 		sb.append("var count: ").append(block.getVariableDeclarationCount()).append("\n").append("\n");
-		for(int i = 0; i < block.getChildCodeBlockCount(); i++) {
+		for (int i = 0; i < block.getChildCodeBlockCount(); i++) {
 			CodeBlock childBlock = block.getChildCodeBlock(i);
 			outputChild(sb, childBlock, tab++);
 		}

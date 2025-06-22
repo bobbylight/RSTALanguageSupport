@@ -20,5 +20,7 @@ public abstract class JS5String extends JSString implements JS5StringFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-	public JS5String(JSString s){super(s);}
+	public JS5String(JSString s) {
+		super(s);
+	}
 }

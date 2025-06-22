@@ -80,5 +80,7 @@ public abstract class JS5Date extends JSDate implements JS5DateFunctions {
 	 * @since Standard ECMA-262 5th. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public static JSNumber now(){return null;}
+	public static JSNumber now() {
+		return null;
+	}
 }

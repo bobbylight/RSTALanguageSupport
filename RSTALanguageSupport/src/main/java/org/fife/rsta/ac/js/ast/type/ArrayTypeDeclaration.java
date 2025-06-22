@@ -66,4 +66,12 @@ public class ArrayTypeDeclaration extends TypeDeclaration {
 		return equals;
 	}
 
+	@Override
+	public int hashCode() {
+		int hash = super.hashCode();
+		if (arrayType != null) {
+			hash = 31 * hash + arrayType.hashCode();
+		}
+		return hash;
+	}
 }

@@ -80,16 +80,16 @@ public class JSR223JavaScriptCompletionResolver extends
 				AstNode paramNode = call.getArguments().get(i);
 				JavaScriptResolver resolver = provider.getJavaScriptEngine().getJavaScriptResolver(provider);
 				Logger.log("PARAM: " + JavaScriptHelper.convertNodeToSource(paramNode));
-				try
-				{
+				try {
 					TypeDeclaration type = resolver.resolveParamNode(JavaScriptHelper.convertNodeToSource(paramNode));
 					String resolved = type != null ? type.getQualifiedName() : "any";
 					sb.append(resolved);
 					if (i < count - 1) {
 						sb.append(",");
 					}
+				} catch (IOException io) {
+					io.printStackTrace();
 				}
-				catch(IOException io){io.printStackTrace();}
 			}
 			sb.append(")");
 			return sb.toString();
@@ -99,7 +99,7 @@ public class JSR223JavaScriptCompletionResolver extends
 
 
 	/**
-	 * Try to resolve the Token.NAME AstNode and return a TypeDeclaration
+	 * Try to resolve the Token.NAME AstNode and return a TypeDeclaration.
 	 * @param node node to resolve
 	 * @return TypeDeclaration if the name can be resolved as a Java Class else null
 	 */
@@ -108,15 +108,13 @@ public class JSR223JavaScriptCompletionResolver extends
 		// check parent is of type property get
 		String testName = null;
 		if (node.getParent() != null
-				&& node.getParent().getType() == Token.GETPROP) { // ast
-																	// parser
+				&& node.getParent().getType() == Token.GETPROP) { // ast parser
 
 			String name = node.toSource();
-			try
-			{
+			try {
 				String longName = node.getParent().toSource();
 
-				if(longName.indexOf('[') == -1 && longName.indexOf(']') == -1 &&
+				if (longName.indexOf('[') == -1 && longName.indexOf(']') == -1 &&
 						longName.indexOf('(') == -1 && longName.indexOf(')') == -1) {
 
 					// trim the text to the short name
@@ -125,9 +123,7 @@ public class JSR223JavaScriptCompletionResolver extends
 						testName = longName.substring(0, index + name.length());
 					}
 				}
-			}
-			catch(Exception e)
-			{
+			} catch (Exception e) {
 				Logger.log(e.getMessage());
 			}
 		}
@@ -138,7 +134,7 @@ public class JSR223JavaScriptCompletionResolver extends
 		if (testName != null) {
 			TypeDeclaration dec = JavaScriptHelper.getTypeDeclaration(testName, provider);
 
-			if(dec == null)
+			if (dec == null)
 				dec = JavaScriptHelper.createNewTypeDeclaration(testName);
 
 			ClassFile cf = provider.getJavaScriptTypesFactory().getClassFile(

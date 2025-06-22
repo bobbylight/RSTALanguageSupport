@@ -4,7 +4,7 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.JSArray;
 import org.fife.rsta.ac.js.ecma.api.ecma3.JSBoolean;
 
 
-public interface JSRegExpFunctions extends JSObjectFunctions{
+public interface JSRegExpFunctions extends JSObjectFunctions {
 
 	/**
 	 * <b>function exec(string)</b> general purpose pattern matching.
@@ -13,7 +13,7 @@ public interface JSRegExpFunctions extends JSObjectFunctions{
 	 * <pre>
 	 * var r = new RegExp("/\bJava\w*\b/g");
 	 * var text = "JavaScript is not the same as Java";
-	 * while((result = e.exec(text)) != null)
+	 * while ((result = e.exec(text)) != null)
 	 * {
 	 *   alert("Matched: " + result[0]);
 	 * }

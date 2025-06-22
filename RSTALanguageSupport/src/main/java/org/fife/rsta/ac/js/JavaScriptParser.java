@@ -115,7 +115,7 @@ public class JavaScriptParser extends AbstractParser {
 		env.setRecordingComments(true);
 		env.setRecordingLocalJsDocComments(true);
 		env.setRecoverFromErrors(true);
-		if(langSupport != null) {
+		if (langSupport != null) {
 			env.setXmlAvailable(langSupport.isXmlAvailable());
 			env.setStrictMode(langSupport.isStrictMode());
 			int version = langSupport.getLanguageVersion();
@@ -160,7 +160,7 @@ public class JavaScriptParser extends AbstractParser {
 			Element root) {
 
 		List<ParseProblem> errors = errorHandler.getErrors();
-		if (errors != null && errors.size() > 0) {
+		if (errors != null && !errors.isEmpty()) {
 
 			for (ParseProblem problem : errors) {
 

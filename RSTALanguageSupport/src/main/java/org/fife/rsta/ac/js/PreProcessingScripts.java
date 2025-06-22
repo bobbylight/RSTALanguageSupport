@@ -1,7 +1,5 @@
 package org.fife.rsta.ac.js;
 
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,15 +21,12 @@ public class PreProcessingScripts {
 	private Set<Completion> preProcessingCompletions = new HashSet<>();
 
 
-	public PreProcessingScripts(SourceCompletionProvider provider)
-	{
+	public PreProcessingScripts(SourceCompletionProvider provider) {
 		this.provider = provider;
 	}
 
-	public void parseScript(String scriptText, TypeDeclarationOptions options)
-	{
-		if(scriptText != null && scriptText.length() > 0)
-		{
+	public void parseScript(String scriptText, TypeDeclarationOptions options) {
+		if (scriptText != null && !scriptText.isEmpty()) {
 			CompilerEnvirons env = JavaScriptParser.createCompilerEnvironment(new JavaScriptParser.JSErrorReporter(), provider.getLanguageSupport());
 			Parser parser = new Parser(env);
 			AstRoot root = parser.parse(scriptText, null, 0);
@@ -41,15 +36,13 @@ public class PreProcessingScripts {
 	}
 
 
-	public void reset()
-	{
+	public void reset() {
 		preProcessingCompletions.clear();
 		//remove all preProcessing Variables
 		provider.getVariableResolver().resetPreProcessingVariables(true);
 	}
 
-	public Set<Completion> getCompletions()
-	{
+	public Set<Completion> getCompletions() {
 		return preProcessingCompletions;
 	}
 

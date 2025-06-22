@@ -1,27 +1,35 @@
 package org.fife.rsta.ac.js;
 
 
-public class Logger {
+public final class Logger {
 
-	private static boolean DEBUG;
+	private static final System.Logger LOG = System.getLogger(Logger.class.getName());
 
-	static
-	{
+	private static final boolean DEBUG;
+
+	/**
+	 * Private constructor to prevent instantiation.
+	 */
+	private Logger() {
+		// Do nothing
+	}
+
+	static {
 		DEBUG = Boolean.parseBoolean(System.getProperty("javascript.debug"));
 	}
 
 	/**
-	 * TODO change logging to Log4J?
-	 * Log message to console
+	 * Log message to console if debug logging is enabled.
+	 *
 	 * @param msg
 	 */
-	public static final void log(String msg) {
+	public static void log(String msg) {
 		if (DEBUG) {
-			System.out.println(msg);
+			LOG.log(System.Logger.Level.DEBUG, msg);
 		}
 	}
 
-	public static final void logError(String msg) {
-		System.err.println(msg);
+	public static void logError(String msg) {
+		LOG.log(System.Logger.Level.ERROR, msg);
 	}
 }

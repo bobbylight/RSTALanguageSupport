@@ -48,7 +48,7 @@ public abstract class JSError implements JSObjectFunctions {
    public JSError prototype;
 
    /**
-    * <b>property constructor
+    * Property constructor.
     *
     * @type Function
     * @memberOf Error

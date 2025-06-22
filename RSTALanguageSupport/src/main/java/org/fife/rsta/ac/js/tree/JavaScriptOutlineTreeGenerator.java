@@ -44,6 +44,9 @@ import org.mozilla.javascript.ast.VariableInitializer;
  */
 class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 
+	private static final System.Logger LOG = System.getLogger(
+		JavaScriptOutlineTreeGenerator.class.getName());
+
 	private JavaScriptTreeNode root;
 	private RSyntaxTextArea textArea;
 
@@ -98,7 +101,8 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 					 * The "Foo" global variable is complained about.  Note that this does not
 					 * occur if there is not JS code *before* and *after* the Foo stuff (?)...
 					else {
-						System.out.println("Node with null text: " + ((AstNode)((java.util.List)childNode.getUserObject()).get(0)).toSource());
+						LOG.log(System.Logger.Level.INFO, "Node with null text: " +
+							((AstNode)((java.util.List)childNode.getUserObject()).get(0)).toSource());
 					}
 					*/
 				}
@@ -613,11 +617,10 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 			switch (target.getType()) {
 				case Token.NAME:
 					varNameNode = (Name)target;
-					//System.out.println("... Variable: " + name.getIdentifier());
 					varName = varNameNode.getIdentifier();
 					break;
 				default:
-					System.out.println("... Unknown var target type: " + target.getClass());
+					LOG.log(System.Logger.Level.INFO, "... Unknown var target type: " + target.getClass());
 					varName = "?";
 					break;
 			}

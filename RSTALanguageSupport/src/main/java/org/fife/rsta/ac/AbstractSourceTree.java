@@ -147,7 +147,7 @@ public abstract class AbstractSourceTree extends JTree {
 		if ((pattern==null && this.pattern!=null) ||
 				(pattern!=null && this.pattern==null) ||
 				(pattern!=null && !pattern.equals(this.pattern.pattern()))) {
-			this.pattern = (pattern==null || pattern.length()==0) ? null :
+			this.pattern = (pattern==null || pattern.isEmpty()) ? null :
 				RSyntaxUtilities.wildcardToPattern("^" + pattern, false, false);
 			Object root = getModel().getRoot();
 			if (root instanceof SourceTreeNode) {

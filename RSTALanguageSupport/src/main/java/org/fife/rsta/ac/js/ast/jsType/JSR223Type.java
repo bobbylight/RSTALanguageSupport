@@ -2,6 +2,7 @@ package org.fife.rsta.ac.js.ast.jsType;
 
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.fife.rsta.ac.js.Logger;
 import org.fife.rsta.ac.js.SourceCompletionProvider;
@@ -23,8 +24,8 @@ public class JSR223Type extends JavaScriptType {
 	 * @see JSCompletion
 	 */
 	@Override
-	protected JSCompletion _getCompletion(String completionLookup,
-			SourceCompletionProvider provider) {
+	protected JSCompletion getCompletionImpl(String completionLookup,
+											 SourceCompletionProvider provider) {
 		JSCompletion completion = methodFieldCompletions.get(completionLookup);
 		if (completion != null) {
 			return completion;
@@ -53,16 +54,14 @@ public class JSR223Type extends JavaScriptType {
 				int weight = matchFunctionType.compare(javaScriptFunctionType,
 						provider, isJavaScriptType);
 				Logger.log("Weight: " + weight);
-				if (weight < JavaScriptFunctionType.CONVERSION_NONE
-						&& (weight < bestFitWeight || bestFitIndex == -1)) {
+				if (weight < JavaScriptFunctionType.CONVERSION_NONE &&
+						(weight < bestFitWeight || bestFitIndex == -1)) {
 					bestFitIndex = i;
 					bestFitWeight = weight;
 				}
 			}
 			if (bestFitIndex > -1) {
-				Logger
-						.log("BEST FIT: "
-								+ matches[bestFitIndex].getLookupName());
+				Logger.log("BEST FIT: " + matches[bestFitIndex].getLookupName());
 				return matches[bestFitIndex];
 			}
 		}
@@ -70,17 +69,16 @@ public class JSR223Type extends JavaScriptType {
 		return null;
 	}
 
-	private JSCompletion[] getPotentialLookupList(String name)
-	{
+	private JSCompletion[] getPotentialLookupList(String name) {
 		//get a list of all potential matches, including extended
-		HashSet<JSCompletion> completionMatches = new HashSet<>();
+		Set<JSCompletion> completionMatches = new HashSet<>();
 		getPotentialLookupList(name, completionMatches, this);
 		return completionMatches.toArray(new JSCompletion[0]);
 	}
 
 	// get a list of all potential method matches
 	private void getPotentialLookupList(String name,
-			HashSet<JSCompletion> completionMatches, JavaScriptType type) {
+										Set<JSCompletion> completionMatches, JavaScriptType type) {
 
 		Map<String, JSCompletion> typeCompletions = type.methodFieldCompletions;
 

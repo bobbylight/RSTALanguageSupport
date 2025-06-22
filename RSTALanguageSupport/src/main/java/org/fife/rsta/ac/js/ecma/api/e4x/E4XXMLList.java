@@ -21,7 +21,8 @@ public abstract class E4XXMLList implements E4XXMLListFunctions {
      * @since Standard ECMA-357 2nd. Edition
      * @since Level 3 Document Object Model Core Definition.
      */
-	public E4XXMLList ( JSObject xml ){}
+	public E4XXMLList(JSObject xml) {
+	}
 
 	/**
      * <b>property prototype</b>

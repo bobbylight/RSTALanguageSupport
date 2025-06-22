@@ -24,7 +24,8 @@ public abstract class E4XXML implements E4XXMLFunctions {
      * @since Standard ECMA-357 2nd. Edition
      * @since Level 3 Document Object Model Core Definition.
      */
-	public E4XXML ( JSObject xml ){}
+	public E4XXML(JSObject xml) {
+	}
 
 
 	/**
@@ -128,7 +129,9 @@ public abstract class E4XXML implements E4XXMLFunctions {
      * @since Standard ECMA-357 2nd. Edition
      * @since Level 3 Document Object Model Core Definition.
      */
-    public static JSObject settings(){return null;}
+    public static JSObject settings() {
+		return null;
+	}
 
     /**
      * <b>function setSetting(settings)</b> The setSettings method is a convenience method for managing the collection of global XML settings stored as properties of the XML constructor.
@@ -138,7 +141,8 @@ public abstract class E4XXML implements E4XXMLFunctions {
      * @since Standard ECMA-357 2nd. Edition
      * @since Level 3 Document Object Model Core Definition.
      */
-    public static void setSettings(JSObject settings){}
+    public static void setSettings(JSObject settings) {
+	}
 
     /**
      * <b>function defaultSettings()</b> The defaultSettings method is a convenience method for managing the collection of global XML settings stored as properties of the XML constructor.
@@ -148,5 +152,7 @@ public abstract class E4XXML implements E4XXMLFunctions {
      * @since Standard ECMA-357 2nd. Edition
      * @since Level 3 Document Object Model Core Definition.
      */
-    public static JSObject defaultSettings(){return null;}
+    public static JSObject defaultSettings() {
+		return null;
+	}
 }

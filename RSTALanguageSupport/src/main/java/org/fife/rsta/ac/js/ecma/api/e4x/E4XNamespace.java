@@ -20,7 +20,7 @@ public abstract class E4XNamespace implements JSObjectFunctions {
      * @since Standard ECMA-357 2nd. Edition
      * @since Level 3 Document Object Model Core Definition.
      */
-	public E4XNamespace ( ){}
+	public E4XNamespace() {}
 
 	/**
      * Object Namespace(uriValue)
@@ -31,7 +31,7 @@ public abstract class E4XNamespace implements JSObjectFunctions {
      * @since Standard ECMA-357 2nd. Edition
      * @since Level 3 Document Object Model Core Definition.
      */
-	public E4XNamespace ( JSString uriValue ){}
+	public E4XNamespace(JSString uriValue) {}
 
 	/**
      * Object Namespace(prefixValue, uriValue)
@@ -43,7 +43,7 @@ public abstract class E4XNamespace implements JSObjectFunctions {
      * @since Standard ECMA-357 2nd. Edition
      * @since Level 3 Document Object Model Core Definition.
      */
-	public E4XNamespace ( JSString prefixValue, JSString uriValue ){}
+	public E4XNamespace(JSString prefixValue, JSString uriValue) {}
 
 	/**
      * <b>property prototype</b>

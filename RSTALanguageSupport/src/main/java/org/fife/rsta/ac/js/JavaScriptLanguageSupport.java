@@ -181,16 +181,16 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 
 
 	public int getJsHintIndent() {
-		final int DEFAULT = 4;
+		final int defaultValue = 4;
 /*
 		if (jshintrc==null) {
-			return DEFAULT;
+			return defaultValue;
 		}
 		long lastModified = jshintrc.lastModified();
 		if (lastModified!=jshintrcLastModified) {
 			RSyntaxDocument doc = new RSyntaxDocument(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
 			try {
-				jshintIndent = DEFAULT;
+				jshintIndent = defaultValue;
 				loadFile(jshintrc, doc);
 				for (org.fife.ui.rsyntaxtextarea.Token t : doc) {
 					if (t.is(TokenTypes.LITERAL_STRING_DOUBLE_QUOTE, "\"indent\"") ||
@@ -202,9 +202,9 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 						if (t!=null && t.getType()==TokenTypes.LITERAL_NUMBER_DECIMAL_INT) {
 							try {
 								jshintIndent = Integer.parseInt(t.getLexeme());
-								System.out.println("Reloading jshint indent: " + jshintIndent);
+								LOG.log(System.Logger.Level.DEBUG, "Reloading jshint indent: " + jshintIndent);
 							} catch (NumberFormatException nfe) {
-								jshintIndent = DEFAULT;
+								jshintIndent = defaultValue;
 							}
 						}
 						break;
@@ -212,13 +212,13 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 				}
 			} catch (IOException ioe) {
 				ioe.printStackTrace();
-				jshintIndent = DEFAULT;
+				jshintIndent = defaultValue;
 			}
 			jshintrcLastModified = lastModified;
 		}
 		return jshintIndent;
 */
-return DEFAULT;
+return defaultValue;
 	}
 
 /*
@@ -280,7 +280,7 @@ return DEFAULT;
 		ac.setAutoActivationEnabled(isAutoActivationEnabled());
 		ac.setAutoActivationDelay(getAutoActivationDelay());
 		ac.setParameterAssistanceEnabled(isParameterAssistanceEnabled());
-		ac.setExternalURLHandler(new JavaScriptDocUrlhandler(this));
+		ac.setExternalURLHandler(new JavaScriptDocUrlHandler(this));
 		ac.setShowDescWindow(getShowDescWindow());
 		ac.install(textArea);
 		installImpl(textArea, ac);
@@ -534,7 +534,7 @@ return DEFAULT;
 
 		// public JavaScriptParser parser;
 
-		public Info(JavaScriptCompletionProvider provider, JavaScriptParser parser) {
+		Info(JavaScriptCompletionProvider provider, JavaScriptParser parser) {
 			this.provider = provider;
 			// this.parser = parser;
 			parser.addPropertyChangeListener(JavaScriptParser.PROPERTY_AST,
@@ -569,7 +569,7 @@ return DEFAULT;
 
 		private RSyntaxTextArea textArea;
 
-		public JavaScriptAutoCompletion(JavaScriptCompletionProvider provider,
+		JavaScriptAutoCompletion(JavaScriptCompletionProvider provider,
 				RSyntaxTextArea textArea) {
 			super(provider);
 			this.textArea = textArea;
@@ -580,10 +580,8 @@ return DEFAULT;
 				int start, int len) {
 
 			String replacement = super.getReplacementText(c, doc, start, len);
-			if(c instanceof JavaScriptShorthandCompletion)
-			{
-				try
-				{
+			if (c instanceof JavaScriptShorthandCompletion) {
+				try {
 					int caret = textArea.getCaretPosition();
 					String leadingWS = RSyntaxUtilities.getLeadingWhitespace(doc, caret);
 					if (replacement.indexOf('\n')>-1) {
@@ -591,7 +589,7 @@ return DEFAULT;
 					}
 
 				}
-				catch(BadLocationException ble){}
+				catch (BadLocationException ble){}
 			}
 			return replacement;
 		}
@@ -621,7 +619,7 @@ return DEFAULT;
 		private Timer t;
 		private DeepestScopeVisitor visitor;
 
-		public Listener(RSyntaxTextArea textArea) {
+		Listener(RSyntaxTextArea textArea) {
 			this.textArea = textArea;
 			textArea.addCaretListener(this);
 			t = new Timer(650, this);
@@ -711,7 +709,7 @@ return DEFAULT;
 	}
 
 
-	private static class DeepestScopeVisitor implements NodeVisitor {
+	private static final class DeepestScopeVisitor implements NodeVisitor {
 
 		private int offs;
 		private AstNode deepestScope;

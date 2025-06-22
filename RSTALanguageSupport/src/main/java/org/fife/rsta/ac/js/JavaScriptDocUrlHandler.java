@@ -21,12 +21,12 @@ import org.fife.ui.autocomplete.ExternalURLHandler;
 import org.fife.ui.autocomplete.Util;
 
 
-public class JavaScriptDocUrlhandler implements ExternalURLHandler {
+public class JavaScriptDocUrlHandler implements ExternalURLHandler {
 
 
 	private JavaScriptLanguageSupport languageSupport;
 
-	public JavaScriptDocUrlhandler(JavaScriptLanguageSupport languageSupport){
+	public JavaScriptDocUrlHandler(JavaScriptLanguageSupport languageSupport){
 		this.languageSupport = languageSupport;
 	}
 	/**
@@ -94,8 +94,8 @@ public class JavaScriptDocUrlhandler implements ExternalURLHandler {
 	 */
 	private boolean isRelativeUrl(String text) {
 		// Javadoc is always ".html", and we support full URL's elsewhere.
-		final String[] EXTS = { ".html", ".htm" };
-        for (String ext : EXTS) {
+		final String[] extensions = { ".html", ".htm" };
+        for (String ext : extensions) {
             if (text.endsWith(ext) || text.contains(ext + "#") ||
                     text.contains(ext + "?")) {
                 return true;
@@ -306,7 +306,7 @@ public class JavaScriptDocUrlhandler implements ExternalURLHandler {
 							}
 							else { // Try methods second
 								List<MethodInfo> miList = cf.getMethodInfoByName(member, -1);
-								if (miList!=null && miList.size()>0) {
+								if (miList!=null && !miList.isEmpty()) {
 									MethodInfo mi = miList.get(0);// Just show the first if multiple
 									memberCompletion = new JSFunctionCompletion(c.getProvider(), mi);
 								}
@@ -317,7 +317,7 @@ public class JavaScriptDocUrlhandler implements ExternalURLHandler {
 							String[] args = getArgs(member);
 							String methodName = member.substring(0, lparen);
 							List<MethodInfo> miList = cf.getMethodInfoByName(methodName, args.length);
-							if (miList!=null && miList.size()>0) {
+							if (miList!=null && !miList.isEmpty()) {
 								if (miList.size()>1) {
 									// TODO: Pick correct overload based on args
 									Logger.log("Multiple overload support not yet implemented");

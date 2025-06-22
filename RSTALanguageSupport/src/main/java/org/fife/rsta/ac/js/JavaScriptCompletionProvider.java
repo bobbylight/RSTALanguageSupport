@@ -82,8 +82,7 @@ public class JavaScriptCompletionProvider extends
 		return languageSupport;
 	}
 
-	public SourceCompletionProvider getProvider()
-	{
+	public SourceCompletionProvider getProvider() {
 		return sourceProvider;
 	}
 
@@ -103,7 +102,7 @@ public class JavaScriptCompletionProvider extends
 	 */
 	private void setCommentCompletions(ShorthandCompletionCache shorthandCache){
 		AbstractCompletionProvider provider = shorthandCache.getCommentProvider();
-		if(provider != null) {
+		if (provider != null) {
 			for (Completion c : shorthandCache.getCommentCompletions()) {
 				provider.addCompletion(c);
 			}

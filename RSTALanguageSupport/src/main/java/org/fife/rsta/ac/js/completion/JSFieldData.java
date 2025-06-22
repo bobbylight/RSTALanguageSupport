@@ -17,15 +17,13 @@ public class JSFieldData {
 	private FieldInfo info;
 	private JarManager jarManager;
 
-	public JSFieldData(FieldInfo info, JarManager jarManager)
-	{
+	public JSFieldData(FieldInfo info, JarManager jarManager) {
 		this.info = info;
 		this.jarManager = jarManager;
 	}
 
 
-	public Field getField()
-	{
+	public Field getField() {
 		ClassFile cf = info.getClassFile();
 		SourceLocation loc = jarManager.getSourceLocForClass(
 				cf.getClassName(true));
@@ -82,18 +80,15 @@ public class JSFieldData {
 
 	}
 
-	public String getType(boolean qualified)
-	{
+	public String getType(boolean qualified) {
 		return info.getTypeString(qualified);
 	}
 
-	public boolean isStatic()
-	{
+	public boolean isStatic() {
 		return info.isStatic();
 	}
 
-	public boolean isPublic()
-	{
+	public boolean isPublic() {
 		int access = info.getAccessFlags();
 		return org.fife.rsta.ac.java.classreader.Util.isPublic(access);
 	}

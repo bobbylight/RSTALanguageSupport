@@ -16,7 +16,8 @@ public abstract class JavaScriptParser {
 	protected TypeDeclarationOptions options;
 
 	/**
-	 * JavaScriptParser constructor
+	 * JavaScriptParser constructor.
+	 *
 	 * @param provider
 	 * @param dot
 	 * @param options
@@ -29,7 +30,8 @@ public abstract class JavaScriptParser {
 	}
 
 	/**
-	 * Converts AstRoot to CodeBlock
+	 * Converts AstRoot to CodeBlock.
+	 *
 	 * @param root AstRoot to iterate
 	 * @param set completions set
 	 * @param entered text entered by user
@@ -39,7 +41,7 @@ public abstract class JavaScriptParser {
 			Set<Completion> set, String entered);
 
 	/**
-	 * If options are null, then it is assumed that the main editor text is being parsed
+	 * If options are null, then it is assumed that the main editor text is being parsed.
 	 * @return whether options is not null and is in pre-processing mode.
 	 *
 	 */

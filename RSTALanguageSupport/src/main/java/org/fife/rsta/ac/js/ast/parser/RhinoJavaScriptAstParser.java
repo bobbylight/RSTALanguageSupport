@@ -1,6 +1,5 @@
 package org.fife.rsta.ac.js.ast.parser;
 
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -38,7 +37,7 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 	 */
 	public void clearImportCache(SourceCompletionProvider provider) {
 		JavaScriptTypesFactory typesFactory = provider.getJavaScriptTypesFactory();
-		if(typesFactory instanceof RhinoJavaScriptTypesFactory) {
+		if (typesFactory instanceof RhinoJavaScriptTypesFactory) {
 			((RhinoJavaScriptTypesFactory) typesFactory).clearImportCache();
 		}
 	}
@@ -58,27 +57,27 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 		}
 	}
 
-	private void mergeImportCache(HashSet<String> packages, HashSet<String> classes) {
+	private void mergeImportCache(Set<String> packages, Set<String> classes) {
 		JavaScriptTypesFactory typesFactory = provider.getJavaScriptTypesFactory();
-		if(typesFactory instanceof RhinoJavaScriptTypesFactory) {
+		if (typesFactory instanceof RhinoJavaScriptTypesFactory) {
 			((RhinoJavaScriptTypesFactory) typesFactory).mergeImports(packages, classes);
 		}
 	}
 
 	/**
-	 * Overridden iterateNode to intercept Token.EXPR_RESULT and check for importPackage and importClass named nodes
+	 * Overridden iterateNode to intercept Token.EXPR_RESULT and check for importPackage and importClass named nodes.
 	 * If found, then process them and extract the imports and add them to RhinoJavaScriptTypesFactory then return
 	 * otherwise call super.iterateNode()
 	 */
 	@Override
-	protected void iterateNode(AstNode child, Set <Completion>set,
+	protected void iterateNode(AstNode child, Set<Completion> set,
 			String entered, CodeBlock block, int offset) {
 
 		//look for importPackage and importClass
 		switch (child.getType()) {
 			case Token.EXPR_RESULT:
 				boolean importFound = processImportNode(child, set, entered, block, offset);
-				if(importFound)
+				if (importFound)
 					return; //already processed node
 				break;
 		}
@@ -87,7 +86,8 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 	}
 
 	/**
-	 * Look for text importPackage and importClass and add to cache
+	 * Look for text importPackage and importClass and add to cache.
+	 *
 	 * @param child AstNode to check. This will always be Token.EXPR_RESULT AstNode
 	 * @param set Set to add completions
 	 * @param entered text entered by user if applicable
@@ -100,12 +100,12 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 			int offset) {
 
 		String src = JavaScriptHelper.convertNodeToSource(child);
-		if(src != null) {
-			if(src.startsWith("importPackage")) {
+		if (src != null) {
+			if (src.startsWith("importPackage")) {
 				processImportPackage(src);
 				return true;
 			}
-			else if(src.startsWith("importClass")) {
+			else if (src.startsWith("importClass")) {
 				processImportClass(src);
 				return true;
 			}
@@ -115,12 +115,10 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 		return false;
 	}
 
-	public static  String removePackages(String src)
-	{
-		if(src.startsWith(PACKAGES))
-		{
+	public static  String removePackages(String src) {
+		if (src.startsWith(PACKAGES)) {
 			String pkg = src.substring(PACKAGES.length());
-			if(pkg != null) {
+			if (pkg != null) {
 				StringBuilder sb = new StringBuilder();
 				//remove any non java characters
 				char[] chars = pkg.toCharArray();
@@ -129,7 +127,7 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
                         sb.append(ch);
                     }
                 }
-				if(sb.length() > 0) {
+				if (sb.length() > 0) {
 					return sb.toString();
 				}
 			}
@@ -149,14 +147,15 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 	private String extractNameFromSrc(String src) {
 		int startIndex = src.indexOf("(");
 		int endIndex = src.indexOf(")");
-		if(startIndex != -1 && endIndex != -1) {
+		if (startIndex != -1 && endIndex != -1) {
 			return removePackages(src.substring(startIndex + 1, endIndex));
 		}
 		return removePackages(src);
 	}
 
 	/**
-	 * Adds package name to RhinoJavaScriptTypesFactory
+	 * Adds package name to RhinoJavaScriptTypesFactory.
+	 *
 	 * @param src source text to extract the package
 	 */
 	private void processImportPackage(String src) {
@@ -165,7 +164,8 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 	}
 
 	/**
-	 * Adds class name to RhinoJavaScriptTypesFactory
+	 * Adds class name to RhinoJavaScriptTypesFactory.
+	 *
 	 * @param src source text to extract the class name
 	 */
 	private void processImportClass(String src) {

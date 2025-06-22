@@ -80,7 +80,7 @@ public abstract class JavaScriptDeclaration {
 	}
 
 	/**
-	 * Set the JavaScript options associated with this declaration
+	 * Set the JavaScript options associated with this declaration.
 	 * These are used to defined whether options are available to
 	 * @param options
 	 */
@@ -91,8 +91,7 @@ public abstract class JavaScriptDeclaration {
 	/**
 	 * @return the  JavaScript options associated with this declaration
 	 */
-	public TypeDeclarationOptions getTypeDeclarationOptions()
-	{
+	public TypeDeclarationOptions getTypeDeclarationOptions() {
 		return options;
 	}
 

@@ -85,14 +85,14 @@ public class JsDocCompletionProvider extends DefaultCompletionProvider {
 		private String inputText;
 		private String icon;
 
-		public JsDocCompletion(CompletionProvider provider,
+		JsDocCompletion(CompletionProvider provider,
 									String replacementText) {
 			super(provider, replacementText);
 			this.inputText = replacementText;
 			this.icon = IconFactory.JSDOC_ITEM_ICON;
 		}
 
-		public JsDocCompletion(CompletionProvider provider,
+		JsDocCompletion(CompletionProvider provider,
 				String inputText, String replacementText, String shortDesc,
 				String icon) {
 			super(provider, replacementText, shortDesc, shortDesc);
@@ -117,13 +117,13 @@ public class JsDocCompletionProvider extends DefaultCompletionProvider {
 
 		private String icon;
 
-		public JsDocParameterizedCompletion(CompletionProvider provider,
+		JsDocParameterizedCompletion(CompletionProvider provider,
 				String inputText, String definitionString, String template) {
 			this(provider, inputText, definitionString, template,
 					IconFactory.JSDOC_ITEM_ICON);
 		}
 
-		public JsDocParameterizedCompletion(CompletionProvider provider,
+		JsDocParameterizedCompletion(CompletionProvider provider,
 				String inputText, String definitionString, String template,
 				String icon) {
 			super(provider, inputText, definitionString, template);

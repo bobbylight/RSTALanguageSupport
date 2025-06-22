@@ -81,7 +81,7 @@ public class JarManager {
 			jar.addCompletions(p, pkgNames, addTo);
 		}
 		*/
-		if (text.length()==0) {
+		if (text.isEmpty()) {
 			return;
 		}
 

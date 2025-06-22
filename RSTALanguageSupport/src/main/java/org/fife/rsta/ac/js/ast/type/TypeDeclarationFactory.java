@@ -32,8 +32,7 @@ public class TypeDeclarationFactory {
 
 	private TypeDeclarations ecma;
 
-	public TypeDeclarationFactory()
-	{
+	public TypeDeclarationFactory() {
 		setTypeDeclarationVersion(null, false, false);
 	}
 
@@ -41,25 +40,23 @@ public class TypeDeclarationFactory {
 	public List<String> setTypeDeclarationVersion(String ecmaVersion,
 			boolean xmlSupported, boolean client) {
 
-		try
-		{
+		try {
 			ecmaVersion = ecmaVersion == null ? getDefaultECMAVersion() : ecmaVersion;
 			//try to instantiate classes
 			Class<?> ecmaClass = TypeDeclarationFactory.class.getClassLoader().loadClass(ecmaVersion);
 		 	ecma = (TypeDeclarations) ecmaClass.getDeclaredConstructor().newInstance();
 		}
-		catch(Exception e)
-		{
+		catch (Exception e) {
 			//TODO log error?
 			//ignore this
 			ecma = new TypeDeclarationsECMAv5();
 		}
 
-		if(xmlSupported) { //add E4X API
+		if (xmlSupported) { //add E4X API
 			new ECMAvE4xAdditions().addAdditionalTypes(ecma);
 		}
 
-		if(client) {
+		if (client) {
 			//for client we are going to add DOM, HTML DOM and Browser attributes/methods
 			new ClientBrowserAdditions().addAdditionalTypes(ecma);
 			new DOMAdditions().addAdditionalTypes(ecma);
@@ -73,8 +70,7 @@ public class TypeDeclarationFactory {
 	/**
 	 * @return Default base ECMA implementation
 	 */
-	protected String getDefaultECMAVersion()
-	{
+	protected String getDefaultECMAVersion() {
 		return TypeDeclarationsECMAv5.class.getName();
 	}
 
@@ -97,14 +93,13 @@ public class TypeDeclarationFactory {
 	 * @param td The type declaration to check.
 	 * @return Whether it is a built-in JS type.
 	 */
-	public boolean isJavaScriptType(TypeDeclaration td)
-	{
+	public boolean isJavaScriptType(TypeDeclaration td) {
 		return ecma.isJavaScriptType(td);
 	}
 
 
 	/**
-	 *
+	 * Returns the type declaration.
 	 * @param name
 	 * @return Lookup type declaration from name. If the
 	 *         <code>TypeDeclaration</code> cannot be found, then lookup using
@@ -139,7 +134,7 @@ public class TypeDeclarationFactory {
 
 			//remove param descriptor type from type e.g. java.util.Iterator<Object> --> java.util.Iterator
 			//as JavaScript does not support this
-			if(lookupName.indexOf('<') > -1) {
+			if (lookupName.indexOf('<') > -1) {
 				lookupName = lookupName.substring(0, lookupName.indexOf('<'));
 			}
 
@@ -168,9 +163,9 @@ public class TypeDeclarationFactory {
 		ecma.addTypeDeclaration(name, dec);
 	}
 
-	public String getClassName(String lookup) throws RuntimeException {
+	public String getClassName(String lookup) {
 		TypeDeclaration td = getTypeDeclaration(lookup);
-		if(td != null) {
+		if (td != null) {
 			return td.getQualifiedName();
 		}
 		//else
@@ -178,8 +173,9 @@ public class TypeDeclarationFactory {
 	}
 
 	/**
+	 * Returns the set of ECMA {@code JavaScriptObjects}.
 	 *
-	 * @return a list of ECMA JavaScriptObjects
+	 * @return The set of ECMA JavaScriptObjects
 	 */
 	public Set<JavaScriptObject> getECMAScriptObjects() {
 		return ecma.getJavaScriptObjects();

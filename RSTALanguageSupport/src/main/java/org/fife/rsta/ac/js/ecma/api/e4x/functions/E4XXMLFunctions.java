@@ -228,22 +228,23 @@ public interface E4XXMLFunctions extends JSObjectFunctions {
 	JSArray inScopeNamespaces();
 
 	/**
-	 * <b>function insertChildAfter( child1 , child2)</b> inserts the given <b></i>child2</b></i> after the given </b></i>child1</b></i> in this XML object and returns this XML object. If </b></i>child1</b></i> is <b><i>null</i></b>, the insertChildAfter method inserts <b></i>child2</b></i> before all children of this XML object (i.e., after none of them). If </b></i>child1</b></i> does not exist in this XML object, it returns without modifying this XML object.
+	 * <b>function insertChildAfter( child1 , child2)</b> inserts the given {@code child2} after the given {@code child1} in this XML object and returns this XML object. If {@code child1} is <b><i>null</i></b>, the insertChildAfter method inserts {@code child2} before all children of this XML object (i.e., after none of them). If {@code child1} does not exist in this XML object, it returns without modifying this XML object.
 	 * @returns XML object representing <b><i>x</i></b>.
 	 * @memberOf XML
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	E4XXML insertChildAfter ( E4XXML child1 , E4XXML child2);
+	E4XXML insertChildAfter(E4XXML child1 , E4XXML child2);
 
 	/**
-	 * <b>function insertChildBefore( child1 , child2)</b> inserts the given <b></i>child2</b></i> before the given </b></i>child1</b></i> in this XML object and returns this XML object. If </b></i>child1</b></i> is null, the insertChildBefore method inserts <b></i>child2</b></i> after all children in this XML object (i.e., before none of them). If </b></i>child1</b></i> does not exist in this XML object, it returns without modifying this XML object.
+	 * Inserts the given {@code child2} before the given {@code child1} in this XML object and returns this XML object. If {@code child1} is null, the insertChildBefore method inserts {@code child2} after all children in this XML object (i.e., before none of them). If {@code child1} does not exist in this XML object, it returns without modifying this XML object.
+	 *
 	 * @returns XML object representing <b><i>x</i></b>.
 	 * @memberOf XML
 	 * @see org.fife.rsta.ac.js.ecma.api.e4x.E4XXML XML
 	 * @since Standard ECMA-357 2nd. Edition
 	 */
-	E4XXML insertChildBefore ( E4XXML child1 , E4XXML child2);
+	E4XXML insertChildBefore(E4XXML child1 , E4XXML child2);
 
 	/**
 	 * <b>function length()</b> the length method always returns the integer 1 for XML objects.

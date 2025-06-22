@@ -136,7 +136,7 @@ public interface JSArrayFunctions extends JSObjectFunctions {
 	 * </pre>
 	 * @param start The array index from where to begin.  If negative, this argument specifies a position measured from the end of the array.
 	 * @param end The array index immediately after the end of the slice. If not specified then the slice includes all the array elements from the start to the end of the array.
-	 * @returns A new <b>array</b> containing elements from the <b><i>start</b></i> up to, but not including the <b><i>end</i></b> of the slice.
+	 * @returns A new <b>array</b> containing elements from the {@code start} up to, but not including the <b><i>end</i></b> of the slice.
 	 * @memberOf Array
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSArray Array
 	 * @see #splice(JSNumber, JSNumber, JSArray) splice();

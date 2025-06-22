@@ -11,33 +11,29 @@
 package org.fife.rsta.ac.js.ast;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
 
 
 /**
- * Cache Local and System scope variables Local scope variables are cleared each
+ * Cache Local and System scope variables. Local scope variables are cleared each
  * time the <code>SourceCompletionProvider</code> finishes parsing the script
  * System scope variables will not be cleared
  */
 public class VariableResolver {
 
 	// HashMap of local variables mapped Name --> JSVariableDeclaration
-	private HashMap<String, JavaScriptVariableDeclaration> localVariables =
-            new HashMap<>();
+	private Map<String, JavaScriptVariableDeclaration> localVariables = new HashMap<>();
 	// pre-processing variables - these are set when pre-processing
-	private HashMap<String, JavaScriptVariableDeclaration> preProcessedVariables =
-            new HashMap<>();
+	private Map<String, JavaScriptVariableDeclaration> preProcessedVariables = new HashMap<>();
 	// HashMap of system variables mapped Name --> JSVariableDeclaration
 	// system variables do not get cleared as they are always available to the
 	// system
-	private HashMap<String, JavaScriptVariableDeclaration> systemVariables =
-            new HashMap<>();
+	private Map<String, JavaScriptVariableDeclaration> systemVariables = new HashMap<>();
 
-	private HashMap<String, JavaScriptFunctionDeclaration> localFunctions =
-            new HashMap<>();
-	private HashMap<String, JavaScriptFunctionDeclaration> preProcessedFunctions =
-            new HashMap<>();
+	private Map<String, JavaScriptFunctionDeclaration> localFunctions = new HashMap<>();
+	private Map<String, JavaScriptFunctionDeclaration> preProcessedFunctions = new HashMap<>();
 
 
 	/**
@@ -61,7 +57,7 @@ public class VariableResolver {
 
 
 	/**
-	 * Add system scope variable to cache
+	 * Add system scope variable to cache.
 	 *
 	 * @param declaration variable to add
 	 */
@@ -71,7 +67,7 @@ public class VariableResolver {
 
 
 	/**
-	 * remove pre-processing variable from system variable cache
+	 * remove pre-processing variable from system variable cache.
 	 *
 	 * @param name of the system variable to remove
 	 */
@@ -81,7 +77,7 @@ public class VariableResolver {
 
 
 	/**
-	 * remove system variable from system variable cache
+	 * remove system variable from system variable cache.
 	 *
 	 * @param name of the system variable to remove
 	 */
@@ -91,7 +87,7 @@ public class VariableResolver {
 
 
 	/**
-	 * Find JSVariableDeclaration for name against all variable types and check is in scope of caret position
+	 * Find JSVariableDeclaration for name against all variable types and check is in scope of caret position.
 	 *
 	 * @param name
 	 * @param dot
@@ -108,10 +104,12 @@ public class VariableResolver {
 				dot) : findDeclaration;
 	}
 
-	public JavaScriptVariableDeclaration findDeclaration(String name, int dot, boolean local, boolean preProcessed, boolean system) {
+	public JavaScriptVariableDeclaration findDeclaration(String name, int dot, boolean local, boolean preProcessed,
+														 boolean system) {
 		JavaScriptVariableDeclaration findDeclaration = local ? findDeclaration(localVariables, name, dot) : null;
 		// test whether this was found and then try pre-processing variable
-		findDeclaration = findDeclaration == null ? preProcessed ? findDeclaration(preProcessedVariables, name, dot) : null : findDeclaration;
+		findDeclaration = findDeclaration == null ?
+			preProcessed ? findDeclaration(preProcessedVariables, name, dot) : null : findDeclaration;
 		// last chance... look in system variables
 		return findDeclaration == null ? system ? findDeclaration(systemVariables, name, dot) : null : findDeclaration;
 	}
@@ -134,14 +132,14 @@ public class VariableResolver {
 
 
 	/**
-	 * Find JSVariableDeclaration and check the scope of the caret position
+	 * Find JSVariableDeclaration and check the scope of the caret position.
 	 *
 	 * @param name
 	 * @param dot
 	 * @return JSVariableDeclaration from the name
 	 */
 	private JavaScriptVariableDeclaration findDeclaration(
-			HashMap<String, JavaScriptVariableDeclaration> variables,
+			Map<String, JavaScriptVariableDeclaration> variables,
 			String name, int dot) {
 		JavaScriptVariableDeclaration dec = variables.get(name);
 
@@ -159,7 +157,7 @@ public class VariableResolver {
 
 	/**
 	 * Find the <code>TypeDeclaration</code> for the variable and check the
-	 * scope of the caret position
+	 * scope of the caret position.
 	 *
 	 * @param name name of variable
 	 * @param dot position
@@ -172,7 +170,7 @@ public class VariableResolver {
 
 
 	/**
-	 * Clear all local scope variables
+	 * Clear all local scope variables.
 	 */
 	public void resetLocalVariables() {
 		localVariables.clear();
@@ -200,7 +198,7 @@ public class VariableResolver {
 
 	/**
 	 * Resolve the entered text by chopping up the text and working from left to
-	 * right, resolving each type in turn
+	 * right, resolving each type in turn.
 	 *
 	 * @param varName
 	 * @param dot
@@ -213,41 +211,39 @@ public class VariableResolver {
 	}
 
 
-	public void addLocalFunction(JavaScriptFunctionDeclaration func)
-	{
+	public void addLocalFunction(JavaScriptFunctionDeclaration func) {
 		localFunctions.put(func.getName(), func);
 	}
 
-	public JavaScriptFunctionDeclaration findFunctionDeclaration(String name)
-	{
+	public JavaScriptFunctionDeclaration findFunctionDeclaration(String name) {
 		JavaScriptFunctionDeclaration dec = localFunctions.get(name);
-		if(dec == null) {
+		if (dec == null) {
 			dec = preProcessedFunctions.get(name);
 		}
 		return dec;
 	}
 
-	public JavaScriptFunctionDeclaration findFunctionDeclaration(String name, boolean local, boolean preProcessed)
-	{
+	public JavaScriptFunctionDeclaration findFunctionDeclaration(String name, boolean local, boolean preProcessed) {
 		JavaScriptFunctionDeclaration dec = local ? localFunctions.get(name) : null;
-		if(dec == null) {
+		if (dec == null) {
 			dec = preProcessed ? preProcessedFunctions.get(name) : null;
 		}
 		return dec;
 	}
 
-	public JavaScriptFunctionDeclaration findFunctionDeclarationByFunctionName(String name, boolean local, boolean preprocessed) {
+	public JavaScriptFunctionDeclaration findFunctionDeclarationByFunctionName(String name, boolean local,
+																			   boolean preprocessed) {
 		JavaScriptFunctionDeclaration func = local ? findFirstFunction(name, localFunctions) : null;
-		if(func == null) {
+		if (func == null) {
 			func = preprocessed ? findFirstFunction(name, preProcessedFunctions) : null;
 		}
 		return func;
 	}
 
 	private JavaScriptFunctionDeclaration findFirstFunction(String name,
-			HashMap<String, JavaScriptFunctionDeclaration> functions) {
+			Map<String, JavaScriptFunctionDeclaration> functions) {
 		for (JavaScriptFunctionDeclaration func : functions.values()) {
-			if(name.equals(func.getFunctionName())) {
+			if (name.equals(func.getFunctionName())) {
 				return func;
 			}
 		}

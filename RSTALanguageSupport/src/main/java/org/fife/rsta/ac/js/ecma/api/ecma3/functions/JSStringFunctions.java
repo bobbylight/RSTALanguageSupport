@@ -28,7 +28,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
      *
      * @memberOf String
      * @param position The index of the character whose encoding is to be returned.
-     * @returns The Unicode encoding of the i>nth</i> character within <b><i>string</i></b>.
+     * @returns The Unicode encoding of the <i>nth</i> character within <b><i>string</i></b>.
      * @see org.fife.rsta.ac.js.ecma.api.ecma3.JSString String
      * @see #charAt(JSNumber) charAt()
      * @since Standard ECMA-262 3rd. Edition

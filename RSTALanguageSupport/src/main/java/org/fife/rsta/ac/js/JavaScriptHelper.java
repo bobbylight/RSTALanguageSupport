@@ -10,8 +10,6 @@
  */
 package org.fife.rsta.ac.js;
 
-import java.io.StringReader;
-
 import org.fife.rsta.ac.js.ast.type.ArrayTypeDeclaration;
 import org.fife.rsta.ac.js.ast.type.TypeDeclaration;
 import org.fife.rsta.ac.js.ast.type.ecma.TypeDeclarations;
@@ -33,11 +31,18 @@ import org.mozilla.javascript.ast.NewExpression;
 import org.mozilla.javascript.ast.NodeVisitor;
 
 
-public class JavaScriptHelper {
+public final class JavaScriptHelper {
 
 	private static final String INFIX = org.mozilla.javascript.ast.InfixExpression.class
 			.getName();
 
+
+	/**
+	 * Private constructor to prevent instantiation.
+	 */
+	private JavaScriptHelper() {
+		// Do nothing
+	}
 
 	/**
 	 * Test whether the start of the variable is the same name as the variable
@@ -56,7 +61,7 @@ public class JavaScriptHelper {
 				return !varName.equals(splitInit[0]);
 			}
 		}
-		catch(Exception e) {
+		catch (Exception e) {
 			//AstNode can throw exceptions if toSource() is invalid e.g. new Date(""..toString());
 		}
 		return false;
@@ -70,7 +75,7 @@ public class JavaScriptHelper {
 	 * @param text to parse
 	 * @return expression statement text from source
 	 */
-	public static final ParseText parseEnteredText(String text) {
+	public static ParseText parseEnteredText(String text) {
 		CompilerEnvirons env = new CompilerEnvirons();
 		env.setIdeMode(true);
 		env.setErrorReporter(new ErrorReporter() {
@@ -139,9 +144,8 @@ public class JavaScriptHelper {
 	 */
 	public static FunctionCall findFunctionCallFromNode(AstNode node) {
 		AstNode parent = node;
-		for(int i=0; i<3; i++)
-		{
-			if(parent == null || (parent instanceof AstRoot))
+		for (int i=0; i<3; i++) {
+			if (parent == null || (parent instanceof AstRoot))
 				break;
 			if (parent instanceof FunctionCall) {
 				return (FunctionCall) parent;
@@ -160,7 +164,7 @@ public class JavaScriptHelper {
 	 * @return TypeDeclaration if node resolves to supported type, e.g. Number,
 	 *         New etc., otherwise null
 	 */
-	public static final TypeDeclaration tokenToNativeTypeDeclaration(
+	public static TypeDeclaration tokenToNativeTypeDeclaration(
 			AstNode typeNode, SourceCompletionProvider provider) {
 		if (typeNode != null) {
 			switch (typeNode.getType()) {
@@ -191,7 +195,7 @@ case Token.EXPR_RESULT:
 					return createArrayType(typeNode, provider);
 				case Token.GETELEM: {
 					TypeDeclaration dec = findGetElementType(typeNode, provider);
-					if(dec != null) {
+					if (dec != null) {
 						return dec;
 					}
 					break;
@@ -199,15 +203,14 @@ case Token.EXPR_RESULT:
 				case Token.THIS : {
 					//ask the provider for the base object
 					String self = provider.getSelf();
-					if(self == null)
+					if (self == null)
 						self = TypeDeclarations.ECMA_GLOBAL;
 
 					return getTypeDeclaration(self, provider);
 				}
 				//xml support
 				case Token.XML : {
-					if(provider.isXMLSupported())
-					{
+					if (provider.isXMLSupported()) {
 						return getTypeDeclaration(TypeDeclarations.ECMA_XML, provider);
 					}
 				}
@@ -234,16 +237,15 @@ case Token.EXPR_RESULT:
 	 * @param provider
 	 * @return
 	 */
-	private static TypeDeclaration findGetElementType(AstNode node, SourceCompletionProvider provider)
-	{
+	private static TypeDeclaration findGetElementType(AstNode node, SourceCompletionProvider provider) {
 		ElementGet getElement = (ElementGet) node;
 		//get target
 		AstNode target = getElement.getTarget();
-		if(target != null) {
+		if (target != null) {
 			JavaScriptCompletionResolver resolver = new JavaScriptCompletionResolver(provider);
 			TypeDeclaration typeDec = resolver.resolveNode(target);
-			if(typeDec != null) {
-				if(typeDec instanceof ArrayTypeDeclaration) {
+			if (typeDec != null) {
+				if (typeDec instanceof ArrayTypeDeclaration) {
 					return ((ArrayTypeDeclaration) typeDec).getArrayType();
 				}
 			}
@@ -257,10 +259,9 @@ case Token.EXPR_RESULT:
 	 * @param provider
 	 * @return
 	 */
-	private static TypeDeclaration createArrayType(AstNode typeNode, SourceCompletionProvider provider)
-	{
+	private static TypeDeclaration createArrayType(AstNode typeNode, SourceCompletionProvider provider) {
 		TypeDeclaration array = getTypeDeclaration(TypeDeclarations.ECMA_ARRAY, provider);
-		if(array != null) {
+		if (array != null) {
 			//create a new ArrayTypeDeclaration
 			ArrayTypeDeclaration arrayDec = new ArrayTypeDeclaration(array.getPackageName(), array.getAPITypeName(), array.getJSName());
 			ArrayLiteral arrayLit = (ArrayLiteral) typeNode;
@@ -285,12 +286,12 @@ case Token.EXPR_RESULT:
 		JavaScriptResolver resolver = provider.getJavaScriptEngine().getJavaScriptResolver(provider);
 		for (AstNode element : arrayLit.getElements()) {
 			TypeDeclaration elementType = resolver.resolveNode(element);
-			if(first) {
+			if (first) {
 				dec = elementType;
 				first = false;
 			}
 			else {
-				if(elementType != null && !elementType.equals(dec)) {
+				if (elementType != null && !elementType.equals(dec)) {
 					dec = provider.getTypesFactory().getDefaultTypeDeclaration();
 					break;
 				}
@@ -305,7 +306,7 @@ case Token.EXPR_RESULT:
 		if (newName != null) {
 
 			TypeDeclaration newType = createNewTypeDeclaration(newName);
-			if(newType.isQualified()) {
+			if (newType.isQualified()) {
 				return newType;
 			} else {
 				return findOrMakeTypeDeclaration(newName, provider);
@@ -315,8 +316,7 @@ case Token.EXPR_RESULT:
 	}
 
 
-	public static TypeDeclaration findOrMakeTypeDeclaration(String name, SourceCompletionProvider provider)
-	{
+	public static TypeDeclaration findOrMakeTypeDeclaration(String name, SourceCompletionProvider provider) {
 		TypeDeclaration newType = getTypeDeclaration(name, provider);
 		if (newType == null) {
 			newType = createNewTypeDeclaration(name);
@@ -324,8 +324,7 @@ case Token.EXPR_RESULT:
 		return newType;
 	}
 
-	public static TypeDeclaration createNewTypeDeclaration(String newName)
-	{
+	public static TypeDeclaration createNewTypeDeclaration(String newName) {
 		// create a new Type
 		String pName = newName.indexOf('.') > 0 ? newName.substring(0,
 				newName.lastIndexOf('.')) : "";
@@ -350,7 +349,7 @@ case Token.EXPR_RESULT:
 	 *
 	 * TODO most probably need some work on this
 	 */
-	private static class InfixVisitor implements NodeVisitor {
+	private static final class InfixVisitor implements NodeVisitor {
 
 		private String type = null;
 		private SourceCompletionProvider provider;
@@ -362,13 +361,12 @@ case Token.EXPR_RESULT:
 		@Override
 		public boolean visit(AstNode node) {
 
-			if (!(node instanceof InfixExpression)) // ignore infix expression
-			{
+			if (!(node instanceof InfixExpression)) { // ignore infix expression
 				JavaScriptResolver resolver = provider.getJavaScriptEngine().getJavaScriptResolver(provider);
 				TypeDeclaration dec = resolver.resolveNode(node);
 
 				boolean isNumber = TypeDeclarations.ECMA_NUMBER.equals(dec.getAPITypeName()) || TypeDeclarations.ECMA_BOOLEAN.equals(dec.getAPITypeName());
-				if(isNumber && (type == null || (isNumber && TypeDeclarations.ECMA_NUMBER.equals(type)))) {
+				if (isNumber && (type == null || (isNumber && TypeDeclarations.ECMA_NUMBER.equals(type)))) {
 					type = TypeDeclarations.ECMA_NUMBER;
 				}
 				else {
@@ -391,14 +389,12 @@ case Token.EXPR_RESULT:
 	 */
 	private static TypeDeclaration getTypeFromInFixExpression(AstNode node, SourceCompletionProvider provider) {
 		InfixExpression infix = (InfixExpression) node;
-		switch(infix.getType())
-		{
+		switch (infix.getType()) {
 			case Token.ADD:
 			case Token.SUB:
 			case Token.MOD:
 			case Token.MUL:
-			case Token.DIV:
-			{
+			case Token.DIV: {
 				InfixVisitor visitor = new InfixVisitor(provider);
 				infix.visit(visitor);
 				return getTypeDeclaration(visitor.type, provider);
@@ -411,14 +407,11 @@ case Token.EXPR_RESULT:
 	}
 
 
-	public static String convertNodeToSource(AstNode node)
-	{
-		try
-		{
+	public static String convertNodeToSource(AstNode node) {
+		try {
 			return node.toSource();
 		}
-		catch(Exception e)
-		{
+		catch (Exception e) {
 			Logger.log(e.getMessage());
 		}
 		return null;
@@ -434,7 +427,7 @@ case Token.EXPR_RESULT:
 	 */
 	public static int findIndexOfFirstOpeningBracket(String text) {
 		int index = 0;
-		if (text != null && text.length() > 0) {
+		if (text != null && !text.isEmpty()) {
 			char[] chars = text.toCharArray();
 			for (int i = chars.length - 1; i >= 0; i--) {
 				switch (chars[i]) {
@@ -457,7 +450,7 @@ case Token.EXPR_RESULT:
 
 	public static int findIndexOfFirstOpeningSquareBracket(String text) {
 		int index = 0;
-		if (text != null && text.length() > 0) {
+		if (text != null && !text.isEmpty()) {
 			char[] chars = text.toCharArray();
 			for (int i = chars.length - 1; i >= 0; i--) {
 				switch (chars[i]) {
@@ -524,7 +517,6 @@ case Token.EXPR_RESULT:
 	}
 
 	/**
-	 *
 	 * @param text to trim
 	 * @return text up to the last dot e.g. a.getText().length returns a.getText()
 	 */
@@ -570,7 +562,7 @@ case Token.EXPR_RESULT:
 						i2++;
 						break;
 					case ',': {
-						if(i1 == 0 && i2 ==0) {
+						if (i1 == 0 && i2 ==0) {
 							return text.substring(i+1).trim();
 						}
 						break;
@@ -587,7 +579,7 @@ case Token.EXPR_RESULT:
 	}
 
 
-	private static class ParseTextVisitor implements NodeVisitor {
+	private static final class ParseTextVisitor implements NodeVisitor {
 
 		private AstNode lastNode;
 		private String text;
@@ -622,15 +614,13 @@ case Token.EXPR_RESULT:
 			return lastNode != null ? lastNode.toSource() : isNew ? "" : text;
 		}
 
-		public boolean isNew()
-		{
+		public boolean isNew() {
 			return isNew;
 		}
 
 	}
 
-	public static class ParseText
-	{
+	public static class ParseText {
 		public String text = "";
 		public boolean isNew;
 

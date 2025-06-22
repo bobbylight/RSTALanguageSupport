@@ -23,7 +23,7 @@ public class RhinoJavaScriptEngine extends JavaScriptEngine {
 	@Override
 	public JavaScriptTypesFactory getJavaScriptTypesFactory(SourceCompletionProvider provider) {
 
-		if(jsFactory == null)
+		if (jsFactory == null)
 			jsFactory = new RhinoJavaScriptTypesFactory(provider.getTypesFactory());
 
 		return jsFactory;

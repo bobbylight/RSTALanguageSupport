@@ -19,7 +19,8 @@ public abstract class E4XQName implements JSObjectFunctions {
      * @since Standard ECMA-357 2nd. Edition
      * @since Level 3 Document Object Model Core Definition.
      */
-	public E4XQName ( ){}
+	public E4XQName() {
+	}
 
 	/**
      * Object QName(name)
@@ -30,7 +31,8 @@ public abstract class E4XQName implements JSObjectFunctions {
      * @since Standard ECMA-357 2nd. Edition
      * @since Level 3 Document Object Model Core Definition.
      */
-	public E4XQName ( JSString name ){}
+	public E4XQName(JSString name) {
+	}
 
 	/**
      * Object QName(namespace, name)
@@ -41,7 +43,8 @@ public abstract class E4XQName implements JSObjectFunctions {
      * @since Standard ECMA-357 2nd. Edition
      * @since Level 3 Document Object Model Core Definition.
      */
-	public E4XQName ( E4XNamespace namespace, JSString name ){}
+	public E4XQName(E4XNamespace namespace, JSString name) {
+	}
 
 	/**
      * <b>property prototype</b>

@@ -25,7 +25,7 @@ public abstract class JSArray implements JSArrayFunctions {
 	 *
 	 * @constructor
 	 * @extends Object
-	 * @param size The desired number of elements in the array. The returned value has its <b>length</b> field set to <b><i>size</b></i>
+	 * @param size The desired number of elements in the array. The returned value has its <b>length</b> field set to {@code size}
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */

@@ -1,10 +1,6 @@
 package org.fife.rsta.ac.js.ast.type.ecma;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.fife.rsta.ac.js.JavaScriptHelper;
 import org.fife.rsta.ac.js.ast.type.ArrayTypeDeclaration;
@@ -40,10 +36,10 @@ public abstract class TypeDeclarations {
 
 	public static String NULL_TYPE = "void";
 
-	private final HashMap<String, TypeDeclaration> types = new HashMap<>();
+	private final Map<String, TypeDeclaration> types = new HashMap<>();
 
 	// reverse lookup for Java types to Javascript types
-	private final HashMap<String, String> javascriptReverseLookup = new HashMap<>();
+	private final Map<String, String> javascriptReverseLookup = new HashMap<>();
 	private final HashSet<JavaScriptObject> ecmaObjects = new HashSet<>();
 
 
@@ -197,8 +193,9 @@ public abstract class TypeDeclarations {
 
 
 	/**
+	 * Returns the type declaration.
 	 *
-	 * @param name
+	 * @param name The type to look up.
 	 * @return Lookup type declaration from name. If the
 	 *         <code>TypeDeclaration</code> cannot be found, then lookup using
 	 *         reserve lookup
@@ -261,14 +258,13 @@ public abstract class TypeDeclarations {
 	 * @param name name of class to test
 	 *
 	 */
-	public boolean canECMAObjectBeInstantiated(String name)
-	{
+	public boolean canECMAObjectBeInstantiated(String name) {
 		String tempName = javascriptReverseLookup.get(name);
-		if(tempName != null) {
+		if (tempName != null) {
 			name = tempName;
 		}
 		for (JavaScriptObject jo : ecmaObjects) {
-			if(jo.getName().equals(name)) {
+			if (jo.getName().equals(name)) {
 				return jo.canBeInstantiated();
 			}
 		}
@@ -303,11 +299,10 @@ public abstract class TypeDeclarations {
 
 		@Override
 		public boolean equals(Object jsObj) {
-			if(jsObj == this)
+			if (jsObj == this)
 				return true;
 
-			if(jsObj instanceof JavaScriptObject)
-			{
+			if (jsObj instanceof JavaScriptObject) {
 				return ((JavaScriptObject) jsObj).getName().equals(getName());
 			}
 

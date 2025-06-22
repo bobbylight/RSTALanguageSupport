@@ -28,8 +28,9 @@ import org.mozilla.javascript.ast.StringLiteral;
  * @author Robert Futrell
  * @version 1.0
  */
-public class RhinoUtil {
+public final class RhinoUtil {
 
+	private static final System.Logger LOG = System.getLogger(RhinoUtil.class.getName());
 
 	/**
 	 * Private constructor to prevent instantiation.
@@ -59,7 +60,7 @@ public class RhinoUtil {
 						paramName = ((Name)paramNode).getIdentifier();
 						break;
 					default:
-						System.out.println("Unhandled class for param: " +
+						LOG.log(System.Logger.Level.INFO, "Unhandled class for param: " +
 								paramNode.getClass());
 						paramName = "?";
 						break;

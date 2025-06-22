@@ -100,7 +100,7 @@ public class HtmlLanguageSupport extends AbstractMarkupLanguageSupport {
 			try {
 				BufferedReader r = new BufferedReader(new InputStreamReader(in));
 				while ((line=r.readLine())!=null) {
-					if (line.length()>0 && line.charAt(0)!='#') {
+					if (!line.isEmpty() && line.charAt(0)!='#') {
 						tags.add(line.trim());
 					}
 				}

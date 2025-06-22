@@ -52,11 +52,10 @@ public class TypeDeclaration {
 
 
 	public String getQualifiedName() {
-		return pkg != null && pkg.length() > 0 ? (pkg + '.' + apiName) : apiName;
+		return pkg != null && !pkg.isEmpty() ? (pkg + '.' + apiName) : apiName;
 	}
 
-	public boolean isQualified()
-	{
+	public boolean isQualified() {
 		return getQualifiedName().indexOf('.') != -1;
 	}
 
@@ -82,7 +81,7 @@ public class TypeDeclaration {
 		if (this == obj)
 			return true;
 
-		if((obj == null) || (obj.getClass() != this.getClass()))
+		if ((obj == null) || (obj.getClass() != this.getClass()))
 			return false;
 
 		if (obj instanceof TypeDeclaration) {

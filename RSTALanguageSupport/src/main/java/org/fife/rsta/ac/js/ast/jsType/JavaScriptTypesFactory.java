@@ -37,29 +37,26 @@ import org.fife.ui.autocomplete.DefaultCompletionProvider;
 
 public abstract class JavaScriptTypesFactory {
 
-	protected HashMap<TypeDeclaration, JavaScriptType> cachedTypes =
-            new HashMap<>();
+	protected Map<TypeDeclaration, JavaScriptType> cachedTypes = new HashMap<>();
 	private boolean useBeanproperties;
 	protected TypeDeclarationFactory typesFactory;
 
 	private static final List<String> UNSUPPORTED_COMPLETIONS;
-	private static String SPECIAL_METHOD = "<clinit>";
+	private static final String SPECIAL_METHOD = "<clinit>";
 
 	//list of unsupported completions e.g. java.lang.Object as JavaScript has it's own
-	static
-	{
+	static {
 		UNSUPPORTED_COMPLETIONS = new ArrayList<>();
 		UNSUPPORTED_COMPLETIONS.add("java.lang.Object");
 	}
 
-	public JavaScriptTypesFactory(TypeDeclarationFactory typesFactory)
-	{
+	public JavaScriptTypesFactory(TypeDeclarationFactory typesFactory) {
 		this.typesFactory = typesFactory;
 	}
 
 	private static class DefaultJavaScriptTypeFactory extends JavaScriptTypesFactory {
 
-		public DefaultJavaScriptTypeFactory(TypeDeclarationFactory typesFactory) {
+		DefaultJavaScriptTypeFactory(TypeDeclarationFactory typesFactory) {
 			super(typesFactory);
 		}
 	}
@@ -88,7 +85,8 @@ public abstract class JavaScriptTypesFactory {
 	 * @param type TypeDeclaration to read from the API e.g. JSString
 	 * @param manager JarManager containing source and classes
 	 * @param text - full text entered by user
-	 * @param provider CompletionsProvider to bind the <code>Completion</code>
+	 * @param provider CompletionsProvider to bind the <code>Completion</code>.
+	 * @return The type, or {@code null} if ???.
 	 */
 	public JavaScriptType getCachedType(TypeDeclaration type,
 			JarManager manager, DefaultCompletionProvider provider,
@@ -111,14 +109,13 @@ public abstract class JavaScriptTypesFactory {
 	}
 
 
-	public ClassFile getClassFile(JarManager manager, TypeDeclaration type)
-	{
+	public ClassFile getClassFile(JarManager manager, TypeDeclaration type) {
 		return manager != null ? manager.getClassEntry(type.getQualifiedName()) : null;
 	}
 
 	/**
 	 * Read the class file and extract all completions, add them all to the
-	 * CachedType
+	 * CachedType.
 	 *
 	 * @param cachedType CachedType to populate all completions
 	 * @param cf ClassFile to read
@@ -167,7 +164,7 @@ public abstract class JavaScriptTypesFactory {
 		boolean isJSType = typesFactory.isJavaScriptType(cachedType.getType());
 
 		//set the class type only for JavaScript types for now
-		if(isJSType) {
+		if (isJSType) {
 			cachedType.setClassTypeCompletion(new JSClassCompletion(provider, cf, false));
 		}
 
@@ -176,7 +173,8 @@ public abstract class JavaScriptTypesFactory {
 		for (int i = 0; i < methodCount; i++) {
 			MethodInfo info = cf.getMethodInfo(i);
 			if (!info.isConstructor() && !SPECIAL_METHOD.equals(info.getName())) {
-				if(isAccessible(info.getAccessFlags(), staticOnly, isJSType) && ((staticOnly && info.isStatic()) || !staticOnly)) {
+				if (isAccessible(info.getAccessFlags(), staticOnly, isJSType) &&
+					((staticOnly && info.isStatic()) || !staticOnly)) {
 					JSFunctionCompletion completion = new JSFunctionCompletion(provider, info, true);
 					cachedType.addCompletion(completion);
 				}
@@ -190,9 +188,8 @@ public abstract class JavaScriptTypesFactory {
 			}
 
 			//load constructors for JavaScript types only
-			if(isJSType && info.isConstructor() && !SPECIAL_METHOD.equals(info.getName())) {
-				if(typesFactory.canJavaScriptBeInstantiated(cachedType.getType().getQualifiedName()))
-				{
+			if (isJSType && info.isConstructor() && !SPECIAL_METHOD.equals(info.getName())) {
+				if (typesFactory.canJavaScriptBeInstantiated(cachedType.getType().getQualifiedName())) {
 					JSConstructorCompletion completion = new JSConstructorCompletion(provider, info);
 					cachedType.addConstructor(completion);
 				}
@@ -250,7 +247,7 @@ public abstract class JavaScriptTypesFactory {
 	}
 
 	/**
-	 * Returns whether the value is accessible based on the access flag for Methods and Fields
+	 * Returns whether the value is accessible based on the access flag for Methods and Fields.
 	 * Rules are as follows:
 	 * 		<OL>
 	 * 			<LI>staticsOnly && public return true; //All public static methods and fields</LI>
@@ -260,21 +257,20 @@ public abstract class JavaScriptTypesFactory {
 	 * @param access - access flag to test
 	 * @param staticsOnly - whether loading static methods and fields only
 	 * @param isJSType - is a built in JavasScript type
-	 * @return
+	 * @return Whether the value is accessible.
 	 */
-	private boolean isAccessible(int access, boolean staticsOnly, boolean isJSType)
-	{
+	private boolean isAccessible(int access, boolean staticsOnly, boolean isJSType) {
 		boolean accessible = false;
-		if (staticsOnly && org.fife.rsta.ac.java.classreader.Util.isPublic(access)
-				|| !staticsOnly && org.fife.rsta.ac.java.classreader.Util.isPublic(access) || (isJSType && org.fife.rsta.ac.java.classreader.Util.isProtected(access))){
+		if (staticsOnly && org.fife.rsta.ac.java.classreader.Util.isPublic(access) ||
+			!staticsOnly && org.fife.rsta.ac.java.classreader.Util.isPublic(access) ||
+			(isJSType && org.fife.rsta.ac.java.classreader.Util.isProtected(access))){
 			accessible = true;
 		}
 		return accessible;
 	}
 
 
-	public TypeDeclaration createNewTypeDeclaration(ClassFile cf, boolean staticOnly)
-	{
+	public TypeDeclaration createNewTypeDeclaration(ClassFile cf, boolean staticOnly) {
 		return createNewTypeDeclaration(cf, staticOnly, true);
 	}
 
@@ -282,8 +278,7 @@ public abstract class JavaScriptTypesFactory {
 		String className = cf.getClassName(false);
 		String packageName = cf.getPackageName();
 
-		if(staticOnly && !addToCache)
-		{
+		if (staticOnly && !addToCache) {
 			return new TypeDeclaration(packageName, className, cf
 					.getClassName(true), staticOnly);
 		}
@@ -291,11 +286,11 @@ public abstract class JavaScriptTypesFactory {
 		String qualified = cf.getClassName(true);
 		//lookup type
 		TypeDeclaration td = typesFactory.getTypeDeclaration(qualified);
-		if(td == null) {
+		if (td == null) {
 			td = new TypeDeclaration(packageName, className, cf
 					.getClassName(true), staticOnly);
 			// now add to types factory
-			if(addToCache)
+			if (addToCache)
 				typesFactory.addType(qualified, td);
 		}
 
@@ -373,9 +368,10 @@ public abstract class JavaScriptTypesFactory {
 	}
 
 	/**
-	 * Return all the JavaScript types that are part of the ECMA API
+	 * Return all the JavaScript types that are part of the ECMA API.
+	 *
 	 * @param provider SourceCompletionProvider
-	 * @return
+	 * @return The types.
 	 */
 	public List<JavaScriptType> getECMAObjectTypes(SourceCompletionProvider provider) {
 		List<JavaScriptType> constructors = new ArrayList<>();
@@ -385,7 +381,7 @@ public abstract class JavaScriptTypesFactory {
 		for (JavaScriptObject object : types) {
 			TypeDeclaration type = typesFactory.getTypeDeclaration(object.getName());
 			JavaScriptType js = getCachedType(type, manager, provider, null);
-			if(js != null) {
+			if (js != null) {
 				constructors.add(js);
 			}
 		}

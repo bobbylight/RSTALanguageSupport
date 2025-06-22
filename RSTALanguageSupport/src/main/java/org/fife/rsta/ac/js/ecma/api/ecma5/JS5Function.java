@@ -14,12 +14,12 @@ public abstract class JS5Function extends JSFunction implements JS5FunctionFunct
      * Object Function(argument_names..., body)
      * @constructor
      * @extends Object
-     * @param argument_names Any number of string arguments, each naming one or more arguments of the Function object to be created.
+     * @param argumentNames Any number of string arguments, each naming one or more arguments of the Function object to be created.
      * @param body A string that represents the body of the function. It may contain an number of JavaScript statements, separated by semicolons.
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
     */
-    public JS5Function(JSString argument_names, JSString body) {
-    	super(argument_names, body);
+    public JS5Function(JSString argumentNames, JSString body) {
+    	super(argumentNames, body);
     }
 }

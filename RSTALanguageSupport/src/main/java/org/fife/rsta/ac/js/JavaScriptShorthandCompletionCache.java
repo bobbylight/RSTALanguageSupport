@@ -27,8 +27,8 @@ import org.fife.ui.autocomplete.DefaultCompletionProvider;
  */
 public class JavaScriptShorthandCompletionCache extends ShorthandCompletionCache {
 
-	private static final String MSG = "org.fife.rsta.ac.js.resources";
-	private static final ResourceBundle msg = ResourceBundle.getBundle(MSG);
+	private static final String MSG_CLASS = "org.fife.rsta.ac.js.resources";
+	private static final ResourceBundle MSG = ResourceBundle.getBundle(MSG_CLASS);
 
 
 	public JavaScriptShorthandCompletionCache(DefaultCompletionProvider templateProvider, DefaultCompletionProvider commentsProvider, boolean e4xSupport) {
@@ -50,64 +50,64 @@ public class JavaScriptShorthandCompletionCache extends ShorthandCompletionCache
         //iterate array
 		String template = "for (var ${i} = 0; ${i} < ${array}.length; ${i}++) {\n\t${cursor}\n}";
 		addShorthandCompletion(new JavaScriptTemplateCompletion(templateProvider, "for", "for-loop-array",
-				template, msg.getString("for.array.shortDesc"),  msg.getString("for.array.summary")));
+				template, MSG.getString("for.array.shortDesc"),  MSG.getString("for.array.summary")));
 
 		//standard for
         template = "for (var ${i} = 0; ${i} < ${10}; ${i}++) {\n\t${cursor}\n}";
         addShorthandCompletion(new JavaScriptTemplateCompletion(templateProvider, "for", "for-loop",
-                template, msg.getString("for.loop.shortDesc"),msg.getString("for.loop.summary")));
+                template, MSG.getString("for.loop.shortDesc"), MSG.getString("for.loop.summary")));
 
         //for in
         template = "for (var ${iterable_element} in ${iterable})\n{\n\t${cursor}\n}";
         addShorthandCompletion(new JavaScriptTemplateCompletion(templateProvider, "for", "for-loop-in",
-                template, msg.getString("for.in.shortDesc"), msg.getString("for.in.summary")));
+                template, MSG.getString("for.in.shortDesc"), MSG.getString("for.in.summary")));
 
         //e4x specific
-        if(e4xSupport) {
+        if (e4xSupport) {
 	        //for each
 	        template = "for each (var ${iterable_element} in ${iterable})\n{\n\t${cursor}\n}";
 	        addShorthandCompletion(new JavaScriptTemplateCompletion(templateProvider, "for", "for-loop-in-each",
-	                template, msg.getString("for.in.each.shortDesc"), msg.getString("for.in.each.summary")));
+	                template, MSG.getString("for.in.each.shortDesc"), MSG.getString("for.in.each.summary")));
         }
 
         //do while
 		template = "do {\n\t${cursor}\n} while (${condition});";
 		addShorthandCompletion(new JavaScriptTemplateCompletion(templateProvider, "do-while",
-				"do-loop", template, msg.getString("do.shortDesc"), msg.getString("do.summary")));
+				"do-loop", template, MSG.getString("do.shortDesc"), MSG.getString("do.summary")));
 
 		//if condition
         template = "if (${condition}) {\n\t${cursor}\n}";
         addShorthandCompletion(new JavaScriptTemplateCompletion(templateProvider, "if", "if-cond",
-                template, msg.getString("if.cond.shortDesc"), msg.getString("if.cond.summary")));
+                template, MSG.getString("if.cond.shortDesc"), MSG.getString("if.cond.summary")));
 
         //if else condition
         template = "if (${condition}) {\n\t${cursor}\n} else {\n\t\n}";
         addShorthandCompletion(new JavaScriptTemplateCompletion(templateProvider, "if", "if-else",
-                template, msg.getString("if.else.shortDesc"), msg.getString("if.else.summary")));
+                template, MSG.getString("if.else.shortDesc"), MSG.getString("if.else.summary")));
 
         //while condition
         template = "while (${condition}) {\n\t${cursor}\n}";
         addShorthandCompletion(new JavaScriptTemplateCompletion(templateProvider, "while", "while-cond",
-                template, msg.getString("while.shortDesc"), msg.getString("while.summary")));
+                template, MSG.getString("while.shortDesc"), MSG.getString("while.summary")));
 
         //switch case statement
         template = "switch (${key}) {\n\tcase ${value}:\n\t\t${cursor}\n\t\tbreak;\n\tdefault:\n\t\tbreak;\n}";
         addShorthandCompletion(new JavaScriptTemplateCompletion(templateProvider, "switch", "switch-statement",
-                template, msg.getString("switch.case.shortDesc"), msg.getString("switch.case.summary")));
+                template, MSG.getString("switch.case.shortDesc"), MSG.getString("switch.case.summary")));
 
         //try catch statement
         template = "try {\n\t ${cursor} \n} catch (${err}) {\n\t\n}";
         addShorthandCompletion(new JavaScriptTemplateCompletion(templateProvider, "try", "try-catch",
-                template, msg.getString("try.catch.shortDesc"), msg.getString("try.catch.summary")));
+                template, MSG.getString("try.catch.shortDesc"), MSG.getString("try.catch.summary")));
 
         //catch block
         template = "catch (${err}) {\n\t${cursor}\n}";
         addShorthandCompletion(new JavaScriptTemplateCompletion(templateProvider, "catch", "catch-block",
-                template, msg.getString("catch.block.shortDesc"), msg.getString("catch.block.summary")));
+                template, MSG.getString("catch.block.shortDesc"), MSG.getString("catch.block.summary")));
 
         // Comments
-        addCommentCompletion(new BasicCompletion(commentsProvider, "TODO:", null, msg.getString("todo")));
-        addCommentCompletion(new BasicCompletion(commentsProvider, "FIXME:", null, msg.getString("fixme")));
+        addCommentCompletion(new BasicCompletion(commentsProvider, "TODO:", null, MSG.getString("todo")));
+        addCommentCompletion(new BasicCompletion(commentsProvider, "FIXME:", null, MSG.getString("fixme")));
 	}
 
 
