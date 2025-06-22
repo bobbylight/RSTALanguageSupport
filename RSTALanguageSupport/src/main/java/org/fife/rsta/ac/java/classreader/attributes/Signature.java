@@ -153,7 +153,7 @@ public class Signature extends AttributeInfo {
 				String paramDescriptors = signature.substring(1, rparen);
 				ParamDescriptorResult res = new ParamDescriptorResult();
 
-				while (paramDescriptors.length()>0) {
+				while (!paramDescriptors.isEmpty()) {
 					parseParamDescriptor(paramDescriptors, cf, additionalTypeArgs,
 							mi, "Error parsing method signature for ", res, qualified);
 					paramTypeList.add(res.type);
@@ -357,7 +357,7 @@ public class Signature extends AttributeInfo {
 						ParamDescriptorResult res2 = new ParamDescriptorResult();
 						List<String> paramTypeList = new ArrayList<>();
 						// Recursively parse type parameters of this parameter
-						while (paramDescriptors.length()>0) {
+						while (!paramDescriptors.isEmpty()) {
 							parseParamDescriptor(paramDescriptors, cf, additionalTypeArgs,
 									mi, "Error parsing method signature for ", res2, qualified);
 							paramTypeList.add(res2.type);

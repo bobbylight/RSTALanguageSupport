@@ -58,6 +58,9 @@ import org.mozilla.javascript.ast.AstRoot;
  */
 public class SourceCompletionProvider extends DefaultCompletionProvider {
 
+	private static final System.Logger LOG = System.getLogger(
+		SourceCompletionProvider.class.getName());
+
 	private JavaScriptCompletionProvider parent;
 	private JarManager jarManager;
 	private int dot;
@@ -87,7 +90,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 		this.xmlSupported = xmlSupported;
 		setParameterizedCompletionParams('(', ", ", ')');
 		setAutoActivationRules(false, "."); // Default - only activate after '.'
-		engine = JavaScriptEngineFactory.Instance().getEngineFromCache(javaScriptEngine);
+		engine = JavaScriptEngineFactory.instance().getEngineFromCache(javaScriptEngine);
 		javaScriptTypesFactory = engine.getJavaScriptTypesFactory(this);
 		//set default for self to Global
 		setSelf(TypeDeclarations.ECMA_GLOBAL);
@@ -102,7 +105,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	 */
 	private void addShorthandCompletions(Set<Completion> set) {
 
-		if(shorthandCache != null) {
+		if (shorthandCache != null) {
 			set.addAll(shorthandCache.getShorthandCompletions());
 		}
 	}
@@ -228,22 +231,21 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 				// Don't add shorthand completions if they're typing something
 				// qualified
 				// only add shorthand completions if the user has started typing something in (Eclipse behaviour)
-				if (text.length() > 0) {
+				if (!text.isEmpty()) {
 					addShorthandCompletions(set);
 				}
 
 
-				if (text.length() > 0) { // try to convert text by removing
+				if (!text.isEmpty()) { // try to convert text by removing
 					// any if, while etc..
 					ParseText pt = JavaScriptHelper.parseEnteredText(text);
 					text = pt.text;
 					isNew = pt.isNew;
 
-					if(isNew)  {
+					if (isNew)  {
 						return handleNewFilter(set, text);
 					}
-					else
-					{
+					else {
 						//load classes and move on
 						loadECMAClasses(set, "");
 					}
@@ -271,8 +273,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 	}
 
-	private List<Completion> handleNewFilter(Set<Completion> set, String text)
-	{
+	private List<Completion> handleNewFilter(Set<Completion> set, String text) {
 		set.clear(); //reset as just interested in the
 		//just load the constructors
 		loadECMAClasses(set, text);
@@ -280,8 +281,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	}
 
 	@SuppressWarnings("unchecked")
-	private List<Completion> resolveCompletions(String text, Set<Completion> set)
-	{
+	private List<Completion> resolveCompletions(String text, Set<Completion> set) {
 		completions.addAll(set);
 
 		// Do a sort of all of our completions to put into case-insensitive order and we're good to go!
@@ -316,20 +316,19 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	 * @param set completion set
 	 * @param text
 	 */
-	private void loadECMAClasses(Set<Completion> set, String text)
-	{
+	private void loadECMAClasses(Set<Completion> set, String text) {
 		//all the constructors
 		List<JavaScriptType> list = engine.getJavaScriptTypesFactory(this).
 				getECMAObjectTypes(this);
 
 		for (JavaScriptType type : list) {
 			//iterate through the constructors
-			if(text.length() == 0) {
-				if(type.getClassTypeCompletion() != null)
+			if (text.isEmpty()) {
+				if (type.getClassTypeCompletion() != null)
 					set.add(type.getClassTypeCompletion());
 			}
 			else {
-				if(type.getType().getJSName().startsWith(text)) {
+				if (type.getType().getJSName().startsWith(text)) {
 					set.addAll(type.getConstructorCompletions().values());
 				}
 			}
@@ -341,22 +340,20 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	 * e.g. set to 'Global' for server side or 'Window' for client JavaScript support
      * @return base class for the completion provider
      */
-	public String getSelf()
-	{
+	public String getSelf() {
 		return self;
 	}
 
 	/**
 	 * Parse Text and add completions to set
 	 */
-	private void parseTextAndResolve(Set<Completion> set, String text)
-	{
+	private void parseTextAndResolve(Set<Completion> set, String text) {
 		// Compile the entered text and resolve the variables/function
 		JavaScriptResolver compiler = engine.getJavaScriptResolver(this);
 		try {
 			JavaScriptType type = compiler.compileText(text);
 			boolean resolved = populateCompletionsFromType(type, set);
-			if(!resolved) {
+			if (!resolved) {
 				type = compiler.compileText("this." + text);
 				populateCompletionsFromType(type, set);
 			}
@@ -382,12 +379,12 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	@Override
 	public String getAlreadyEnteredText(JTextComponent comp) {
 		String text = super.getAlreadyEnteredText(comp);
-		if(text != null) {
+		if (text != null) {
 			int charIndex = JavaScriptHelper.findIndexOfFirstOpeningBracket(text);
 			text = text.substring(charIndex);
 			int sqIndex = JavaScriptHelper.findIndexOfFirstOpeningSquareBracket(text);
 			text = text.substring(sqIndex).trim();
-			if(charIndex > 0 || sqIndex > 0) {
+			if (charIndex > 0 || sqIndex > 0) {
 				text = JavaScriptHelper.trimFromLastParam(text);
 				Logger.log("SourceCompletionProvider:getAlreadyEnteredText()::afterTrim " + text);
 			}
@@ -572,13 +569,11 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 		return preProcessing != null;
 	}
 
-	public JavaScriptEngine getJavaScriptEngine()
-	{
+	public JavaScriptEngine getJavaScriptEngine() {
 		return engine;
 	}
 
-	public void setJavaScriptEngine(JavaScriptEngine engine)
-	{
+	public void setJavaScriptEngine(JavaScriptEngine engine) {
 		this.engine = engine;
 	}
 
@@ -587,32 +582,27 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	}
 
 
-	public boolean isXMLSupported()
-	{
+	public boolean isXMLSupported() {
 		return xmlSupported;
 	}
 
-	public void setXMLSupported(boolean xmlSupported)
-	{
+	public void setXMLSupported(boolean xmlSupported) {
 		this.xmlSupported = xmlSupported;
 	}
 
 
-	public void setSelf(String self)
-	{
+	public void setSelf(String self) {
 		this.self = self;
 	}
 
-	public void parseDocument(int dot)
-	{
+	public void parseDocument(int dot) {
 		AstRoot ast = this.parent.getASTRoot();
 		Set<Completion> set = new HashSet<>();
 		variableResolver.resetLocalVariables();
 		iterateAstRoot(ast, set, "", dot, typeDeclarationOptions);
 	}
 
-	public TypeDeclarationFactory getTypesFactory()
-	{
+	public TypeDeclarationFactory getTypesFactory() {
 		return engine.getTypesFactory();
 	}
 
@@ -626,19 +616,20 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 	// TODO remove
 	public void debugCodeBlock(CodeBlock block, int tab) {
-		System.out.println();
+		LOG.log(System.Logger.Level.INFO, "");
 		tab++;
 		if (block != null) {
+			StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < tab; i++) {
-				System.out.print("\t");
+				sb.append("  ");
 			}
-			System.out.print("Start: " + block.getStartOffset() + " end:"
-					+ block.getEndOffset());
+			sb.append("Start: ").append(block.getStartOffset()).append(" end:").append(block.getEndOffset());
 			for (int ii = 0; ii < block.getVariableDeclarationCount(); ii++) {
 				JavaScriptVariableDeclaration vd = block
 						.getVariableDeclaration(ii);
-				System.out.print(" " + vd.getName() + " ");
+				sb.append(" ").append(vd.getName()).append(" ");
 			}
+			LOG.log(System.Logger.Level.INFO, sb.toString());
 			for (int i = 0; i < block.getChildCodeBlockCount(); i++) {
 				debugCodeBlock(block.getChildCodeBlock(i), tab);
 			}

@@ -111,7 +111,11 @@ public abstract class JSDate implements JSDateFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public static JSNumber UTC(JSNumber year, JSNumber month, JSNumber day, JSNumber hour, JSNumber min, JSNumber sec, JSNumber ms){return null;}
+   @SuppressWarnings("checkstyle:MethodName") // Matches the casing in JS
+	public static JSNumber UTC(JSNumber year, JSNumber month, JSNumber day, JSNumber hour, JSNumber min,
+							   JSNumber sec, JSNumber ms) {
+		return null;
+	}
 
 
 	/**
@@ -125,6 +129,8 @@ public abstract class JSDate implements JSDateFunctions {
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
-	public static JSNumber parse(JSString string){return null;}
+	public static JSNumber parse(JSString string) {
+		return null;
+	}
 
 }

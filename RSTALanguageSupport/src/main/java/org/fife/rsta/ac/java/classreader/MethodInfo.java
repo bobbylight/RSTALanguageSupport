@@ -180,7 +180,7 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 		List<String> paramTypeList = new ArrayList<>();
 		String type;
 
-		while (paramDescriptors.length()>0) {
+		while (!paramDescriptors.isEmpty()) {
 
 			// Can't do lastIndexOf() as there may be > 1 array parameter
 			// in the descriptors.

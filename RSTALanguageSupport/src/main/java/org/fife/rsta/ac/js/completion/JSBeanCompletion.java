@@ -99,8 +99,7 @@ public class JSBeanCompletion extends VariableCompletion implements
 		return methodData.getEnclosingClassName(fullyQualified);
 	}
 
-	public JSMethodData getMethodData()
-	{
+	public JSMethodData getMethodData() {
 		return methodData;
 	}
 
@@ -112,7 +111,7 @@ public class JSBeanCompletion extends VariableCompletion implements
 		if (memberIsGetMethod || memberIsIsMethod || memberIsSetMethod) {
 			// Double check name component.
 			String nameComponent = name.substring(memberIsIsMethod ? 2 : 3);
-			if (nameComponent.length() == 0)
+			if (nameComponent.isEmpty())
 				return name; // return name
 
 			// Make the bean property name.

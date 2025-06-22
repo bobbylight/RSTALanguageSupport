@@ -17,7 +17,7 @@ package org.fife.rsta.ac.js;
  * @author Robert Futrell
  * @version 1.0
  */
-public class Util {
+public final class Util {
 
 	/**
 	 * Private constructor to prevent instantiation.

@@ -15,11 +15,11 @@ public abstract class JavaScriptResolver {
 	protected SourceCompletionProvider provider;
 
 	/**
-	 * Base JavaScriptResolver
+	 * Base JavaScriptResolver.
+	 *
 	 * @param provider SourceCompletionProvider
 	 */
-	public JavaScriptResolver(SourceCompletionProvider provider)
-	{
+	public JavaScriptResolver(SourceCompletionProvider provider) {
 		this.provider = provider;
 	}
 
@@ -45,18 +45,21 @@ public abstract class JavaScriptResolver {
 	 * "Hello World".length; //resolve as a Number
 	 *
 	 * @param text to compile and resolve
+	 * @return The type.
 	 */
 	public abstract JavaScriptType compileText(String text) throws IOException;
 
 	/**
-	 * Resolve node type to TypeDeclaration
+	 * Resolve node type to TypeDeclaration.
+	 *
 	 * @param node AstNode to resolve
 	 * @return TypeDeclaration for node or null if not found.
 	 */
 	protected abstract TypeDeclaration resolveNativeType(AstNode node);
 
 	/**
-	 * Get lookup string for function completions
+	 * Get lookup string for function completions.
+	 *
 	 * @param method JSMethodData holding method information
 	 * @param name name of method
 	 * @return The lookup text.
@@ -64,7 +67,8 @@ public abstract class JavaScriptResolver {
 	public abstract String getLookupText(JSMethodData method, String name);
 
 	/**
-	 * Returns same string format as {@link #getLookupText(JSMethodData, String)} but from AstNode Function
+	 * Returns same string format as {@link #getLookupText(JSMethodData, String)} but from AstNode Function.
+	 *
 	 * @param call
 	 * @param provider
 	 * @return The function name.

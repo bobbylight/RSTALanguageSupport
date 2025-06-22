@@ -30,7 +30,7 @@ public abstract class JS5Array extends JSArray implements JS5ArrayFunctions {
 	 *
 	 * @constructor
 	 * @extends Object
-	 * @param size The desired number of elements in the array. The returned value has its <b>length</b> field set to <b><i>size</b></i>
+	 * @param size The desired number of elements in the array. The returned value has its <b>length</b> field set to {@code size}
 	 * @since Standard ECMA-262 3rd. Edition
 	 * @since Level 2 Document Object Model Core Definition.
 	 */
@@ -55,12 +55,14 @@ public abstract class JS5Array extends JSArray implements JS5ArrayFunctions {
 	 * <b>function isArray(o)</b> test whether argument is an array.
 	 *
 	 * @param o object to test.
-	 * @returns <b><i>true</b></i> if object is of type array, otherwise <b><i>false</b></i>.
+	 * @returns {code true} if object is of type array, otherwise {code false}.
 	 * @memberOf Array
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma5.JS5Array Array
 	 * @since Standard ECMA-262 5th. Edition
 	 */
-	public static JSBoolean isArray(JS5Object o) {return null;}
+	public static JSBoolean isArray(JS5Object o) {
+		return null;
+	}
 
 
 }

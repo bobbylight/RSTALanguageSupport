@@ -24,8 +24,7 @@ public class JSMethodData {
 	private JarManager jarManager;
 	private ArrayList<String> paramNames;
 
-	public JSMethodData(MethodInfo info, JarManager jarManager)
-	{
+	public JSMethodData(MethodInfo info, JarManager jarManager) {
 		this.info = info;
 		this.jarManager = jarManager;
 	}
@@ -48,8 +47,7 @@ public class JSMethodData {
 
 		//try the method next
 		Method method = getMethod();
-		if(method != null)
-		{
+		if (method != null) {
 			name = method.getParameter(index).getName();
 		}
 
@@ -110,10 +108,8 @@ public class JSMethodData {
 
 	}
 
-	public String getParameterType(String[] paramTypes, int index, CompletionProvider provider)
-	{
-		if(paramTypes != null && index < paramTypes.length)
-		{
+	public String getParameterType(String[] paramTypes, int index, CompletionProvider provider) {
+		if (paramTypes != null && index < paramTypes.length) {
 			return ((SourceCompletionProvider) provider).getTypesFactory().convertJavaScriptType(paramTypes[index], true);
 		}
 		return null;
@@ -142,8 +138,7 @@ public class JSMethodData {
 	}
 
 
-	public Method getMethod()
-	{
+	public Method getMethod() {
 		ClassFile cf = info.getClassFile();
 		SourceLocation loc = jarManager.getSourceLocForClass(
 				cf.getClassName(true));
@@ -186,7 +181,7 @@ public class JSMethodData {
 		if (cu!=null) {
 
 			Iterator<TypeDeclaration> i = cu.getTypeDeclarationIterator();
-			for (; i.hasNext(); ) {
+			while (i.hasNext()) {
 
 				TypeDeclaration td = i.next();
 				String typeName = td.getName();
@@ -198,7 +193,7 @@ public class JSMethodData {
 					// parameters we're looking for.  99% of the time, there
 					// will only be 1, the method we're looking for.
 					List<Method> contenders = null;
-					for (Iterator<Member> j=td.getMemberIterator(); j.hasNext(); ) {
+					for (Iterator<Member> j=td.getMemberIterator(); j.hasNext();) {
 						Member member = j.next();
 						if (member instanceof Method &&
 								member.getName().equals(info.getName())) {
@@ -259,23 +254,19 @@ public class JSMethodData {
 
 	}
 
-	public MethodInfo getMethodInfo()
-	{
+	public MethodInfo getMethodInfo() {
 		return info;
 	}
 
-	public String getType(boolean qualified)
-	{
+	public String getType(boolean qualified) {
 		return info.getReturnTypeString(qualified);
 	}
 
-	public int getParameterCount()
-	{
+	public int getParameterCount() {
 		return info.getParameterCount();
 	}
 
-	public boolean isStatic()
-	{
+	public boolean isStatic() {
 		return info.isStatic();
 	}
 

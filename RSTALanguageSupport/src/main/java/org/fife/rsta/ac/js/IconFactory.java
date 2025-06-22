@@ -26,7 +26,7 @@ import org.fife.ui.autocomplete.EmptyIcon;
  * @author Robert Futrell
  * @version 1.0
  */
-public class IconFactory {
+public final class IconFactory {
 
 	public static final String FUNCTION_ICON = "function";
 	public static final String LOCAL_VARIABLE_ICON = "local_variable";

@@ -87,14 +87,14 @@ public interface WindowFunctions extends JS5ObjectFunctions {
 	/**
 	 * function open(URL, name, specs, replace) Opens a new browser window
 	 *
-	 * @param URL
+	 * @param url
 	 * @param name
 	 * @param specs
 	 * @param replace
 	 * @memberOf  Window
 	 * @returns opened Window object
 	 */
-	Window open(JSString URL, JSString name, JSString specs, JSBoolean replace);
+	Window open(JSString url, JSString name, JSString specs, JSBoolean replace);
 
 	/**
 	 * function print() Prints the content of the current window

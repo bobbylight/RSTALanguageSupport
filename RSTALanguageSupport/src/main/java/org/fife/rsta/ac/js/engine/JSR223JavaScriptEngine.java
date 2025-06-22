@@ -23,7 +23,7 @@ public static final String JSR223_ENGINE = "JSR223";
 
 	@Override
 	public JavaScriptTypesFactory getJavaScriptTypesFactory(SourceCompletionProvider provider) {
-		if(jsFactory == null)
+		if (jsFactory == null)
 			jsFactory = new JSR223JavaScriptTypesFactory(provider.getTypesFactory());
 		return jsFactory;
 	}

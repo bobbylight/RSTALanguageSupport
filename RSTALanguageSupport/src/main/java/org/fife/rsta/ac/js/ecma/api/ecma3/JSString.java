@@ -70,5 +70,7 @@ public abstract class JSString implements JSStringFunctions {
      * @since Standard ECMA-262 3rd. Edition
      * @since Level 2 Document Object Model Core Definition.
      */
-    public static JSString fromCharCode(JSNumber charCode){return null;}
+    public static JSString fromCharCode(JSNumber charCode) {
+		return null;
+	}
 }

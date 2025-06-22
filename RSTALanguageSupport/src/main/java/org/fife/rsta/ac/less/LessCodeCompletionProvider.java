@@ -57,7 +57,7 @@ class LessCodeCompletionProvider extends PropertyValueCompletionProvider {
 
 		boolean modified = false;
 
-		if (alreadyEntered != null && alreadyEntered.length() > 0 &&
+		if (alreadyEntered != null && !alreadyEntered.isEmpty() &&
 				alreadyEntered.charAt(0) == '@') {
 			addLessVariableCompletions(completions, comp, alreadyEntered);
 			modified = true;

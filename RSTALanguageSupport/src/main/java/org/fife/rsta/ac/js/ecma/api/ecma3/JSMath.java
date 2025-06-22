@@ -98,7 +98,9 @@ public abstract class JSMath {
      * @since   Standard ECMA-262 3rd. Edition
      * @since   Level 2 Document Object Model Core Definition.
     */
-   public static JSNumber abs(JSNumber x){return null;}
+   public static JSNumber abs(JSNumber x) {
+	   return null;
+   }
 
    /**
      * <b>function acos(x)</b> compute an arccosine
@@ -111,7 +113,9 @@ public abstract class JSMath {
      * @since   Standard ECMA-262 3rd. Edition
      * @since   Level 2 Document Object Model Core Definition.
     */
-   public static JSNumber acos(JSNumber x){return null;}
+   public static JSNumber acos(JSNumber x) {
+	   return null;
+   }
 
    /**
      * <b>function asin(x)</b> compute an arcsine
@@ -124,7 +128,9 @@ public abstract class JSMath {
      * @since   Standard ECMA-262 3rd. Edition
      * @since   Level 2 Document Object Model Core Definition.
     */
-   public static JSNumber asin(JSNumber x){return null;}
+   public static JSNumber asin(JSNumber x) {
+	   return null;
+   }
 
    /**
      * <b>function atan(x)</b> compute an arctangent
@@ -137,7 +143,9 @@ public abstract class JSMath {
      * @since   Standard ECMA-262 3rd. Edition
      * @since   Level 2 Document Object Model Core Definition.
     */
-   public static JSNumber atan(JSNumber x){return null;}
+   public static JSNumber atan(JSNumber x) {
+	   return null;
+   }
 
    /**
      * <b>function atan2(x,y)</b> compute the angle from the X axis to a point.
@@ -151,7 +159,9 @@ public abstract class JSMath {
      * @since   Standard ECMA-262 3rd. Edition
      * @since   Level 2 Document Object Model Core Definition.
     */
-   public static JSNumber atan2(JSNumber y, JSNumber x){return null;}
+   public static JSNumber atan2(JSNumber y, JSNumber x) {
+	   return null;
+   }
 
    /**
      * <b>function ceil(x)</b> round a number up.
@@ -171,7 +181,9 @@ public abstract class JSMath {
      * @since   Standard ECMA-262 3rd. Edition
      * @since   Level 2 Document Object Model Core Definition.
     */
-   public static JSNumber ceil(JSNumber x){return null;}
+   public static JSNumber ceil(JSNumber x) {
+	   return null;
+   }
 
    /**
      * <b>function cos(x)</b> compute a cosine.
@@ -184,7 +196,9 @@ public abstract class JSMath {
      * @since   Standard ECMA-262 3rd. Edition
      * @since   Level 2 Document Object Model Core Definition.
     */
-   public static JSNumber cos(JSNumber x){return null;}
+   public static JSNumber cos(JSNumber x) {
+	   return null;
+   }
 
    /**
      * <b>function exp(x)</b> compute E<sup>x</sup>.
@@ -197,7 +211,9 @@ public abstract class JSMath {
      * @since   Standard ECMA-262 3rd. Edition
      * @since   Level 2 Document Object Model Core Definition.
     */
-   public static JSNumber exp(JSNumber x){return null;}
+   public static JSNumber exp(JSNumber x) {
+	   return null;
+   }
 
    /**
      * <b>function floor(x)</b> round a number down.
@@ -217,7 +233,9 @@ public abstract class JSMath {
      * @since   Standard ECMA-262 3rd. Edition
      * @since   Level 2 Document Object Model Core Definition.
     */
-   public static JSNumber floor(JSNumber x){return null;}
+   public static JSNumber floor(JSNumber x) {
+	   return null;
+   }
 
    /**
      * <b>function log(x)</b> compute a natural logarithm.
@@ -230,7 +248,9 @@ public abstract class JSMath {
      * @since   Standard ECMA-262 3rd. Edition
      * @since   Level 2 Document Object Model Core Definition.
     */
-   public static JSNumber log(JSNumber x){return null;}
+   public static JSNumber log(JSNumber x) {
+	   return null;
+   }
 
    /**
      * <b>function max(args)</b> Return the largest argument.
@@ -243,7 +263,9 @@ public abstract class JSMath {
      * @since   Standard ECMA-262 3rd. Edition
      * @since   Level 2 Document Object Model Core Definition.
     */
-   public static JSNumber max(JSNumber args){return null;}
+   public static JSNumber max(JSNumber args) {
+	   return null;
+   }
 
    /**
      * <b>function min(args)</b> return the smallest argument.
@@ -256,7 +278,9 @@ public abstract class JSMath {
      * @since   Standard ECMA-262 3rd. Edition
      * @since   Level 2 Document Object Model Core Definition.
     */
-   public static JSNumber min(JSNumber args){return null;}
+   public static JSNumber min(JSNumber args) {
+	   return null;
+   }
 
    /**
      * <b>function pow(x,y)</b> compute X<sub>y</sub>
@@ -270,7 +294,9 @@ public abstract class JSMath {
      * @since   Standard ECMA-262 3rd. Edition
      * @since   Level 2 Document Object Model Core Definition.
     */
-   public static JSNumber pow(JSNumber x, JSNumber y){return null;}
+   public static JSNumber pow(JSNumber x, JSNumber y) {
+	   return null;
+   }
 
    /**
      * function random() return a pseudorandom number
@@ -282,7 +308,9 @@ public abstract class JSMath {
      * @since   Standard ECMA-262 3rd. Edition
      * @since   Level 2 Document Object Model Core Definition.
     */
-   public static JSNumber random(){return null;}
+   public static JSNumber random() {
+	   return null;
+   }
 
    /**
      * <b>function round(x)</b> round to the nearest integer.
@@ -295,7 +323,9 @@ public abstract class JSMath {
      * @since   Standard ECMA-262 3rd. Edition
      * @since   Level 2 Document Object Model Core Definition.
     */
-   public static JSNumber round(JSNumber x){return null;}
+   public static JSNumber round(JSNumber x) {
+	   return null;
+   }
 
    /**
      * <b>function sin(x)</b> compute a sine.
@@ -308,7 +338,9 @@ public abstract class JSMath {
      * @since   Standard ECMA-262 3rd. Edition
      * @since   Level 2 Document Object Model Core Definition.
     */
-   public static JSNumber sin(JSNumber x){return null;}
+   public static JSNumber sin(JSNumber x) {
+	   return null;
+   }
 
    /**
      * <b>function sqrt(x)</b> compute a square root.
@@ -321,7 +353,9 @@ public abstract class JSMath {
      * @since   Standard ECMA-262 3rd. Edition
      * @since   Level 2 Document Object Model Core Definition.
     */
-   public static JSNumber sqrt(JSNumber x){return null;}
+   public static JSNumber sqrt(JSNumber x) {
+	   return null;
+   }
 
    /**
      * <b>function tan(x)</b> compute a tangent.
@@ -334,7 +368,9 @@ public abstract class JSMath {
      * @since   Standard ECMA-262 3rd. Edition
      * @since   Level 2 Document Object Model Core Definition.
     */
-   public static JSNumber tan(JSNumber x){return null;}
+   public static JSNumber tan(JSNumber x) {
+	   return null;
+   }
 
 
 }

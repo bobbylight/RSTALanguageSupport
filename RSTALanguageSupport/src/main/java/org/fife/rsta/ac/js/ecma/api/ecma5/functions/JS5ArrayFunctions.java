@@ -63,7 +63,7 @@ public interface JS5ArrayFunctions extends JS5ObjectFunctions, JSArrayFunctions 
 	 * a.forEach(function(x,i,a){a[i]++;}); //a is now [2,3,4]
 	 * </pre>
 	 * @param f The function to invoke for each element of <b>array</b>
-	 * @param o An optional value on which <b><i>f</b></i> is invoked
+	 * @param o An optional value on which {@code f} is invoked
 	 * @memberOf Array
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma5.JS5Array Array
 	 * @since Standard ECMA-262 5th. Edition

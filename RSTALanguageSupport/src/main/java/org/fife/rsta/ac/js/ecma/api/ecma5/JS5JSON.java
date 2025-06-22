@@ -17,7 +17,9 @@ public abstract class JS5JSON  {
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma5.JS5JSON JSON
 	 * @since Standard ECMA-262 5th. Edition
 	 */
-	public static JS5Object parse(JS5String s, JS5Function reviver){return null;}
+	public static JS5Object parse(JS5String s, JS5Function reviver) {
+		return null;
+	}
 
 	/**
 	 * <b>function stringify(o, filter, indent)</b> serialize an object, array or primitive value.
@@ -30,5 +32,7 @@ public abstract class JS5JSON  {
 	 * @see org.fife.rsta.ac.js.ecma.api.ecma5.JS5JSON JSON
 	 * @since Standard ECMA-262 5th. Edition
 	 */
-	public static JS5Object stringify(JS5Object o, JS5Function filter, JS5Object indent){return null;}
+	public static JS5Object stringify(JS5Object o, JS5Function filter, JS5Object indent) {
+		return null;
+	}
 }

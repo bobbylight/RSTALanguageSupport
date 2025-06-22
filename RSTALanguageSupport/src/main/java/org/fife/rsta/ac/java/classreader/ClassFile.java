@@ -221,8 +221,7 @@ public class ClassFile implements AccessFlags {
 		}
 
 		// cpi is never null
-		throw new InternalError("Expected ConstantClassInfo, found " +
-								cpi.getClass().toString());
+		throw new InternalError("Expected ConstantClassInfo, found " + cpi.getClass());
 
 	}
 

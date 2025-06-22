@@ -6,8 +6,7 @@ import org.fife.rsta.ac.js.ast.type.TypeDeclarationFactory;
 
 public class JSR223JavaScriptTypesFactory extends JavaScriptTypesFactory {
 
-	public JSR223JavaScriptTypesFactory(TypeDeclarationFactory typesFactory)
-	{
+	public JSR223JavaScriptTypesFactory(TypeDeclarationFactory typesFactory) {
 		super(typesFactory);
 	}
 

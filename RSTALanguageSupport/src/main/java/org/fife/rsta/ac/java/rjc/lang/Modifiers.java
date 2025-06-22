@@ -186,7 +186,7 @@ public class Modifiers {
 		StringBuilder sb = new StringBuilder();
 		for (int i=0; i<annotations.size(); i++) {
 			sb.append(annotations.get(i).toString());
-			if (i<annotations.size()-1 || modifiers.size()>0) {
+			if (i<annotations.size()-1 || !modifiers.isEmpty()) {
 				sb.append(' ');
 			}
 		}

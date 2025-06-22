@@ -11,7 +11,7 @@ import org.fife.rsta.ac.js.resolver.JavaScriptResolver;
 
 
 /**
- * JavaScript Engine Interface used for resolving Types
+ * JavaScript Engine Interface used for resolving Types.
  * SourceCompletionProvider needs a JavaScriptEngine for creating the following:
  * <ul>
  *  <li>JavaScriptResolver
@@ -43,6 +43,7 @@ public abstract class JavaScriptEngine {
 	public abstract JavaScriptResolver getJavaScriptResolver(SourceCompletionProvider provider);
 
 	/**
+	 * Returns the types factory.
 	 *
 	 * @param provider SourceCompletionProvider
 	 * @return JavaScriptTypesFactory that holds a cache of JavaScriptType
@@ -50,6 +51,7 @@ public abstract class JavaScriptEngine {
 	public abstract JavaScriptTypesFactory getJavaScriptTypesFactory(SourceCompletionProvider provider);
 
 	/**
+	 * Returns the parser.
 	 *
 	 * @param provider SourceCompletionProvider
 	 * @param dot caret position
@@ -57,6 +59,7 @@ public abstract class JavaScriptEngine {
 	 * @return JavaScriptParser that converts AstRoot to CodeBlock
 	 *
 	 */
-	public abstract JavaScriptParser getParser(SourceCompletionProvider provider, int dot, TypeDeclarationOptions options);
+	public abstract JavaScriptParser getParser(SourceCompletionProvider provider, int dot,
+											   TypeDeclarationOptions options);
 
 }

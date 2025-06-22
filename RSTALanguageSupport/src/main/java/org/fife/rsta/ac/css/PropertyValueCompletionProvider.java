@@ -154,7 +154,7 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 
 
 	private static String removeVendorPrefix(String text) {
-		if (text.length()>0 && text.charAt(0)=='-') {
+		if (!text.isEmpty() && text.charAt(0)=='-') {
 			Matcher m = VENDOR_PREFIXES.matcher(text);
 			if (m.find()) {
 				text = text.substring(m.group().length());
@@ -414,7 +414,7 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 		String line;
 		try {
 			while ((line=r.readLine())!=null) {
-				if (line.length()>0 && line.charAt(0)!='#') {
+				if (!line.isEmpty() && line.charAt(0)!='#') {
 					parsePropertyValueCompletionLine(line);
 				}
 			}

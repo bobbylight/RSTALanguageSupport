@@ -27,9 +27,8 @@ public class JSFieldCompletion extends VariableCompletion implements
 		setRelevance(fieldData);
 	}
 
-	private void setRelevance(JSFieldData data)
-	{
-		if(data.isStatic()) {
+	private void setRelevance(JSFieldData data) {
+		if (data.isStatic()) {
 			setRelevance(STATIC_FIELD_RELEVANCE);
 		} else  {
 			setRelevance(GLOBAL_VARIABLE_RELEVANCE);
@@ -97,11 +96,10 @@ public class JSFieldCompletion extends VariableCompletion implements
 
 	@Override
 	public boolean equals(Object obj) {
-		if(obj == this) {
+		if (obj == this) {
 			return true;
 		}
-		if(obj instanceof JSFieldCompletion)
-		{
+		if (obj instanceof JSFieldCompletion) {
 			JSFieldCompletion jsComp = (JSFieldCompletion) obj;
 			return getLookupName().equals(jsComp.getLookupName());
 		}

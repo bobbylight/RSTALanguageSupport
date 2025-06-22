@@ -36,11 +36,9 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 			Token t = result.token;
 			boolean function = result.function;
 			String name = t.getLexeme();
-			if(name != null && name.length() > 0)
-			{
+			if (name != null && !name.isEmpty()) {
 				//only re-parse the document if there is a character that could potentially be a variable or function
-				if(name.length() > 1 || (name.length() == 1 && Character.isJavaIdentifierPart(name.charAt(0))))
-				{
+				if (name.length() > 1 || (name.length() == 1 && Character.isJavaIdentifierPart(name.charAt(0)))) {
 					language.reparseDocument(offs);
 				}
 			}
@@ -56,7 +54,7 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 					String lookup = getLookupNameForFunction(textArea, offs, name);
 					// lookup Function based on the name
 					dec = variableResolver.findFunctionDeclaration(lookup, findLocal, findPreprocessed);
-					if(dec == null) {
+					if (dec == null) {
 						dec = variableResolver.findFunctionDeclarationByFunctionName(name, findLocal, findPreprocessed);
 					}
 				}
@@ -73,8 +71,9 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 	/**
 	 * @return LinkGeneratorResult based on the JavaScriptDeclaration and the position
 	 */
-	protected LinkGeneratorResult createSelectedRegionResult(RSyntaxTextArea textArea, Token t, JavaScriptDeclaration dec) {
-		if(dec.getTypeDeclarationOptions() != null && !dec.getTypeDeclarationOptions().isSupportsLinks()) {
+	protected LinkGeneratorResult createSelectedRegionResult(RSyntaxTextArea textArea, Token t,
+															 JavaScriptDeclaration dec) {
+		if (dec.getTypeDeclarationOptions() != null && !dec.getTypeDeclarationOptions().isSupportsLinks()) {
 			return null;
 		}
 		return new SelectRegionLinkGeneratorResult(textArea, t.getOffset(), dec.getStartOffSet(), dec.getEndOffset());
@@ -142,32 +141,32 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 		boolean params = false;
 		int count = 0;
 		StringBuilder sb = new StringBuilder();
-		for(int i=0; i<function.length(); i++) {
+		for (int i=0; i<function.length(); i++) {
 			char ch = function.charAt(i);
 
-			if(ch == '(') {
+			if (ch == '(') {
 				params = true;
 				count = 0;
 				sb.append(ch);
 			}
 
-			else if(ch == ')') {
+			else if (ch == ')') {
 				sb.append(ch);
 				break;
 			}
 
-			else if(ch == ',') {
+			else if (ch == ',') {
 				count = 0;
 				sb.append(ch);
 				continue;
 			}
 
-			else if(params && count == 0) {
+			else if (params && count == 0) {
 				sb.append('p');
 				count++;
 			}
 
-			else if(!params) {
+			else if (!params) {
 				sb.append(ch);
 			}
 
@@ -218,8 +217,7 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 						Token next = wrapToken(RSyntaxUtilities
 								.getNextImportantToken(t.getNextToken(),
 										textArea, line));
-						if (next != null
-								&& next.isSingleChar(Token.SEPARATOR, '(')) {
+						if (next != null && next.isSingleChar(Token.SEPARATOR, '(')) {
 							isFunction = true;
 						}
 
@@ -270,7 +268,7 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 	 * The result of checking whether a region of code under the mouse is
 	 * <em>possibly</em> link-able.
 	 */
-	private static class IsLinkableCheckResult {
+	private static final class IsLinkableCheckResult {
 
 		/**
 		 * The token under the mouse position.

@@ -127,8 +127,7 @@ public class JSVariableCompletion extends VariableCompletion implements
 
         SourceCompletionProvider scp = (SourceCompletionProvider)getProvider();
         ClassFile cf = scp.getJavaScriptTypesFactory().getClassFile(scp.getJarManager(), JavaScriptHelper.createNewTypeDeclaration(getType(true)));
-        if(cf != null)
-        {
+        if (cf != null) {
             SourceLocation  loc = scp.getSourceLocForClass(cf.getClassName(true));
 
             if (loc!=null) {

@@ -2,6 +2,7 @@ package org.fife.rsta.ac.js.ast.jsType;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Set;
 
 import org.fife.rsta.ac.java.JarManager;
 import org.fife.rsta.ac.java.classreader.ClassFile;
@@ -24,8 +25,7 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 	private LinkedHashSet<String> importClasses = new LinkedHashSet<>();
 	private LinkedHashSet<String> importPackages = new LinkedHashSet<>();
 
-	public RhinoJavaScriptTypesFactory(TypeDeclarationFactory typesFactory)
-	{
+	public RhinoJavaScriptTypesFactory(TypeDeclarationFactory typesFactory) {
 		super(typesFactory);
 	}
 
@@ -38,31 +38,27 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 		importPackages.add(packageName);
 	}
 
-	public void mergeImports(HashSet<String> packages, HashSet<String> classes)
-	{
+	public void mergeImports(Set<String> packages, Set<String> classes) {
 		mergeImports(packages, importPackages, true);
 		mergeImports(classes, importClasses, false);
 	}
 
-	private void mergeImports(HashSet<String> newImports, LinkedHashSet<String> oldImports, boolean packages)
-	{
+	private void mergeImports(Set<String> newImports, LinkedHashSet<String> oldImports, boolean packages) {
 		//iterate through the old imports and check whether the import exists in new. If not then add to remove and remove all types for that package/class
 		HashSet<String> remove = new HashSet<>();
 		for (String obj : oldImports) {
-			if(!newImports.contains(obj)) {
+			if (!newImports.contains(obj)) {
 				remove.add(obj);
 			}
 		}
 
 
 		//now iterate through the remove list and remove imports not needed
-		if(!remove.isEmpty())
-		{
+		if (!remove.isEmpty()) {
 			HashSet<TypeDeclaration> removeTypes = new HashSet<>();
 			for (String name : remove) {
 				for (TypeDeclaration dec : cachedTypes.keySet()) {
-					if((packages && dec.getQualifiedName().startsWith(name)) || (!packages && dec.getQualifiedName().equals(name)))
-					{
+					if ((packages && dec.getQualifiedName().startsWith(name)) || (!packages && dec.getQualifiedName().equals(name))) {
 						removeAllTypes(cachedTypes.get(dec));
 						removeTypes.add(dec);
 					}
@@ -71,8 +67,7 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 			cachedTypes.keySet().removeAll(removeTypes);
 		}
 
-		if(canClearCache(newImports, oldImports))
-		{
+		if (canClearCache(newImports, oldImports)) {
 			//now clear and swap
 			oldImports.clear();
 			//remove types
@@ -88,13 +83,13 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 	 * @param oldImports
 	 * @return
 	 */
-	private boolean canClearCache(HashSet<String> newImports, LinkedHashSet<String> oldImports) {
-		if(newImports.size() != oldImports.size()) {
+	private boolean canClearCache(Set<String> newImports, LinkedHashSet<String> oldImports) {
+		if (newImports.size() != oldImports.size()) {
 			return true;
 		}
 
 		for (String im : oldImports) {
-			if(!newImports.contains(im)) {
+			if (!newImports.contains(im)) {
 				return true;
 			}
 		}
@@ -102,15 +97,13 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 		return false;
 	}
 
-	public void clearImportCache()
-	{
+	public void clearImportCache() {
 		importClasses.clear();
 		importPackages.clear();
 		clearAllImportTypes();
 	}
 
-	private void clearAllImportTypes()
-	{
+	private void clearAllImportTypes() {
 		HashSet<TypeDeclaration> removeTypes = new HashSet<>();
 		//clear all non ECMA (JavaScript types) for importPackage and importClass to work properly
         for (TypeDeclaration dec : cachedTypes.keySet()) {
@@ -126,13 +119,10 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 	 * Remove all TypeDeclarations from the TypeDeclarationFactory from the JavaScriptType and all it's extended classes
 	 * @param type
 	 */
-	private void removeAllTypes(JavaScriptType type)
-	{
-		if(type != null)
-		{
+	private void removeAllTypes(JavaScriptType type) {
+		if (type != null) {
 			typesFactory.removeType(type.getType().getQualifiedName());
-			if(type.getExtendedClasses().size() > 0)
-			{
+			if (!type.getExtendedClasses().isEmpty()) {
                 for (JavaScriptType extendedType : type.getExtendedClasses()) {
                     removeAllTypes(extendedType);
                 }
@@ -158,10 +148,8 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 		return file;
 	}
 
-	private String removePackagesFromType(String type)
-	{
-		if(type.startsWith(RhinoJavaScriptAstParser.PACKAGES))
-		{
+	private String removePackagesFromType(String type) {
+		if (type.startsWith(RhinoJavaScriptAstParser.PACKAGES)) {
 			return RhinoJavaScriptAstParser.removePackages(type);
 		}
 		return type;

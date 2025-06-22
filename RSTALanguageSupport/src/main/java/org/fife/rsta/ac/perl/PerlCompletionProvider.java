@@ -162,7 +162,7 @@ public class PerlCompletionProvider extends CCompletionProvider {
 
 		CompletionProvider p = getDefaultCompletionProvider();
 		String text = p.getAlreadyEnteredText(comp);
-		char firstChar = text.length()==0 ? 0 : text.charAt(0);
+		char firstChar = text.isEmpty() ? 0 : text.charAt(0);
 		if (firstChar!='$' && firstChar!='@' && firstChar!='%') {
 			return null;
 		}
@@ -173,7 +173,7 @@ public class PerlCompletionProvider extends CCompletionProvider {
 		recursivelyAddLocalVars(varCompletions, block, dot, firstChar);
 
 		// Get only those that match what's typed
-		if (varCompletions.size()>0) {
+		if (!varCompletions.isEmpty()) {
 			Completion from = new BasicCompletion(p, text);
 			Completion to = new BasicCompletion(p, text + '{');
 			varCompletions = varCompletions.subSet(from, to);

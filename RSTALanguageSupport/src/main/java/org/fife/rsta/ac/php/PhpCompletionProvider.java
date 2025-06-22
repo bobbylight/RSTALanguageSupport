@@ -101,7 +101,7 @@ public class PhpCompletionProvider extends HtmlCompletionProvider {
             if (startChar != 0) {
                 char endChar = handler.getParamEndChar();
                 String sep = handler.getParamSeparator();
-                if (endChar != 0 && sep != null && sep.length() > 0) { // Sanity
+                if (endChar != 0 && sep != null && !sep.isEmpty()) { // Sanity
                     setParameterizedCompletionParams(startChar, sep, endChar);
                 }
             }

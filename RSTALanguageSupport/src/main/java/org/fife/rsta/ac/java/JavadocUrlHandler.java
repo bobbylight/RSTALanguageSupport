@@ -332,7 +332,7 @@ public class JavadocUrlHandler implements ExternalURLHandler {
 							}
 							else { // Try methods second
 								List<MethodInfo> miList = cf.getMethodInfoByName(member, -1);
-								if (miList!=null && miList.size()>0) {
+								if (miList!=null && !miList.isEmpty()) {
 									MethodInfo mi = miList.get(0);// Just show the first if multiple
 									memberCompletion = new MethodCompletion(c.getProvider(), mi);
 								}
@@ -343,7 +343,7 @@ public class JavadocUrlHandler implements ExternalURLHandler {
 							String[] args = getArgs(member);
 							String methodName = member.substring(0, lparen);
 							List<MethodInfo> miList = cf.getMethodInfoByName(methodName, args.length);
-							if (miList!=null && miList.size()>0) {
+							if (miList!=null && !miList.isEmpty()) {
 								if (miList.size()>1) {
 									// TODO: Pick correct overload based on args
 									logError("Multiple overload support not yet implemented");

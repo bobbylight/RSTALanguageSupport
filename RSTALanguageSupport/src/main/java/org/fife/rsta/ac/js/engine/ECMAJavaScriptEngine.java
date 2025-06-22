@@ -20,7 +20,7 @@ public class ECMAJavaScriptEngine extends JavaScriptEngine {
 
 	@Override
 	public JavaScriptTypesFactory getJavaScriptTypesFactory(SourceCompletionProvider provider) {
-		if(jsFactory == null)
+		if (jsFactory == null)
 			jsFactory = JavaScriptTypesFactory.getDefaultJavaScriptTypesFactory(provider.getTypesFactory());
 
 		return jsFactory;

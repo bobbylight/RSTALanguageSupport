@@ -45,7 +45,7 @@ public class JSClassCompletion extends BasicCompletion implements JSCompletion {
 			return 0;
 		}
 		// Check for classes with same name, but in different packages
-		else if(c2.toString().equalsIgnoreCase(toString())) {
+		else if (c2.toString().equalsIgnoreCase(toString())) {
 			if (c2 instanceof JSClassCompletion) {
 				JSClassCompletion jsc2 = (JSClassCompletion) c2;
 				return getReplacementText().compareTo(jsc2.getReplacementText());
@@ -69,8 +69,7 @@ public class JSClassCompletion extends BasicCompletion implements JSCompletion {
 		if (lastDot > -1) {
 			return temp.substring(lastDot + 1);
 		}
-		if(temp.contains("new"))
-		{
+		if (temp.contains("new")) {
 			return "";
 		}
 
@@ -118,7 +117,7 @@ public class JSClassCompletion extends BasicCompletion implements JSCompletion {
 			CompilationUnit cu = Util.getCompilationUnitFromDisk(loc, cf);
 			if (cu!=null) {
 				Iterator<TypeDeclaration> i = cu.getTypeDeclarationIterator();
-				for (; i.hasNext(); ) {
+				while (i.hasNext()) {
 					TypeDeclaration td = i.next();
 					String typeName = td.getName();
 					// Avoid inner classes, etc.
@@ -163,8 +162,7 @@ public class JSClassCompletion extends BasicCompletion implements JSCompletion {
 		}
 		x = newX;
 
-		if(qualified)
-		{
+		if (qualified) {
 			s = " - ";
 			g.drawString(s, x, y);
 			x += fm.stringWidth(s);

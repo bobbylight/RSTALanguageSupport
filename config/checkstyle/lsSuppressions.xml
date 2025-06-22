@@ -6,11 +6,12 @@
 <suppressions>
     <suppress files=".*src[\\/]test[\\/].*" checks="[a-zA-Z0-9]*"/>
 
-    <!-- The JS classes currently use invalid Javadoc tags, as their Javadoc
+    <!-- The JS classes have a lot of issues, including using invalid Javadoc tags as their Javadoc
          is used to generate the JSDoc documentation for ES constructs.
-         For now just ignore everything for simplicity.
+         For now we're ignoring several issues that will take some time to address.
+         TODO: Remove these issues one by one.
     -->
-    <suppress files=".*src[\\/]main[\\/]java[\\/]org[\\/]fife[\\/]rsta[\\/]ac[\\/]js[\\/].*" checks="[a-zA-Z0-9]*"/>
+    <suppress files=".*src[\\/]main[\\/]java[\\/]org[\\/]fife[\\/]rsta[\\/]ac[\\/]js[\\/].*" checks="AvoidNestedBlocks|CommentsIndentation|ExplicitInitialization|IllegalType|JavadocContentLocation|JavadocTagContinuationIndentation|JavadocMethod|JavadocPackage|JavadocStyle|LineLength|MissingJavadocMethod|MissingJavadocType|NeedBraces|NonEmptyAtclauseDescription|OperatorWrap|RequireEmptyLineBeforeBlockTagGroup|StaticVariableName|VisibilityModifier"/>
 
     <!-- Lots of blocks are empty with "TODO" comments describing future implementations -->
     <suppress files=".*src[\\/]main[\\/]java[\\/]org[\\/]fife[\\/]rsta[\\/]ac[\\/].*" checks="EmptyBlock"/>

@@ -77,7 +77,7 @@ public final class ClassEnumerationReader {
 
                 // Skip blank lines and comments
                 line = line.trim();
-                if (line.length() == 0 || line.charAt(0) == '#') {
+                if (line.isEmpty() || line.charAt(0) == '#') {
                     continue;
                 }
 

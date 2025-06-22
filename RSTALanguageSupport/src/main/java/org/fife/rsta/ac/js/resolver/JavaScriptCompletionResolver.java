@@ -3,6 +3,7 @@ package org.fife.rsta.ac.js.resolver;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.fife.rsta.ac.java.classreader.ClassFile;
 import org.fife.rsta.ac.js.JavaScriptHelper;
@@ -46,7 +47,8 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 
 
 	/**
-	 * Standard ECMA JavaScript resolver
+	 * Standard ECMA JavaScript resolver.
+	 *
 	 * @param provider
 	 */
 	public JavaScriptCompletionResolver(SourceCompletionProvider provider) {
@@ -64,7 +66,8 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	 */
 	@Override
 	public JavaScriptType compileText(String text) {
-		CompilerEnvirons env = JavaScriptParser.createCompilerEnvironment(new JavaScriptParser.JSErrorReporter(), provider.getLanguageSupport());
+		CompilerEnvirons env = JavaScriptParser.createCompilerEnvironment(new JavaScriptParser.JSErrorReporter(),
+			provider.getLanguageSupport());
 
 		String parseText = JavaScriptHelper.removeLastDotFromText(text);
 
@@ -85,8 +88,9 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	@Override
 	public TypeDeclaration resolveParamNode(String text) {
 
-		if(text != null) {
-			CompilerEnvirons env = JavaScriptParser.createCompilerEnvironment(new JavaScriptParser.JSErrorReporter(), provider.getLanguageSupport());
+		if (text != null) {
+			CompilerEnvirons env = JavaScriptParser.createCompilerEnvironment(new JavaScriptParser.JSErrorReporter(),
+				provider.getLanguageSupport());
 
 			int charIndex = JavaScriptHelper.findIndexOfFirstOpeningBracket(text);
 			env.setRecoverFromErrors(true);
@@ -101,13 +105,15 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	}
 
 	/**
-	 * Resolve node type to TypeDeclaration. Called instead of #compileText(String text) when document is already parsed
+	 * Resolve node type to TypeDeclaration. Called instead of #compileText(String text) when document is already
+	 * parsed.
+	 *
 	 * @param node AstNode to resolve
 	 * @return TypeDeclaration for node or null if not found.
 	 */
 	@Override
 	public TypeDeclaration resolveNode(AstNode node) {
-		if(node == null) return provider.getTypesFactory().getDefaultTypeDeclaration();
+		if (node == null) return provider.getTypesFactory().getDefaultTypeDeclaration();
 		CompilerNodeVisitor visitor = new CompilerNodeVisitor(true);
 		node.visit(visitor);
 		return lastJavaScriptType != null ? lastJavaScriptType.getType()
@@ -115,17 +121,16 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	}
 
 	/**
-	 * Resolve node type to TypeDeclaration
+	 * Resolve node type to TypeDeclaration.
 	 * N.B called from <code>CompilerNodeVisitor.visit()</code>
 	 *
 	 * @param node AstNode to resolve
 	 * @return TypeDeclaration for node or null if not found.
 	 */
 	@Override
-	protected TypeDeclaration resolveNativeType(AstNode node)
-	{
+	protected TypeDeclaration resolveNativeType(AstNode node) {
 		TypeDeclaration dec = JavaScriptHelper.tokenToNativeTypeDeclaration(node, provider);
-		if(dec == null) {
+		if (dec == null) {
 			dec = testJavaStaticType(node);
 		}
 
@@ -147,7 +152,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	}
 
 	/**
-	 * Try to resolve the Token.NAME AstNode and return a TypeDeclaration
+	 * Try to resolve the Token.NAME AstNode and return a TypeDeclaration.
 	 * @param node node to resolve
 	 * @return TypeDeclaration if the name can be resolved as a Java Class else null
 	 */
@@ -158,8 +163,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 		if (testName != null) {
 			TypeDeclaration dec = JavaScriptHelper.getTypeDeclaration(testName, provider);
 
-			if(dec != null)
-			{
+			if (dec != null) {
 				ClassFile cf = provider.getJavaScriptTypesFactory().getClassFile(
 						provider.getJarManager(), dec);
 				if (cf != null) {
@@ -176,12 +180,10 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 	// TODO not sure how right this is, but is very tricky problem resolving
 	// complex completions
 
-	private class CompilerNodeVisitor implements NodeVisitor {
+	private final class CompilerNodeVisitor implements NodeVisitor {
 
 		private boolean ignoreParams;
-		private HashSet<AstNode> paramNodes = new HashSet<>();
-
-
+		private Set<AstNode> paramNodes = new HashSet<>();
 
 		private CompilerNodeVisitor(boolean ignoreParams) {
 			this.ignoreParams = ignoreParams;
@@ -194,8 +196,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 			Logger.log(JavaScriptHelper.convertNodeToSource(node));
 			Logger.log(node.shortName());
 
-			if(!validNode(node))
-			{
+			if (!validNode(node)) {
 				//invalid node found, set last completion invalid and stop processing
 				lastJavaScriptType = null;
 				return false;
@@ -209,9 +210,9 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 			TypeDeclaration dec;
 			//only resolve native type if last type is null
 			//otherwise it can be assumed that this is part of multi depth - e.g. "".length.toString()
-			if(lastJavaScriptType == null) {
+			if (lastJavaScriptType == null) {
 				dec = resolveNativeType(node);
-				if(dec == null && node.getType() == Token.NAME) {
+				if (dec == null && node.getType() == Token.NAME) {
 					lastJavaScriptType = null;
 					return false;
 				}
@@ -244,13 +245,12 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 					lastJavaScriptType = jsType;
 				}
 			}
-			else if(node instanceof FunctionCall)
-			{
+			else if (node instanceof FunctionCall) {
 				FunctionCall fn = (FunctionCall) node;
 				String lookupText = createLookupString(fn);
-				JavaScriptFunctionDeclaration funcDec = provider.getVariableResolver().findFunctionDeclaration(lookupText);
-				if(funcDec != null)
-				{
+				JavaScriptFunctionDeclaration funcDec = provider.getVariableResolver().
+					findFunctionDeclaration(lookupText);
+				if (funcDec != null) {
 					jsType = provider.getJavaScriptTypesFactory().getCachedType(
 							funcDec.getTypeDeclaration(), provider.getJarManager(), provider,
 							JavaScriptHelper.convertNodeToSource(node));
@@ -265,32 +265,28 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 			return true;
 		}
 
-		private boolean validNode(AstNode node)
-		{
-			switch(node.getType())
-			{
-				case Token.NAME: return ((Name) node).getIdentifier() != null && ((Name) node).getIdentifier().length() > 0;
+		private boolean validNode(AstNode node) {
+			switch (node.getType()) {
+				case Token.NAME: return ((Name) node).getIdentifier() != null &&
+					!((Name) node).getIdentifier().isEmpty();
 			}
 			return true;
 		}
 
-		private String createLookupString(FunctionCall fn)
-		{
+		private String createLookupString(FunctionCall fn) {
 			StringBuilder sb = new StringBuilder();
 			String name = "";
-			switch(fn.getTarget().getType())
-			{
+			switch (fn.getTarget().getType()) {
 				case Token.NAME : name = ((Name) fn.getTarget()).getIdentifier();
 				break;
 			}
 			sb.append(name);
 			sb.append("(");
 			Iterator<AstNode> i = fn.getArguments().iterator();
-			while (i.hasNext())
-			{
+			while (i.hasNext()) {
 				i.next();
 				sb.append("p");
-				if(i.hasNext())
+				if (i.hasNext())
 					sb.append(",");
 			}
 			sb.append(")");
@@ -299,14 +295,14 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 
 		/**
 		 * Test node to check whether to ignore resolving, this is for
-		 * parameters
+		 * parameters.
 		 *
 		 * @param node node to test
 		 * @return true to ignore
 		 */
 		private boolean ignore(AstNode node, boolean ignoreParams) {
 			switch (node.getType()) {
-				// ignore errors e.g. if statement - if(a. //no closing brace
+				// ignore errors e.g. if statement - if (a. //no closing brace
 				case Token.EXPR_VOID:
 				case Token.EXPR_RESULT:
 					return ((ExpressionStatement) node).getExpression()
@@ -333,7 +329,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 
 
 		/**
-		 * Get all nodes within AstNode and add to an ArrayList
+		 * Get all nodes within AstNode and add to an ArrayList.
 		 *
 		 * @param node
 		 */
@@ -352,7 +348,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 
 		/**
 		 * Check the function that a name may belong to contains this actual
-		 * parameter
+		 * parameter.
 		 *
 		 * @param node Node to check
 		 * @return true if the function contains the parameter
@@ -501,7 +497,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 
 
 	/**
-	 * Creates a new JavaScriptType based on the String type
+	 * Creates a new JavaScriptType based on the String type.
 	 * @param provider SourceCompletionProvider
 	 * @param type type of JavaScript type to create e.g. java.sql.Connection
 	 * @param text Text entered from the user to resolve the node. This will be null if resolveNode(AstNode node) is called
@@ -537,9 +533,9 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 
 
 	/**
-	 * Visit all nodes in the AstNode tree and all to a single list
+	 * Visit all nodes in the AstNode tree and all to a single list.
 	 */
-	private static class VisitorAll implements NodeVisitor {
+	private static final class VisitorAll implements NodeVisitor {
 
 		private ArrayList<AstNode> all = new ArrayList<>();
 

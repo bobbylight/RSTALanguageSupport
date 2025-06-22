@@ -39,7 +39,7 @@ import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
  * @author Robert Futrell
  * @version 1.0
  */
-class JsHinter {
+final class JsHinter {
 
 	private JavaScriptParser parser;
 //	private RSyntaxDocument doc;
@@ -338,7 +338,7 @@ class JsHinter {
 		 *
 		 * @param in The stream (stdout or stderr) to read from.
 		 */
-		public StreamReaderThread(InputStream in) {
+		StreamReaderThread(InputStream in) {
 			r = new BufferedReader(new InputStreamReader(in));
 			this.buffer = new StringBuilder();
 		}
