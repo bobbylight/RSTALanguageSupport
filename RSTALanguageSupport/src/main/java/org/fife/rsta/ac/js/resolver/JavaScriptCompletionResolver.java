@@ -363,9 +363,7 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 			FunctionCall fc = JavaScriptHelper.findFunctionCallFromNode(node);
 			if (fc != null && !(node == fc)) {
 				collectAllNodes(fc);
-				if (paramNodes.contains(node)) {
-					return true;
-				}
+				return paramNodes.contains(node);
 			}
 			return false;
 		}
@@ -373,9 +371,12 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 
 
 	/**
-	 * Lookup the name of the node within the last JavaScript type. e.g. var a =
-	 * 1; var b = a.MAX_VALUE; looks up MAX_VALUE within NumberLiteral a where a
-	 * is resolve before as a JavaScript Number;
+	 * Lookup the name of the node within the last JavaScript type. e.g.
+	 * <pre>
+	 *   var a = 1; var b = a.MAX_VALUE;
+	 * </pre>
+	 * looks up {@code MAX_VALUE} within NumberLiteral {@code a} where {@code a}
+	 * is resolved before as a JavaScript Number;
 	 *
 	 * @param node
 	 * @param lastJavaScriptType
@@ -404,8 +405,11 @@ public class JavaScriptCompletionResolver extends JavaScriptResolver {
 
 	/**
 	 * Lookup the function name of the node within the last JavaScript type. e.g.
-	 * var a = ""; var b = a.toString(); looks up toString() within
-	 * StringLiteral a where a is resolve before as a JavaScript String;
+	 * <pre>
+	 * var a = ""; var b = a.toString();
+	 * </pre>
+	 * looks up {@code toString()} within
+	 * StringLiteral {@code a} where {@code a} is resolved before as a JavaScript String;
 	 *
 	 * @param node
 	 * @param lastJavaScriptType

@@ -32,12 +32,12 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 		JavaScriptDeclaration dec = null;
 		IsLinkableCheckResult result = checkForLinkableToken(textArea, offs);
 		if (result != null) {
-			//re-parse the document to resolve any variables local to the offs
+			// reparse the document to resolve any variables local to the offs
 			Token t = result.token;
 			boolean function = result.function;
 			String name = t.getLexeme();
 			if (name != null && !name.isEmpty()) {
-				//only re-parse the document if there is a character that could potentially be a variable or function
+				//only reparse the document if there is a character that could potentially be a variable or function
 				if (name.length() > 1 || (name.length() == 1 && Character.isJavaIdentifierPart(name.charAt(0)))) {
 					language.reparseDocument(offs);
 				}

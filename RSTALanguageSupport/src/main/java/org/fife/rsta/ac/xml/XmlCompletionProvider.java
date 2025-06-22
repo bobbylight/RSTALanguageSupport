@@ -269,7 +269,7 @@ class XmlCompletionProvider extends DefaultCompletionProvider {
 	 * @return The token representing the tag name, or <code>null</code> if it
 	 *         could not be found.
 	 */
-	public static final Token getTagNameTokenForCaretOffset(
+	public static Token getTagNameTokenForCaretOffset(
 			RSyntaxTextArea textArea) {
 
 		int dot = textArea.getCaretPosition();

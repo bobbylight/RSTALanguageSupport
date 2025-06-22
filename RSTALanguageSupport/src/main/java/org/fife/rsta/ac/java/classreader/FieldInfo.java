@@ -212,10 +212,7 @@ public class FieldInfo extends MemberInfo {
 
 		}
 
-		for (int i=0; i<braceCount; i++) {
-			sb.append("[]");
-		}
-
+		sb.append("[]".repeat(braceCount));
 		return sb.toString();
 
 	}

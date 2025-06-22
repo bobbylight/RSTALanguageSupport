@@ -268,7 +268,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		}
 
 		/**
-		 * Called when a text area is re-parsed.
+		 * Called when a text area is reparsed.
 		 *
 		 * @param e The event.
 		 */
@@ -291,7 +291,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 
 	/**
 	 * A hack of <tt>AutoCompletion</tt> that forces the <tt>JavaParser</tt>
-	 * to re-parse the document when the user presses ctrl+space.
+	 * to reparse the document when the user presses ctrl+space.
 	 */
 	private class JavaAutoCompletion extends AutoCompletion {
 
@@ -540,7 +540,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 
 		@Override
 		protected int refreshPopupWindow() {
-			// Force the parser to re-parse
+			// Force the parser to reparse
 			JavaParser parser = getParser(textArea);
 			RSyntaxDocument doc = (RSyntaxDocument)textArea.getDocument();
 			String style = textArea.getSyntaxEditingStyle();

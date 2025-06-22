@@ -542,7 +542,7 @@ return defaultValue;
 		}
 
 		/**
-		 * Called when a text area is re-parsed.
+		 * Called when a text area is reparsed.
 		 *
 		 * @param e The event.
 		 */
@@ -563,7 +563,7 @@ return defaultValue;
 
 	/**
 	 * A hack of <code>AutoCompletion</code> that forces the parser to
-	 * re-parse the document when the user presses Ctrl+space.
+	 * reparse the document when the user presses Ctrl+space.
 	 */
 	private class JavaScriptAutoCompletion extends AutoCompletion {
 
@@ -596,7 +596,7 @@ return defaultValue;
 
 		@Override
 		protected int refreshPopupWindow() {
-			// Force the parser to re-parse
+			// Force the parser to reparse
 			JavaScriptParser parser = getParser(textArea);
 			RSyntaxDocument doc = (RSyntaxDocument) textArea.getDocument();
 			String style = textArea.getSyntaxEditingStyle();

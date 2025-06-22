@@ -123,10 +123,7 @@ public class Type {
 			}
 		}
 
-		for (int i=0; i<bracketPairCount; i++) {
-			sb.append("[]");
-		}
-
+		sb.append("[]".repeat(Math.max(0, bracketPairCount)));
 		return sb.toString();
 
 	}

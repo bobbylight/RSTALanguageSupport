@@ -44,8 +44,7 @@ public class Modifiers {
 	private List<Annotation> annotations;
 
 
-	private static final Map<Integer, String> MODIFIER_TEXT
-			= new HashMap<Integer, String>() {
+	private static final Map<Integer, String> MODIFIER_TEXT = new HashMap<>() {
 
 		private static final long serialVersionUID = 1L;
 

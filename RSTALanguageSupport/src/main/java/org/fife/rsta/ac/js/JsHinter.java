@@ -298,7 +298,7 @@ final class JsHinter {
 //	 * errors.
 //	 * NOTE: We can't do this here because we don't know the tab size that
 //	 * JSHint is using!  Our only hope is to disable these warnings; the user
-//	 * just can't get indentation-related warnings unfortunately.
+//	 * just can't get indentation-related warnings, unfortunately.
 //	 */
 //	private final DefaultParserNotice createNotice(RSyntaxDocument doc,
 //			String msg, int line, int offs, int len, int indent) {
