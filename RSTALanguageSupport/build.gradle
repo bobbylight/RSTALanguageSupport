@@ -43,18 +43,6 @@ test {
 }
 
 publishing {
-    repositories {
-        maven {
-            def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-            def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots/'
-            url = isReleaseVersion ? releasesRepoUrl : snapshotsRepoUrl
-            credentials { // Credentials usually kept in user's .gradle/gradle.properties
-                // We must defensively check for these properties so Travis CI build works
-                username = project.hasProperty('ossrhUsername') ? ossrhUsername : 'unknown'
-                password = project.hasProperty('ossrhPassword') ? ossrhPassword : 'unknown'
-            }
-        }
-    }
     publications {
         maven(MavenPublication) {
 
