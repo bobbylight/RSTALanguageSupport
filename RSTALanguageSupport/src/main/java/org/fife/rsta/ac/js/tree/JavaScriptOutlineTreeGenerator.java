@@ -20,19 +20,7 @@ import org.fife.rsta.ac.js.IconFactory;
 import org.fife.rsta.ac.js.util.RhinoUtil;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.mozilla.javascript.Token;
-import org.mozilla.javascript.ast.Assignment;
-import org.mozilla.javascript.ast.AstNode;
-import org.mozilla.javascript.ast.AstRoot;
-import org.mozilla.javascript.ast.ExpressionStatement;
-import org.mozilla.javascript.ast.FunctionCall;
-import org.mozilla.javascript.ast.FunctionNode;
-import org.mozilla.javascript.ast.Name;
-import org.mozilla.javascript.ast.NodeVisitor;
-import org.mozilla.javascript.ast.ObjectLiteral;
-import org.mozilla.javascript.ast.ObjectProperty;
-import org.mozilla.javascript.ast.PropertyGet;
-import org.mozilla.javascript.ast.VariableDeclaration;
-import org.mozilla.javascript.ast.VariableInitializer;
+import org.mozilla.javascript.ast.*;
 
 
 /**
@@ -319,17 +307,21 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 						tn.setText(clazz + "()");
 
 						ObjectLiteral value = (ObjectLiteral)rhs;
-						List<ObjectProperty> properties = value.getElements();
-						for (ObjectProperty property : properties) {
+						List<AbstractObjectProperty> properties = value.getElements();
+						for (AbstractObjectProperty property : properties) {
 
-							AstNode propertyKey = property.getLeft();
-							tn = createTreeNode(propertyKey);
+							if (property instanceof ObjectProperty) {
+								ObjectProperty propObj = (ObjectProperty)property;
+								AstNode propertyKey = propObj.getKey();
+								tn = createTreeNode(propertyKey);
 
-							String memberName = RhinoUtil.getPropertyName(propertyKey);
-							AstNode propertyValue = property.getRight();
-							visitPrototypeMember(tn, clazz,
-								memberName, propertyValue);
+								String memberName = RhinoUtil.getPropertyName(propertyKey);
+								AstNode propertyValue = propObj.getValue();
+								visitPrototypeMember(tn, clazz,
+									memberName, propertyValue);
+							}
 
+							// TODO: Also handle SpreadObjectProperty
 						}
 
 					}
@@ -416,23 +408,27 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 	private void visitPropertyDescriptors(ObjectLiteral descriptorObjLit,
 			String clazz) {
 
-		List<ObjectProperty> descriptors = descriptorObjLit.getElements();
-		for (ObjectProperty prop : descriptors) {
+		List<AbstractObjectProperty> descriptors = descriptorObjLit.getElements();
+		for (AbstractObjectProperty prop : descriptors) {
 
-			AstNode propertyKey = prop.getLeft();
-			AstNode propertyValue = prop.getRight();
+			// TODO: Handle SpreadObjectPropertys, though they're not commonly used in
+			// property descriptors
+			if (prop instanceof ObjectProperty) {
+				ObjectProperty propObj = (ObjectProperty)prop;
+				AstNode propertyKey = propObj.getKey();
+				AstNode propertyValue = propObj.getValue();
 
-			// Should always be true, as this should be a property descriptor
-			if (propertyValue instanceof ObjectLiteral) {
+				// Should always be true, as this should be a property descriptor
+				if (propertyValue instanceof ObjectLiteral) {
 
-				JavaScriptTreeNode tn = createTreeNode(propertyKey);
+					JavaScriptTreeNode tn = createTreeNode(propertyKey);
 
-				String memberName = RhinoUtil.getPropertyName(propertyKey);
-				visitPropertyDescriptor(tn, clazz,
-					memberName, (ObjectLiteral)propertyValue);
+					String memberName = RhinoUtil.getPropertyName(propertyKey);
+					visitPropertyDescriptor(tn, clazz,
+						memberName, (ObjectLiteral) propertyValue);
 
+				}
 			}
-
 		}
 
 	}
@@ -454,45 +450,50 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 		// TODO: Glean more information than just the value, for a more
 		// detailed icon.
 
-		List<ObjectProperty> propDescProperties = propDesc.getElements();
-		for (ObjectProperty propDescProperty : propDescProperties) {
+		List<AbstractObjectProperty> propDescProperties = propDesc.getElements();
+		for (AbstractObjectProperty propDescProperty : propDescProperties) {
 
-			AstNode propertyKey = propDescProperty.getLeft();
-			String propName = RhinoUtil.getPropertyName(propertyKey);
-			if ("value".equals(propName)) {
+			// TODO: Decide if we can/should look through SpreadObjectPropertys
+			if (propDescProperty instanceof ObjectProperty) {
 
-				AstNode propertyValue = propDescProperty.getRight();
-				boolean isFunction = propertyValue instanceof FunctionNode;
-				String text = memberName;
-				if (isFunction) {
-					FunctionNode func = (FunctionNode)propertyValue;
-					text += RhinoUtil.getFunctionArgsString(func);
-					tn.setIcon(IconFactory.getIcon(IconFactory.PUBLIC_METHOD_ICON));
-					tn.setSortPriority(JavaScriptOutlineTree.PRIORITY_FUNCTION);
-				}
-				else {
-					tn.setIcon(IconFactory.getIcon(IconFactory.PUBLIC_FIELD_ICON));
-					tn.setSortPriority(JavaScriptOutlineTree.PRIORITY_VARIABLE);
-				}
+				ObjectProperty objectProp = (ObjectProperty) propDescProperty;
+				AstNode propertyKey = objectProp.getKey();
+				String propName = RhinoUtil.getPropertyName(propertyKey);
+				if ("value".equals(propName)) {
 
-				tn.setText(text);
-				if (prototypeAdditions==null) {
-					prototypeAdditions = new HashMap<>();
-				}
-                List<JavaScriptTreeNode> list = prototypeAdditions.computeIfAbsent(clazz, k -> new ArrayList<>());
+					AstNode propertyValue = objectProp.getValue();
+					boolean isFunction = propertyValue instanceof FunctionNode;
+					String text = memberName;
+					if (isFunction) {
+						FunctionNode func = (FunctionNode) propertyValue;
+						text += RhinoUtil.getFunctionArgsString(func);
+						tn.setIcon(IconFactory.getIcon(IconFactory.PUBLIC_METHOD_ICON));
+						tn.setSortPriority(JavaScriptOutlineTree.PRIORITY_FUNCTION);
+					}
+					else {
+						tn.setIcon(IconFactory.getIcon(IconFactory.PUBLIC_FIELD_ICON));
+						tn.setSortPriority(JavaScriptOutlineTree.PRIORITY_VARIABLE);
+					}
 
-                list.add(tn);
+					tn.setText(text);
+					if (prototypeAdditions == null) {
+						prototypeAdditions = new HashMap<>();
+					}
+					List<JavaScriptTreeNode> list = prototypeAdditions.computeIfAbsent(clazz, k -> new ArrayList<>());
 
-				if (isFunction) {
-					JavaScriptTreeNode prevScopeTreeNode = curScopeTreeNode;
-					curScopeTreeNode = tn;
-					FunctionNode func = (FunctionNode)propertyValue;
-					func.getBody().visit(this);
-					curScopeTreeNode = prevScopeTreeNode;
+					list.add(tn);
+
+					if (isFunction) {
+						JavaScriptTreeNode prevScopeTreeNode = curScopeTreeNode;
+						curScopeTreeNode = tn;
+						FunctionNode func = (FunctionNode) propertyValue;
+						func.getBody().visit(this);
+						curScopeTreeNode = prevScopeTreeNode;
+					}
+
 				}
 
 			}
-
 		}
 
 	}
@@ -501,17 +502,23 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 	private void visitPrototypeMembers(ObjectLiteral objLiteral,
 			String clazz) {
 
-		List<ObjectProperty> properties = objLiteral.getElements();
-		for (ObjectProperty property : properties) {
+		List<AbstractObjectProperty> properties = objLiteral.getElements();
+		for (AbstractObjectProperty property : properties) {
 
-			AstNode propertyKey = property.getLeft();
-			JavaScriptTreeNode tn = createTreeNode(propertyKey);
+			if (property instanceof ObjectProperty) {
+				ObjectProperty objProperty = (ObjectProperty)property;
+				AstNode propertyKey = objProperty.getKey();
+				JavaScriptTreeNode tn = createTreeNode(propertyKey);
 
-			String memberName = RhinoUtil.getPropertyName(propertyKey);
-			AstNode propertyValue = property.getRight();
-			visitPrototypeMember(tn, clazz,
-				memberName, propertyValue);
-
+				String memberName = RhinoUtil.getPropertyName(propertyKey);
+				AstNode propertyValue = objProperty.getValue();
+				visitPrototypeMember(tn, clazz,
+					memberName, propertyValue);
+			}
+			else if (property instanceof SpreadObjectProperty) {
+				// TODO: Implement me
+				// SpreadObjectProperty sop = (SpreadObjectProperty)property;
+			}
 		}
 
 	}
