@@ -124,6 +124,16 @@ public class JavaCompletionProvider extends LanguageAwareCompletionProvider {
 
 
 	/**
+	 * Returns the source completion provider used internally.
+	 *
+	 * @return The source completion provider.
+	 */
+	SourceCompletionProvider getSourceProvider() {
+		return sourceProvider;
+	}
+
+
+	/**
 	 * Returns the jars on the "build path".
 	 *
 	 * @return A list of {@link LibraryInfo}s.  Modifying a
