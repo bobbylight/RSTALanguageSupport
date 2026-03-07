@@ -86,6 +86,17 @@ public class SimpleClass {
 
 
 	/**
+	 * Contains a local variable declared with a cast expression inside a for loop.
+	 */
+	public void localVarsWithCast(List items) {
+		for (int i = 0; i < items.size(); i++) {
+			String item = (String)items.get(i);
+			classStr1 = item;
+		}
+	}
+
+
+	/**
 	 * Contains local variables that are easy to parse.
 	 */
 	public void localVarsSimple() {
