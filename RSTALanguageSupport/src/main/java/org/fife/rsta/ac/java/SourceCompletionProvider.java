@@ -970,7 +970,8 @@ public SourceLocation getSourceLocForClass(String className) {
 
 			if (hasParens) {
 				// Method call - find method and get return type
-				String returnType = findMethodReturnType(currentType, memberName, isStatic, pkg);
+				int argCount = countArguments(seg.substring(parenIdx));
+				String returnType = findMethodReturnType(currentType, memberName, argCount, isStatic, pkg);
 				if (returnType == null || "void".equals(returnType)) {
 					log("[DEBUG]: Could not resolve method return type: " + memberName + " on " + currentType.getClassName(false));
 					return null;
@@ -1000,15 +1001,24 @@ public SourceLocation getSourceLocForClass(String className) {
 
 	/**
 	 * Finds the return type of a method in the given ClassFile.
-	 * Walks the superclass chain to find inherited methods.
+	 * Matches by name and parameter count, walking the superclass chain.
+	 *
+	 * @param cf The class to search.
+	 * @param methodName The method name.
+	 * @param argCount The number of arguments at the call site, or -1 to
+	 *        match any overload.
+	 * @param mustBeStatic Whether the method must be static.
+	 * @param pkg The package for accessibility checking.
+	 * @return The fully-qualified return type, or null.
 	 */
 	private String findMethodReturnType(ClassFile cf, String methodName,
-			boolean mustBeStatic, String pkg) {
+			int argCount, boolean mustBeStatic, String pkg) {
 		while (cf != null) {
 			for (int i = 0; i < cf.getMethodCount(); i++) {
 				MethodInfo mi = cf.getMethodInfo(i);
 				if (mi.getName().equals(methodName) &&
 						(!mustBeStatic || mi.isStatic()) &&
+						(argCount < 0 || mi.getParameterCount() == argCount) &&
 						isAccessible(mi, pkg)) {
 					return mi.getReturnTypeString(true);
 				}
@@ -1016,6 +1026,35 @@ public SourceLocation getSourceLocForClass(String className) {
 			cf = getClassFileFor(null, cf.getSuperClassName(true));
 		}
 		return null;
+	}
+
+
+	/**
+	 * Counts the number of arguments in a parenthesized argument list.
+	 * Handles nested parentheses. Returns 0 for empty args {@code "()"}.
+	 *
+	 * @param argsWithParens The argument string starting with '(' (e.g.,
+	 *        "(x, y)" or "()")
+	 * @return The argument count, or -1 if the string is malformed.
+	 */
+	static int countArguments(String argsWithParens) {
+		if (argsWithParens == null || argsWithParens.length() < 2) {
+			return -1;
+		}
+		// Strip outer parens
+		String inner = argsWithParens.substring(1, argsWithParens.length() - 1).trim();
+		if (inner.isEmpty()) {
+			return 0;
+		}
+		int count = 1;
+		int depth = 0;
+		for (int i = 0; i < inner.length(); i++) {
+			char c = inner.charAt(i);
+			if (c == '(') depth++;
+			else if (c == ')') depth--;
+			else if (c == ',' && depth == 0) count++;
+		}
+		return count;
 	}
 
 

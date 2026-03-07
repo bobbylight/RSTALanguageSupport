@@ -70,23 +70,43 @@ class SourceCompletionProviderTest {
 		assertEquals("foo", getEnteredText("foo"));
 	}
 
-	/**
-	 * Documents the overload limitation in {@code findMethodReturnType}.
-	 * <p>
-	 * The {@code getAlreadyEnteredText} method correctly extracts the chain
-	 * text (e.g., {@code sb.append("x").}), but full chain resolution through
-	 * JDK types like {@code StringBuilder.append().toString()} requires a
-	 * JarManager loaded with JRE classes, which is out of scope for this unit
-	 * test.
-	 * <p>
-	 * NOTE: The private {@code findMethodReturnType} method returns the first
-	 * method matching by name only -- it does not distinguish overloads by
-	 * parameter count or types. This is a known limitation that cannot be
-	 * directly tested from outside the class.
-	 */
 	@Test
-	void testMethodChainWithStringArg_documentsOverloadLimitation() {
-		// Verifies getAlreadyEnteredText correctly handles string args in parens
+	void testMethodChainWithStringArg() {
 		assertEquals("sb.append(\"x\").", getEnteredText("sb.append(\"x\")."));
+	}
+
+	// --- countArguments tests ---
+
+	@Test
+	void testCountArguments_empty() {
+		assertEquals(0, SourceCompletionProvider.countArguments("()"));
+	}
+
+	@Test
+	void testCountArguments_one() {
+		assertEquals(1, SourceCompletionProvider.countArguments("(x)"));
+	}
+
+	@Test
+	void testCountArguments_two() {
+		assertEquals(2, SourceCompletionProvider.countArguments("(x, y)"));
+	}
+
+	@Test
+	void testCountArguments_three() {
+		assertEquals(3, SourceCompletionProvider.countArguments("(a, b, c)"));
+	}
+
+	@Test
+	void testCountArguments_nested() {
+		// foo(bar(x, y), z) has 2 top-level args
+		assertEquals(2, SourceCompletionProvider.countArguments("(bar(x, y), z)"));
+	}
+
+	@Test
+	void testCountArguments_malformed() {
+		assertEquals(-1, SourceCompletionProvider.countArguments(null));
+		assertEquals(-1, SourceCompletionProvider.countArguments(""));
+		assertEquals(-1, SourceCompletionProvider.countArguments("("));
 	}
 }
