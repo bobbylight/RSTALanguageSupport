@@ -116,7 +116,9 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 
 		String[] paramTypes = getParameterTypes();
 		for (int i=0; i<paramTypes.length; i++) {
-			sb.append(paramTypes[i]).append(" param").append(i);
+			sb.append(paramTypes[i]).append(' ');
+			String name = getParameterName(i);
+			sb.append(name != null ? name : "param" + i);
 			if (i<paramTypes.length-1) {
 				sb.append(", ");
 			}
