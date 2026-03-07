@@ -632,6 +632,57 @@ public SourceLocation getSourceLocForClass(String className) {
 	}
 
 
+	/**
+	 * Overrides the default to scan back through balanced parentheses,
+	 * enabling method chain completions like {@code foo.bar().baz}.
+	 */
+	@Override
+	public String getAlreadyEnteredText(JTextComponent comp) {
+
+		try {
+			javax.swing.text.Document doc = comp.getDocument();
+			int caret = comp.getCaretPosition();
+			javax.swing.text.Element root = doc.getDefaultRootElement();
+			int lineIdx = root.getElementIndex(caret);
+			javax.swing.text.Element line = root.getElement(lineIdx);
+			int lineStart = line.getStartOffset();
+			int len = caret - lineStart;
+			String lineText = doc.getText(lineStart, len);
+
+			// Scan backward from end, accepting identifier chars, dots,
+			// and balanced parentheses (for method calls in chains).
+			int i = lineText.length() - 1;
+			while (i >= 0) {
+				char c = lineText.charAt(i);
+				if (Character.isJavaIdentifierPart(c) || c == '.') {
+					i--;
+				} else if (c == ')') {
+					// Skip balanced parens
+					int depth = 1;
+					i--;
+					while (i >= 0 && depth > 0) {
+						c = lineText.charAt(i);
+						if (c == ')') depth++;
+						else if (c == '(') depth--;
+						i--;
+					}
+					// After balanced parens, continue scanning (the method
+					// name before '(' will be picked up in the next iteration)
+				} else {
+					break;
+				}
+			}
+			i++;
+
+			return (i < lineText.length()) ? lineText.substring(i) : "";
+
+		} catch (BadLocationException e) {
+			e.printStackTrace();
+			return "";
+		}
+	}
+
+
 	@Override
 	protected boolean isValidChar(char ch) {
 		return Character.isJavaIdentifierPart(ch) || ch=='.';
