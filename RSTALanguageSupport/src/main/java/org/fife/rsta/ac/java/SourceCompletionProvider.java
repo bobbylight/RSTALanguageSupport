@@ -632,6 +632,70 @@ public SourceLocation getSourceLocForClass(String className) {
 	}
 
 
+	/**
+	 * Overrides the default to scan back through balanced parentheses,
+	 * enabling method chain completions like {@code foo.bar().baz}.
+	 */
+	@Override
+	public String getAlreadyEnteredText(JTextComponent comp) {
+
+		try {
+			javax.swing.text.Document doc = comp.getDocument();
+			int caret = comp.getCaretPosition();
+			javax.swing.text.Element root = doc.getDefaultRootElement();
+			int lineIdx = root.getElementIndex(caret);
+			javax.swing.text.Element line = root.getElement(lineIdx);
+			int lineStart = line.getStartOffset();
+			int len = caret - lineStart;
+			String lineText = doc.getText(lineStart, len);
+
+			// Scan backward from end, accepting identifier chars, dots,
+			// and balanced parentheses (for method calls in chains).
+			// Track whether the last accepted token was a dot to distinguish
+			// method call parens (foo.bar().) from cast parens ((Cast)var.).
+			int i = lineText.length() - 1;
+			boolean lastWasDot = false;
+			while (i >= 0) {
+				char c = lineText.charAt(i);
+				if (Character.isJavaIdentifierPart(c)) {
+					lastWasDot = false;
+					i--;
+				} else if (c == '.') {
+					lastWasDot = true;
+					i--;
+				} else if (c == ')') {
+					// In a method chain like foo.bar().baz, ')' follows
+					// '.' when scanning backward (baz -> . -> )). In a cast
+					// like (Type)var., ')' follows identifier chars
+					// (var -> )). Only skip parens for method calls.
+					if (!lastWasDot) break;
+					// Skip balanced parens
+					int depth = 1;
+					i--;
+					while (i >= 0 && depth > 0) {
+						c = lineText.charAt(i);
+						if (c == ')') depth++;
+						else if (c == '(') depth--;
+						i--;
+					}
+					lastWasDot = false;
+					// After balanced parens, continue scanning (the method
+					// name before '(' will be picked up in the next iteration)
+				} else {
+					break;
+				}
+			}
+			i++;
+
+			return (i < lineText.length()) ? lineText.substring(i) : "";
+
+		} catch (BadLocationException e) {
+			e.printStackTrace();
+			return "";
+		}
+	}
+
+
 	@Override
 	protected boolean isValidChar(char ch) {
 		return Character.isJavaIdentifierPart(ch) || ch=='.';
@@ -805,6 +869,256 @@ public SourceLocation getSourceLocForClass(String className) {
 
 
 	/**
+	 * Resolves a dotted prefix like "AudioEngine.sharedEngine()" into the
+	 * ClassFile representing the final type in the chain.
+	 *
+	 * @param cu The compilation unit.
+	 * @param td The enclosing type declaration.
+	 * @param currentMethod The method the caret is in (for local var lookup).
+	 * @param prefix The dotted expression prefix (everything before final dot).
+	 * @param offs The caret offset (for local variable scope checking).
+	 * @return The resolved ClassFile, or null if resolution fails.
+	 */
+	private ClassFile resolveChainType(CompilationUnit cu, TypeDeclaration td,
+			Method currentMethod, String prefix, int offs) {
+
+		// Split prefix on dots, but keep parenthesized segments together.
+		// e.g., "AudioEngine.sharedEngine()" -> ["AudioEngine", "sharedEngine()"]
+		List<String> segments = new ArrayList<>();
+		int depth = 0;
+		int segStart = 0;
+		for (int i = 0; i < prefix.length(); i++) {
+			char c = prefix.charAt(i);
+			if (c == '(') depth++;
+			else if (c == ')') depth--;
+			else if (c == '.' && depth == 0) {
+				segments.add(prefix.substring(segStart, i));
+				segStart = i + 1;
+			}
+		}
+		if (segStart < prefix.length()) {
+			segments.add(prefix.substring(segStart));
+		}
+
+		if (segments.isEmpty()) return null;
+
+		String pkg = cu.getPackageName();
+		String firstSeg = segments.get(0);
+		// Strip trailing parens for method call detection
+		boolean firstIsMethodCall = firstSeg.endsWith("()");
+		String firstName = firstIsMethodCall ?
+			firstSeg.substring(0, firstSeg.length() - 2) : firstSeg;
+
+		ClassFile currentType = null;
+		boolean isStatic = false;
+
+		// Resolve first segment: could be local var, parameter, field, or class name
+
+		// 1. Check fields in enclosing type
+		for (Iterator<Member> j = td.getMemberIterator(); j.hasNext(); ) {
+			Member m = j.next();
+			if (m instanceof Field) {
+				Field field = (Field) m;
+				if (field.getName().equals(firstName) && !firstIsMethodCall) {
+					Type type = field.getType();
+					if (!type.isBasicType() && !type.isArray()) {
+						currentType = getClassFileFor(cu, type.getName(true, false));
+					}
+					break;
+				}
+			}
+		}
+
+		// 2. Check method parameters
+		if (currentType == null && currentMethod != null && !firstIsMethodCall) {
+			for (int i = 0; i < currentMethod.getParameterCount(); i++) {
+				FormalParameter param = currentMethod.getParameter(i);
+				if (firstName.equals(param.getName())) {
+					Type type = param.getType();
+					if (!type.isBasicType() && !type.isArray()) {
+						currentType = getClassFileFor(cu, type.getName(true, false));
+					}
+					break;
+				}
+			}
+		}
+
+		// 3. Check local variables
+		if (currentType == null && currentMethod != null && !firstIsMethodCall) {
+			CodeBlock body = currentMethod.getBody();
+			if (body != null) {
+				currentType = resolveLocalVarType(cu, body, firstName, offs);
+			}
+		}
+
+		// 4. Check class name (static access)
+		if (currentType == null && !firstIsMethodCall) {
+			List<ImportDeclaration> imports = cu.getImports();
+			List<ClassFile> matches = jarManager.getClassesWithUnqualifiedName(
+					firstName, imports);
+			if (matches != null && !matches.isEmpty()) {
+				currentType = matches.get(0);
+				isStatic = true;
+			}
+		}
+
+		if (currentType == null) {
+			log("[DEBUG]: Could not resolve first segment: " + firstSeg);
+			return null;
+		}
+
+		// If first segment resolved to a class (static access) and there's
+		// only one segment, return the class for static member completion
+		if (segments.size() == 1 && !firstIsMethodCall) {
+			return currentType;
+		}
+
+		// Walk remaining segments
+		for (int idx = 1; idx < segments.size(); idx++) {
+			String seg = segments.get(idx);
+			// Handle methods with args: strip everything from first '('
+			int parenIdx = seg.indexOf('(');
+			boolean hasParens = parenIdx > -1;
+			String memberName = hasParens ? seg.substring(0, parenIdx) : seg;
+
+			if (hasParens) {
+				// Method call - find method and get return type
+				int argCount = countArguments(seg.substring(parenIdx));
+				String returnType = findMethodReturnType(currentType, memberName, argCount, isStatic, pkg);
+				if (returnType == null || "void".equals(returnType)) {
+					log("[DEBUG]: Could not resolve method return type: " + memberName + " on " + currentType.getClassName(false));
+					return null;
+				}
+				currentType = getClassFileFor(cu, returnType);
+				isStatic = false; // after first call, subsequent accesses are instance
+			} else {
+				// Field access - find field and get type
+				String fieldType = findFieldType(currentType, memberName, isStatic, pkg);
+				if (fieldType == null) {
+					log("[DEBUG]: Could not resolve field type: " + memberName + " on " + currentType.getClassName(false));
+					return null;
+				}
+				currentType = getClassFileFor(cu, fieldType);
+				isStatic = false;
+			}
+
+			if (currentType == null) {
+				log("[DEBUG]: Could not resolve ClassFile in chain at segment: " + seg);
+				return null;
+			}
+		}
+
+		return currentType;
+	}
+
+
+	/**
+	 * Finds the return type of a method in the given ClassFile.
+	 * Matches by name and parameter count, walking the superclass chain.
+	 *
+	 * @param cf The class to search.
+	 * @param methodName The method name.
+	 * @param argCount The number of arguments at the call site, or -1 to
+	 *        match any overload.
+	 * @param mustBeStatic Whether the method must be static.
+	 * @param pkg The package for accessibility checking.
+	 * @return The fully-qualified return type, or null.
+	 */
+	private String findMethodReturnType(ClassFile cf, String methodName,
+			int argCount, boolean mustBeStatic, String pkg) {
+		while (cf != null) {
+			for (int i = 0; i < cf.getMethodCount(); i++) {
+				MethodInfo mi = cf.getMethodInfo(i);
+				if (mi.getName().equals(methodName) &&
+						(!mustBeStatic || mi.isStatic()) &&
+						(argCount < 0 || mi.getParameterCount() == argCount) &&
+						isAccessible(mi, pkg)) {
+					return mi.getReturnTypeString(true);
+				}
+			}
+			cf = getClassFileFor(null, cf.getSuperClassName(true));
+		}
+		return null;
+	}
+
+
+	/**
+	 * Counts the number of arguments in a parenthesized argument list.
+	 * Handles nested parentheses. Returns 0 for empty args {@code "()"}.
+	 *
+	 * @param argsWithParens The argument string starting with '(' (e.g.,
+	 *        "(x, y)" or "()")
+	 * @return The argument count, or -1 if the string is malformed.
+	 */
+	static int countArguments(String argsWithParens) {
+		if (argsWithParens == null || argsWithParens.length() < 2) {
+			return -1;
+		}
+		// Strip outer parens
+		String inner = argsWithParens.substring(1, argsWithParens.length() - 1).trim();
+		if (inner.isEmpty()) {
+			return 0;
+		}
+		int count = 1;
+		int depth = 0;
+		for (int i = 0; i < inner.length(); i++) {
+			char c = inner.charAt(i);
+			if (c == '(') depth++;
+			else if (c == ')') depth--;
+			else if (c == ',' && depth == 0) count++;
+		}
+		return count;
+	}
+
+
+	/**
+	 * Finds the type of a field in the given ClassFile.
+	 * Walks the superclass chain to find inherited fields.
+	 */
+	private String findFieldType(ClassFile cf, String fieldName,
+			boolean mustBeStatic, String pkg) {
+		while (cf != null) {
+			for (int i = 0; i < cf.getFieldCount(); i++) {
+				FieldInfo fi = cf.getFieldInfo(i);
+				if (fi.getName().equals(fieldName) &&
+						(!mustBeStatic || fi.isStatic()) &&
+						isAccessible(fi, pkg)) {
+					return fi.getTypeString(true);
+				}
+			}
+			cf = getClassFileFor(null, cf.getSuperClassName(true));
+		}
+		return null;
+	}
+
+
+	/**
+	 * Resolves a local variable name to its ClassFile type.
+	 */
+	private ClassFile resolveLocalVarType(CompilationUnit cu, CodeBlock block,
+			String varName, int offs) {
+		for (int i = 0; i < block.getLocalVarCount(); i++) {
+			LocalVariable var = block.getLocalVar(i);
+			if (var.getNameEndOffset() <= offs && varName.equals(var.getName())) {
+				Type type = var.getType();
+				if (!type.isBasicType() && !type.isArray()) {
+					return getClassFileFor(cu, type.getName(true, false));
+				}
+				return null;
+			}
+		}
+		for (int i = 0; i < block.getChildBlockCount(); i++) {
+			CodeBlock child = block.getChildBlock(i);
+			if (child.containsOffset(offs)) {
+				ClassFile result = resolveLocalVarType(cu, child, varName, offs);
+				if (result != null) return result;
+			}
+		}
+		return null;
+	}
+
+
+	/**
 	 * Loads completions for the text at the current caret position, if there
 	 * is a "prefix" of chars and at least one '.' character in the text up to
 	 * the caret.  This is currently very limited and needs to be improved.
@@ -824,20 +1138,26 @@ public SourceLocation getSourceLocForClass(String className) {
 			String alreadyEntered, Set<Completion> retVal,
 			TypeDeclaration td, Method currentMethod, String prefix, int offs) {
 
-		// TODO: Remove this restriction.
-		int dot = prefix.indexOf('.');
-		if (dot>-1) {
-			log("[DEBUG]: Qualified non-this completions currently only go 1 level deep");
-			return;
-		}
-
-		// TODO: Remove this restriction.
-		else if (!prefix.matches("[A-Za-z_][A-Za-z0-9_\\$]*")) {
-			log("[DEBUG]: Only identifier non-this completions are currently supported");
-			return;
-		}
-
 		String pkg = cu.getPackageName();
+
+		// Check if prefix contains dots or parens (chain expression)
+		if (prefix.indexOf('.') > -1 || prefix.indexOf('(') > -1) {
+			// Chain expression: resolve the full chain to a final type
+			ClassFile resolvedType = resolveChainType(cu, td, currentMethod, prefix, offs);
+			if (resolvedType != null) {
+				addCompletionsForExtendedClass(retVal, cu, resolvedType, pkg, null);
+			} else {
+				log("[DEBUG]: Chain resolution failed for: " + prefix);
+			}
+			return;
+		}
+
+		// Simple identifier (no dots) - use existing logic below
+		if (!prefix.matches("[A-Za-z_][A-Za-z0-9_\\$]*")) {
+			log("[DEBUG]: Only identifier non-this completions are currently supported: " + prefix);
+			return;
+		}
+
 		boolean matched = false;
 
 		for (Iterator<Member> j=td.getMemberIterator(); j.hasNext();) {
