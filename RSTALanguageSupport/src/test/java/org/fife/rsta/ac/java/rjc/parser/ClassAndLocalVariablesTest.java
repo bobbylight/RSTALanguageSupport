@@ -112,9 +112,9 @@ class ClassAndLocalVariablesTest {
 		TypeDeclaration typeDec = cu.getTypeDeclarationIterator().next();
 		assertEquals("SimpleClass", typeDec.getName());
 
-		// 4 fields, 1 constructor and 4 methods
+		// 7 fields (4 single + 3 from multi-decl), 1 constructor and 4 methods
 		int memberCount = typeDec.getMemberCount();
-		assertEquals(9, memberCount);
+		assertEquals(12, memberCount);
 
 		// Iterate through members.  They should be returned in the
 		// order they are found in.
@@ -153,6 +153,28 @@ class ClassAndLocalVariablesTest {
 		assertEquals("List<Double>", field.getType().toString());
 		assertTrue(field.getModifiers().isPrivate());
         assertNull(field.getDocComment());
+
+		// Multi-variable declaration: public String multiA, multiB, multiC;
+		member = i.next();
+		assertInstanceOf(Field.class, member);
+		field = (Field)member;
+		assertEquals("multiA", field.getName());
+		assertEquals("String", field.getType().toString());
+		assertTrue(field.getModifiers().isPublic());
+
+		member = i.next();
+		assertInstanceOf(Field.class, member);
+		field = (Field)member;
+		assertEquals("multiB", field.getName());
+		assertEquals("String", field.getType().toString());
+		assertTrue(field.getModifiers().isPublic());
+
+		member = i.next();
+		assertInstanceOf(Field.class, member);
+		field = (Field)member;
+		assertEquals("multiC", field.getName());
+		assertEquals("String", field.getType().toString());
+		assertTrue(field.getModifiers().isPublic());
 
 		member = i.next();
 		assertInstanceOf(Method.class, member);
