@@ -38,6 +38,9 @@ public class SimpleClass {
 
 	private List<Double> list;
 
+	/** Multi-variable declaration. */
+	public String multiA, multiB, multiC;
+
 
 	public SimpleClass() {
 		list = new ArrayList<Double>();
