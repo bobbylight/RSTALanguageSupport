@@ -651,12 +651,24 @@ public SourceLocation getSourceLocForClass(String className) {
 
 			// Scan backward from end, accepting identifier chars, dots,
 			// and balanced parentheses (for method calls in chains).
+			// Track whether the last accepted token was a dot to distinguish
+			// method call parens (foo.bar().) from cast parens ((Cast)var.).
 			int i = lineText.length() - 1;
+			boolean lastWasDot = false;
 			while (i >= 0) {
 				char c = lineText.charAt(i);
-				if (Character.isJavaIdentifierPart(c) || c == '.') {
+				if (Character.isJavaIdentifierPart(c)) {
+					lastWasDot = false;
+					i--;
+				} else if (c == '.') {
+					lastWasDot = true;
 					i--;
 				} else if (c == ')') {
+					// In a method chain like foo.bar().baz, ')' follows
+					// '.' when scanning backward (baz -> . -> )). In a cast
+					// like (Type)var., ')' follows identifier chars
+					// (var -> )). Only skip parens for method calls.
+					if (!lastWasDot) break;
 					// Skip balanced parens
 					int depth = 1;
 					i--;
@@ -666,6 +678,7 @@ public SourceLocation getSourceLocForClass(String className) {
 						else if (c == '(') depth--;
 						i--;
 					}
+					lastWasDot = false;
 					// After balanced parens, continue scanning (the method
 					// name before '(' will be picked up in the next iteration)
 				} else {

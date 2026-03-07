@@ -75,6 +75,32 @@ class SourceCompletionProviderTest {
 		assertEquals("sb.append(\"x\").", getEnteredText("sb.append(\"x\")."));
 	}
 
+	// --- Cast expression tests (should NOT scan through cast parens) ---
+
+	@Test
+	void testCastExpressionNotIncluded() {
+		// (MissionObjective)objectives. should return just "objectives."
+		assertEquals("objectives.", getEnteredText("(MissionObjective)objectives."));
+	}
+
+	@Test
+	void testCastExpressionWithAssignment() {
+		assertEquals("objectives.",
+			getEnteredText("MissionObjective obj = (MissionObjective)objectives."));
+	}
+
+	@Test
+	void testCastExpressionWithSpaceBefore() {
+		assertEquals("var.", getEnteredText("x = (Type)var."));
+	}
+
+	@Test
+	void testMethodChainStillWorksAfterCastFix() {
+		// Ensure method chains still work correctly
+		assertEquals("foo.bar().", getEnteredText("foo.bar()."));
+		assertEquals("a.b().c().", getEnteredText("a.b().c()."));
+	}
+
 	// --- countArguments tests ---
 
 	@Test
