@@ -181,6 +181,16 @@ class ClassCompletion extends AbstractJavaSourceCompletion {
 	}
 
 
+	/**
+	 * Returns whether this class is an annotation type (has ACC_ANNOTATION flag).
+	 *
+	 * @return Whether this is an annotation type.
+	 */
+	public boolean isAnnotationType() {
+		return (cf.getAccessFlags() & AccessFlags.ACC_ANNOTATION) != 0;
+	}
+
+
 	@Override
 	public String getToolTipText() {
 		return "class " + getReplacementText();
