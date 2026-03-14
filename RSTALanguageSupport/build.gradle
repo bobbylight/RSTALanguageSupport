@@ -8,6 +8,8 @@ dependencies {
     api 'com.fifesoft:rsyntaxtextarea:3.6.1'
     api 'com.fifesoft:autocomplete:3.3.3'
     implementation 'org.mozilla:rhino-all:1.9.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 base {
@@ -30,6 +32,7 @@ jar {
     }
 }
 test {
+    useJUnitPlatform()
     testLogging {
         events 'failed' //, 'passed', 'skipped', 'standardOut', 'standardError'
 

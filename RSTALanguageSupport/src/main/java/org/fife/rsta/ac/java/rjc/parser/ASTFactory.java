@@ -461,9 +461,11 @@ OUTER:
 				break;
 
 			case ANNOTATION_START:
-				// TODO: AnnotationTypeDeclaration, implement me.
-				throw new IOException(
-						"AnnotationTypeDeclaration not implemented");
+				// @interface — annotation type declaration.
+				// The '@' token has been consumed; now consume the 'interface' keyword.
+				s.yylexNonNull(KEYWORD_INTERFACE, "'interface' expected after '@'");
+				td = getNormalInterfaceDeclaration(cu, s, addTo);
+				break;
 
 			default:
 				ParserNotice notice = new ParserNotice(t,
@@ -873,9 +875,10 @@ OUTER:
 				type.incrementBracketPairCount(s.skipBracketPairs());
 			}
 			List<String> thrownTypeNames = getThrownTypeNames(cu, s);
-			t = s.yylexNonNull("'{' or ';' expected");
+			t = s.yylexNonNull("';' expected");
 			if (t.getType() != SEPARATOR_SEMICOLON) {
-				throw new IOException("';' expected");
+				// Could be 'default' clause in annotation type element — skip to ';'
+				s.eatThroughNextSkippingBlocks(SEPARATOR_SEMICOLON);
 			}
 			Method m = new Method(s, modList, type, methodNameToken, formalParams,
 									thrownTypeNames);
