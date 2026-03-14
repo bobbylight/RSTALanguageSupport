@@ -29,6 +29,7 @@ import javax.swing.text.JTextComponent;
 import org.fife.rsta.ac.ShorthandCompletionCache;
 import org.fife.rsta.ac.java.buildpath.LibraryInfo;
 import org.fife.rsta.ac.java.buildpath.SourceLocation;
+import org.fife.rsta.ac.java.classreader.AccessFlags;
 import org.fife.rsta.ac.java.classreader.ClassFile;
 import org.fife.rsta.ac.java.classreader.FieldInfo;
 import org.fife.rsta.ac.java.classreader.MemberInfo;
@@ -46,6 +47,7 @@ import org.fife.rsta.ac.java.rjc.ast.TypeDeclaration;
 import org.fife.rsta.ac.java.rjc.lang.Type;
 import org.fife.rsta.ac.java.rjc.lang.TypeArgument;
 import org.fife.rsta.ac.java.rjc.lang.TypeParameter;
+import org.fife.ui.autocomplete.BasicCompletion;
 import org.fife.ui.autocomplete.Completion;
 import org.fife.ui.autocomplete.DefaultCompletionProvider;
 import org.fife.ui.rsyntaxtextarea.RSyntaxDocument;
@@ -293,6 +295,58 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	 */
 	public void setShorthandCache(ShorthandCompletionCache shorthandCache) {
 		this.shorthandCache = shorthandCache;
+	}
+
+
+	/**
+	 * Adds completions for annotation element parameters when the caret
+	 * is inside an annotation's parentheses (e.g. {@code @Serialize(nam|)}).
+	 *
+	 * @param set The set to add completions to.
+	 * @param cu The compilation unit being parsed.
+	 * @param annotationClassName The simple name of the annotation type.
+	 * @return {@code true} if annotation completions were added (caller
+	 *         should return them directly), {@code false} if not in
+	 *         annotation context.
+	 */
+	private boolean addAnnotationElementCompletions(Set<Completion> set,
+			CompilationUnit cu, String annotationClassName) {
+
+		ClassFile cf = getClassFileFor(cu, annotationClassName);
+		if (cf == null ||
+				(cf.getAccessFlags() & AccessFlags.ACC_ANNOTATION) == 0) {
+			return false;
+		}
+
+		// Add annotation element methods as completions
+		int methodCount = cf.getMethodCount();
+		for (int i=0; i<methodCount; i++) {
+			MethodInfo method = cf.getMethodInfo(i);
+			String name = method.getName();
+
+			if (method.isConstructor() || method.isStatic() || method.getParameterCount() != 0 ||
+					org.fife.rsta.ac.java.classreader.Util.isSynthetic(method.getAccessFlags())) {
+				continue;
+			}
+
+			// Display shows "name" but insertion produces "name="
+			BasicCompletion bc = new BasicCompletion(this, name + "=") {
+				@Override
+				public String getInputText() {
+					return name;
+				}
+			};
+			bc.setShortDescription(method.getReturnTypeString(false));
+
+			String summary = new MethodInfoData(method, this).getSummary();
+			if (summary != null && summary.startsWith("/**")) {
+				bc.setSummary(Util.docCommentToHtml(summary));
+			}
+
+			set.add(bc);
+		}
+
+		return !set.isEmpty();
 	}
 
 
@@ -556,35 +610,55 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 		// Note: getAlreadyEnteredText() never returns null
 		String text = getAlreadyEnteredText(comp);
 
-		// Special case - end of a String literal
-		boolean stringLiteralMember = checkStringLiteralMember(comp, text, cu,
-																set);
+		String annotationClassName = getAnnotationClassName(comp);
+		boolean annotationElements = annotationClassName != null &&
+			addAnnotationElementCompletions(set, cu, annotationClassName);
+		if (!annotationElements) {
+			// Special case - end of a String literal
+			boolean stringLiteralMember = checkStringLiteralMember(comp, text, cu,
+																	set);
 
-		// Not after a String literal - regular code completion
-		if (!stringLiteralMember) {
+			// Not after a String literal - regular code completion
+			if (!stringLiteralMember) {
 
-			// Don't add shorthand completions if they're typing something
-			// qualified
-			if (text.indexOf('.')==-1) {
-				addShorthandCompletions(set);
+				// Don't add shorthand completions if they're typing something
+				// qualified
+				if (text.indexOf('.')==-1) {
+					addShorthandCompletions(set);
+				}
+
+				loadImportCompletions(set, text, cu);
+
+				// Add completions for fully-qualified stuff (e.g. "com.sun.jav")
+				//long startTime = System.currentTimeMillis();
+				jarManager.addCompletions(this, text, set);
+				//long time = System.currentTimeMillis() - startTime;
+				//log("jar completions loaded in: " + time);
+
+				// Loop through all types declared in this source, and provide
+				// completions depending on in what type/method/etc. the caret's in.
+				loadCompletionsForCaretPosition(cu, comp, text, set);
+
 			}
-
-			loadImportCompletions(set, text, cu);
-
-			// Add completions for fully-qualified stuff (e.g. "com.sun.jav")
-			//long startTime = System.currentTimeMillis();
-			jarManager.addCompletions(this, text, set);
-			//long time = System.currentTimeMillis() - startTime;
-			//log("jar completions loaded in: " + time);
-
-			// Loop through all types declared in this source, and provide
-			// completions depending on in what type/method/etc. the caret's in.
-			loadCompletionsForCaretPosition(cu, comp, text, set);
 
 		}
 
 		// Do a final sort of all of our completions and we're good to go!
 		completions = new ArrayList<>(set);
+
+		// If in annotation context (@), filter to only annotation types
+		boolean annotationContext = isAnnotationContext(comp, text);
+		if (annotationContext) {
+			Iterator<Completion> it = completions.iterator();
+			while (it.hasNext()) {
+				Completion c = it.next();
+				if (!(c instanceof ClassCompletion) ||
+						!((ClassCompletion) c).isAnnotationType()) {
+					it.remove();
+				}
+			}
+		}
+
 		Collections.sort(completions);
 
 		// Only match based on stuff after the final '.', since that's what is
@@ -633,9 +707,116 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 
 
 
-public SourceLocation getSourceLocForClass(String className) {
-	return jarManager.getSourceLocForClass(className);
-}
+	/**
+	 * Returns the source location for the specified class, if available.
+	 *
+	 * @param className The fully qualified class name.
+	 * @return The source location, or {@code null} if not found.
+	 */
+	public SourceLocation getSourceLocForClass(String className) {
+		return jarManager.getSourceLocForClass(className);
+	}
+
+
+	/**
+	 * Checks whether the already-entered text follows '@', allowing whitespace
+	 * between the annotation marker and name.
+	 */
+	private boolean isAnnotationContext(JTextComponent comp, String alreadyEntered) {
+		try {
+			RSyntaxDocument doc = (RSyntaxDocument)comp.getDocument();
+			int offset = comp.getCaretPosition() - alreadyEntered.length() - 1;
+			while (offset >= 0 && Character.isWhitespace(doc.charAt(offset))) {
+				offset--;
+			}
+			return offset >= 0 && doc.charAt(offset) == '@';
+		} catch (BadLocationException e) {
+			return false;
+		}
+	}
+
+
+	/**
+	 * Returns the annotation whose element name is being completed, or
+	 * {@code null} when the caret is in an expression or outside an annotation.
+	 * Tokens keep parentheses in strings and comments out of the nesting count.
+	 */
+	private String getAnnotationClassName(JTextComponent comp) {
+		RSyntaxTextArea textArea = (RSyntaxTextArea)comp;
+		int caret = comp.getCaretPosition();
+		int depth = 0;
+		boolean argumentStart = false;
+		try {
+			for (int line = textArea.getLineOfOffset(caret); line >= 0; line--) {
+				List<Token> tokens = new ArrayList<>();
+				for (Token token = textArea.getTokenListForLine(line);
+						token != null && token.isPaintable() && token.getOffset() < caret;
+						token = token.getNextToken()) {
+					tokens.add(token);
+				}
+				for (int i = tokens.size() - 1; i >= 0; i--) {
+					Token token = tokens.get(i);
+					if (token.isComment() && token.getEndOffset() >= caret) {
+						return null;
+					}
+					if (token.isCommentOrWhitespace()) {
+						continue;
+					}
+					if (!argumentStart && depth == 0) {
+						if (token.isSingleChar(',') || token.isSingleChar('(')) {
+							argumentStart = true;
+						}
+						else if (token.getType() != Token.IDENTIFIER) {
+							return null;
+						}
+					}
+					if (token.isSingleChar(')') || token.isSingleChar('}') || token.isSingleChar(']')) {
+						depth++;
+					}
+					else if (token.isSingleChar('(') || token.isSingleChar('{') || token.isSingleChar('[')) {
+						if (depth == 0) {
+							return token.isSingleChar('(') ?
+								getAnnotationNameBefore((RSyntaxDocument)comp.getDocument(), token.getOffset()) : null;
+						}
+						depth--;
+					}
+					else if (depth == 0 && token.isSingleChar(';')) {
+						return null;
+					}
+				}
+			}
+		} catch (BadLocationException e) {
+			return null;
+		}
+		return null;
+	}
+
+
+	/**
+	 * Returns the annotation name before an opening parenthesis, if any.
+	 *
+	 * @param doc The document being edited.
+	 * @param offset The opening parenthesis offset.
+	 * @return The annotation name, or {@code null}.
+	 * @throws BadLocationException If an offset is invalid.
+	 */
+	private String getAnnotationNameBefore(RSyntaxDocument doc, int offset) throws BadLocationException {
+		while (offset > 0 && Character.isWhitespace(doc.charAt(offset - 1))) {
+			offset--;
+		}
+		int end = offset;
+		while (offset > 0 && (Character.isJavaIdentifierPart(doc.charAt(offset - 1)) ||
+				doc.charAt(offset - 1) == '.')) {
+			offset--;
+		}
+		int start = offset;
+		while (offset > 0 && Character.isWhitespace(doc.charAt(offset - 1))) {
+			offset--;
+		}
+		return start < end && offset > 0 && doc.charAt(offset - 1) == '@' ?
+			doc.getText(start, end - start) : null;
+	}
+
 
 	/**
 	 * Returns whether a method defined by a super class is accessible to
