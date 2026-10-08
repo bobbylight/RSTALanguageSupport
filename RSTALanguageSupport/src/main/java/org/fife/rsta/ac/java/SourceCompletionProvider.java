@@ -996,6 +996,12 @@ public SourceLocation getSourceLocForClass(String className) {
 			}
 		}
 
+		// 3b. Check fields inherited from the superclass chain (e.g. a
+		// Component subclass's "gameObject")
+		if (currentType == null && !firstIsMethodCall) {
+			currentType = resolveInheritedFieldType(cu, td, firstName);
+		}
+
 		// 4. Check class name (static access)
 		if (currentType == null && !firstIsMethodCall) {
 			List<ImportDeclaration> imports = cu.getImports();
@@ -1138,6 +1144,33 @@ public SourceLocation getSourceLocForClass(String className) {
 
 
 	/**
+	 * Resolves the type of a non-basic field named {@code fieldName} that the
+	 * class being edited inherits from its superclass chain, or returns
+	 * <code>null</code>.
+	 */
+	private ClassFile resolveInheritedFieldType(CompilationUnit cu,
+			TypeDeclaration td, String fieldName) {
+		if (!(td instanceof NormalClassDeclaration)) {
+			return null;
+		}
+		Type extended = ((NormalClassDeclaration)td).getExtendedType();
+		if (extended==null) {
+			return null;
+		}
+		ClassFile superClass = getClassFileFor(cu, extended.getName(true, false));
+		if (superClass==null) {
+			return null;
+		}
+		String fieldType = findFieldType(superClass, fieldName, false,
+				cu.getPackageName());
+		if (fieldType==null || fieldType.endsWith("]")) {
+			return null;
+		}
+		return getClassFileFor(cu, fieldType);
+	}
+
+
+	/**
 	 * Resolves a local variable name to its ClassFile type.
 	 */
 	private ClassFile resolveLocalVarType(CompilationUnit cu, CodeBlock block,
@@ -1276,6 +1309,17 @@ public SourceLocation getSourceLocForClass(String className) {
 
 			matched |= found;
 
+		}
+
+		// The prefix might be a field inherited from a superclass, e.g.
+		// "gameObject." inside a Component subclass. Fields declared only in
+		// the superclass's class file are not members of td.
+		if (!matched && retVal.isEmpty()) {
+			ClassFile inherited = resolveInheritedFieldType(cu, td, prefix);
+			if (inherited!=null) {
+				addCompletionsForExtendedClass(retVal, cu, inherited, pkg, null);
+				matched = true;
+			}
 		}
 
 		// Could be a class name, in which case we'll need to add completions
