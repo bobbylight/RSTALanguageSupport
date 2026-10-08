@@ -112,9 +112,9 @@ class ClassAndLocalVariablesTest {
 		TypeDeclaration typeDec = cu.getTypeDeclarationIterator().next();
 		assertEquals("SimpleClass", typeDec.getName());
 
-		// 4 fields, 1 constructor and 4 methods
+		// 4 fields, 1 constructor and 5 methods
 		int memberCount = typeDec.getMemberCount();
-		assertEquals(9, memberCount);
+		assertEquals(10, memberCount);
 
 		// Iterate through members.  They should be returned in the
 		// order they are found in.
@@ -191,6 +191,12 @@ class ClassAndLocalVariablesTest {
 		member = i.next();
 		assertInstanceOf(Method.class, member);
 		method = (Method)member;
+		assertEquals("localVarsWithCast", method.getName());
+		assertTrue(method.getModifiers().isPublic());
+
+		member = i.next();
+		assertInstanceOf(Method.class, member);
+		method = (Method)member;
 		assertEquals("localVarsSimple", method.getName());
 		assertTrue(method.getModifiers().isPublic());
 
@@ -217,6 +223,38 @@ class ClassAndLocalVariablesTest {
 			assertEquals("val" + i, var.getName());
 		}
 
+	}
+
+
+	@Test
+	void testLocalVariablesWithCast() {
+
+		TypeDeclaration td = cu.getTypeDeclaration(0);
+		List<Method> methods = td.getMethodsByName("localVarsWithCast");
+		assertEquals(1, methods.size());
+		Method method = methods.get(0);
+		CodeBlock body = method.getBody();
+
+		// The for loop body is a child block.
+		// The for loop should have a child block containing "String item = ..."
+		assertTrue(body.getChildBlockCount() >= 1,
+				"for loop should create a child code block");
+		CodeBlock forBlock = body.getChildBlock(0);
+		assertTrue(forBlock.getLocalVarCount() >= 1,
+				"for block should contain at least 1 local variable (item)");
+
+		// Find the 'item' local variable
+		boolean found = false;
+		for (int i = 0; i < forBlock.getLocalVarCount(); i++) {
+			LocalVariable var = forBlock.getLocalVar(i);
+			if ("item".equals(var.getName())) {
+				assertEquals("String", var.getType().getName(false),
+						"Cast-assigned local var should have declared type");
+				found = true;
+				break;
+			}
+		}
+		assertTrue(found, "Local variable 'item' should be parsed from cast assignment");
 	}
 
 
