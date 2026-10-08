@@ -175,9 +175,24 @@ class ClassCompletion extends AbstractJavaSourceCompletion {
 
 		}
 
-		// Default to the fully-qualified class name.
-		return cf.getClassName(true);
+		// Default to the class name and its package.
+		String pkg = cf.getPackageName();
+		return "<html><body><b>" + cf.getClassName(false) + "</b><br>" +
+				"<font color=\"#808080\">" +
+				(cf.isDeprecated() ? "<b>Deprecated.</b> " : "") +
+				(pkg!=null ? "Package " + pkg : "Default package") +
+				"</font><br><br><i>No documentation.</i></body></html>";
 
+	}
+
+
+	/**
+	 * Returns whether this class is deprecated.
+	 *
+	 * @return Whether this class is deprecated.
+	 */
+	boolean isDeprecated() {
+		return cf.isDeprecated();
 	}
 
 
