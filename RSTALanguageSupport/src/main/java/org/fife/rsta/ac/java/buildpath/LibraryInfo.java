@@ -48,6 +48,13 @@ public abstract class LibraryInfo implements Comparable<LibraryInfo>,
 	 */
 	private SourceLocation sourceLoc;
 
+	/**
+	 * Whether this library holds the user's own project classes, as opposed
+	 * to an engine, JRE or third-party library.  Code completion ranks
+	 * project classes above library ones.
+	 */
+	private boolean projectLibrary;
+
 
 	/**
 	 * Does any cleanup necessary after a call to
@@ -299,6 +306,31 @@ public abstract class LibraryInfo implements Comparable<LibraryInfo>,
 	 * @return The hash code for this library.
 	 */
 	public abstract int hashCodeImpl();
+
+
+	/**
+	 * Returns whether this library holds the user's own project classes.
+	 *
+	 * @return Whether this is a project library.
+	 * @see #setProjectLibrary(boolean)
+	 */
+	public boolean isProjectLibrary() {
+		return projectLibrary;
+	}
+
+
+	/**
+	 * Sets whether this library holds the user's own project classes.  Code
+	 * completion ranks members and classes of project libraries above those
+	 * of other libraries.  This must be set before the library is added to a
+	 * <code>JarManager</code>.
+	 *
+	 * @param projectLibrary Whether this is a project library.
+	 * @see #isProjectLibrary()
+	 */
+	public void setProjectLibrary(boolean projectLibrary) {
+		this.projectLibrary = projectLibrary;
+	}
 
 
 	/**

@@ -252,6 +252,28 @@ public class JarManager {
 
 
 	/**
+	 * Returns whether a class comes from a library marked as holding the
+	 * user's own project classes.
+	 *
+	 * @param className The fully qualified class name.
+	 * @return Whether the class is a project class.
+	 * @see LibraryInfo#setProjectLibrary(boolean)
+	 */
+	public boolean isProjectClass(String className) {
+		if (className==null || className.isEmpty()) {
+			return false;
+		}
+		for (JarReader jar : classFileSources) {
+			if (jar.getLibraryInfo().isProjectLibrary() &&
+					jar.containsClass(className)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+	/**
 	 * Returns a list of all classes/interfaces/enums with a given (unqualified)
 	 * name.  There may be several, since the name is unqualified.
 	 *

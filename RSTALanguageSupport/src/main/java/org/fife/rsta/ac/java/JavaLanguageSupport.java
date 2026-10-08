@@ -526,6 +526,9 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 				}
 			}
 
+			// Remember the pick so it ranks a little higher this session.
+			CompletionRanker.recordPick(c);
+
 			try {
 				super.insertCompletion(c, typedParamListStartChar);
 				if (importInfo!=null) {

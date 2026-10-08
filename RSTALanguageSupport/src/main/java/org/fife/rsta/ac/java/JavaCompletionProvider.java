@@ -117,6 +117,21 @@ public class JavaCompletionProvider extends LanguageAwareCompletionProvider {
 	}
 
 
+	/**
+	 * Overridden so that the source provider's ranking (see
+	 * {@link CompletionRanker}) survives; the default implementation re-sorts
+	 * completions by relevance and name.  The comment and string providers
+	 * sort their own completions.
+	 */
+	@Override
+	public List<Completion> getCompletions(JTextComponent comp) {
+		if (getParent()!=null) {
+			return super.getCompletions(comp);
+		}
+		return getCompletionsImpl(comp);
+	}
+
+
 	@Override
 	public List<Completion> getCompletionsAt(JTextComponent tc, Point p) {
 		return sourceProvider.getCompletionsAt(tc, p);
