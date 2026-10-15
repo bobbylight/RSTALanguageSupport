@@ -428,36 +428,36 @@ if (t!=null && !t.isWhitespace()) {
 	 * auto-activate in some other language, such as PHP.
 	 *
 	 * @param tc The text component.
+	 * @param offs The offset of the character that was just inserted.
 	 * @return Whether auto-activation is okay outside of markup.
-	 * @see #isAutoActivateOkay(JTextComponent)
+	 * @see #isAutoActivateOkay(JTextComponent, int)
 	 */
-	protected boolean isAutoActivateOkayOutsideOfMarkup(JTextComponent tc) {
-		return super.isAutoActivateOkay(tc);
+	protected boolean isAutoActivateOkayOutsideOfMarkup(JTextComponent tc, int offs) {
+		return super.isAutoActivateOkay(tc, offs);
 	}
 
 
 	/**
 	 * Overridden to ensure auto-activation only occurs in a markup tag.
 	 *
-	 * @see #isAutoActivateOkayOutsideOfMarkup(JTextComponent)
+	 * @see #isAutoActivateOkayOutsideOfMarkup(JTextComponent, int)
 	 */
 	@Override
-	public boolean isAutoActivateOkay(JTextComponent tc) {
+	public boolean isAutoActivateOkay(JTextComponent tc, int offs) {
 
-		boolean okay = super.isAutoActivateOkay(tc);
+		boolean okay = super.isAutoActivateOkay(tc, offs);
 
 		if (okay) {
 
 			RSyntaxTextArea textArea = (RSyntaxTextArea)tc;
-			int dot = textArea.getCaretPosition();
 
 			try {
 
-				int line = textArea.getLineOfOffset(dot);
+				int line = textArea.getLineOfOffset(offs);
 				Token list = textArea.getTokenListForLine(line);
 
 				if (list!=null) { // Always true?
-					return !insideMarkupTag(textArea, list, line, dot);
+					return !insideMarkupTag(textArea, list, line, offs);
 				}
 
 			} catch (BadLocationException ble) {

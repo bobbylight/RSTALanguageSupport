@@ -61,12 +61,12 @@ public class AboutDialog extends JDialog {
 		JPanel box2 = new JPanel();
 		box2.setLayout(new BoxLayout(box2, BoxLayout.Y_AXIS));
 		box2.setOpaque(true);
-		box2.setBackground(Color.white);
+		box2.setBackground(Color.WHITE);
 		box2.setBorder(new TopBorder());
 
 		JLabel label = new JLabel("Language Support Demo");
 		label.setOpaque(true);
-		label.setBackground(Color.white);
+		label.setBackground(Color.WHITE);
 		Font labelFont = label.getFont();
 		label.setFont(labelFont.deriveFont(Font.BOLD, 20));
 		addLeftAligned(label, box2);

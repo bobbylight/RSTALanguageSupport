@@ -18,6 +18,22 @@ RSTALanguageSupport is available under a [modified BSD license](https://github.c
 For more information, visit [https://github.com/bobbylight/RSyntaxTextArea](https://github.com/bobbylight/RSyntaxTextArea).
 
 
+# Building and Requirements
+
+Building RSTALanguageSupport requires JDK 25 or later:
+
+    ./gradlew build --warning-mode all
+
+Version 4.x of RSTALanguageSupport depends on RSyntaxTextArea 4.x and
+AutoComplete 4.x, and requires Java 11 to run.  If you need to support older
+Java versions, use the version specified in the following table:
+
+| Version      | Required to build (JDK) | Required to run (JRE) | RSyntaxTextArea | AutoComplete |
+|--------------|-------------------------|-----------------------|-----------------|--------------|
+| Next release | 25                      | 11                    | 4.x             | 4.x          |
+| 3.4.x        | 17                      | 8                     | 3.x             | 3.x          |
+
+
 # Supported Languages and Status
 
 Languages supported in this library include:
