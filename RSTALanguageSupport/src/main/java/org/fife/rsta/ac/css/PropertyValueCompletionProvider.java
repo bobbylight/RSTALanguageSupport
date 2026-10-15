@@ -341,9 +341,9 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 
 
 	@Override
-	public boolean isAutoActivateOkay(JTextComponent tc) {
+	public boolean isAutoActivateOkay(JTextComponent tc, int offs) {
 
-		boolean ok = super.isAutoActivateOkay(tc);
+		boolean ok = super.isAutoActivateOkay(tc, offs);
 
 		// In our constructor, we set up auto-activation of the completion
 		// popup to occur on space chars.  This extra check makes it a little
@@ -351,10 +351,9 @@ public class PropertyValueCompletionProvider extends CompletionProviderBase {
 		// for property values.
 		if (ok) {
 			RSyntaxDocument doc = (RSyntaxDocument)tc.getDocument();
-			int dot = tc.getCaretPosition();
 			try {
-				if (dot>1 && doc.charAt(dot)==' ') { // Caret hasn't advanced (?)
-					ok = doc.charAt(dot-1)==':';
+				if (offs>1 && doc.charAt(offs)==' ') {
+					ok = doc.charAt(offs-1)==':';
 				}
 			} catch (BadLocationException ble) {
 				ble.printStackTrace(); // Never happens

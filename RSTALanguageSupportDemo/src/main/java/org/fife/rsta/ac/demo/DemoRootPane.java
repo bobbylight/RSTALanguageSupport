@@ -103,7 +103,7 @@ class DemoRootPane extends JRootPane implements HyperlinkListener,
 		setJMenuBar(createMenuBar());
 
 		ErrorStrip errorStrip = new ErrorStrip(textArea);
-//errorStrip.setBackground(java.awt.Color.blue);
+//errorStrip.setBackground(java.awt.Color.BLUE);
 JPanel cp = new JPanel(new BorderLayout());
 cp.add(sp);
 cp.add(errorStrip, BorderLayout.LINE_END);

@@ -22,7 +22,7 @@ import org.fife.ui.rsyntaxtextarea.Token;
  * Returns non-whitespace, non-comment tokens from an {@link RSyntaxDocument},
  * one at a time.  This can be used by simplistic {@link LanguageSupport}s to
  * "parse" for simple, easily-identifiable tokens, such as curly braces and
- * {@link Token#VARIABLE}s.  For example, to identify code blocks for languages
+ * {@link TokenTypes#VARIABLE}s.  For example, to identify code blocks for languages
  * structured like C and Java, you can use this class in conjunction with
  * {@link CodeBlock} and {@link VariableDeclaration} to create an
  * easily-parsable model of your source code.

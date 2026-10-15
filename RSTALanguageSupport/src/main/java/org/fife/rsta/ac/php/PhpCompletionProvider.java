@@ -239,9 +239,9 @@ public class PhpCompletionProvider extends HtmlCompletionProvider {
 	 * Overridden to properly handle both HTML markup and PHP code.
 	 */
 	@Override
-	public boolean isAutoActivateOkay(JTextComponent tc) {
-		return inPhpBlock(tc) ? isAutoActivateOkayOutsideOfMarkup(tc) :
-				super.isAutoActivateOkay(tc);
+	public boolean isAutoActivateOkay(JTextComponent tc, int offs) {
+		return inPhpBlock(tc) ? isAutoActivateOkayOutsideOfMarkup(tc, offs) :
+				super.isAutoActivateOkay(tc, offs);
 	}
 
 
