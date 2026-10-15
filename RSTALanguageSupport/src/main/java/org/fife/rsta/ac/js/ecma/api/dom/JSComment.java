@@ -21,7 +21,7 @@ public abstract class JSComment implements Comment, JS5ObjectFunctions {
 	}
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type Comment
 	 * @memberOf Comment
@@ -32,7 +32,7 @@ public abstract class JSComment implements Comment, JS5ObjectFunctions {
 	public JSComment protype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Array

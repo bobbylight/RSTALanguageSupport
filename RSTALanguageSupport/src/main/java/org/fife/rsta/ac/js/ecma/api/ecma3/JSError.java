@@ -11,7 +11,7 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.functions.JSObjectFunctions;
 public abstract class JSError implements JSObjectFunctions {
 
 	/**
-	 * Object Error()
+	 * Object Error().
 	 *
 	 * @super Object
 	 * @constructor
@@ -24,7 +24,7 @@ public abstract class JSError implements JSObjectFunctions {
 	}
 
 	/**
-	 * Object Error(message)
+	 * Object Error(message).
 	 *
 	 * @param message An optional error message that provides details about the exception
 	 * @super Object
@@ -37,7 +37,7 @@ public abstract class JSError implements JSObjectFunctions {
 	}
 
 	/**
-	 * Property <b>prototype</b>
+	 * Property <b>prototype</b>.
 	 *
 	 * @type Error
 	 * @memberOf Error
@@ -59,7 +59,7 @@ public abstract class JSError implements JSObjectFunctions {
 	protected JSFunction constructor;
 
 	/**
-	 * <b>property name</b>
+	 * <b>property name</b>.
 	 *
 	 * @type String
 	 * @memberOf Error
@@ -70,7 +70,7 @@ public abstract class JSError implements JSObjectFunctions {
 	protected JSString name;
 
 	/**
-	 * <b>property message</b>
+	 * <b>property message</b>.
 	 *
 	 * @type String
 	 * @memberOf Error

@@ -6,7 +6,7 @@ import org.fife.rsta.ac.js.ecma.api.ecma5.JS5Array;
 public abstract class BarProp extends JS5Array {
 
 	/**
-	 * Object BarProp()
+	 * Object BarProp().
 	 *
 	 * @constructor
 	 * @since Standard ECMA-262 3rd. Edition
@@ -17,7 +17,7 @@ public abstract class BarProp extends JS5Array {
 	}
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type Array
 	 * @memberOf Array

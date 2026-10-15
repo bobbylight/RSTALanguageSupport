@@ -129,7 +129,7 @@ public interface JSArrayFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * <b>function slice(start, end)</b> return a portion of an <b>array</b>
+	 * <b>function slice(start, end)</b> return a portion of an <b>array</b>.
 	 * <p>
 	 * <strong>Example</strong>
 	 * <pre>
@@ -152,7 +152,7 @@ public interface JSArrayFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * <b>function sort(function)</b> sort the elements of an <b>array</b>
+	 * <b>function sort(function)</b> sort the elements of an <b>array</b>.
 	 * <p>
 	 * <strong>Example</strong>
 	 * <pre>
@@ -173,7 +173,7 @@ public interface JSArrayFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * <b>function splice(start, deletecount, items)</b> insert, remove, or replace <b>array</b> elements
+	 * <b>function splice(start, deletecount, items)</b> insert, remove, or replace <b>array</b> elements.
 	 * <p>
 	 * <strong>Example</strong>
 	 * <pre>
@@ -197,7 +197,7 @@ public interface JSArrayFunctions extends JSObjectFunctions {
 
 
 	/**
-	 * <b>function unshift(items)</b> insert elements at the beginning of an <b>array</b>
+	 * <b>function unshift(items)</b> insert elements at the beginning of an <b>array</b>.
 	 * <p>
 	 * <strong>Example</strong>
 	 * <pre>

@@ -4,7 +4,7 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.functions.JSGlobalFunctions;
 
 
 /**
- * Object Global
+ * Object Global.
  *
  * @since Standard ECMA-262 3rd. Edition
  */

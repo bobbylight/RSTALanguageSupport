@@ -11,7 +11,7 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.functions.JSRegExpFunctions;
 public abstract class JSRegExp implements JSRegExpFunctions {
 
 	/**
-	 * Object RegExp(pattern, attributes)
+	 * Object RegExp(pattern, attributes).
 	 *
 	 * @param pattern    a string that specifies the pattern of the regular expression.
 	 * @param attributes an optional string containing and of the "g", "i" an "m" attributes that specify global, case-insensitive, and multiline matches respectively.
@@ -25,7 +25,7 @@ public abstract class JSRegExp implements JSRegExpFunctions {
 	}
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type RegExp
 	 * @memberOf RegExp
@@ -36,7 +36,7 @@ public abstract class JSRegExp implements JSRegExpFunctions {
 	public JSRegExp prototype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf RegExp
@@ -47,7 +47,7 @@ public abstract class JSRegExp implements JSRegExpFunctions {
 	protected JSFunction constructor;
 
 	/**
-	 * <b>property source</b>
+	 * <b>property source</b>.
 	 *
 	 * @type String
 	 * @memberOf RegExp
@@ -58,7 +58,7 @@ public abstract class JSRegExp implements JSRegExpFunctions {
 	protected JSString source;
 
 	/**
-	 * <b>property global</b>
+	 * <b>property global</b>.
 	 *
 	 * @type Boolean
 	 * @memberOf RegExp
@@ -69,7 +69,7 @@ public abstract class JSRegExp implements JSRegExpFunctions {
 	protected JSBoolean global;
 
 	/**
-	 * <b>property ignoreCase</b>
+	 * <b>property ignoreCase</b>.
 	 *
 	 * @type Boolean
 	 * @memberOf RegExp
@@ -80,7 +80,7 @@ public abstract class JSRegExp implements JSRegExpFunctions {
 	protected JSBoolean ignoreCase;
 
 	/**
-	 * <b>property multiline</b>
+	 * <b>property multiline</b>.
 	 *
 	 * @type Boolean
 	 * @memberOf RegExp
@@ -91,7 +91,7 @@ public abstract class JSRegExp implements JSRegExpFunctions {
 	protected JSBoolean multiline;
 
 	/**
-	 * <b>property lastIndex</b>
+	 * <b>property lastIndex</b>.
 	 *
 	 * @type Number
 	 * @memberOf RegExp

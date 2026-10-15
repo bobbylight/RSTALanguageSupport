@@ -9,7 +9,7 @@ public abstract class JSHTMLDocument implements HTMLDocument, JS5ObjectFunctions
 
 	/**
 	 * Object HTMLDocument()
-	 * See also the <a href='http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510'>Document Object Model (DOM) Level 2 Specification</a>
+	 * See also the <a href='http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510'>Document Object Model (DOM) Level 2 Specification</a>.
 	 *
 	 * @constructor
 	 * @since Standard ECMA-262 3rd. Edition
@@ -21,7 +21,7 @@ public abstract class JSHTMLDocument implements HTMLDocument, JS5ObjectFunctions
 	}
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type HTMLDocument
 	 * @memberOf HTMLDocument
@@ -32,7 +32,7 @@ public abstract class JSHTMLDocument implements HTMLDocument, JS5ObjectFunctions
 	public JSHTMLDocument protype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Array

@@ -6,13 +6,13 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.functions.JSObjectFunctions;
 
 
 /**
- * Object QName
+ * Object QName.
  *
  * @since Standard ECMA-357 2nd. Edition
  */
 public abstract class E4XQName implements JSObjectFunctions {
 	/**
-	 * Object QName()
+	 * Object QName().
 	 *
 	 * @constructor
 	 * @extends Object
@@ -23,7 +23,7 @@ public abstract class E4XQName implements JSObjectFunctions {
 	}
 
 	/**
-	 * Object QName(name)
+	 * Object QName(name).
 	 *
 	 * @param name localname of the QName
 	 * @constructor
@@ -48,7 +48,7 @@ public abstract class E4XQName implements JSObjectFunctions {
 	}
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type QName
 	 * @memberOf QName
@@ -59,7 +59,7 @@ public abstract class E4XQName implements JSObjectFunctions {
 	public E4XQName protype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf QName
@@ -70,7 +70,7 @@ public abstract class E4XQName implements JSObjectFunctions {
 	protected JSFunction constructor;
 
 	/**
-	 * <b>property localName</b> local name part of QName
+	 * <b>property localName</b> local name part of QName.
 	 *
 	 * @type String
 	 * @memberOf QName
@@ -82,7 +82,7 @@ public abstract class E4XQName implements JSObjectFunctions {
 
 
 	/**
-	 * <b>property uri</b> namespace uri part of QName
+	 * <b>property uri</b> namespace uri part of QName.
 	 *
 	 * @type String
 	 * @memberOf QName

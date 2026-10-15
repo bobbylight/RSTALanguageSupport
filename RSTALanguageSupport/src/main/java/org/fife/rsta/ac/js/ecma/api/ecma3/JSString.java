@@ -12,7 +12,7 @@ public abstract class JSString implements JSStringFunctions {
 
 
 	/**
-     * Object String(s)
+     * Object String(s).
      *
      * @constructor
      * @extends Object
@@ -23,7 +23,7 @@ public abstract class JSString implements JSStringFunctions {
 	public JSString(JSString s){}
 
     /**
-     * <b>property length</b>
+     * <b>property length</b>.
      *
      * @type Number
      * @memberOf String
@@ -34,7 +34,7 @@ public abstract class JSString implements JSStringFunctions {
     protected JSNumber length;
 
     /**
-     * <b>property prototype</b>
+     * <b>property prototype</b>.
      *
      * @type String
      * @memberOf String
@@ -45,7 +45,7 @@ public abstract class JSString implements JSStringFunctions {
     public JSString prototype;
 
     /**
-     * <b>property constructor</b>
+     * <b>property constructor</b>.
      *
      * @type Function
      * @memberOf String

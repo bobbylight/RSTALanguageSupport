@@ -9,7 +9,7 @@ public abstract class JSHTMLFormElement implements HTMLFormElement, JS5ObjectFun
 
 	/**
 	 * Object HTMLFormElement()
-	 * See also the <a href='http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510'>Document Object Model (DOM) Level 2 Specification</a>
+	 * See also the <a href='http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510'>Document Object Model (DOM) Level 2 Specification</a>.
 	 *
 	 * @constructor
 	 * @since Standard ECMA-262 3rd. Edition
@@ -21,7 +21,7 @@ public abstract class JSHTMLFormElement implements HTMLFormElement, JS5ObjectFun
 	}
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type HTMLFormElement
 	 * @memberOf HTMLFormElement
@@ -32,7 +32,7 @@ public abstract class JSHTMLFormElement implements HTMLFormElement, JS5ObjectFun
 	public JSHTMLFormElement protype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Array

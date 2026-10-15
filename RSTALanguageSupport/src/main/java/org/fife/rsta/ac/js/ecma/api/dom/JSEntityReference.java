@@ -21,7 +21,7 @@ public abstract class JSEntityReference implements EntityReference, JS5ObjectFun
 	}
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type EntityReference
 	 * @memberOf EntityReference
@@ -32,7 +32,7 @@ public abstract class JSEntityReference implements EntityReference, JS5ObjectFun
 	public JSEntityReference protype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Array

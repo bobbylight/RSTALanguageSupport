@@ -21,7 +21,7 @@ public abstract class JSUserDataHandler implements UserDataHandler, JS5ObjectFun
 	}
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type UserDataHandler
 	 * @memberOf UserDataHandler
@@ -32,7 +32,7 @@ public abstract class JSUserDataHandler implements UserDataHandler, JS5ObjectFun
 	public JSUserDataHandler protype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Array

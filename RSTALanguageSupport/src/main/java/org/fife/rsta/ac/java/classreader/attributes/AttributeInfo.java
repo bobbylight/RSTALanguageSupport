@@ -63,10 +63,10 @@ public abstract class AttributeInfo {
 										DataInputStream in, String attrName,
 										int attrLength) throws IOException {
 		/*
-		int[] info = new int[attrLength];
-		for (int i=0; i<attrLength; i++) {
-			info[i] = in.readUnsignedByte();
-		}
+		 * 		int[] info = new int[attrLength];
+		 * 		for (int i=0; i<attrLength; i++) {
+		 * 			info[i] = in.readUnsignedByte();
+		 * 		}
 		*/
 		Util.skipBytes(in, attrLength);
 		return new UnsupportedAttribute(cf, attrName);

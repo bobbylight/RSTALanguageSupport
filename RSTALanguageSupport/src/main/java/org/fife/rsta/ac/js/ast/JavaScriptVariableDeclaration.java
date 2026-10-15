@@ -29,6 +29,8 @@ public class JavaScriptVariableDeclaration extends JavaScriptDeclaration {
 
 
 	/**
+	 * Constructor.
+	 *
 	 * @param name of the variable
 	 * @param offset position within script
 	 * @param provider JavaScript source provider
@@ -96,6 +98,8 @@ public class JavaScriptVariableDeclaration extends JavaScriptDeclaration {
 
 
 	/**
+	 * Returns typeDeclaration for the variable.
+	 *
 	 * @return TypeDeclaration for the variable
 	 */
 	public TypeDeclaration getTypeDeclaration() {
@@ -104,6 +108,8 @@ public class JavaScriptVariableDeclaration extends JavaScriptDeclaration {
 
 
 	/**
+	 * Returns javaScript name for the type declaration e.g. String, Number etc.
+	 *
 	 * @return JavaScript name for the type declaration e.g. String, Number etc.
 	 */
 	public String getJavaScriptTypeName() {

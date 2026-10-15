@@ -21,7 +21,7 @@ public abstract class JSNameList implements NameList, JS5ObjectFunctions {
 	}
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type NameList
 	 * @memberOf NameList
@@ -32,7 +32,7 @@ public abstract class JSNameList implements NameList, JS5ObjectFunctions {
 	public JSNameList protype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Array

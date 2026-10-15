@@ -68,6 +68,8 @@ public class TypeDeclarationFactory {
 	}
 
 	/**
+	 * Returns default base ECMA implementation.
+	 *
 	 * @return Default base ECMA implementation
 	 */
 	protected String getDefaultECMAVersion() {
@@ -79,7 +81,7 @@ public class TypeDeclarationFactory {
 	}
 
 	/**
-	 * Removes declaration type from type cache
+	 * Removes declaration type from type cache.
 	 *
 	 * @param name name of type declaration
 	 *
@@ -89,7 +91,7 @@ public class TypeDeclarationFactory {
 	}
 
 	/**
-	 * Returns whether the qualified name is a built-in JavaScript type
+	 * Returns whether the qualified name is a built-in JavaScript type.
 	 *
 	 * @param td The type declaration to check.
 	 * @return Whether it is a built-in JS type.
@@ -113,6 +115,8 @@ public class TypeDeclarationFactory {
 
 
 	/**
+	 * Looks up a type declaration and returns its JavaScript name.
+	 *
 	 * @param name of TypeDeclaration to lookup
 	 * @return lookup <code>TypeDeclaration</code> and return the JavaScript name
 	 */
@@ -158,6 +162,8 @@ public class TypeDeclarationFactory {
 
 
 	/**
+	 * Returns default type declaration - ANY.
+	 *
 	 * @return default type declaration - ANY
 	 */
 	public TypeDeclaration getDefaultTypeDeclaration() {

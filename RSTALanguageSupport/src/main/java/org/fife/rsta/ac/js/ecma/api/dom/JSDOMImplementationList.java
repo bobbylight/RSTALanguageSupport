@@ -21,7 +21,7 @@ public abstract class JSDOMImplementationList implements DOMImplementationList, 
 	}
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type DOMImplementationList
 	 * @memberOf DOMImplementationList
@@ -32,7 +32,7 @@ public abstract class JSDOMImplementationList implements DOMImplementationList, 
 	public DOMImplementationList protype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Array

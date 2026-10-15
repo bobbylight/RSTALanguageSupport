@@ -269,42 +269,42 @@ public class XmlOutlineTree extends AbstractSourceTree {
 	/*
 	 * TODO: Make me work for any LanguageSupport (don't synchronize if waiting on
 	 * a pending parse) and pull me out and make me available for all languages.
-	private class Synchronizer implements CaretListener, ActionListener {
-
-		private Timer timer;
-		private int dot;
-
-		public Synchronizer() {
-			timer = new Timer(650, this);
-			timer.setRepeats(false);
-		}
-
-		public void actionPerformed(ActionEvent e) {
-			recursivelyCheck(root);
-			//System.out.println("Here");
-		}
-
-		public void caretUpdate(CaretEvent e) {
-			this.dot = e.getDot();
-			timer.restart();
-		}
-
-		private boolean recursivelyCheck(XmlTreeNode node) {
-			if (node.containsOffset(dot)) {
-				for (int i=0; i<node.getChildCount(); i++) {
-					XmlTreeNode child = (XmlTreeNode)node.getChildAt(i);
-					if (recursivelyCheck(child)) {
-						return true;
-					}
-				}
-				// None of the children contain the offset, must this guy
-				node.selectInTree();
-				return true;
-			}
-			return false;
-		}
-
-	}
+	 * 	private class Synchronizer implements CaretListener, ActionListener {
+	 *
+	 * 		private Timer timer;
+	 * 		private int dot;
+	 *
+	 * 		public Synchronizer() {
+	 * 			timer = new Timer(650, this);
+	 * 			timer.setRepeats(false);
+	 * 		}
+	 *
+	 * 		public void actionPerformed(ActionEvent e) {
+	 * 			recursivelyCheck(root);
+	 * 			//System.out.println("Here");
+	 * 		}
+	 *
+	 * 		public void caretUpdate(CaretEvent e) {
+	 * 			this.dot = e.getDot();
+	 * 			timer.restart();
+	 * 		}
+	 *
+	 * 		private boolean recursivelyCheck(XmlTreeNode node) {
+	 * 			if (node.containsOffset(dot)) {
+	 * 				for (int i=0; i<node.getChildCount(); i++) {
+	 * 					XmlTreeNode child = (XmlTreeNode)node.getChildAt(i);
+	 * 					if (recursivelyCheck(child)) {
+	 * 						return true;
+	 * 					}
+	 * 				}
+	 * 				// None of the children contain the offset, must this guy
+	 * 				node.selectInTree();
+	 * 				return true;
+	 * 			}
+	 * 			return false;
+	 * 		}
+	 *
+	 * 	}
 */
 
 }

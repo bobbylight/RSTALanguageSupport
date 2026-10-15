@@ -19,6 +19,8 @@ public abstract class JavaScriptDeclaration {
 	}
 
 	/**
+	 * Returns name of the declaration.
+	 *
 	 * @return Name of the declaration
 	 */
 	public String getName() {
@@ -27,6 +29,8 @@ public abstract class JavaScriptDeclaration {
 
 
 	/**
+	 * Returns variable position within the script.
+	 *
 	 * @return variable position within the script
 	 */
 	public int getOffset() {
@@ -74,6 +78,8 @@ public abstract class JavaScriptDeclaration {
 	}
 
 	/**
+	 * Returns codeblock associated with this declaration.
+	 *
 	 * @return codeblock associated with this declaration
 	 */
 	public CodeBlock getCodeBlock() {
@@ -91,6 +97,8 @@ public abstract class JavaScriptDeclaration {
 	}
 
 	/**
+	 * Returns the  JavaScript options associated with this declaration.
+	 *
 	 * @return the  JavaScript options associated with this declaration
 	 */
 	public TypeDeclarationOptions getTypeDeclarationOptions() {

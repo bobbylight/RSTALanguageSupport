@@ -21,7 +21,7 @@ public abstract class JSDocument implements Document, JS5ObjectFunctions {
 	}
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type Document
 	 * @memberOf Document
@@ -32,7 +32,7 @@ public abstract class JSDocument implements Document, JS5ObjectFunctions {
 	public JSDocument protype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Array

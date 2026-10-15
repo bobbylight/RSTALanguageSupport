@@ -20,6 +20,8 @@ public class TypeDeclarationOptions {
 	}
 
 	/**
+	 * Returns the owner script name.
+	 *
 	 * @return the owner script name.
 	 */
 	public String getOwnerScriptName() {
@@ -36,6 +38,8 @@ public class TypeDeclarationOptions {
 	}
 
 	/**
+	 * Returns whether the type declaration supports hyperlinks.
+	 *
 	 * @return whether the type declaration supports hyperlinks.
 	 */
 	public boolean isSupportsLinks() {
@@ -52,6 +56,8 @@ public class TypeDeclarationOptions {
 	}
 
 	/**
+	 * Returns whether the type declaration has been created from a pre-processed script.
+	 *
 	 * @return whether the type declaration has been created from a pre-processed script.
 	 */
 	public boolean isPreProcessing() {

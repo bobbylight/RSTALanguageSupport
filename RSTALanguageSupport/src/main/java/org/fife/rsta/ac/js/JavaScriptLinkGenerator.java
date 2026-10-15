@@ -69,6 +69,8 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 	}
 
 	/**
+	 * Returns linkGeneratorResult based on the JavaScriptDeclaration and the position.
+	 *
 	 * @return LinkGeneratorResult based on the JavaScriptDeclaration and the position
 	 */
 	protected LinkGeneratorResult createSelectedRegionResult(RSyntaxTextArea textArea, Token t,
@@ -80,6 +82,8 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 	}
 
 	/**
+	 * Sets whether to look in the RSTA editing script for variable/function completions.
+	 *
 	 * @param find flag to state whether to look in the RSTA editing script for variable/function completions
 	 */
 	public void setFindLocal(boolean find) {
@@ -87,6 +91,8 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 	}
 
 	/**
+	 * Sets whether to look in the pre-processed scripts for variable/function completions.
+	 *
 	 * @param find flag to state whether to look in the pre-processed scripts for variable/function completions
 	 */
 	public void setFindPreprocessed(boolean find) {
@@ -94,6 +100,8 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 	}
 
 	/**
+	 * Sets whether to look in the system scripts for variable/function completions.
+	 *
 	 * @param find flag to state whether to look in the system scripts for variable/function completions
 	 */
 	public void setFindSystem(boolean find) {
@@ -257,6 +265,8 @@ public class JavaScriptLinkGenerator implements LinkGenerator {
 	}
 
 	/**
+	 * Returns javaScriptLanguage support.
+	 *
 	 * @return JavaScriptLanguage support
 	 */
 	public JavaScriptLanguageSupport getLanguage() {

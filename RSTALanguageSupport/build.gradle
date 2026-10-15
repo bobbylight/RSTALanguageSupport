@@ -7,7 +7,7 @@ plugins {
 dependencies {
     api 'com.fifesoft:rsyntaxtextarea:4.0.1'
     api 'com.fifesoft:autocomplete:4.0.0'
-    implementation 'org.mozilla:rhino-all:1.9.0'
+    implementation 'org.mozilla:rhino-all:1.9.1'
 }
 
 base {

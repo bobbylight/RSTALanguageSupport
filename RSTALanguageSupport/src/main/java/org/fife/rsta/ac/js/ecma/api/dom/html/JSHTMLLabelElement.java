@@ -9,7 +9,7 @@ public abstract class JSHTMLLabelElement implements HTMLLabelElement, JS5ObjectF
 
 	/**
 	 * Object HTMLLabelElement()
-	 * See also the <a href='http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510'>Document Object Model (DOM) Level 2 Specification</a>
+	 * See also the <a href='http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510'>Document Object Model (DOM) Level 2 Specification</a>.
 	 *
 	 * @constructor
 	 * @since Standard ECMA-262 3rd. Edition
@@ -21,7 +21,7 @@ public abstract class JSHTMLLabelElement implements HTMLLabelElement, JS5ObjectF
 	}
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type HTMLLabelElement
 	 * @memberOf HTMLLabelElement
@@ -32,7 +32,7 @@ public abstract class JSHTMLLabelElement implements HTMLLabelElement, JS5ObjectF
 	public JSHTMLLabelElement protype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Array

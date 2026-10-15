@@ -154,7 +154,7 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
 	}
 
 	/**
-	 * <b>function getPrototypeOf(o)</b> return the prototype of an object
+	 * <b>function getPrototypeOf(o)</b> return the prototype of an object.
 	 * <p>
 	 * <strong>Example</strong>
 	 * <pre>
@@ -175,7 +175,7 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
 	}
 
 	/**
-	 * <b>function isExtensible(o)</b> can new properties be added to an object?
+	 * <b>function isExtensible(o)</b> can new properties be added to an object?.
 	 * <p>
 	 * <strong>Example</strong>
 	 * <pre>
@@ -195,7 +195,7 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
 	}
 
 	/**
-	 * <b>function isFrozen(o)</b> is an object immutable?
+	 * <b>function isFrozen(o)</b> is an object immutable?.
 	 *
 	 * @param o The object to be checked.
 	 * @returns {code true} if the object is frozen or immutable, otherwise {code false}.
@@ -213,7 +213,7 @@ public abstract class JS5Object extends JSObject implements JS5ObjectFunctions {
 	}
 
 	/**
-	 * <b>function isSealed(o)</b> can properties be added or deleted from an object?
+	 * <b>function isSealed(o)</b> can properties be added or deleted from an object?.
 	 *
 	 * @param o The object to be checked.
 	 * @returns {code true} if the object is sealed, otherwise {code false}.

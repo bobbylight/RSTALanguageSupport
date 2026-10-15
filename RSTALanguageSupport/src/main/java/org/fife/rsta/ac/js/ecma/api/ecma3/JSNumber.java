@@ -11,7 +11,7 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.functions.JSNumberFunctions;
 public abstract class JSNumber implements JSNumberFunctions {
 
     /**
-     * Object Number(value)
+     * Object Number(value).
      *
      * @constructor
      * @extends Object
@@ -23,7 +23,7 @@ public abstract class JSNumber implements JSNumberFunctions {
     }
 
     /**
-     * <b>property prototype</b>
+     * <b>property prototype</b>.
      *
      * @type Number
      * @memberOf Number
@@ -34,7 +34,7 @@ public abstract class JSNumber implements JSNumberFunctions {
     public JSNumber prototype;
 
     /**
-     * <b>property constructor</b>
+     * <b>property constructor</b>.
      *
      * @type Function
      * @memberOf Number

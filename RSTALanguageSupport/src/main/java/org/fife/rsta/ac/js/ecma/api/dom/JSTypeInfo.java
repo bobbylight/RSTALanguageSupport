@@ -21,7 +21,7 @@ public abstract class JSTypeInfo implements TypeInfo, JS5ObjectFunctions {
 	}
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type TypeInfo
 	 * @memberOf TypeInfo
@@ -32,7 +32,7 @@ public abstract class JSTypeInfo implements TypeInfo, JS5ObjectFunctions {
 	public JSTypeInfo protype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Array

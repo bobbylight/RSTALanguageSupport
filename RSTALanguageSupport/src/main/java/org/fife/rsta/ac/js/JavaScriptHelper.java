@@ -118,6 +118,8 @@ public final class JavaScriptHelper {
 
 
 	/**
+	 * Returns the lookup name of a function from its AST node.
+	 *
 	 * @param node AstNode to look for function
 	 * @param provider The provider to look it up in.
 	 * @return function lookup name from it's AstNode. i.e. concat function name
@@ -157,7 +159,7 @@ public final class JavaScriptHelper {
 
 
 	/**
-	 * Convert AstNode to TypeDeclaration
+	 * Convert AstNode to TypeDeclaration.
 	 *
 	 * @param typeNode AstNode to convert
 	 * @param provider SourceProvider
@@ -257,7 +259,7 @@ case Token.EXPR_RESULT:
 	}
 
 	/**
-	 * Create array type from AstNode and try to determine the array type
+	 * Create array type from AstNode and try to determine the array type.
 	 *
 	 * @param typeNode
 	 * @param provider
@@ -522,6 +524,8 @@ case Token.EXPR_RESULT:
 	}
 
 	/**
+	 * Returns text up to the last dot.
+	 *
 	 * @param text to trim
 	 * @return text up to the last dot e.g. a.getText().length returns a.getText()
 	 */

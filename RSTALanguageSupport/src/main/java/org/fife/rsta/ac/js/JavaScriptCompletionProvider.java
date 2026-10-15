@@ -87,7 +87,7 @@ public class JavaScriptCompletionProvider extends
 	}
 
 	/**
-	 * Set shorthand completion cache
+	 * Set shorthand completion cache.
 	 */
 	public void setShorthandCompletionCache(
 							ShorthandCompletionCache shorthandCache) {

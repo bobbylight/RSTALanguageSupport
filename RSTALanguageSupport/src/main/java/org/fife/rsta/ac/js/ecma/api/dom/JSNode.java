@@ -21,7 +21,7 @@ public abstract class JSNode implements Node, JS5ObjectFunctions {
 	}
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type Node
 	 * @memberOf Node
@@ -32,7 +32,7 @@ public abstract class JSNode implements Node, JS5ObjectFunctions {
 	public JSNode protype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Array

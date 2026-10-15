@@ -21,7 +21,7 @@ public abstract class JSElement implements Element, JS5ObjectFunctions {
 	}
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type Element
 	 * @memberOf Element
@@ -32,7 +32,7 @@ public abstract class JSElement implements Element, JS5ObjectFunctions {
 	public JSElement protype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Array

@@ -134,6 +134,8 @@ public abstract class JavaScriptTypesFactory {
 
 
 	/**
+	 * Returns whether a method looks like a bean property accessor.
+	 *
 	 * @param method
 	 * @return true if the method starts with get or is.
 	 */
@@ -300,6 +302,8 @@ public abstract class JavaScriptTypesFactory {
 
 
 	/**
+	 * Returns returns the ClassFile for the class name, checks all packages available to match to the class name.
+	 *
 	 * @return returns the ClassFile for the class name, checks all packages
 	 *         available to match to the class name
 	 */

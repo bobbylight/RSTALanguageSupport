@@ -21,7 +21,7 @@ public abstract class JSDocumentType implements DocumentType, JS5ObjectFunctions
 	}
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type DocumentType
 	 * @memberOf DocumentType
@@ -32,7 +32,7 @@ public abstract class JSDocumentType implements DocumentType, JS5ObjectFunctions
 	public JSDocumentType protype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Array

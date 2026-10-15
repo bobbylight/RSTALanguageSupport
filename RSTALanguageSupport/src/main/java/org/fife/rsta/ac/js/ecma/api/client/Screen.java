@@ -8,7 +8,7 @@ import org.fife.rsta.ac.js.ecma.api.ecma5.functions.JS5ObjectFunctions;
 public abstract class Screen implements JS5ObjectFunctions {
 
 	/**
-	 * Object Screen()
+	 * Object Screen().
 	 *
 	 * @super Object
 	 * @constructor
@@ -17,7 +17,7 @@ public abstract class Screen implements JS5ObjectFunctions {
 	public Screen(){}
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Object
@@ -28,7 +28,7 @@ public abstract class Screen implements JS5ObjectFunctions {
 	protected JSFunction constructor;
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type Location
 	 * @memberOf Location
@@ -38,7 +38,7 @@ public abstract class Screen implements JS5ObjectFunctions {
 
 
 	/**
-	 * Property availHeight
+	 * Property availHeight.
 	 *
 	 * @type Number
 	 * @memberOf Screen
@@ -46,7 +46,7 @@ public abstract class Screen implements JS5ObjectFunctions {
 	public JSNumber availHeight;
 
 	/**
-	 * Property availWidth
+	 * Property availWidth.
 	 *
 	 * @type Number
 	 * @memberOf Screen
@@ -54,7 +54,7 @@ public abstract class Screen implements JS5ObjectFunctions {
 	public JSNumber availWidth;
 
 	/**
-	 * Property colorDepth
+	 * Property colorDepth.
 	 *
 	 * @type Number
 	 * @memberOf Screen
@@ -62,7 +62,7 @@ public abstract class Screen implements JS5ObjectFunctions {
 	public JSNumber colorDepth;
 
 	/**
-	 * Property height
+	 * Property height.
 	 *
 	 * @type Number
 	 * @memberOf Screen
@@ -70,7 +70,7 @@ public abstract class Screen implements JS5ObjectFunctions {
 	public JSNumber height;
 
 	/**
-	 * Property width
+	 * Property width.
 	 *
 	 * @type Number
 	 * @memberOf Screen

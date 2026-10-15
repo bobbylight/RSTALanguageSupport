@@ -159,7 +159,7 @@ public abstract class TypeDeclarations {
 
 
 	/**
-	 * Add Javascript reverse lookup
+	 * Add Javascript reverse lookup.
 	 *
 	 * @param apiName Java API name
 	 * @param jsName Javascript name
@@ -170,7 +170,7 @@ public abstract class TypeDeclarations {
 
 
 	/**
-	 * Removes declaration type from type cache
+	 * Removes declaration type from type cache.
 	 *
 	 * @param name name of type declaration
 	 *
@@ -181,7 +181,7 @@ public abstract class TypeDeclarations {
 
 
 	/**
-	 * Returns whether the qualified name is a built-in JavaScript type
+	 * Returns whether the qualified name is a built-in JavaScript type.
 	 *
 	 * @param td The type declaration, which may be {@code null}.
 	 * @return Whether it is a built-in JS type.
@@ -214,7 +214,7 @@ public abstract class TypeDeclarations {
 
 
 	/**
-	 * Lookup the JavaScript name for a given name
+	 * Lookup the JavaScript name for a given name.
 	 *
 	 * @param lookupName
 	 * @return check whether the name is wrapped in [] then return
@@ -275,7 +275,7 @@ public abstract class TypeDeclarations {
 
 
 	/**
-	 * Simple class holder to hold the name of ECMA object and whether it can be instantiated
+	 * Simple class holder to hold the name of ECMA object and whether it can be instantiated.
 	 */
 	public static class JavaScriptObject {
 

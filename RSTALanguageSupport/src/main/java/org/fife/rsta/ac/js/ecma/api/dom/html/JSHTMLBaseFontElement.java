@@ -9,7 +9,7 @@ public abstract class JSHTMLBaseFontElement implements HTMLBaseFontElement, JS5O
 
 	/**
 	 * Object HTMLBaseFontElement()
-	 * See also the <a href='http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510'>Document Object Model (DOM) Level 2 Specification</a>
+	 * See also the <a href='http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510'>Document Object Model (DOM) Level 2 Specification</a>.
 	 *
 	 * @constructor
 	 * @since Standard ECMA-262 3rd. Edition
@@ -21,7 +21,7 @@ public abstract class JSHTMLBaseFontElement implements HTMLBaseFontElement, JS5O
 	}
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type HTMLBaseFontElement
 	 * @memberOf HTMLBaseFontElement
@@ -32,7 +32,7 @@ public abstract class JSHTMLBaseFontElement implements HTMLBaseFontElement, JS5O
 	public JSHTMLBaseFontElement protype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Array
