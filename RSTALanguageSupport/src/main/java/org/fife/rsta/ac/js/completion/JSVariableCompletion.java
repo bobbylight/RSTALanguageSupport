@@ -51,6 +51,8 @@ public class JSVariableCompletion extends VariableCompletion implements
 
 
 	/**
+	 * Returns the type name not qualified.
+	 *
 	 * @return the type name not qualified
 	 */
 	@Override
@@ -60,6 +62,8 @@ public class JSVariableCompletion extends VariableCompletion implements
 
 
 	/**
+	 * Returns the type name of this variable, optionally qualified.
+	 *
 	 * @param qualified whether to return the name as qualified
 	 * @return the type name based on qualified
 	 */

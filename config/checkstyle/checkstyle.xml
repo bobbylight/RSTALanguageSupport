@@ -115,7 +115,7 @@
 			<property name="accessModifiers" value="package"/>
 		</module>
 		-->
-		<module name="JavadocStyle"/>
+		<module name="SummaryJavadoc"/>
 		<module name="AtclauseOrder"/>
 		<module name="InvalidJavadocPosition"/>
 		<module name="JavadocBlockTagLocation"/>
@@ -276,6 +276,9 @@
 		<!--<module name="FinalParameters"/>-->
 		<!-- <module name="TodoComment"/> -->
 		<module name="UpperEll"/>
+		<module name="ArrayBracketNoWhitespace"/>
+		<module name="UnnecessaryTypeArgumentsWithRecordPattern"/>
+		<module name="MultilineCommentLeadingAsteriskPresence"/>
 
 		<!-- Checks for metrics.                                       -->
 		<!-- See https://checkstyle.sourceforge.io/config_metrics.html -->

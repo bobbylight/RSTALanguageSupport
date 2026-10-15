@@ -21,7 +21,7 @@ public abstract class JSDocumentFragment implements DocumentFragment, JS5ObjectF
 	}
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type DocumentFragment
 	 * @memberOf DocumentFragment
@@ -32,7 +32,7 @@ public abstract class JSDocumentFragment implements DocumentFragment, JS5ObjectF
 	public JSDocumentFragment protype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Array

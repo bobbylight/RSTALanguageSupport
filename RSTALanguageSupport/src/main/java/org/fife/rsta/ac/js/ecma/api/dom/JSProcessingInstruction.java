@@ -21,7 +21,7 @@ public abstract class JSProcessingInstruction implements ProcessingInstruction, 
 	}
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type ProcessingInstruction
 	 * @memberOf ProcessingInstruction
@@ -32,7 +32,7 @@ public abstract class JSProcessingInstruction implements ProcessingInstruction, 
 	public JSProcessingInstruction protype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Array

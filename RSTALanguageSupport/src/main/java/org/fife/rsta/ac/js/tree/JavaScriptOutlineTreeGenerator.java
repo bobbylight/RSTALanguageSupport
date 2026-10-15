@@ -88,10 +88,10 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 					 * });
 					 * The "Foo" global variable is complained about.  Note that this does not
 					 * occur if there is not JS code *before* and *after* the Foo stuff (?)...
-					else {
-						LOG.log(System.Logger.Level.INFO, "Node with null text: " +
-							((AstNode)((java.util.List)childNode.getUserObject()).get(0)).toSource());
-					}
+					 * 					else {
+					 * 						LOG.log(System.Logger.Level.INFO, "Node with null text: " +
+					 * 							((AstNode)((java.util.List)childNode.getUserObject()).get(0)).toSource());
+					 * 					}
 					*/
 				}
 			}

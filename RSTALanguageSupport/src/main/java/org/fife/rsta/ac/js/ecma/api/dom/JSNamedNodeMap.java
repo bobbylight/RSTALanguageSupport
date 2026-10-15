@@ -21,7 +21,7 @@ public abstract class JSNamedNodeMap implements NamedNodeMap, JS5ObjectFunctions
 	}
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type NamedNodeMap
 	 * @memberOf NamedNodeMap
@@ -32,7 +32,7 @@ public abstract class JSNamedNodeMap implements NamedNodeMap, JS5ObjectFunctions
 	public JSNamedNodeMap protype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Array

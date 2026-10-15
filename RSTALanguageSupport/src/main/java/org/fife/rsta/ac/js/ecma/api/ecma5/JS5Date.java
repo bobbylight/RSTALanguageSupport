@@ -13,7 +13,7 @@ import org.fife.rsta.ac.js.ecma.api.ecma5.functions.JS5DateFunctions;
 public abstract class JS5Date extends JSDate implements JS5DateFunctions {
 
 	/**
-	 * Object Date()
+	 * Object Date().
 	 *
 	 * <p>Creates a Date object set to the current date and time.</p>
 	 *
@@ -27,7 +27,7 @@ public abstract class JS5Date extends JSDate implements JS5DateFunctions {
 	}
 
 	/**
-	 * Object Date(milliseconds)
+	 * Object Date(milliseconds).
 	 *
 	 * @constructor
 	 * @extends Object
@@ -40,7 +40,7 @@ public abstract class JS5Date extends JSDate implements JS5DateFunctions {
 	}
 
 	/**
-	 * Object Date(datestring)
+	 * Object Date(datestring).
 	 *
 	 * @constructor
 	 * @extends Object
@@ -53,7 +53,7 @@ public abstract class JS5Date extends JSDate implements JS5DateFunctions {
 	}
 
 	/**
-	 * Object Date(year, month, day, hours, minutes, seconds, ms)
+	 * Object Date(year, month, day, hours, minutes, seconds, ms).
 	 *
 	 * @constructor
 	 * @extends Object

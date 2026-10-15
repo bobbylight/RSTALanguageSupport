@@ -6,14 +6,14 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.functions.JSObjectFunctions;
 
 
 /**
- * Object Namespace
+ * Object Namespace.
  *
  * @since Standard ECMA-357 2nd. Edition
  */
 public abstract class E4XNamespace implements JSObjectFunctions {
 
 	/**
-	 * Object Namespace()
+	 * Object Namespace().
 	 *
 	 * @constructor
 	 * @extends Object
@@ -24,7 +24,7 @@ public abstract class E4XNamespace implements JSObjectFunctions {
 	}
 
 	/**
-	 * Object Namespace(uriValue)
+	 * Object Namespace(uriValue).
 	 *
 	 * @param uriValue uri part of Namespace
 	 * @constructor
@@ -36,7 +36,7 @@ public abstract class E4XNamespace implements JSObjectFunctions {
 	}
 
 	/**
-	 * Object Namespace(prefixValue, uriValue)
+	 * Object Namespace(prefixValue, uriValue).
 	 *
 	 * @param prefixValue Optional prefix part of Namespace
 	 * @param uriValue    uri part of Namespace
@@ -49,7 +49,7 @@ public abstract class E4XNamespace implements JSObjectFunctions {
 	}
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type Namespace
 	 * @memberOf Namespace
@@ -60,7 +60,7 @@ public abstract class E4XNamespace implements JSObjectFunctions {
 	public E4XNamespace protype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Namespace
@@ -71,7 +71,7 @@ public abstract class E4XNamespace implements JSObjectFunctions {
 	protected JSFunction constructor;
 
 	/**
-	 * <b>property prefix</b>
+	 * <b>property prefix</b>.
 	 *
 	 * @type String
 	 * @memberOf Namespace
@@ -83,7 +83,7 @@ public abstract class E4XNamespace implements JSObjectFunctions {
 
 
 	/**
-	 * <b>property uri</b>
+	 * <b>property uri</b>.
 	 *
 	 * @type String
 	 * @memberOf Namespace

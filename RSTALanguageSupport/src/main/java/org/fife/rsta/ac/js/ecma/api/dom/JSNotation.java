@@ -21,7 +21,7 @@ public abstract class JSNotation implements Notation, JS5ObjectFunctions {
 	}
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type Notation
 	 * @memberOf Notation
@@ -32,7 +32,7 @@ public abstract class JSNotation implements Notation, JS5ObjectFunctions {
 	public JSNotation protype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Array

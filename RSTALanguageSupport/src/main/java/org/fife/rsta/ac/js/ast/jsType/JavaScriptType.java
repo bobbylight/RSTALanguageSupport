@@ -109,6 +109,8 @@ public class JavaScriptType {
 	}
 
 	/**
+	 * Returns the class type completion for the javascript type.
+	 *
 	 * @return the class type completion for the javascript type
 	 */
 	public JSCompletion getClassTypeCompletion() {
@@ -116,6 +118,8 @@ public class JavaScriptType {
 	}
 
 	/**
+	 * Returns a completion for the specified lookup name.
+	 *
 	 * @param completionLookup The lookup.
 	 * @param provider The completion provider.
 	 * @return JSCompletion using lookup name
@@ -128,6 +132,8 @@ public class JavaScriptType {
 
 
 	/**
+	 * Returns a completion for the specified lookup name.
+	 *
 	 * @param completionLookup
 	 * @return JSCompletion using lookup name
 	 * @see JSCompletion
@@ -138,6 +144,8 @@ public class JavaScriptType {
 
 
 	/**
+	 * Searches this type's completions for the specified lookup name, then its extended type.
+	 *
 	 * @param cachedType
 	 * @param completionLookup
 	 * @return completion searches this typCompletions first and if not found,
@@ -161,6 +169,8 @@ public class JavaScriptType {
 
 
 	/**
+	 * Returns A map of completion names to completions.
+	 *
 	 * @return A map of completion names to completions.
 	 * @see JSCompletion
 	 */

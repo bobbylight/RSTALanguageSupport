@@ -5,7 +5,7 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.JSGlobal;
 
 
 /**
- * Object Global
+ * Object Global.
  *
  * @since Standard ECMA-357 2nd. Edition
  */

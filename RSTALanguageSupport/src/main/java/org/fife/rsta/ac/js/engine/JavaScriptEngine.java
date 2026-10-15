@@ -37,6 +37,8 @@ public abstract class JavaScriptEngine {
     }
 
 	/**
+	 * Returns the resolver used to resolve JavaScript types and type declarations.
+	 *
 	 * @param provider SourceCompletionProvider
 	 * @return JavaScriptResolver used to resolve JavaScriptType and TypeDeclaration
 	 */

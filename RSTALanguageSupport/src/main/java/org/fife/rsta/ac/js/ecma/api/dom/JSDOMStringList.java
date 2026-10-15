@@ -21,7 +21,7 @@ public abstract class JSDOMStringList implements DOMStringList, JS5ObjectFunctio
 	}
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type DOMStringList
 	 * @memberOf DOMStringList
@@ -32,7 +32,7 @@ public abstract class JSDOMStringList implements DOMStringList, JS5ObjectFunctio
 	public JSDOMStringList protype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Array

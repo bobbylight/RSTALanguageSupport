@@ -11,7 +11,7 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.functions.JSDateFunctions;
 public abstract class JSDate implements JSDateFunctions {
 
 	/**
-	 * Object Date()
+	 * Object Date().
 	 *
 	 * <p>Creates a Date object set to the current date and time.</p>
 	 *
@@ -25,7 +25,7 @@ public abstract class JSDate implements JSDateFunctions {
 	}
 
 	/**
-	 * Object Date(milliseconds)
+	 * Object Date(milliseconds).
 	 *
 	 * @param milliseconds The number of milliseconds between the desired date and midnight January 1, 1970 (UTC).
 	 * @constructor
@@ -38,7 +38,7 @@ public abstract class JSDate implements JSDateFunctions {
 	}
 
 	/**
-	 * Object Date(datestring)
+	 * Object Date(datestring).
 	 *
 	 * @param datestring A single argument that specifies date and optionally, the time as a string. The string should be in a format accepted by <b>Date.parse()</b>
 	 * @constructor
@@ -51,7 +51,7 @@ public abstract class JSDate implements JSDateFunctions {
 	}
 
 	/**
-	 * Object Date(year, month, day, hours, minutes, seconds, ms)
+	 * Object Date(year, month, day, hours, minutes, seconds, ms).
 	 *
 	 * @param year    The year in a four digit format. e.g. 2011 for the year 2011
 	 * @param month   The month specified as a single integer from 0 (January) to 11 (December)
@@ -71,7 +71,7 @@ public abstract class JSDate implements JSDateFunctions {
 
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type Date
 	 * @memberOf Date
@@ -82,7 +82,7 @@ public abstract class JSDate implements JSDateFunctions {
 	public JSDate prototype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Date

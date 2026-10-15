@@ -72,14 +72,14 @@ public class JarManager {
 		/*
 		 * The commented-out code below is probably replaced by the rest of the code
 		 * in this method...
-		TODO: Verify me!!!
+		 * 		TODO: Verify me!!!
 		 *
-		// Add any completions matching the text for each jar we know about
-		String[] pkgNames = Util.splitOnChar(text, '.');
-		for (int i=0; i<jars.size(); i++) {
-			JarReader jar = (JarReader)jars.get(i);
-			jar.addCompletions(p, pkgNames, addTo);
-		}
+		 * 		// Add any completions matching the text for each jar we know about
+		 * 		String[] pkgNames = Util.splitOnChar(text, '.');
+		 * 		for (int i=0; i<jars.size(); i++) {
+		 * 			JarReader jar = (JarReader)jars.get(i);
+		 * 			jar.addCompletions(p, pkgNames, addTo);
+		 * 		}
 		*/
 		if (text.isEmpty()) {
 			return;

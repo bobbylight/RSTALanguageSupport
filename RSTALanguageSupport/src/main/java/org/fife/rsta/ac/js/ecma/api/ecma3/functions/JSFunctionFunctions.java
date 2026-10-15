@@ -26,7 +26,7 @@ public interface JSFunctionFunctions extends JSObjectFunctions {
 	JSObject apply(JSObject thisObject, JSArray argArray);
 
 	/**
-	 * <b>function call (thisObject, args)</b> invoke a function as a method of an object
+	 * <b>function call (thisObject, args)</b> invoke a function as a method of an object.
 	 * <p>
 	 * <strong>Example</strong>
 	 * <pre>

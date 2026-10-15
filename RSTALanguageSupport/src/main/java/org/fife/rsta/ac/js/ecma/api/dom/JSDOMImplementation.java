@@ -21,7 +21,7 @@ public abstract class JSDOMImplementation implements DOMImplementation, JS5Objec
 	}
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type DOMImplementation
 	 * @memberOf DOMImplementation
@@ -32,7 +32,7 @@ public abstract class JSDOMImplementation implements DOMImplementation, JS5Objec
 	public JSDOMImplementation protype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Array

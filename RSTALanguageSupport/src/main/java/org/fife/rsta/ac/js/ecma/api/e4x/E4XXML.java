@@ -8,7 +8,7 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.JSObject;
 
 
 /**
- * Object XML
+ * Object XML.
  *
  * @since Standard ECMA-357 2nd. Edition
  */
@@ -16,7 +16,7 @@ public abstract class E4XXML implements E4XXMLFunctions {
 
 
 	/**
-	 * Object XML(xml)
+	 * Object XML(xml).
 	 *
 	 * @param xml The XML definition
 	 * @constructor
@@ -29,7 +29,7 @@ public abstract class E4XXML implements E4XXMLFunctions {
 
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type XML
 	 * @memberOf XML
@@ -40,7 +40,7 @@ public abstract class E4XXML implements E4XXMLFunctions {
 	public E4XXML protype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf XML

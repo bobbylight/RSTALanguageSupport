@@ -11,7 +11,7 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.functions.JSObjectFunctions;
 public abstract class JSBoolean implements JSObjectFunctions {
 
     /**
-     * Object Boolean(value)
+     * Object Boolean(value).
      *
      * @constructor
      * @extends Object
@@ -23,7 +23,7 @@ public abstract class JSBoolean implements JSObjectFunctions {
     }
 
     /**
-     * <b>property prototype</b>
+     * <b>property prototype</b>.
      *
      * @type Boolean
      * @memberOf Boolean
@@ -34,7 +34,7 @@ public abstract class JSBoolean implements JSObjectFunctions {
     public JSBoolean prototype;
 
     /**
-     * <b>property constructor</b>
+     * <b>property constructor</b>.
      *
      * @type Function
      * @memberOf Boolean

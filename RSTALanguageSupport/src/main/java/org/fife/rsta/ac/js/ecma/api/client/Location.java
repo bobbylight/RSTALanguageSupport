@@ -95,7 +95,7 @@ public abstract class Location implements LocationFunctions {
 	public JSString port;
 
 	/**
-	 * Property protocol
+	 * Property protocol.
 	 *
 	 * @type String
 	 * @memberOf Location

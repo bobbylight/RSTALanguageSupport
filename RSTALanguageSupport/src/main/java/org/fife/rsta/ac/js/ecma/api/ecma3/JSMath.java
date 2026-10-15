@@ -104,7 +104,7 @@ public abstract class JSMath {
 	}
 
 	/**
-	 * <b>function acos(x)</b> compute an arccosine
+	 * <b>function acos(x)</b> compute an arccosine.
 	 *
 	 * @param x a number between -1.0 and 1.0
 	 * @memberOf Math
@@ -119,7 +119,7 @@ public abstract class JSMath {
 	}
 
 	/**
-	 * <b>function asin(x)</b> compute an arcsine
+	 * <b>function asin(x)</b> compute an arcsine.
 	 *
 	 * @param x a number between -1.0 and 1.0
 	 * @memberOf Math
@@ -134,7 +134,7 @@ public abstract class JSMath {
 	}
 
 	/**
-	 * <b>function atan(x)</b> compute an arctangent
+	 * <b>function atan(x)</b> compute an arctangent.
 	 *
 	 * @param x Any number
 	 * @memberOf Math
@@ -286,7 +286,7 @@ public abstract class JSMath {
 	}
 
 	/**
-	 * <b>function pow(x,y)</b> compute X<sub>y</sub>
+	 * <b>function pow(x,y)</b> compute X<sub>y</sub>.
 	 *
 	 * @param x The number to be raised to a power.
 	 * @param y The power that x to be raised to.
@@ -302,7 +302,7 @@ public abstract class JSMath {
 	}
 
 	/**
-	 * function random() return a pseudorandom number
+	 * function random() return a pseudorandom number.
 	 *
 	 * @memberOf Math
 	 * @type Number

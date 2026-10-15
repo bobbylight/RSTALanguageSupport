@@ -21,7 +21,7 @@ public abstract class JSCDATASection implements CDATASection, JS5ObjectFunctions
 	}
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type CDATASection
 	 * @memberOf CDATASection
@@ -32,7 +32,7 @@ public abstract class JSCDATASection implements CDATASection, JS5ObjectFunctions
 	public JSCDATASection protype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Array

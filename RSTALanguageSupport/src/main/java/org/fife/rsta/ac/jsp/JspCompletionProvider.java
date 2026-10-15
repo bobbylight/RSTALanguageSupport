@@ -42,19 +42,19 @@ public class JspCompletionProvider extends HtmlCompletionProvider {
 
 		prefixToTld = new HashMap<>();
 		/*
-		String fileName = File.separatorChar=='/' ?
-				"/users/robert/struts-2.2.3/lib/struts2-core-2.2.3.jar" :
-				"c:/dev/struts/struts-2.2.3/lib/struts2-core-2.2.3.jar";
-		File file = new File(fileName);
-		if (!file.exists()) {
-			file = new File("C:/temp/struts2-core-2.2.1.jar");
-		}
-
-		try {
-			prefixToTld.put("s", new TldFile(this, file));
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
+		 * 		String fileName = File.separatorChar=='/' ?
+		 * 				"/users/robert/struts-2.2.3/lib/struts2-core-2.2.3.jar" :
+		 * 				"c:/dev/struts/struts-2.2.3/lib/struts2-core-2.2.3.jar";
+		 * 		File file = new File(fileName);
+		 * 		if (!file.exists()) {
+		 * 			file = new File("C:/temp/struts2-core-2.2.1.jar");
+		 * 		}
+		 *
+		 * 		try {
+		 * 			prefixToTld.put("s", new TldFile(this, file));
+		 * 		} catch (IOException ioe) {
+		 * 			ioe.printStackTrace();
+		 * 		}
 		*/
 		setAutoActivationRules(false, "<:");
 

@@ -831,7 +831,7 @@ public class JavaScriptAstParser extends JavaScriptParser {
 
 		/**
 		 * Iterate through all the return types and check they are all the same,
-		 * otherwise return no type
+		 * otherwise return no type.
 		 *
 		 * @return
 		 */

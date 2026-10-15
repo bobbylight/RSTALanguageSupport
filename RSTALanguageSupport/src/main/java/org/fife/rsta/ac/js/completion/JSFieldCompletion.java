@@ -91,7 +91,7 @@ public class JSFieldCompletion extends VariableCompletion implements
 	@Override
 	public String getType(boolean qualified) {
 		return fieldData.getType(true); /*TypeDeclarationFactory.lookupJSType(fieldData.getType(true),
-				qualified);*/
+		 * 				qualified);*/
 	}
 
 	@Override

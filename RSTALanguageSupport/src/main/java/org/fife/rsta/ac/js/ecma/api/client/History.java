@@ -18,7 +18,7 @@ public abstract class History implements HistoryFunctions {
 	}
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Object
@@ -29,7 +29,7 @@ public abstract class History implements HistoryFunctions {
 	protected JSFunction constructor;
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type History
 	 * @memberOf History

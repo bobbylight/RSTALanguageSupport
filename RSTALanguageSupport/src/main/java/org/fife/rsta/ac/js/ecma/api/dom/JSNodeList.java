@@ -21,7 +21,7 @@ public abstract class JSNodeList implements NodeList, JS5ObjectFunctions {
 	}
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type NodeList
 	 * @memberOf NodeList
@@ -32,7 +32,7 @@ public abstract class JSNodeList implements NodeList, JS5ObjectFunctions {
 	public JSNodeList protype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Array

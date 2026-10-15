@@ -19,7 +19,7 @@ public abstract class JSCharacterData implements CDATASection, JS5ObjectFunction
 	public JSCharacterData() {}
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type CharacterData
 	 * @memberOf CharacterData
@@ -30,7 +30,7 @@ public abstract class JSCharacterData implements CDATASection, JS5ObjectFunction
 	public JSCharacterData protype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Array

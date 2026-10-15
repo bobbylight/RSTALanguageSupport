@@ -19,6 +19,8 @@ public class JSR223Type extends JavaScriptType {
 
 
 	/**
+	 * Returns a completion for the specified lookup name.
+	 *
 	 * @param completionLookup
 	 * @return JSCompletion using lookup name
 	 * @see JSCompletion

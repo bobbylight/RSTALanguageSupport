@@ -71,7 +71,7 @@ public interface JSObjectFunctions {
     JSBoolean hasOwnProperty(String name);
 
     /**
-     * <b>function isPrototypeOf(o)</b> is an object the prototype of another?
+     * <b>function isPrototypeOf(o)</b> is an object the prototype of another?.
      * <p>
      * <strong>Example</strong>
 	 * <pre>
@@ -92,7 +92,7 @@ public interface JSObjectFunctions {
     JSBoolean isPrototypeOf(JSObject o);
 
     /**
-     * <b>function propertyIsEnumerable(name)</b>  will property be seen by for/in loop?
+     * <b>function propertyIsEnumerable(name)</b>  will property be seen by for/in loop?.
      * <p>
      * <strong>Example</strong>
 	 * <pre>

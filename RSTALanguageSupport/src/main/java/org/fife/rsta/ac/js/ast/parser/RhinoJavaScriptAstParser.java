@@ -32,7 +32,7 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 	}
 
 	/**
-	 * Clear the importPackage and importClass cache
+	 * Clear the importPackage and importClass cache.
 	 *
 	 * @param provider SourceCompletionProvider
 	 */
@@ -138,6 +138,8 @@ public class RhinoJavaScriptAstParser extends JavaScriptAstParser {
 
 
 	/**
+	 * Returns the import statement contents from within the parentheses.
+	 *
 	 * @param src String to extract name
 	 * @return import statement from withing the ( and )
 	 * e.g.  importPackage(java.util)

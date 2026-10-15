@@ -78,7 +78,7 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 	}
 
 	/**
-	 * Validate whether the newImports and old imports contain the same values
+	 * Validate whether the newImports and old imports contain the same values.
 	 *
 	 * @param newImports
 	 * @param oldImports
@@ -117,7 +117,7 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 	}
 
 	/**
-	 * Remove all TypeDeclarations from the TypeDeclarationFactory from the JavaScriptType and all it's extended classes
+	 * Remove all TypeDeclarations from the TypeDeclarationFactory from the JavaScriptType and all it's extended classes.
 	 *
 	 * @param type
 	 */
@@ -134,7 +134,7 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 
 
 	/**
-	 * Override getClassFile that checks the imported packages and classnames based on the TypeDeclaration.getAPITypeName()
+	 * Override getClassFile that checks the imported packages and classnames based on the TypeDeclaration.getAPITypeName().
 	 */
 	@Override
 	public ClassFile getClassFile(JarManager manager, TypeDeclaration type) {
@@ -158,7 +158,7 @@ public class RhinoJavaScriptTypesFactory extends JSR223JavaScriptTypesFactory {
 	}
 
 	/**
-	 * Look for class file using imported classes
+	 * Look for class file using imported classes.
 	 *
 	 * @param manager
 	 * @param name

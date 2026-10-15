@@ -21,7 +21,7 @@ public abstract class JSDOMConfiguration implements DOMConfiguration, JS5ObjectF
 	}
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type DOMConfiguration
 	 * @memberOf DOMConfiguration
@@ -32,7 +32,7 @@ public abstract class JSDOMConfiguration implements DOMConfiguration, JS5ObjectF
 	public JSDOMConfiguration protype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Array

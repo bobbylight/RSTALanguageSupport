@@ -347,7 +347,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 	}
 
 	/**
-	 * Parse Text and add completions to set
+	 * Parse Text and add completions to set.
 	 */
 	private void parseTextAndResolve(Set<Completion> set, String text) {
 		// Compile the entered text and resolve the variables/function
@@ -367,7 +367,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 	/**
 	 * Populate Set of completions if JavaScriptType is not null and return true,
-	 * otherwise return false
+	 * otherwise return false.
 	 */
 	private boolean populateCompletionsFromType(JavaScriptType type,
 			Set<Completion> set) {
@@ -416,7 +416,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 
 	/**
-	 * Convenience method to call variable resolver
+	 * Convenience method to call variable resolver.
 	 *
 	 * @param name
 	 * @return
@@ -427,7 +427,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 
 	/**
-	 * Convenience method to call variable resolver
+	 * Convenience method to call variable resolver.
 	 *
 	 * @param name
 	 * @return JavaScript variable declaration
@@ -449,7 +449,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 
 	/**
-	 * Get the source of the node and try to resolve function node:
+	 * Get the source of the node and try to resolve function node:.
 	 *
 	 * @param functionNode
 	 * @return a.toString().getCharAt(1); returns String TypeDeclaration
@@ -478,7 +478,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 
 	/**
-	 * Iterate though the CodeBlock and extract all variables within scope
+	 * Iterate though the CodeBlock and extract all variables within scope.
 	 *
 	 * @param completions
 	 * @param block
@@ -534,7 +534,7 @@ public class SourceCompletionProvider extends DefaultCompletionProvider {
 
 
 	/**
-	 * The jar manager is used to parse the JS API for function completions
+	 * The jar manager is used to parse the JS API for function completions.
 	 *
 	 * @param jarManager
 	 */

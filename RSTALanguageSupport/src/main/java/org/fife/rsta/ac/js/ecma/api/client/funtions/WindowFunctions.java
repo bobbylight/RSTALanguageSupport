@@ -95,7 +95,7 @@ public interface WindowFunctions extends JS5ObjectFunctions {
 	void moveBy(JSNumber arg1, JSNumber arg2);
 
 	/**
-	 * function open(URL, name, specs, replace) Opens a new browser window
+	 * function open(URL, name, specs, replace) Opens a new browser window.
 	 *
 	 * @param url
 	 * @param name

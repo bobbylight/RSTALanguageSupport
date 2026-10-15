@@ -12,7 +12,7 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.functions.JSObjectFunctions;
 public abstract class JSObject implements JSObjectFunctions {
 
     /**
-     * Object Object()
+     * Object Object().
      *
      * <p>Creates a new object instance</p>
      *
@@ -24,7 +24,7 @@ public abstract class JSObject implements JSObjectFunctions {
     }
 
     /**
-     * Object Object(value)
+     * Object Object(value).
      * <p>
      *
      * @constructor
@@ -36,7 +36,7 @@ public abstract class JSObject implements JSObjectFunctions {
     }
 
     /**
-     * <b>property prototype</b>
+     * <b>property prototype</b>.
      *
      * @type Object
      * @memberOf Object
@@ -47,7 +47,7 @@ public abstract class JSObject implements JSObjectFunctions {
     public JSObject prototype;
 
     /**
-     * <b>property constructor</b>
+     * <b>property constructor</b>.
      *
      * @type Function
      * @memberOf Object

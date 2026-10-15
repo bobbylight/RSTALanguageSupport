@@ -10,7 +10,7 @@ import org.fife.rsta.ac.js.ecma.api.ecma3.functions.JSArrayFunctions;
 public abstract class JSArray implements JSArrayFunctions {
 
 	/**
-	 * Object Array()
+	 * Object Array().
 	 *
 	 * @constructor
 	 * @extends Object
@@ -22,7 +22,7 @@ public abstract class JSArray implements JSArrayFunctions {
 	}
 
 	/**
-	 * Object Array(size)
+	 * Object Array(size).
 	 *
 	 * @param size The desired number of elements in the array. The returned value has its <b>length</b> field set to {@code size}
 	 * @constructor
@@ -49,7 +49,7 @@ public abstract class JSArray implements JSArrayFunctions {
 
 
 	/**
-	 * <b>property length</b>
+	 * <b>property length</b>.
 	 *
 	 * @type Number
 	 * @memberOf Array
@@ -60,7 +60,7 @@ public abstract class JSArray implements JSArrayFunctions {
 	public JSNumber length;
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type Array
 	 * @memberOf Array
@@ -71,7 +71,7 @@ public abstract class JSArray implements JSArrayFunctions {
 	public JSArray prototype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Array

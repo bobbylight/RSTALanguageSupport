@@ -357,30 +357,30 @@ public final class JavaScriptFunctionType {
 	 * @return
 	 */
 	/*public static JavaScriptFunctionType parseFunction(String function, SourceCompletionProvider provider) {
-		int paramStartIndex = function.indexOf('(');
-		int paramEndIndex = function.indexOf(')');
-		JavaScriptFunctionType functionType = new JavaScriptFunctionType(
-				function.substring(0, paramStartIndex), provider);
-
-		if (paramStartIndex > -1 && paramEndIndex > -1) {
-			// strip parameters and resolve types
-			String paramsStr = function.substring(paramStartIndex + 1,
-					paramEndIndex).trim();
-			if (paramsStr.length() > 0) {
-				// iterate through params
-				String[] params = paramsStr.split(",");
-				for (int i = 0; i < params.length; i++) {
-					functionType.addArgument(JavaScriptHelper
-							.createNewTypeDeclaration(params[i]));
-				}
-			}
-		}
-
-		return functionType;
-	}*/
+	 * 		int paramStartIndex = function.indexOf('(');
+	 * 		int paramEndIndex = function.indexOf(')');
+	 * 		JavaScriptFunctionType functionType = new JavaScriptFunctionType(
+	 * 				function.substring(0, paramStartIndex), provider);
+	 *
+	 * 		if (paramStartIndex > -1 && paramEndIndex > -1) {
+	 * 			// strip parameters and resolve types
+	 * 			String paramsStr = function.substring(paramStartIndex + 1,
+	 * 					paramEndIndex).trim();
+	 * 			if (paramsStr.length() > 0) {
+	 * 				// iterate through params
+	 * 				String[] params = paramsStr.split(",");
+	 * 				for (int i = 0; i < params.length; i++) {
+	 * 					functionType.addArgument(JavaScriptHelper
+	 * 							.createNewTypeDeclaration(params[i]));
+	 * 				}
+	 * 			}
+	 * 		}
+	 *
+	 * 		return functionType;
+	 * 	}*/
 
 	/**
-	 * Convenience method to parse function string and converts to JavaScriptFunctionType
+	 * Convenience method to parse function string and converts to JavaScriptFunctionType.
 	 *
 	 * @param function String to parse e.g. convertValue(java.util.String val);
 	 * @param provider used for type conversions

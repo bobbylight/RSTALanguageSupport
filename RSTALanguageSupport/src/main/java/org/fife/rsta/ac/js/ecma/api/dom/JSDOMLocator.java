@@ -21,7 +21,7 @@ public abstract class JSDOMLocator implements DOMLocator, JS5ObjectFunctions {
 	}
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type DOMLocator
 	 * @memberOf DOMLocator
@@ -32,7 +32,7 @@ public abstract class JSDOMLocator implements DOMLocator, JS5ObjectFunctions {
 	public JSDOMLocator protype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Array

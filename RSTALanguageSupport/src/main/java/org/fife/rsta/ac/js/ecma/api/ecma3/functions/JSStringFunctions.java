@@ -95,7 +95,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
 	JSNumber localeCompare(JSString otherString);
 
 	/**
-	 * <b>function match(regexp)</b> find one or more regular-expression matches
+	 * <b>function match(regexp)</b> find one or more regular-expression matches.
 	 *
 	 * @param regexp A RegExp object that specifies the pattern to be matched.
 	 * @memberOf String
@@ -120,7 +120,7 @@ public interface JSStringFunctions extends JSObjectFunctions {
 	JSString replace(JSRegExp regexp, JSString replaceValue);
 
 	/**
-	 * <b>function search(regexp)</b> search for a regular expression
+	 * <b>function search(regexp)</b> search for a regular expression.
 	 *
 	 * @param regexp A RegExp object that specifies the pattern to be searched.
 	 * @memberOf String

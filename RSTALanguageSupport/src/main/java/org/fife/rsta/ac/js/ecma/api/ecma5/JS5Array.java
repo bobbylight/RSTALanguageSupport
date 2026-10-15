@@ -15,7 +15,7 @@ import org.fife.rsta.ac.js.ecma.api.ecma5.functions.JS5ArrayFunctions;
 public abstract class JS5Array extends JSArray implements JS5ArrayFunctions {
 
 	/**
-	 * Object Array()
+	 * Object Array().
 	 *
 	 * @constructor
 	 * @extends Object
@@ -27,7 +27,7 @@ public abstract class JS5Array extends JSArray implements JS5ArrayFunctions {
 	}
 
 	/**
-	 * Object Array(size)
+	 * Object Array(size).
 	 *
 	 * @constructor
 	 * @extends Object

@@ -38,9 +38,9 @@ public class UnsupportedAttribute extends AttributeInfo {
 	}
 
 	/*
-	public int[] getInfo() {
-		return info;
-	}
+	 * 	public int[] getInfo() {
+	 * 		return info;
+	 * 	}
 	*/
 
 	@Override

@@ -184,55 +184,55 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 	public int getJsHintIndent() {
 		final int defaultValue = 4;
 /*
-		if (jshintrc==null) {
-			return defaultValue;
-		}
-		long lastModified = jshintrc.lastModified();
-		if (lastModified!=jshintrcLastModified) {
-			RSyntaxDocument doc = new RSyntaxDocument(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
-			try {
-				jshintIndent = defaultValue;
-				loadFile(jshintrc, doc);
-				for (org.fife.ui.rsyntaxtextarea.Token t : doc) {
-					if (t.is(TokenTypes.LITERAL_STRING_DOUBLE_QUOTE, "\"indent\"") ||
-							t.is(TokenTypes.LITERAL_CHAR, "'indent'")) {
-						t = t.getNextToken();
-						while (t!=null && (t.isWhitespace() || t.isSingleChar(':'))) {
-							t = t.getNextToken();
-						}
-						if (t!=null && t.getType()==TokenTypes.LITERAL_NUMBER_DECIMAL_INT) {
-							try {
-								jshintIndent = Integer.parseInt(t.getLexeme());
-								LOG.log(System.Logger.Level.DEBUG, "Reloading jshint indent: " + jshintIndent);
-							} catch (NumberFormatException nfe) {
-								jshintIndent = defaultValue;
-							}
-						}
-						break;
-					}
-				}
-			} catch (IOException ioe) {
-				ioe.printStackTrace();
-				jshintIndent = defaultValue;
-			}
-			jshintrcLastModified = lastModified;
-		}
-		return jshintIndent;
+ * 		if (jshintrc==null) {
+ * 			return defaultValue;
+ * 		}
+ * 		long lastModified = jshintrc.lastModified();
+ * 		if (lastModified!=jshintrcLastModified) {
+ * 			RSyntaxDocument doc = new RSyntaxDocument(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
+ * 			try {
+ * 				jshintIndent = defaultValue;
+ * 				loadFile(jshintrc, doc);
+ * 				for (org.fife.ui.rsyntaxtextarea.Token t : doc) {
+ * 					if (t.is(TokenTypes.LITERAL_STRING_DOUBLE_QUOTE, "\"indent\"") ||
+ * 							t.is(TokenTypes.LITERAL_CHAR, "'indent'")) {
+ * 						t = t.getNextToken();
+ * 						while (t!=null && (t.isWhitespace() || t.isSingleChar(':'))) {
+ * 							t = t.getNextToken();
+ * 						}
+ * 						if (t!=null && t.getType()==TokenTypes.LITERAL_NUMBER_DECIMAL_INT) {
+ * 							try {
+ * 								jshintIndent = Integer.parseInt(t.getLexeme());
+ * 								LOG.log(System.Logger.Level.DEBUG, "Reloading jshint indent: " + jshintIndent);
+ * 							} catch (NumberFormatException nfe) {
+ * 								jshintIndent = defaultValue;
+ * 							}
+ * 						}
+ * 						break;
+ * 					}
+ * 				}
+ * 			} catch (IOException ioe) {
+ * 				ioe.printStackTrace();
+ * 				jshintIndent = defaultValue;
+ * 			}
+ * 			jshintrcLastModified = lastModified;
+ * 		}
+ * 		return jshintIndent;
 */
 return defaultValue;
 	}
 
 	/*
-	private void loadFile(File file, RSyntaxDocument doc) throws IOException {
-		BufferedReader r = new BufferedReader(new FileReader(file));
-		try {
-			new RSyntaxTextAreaEditorKit().read(r, doc, 0);
-		} catch (BadLocationException ble) {
-			throw new IOException(ble.getMessage()); // Never happens
-		} finally {
-			r.close();
-		}
-	}
+	 * 	private void loadFile(File file, RSyntaxDocument doc) throws IOException {
+	 * 		BufferedReader r = new BufferedReader(new FileReader(file));
+	 * 		try {
+	 * 			new RSyntaxTextAreaEditorKit().read(r, doc, 0);
+	 * 		} catch (BadLocationException ble) {
+	 * 			throw new IOException(ble.getMessage()); // Never happens
+	 * 		} finally {
+	 * 			r.close();
+	 * 		}
+	 * 	}
 	*/
 
 	/**

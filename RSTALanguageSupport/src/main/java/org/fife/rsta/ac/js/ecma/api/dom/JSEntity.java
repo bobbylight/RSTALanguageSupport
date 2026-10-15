@@ -21,7 +21,7 @@ public abstract class JSEntity implements Entity, JS5ObjectFunctions {
 	}
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type Entity
 	 * @memberOf Entity
@@ -32,7 +32,7 @@ public abstract class JSEntity implements Entity, JS5ObjectFunctions {
 	public JSEntity protype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Array

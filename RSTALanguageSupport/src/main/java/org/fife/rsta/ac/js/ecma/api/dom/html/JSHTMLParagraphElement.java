@@ -9,7 +9,7 @@ public abstract class JSHTMLParagraphElement implements HTMLParagraphElement, JS
 
 	/**
 	 * Object HTMLParagraphElement()
-	 * See also the <a href='http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510'>Document Object Model (DOM) Level 2 Specification</a>
+	 * See also the <a href='http://www.w3.org/TR/2000/CR-DOM-Level-2-20000510'>Document Object Model (DOM) Level 2 Specification</a>.
 	 *
 	 * @constructor
 	 * @since Standard ECMA-262 3rd. Edition
@@ -21,7 +21,7 @@ public abstract class JSHTMLParagraphElement implements HTMLParagraphElement, JS
 	}
 
 	/**
-	 * <b>property prototype</b>
+	 * <b>property prototype</b>.
 	 *
 	 * @type HTMLParagraphElement
 	 * @memberOf HTMLParagraphElement
@@ -32,7 +32,7 @@ public abstract class JSHTMLParagraphElement implements HTMLParagraphElement, JS
 	public JSHTMLParagraphElement protype;
 
 	/**
-	 * <b>property constructor</b>
+	 * <b>property constructor</b>.
 	 *
 	 * @type Function
 	 * @memberOf Array

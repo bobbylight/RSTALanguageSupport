@@ -258,7 +258,7 @@ public class JSFunctionCompletion extends FunctionCompletion implements
 
 	/**
 	 * Override the FunctionCompletion.Parameter to look up the Javascript name
-	 * for the completion type
+	 * for the completion type.
 	 */
 	public static class JSFunctionParam extends
 			ParameterizedCompletion.Parameter {
