@@ -25,13 +25,14 @@ Building RSTALanguageSupport requires JDK 25 or later:
     ./gradlew build --warning-mode all
 
 Version 4.x of RSTALanguageSupport depends on RSyntaxTextArea 4.x and
-AutoComplete 4.x, and requires Java 11 to run.  If you need to support older
-Java versions, use the version specified in the following table:
+AutoComplete 4.x. The required runtime JRE version is unchanged at 11.
+Older versions and their dependency versions are listed in the table below:
 
-| Version      | Required to build (JDK) | Required to run (JRE) | RSyntaxTextArea | AutoComplete |
-|--------------|-------------------------|-----------------------|-----------------|--------------|
-| Next release | 25                      | 11                    | 4.x             | 4.x          |
-| 3.4.x        | 17                      | 8                     | 3.x             | 3.x          |
+| Version | Required to build (JDK) | Required to run (JRE) | RSyntaxTextArea | AutoComplete |
+|---------|-------------------------|-----------------------|-----------------|--------------|
+| 4.x     | 25                      | 11                    | 4.x             | 4.x          |
+| 3.4.x   | 17                      | 11                    | 3.x             | 3.x          |
+| 3.3.x   | 8                       | 8                     | 3.x             | 3.x          |
 
 
 # Supported Languages and Status
