@@ -30,7 +30,7 @@ public class Asm6502LanguageSupport extends AbstractLanguageSupport {
 		setAutoActivationEnabled(true);
 		setAutoActivationDelay(500);
 		setParameterAssistanceEnabled(true);
-		//setShowDescWindow(true);
+		//setDescWindowVisibility(DescWindowVisibility.ALWAYS);
 	}
 
 

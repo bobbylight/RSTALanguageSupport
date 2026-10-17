@@ -10,8 +10,10 @@
  */
 package org.fife.rsta.ac;
 
+import javax.swing.KeyStroke;
 import javax.swing.ListCellRenderer;
 
+import org.fife.ui.autocomplete.DescWindowVisibility;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 
@@ -55,13 +57,23 @@ public interface LanguageSupport {
 
 
 	/**
-	 * REturns whether the description window is also shown when the
-	 * completion list is displayed, for editors of this language.
+	 * Returns the keystroke that toggles the description window when {@link #getDescWindowVisibility()} is
+	 * {@link DescWindowVisibility#ON_DEMAND}, for editors of this language.
 	 *
-	 * @return Whether the description window is shown.
-	 * @see #setShowDescWindow(boolean)
+	 * @return The keystroke, or <code>null</code> if none is installed.
+	 * @see #setDescWindowToggleKey(KeyStroke)
 	 */
-	boolean getShowDescWindow();
+	KeyStroke getDescWindowToggleKey();
+
+
+	/**
+	 * Returns whether and when the description window is shown alongside the completion list,
+	 * for editors of this language.
+	 *
+	 * @return When the description window is shown.
+	 * @see #setDescWindowVisibility(DescWindowVisibility)
+	 */
+	DescWindowVisibility getDescWindowVisibility();
 
 
 	/**
@@ -167,13 +179,23 @@ public interface LanguageSupport {
 
 
 	/**
-	 * Toggles whether the description window should also be shown when the
-	 * completion list is displayed, for editors of this language.
+	 * Sets the keystroke that toggles the description window when {@link #getDescWindowVisibility()} is
+	 * {@link DescWindowVisibility#ON_DEMAND}, for editors of this language.
 	 *
-	 * @param show Whether to show the description window.
-	 * @see #getShowDescWindow()
+	 * @param keyStroke The keystroke, or <code>null</code> for none.
+	 * @see #getDescWindowToggleKey()
 	 */
-	void setShowDescWindow(boolean show);
+	void setDescWindowToggleKey(KeyStroke keyStroke);
+
+
+	/**
+	 * Sets whether and when the description window is shown alongside the completion list,
+	 * for editors of this language.
+	 *
+	 * @param visibility When to show the description window.
+	 * @see #getDescWindowVisibility()
+	 */
+	void setDescWindowVisibility(DescWindowVisibility visibility);
 
 
 	/**

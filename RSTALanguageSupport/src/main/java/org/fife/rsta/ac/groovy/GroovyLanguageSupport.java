@@ -14,6 +14,7 @@ package org.fife.rsta.ac.groovy;
 
 import org.fife.rsta.ac.AbstractLanguageSupport;
 import org.fife.ui.autocomplete.AutoCompletion;
+import org.fife.ui.autocomplete.DescWindowVisibility;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 
@@ -36,7 +37,7 @@ public class GroovyLanguageSupport extends AbstractLanguageSupport {
 	 */
 	public GroovyLanguageSupport() {
 		setParameterAssistanceEnabled(true);
-		setShowDescWindow(true);
+		setDescWindowVisibility(DescWindowVisibility.ALWAYS);
 	}
 
 

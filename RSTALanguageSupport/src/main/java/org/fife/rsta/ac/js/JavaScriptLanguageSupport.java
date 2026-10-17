@@ -97,7 +97,7 @@ public class JavaScriptLanguageSupport extends AbstractLanguageSupport {
 		setDefaultCompletionCellRenderer(new JavaScriptCellRenderer());
 		setAutoActivationEnabled(true);
 		setParameterAssistanceEnabled(true);
-		setShowDescWindow(true);
+		setDescWindowVisibility(DescWindowVisibility.ALWAYS);
 		// Rhino keeps its pre-ES6 defualt for backwards compatibility,
 		// but most modern apps want to use the latest language
 		// features
@@ -282,8 +282,7 @@ return defaultValue;
 		ac.setAutoActivationDelay(getAutoActivationDelay());
 		ac.setParameterAssistanceEnabled(isParameterAssistanceEnabled());
 		ac.setExternalURLHandler(new JavaScriptDocUrlHandler(this));
-		ac.setDescWindowVisibility(getShowDescWindow() ?
-				DescWindowVisibility.ALWAYS : DescWindowVisibility.NEVER);
+		configureDescWindow(ac);
 		ac.install(textArea);
 		installImpl(textArea, ac);
 

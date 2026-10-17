@@ -78,7 +78,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		jarManager = new JarManager();
 		setAutoActivationEnabled(true);
 		setParameterAssistanceEnabled(true);
-		setShowDescWindow(true);
+		setDescWindowVisibility(DescWindowVisibility.ALWAYS);
 	}
 
 
@@ -144,8 +144,7 @@ public class JavaLanguageSupport extends AbstractLanguageSupport {
 		ac.setExternalURLHandler(new JavadocUrlHandler());
 		ac.setParameterAssistanceEnabled(isParameterAssistanceEnabled());
 		ac.setParamChoicesRenderer(new JavaParamListCellRenderer());
-		ac.setDescWindowVisibility(getShowDescWindow() ?
-				DescWindowVisibility.ALWAYS : DescWindowVisibility.NEVER);
+		configureDescWindow(ac);
 		ac.install(textArea);
 		installImpl(textArea, ac);
 
