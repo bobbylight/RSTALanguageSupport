@@ -10,9 +10,6 @@
  */
 package org.fife.rsta.ac.java.buildpath;
 
-import org.fife.rsta.ac.java.PackageMapNode;
-import org.fife.rsta.ac.java.classreader.ClassFile;
-
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.File;
@@ -21,6 +18,9 @@ import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
+
+import org.fife.rsta.ac.java.PackageMapNode;
+import org.fife.rsta.ac.java.classreader.ClassFile;
 
 
 /**

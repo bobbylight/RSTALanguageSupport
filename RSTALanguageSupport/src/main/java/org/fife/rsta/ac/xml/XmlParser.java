@@ -13,20 +13,13 @@ package org.fife.rsta.ac.xml;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
-
+import java.io.StringReader;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Element;
 import javax.swing.text.Segment;
 import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import org.xml.sax.Attributes;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
-import org.xml.sax.Locator;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.helpers.DefaultHandler;
 
 import org.fife.io.DocumentReader;
 import org.fife.rsta.ac.xml.tree.XmlTreeNode;
@@ -36,6 +29,13 @@ import org.fife.ui.rsyntaxtextarea.parser.DefaultParseResult;
 import org.fife.ui.rsyntaxtextarea.parser.DefaultParserNotice;
 import org.fife.ui.rsyntaxtextarea.parser.ParseResult;
 import org.fife.ui.rsyntaxtextarea.parser.ParserNotice;
+import org.xml.sax.Attributes;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
+import org.xml.sax.Locator;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.helpers.DefaultHandler;
 
 
 /**
@@ -76,7 +76,6 @@ public class XmlParser extends AbstractParser {
 	private SAXParserFactory spf;
 	private SAXParser sp;
 	private ValidationConfig validationConfig;
-	private int elemCount;
 
 
 	public XmlParser(XmlLanguageSupport xls) {
@@ -329,7 +328,7 @@ new ValidationConfigSniffer().sniff(doc);
 				return entityResolver.resolveEntity(publicId, systemId);
 			}
 			// Override default behavior and return empty DTD contents
-			return new InputSource(new java.io.StringReader(" "));
+			return new InputSource(new StringReader(" "));
 			//return super.resolveEntity(publicId, systemId);
 		}
 

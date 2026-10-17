@@ -13,7 +13,6 @@ package org.fife.rsta.ac.perl;
 import java.io.InputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.swing.text.Element;
 
 import org.fife.rsta.ac.OutputCollector;

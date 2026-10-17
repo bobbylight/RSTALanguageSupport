@@ -84,8 +84,8 @@ public abstract class JavaScriptTypesFactory {
 	 *
 	 * @param type TypeDeclaration to read from the API e.g. JSString
 	 * @param manager JarManager containing source and classes
-	 * @param text - full text entered by user
 	 * @param provider CompletionsProvider to bind the <code>Completion</code>.
+	 * @param text full text entered by user
 	 * @return The type, or {@code null} if ???.
 	 */
 	public JavaScriptType getCachedType(TypeDeclaration type,

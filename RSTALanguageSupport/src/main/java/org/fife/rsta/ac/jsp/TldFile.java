@@ -19,8 +19,8 @@ import org.fife.rsta.ac.jsp.TldAttribute.TldAttributeParam;
 import org.fife.ui.autocomplete.ParameterizedCompletion.Parameter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
 
