@@ -10,11 +10,11 @@
  */
 package org.fife.rsta.ac.java;
 
-import org.fife.ui.autocomplete.Completion;
-
 import java.awt.Component;
 import java.awt.Dimension;
 import javax.swing.JList;
+
+import org.fife.ui.autocomplete.Completion;
 
 
 /**

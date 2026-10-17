@@ -46,9 +46,9 @@ import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicTextFieldUI;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
-import org.fife.ui.rsyntaxtextarea.focusabletip.TipUtil;
 import org.fife.ui.rsyntaxtextarea.PopupWindowDecorator;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.focusabletip.TipUtil;
 
 
 /**

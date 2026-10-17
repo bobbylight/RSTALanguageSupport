@@ -11,6 +11,7 @@
 package org.fife.rsta.ac.php;
 
 import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -72,7 +73,7 @@ public class PhpCompletionProvider extends HtmlCompletionProvider {
 		InputStream in = cl.getResourceAsStream("data/php.xml");
 		try {
 			if (in==null) { // Ghetto temporary workaround
-				in = new java.io.FileInputStream("data/php.xml");
+				in = new FileInputStream("data/php.xml");
 			}
 			loadPhpCompletionsFromXML(in);
 		} catch (IOException ioe) {

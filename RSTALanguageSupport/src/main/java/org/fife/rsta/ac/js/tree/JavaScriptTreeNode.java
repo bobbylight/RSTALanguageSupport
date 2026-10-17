@@ -16,7 +16,6 @@ import javax.swing.text.Position;
 
 import org.fife.rsta.ac.SourceTreeNode;
 import org.fife.rsta.ac.js.util.RhinoUtil;
-
 import org.mozilla.javascript.ast.AstNode;
 
 

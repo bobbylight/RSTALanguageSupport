@@ -22,9 +22,6 @@ import org.fife.ui.autocomplete.ParameterizedCompletion.Parameter;
  */
 class TldAttribute extends AttributeCompletion {
 
-	private boolean required;
-	private boolean rtexprvalue;
-
 
 	TldAttribute(JspCompletionProvider provider,
 			TldAttributeParam param) {

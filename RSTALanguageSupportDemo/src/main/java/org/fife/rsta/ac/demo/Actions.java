@@ -12,7 +12,6 @@ package org.fife.rsta.ac.demo;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-
 import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
 import javax.swing.KeyStroke;

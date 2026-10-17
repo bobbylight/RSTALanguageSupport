@@ -4,9 +4,9 @@
  */
 package org.fife.rsta.ac.asm6502;
 
-import org.fife.ui.autocomplete.*;
-
 import java.io.IOException;
+
+import org.fife.ui.autocomplete.*;
 
 
 /**

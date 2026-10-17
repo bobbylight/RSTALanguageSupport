@@ -12,7 +12,6 @@ package org.fife.rsta.ac.java;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-
 import javax.swing.text.Element;
 
 import org.fife.io.DocumentReader;

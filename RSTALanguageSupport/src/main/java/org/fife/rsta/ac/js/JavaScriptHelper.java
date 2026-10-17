@@ -20,15 +20,7 @@ import org.mozilla.javascript.ErrorReporter;
 import org.mozilla.javascript.EvaluatorException;
 import org.mozilla.javascript.Parser;
 import org.mozilla.javascript.Token;
-import org.mozilla.javascript.ast.ArrayLiteral;
-import org.mozilla.javascript.ast.AstNode;
-import org.mozilla.javascript.ast.AstRoot;
-import org.mozilla.javascript.ast.ElementGet;
-import org.mozilla.javascript.ast.FunctionCall;
-import org.mozilla.javascript.ast.InfixExpression;
-import org.mozilla.javascript.ast.Name;
-import org.mozilla.javascript.ast.NewExpression;
-import org.mozilla.javascript.ast.NodeVisitor;
+import org.mozilla.javascript.ast.*;
 
 
 public final class JavaScriptHelper {
@@ -170,13 +162,13 @@ public final class JavaScriptHelper {
 			AstNode typeNode, SourceCompletionProvider provider) {
 		if (typeNode != null) {
 			switch (typeNode.getType()) {
-case Token.EXPR_RESULT:
-	AstNode expr = ((org.mozilla.javascript.ast.ExpressionStatement)typeNode).getExpression();
-	if (expr.getType()==Token.NAME) {
-		return provider.resolveTypeDeclation(((Name) expr)
-				.getIdentifier());
-	}
-	break;
+				case Token.EXPR_RESULT:
+					AstNode expr = ((ExpressionStatement)typeNode).getExpression();
+					if (expr.getType()==Token.NAME) {
+						return provider.resolveTypeDeclation(((Name) expr)
+								.getIdentifier());
+					}
+					break;
 				case Token.CATCH:
 					return getTypeDeclaration(TypeDeclarations.ECMA_ERROR, provider);
 				case Token.NAME:

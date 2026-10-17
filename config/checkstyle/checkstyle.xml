@@ -117,15 +117,23 @@
 		-->
 		<module name="SummaryJavadoc"/>
 		<module name="AtclauseOrder"/>
+        <module name="InappropriateJavadocBlockTagsOnType"/>
 		<module name="InvalidJavadocPosition"/>
+<!--        <module name="InappropriateJavadocBlockTagsOnField"/> JS package uses jsdoc tags -->
+        <module name="InappropriateJavadocBlockTagsOnPackage"/>
 		<module name="JavadocBlockTagLocation"/>
+        <module name="JavadocEndCommentDelimiter"/>
+        <module name="JavadocLinkWellKnownApi"/>
 		<module name="JavadocMethod">
 			<property name="accessModifiers" value="public"/>
 		</module>
 		<module name="JavadocMissingLeadingAsterisk"/>
 		<module name="JavadocMissingWhitespaceAfterAsterisk"/>
+        <module name="JavadocParamOrder"/>
 		<module name="JavadocTagContinuationIndentation"/>
+        <module name="JavadocThrowsOrder"/>
 		<module name="NonEmptyAtclauseDescription"/>
+        <!--<module name="PreferCodeOrSnippetJavadocInlineTag"/> too noisy for now -->
 		<module name="RequireEmptyLineBeforeBlockTagGroup"/>
 		<module name="MissingJavadocMethod">
 			<property name="allowMissingPropertyJavadoc" value="true"/>
@@ -158,8 +166,15 @@
 		<!-- Checks for imports                                              -->
 		<!-- See https://checkstyle.sourceforge.io/checks/imports/index.html -->
 		<!--<module name="AvoidStarImport"/>-->
+        <module name="AvoidModuleImport"/>
 		<module name="IllegalImport"/> <!-- defaults to sun.* packages -->
+        <module name="ImportOrder">
+            <property name="groups" value="/^javax?\./,*"/>
+            <property name="separated" value="true"/>
+        </module>
+        <module name="ModuleImportOrder"/>
 		<module name="RedundantImport"/>
+        <module name="UnnecessaryFullyQualifiedType"/>
 		<module name="UnusedImports"/>
 
 
@@ -229,6 +244,7 @@
 		<module name="EqualsAvoidNull"/>
 		<module name="EqualsHashCode"/>
 		<module name="ExplicitInitialization"/>
+        <module name="ExpressionOverBlockLambda"/>
 		<!-- Completely overridden since it's common in Java to do e.g. this.foo = foo;
         <module name="HiddenField">
 			<property name="ignoreSetter" value="true" />
@@ -253,6 +269,11 @@
 		<module name="UnnecessarySemicolonInEnumeration"/>
 		<module name="UnnecessarySemicolonInTryWithResources"/>
 		<module name="UnusedLocalVariable"/>
+        <module name="UnusedPrivateField"/>
+
+        <!-- Modules checks.                                                 -->
+        <!-- See https://checkstyle.sourceforge.io/checks/modules/index.html -->
+        <module name="ModuleDirectiveOrder"/>
 
 		<!-- Checks for class design                                        -->
 		<!-- See https://checkstyle.sourceforge.io/checks/design/index.html -->

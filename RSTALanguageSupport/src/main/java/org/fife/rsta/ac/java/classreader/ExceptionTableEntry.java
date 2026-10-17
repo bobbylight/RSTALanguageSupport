@@ -10,10 +10,10 @@
  */
 package org.fife.rsta.ac.java.classreader;
 
+import java.io.*;
+
 import org.fife.rsta.ac.java.classreader.attributes.Code;
 import org.fife.rsta.ac.java.classreader.constantpool.ConstantClassInfo;
-
-import java.io.*;
 
 
 /**

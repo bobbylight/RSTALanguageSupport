@@ -11,6 +11,7 @@
 package org.fife.rsta.ac.xml;
 
 import javax.xml.parsers.SAXParserFactory;
+
 import org.xml.sax.EntityResolver;
 
 
