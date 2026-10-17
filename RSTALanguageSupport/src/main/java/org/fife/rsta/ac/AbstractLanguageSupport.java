@@ -12,8 +12,10 @@ package org.fife.rsta.ac;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.KeyStroke;
 import javax.swing.ListCellRenderer;
 import javax.swing.UIManager;
 
@@ -67,10 +69,15 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 	private boolean parameterAssistanceEnabled;
 
 	/**
-	 * Whether the description window is displayed when the completion list
-	 * window is displayed.
+	 * Whether and when the description window is displayed alongside the completion list window.
 	 */
-	private boolean showDescWindow;
+	private DescWindowVisibility descWindowVisibility;
+
+	/**
+	 * The keystroke that toggles the description window when {@link #descWindowVisibility} is
+	 * {@link DescWindowVisibility#ON_DEMAND}.
+	 */
+	private KeyStroke descWindowToggleKey;
 
 	/**
 	 * The default renderer for the completion list.
@@ -87,6 +94,8 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 		autoCompleteEnabled = true;
 		autoActivationEnabled = false;
 		autoActivationDelay = 300;
+		descWindowVisibility = DescWindowVisibility.NEVER;
+		descWindowToggleKey = AutoCompletion.getDefaultDescWindowToggleKey();
 	}
 
 
@@ -104,9 +113,22 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 		ac.setAutoActivationEnabled(isAutoActivationEnabled());
 		ac.setAutoActivationDelay(getAutoActivationDelay());
 		ac.setParameterAssistanceEnabled(isParameterAssistanceEnabled());
-		ac.setDescWindowVisibility(getShowDescWindow() ?
-				DescWindowVisibility.ALWAYS : DescWindowVisibility.NEVER);
+		configureDescWindow(ac);
 		return ac;
+	}
+
+
+	/**
+	 * Applies this language support's description window settings to an
+	 * auto-completion instance.  Subclasses that don't create their
+	 * <code>AutoCompletion</code>s via
+	 * {@link #createAutoCompletion(CompletionProvider)} should call this.
+	 *
+	 * @param ac The auto-completion to configure.
+	 */
+	protected void configureDescWindow(AutoCompletion ac) {
+		ac.setDescWindowVisibility(getDescWindowVisibility());
+		ac.setDescWindowToggleKey(getDescWindowToggleKey());
 	}
 
 
@@ -162,8 +184,14 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 
 
 	@Override
-	public boolean getShowDescWindow() {
-		return showDescWindow;
+	public KeyStroke getDescWindowToggleKey() {
+		return descWindowToggleKey;
+	}
+
+
+	@Override
+	public DescWindowVisibility getDescWindowVisibility() {
+		return descWindowVisibility;
 	}
 
 
@@ -273,12 +301,23 @@ public abstract class AbstractLanguageSupport implements LanguageSupport {
 
 
 	@Override
-	public void setShowDescWindow(boolean show) {
-		if (show!=showDescWindow) {
-			showDescWindow = show;
+	public void setDescWindowToggleKey(KeyStroke keyStroke) {
+		if (!Objects.equals(keyStroke, descWindowToggleKey)) {
+			descWindowToggleKey = keyStroke;
 			for (AutoCompletion ac : textAreaToAutoCompletion.values()) {
-				ac.setDescWindowVisibility(show ?
-						DescWindowVisibility.ALWAYS : DescWindowVisibility.NEVER);
+				ac.setDescWindowToggleKey(keyStroke);
+			}
+		}
+	}
+
+
+	@Override
+	public void setDescWindowVisibility(DescWindowVisibility visibility) {
+		Objects.requireNonNull(visibility, "visibility");
+		if (visibility!=descWindowVisibility) {
+			descWindowVisibility = visibility;
+			for (AutoCompletion ac : textAreaToAutoCompletion.values()) {
+				ac.setDescWindowVisibility(visibility);
 			}
 		}
 	}

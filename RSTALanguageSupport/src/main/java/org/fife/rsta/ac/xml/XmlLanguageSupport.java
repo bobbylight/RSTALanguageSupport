@@ -22,6 +22,7 @@ import org.fife.rsta.ac.GoToMemberAction;
 import org.fife.rsta.ac.html.HtmlCellRenderer;
 import org.fife.rsta.ac.xml.tree.XmlOutlineTree;
 import org.fife.ui.autocomplete.AutoCompletion;
+import org.fife.ui.autocomplete.DescWindowVisibility;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 //import org.xml.sax.EntityResolver;
 //import org.xml.sax.InputSource;
@@ -68,7 +69,7 @@ public class XmlLanguageSupport extends AbstractMarkupLanguageSupport {
 	public XmlLanguageSupport() {
 		setAutoActivationEnabled(true);
 		setParameterAssistanceEnabled(false);
-		setShowDescWindow(false);
+		setDescWindowVisibility(DescWindowVisibility.NEVER);
 		setShowSyntaxErrors(true);
 	}
 

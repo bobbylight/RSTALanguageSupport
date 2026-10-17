@@ -18,6 +18,7 @@ import org.fife.rsta.ac.AbstractMarkupLanguageSupport;
 import org.fife.rsta.ac.html.HtmlCellRenderer;
 import org.fife.rsta.ac.html.HtmlLanguageSupport;
 import org.fife.ui.autocomplete.AutoCompletion;
+import org.fife.ui.autocomplete.DescWindowVisibility;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 
@@ -52,7 +53,7 @@ public class PhpLanguageSupport extends AbstractMarkupLanguageSupport {
 	public PhpLanguageSupport() {
 		setAutoActivationEnabled(true);
 		setParameterAssistanceEnabled(true);
-		setShowDescWindow(true);
+		setDescWindowVisibility(DescWindowVisibility.ALWAYS);
 		tagsToClose = HtmlLanguageSupport.getTagsToClose();
 	}
 

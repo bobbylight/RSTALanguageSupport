@@ -20,6 +20,7 @@ import javax.swing.ListCellRenderer;
 
 import org.fife.rsta.ac.AbstractMarkupLanguageSupport;
 import org.fife.ui.autocomplete.AutoCompletion;
+import org.fife.ui.autocomplete.DescWindowVisibility;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 
@@ -53,7 +54,7 @@ public class HtmlLanguageSupport extends AbstractMarkupLanguageSupport {
 	public HtmlLanguageSupport() {
 		setAutoActivationEnabled(true);
 		setParameterAssistanceEnabled(false);
-		setShowDescWindow(true);
+		setDescWindowVisibility(DescWindowVisibility.ALWAYS);
 	}
 
 

@@ -12,6 +12,7 @@ package org.fife.rsta.ac.less;
 
 import org.fife.rsta.ac.css.CssCompletionProvider;
 import org.fife.rsta.ac.css.CssLanguageSupport;
+import org.fife.ui.autocomplete.DescWindowVisibility;
 
 
 /**
@@ -27,7 +28,7 @@ public class LessLanguageSupport extends CssLanguageSupport {
 	 * Constructor.
 	 */
 	public LessLanguageSupport() {
-		setShowDescWindow(true);
+		setDescWindowVisibility(DescWindowVisibility.ALWAYS);
 	}
 
 

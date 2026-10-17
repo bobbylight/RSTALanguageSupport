@@ -19,6 +19,7 @@ import org.fife.rsta.ac.html.HtmlCellRenderer;
 import org.fife.rsta.ac.html.HtmlCompletionProvider;
 import org.fife.rsta.ac.html.HtmlLanguageSupport;
 import org.fife.ui.autocomplete.AutoCompletion;
+import org.fife.ui.autocomplete.DescWindowVisibility;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 
@@ -53,7 +54,7 @@ public class JspLanguageSupport extends AbstractMarkupLanguageSupport {
 	public JspLanguageSupport() {
 		setAutoActivationEnabled(true);
 		setParameterAssistanceEnabled(false);
-		setShowDescWindow(true);
+		setDescWindowVisibility(DescWindowVisibility.ALWAYS);
 		tagsToClose = HtmlLanguageSupport.getTagsToClose();
 	}
 
