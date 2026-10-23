@@ -65,6 +65,44 @@ public class ASTFactory implements TokenTypes {
 	}
 
 
+	/**
+	 * Adds the fields declared by a field declaration to a type.
+	 *
+	 * @param cu The compilation unit.
+	 * @param s The scanner, used to create the fields' offsets.
+	 * @param typeDec The type to add the fields to.
+	 * @param modList The fields' modifiers.
+	 * @param tokenList The declaration's tokens, with initializers removed,
+	 *        e.g. {@code int a [ ] , b} for {@code int a[] = { 1 }, b = 2;}.
+	 * @throws IOException If an IO error occurs.
+	 */
+	private void addFields(CompilationUnit cu, Scanner s, AbstractTypeDeclarationNode typeDec,
+						   Modifiers modList, List<Token> tokenList) throws IOException {
+
+		Scanner tempScanner = new Scanner(tokenList);
+		Type type = getType(cu, tempScanner);
+		boolean deprecated = checkDeprecated();
+		String docComment = s.getLastDocComment();
+
+		while (true) {
+			Token fieldNameToken = tempScanner.yylexNonNull(IDENTIFIER, "Identifier (field name) expected");
+			// Each variable can add its own array dimensions, e.g. "int a, b[];"
+			Type fieldType = new Type(type);
+			fieldType.incrementBracketPairCount(tempScanner.skipBracketPairs());
+			Field field = new Field(s, modList, fieldType, fieldNameToken);
+			field.setDeprecated(deprecated);
+			field.setDocComment(docComment);
+			log(field.toString());
+			typeDec.addMember(field);
+			if (tempScanner.yyPeekCheckType()!=SEPARATOR_COMMA) {
+				break;
+			}
+			tempScanner.yylex();
+		}
+
+	}
+
+
 	private boolean checkDeprecated() {
 		boolean deprecated = nextMemberDeprecated;
 		nextMemberDeprecated = false;
@@ -795,7 +833,6 @@ return cu;
 		List<Token> tokenList = new ArrayList<>(1);
 		List<Token> methodNameAndTypeTokenList = null;
 		List<Token> methodParamsList = null;
-		int bracketPairCount;
 		boolean methodDecl = false;
 		boolean blockDecl = false;
 		boolean varDecl = false;
@@ -817,9 +854,12 @@ OUTER:
 					break OUTER;
 				case OPERATOR_EQUALS:
 					varDecl = true;
-					// can be "= 4;", "= new foo();" or even "= new foo() { ... };".
-					s.eatThroughNextSkippingBlocks(SEPARATOR_SEMICOLON);
-					break OUTER;
+					t = s.eatThroughVariableInitializer();
+					if (t==null || t.isType(SEPARATOR_SEMICOLON)) {
+						break OUTER;
+					}
+					tokenList.add(t); // A comma; more variables follow
+					break;
 				case SEPARATOR_SEMICOLON:
 					varDecl = true;
 					break OUTER;
@@ -832,27 +872,7 @@ OUTER:
 
 		if (varDecl) {
 			log("*** Variable declaration:");
-			Scanner tempScanner = new Scanner(tokenList);
-			Type type = getType(cu, tempScanner);
-			Token fieldNameToken = tempScanner.yylexNonNull(IDENTIFIER, "Identifier (field name) expected");
-			bracketPairCount = tempScanner.skipBracketPairs();
-			type.incrementBracketPairCount(bracketPairCount);
-			Field field = new Field(s, modList, type, fieldNameToken);
-			field.setDeprecated(checkDeprecated());
-			field.setDocComment(s.getLastDocComment());
-			log(field.toString());
-			iDec.addMember(field);
-			// Handle comma-separated field declarations: Type a, b, c;
-			while (tempScanner.yyPeekCheckType() == SEPARATOR_COMMA) {
-				tempScanner.yylexNonNull(SEPARATOR_COMMA, "',' expected");
-				Token extraName = tempScanner.yylexNonNull(IDENTIFIER, "Identifier expected");
-				tempScanner.skipBracketPairs();
-				Field extraField = new Field(s, modList, type, extraName);
-				extraField.setDeprecated(checkDeprecated());
-				extraField.setDocComment(s.getLastDocComment());
-				log(extraField.toString());
-				iDec.addMember(extraField);
-			}
+			addFields(cu, s, iDec, modList, tokenList);
 		}
 		else if (methodDecl) {
 			log("*** Method declaration:");
@@ -939,7 +959,6 @@ OUTER:
 		List<Token> tokenList = new ArrayList<>(1);
 		List<Token> methodNameAndTypeTokenList = null;
 		List<Token> methodParamsList = null;
-		int bracketPairCount;
 		boolean methodDecl = false;
 		boolean blockDecl = false;
 		boolean varDecl = false;
@@ -961,9 +980,12 @@ OUTER:
 					break OUTER;
 				case OPERATOR_EQUALS:
 					varDecl = true;
-					// can be "= 4;", "= new foo();" or even "= new foo() { ... };".
-					s.eatThroughNextSkippingBlocks(SEPARATOR_SEMICOLON);
-					break OUTER;
+					t = s.eatThroughVariableInitializer();
+					if (t==null || t.isType(SEPARATOR_SEMICOLON)) {
+						break OUTER;
+					}
+					tokenList.add(t); // A comma; more variables follow
+					break;
 				case SEPARATOR_SEMICOLON:
 					varDecl = true;
 					break OUTER;
@@ -976,27 +998,7 @@ OUTER:
 
 		if (varDecl) {
 			log("*** Variable declaration:");
-			Scanner tempScanner = new Scanner(tokenList);
-			Type type = getType(cu, tempScanner);
-			Token fieldNameToken = tempScanner.yylexNonNull(IDENTIFIER, "Identifier (field name) expected");
-			bracketPairCount = tempScanner.skipBracketPairs();
-			type.incrementBracketPairCount(bracketPairCount);
-			Field field = new Field(s, modList, type, fieldNameToken);
-			field.setDeprecated(checkDeprecated());
-			field.setDocComment(s.getLastDocComment());
-			log(field.toString());
-			classDec.addMember(field);
-			// Handle comma-separated field declarations: Type a, b, c;
-			while (tempScanner.yyPeekCheckType() == SEPARATOR_COMMA) {
-				tempScanner.yylexNonNull(SEPARATOR_COMMA, "',' expected");
-				Token extraName = tempScanner.yylexNonNull(IDENTIFIER, "Identifier expected");
-				tempScanner.skipBracketPairs();
-				Field extraField = new Field(s, modList, type, extraName);
-				extraField.setDeprecated(checkDeprecated());
-				extraField.setDocComment(s.getLastDocComment());
-				log(extraField.toString());
-				classDec.addMember(extraField);
-			}
+			addFields(cu, s, classDec, modList, tokenList);
 		}
 		else if (methodDecl) {
 			log("*** Method declaration:");
