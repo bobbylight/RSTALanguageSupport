@@ -49,6 +49,11 @@ public abstract class MemberInfo {
 	public static final String DEPRECATED			= "Deprecated";
 
 	/**
+	 * Attribute marking a member as synthetic in older class files.
+	 */
+	public static final String SYNTHETIC = "Synthetic";
+
+	/**
 	 * Attribute containing index of the member's signature.
 	 */
 	public static final String SIGNATURE			= "Signature";
@@ -71,7 +76,8 @@ public abstract class MemberInfo {
 
 
 	/**
-	 * Returns the access flags for this field.
+	 * Returns the access flags for this member.  The synthetic flag is also
+	 * set for members marked with a {@code Synthetic} attribute.
 	 *
 	 * @return The access flags, as a bit field.
 	 * @see AccessFlags
@@ -157,6 +163,12 @@ public abstract class MemberInfo {
 		if (DEPRECATED.equals(attrName)) { // 4.7.10
 			// No need to read anything else, attributeLength==0
 			deprecated = true;
+		}
+
+		else if (SYNTHETIC.equals(attrName)) { // 4.7.8
+			// Pre-Java 5 class files use this zero-length attribute instead of
+			// ACC_SYNTHETIC. Normalize it so callers can use the same flag check.
+			accessFlags |= AccessFlags.ACC_SYNTHETIC;
 		}
 
 		else if (SIGNATURE.equals(attrName)) { // 4.8.8

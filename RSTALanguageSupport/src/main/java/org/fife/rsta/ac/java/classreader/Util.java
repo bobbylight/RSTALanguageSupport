@@ -88,6 +88,18 @@ public final class Util implements AccessFlags {
 
 
 	/**
+	 * Returns whether an object is synthetic, meaning it is not present in
+	 * the source code.
+	 *
+	 * @param accessFlags The access flags to check.
+	 * @return Whether an object is synthetic.
+	 */
+	public static boolean isSynthetic(int accessFlags) {
+		return (accessFlags & ACC_SYNTHETIC) != 0;
+	}
+
+
+	/**
 	 * Fully skips a given number of bytes in an input stream.
 	 *
 	 * @param in The input stream.

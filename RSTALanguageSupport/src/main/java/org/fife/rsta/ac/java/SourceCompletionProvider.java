@@ -98,6 +98,8 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	 * {@code true}.
 	 */
 	private boolean hideSyntheticFields = true;
+
+
 	/**
 	 * Constructor.
 	 */
@@ -154,7 +156,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 		int methodCount = cf.getMethodCount();
 		for (int i=0; i<methodCount; i++) {
 			MethodInfo info = cf.getMethodInfo(i);
-			if (isAccessible(info, pkg) && info.isStatic()) {
+			if (!isHiddenSyntheticMember(info) && isAccessible(info, pkg) && info.isStatic()) {
 				MethodCompletion mc = new MethodCompletion(this, info);
 				set.add(mc);
 			}
@@ -163,7 +165,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 		int fieldCount = cf.getFieldCount();
 		for (int i=0; i<fieldCount; i++) {
 			FieldInfo info = cf.getFieldInfo(i);
-			if (isAccessible(info, pkg) && info.isStatic()) {
+			if (!isHiddenSyntheticMember(info) && isAccessible(info, pkg) && info.isStatic()) {
 				FieldCompletion fc = new FieldCompletion(this, info);
 				set.add(fc);
 			}
@@ -206,7 +208,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 		for (int i=0; i<methodCount; i++) {
 			MethodInfo info = cf.getMethodInfo(i);
 			// Don't show constructors
-			if (isAccessible(info, pkg) && !info.isConstructor()) {
+			if (!isHiddenSyntheticMember(info) && isAccessible(info, pkg) && !info.isConstructor()) {
 				MethodCompletion mc = new MethodCompletion(this, info);
 				set.add(mc);
 			}
@@ -215,7 +217,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 		int fieldCount = cf.getFieldCount();
 		for (int i=0; i<fieldCount; i++) {
 			FieldInfo info = cf.getFieldInfo(i);
-			if (isAccessible(info, pkg)) {
+			if (!isHiddenSyntheticMember(info) && isAccessible(info, pkg)) {
 				FieldCompletion fc = new FieldCompletion(this, info);
 				set.add(fc);
 			}
@@ -645,16 +647,6 @@ public SourceLocation getSourceLocForClass(String className) {
 	 */
 	private boolean isAccessible(MemberInfo info, String pkg) {
 
-		// Filter compiler-generated synthetic members from completion results:
-		// - class$N fields: generated for .class literal expressions (pre-Java 5)
-		// - access$N methods: generated for inner class private member access
-		if (hideSyntheticFields) {
-			String name = info.getName();
-			if (name != null && (name.startsWith("class$") || name.startsWith("access$"))) {
-				return false;
-			}
-		}
-
 		boolean accessible = false;
 		int access = info.getAccessFlags();
 
@@ -670,6 +662,18 @@ public SourceLocation getSourceLocForClass(String className) {
 
 		return accessible;
 
+	}
+
+
+	/**
+	 * Returns whether a synthetic member should be hidden from completions.
+	 *
+	 * @param info Information about the member.
+	 * @return Whether the member should be hidden.
+	 */
+	private boolean isHiddenSyntheticMember(MemberInfo info) {
+		return hideSyntheticFields &&
+			org.fife.rsta.ac.java.classreader.Util.isSynthetic(info.getAccessFlags());
 	}
 
 
