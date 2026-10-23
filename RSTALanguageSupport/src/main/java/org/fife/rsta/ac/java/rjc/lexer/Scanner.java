@@ -394,6 +394,47 @@ private void pushOntoStack(Token t) {
 
 
 	/**
+	 * Eats a variable's initializer, which can be e.g. "= 4", "= new foo()"
+	 * or even "= new foo() { ... }".  The initializer is not validated.
+	 * This should be called just after the '=' has been read.
+	 *
+	 * @return The token ending the initializer: either a comma followed by
+	 *         another variable declarator, a semicolon, or <code>null</code>
+	 *         if the end of the stream is reached.
+	 * @throws IOException If an IO error occurs.
+	 */
+	public Token eatThroughVariableInitializer() throws IOException {
+		Token t;
+		do {
+			t = eatThroughNextSkippingBlocksAndStuffInParens(TokenTypes.SEPARATOR_COMMA,
+				TokenTypes.SEPARATOR_SEMICOLON);
+		} while (t!=null && t.isType(TokenTypes.SEPARATOR_COMMA) && !isNextVariableDeclarator());
+		return t;
+	}
+
+
+	/**
+	 * Returns whether the next tokens look like a variable declarator, e.g.
+	 * {@code b;}, {@code b = 2} or {@code b[],}.  This is used to tell a
+	 * comma separating variables apart from one in an initializer that isn't
+	 * in parens or a block, such as in {@code new HashMap<String, Integer>()}.
+	 */
+	private boolean isNextVariableDeclarator() throws IOException {
+		if (yyPeekCheckType()!=TokenTypes.IDENTIFIER) {
+			return false;
+		}
+		int i = 2;
+		while (yyPeekCheckType(i)==TokenTypes.SEPARATOR_LBRACKET &&
+				yyPeekCheckType(i+1)==TokenTypes.SEPARATOR_RBRACKET) {
+			i += 2;
+		}
+		int type = yyPeekCheckType(i);
+		return type==TokenTypes.OPERATOR_EQUALS || type==TokenTypes.SEPARATOR_COMMA ||
+			type==TokenTypes.SEPARATOR_SEMICOLON;
+	}
+
+
+	/**
 	 * Eats tokens from the stream until one of the given types is found.
 	 * That token is kept in the stream and will be the next one returned.
 	 *

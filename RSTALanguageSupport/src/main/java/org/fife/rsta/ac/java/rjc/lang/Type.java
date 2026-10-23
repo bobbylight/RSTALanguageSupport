@@ -53,6 +53,20 @@ public class Type {
 
 
 	/**
+	 * Copy constructor.  The identifiers and type arguments are shared with
+	 * the original type, but changes to the bracket pair count of one do not
+	 * affect the other.
+	 *
+	 * @param type The type to copy.
+	 */
+	public Type(Type type) {
+		identifiers = new ArrayList<>(type.identifiers);
+		typeArguments = new ArrayList<>(type.typeArguments);
+		bracketPairCount = type.bracketPairCount;
+	}
+
+
+	/**
 	 * Adds an identifier to this type.
 	 *
 	 * @param identifier The identifier.
