@@ -22,19 +22,24 @@ import org.fife.rsta.ac.java.classreader.ClassFile;
 
 
 /**
- * Information about the classes in a Java 9+ runtime image, read via the
- * {@code jrt:/} file system.  Unlike {@link Jdk9LibraryInfo}, this does not
- * require the runtime to ship {@code jmods}, so it works for JREs, {@code jlink}
- * images and other distributions that only contain {@code lib/modules}.
+ * Information about the classes in a Java 9+ runtime, to add to the "build
+ * path".  The runtime image ({@code lib/modules}) is read via the
+ * {@code jrt:/} file system.  Every Java 9+ runtime has such an image,
+ * including JREs and {@code jlink}'d images, regardless of whether it also
+ * ships {@code jmods}.
  * <p>
  * The runtime being read need not be the one running this application.  For
  * any other runtime, its {@code lib/jrt-fs.jar} is used to read its image,
  * and the resulting file system is kept open for the life of the JVM so it
  * can be shared.
+ * <p>
+ * For Java 8 and earlier, see {@link JarLibraryInfo}.
  *
  * @author Robert Futrell
  * @version 1.0
- * @see Jdk9LibraryInfo
+ * @see DirLibraryInfo
+ * @see ClasspathLibraryInfo
+ * @see JarLibraryInfo
  * @see LibraryInfo#getJreJarInfo(File)
  */
 public class JrtLibraryInfo extends LibraryInfo {
@@ -202,14 +207,8 @@ public class JrtLibraryInfo extends LibraryInfo {
 		synchronized (FOREIGN_FILE_SYSTEMS) {
 			FileSystem fs = FOREIGN_FILE_SYSTEMS.get(home);
 			if (fs == null || !fs.isOpen()) {
-				try {
-					fs = FileSystems.newFileSystem(URI.create("jrt:/"),
-						Map.of("java.home", home.toString()));
-				} catch (UnsupportedClassVersionError ucve) {
-					// The runtime's jrt-fs.jar is from a newer Java than ours
-					throw new IOException("Cannot read runtime image at " +
-						home + " from this older JVM: " + ucve.getMessage(), ucve);
-				}
+				fs = FileSystems.newFileSystem(URI.create("jrt:/"),
+					Map.of("java.home", home.toString()));
 				FOREIGN_FILE_SYSTEMS.put(home, fs);
 			}
 			return fs;

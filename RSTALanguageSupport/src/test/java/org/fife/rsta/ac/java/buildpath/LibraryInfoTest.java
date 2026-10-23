@@ -32,17 +32,18 @@ class LibraryInfoTest {
 	}
 
 	@Test
-	void testGetJreJarInfo_jmods_usesJdk9LibraryInfo() throws IOException {
+	void testGetJreJarInfo_runtimeImageWithJmods_usesJrtLibraryInfo() throws IOException {
+		touch("lib/modules");
 		touch("jmods/java.base.jmod");
-		touch("lib/modules"); // Present in real JDKs too; jmods takes precedence
 
 		LibraryInfo info = LibraryInfo.getJreJarInfo(tempDir.toFile());
 
-		assertInstanceOf(Jdk9LibraryInfo.class, info);
+		assertInstanceOf(JrtLibraryInfo.class, info);
 	}
 
+
 	@Test
-	void testGetJreJarInfo_runtimeImageWithoutJmods_usesJrtLibraryInfo() throws IOException {
+	void testGetJreJarInfo_runtimeImage_usesJrtLibraryInfo() throws IOException {
 		touch("lib/modules");
 
 		LibraryInfo info = LibraryInfo.getJreJarInfo(tempDir.toFile());
@@ -53,7 +54,7 @@ class LibraryInfoTest {
 	}
 
 	@Test
-	void testGetJreJarInfo_runtimeImageWithoutJmods_attachesSourceZip() throws IOException {
+	void testGetJreJarInfo_runtimeImage_attachesSourceZip() throws IOException {
 		touch("lib/modules");
 		touch("lib/src.zip");
 
@@ -72,12 +73,19 @@ class LibraryInfoTest {
 		assertInstanceOf(JarLibraryInfo.class, info);
 	}
 
+	// jmods are not needed or used; the runtime image is what's read
+	@Test
+	void testGetJreJarInfo_jmodsWithoutRuntimeImage_returnsNull() throws IOException {
+		touch("jmods/java.base.jmod");
+
+		assertNull(LibraryInfo.getJreJarInfo(tempDir.toFile()));
+	}
+
 	@Test
 	void testGetJreJarInfo_nothingRecognizable_returnsNull() {
 		assertNull(LibraryInfo.getJreJarInfo(tempDir.toFile()));
 	}
 
-	// Works whether the host JDK ships jmods (Jdk9LibraryInfo) or not (JrtLibraryInfo)
 	@Test
 	void testGetMainJreJarInfo_providesJdkClasses() throws IOException {
 		LibraryInfo info = LibraryInfo.getMainJreJarInfo();

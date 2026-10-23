@@ -391,11 +391,9 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	/**
 	 * Adds a jar to read from.
 	 *
-	 * @param info The jar to add.  If this is <code>null</code>, then
-	 *        the current JVM's main JRE jar (rt.jar, or classes.jar on OS X)
-	 *        will be added.  If this jar has already been added, adding it
-	 *        again will do nothing (except possibly update its attached source
-	 *        location).
+	 * @param info The jar to add.  This cannot be <code>null</code>.  If this
+	 *        jar has already been added, adding it again will do nothing
+	 *        (except possibly update its attached source location).
 	 * @throws IOException If an IO error occurs.
 	 * @see #getJars()
 	 * @see #removeJar(File)
