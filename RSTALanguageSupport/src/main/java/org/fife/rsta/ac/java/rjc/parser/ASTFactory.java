@@ -842,7 +842,17 @@ OUTER:
 			field.setDocComment(s.getLastDocComment());
 			log(field.toString());
 			iDec.addMember(field);
-			// TODO: Parse and grab the "value" after the '=' sign.
+			// Handle comma-separated field declarations: Type a, b, c;
+			while (tempScanner.yyPeekCheckType() == SEPARATOR_COMMA) {
+				tempScanner.yylexNonNull(SEPARATOR_COMMA, "',' expected");
+				Token extraName = tempScanner.yylexNonNull(IDENTIFIER, "Identifier expected");
+				tempScanner.skipBracketPairs();
+				Field extraField = new Field(s, modList, type, extraName);
+				extraField.setDeprecated(checkDeprecated());
+				extraField.setDocComment(s.getLastDocComment());
+				log(extraField.toString());
+				iDec.addMember(extraField);
+			}
 		}
 		else if (methodDecl) {
 			log("*** Method declaration:");
@@ -976,6 +986,17 @@ OUTER:
 			field.setDocComment(s.getLastDocComment());
 			log(field.toString());
 			classDec.addMember(field);
+			// Handle comma-separated field declarations: Type a, b, c;
+			while (tempScanner.yyPeekCheckType() == SEPARATOR_COMMA) {
+				tempScanner.yylexNonNull(SEPARATOR_COMMA, "',' expected");
+				Token extraName = tempScanner.yylexNonNull(IDENTIFIER, "Identifier expected");
+				tempScanner.skipBracketPairs();
+				Field extraField = new Field(s, modList, type, extraName);
+				extraField.setDeprecated(checkDeprecated());
+				extraField.setDocComment(s.getLastDocComment());
+				log(extraField.toString());
+				classDec.addMember(extraField);
+			}
 		}
 		else if (methodDecl) {
 			log("*** Method declaration:");
