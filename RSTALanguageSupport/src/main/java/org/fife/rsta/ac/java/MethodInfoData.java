@@ -274,7 +274,7 @@ class MethodInfoData implements Data {
 
 		sb.append('(');
 		int paramCount = info.getParameterCount();
-		for (int i=0; i<paramCount; i++) {
+		for (int i=info.getSyntheticParameterCount(); i<paramCount; i++) {
 			sb.append(info.getParameterType(i, false));
 			sb.append(' ');
 			sb.append(getParameterName(i));
