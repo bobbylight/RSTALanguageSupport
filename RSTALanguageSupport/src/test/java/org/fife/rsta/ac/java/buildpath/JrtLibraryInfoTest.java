@@ -19,8 +19,8 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 /**
  * Unit tests for the {@code JrtLibraryInfo} class.  These read the runtime
- * running the tests, which always has a {@code lib/modules} image whether or
- * not it ships {@code jmods}.
+ * running the tests, which has a {@code lib/modules} image like any Java 9+
+ * runtime.
  */
 class JrtLibraryInfoTest {
 

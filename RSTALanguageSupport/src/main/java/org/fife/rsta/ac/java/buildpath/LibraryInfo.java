@@ -164,12 +164,12 @@ public abstract class LibraryInfo implements Comparable<LibraryInfo>,
 
 
 	/**
-	 * Returns information on the "main" jar for a JRE.  This will be
-	 * <tt>rt.jar</tt> everywhere except OS X, where it will be
-	 * <tt>classes.jar</tt>.  For Java 9 and later, the runtime's modules are
-	 * read instead, from its {@code jmods} if it has them, or from its
-	 * runtime image otherwise.  The associated source zip/jar file is also
-	 * checked for.
+	 * Returns information on the classes of a Java runtime.  For Java 9 and
+	 * later, the runtime image ({@code lib/modules}) is read, and a
+	 * {@link JrtLibraryInfo} is returned.  For Java 8 and earlier, this will
+	 * be a {@link JarLibraryInfo} for <tt>rt.jar</tt> everywhere except OS X,
+	 * where it will be <tt>classes.jar</tt>.  The associated source zip/jar
+	 * file is also checked for.
 	 *
 	 * @param jreHome The location of the JRE.
 	 * @return The information, or <code>null</code> if there is not a JRE in
@@ -178,29 +178,8 @@ public abstract class LibraryInfo implements Comparable<LibraryInfo>,
 	 */
 	public static LibraryInfo getJreJarInfo(File jreHome) {
 
-		// Check if the JRE is made of modules (Java 9+)
-		File mods = new File(jreHome,"jmods");
-		if (mods.isDirectory()) {
-			File[] files = mods.listFiles(pathname -> {
-				if (pathname.isFile()) {
-					String name = pathname.getName();
-					return name.endsWith(".jmod") &&
-						(name.startsWith("java.") || name.startsWith("jdk."));
-				}
-				return false;
-			});
-
-			LibraryInfo info = new Jdk9LibraryInfo(files);
-			File sourceZip = new File(jreHome,"lib/src.zip");
-			if (sourceZip.isFile()) {
-				info.setSourceLocation(new ZipSourceLocation(sourceZip));
-			}
-
-			return info;
-		}
-
-		// Many Java 9+ runtimes (JREs, jlink images, etc.) don't ship jmods,
-		// but all of them contain the runtime image itself
+		// Java 9+ runtimes, including JREs and jlink'd images, all contain
+		// a runtime image
 		if (new File(jreHome, "lib/modules").isFile()) {
 			LibraryInfo info = new JrtLibraryInfo(jreHome);
 			File sourceZip = new File(jreHome,"lib/src.zip");
@@ -273,10 +252,8 @@ public abstract class LibraryInfo implements Comparable<LibraryInfo>,
 
 
 	/**
-	 * Returns information on the JRE running this application.  This will be
-	 * <tt>rt.jar</tt> everywhere except OS X, where it will be
-	 * <tt>classes.jar</tt>.  The associated source zip/jar file is also
-	 * checked for.
+	 * Returns information on the JRE running this application.  See
+	 * {@link #getJreJarInfo(File)} for the kind of information returned.
 	 *
 	 * @return The information, or <code>null</code> if an error occurs.
 	 * @see #getJreJarInfo(File)

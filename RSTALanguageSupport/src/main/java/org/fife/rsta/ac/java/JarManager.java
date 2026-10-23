@@ -140,11 +140,9 @@ public class JarManager {
 	/**
 	 * Adds a class file source to read from.
 	 *
-	 * @param info The source to add.  If this is <code>null</code>, then
-	 *        the current JVM's main JRE jar (rt.jar, or classes.jar on OS X)
-	 *        will be added.  If this source has already been added, adding it
-	 *        again will do nothing (except possibly update its attached source
-	 *        location).
+	 * @param info The source to add.  This cannot be <code>null</code>.  If
+	 *        this source has already been added, adding it again will do
+	 *        nothing (except possibly update its attached source location).
 	 * @return Whether this source was added (e.g. it wasn't already loaded, or
 	 *         it has a new source path).
 	 * @throws IOException If an IO error occurs.
@@ -184,9 +182,9 @@ public class JarManager {
 
 
 	/**
-	 * Adds the current JVM's rt.jar (or class.jar if on OS X) to the list of
-	 * class file sources.  If the application is running in a JDK, the
-	 * associated source zip is also located and used.
+	 * Adds the classes of the Java runtime running this application to the
+	 * list of class file sources.  If the runtime includes its source zip
+	 * (e.g. it is a JDK), that source is also located and used.
 	 *
 	 * @throws IOException If an IO error occurs.
 	 * @see #addClassFileSource(LibraryInfo)
