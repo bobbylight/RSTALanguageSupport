@@ -19,10 +19,10 @@ jobs:
         java: [ '25', '26' ]
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Verify gradle wrapper
-        uses: gradle/actions/wrapper-validation@v5
+        uses: gradle/actions/wrapper-validation@v6
         if: matrix.java == '25'
 
       - name: Set up JDK ${{ matrix.java }}
