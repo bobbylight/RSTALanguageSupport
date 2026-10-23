@@ -45,6 +45,12 @@ interface ConstantTypes {
 
 	int CONSTANT_MethodType			= 16;
 
+	int CONSTANT_Dynamic			= 17;
+
 	int CONSTANT_InvokeDynamic		= 18;
+
+	int CONSTANT_Module				= 19;
+
+	int CONSTANT_Package			= 20;
 
 }
