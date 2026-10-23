@@ -216,6 +216,19 @@ class Jdk9LibraryInfoTest {
 	}
 
 	@Test
+	void testCreatePackageMap_ignoresModuleInfo() throws IOException {
+		Map<String, byte[]> entries = new LinkedHashMap<>();
+		entries.put("classes/module-info.class", new byte[] { 0 });
+		entries.put("classes/java/lang/String.class", readClassBytes(String.class));
+		Jdk9LibraryInfo info = new Jdk9LibraryInfo(new File[] { createJmod("m.jmod", entries) });
+
+		PackageMapNode map = info.createPackageMap();
+
+		assertTrue(map.containsClass("java.lang.String"));
+		assertFalse(map.containsClass("module-info"));
+	}
+
+	@Test
 	void testGetJreHome() throws IOException {
 		// <home>/jmods/java.base.jmod
 		File home = tempDir.resolve("home").toFile();

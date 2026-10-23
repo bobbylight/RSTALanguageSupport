@@ -40,6 +40,8 @@ import org.fife.ui.autocomplete.CompletionProvider;
  */
 public class PackageMapNode {
 
+	private static final String MODULE_INFO_CLASS = "module-info.class";
+
 	/**
 	 * A mapping of sub-package name to the sub-packages and classes under it.
 	 */
@@ -73,6 +75,12 @@ public class PackageMapNode {
 	public void add(String className) {
 
 		String[] tokens = Util.splitOnChar(className, '/');
+
+		// Module descriptors aren't classes and shouldn't be offered as such
+		if (MODULE_INFO_CLASS.equals(tokens[tokens.length - 1])) {
+			return;
+		}
+
 		PackageMapNode pmn = this;
 
 		for (int i=0; i<tokens.length-1; i++) {
