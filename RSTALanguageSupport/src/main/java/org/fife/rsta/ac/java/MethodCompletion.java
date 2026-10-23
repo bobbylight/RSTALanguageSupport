@@ -107,7 +107,7 @@ class MethodCompletion extends FunctionCompletion implements MemberCompletion {
 
 		String[] paramTypes = info.getParameterTypes();
 		List<Parameter> params = new ArrayList<>(paramTypes.length);
-		for (int i=0; i<paramTypes.length; i++) {
+		for (int i=info.getSyntheticParameterCount(); i<paramTypes.length; i++) {
 			String name = ((MethodInfoData)data).getParameterName(i);
 			String type = paramTypes[i].substring(paramTypes[i].lastIndexOf('.')+1);
 			params.add(new Parameter(type, name));

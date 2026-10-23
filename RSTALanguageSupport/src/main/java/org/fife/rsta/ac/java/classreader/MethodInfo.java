@@ -115,10 +115,11 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	private void appendParamDescriptors(StringBuilder sb) {
 
 		String[] paramTypes = getParameterTypes();
-		for (int i=0; i<paramTypes.length; i++) {
+		int synthetic = getSyntheticParameterCount();
+		for (int i=synthetic; i<paramTypes.length; i++) {
 			sb.append(paramTypes[i]).append(' ');
 			String name = getParameterName(i);
-			sb.append(name != null ? name : "param" + i);
+			sb.append(name != null ? name : "param" + (i - synthetic));
 			if (i<paramTypes.length-1) {
 				sb.append(", ");
 			}
@@ -149,18 +150,41 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 	 * method.  If this method takes any generic type arguments, these
 	 * types are grabbed from the parent <code>ClassFile</code> instance,
 	 * whose type argument values should have been initialized via
-	 * {@link ClassFile#setTypeParamsToTypeArgs(Map)}.
+	 * {@link ClassFile#setTypeParamsToTypeArgs(Map)}.<p>
+	 *
+	 * The returned array always lines up with the method's descriptor, so
+	 * it includes any synthetic parameters, even though compilers leave
+	 * those out of the <code>Signature</code> attribute.
 	 *
 	 * @return The array of parameter types.
 	 * @see #createParamTypesFromDescriptor(boolean)
 	 * @see #createParamTypesFromTypeSignature()
 	 */
 	private String[] createParamTypes() {
+
 		String[] types = createParamTypesFromTypeSignature();
 		if (types==null) {
-			types = createParamTypesFromDescriptor(true);
+			return createParamTypesFromDescriptor(true);
 		}
-		return types;
+
+		// The Signature attribute omits synthetic parameters such as an
+		// enum constructor's name and ordinal, so take those from the
+		// descriptor.  If the counts don't match up in a way we understand
+		// (e.g. a local class's captured variables), use the descriptor so
+		// parameter indices stay correct.
+		String[] descriptorTypes = createParamTypesFromDescriptor(false);
+		int missing = descriptorTypes.length - types.length;
+		if (missing == 0) {
+			return types;
+		}
+		if (missing != getExpectedSyntheticParameterCount()) {
+			return createParamTypesFromDescriptor(true);
+		}
+		String[] allTypes = new String[descriptorTypes.length];
+		System.arraycopy(descriptorTypes, 0, allTypes, 0, missing);
+		System.arraycopy(types, 0, allTypes, missing, types.length);
+		return allTypes;
+
 	}
 
 
@@ -386,6 +410,41 @@ public class MethodInfo extends MemberInfo implements AccessFlags {
 			}
 		}
 		return null;
+	}
+
+
+	/**
+	 * Returns the number of leading parameters the compiler added to this
+	 * method that don't appear in source.  This is 2 for enum constructors
+	 * (the constant's name and ordinal), 1 for constructors of non-static
+	 * member classes (the enclosing instance), and 0 for everything else.
+	 * These parameters are included in {@link #getParameterCount()}.
+	 *
+	 * @return The number of leading synthetic parameters.
+	 */
+	public int getSyntheticParameterCount() {
+		return Math.min(getExpectedSyntheticParameterCount(),
+			getParameterCount());
+	}
+
+
+	/**
+	 * Returns the number of leading synthetic parameters this method should
+	 * have, based on the kind of class that defines it.
+	 *
+	 * @return The expected number of leading synthetic parameters.
+	 * @see #getSyntheticParameterCount()
+	 */
+	private int getExpectedSyntheticParameterCount() {
+		if (isConstructor()) {
+			if ((cf.getAccessFlags() & AccessFlags.ACC_ENUM) != 0) {
+				return 2;
+			}
+			if (cf.isInnerMemberClass()) {
+				return 1;
+			}
+		}
+		return 0;
 	}
 
 

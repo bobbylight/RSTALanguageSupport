@@ -92,6 +92,12 @@ public class ClassFile implements AccessFlags {
 	private boolean deprecated;
 
 	/**
+	 * Whether this is a non-static member class, whose constructors take a
+	 * hidden leading parameter for the enclosing instance.
+	 */
+	private boolean innerMemberClass;
+
+	/**
 	 * Attributes of this class or interface.
 	 */
 	private AttributeInfo[] attributes;
@@ -499,6 +505,18 @@ public class ClassFile implements AccessFlags {
 
 
 	/**
+	 * Returns whether this is a non-static member class.  Constructors of
+	 * such classes take a hidden leading parameter for the enclosing instance.
+	 *
+	 * @return Whether this is a non-static member class.
+	 * @see MethodInfo#getSyntheticParameterCount()
+	 */
+	public boolean isInnerMemberClass() {
+		return innerMemberClass;
+	}
+
+
+	/**
 	 * Returns whether this class is deprecated.
 	 *
 	 * @return Whether this class is deprecated.
@@ -558,10 +576,18 @@ public class ClassFile implements AccessFlags {
 		}
 
 		else if (INNER_CLASSES.equals(attrName)) { // 4.8.5
-			//String name = getClassName(false) + "." + getName();
-			//System.out.println(name + ": Attribute " + attrName + " not supported");
-			Util.skipBytes(in, attributeLength);
-			//ai = null;
+			// We only care whether this class is a non-static member class
+			int classCount = in.readUnsignedShort();
+			for (int i=0; i<classCount; i++) {
+				int innerClassInfo = in.readUnsignedShort();
+				int outerClassInfo = in.readUnsignedShort();
+				/*int innerNameIndex = */in.readUnsignedShort();
+				int innerFlags = in.readUnsignedShort();
+				if (innerClassInfo==thisClass && outerClassInfo!=0 &&
+						(innerFlags & AccessFlags.ACC_STATIC)==0) {
+					innerMemberClass = true;
+				}
+			}
 		}
 
 		else if (ENCLOSING_METHOD.equals(attrName)) { // 4.8.6
