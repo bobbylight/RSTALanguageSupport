@@ -15,9 +15,10 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.zip.ZipEntry;
 
 import org.fife.rsta.ac.java.PackageMapNode;
 import org.fife.rsta.ac.java.classreader.ClassFile;
@@ -47,6 +48,13 @@ public class Jdk9LibraryInfo extends LibraryInfo {
 	private File[] jmodFiles;
 	private JarFile[] bulkCreateJmods;
 
+	/**
+	 * Maps a class entry name (e.g. {@code java/lang/String.class}) to the
+	 * index in {@link #jmodFiles} of the jmod that contains it, so we never
+	 * have to search every jmod to find a class.  Built lazily.
+	 */
+	private Map<String, Integer> entryToJmodIndex;
+
 	public Jdk9LibraryInfo(File[] jmodFiles) {
 		this(jmodFiles, null);
 	}
@@ -60,7 +68,13 @@ public class Jdk9LibraryInfo extends LibraryInfo {
 
 	@Override
 	public void bulkClassFileCreationEnd() {
+		if (bulkCreateJmods == null) {
+			return;
+		}
 		for (JarFile bulkCreateJar: bulkCreateJmods) {
+			if (bulkCreateJar == null) { // Failed to open in start()
+				continue;
+			}
 			try {
 				bulkCreateJar.close();
 			} catch (IOException ioe) {
@@ -108,12 +122,11 @@ public class Jdk9LibraryInfo extends LibraryInfo {
 
 	@Override
 	public ClassFile createClassFile(String entryName) throws IOException {
-		for (File jarFile: jmodFiles) {
-			try (JarFile jar = new JarFile(jarFile)) {
-				ClassFile c = createClassFileImpl(jar, entryName);
-				if (c!=null) {
-					return c;
-				}
+		Integer jmodIndex = getJmodIndexFor(entryName);
+		if (jmodIndex != null) {
+			// Only the jmod known to contain the class is opened
+			try (JarFile jar = new JarFile(jmodFiles[jmodIndex])) {
+				return createClassFileImpl(jar, entryName);
 			}
 		}
 		// TODO: Throw an exception in 4.0.0 release
@@ -123,14 +136,53 @@ public class Jdk9LibraryInfo extends LibraryInfo {
 
 	@Override
 	public ClassFile createClassFileBulk(String entryName) throws IOException {
-		for (JarFile bulkCreateJar: bulkCreateJmods) {
-			ClassFile c = createClassFileImpl(bulkCreateJar, entryName);
-			if (c!=null) {
-				return c;
+		Integer jmodIndex = getJmodIndexFor(entryName);
+		if (jmodIndex != null && bulkCreateJmods != null) {
+			JarFile jar = bulkCreateJmods[jmodIndex];
+			if (jar != null) {
+				return createClassFileImpl(jar, entryName);
 			}
 		}
 		// TODO: Throw an exception in 4.0.0 release
 		return null;
+	}
+
+
+	/**
+	 * Returns the index of the jmod containing a class, building the
+	 * entry-to-jmod index if necessary.
+	 *
+	 * @param entryName The class entry name, such as
+	 *        {@code java/lang/String.class}.
+	 * @return The index into {@code jmodFiles}, or {@code null} if no jmod
+	 *         contains the class.
+	 */
+	private synchronized Integer getJmodIndexFor(String entryName) throws IOException {
+		if (entryToJmodIndex == null) {
+			entryToJmodIndex = buildEntryIndex();
+		}
+		return entryToJmodIndex.get(entryName);
+	}
+
+
+	/**
+	 * Scans every jmod once, recording which one contains each class.  If a
+	 * class is in more than one jmod, the first one wins.
+	 */
+	private Map<String, Integer> buildEntryIndex() throws IOException {
+		Map<String, Integer> index = new HashMap<>();
+		for (int i = 0; i < jmodFiles.length; i++) {
+			try (JarFile jar = new JarFile(jmodFiles[i])) {
+				Enumeration<JarEntry> e = jar.entries();
+				while (e.hasMoreElements()) {
+					String entryName = e.nextElement().getName();
+					if (entryName.startsWith("classes/") && entryName.endsWith(".class")) {
+						index.putIfAbsent(entryName.substring(8), i);
+					}
+				}
+			}
+		}
+		return index;
 	}
 
 
@@ -153,25 +205,13 @@ public class Jdk9LibraryInfo extends LibraryInfo {
 
 
 	@Override
-	public PackageMapNode createPackageMap() throws IOException {
+	public synchronized PackageMapNode createPackageMap() throws IOException {
 		PackageMapNode root = new PackageMapNode();
 
-		for (File jarFile: jmodFiles) {
-			try (JarFile jar = new JarFile(jarFile)) {
-
-				Enumeration<JarEntry> e = jar.entries();
-				while (e.hasMoreElements()) {
-					ZipEntry entry = e.nextElement();
-					String entryName = entry.getName();
-					if (entryName.startsWith("classes/")) {
-						entryName = entryName.substring(8);
-						if (entryName.endsWith(".class")) {
-							root.add(entryName);
-						}
-					}
-				}
-
-			}
+		// Rescan the jmods, refreshing the index used to find classes later
+		entryToJmodIndex = buildEntryIndex();
+		for (String entryName : entryToJmodIndex.keySet()) {
+			root.add(entryName);
 		}
 
 		return root;
