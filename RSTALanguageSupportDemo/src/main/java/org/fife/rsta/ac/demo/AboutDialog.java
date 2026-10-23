@@ -35,6 +35,7 @@ import javax.swing.border.AbstractBorder;
 
 import org.fife.rsta.ac.java.buildpath.JarLibraryInfo;
 import org.fife.rsta.ac.java.buildpath.Jdk9LibraryInfo;
+import org.fife.rsta.ac.java.buildpath.JrtLibraryInfo;
 import org.fife.rsta.ac.java.buildpath.LibraryInfo;
 import org.fife.rsta.ac.perl.PerlLanguageSupport;
 
@@ -94,6 +95,8 @@ public class AboutDialog extends JDialog {
 			if (jreHome!=null) {
 				jre = jreHome.getAbsolutePath();
 			}
+		} else if (info instanceof JrtLibraryInfo) { // Java 9 and later, no jmods
+			jre = ((JrtLibraryInfo)info).getJreHome().getAbsolutePath();
 		}
 		JTextField javaField = createTextField(jre);
 
