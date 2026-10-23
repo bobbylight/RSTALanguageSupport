@@ -177,6 +177,44 @@ public class Code extends AttributeInfo {
 
 
 	/**
+	 * Returns the JVM local variable slot occupied by each parameter of a
+	 * method.  Instance methods reserve slot 0 for {@code this}, and
+	 * {@code long} and {@code double} parameters occupy two slots.
+	 *
+	 * @param descriptor The method descriptor, e.g. {@code (JII)V}.
+	 * @param isStatic Whether the method is static.
+	 * @return The first slot of each parameter, in declaration order.
+	 */
+	static int[] getParameterSlots(String descriptor, boolean isStatic) {
+
+		List<Integer> slots = new ArrayList<>();
+		int slot = isStatic ? 0 : 1;
+		int pos = 1; // Skip '('
+
+		while (descriptor.charAt(pos) != ')') {
+			slots.add(slot);
+			boolean array = false;
+			while (descriptor.charAt(pos) == '[') {
+				array = true;
+				pos++;
+			}
+			char c = descriptor.charAt(pos);
+			if (c == 'L') {
+				pos = descriptor.indexOf(';', pos);
+			}
+			pos++;
+			slot += !array && (c == 'J' || c == 'D') ? 2 : 1;
+		}
+
+		int[] result = new int[slots.size()];
+		for (int i=0; i<result.length; i++) {
+			result[i] = slots.get(i);
+		}
+		return result;
+	}
+
+
+	/**
 	 * Reads a <code>Code</code> attribute from an input stream.
 	 *
 	 * @param mi The parent method.
@@ -257,7 +295,10 @@ public class Code extends AttributeInfo {
 
 			int paramCount = mi.getParameterCount();
 			paramNames = new String[paramCount];
-			boolean isStatic = mi.isStatic();
+			// Local variable table entries are keyed by JVM local variable slot,
+			// not parameter index, and long/double parameters take two slots.
+			int[] paramSlots = getParameterSlots(mi.getDescriptor(),
+					mi.isStatic());
 
 			int localVariableTableLength = in.readUnsignedShort();
 			for (int i=0; i<localVariableTableLength; i++) {
@@ -266,18 +307,13 @@ public class Code extends AttributeInfo {
 				/*int length = */in.readUnsignedShort();
 				int nameIndex = in.readUnsignedShort();
 				/*int descriptorIndex = */in.readUnsignedShort();
+				int slot = in.readUnsignedShort();
 
-				// Non-static methods have implicit "this" variable passed in,
-				// so we must avoid that
-				int index = in.readUnsignedShort();
-				int adjustedIndex = isStatic ? index : index-1;
-
-				if (adjustedIndex>=0 && adjustedIndex<paramNames.length) {
-					String name = cf.getUtf8ValueFromConstantPool(nameIndex);
-					//System.out.println("!!! " + getClassFile().
-					//	getClassName(false) + "." + getMethodInfo().
-					//	getNameAndParameters() + " - " + index + ": " + name);
-					paramNames[adjustedIndex] = name;
+				for (int p=0; p<paramSlots.length && p<paramNames.length; p++) {
+					if (paramSlots[p] == slot) {
+						paramNames[p] = cf.getUtf8ValueFromConstantPool(nameIndex);
+						break;
+					}
 				}
 
 			}
