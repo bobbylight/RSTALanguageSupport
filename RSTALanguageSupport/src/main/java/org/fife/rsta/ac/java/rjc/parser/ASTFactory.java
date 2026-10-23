@@ -359,21 +359,22 @@ OUTER:
 						if (s.yyPeekCheckType()==IDENTIFIER) {
 							while ((t=s.yylexNonNull(IDENTIFIER,
 									"Variable name expected (type==" + varType + ")"))!=null) {
-								int arrayDepth = s.skipBracketPairs();
-								varType.incrementBracketPairCount(arrayDepth);
-								String varDec = varType + " " + t.getLexeme();
+								// Each variable can add its own array dimensions, e.g. "int a, b[];"
+								Type lVarType = new Type(varType);
+								lVarType.incrementBracketPairCount(s.skipBracketPairs());
+								String varDec = lVarType + " " + t.getLexeme();
 								log(">>> Variable -- " + varDec + " (line " + t.getLine() + ")");
 								int offs = t.getOffset();
 								String name = t.getLexeme();
-								LocalVariable lVar = new LocalVariable(s, isFinal, varType, offs, name);
+								LocalVariable lVar = new LocalVariable(s, isFinal, lVarType, offs, name);
 								checkForDuplicateLocalVarNames(cu, t, block, m);
 								block.addLocalVariable(lVar);
 								nextType = s.yyPeekCheckType();
 								// A "valid" nextType would be '=', ',' or ';'.
 								// If it's an '=', skip past the assignment.
 								if (nextType==OPERATOR_EQUALS) {
-									Token temp = s.eatThroughNextSkippingBlocksAndStuffInParens(SEPARATOR_COMMA,
-										SEPARATOR_SEMICOLON);
+									s.yylex();
+									Token temp = s.eatThroughVariableInitializer();
 									if (temp!=null) {
 										s.yyPushback(temp);
 									}
