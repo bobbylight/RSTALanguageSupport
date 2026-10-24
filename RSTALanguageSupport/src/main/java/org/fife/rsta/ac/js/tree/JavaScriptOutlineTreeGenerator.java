@@ -529,6 +529,101 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 	}
 
 
+	/**
+	 * Returns the object literal at a property path such as
+	 * <code>config.defaults</code>, where <code>config</code> is a variable
+	 * initialized to an object literal.
+	 *
+	 * @param nodes The nodes of the property path.
+	 * @return The object literal, or {@code null} if it can't be resolved.
+	 */
+	private static ObjectLiteral getObjectLiteralProperty(List<AstNode> nodes) {
+
+		if (!(nodes.get(0) instanceof Name)) {
+			return null;
+		}
+
+		ObjectLiteral literal = getObjectLiteralInitializer((Name)nodes.get(0));
+		for (int i = 1; i < nodes.size() && literal != null; i++) {
+			String key = nodes.get(i).toSource();
+			ObjectLiteral next = null;
+			for (AbstractObjectProperty property : literal.getElements()) {
+				if (property instanceof ObjectProperty) {
+					ObjectProperty objProperty = (ObjectProperty)property;
+					if (key.equals(RhinoUtil.getPropertyName(objProperty.getKey())) &&
+							objProperty.getValue() instanceof ObjectLiteral) {
+						next = (ObjectLiteral)objProperty.getValue();
+					}
+				}
+			}
+			literal = next;
+		}
+
+		return literal;
+	}
+
+
+	/**
+	 * Copies the members already found for one class or namespace into
+	 * another.
+	 *
+	 * @param fromClazz The class to copy members from.
+	 * @param toClazz The class to copy members to.
+	 * @return Whether any members were found for <code>fromClazz</code>.
+	 */
+	private boolean copyPrototypeAdditions(String fromClazz, String toClazz) {
+
+		List<JavaScriptTreeNode> members = prototypeAdditions == null ? null :
+			prototypeAdditions.get(fromClazz);
+		if (members == null) {
+			return false;
+		}
+
+		// "Foo.prototype = { ...Foo.prototype }" - the members are already there
+		if (!fromClazz.equals(toClazz)) {
+			List<JavaScriptTreeNode> list = prototypeAdditions.computeIfAbsent(toClazz, k -> new ArrayList<>());
+			for (JavaScriptTreeNode member : members) {
+				list.add((JavaScriptTreeNode)member.cloneWithChildren());
+			}
+		}
+		return true;
+	}
+
+
+	/**
+	 * Visits the expression in a spread property in an object literal,
+	 * adding the members it contributes to a class.
+	 *
+	 * @param expr The spread expression, e.g. <code>x</code> in
+	 *        <code>...x</code>.
+	 * @param clazz The class that the members belong to.
+	 */
+	private void visitSpreadMembers(AstNode expr, String clazz) {
+
+		// "...x"
+		if (expr instanceof Name) {
+			expr = getObjectLiteralInitializer((Name)expr);
+		}
+
+		// "...Foo.prototype", "...ns.mixin", "...config.defaults"
+		else if (expr instanceof PropertyGet) {
+			List<AstNode> nodes = getChainedPropertyGetNodes((PropertyGet)expr);
+			int count = nodes.size();
+			boolean isPrototype = RhinoUtil.isPrototypeNameNode(nodes.get(count - 1));
+			String fromClazz = RhinoUtil.getPrototypeClazz(nodes, isPrototype ? count - 1 : count);
+			if (copyPrototypeAdditions(fromClazz, clazz)) {
+				return;
+			}
+			expr = getObjectLiteralProperty(nodes);
+		}
+
+		// TODO: Handle other expressions, such as "...(cond ? { a: 1 } : {})"
+		if (expr instanceof ObjectLiteral) {
+			visitPrototypeMembers((ObjectLiteral)expr, clazz);
+		}
+	}
+
+
 	private void visitPrototypeMembers(ObjectLiteral objLiteral,
 			String clazz) {
 
@@ -551,16 +646,8 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 					memberName, propertyValue);
 			}
 			else if (property instanceof SpreadObjectProperty) {
-				// "...{ a: 1, b: 2 }" or "...x" - the literal's members are copied in.
-				// TODO: Resolve other spread expressions, such as "...Foo.prototype"
 				SpreadObjectProperty sop = (SpreadObjectProperty)property;
-				AstNode spreadExpr = sop.getSpreadNode().getExpression();
-				if (spreadExpr instanceof Name) {
-					spreadExpr = getObjectLiteralInitializer((Name)spreadExpr);
-				}
-				if (spreadExpr instanceof ObjectLiteral) {
-					visitPrototypeMembers((ObjectLiteral)spreadExpr, clazz);
-				}
+				visitSpreadMembers(sop.getSpreadNode().getExpression(), clazz);
 			}
 		}
 

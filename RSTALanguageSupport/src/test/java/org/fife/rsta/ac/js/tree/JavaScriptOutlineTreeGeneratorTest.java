@@ -141,6 +141,77 @@ class JavaScriptOutlineTreeGeneratorTest {
     }
 
     @Test
+    void testPrototypeObjectLiteral_spreadPrototypeObjectLiteral() {
+        String code = "function Bar() {}\n" +
+            "Bar.prototype = { inherited: function(x) {} };\n" +
+            "function Foo() {}\n" +
+            "Foo.prototype = { ...Bar.prototype, bar: 1 };\n";
+        JavaScriptTreeNode root = generate(code);
+        assertEquals(List.of("inherited(x)", "bar"), getChildTexts(getChild(root, "Foo()")));
+        assertEquals(List.of("inherited(x)"), getChildTexts(getChild(root, "Bar()")));
+    }
+
+    @Test
+    void testPrototypeObjectLiteral_spreadPrototypeWithAssignedMembers() {
+        String code = "function Bar() {}\n" +
+            "Bar.prototype.inherited = function(x) { var local = 1; };\n" +
+            "Bar.prototype.VALUE = 5;\n" +
+            "function Foo() {}\n" +
+            "Foo.prototype = { ...Bar.prototype, bar: 1 };\n";
+        JavaScriptTreeNode foo = getChild(generate(code), "Foo()");
+        assertEquals(List.of("inherited(x)", "VALUE", "bar"), getChildTexts(foo));
+        assertEquals(List.of("local"), getChildTexts(getChild(foo, "inherited(x)")));
+    }
+
+    @Test
+    void testPrototypeObjectLiteral_spreadPrototype_ignoresLaterMembers() {
+        String code = "function Bar() {}\n" +
+            "Bar.prototype.before = 1;\n" +
+            "function Foo() {}\n" +
+            "Foo.prototype = { ...Bar.prototype, bar: 1 };\n" +
+            "Bar.prototype.after = 2;\n";
+        JavaScriptTreeNode foo = getChild(generate(code), "Foo()");
+        assertEquals(List.of("before", "bar"), getChildTexts(foo));
+    }
+
+    @Test
+    void testPrototypeObjectLiteral_spreadOwnPrototype() {
+        String code = "function Foo() {}\n" +
+            "Foo.prototype.before = 1;\n" +
+            "Foo.prototype = { ...Foo.prototype, bar: 1 };\n";
+        JavaScriptTreeNode foo = getChild(generate(code), "Foo()");
+        assertEquals(List.of("before", "bar"), getChildTexts(foo));
+    }
+
+    @Test
+    void testPrototypeObjectLiteral_spreadNamespaceMember() {
+        String code = "var ns = {};\n" +
+            "ns.mixin = { m: 1 };\n" +
+            "function Foo() {}\n" +
+            "Foo.prototype = { ...ns.mixin, bar: 1 };\n";
+        JavaScriptTreeNode foo = getChild(generate(code), "Foo()");
+        assertEquals(List.of("m", "bar"), getChildTexts(foo));
+    }
+
+    @Test
+    void testPrototypeObjectLiteral_spreadVariableProperty() {
+        String code = "const config = { defaults: { d: 1 }, other: 2 };\n" +
+            "function Foo() {}\n" +
+            "Foo.prototype = { ...config.defaults, bar: 1 };\n";
+        JavaScriptTreeNode foo = getChild(generate(code), "Foo()");
+        assertEquals(List.of("d", "bar"), getChildTexts(foo));
+    }
+
+    @Test
+    void testPrototypeObjectLiteral_spreadUnresolvablePropertyGet() {
+        String code = "const config = { other: 2 };\n" +
+            "function Foo() {}\n" +
+            "Foo.prototype = { ...config.defaults, ...unknown.x, ...this.y, bar: 1 };\n";
+        JavaScriptTreeNode foo = getChild(generate(code), "Foo()");
+        assertEquals(List.of("bar"), getChildTexts(foo));
+    }
+
+    @Test
     void testObjectFreeze_spreadObjectLiteral() {
         String code = "var ns = {};\n" +
             "ns.Foo = Object.freeze({\n" +
