@@ -307,22 +307,7 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 						tn.setText(clazz + "()");
 
 						ObjectLiteral value = (ObjectLiteral)rhs;
-						List<AbstractObjectProperty> properties = value.getElements();
-						for (AbstractObjectProperty property : properties) {
-
-							if (property instanceof ObjectProperty) {
-								ObjectProperty propObj = (ObjectProperty)property;
-								AstNode propertyKey = propObj.getKey();
-								tn = createTreeNode(propertyKey);
-
-								String memberName = RhinoUtil.getPropertyName(propertyKey);
-								AstNode propertyValue = propObj.getValue();
-								visitPrototypeMember(tn, clazz,
-									memberName, propertyValue);
-							}
-
-							// TODO: Also handle SpreadObjectProperty
-						}
+						visitPrototypeMembers(value, clazz);
 
 					}
 
@@ -516,8 +501,13 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 					memberName, propertyValue);
 			}
 			else if (property instanceof SpreadObjectProperty) {
-				// TODO: Implement me
-				// SpreadObjectProperty sop = (SpreadObjectProperty)property;
+				// "...{ a: 1, b: 2 }" - the literal's members are copied in.
+				// TODO: Resolve other spread expressions, such as variables
+				SpreadObjectProperty sop = (SpreadObjectProperty)property;
+				AstNode spreadExpr = sop.getSpreadNode().getExpression();
+				if (spreadExpr instanceof ObjectLiteral) {
+					visitPrototypeMembers((ObjectLiteral)spreadExpr, clazz);
+				}
 			}
 		}
 
