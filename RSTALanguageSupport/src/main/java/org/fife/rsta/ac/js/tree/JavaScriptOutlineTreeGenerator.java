@@ -12,8 +12,10 @@ package org.fife.rsta.ac.js.tree;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.swing.text.BadLocationException;
 
 import org.fife.rsta.ac.js.IconFactory;
@@ -41,6 +43,8 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 	private JavaScriptTreeNode curScopeTreeNode;
 
 	private Map<String, List<JavaScriptTreeNode>> prototypeAdditions;
+
+	private Set<ObjectLiteral> visitingObjectLiterals = new HashSet<>();
 
 
 	JavaScriptOutlineTreeGenerator(RSyntaxTextArea textArea,
@@ -484,8 +488,54 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 	}
 
 
+	/**
+	 * Returns the object literal a variable is initialized to, if any.
+	 *
+	 * @param name A reference to the variable.
+	 * @return The object literal, or {@code null} if the variable can't be
+	 *         resolved or isn't initialized to an object literal.
+	 */
+	private static ObjectLiteral getObjectLiteralInitializer(Name name) {
+
+		String id = name.getIdentifier();
+		Scope scope = name.getEnclosingScope();
+		Scope definingScope = scope == null ? null : scope.getDefiningScope(id);
+		if (definingScope == null) {
+			return null;
+		}
+
+		// Rhino doesn't record a symbol's declaration node, so look for it
+		ObjectLiteral[] result = new ObjectLiteral[1];
+		definingScope.visit(node -> {
+			if (result[0] != null) {
+				return false;
+			}
+			// Don't look in nested scopes that shadow this variable
+			if (node != definingScope && node instanceof Scope &&
+					((Scope)node).getSymbol(id) != null) {
+				return false;
+			}
+			if (node instanceof VariableInitializer) {
+				VariableInitializer var = (VariableInitializer)node;
+				AstNode target = var.getTarget();
+				if (target instanceof Name && id.equals(((Name)target).getIdentifier()) &&
+						var.getInitializer() instanceof ObjectLiteral) {
+					result[0] = (ObjectLiteral)var.getInitializer();
+				}
+			}
+			return true;
+		});
+		return result[0];
+	}
+
+
 	private void visitPrototypeMembers(ObjectLiteral objLiteral,
 			String clazz) {
+
+		// Guard against cycles such as "const x = { ...x };"
+		if (!visitingObjectLiterals.add(objLiteral)) {
+			return;
+		}
 
 		List<AbstractObjectProperty> properties = objLiteral.getElements();
 		for (AbstractObjectProperty property : properties) {
@@ -501,15 +551,20 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 					memberName, propertyValue);
 			}
 			else if (property instanceof SpreadObjectProperty) {
-				// "...{ a: 1, b: 2 }" - the literal's members are copied in.
-				// TODO: Resolve other spread expressions, such as variables
+				// "...{ a: 1, b: 2 }" or "...x" - the literal's members are copied in.
+				// TODO: Resolve other spread expressions, such as "...Foo.prototype"
 				SpreadObjectProperty sop = (SpreadObjectProperty)property;
 				AstNode spreadExpr = sop.getSpreadNode().getExpression();
+				if (spreadExpr instanceof Name) {
+					spreadExpr = getObjectLiteralInitializer((Name)spreadExpr);
+				}
 				if (spreadExpr instanceof ObjectLiteral) {
 					visitPrototypeMembers((ObjectLiteral)spreadExpr, clazz);
 				}
 			}
 		}
+
+		visitingObjectLiterals.remove(objLiteral);
 
 	}
 

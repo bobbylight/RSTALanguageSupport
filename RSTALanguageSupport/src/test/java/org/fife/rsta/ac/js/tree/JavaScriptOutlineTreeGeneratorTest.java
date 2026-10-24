@@ -86,6 +86,61 @@ class JavaScriptOutlineTreeGeneratorTest {
     }
 
     @Test
+    void testPrototypeObjectLiteral_spreadVariable() {
+        String code = "const x = {\n" +
+            "   x1: true,\n" +
+            "   x2: true,\n" +
+            "}\n" +
+            "\n" +
+            "Klass3.prototype = {\n" +
+            "   getName: function(arg1, arg2) {\n" +
+            "      return this.name;\n" +
+            "   },\n" +
+            "   VALUE: 5,\n" +
+            "   ...x\n" +
+            "};\n";
+        JavaScriptTreeNode klass3 = getChild(generate(code), "Klass3()");
+        assertEquals(List.of("getName(arg1, arg2)", "VALUE", "x1", "x2"), getChildTexts(klass3));
+    }
+
+    @Test
+    void testPrototypeObjectLiteral_spreadBlockScopedVariable() {
+        String code = "let x = { outer: 1 };\n" +
+            "{\n" +
+            "    let x = { inner: 1 };\n" +
+            "    Foo.prototype = { ...x, bar: 1 };\n" +
+            "}\n";
+        JavaScriptTreeNode foo = getChild(generate(code), "Foo()");
+        assertEquals(List.of("inner", "bar"), getChildTexts(foo));
+    }
+
+    @Test
+    void testPrototypeObjectLiteral_spreadShadowedVariable() {
+        String code = "var x = { outer: 1 };\n" +
+            "function f() {\n" +
+            "    var x = { inner: 1 };\n" +
+            "}\n" +
+            "Foo.prototype = { ...x, bar: 1 };\n";
+        JavaScriptTreeNode foo = getChild(generate(code), "Foo()");
+        assertEquals(List.of("outer", "bar"), getChildTexts(foo));
+    }
+
+    @Test
+    void testPrototypeObjectLiteral_spreadUndeclaredVariable() {
+        String code = "Foo.prototype = { ...unknown, bar: 1 };\n";
+        JavaScriptTreeNode foo = getChild(generate(code), "Foo()");
+        assertEquals(List.of("bar"), getChildTexts(foo));
+    }
+
+    @Test
+    void testPrototypeObjectLiteral_spreadSelfReferencingVariable() {
+        String code = "var x = { ...x, x1: 1 };\n" +
+            "Foo.prototype = { ...x, bar: 1 };\n";
+        JavaScriptTreeNode foo = getChild(generate(code), "Foo()");
+        assertEquals(List.of("x1", "bar"), getChildTexts(foo));
+    }
+
+    @Test
     void testObjectFreeze_spreadObjectLiteral() {
         String code = "var ns = {};\n" +
             "ns.Foo = Object.freeze({\n" +
