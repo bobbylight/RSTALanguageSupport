@@ -184,6 +184,28 @@ class SourceCompletionProviderTest {
 		assertEquals("sb.append(\"x\").", getEnteredText("sb.append(\"x\")."));
 	}
 
+	@Test
+	void testMethodChainWithParenInCharArg() {
+		assertEquals("sb.append(')').", getEnteredText("sb.append(')')."));
+		assertEquals("sb.append('(').", getEnteredText("sb.append('(')."));
+	}
+
+	@Test
+	void testMethodChainWithParensInStringArg() {
+		assertEquals("sb.append(\"a)b(\").", getEnteredText("x = sb.append(\"a)b(\")."));
+	}
+
+	@Test
+	void testMethodChainWithEscapedQuoteInStringArg() {
+		assertEquals("sb.append(\"a\\\")\").", getEnteredText("sb.append(\"a\\\")\")."));
+		assertEquals("sb.append('\\'').", getEnteredText("sb.append('\\'')."));
+	}
+
+	@Test
+	void testMethodChainWithUnterminatedLiteral() {
+		assertEquals("", getEnteredText("x\").bar()."));
+	}
+
 	// --- Cast expression tests (should NOT scan through cast parens) ---
 
 	@Test
@@ -214,34 +236,42 @@ class SourceCompletionProviderTest {
 
 	@Test
 	void testCountArguments_empty() {
-		assertEquals(0, SourceCompletionProvider.countArguments("()"));
+		assertEquals(0, ChainExpressions.countArguments("()"));
 	}
 
 	@Test
 	void testCountArguments_one() {
-		assertEquals(1, SourceCompletionProvider.countArguments("(x)"));
+		assertEquals(1, ChainExpressions.countArguments("(x)"));
 	}
 
 	@Test
 	void testCountArguments_two() {
-		assertEquals(2, SourceCompletionProvider.countArguments("(x, y)"));
+		assertEquals(2, ChainExpressions.countArguments("(x, y)"));
 	}
 
 	@Test
 	void testCountArguments_three() {
-		assertEquals(3, SourceCompletionProvider.countArguments("(a, b, c)"));
+		assertEquals(3, ChainExpressions.countArguments("(a, b, c)"));
 	}
 
 	@Test
 	void testCountArguments_nested() {
 		// foo(bar(x, y), z) has 2 top-level args
-		assertEquals(2, SourceCompletionProvider.countArguments("(bar(x, y), z)"));
+		assertEquals(2, ChainExpressions.countArguments("(bar(x, y), z)"));
+	}
+
+	@Test
+	void testCountArguments_literals() {
+		assertEquals(1, ChainExpressions.countArguments("(\"a,b\")"));
+		assertEquals(1, ChainExpressions.countArguments("(\"a)b\")"));
+		assertEquals(2, ChainExpressions.countArguments("(\"a\\\",\", ',')"));
+		assertEquals(1, ChainExpressions.countArguments("(')')"));
 	}
 
 	@Test
 	void testCountArguments_malformed() {
-		assertEquals(-1, SourceCompletionProvider.countArguments(null));
-		assertEquals(-1, SourceCompletionProvider.countArguments(""));
-		assertEquals(-1, SourceCompletionProvider.countArguments("("));
+		assertEquals(-1, ChainExpressions.countArguments(null));
+		assertEquals(-1, ChainExpressions.countArguments(""));
+		assertEquals(-1, ChainExpressions.countArguments("("));
 	}
 }

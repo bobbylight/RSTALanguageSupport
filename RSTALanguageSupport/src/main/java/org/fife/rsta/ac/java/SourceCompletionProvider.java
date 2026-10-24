@@ -876,55 +876,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 			int lineStart = line.getStartOffset();
 			int len = caret - lineStart;
 			String lineText = doc.getText(lineStart, len);
-
-			// Scan backward from end, accepting identifier chars, dots,
-			// and balanced parentheses (for method calls in chains).
-			// Track whether the last accepted token was a dot to distinguish
-			// method call parens (foo.bar().) from cast parens ((Cast)var.).
-			int i = lineText.length() - 1;
-			boolean lastWasDot = false;
-			while (i >= 0) {
-				char c = lineText.charAt(i);
-				if (Character.isJavaIdentifierPart(c)) {
-					lastWasDot = false;
-					i--;
-				}
-				else if (c == '.') {
-					lastWasDot = true;
-					i--;
-				}
-				else if (c == ')') {
-					// In a method chain like foo.bar().baz, ')' follows
-					// '.' when scanning backward (baz -> . -> )). In a cast
-					// like (Type)var., ')' follows identifier chars
-					// (var -> )). Only skip parens for method calls.
-					if (!lastWasDot) {
-						break;
-					}
-					// Skip balanced parens
-					int depth = 1;
-					i--;
-					while (i >= 0 && depth > 0) {
-						c = lineText.charAt(i);
-						if (c == ')') {
-							depth++;
-						}
-						else if (c == '(') {
-							depth--;
-						}
-						i--;
-					}
-					lastWasDot = false;
-					// After balanced parens, continue scanning (the method
-					// name before '(' will be picked up in the next iteration)
-				}
-				else {
-					break;
-				}
-			}
-			i++;
-
-			return (i < lineText.length()) ? lineText.substring(i) : "";
+			return ChainExpressions.getTrailingChain(lineText);
 
 		} catch (BadLocationException e) {
 			e.printStackTrace();
@@ -1119,28 +1071,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	private ClassFile resolveChainType(CompilationUnit cu, TypeDeclaration td,
 			Method currentMethod, String prefix, int offs) {
 
-		// Split prefix on dots, but keep parenthesized segments together.
-		// e.g., "AudioEngine.sharedEngine()" -> ["AudioEngine", "sharedEngine()"]
-		List<String> segments = new ArrayList<>();
-		int depth = 0;
-		int segStart = 0;
-		for (int i = 0; i < prefix.length(); i++) {
-			char c = prefix.charAt(i);
-			if (c == '(') {
-				depth++;
-			}
-			else if (c == ')') {
-				depth--;
-			}
-			else if (c == '.' && depth == 0) {
-				segments.add(prefix.substring(segStart, i));
-				segStart = i + 1;
-			}
-		}
-		if (segStart < prefix.length()) {
-			segments.add(prefix.substring(segStart));
-		}
-
+		List<String> segments = ChainExpressions.splitSegments(prefix);
 		if (segments.isEmpty()) {
 			return null;
 		}
@@ -1155,53 +1086,58 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 		ClassFile currentType = null;
 		boolean isStatic = false;
 
-		// Resolve first segment: could be local var, parameter, field, or class name
+		// Resolve first segment: could be local var, parameter, field, or class
+		// name, checked in that order since each one hides the ones after it
+		Type firstType = null;
+		boolean found = false;
 
-		// 1. Check fields in enclosing type
-		for (Iterator<Member> j = td.getMemberIterator(); j.hasNext();) {
-			Member m = j.next();
-			if (m instanceof Field) {
-				Field field = (Field)m;
-				if (field.getName().equals(firstName) && !firstIsMethodCall) {
-					Type type = field.getType();
-					if (!type.isBasicType() && !type.isArray()) {
-						currentType = getClassFileFor(cu, type.getName(true, false));
-					}
-					break;
-				}
+		// 1. Check local variables
+		if (currentMethod != null && !firstIsMethodCall) {
+			CodeBlock body = currentMethod.getBody();
+			LocalVariable var = body != null ?
+				findLocalVar(body, firstName, offs) : null;
+			if (var != null) {
+				firstType = var.getType();
+				found = true;
 			}
 		}
 
 		// 2. Check method parameters
-		if (currentType == null && currentMethod != null && !firstIsMethodCall) {
+		if (!found && currentMethod != null && !firstIsMethodCall) {
 			for (int i = 0; i < currentMethod.getParameterCount(); i++) {
 				FormalParameter param = currentMethod.getParameter(i);
 				if (firstName.equals(param.getName())) {
-					Type type = param.getType();
-					if (!type.isBasicType() && !type.isArray()) {
-						currentType = getClassFileFor(cu, type.getName(true, false));
-					}
+					firstType = param.getType();
+					found = true;
 					break;
 				}
 			}
 		}
 
-		// 3. Check local variables
-		if (currentType == null && currentMethod != null && !firstIsMethodCall) {
-			CodeBlock body = currentMethod.getBody();
-			if (body != null) {
-				currentType = resolveLocalVarType(cu, body, firstName, offs);
+		// 3. Check fields in enclosing type
+		if (!found && !firstIsMethodCall) {
+			for (Iterator<Member> j = td.getMemberIterator(); j.hasNext();) {
+				Member m = j.next();
+				if (m instanceof Field && ((Field)m).getName().equals(firstName)) {
+					firstType = ((Field)m).getType();
+					found = true;
+					break;
+				}
 			}
+		}
+
+		if (firstType != null && !firstType.isBasicType() && !firstType.isArray()) {
+			currentType = getClassFileFor(cu, firstType.getName(true, false));
 		}
 
 		// 3b. Check fields inherited from the superclass chain (e.g. a
 		// Component subclass's "gameObject")
-		if (currentType == null && !firstIsMethodCall) {
+		if (!found && !firstIsMethodCall) {
 			currentType = resolveInheritedFieldType(cu, td, firstName);
 		}
 
 		// 4. Check class name (static access)
-		if (currentType == null && !firstIsMethodCall) {
+		if (!found && currentType == null && !firstIsMethodCall) {
 			List<ImportDeclaration> imports = cu.getImports();
 			List<ClassFile> matches = jarManager.getClassesWithUnqualifiedName(
 					firstName, imports);
@@ -1232,7 +1168,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 
 			if (hasParens) {
 				// Method call - find method and get return type
-				int argCount = countArguments(seg.substring(parenIdx));
+				int argCount = ChainExpressions.countArguments(seg.substring(parenIdx));
 				String returnType = findMethodReturnType(currentType, memberName, argCount, isStatic, pkg);
 				if (returnType == null || "void".equals(returnType)) {
 					log("[DEBUG]: Could not resolve method return type: " + memberName + " on " +
@@ -1295,41 +1231,6 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 
 
 	/**
-	 * Counts the number of arguments in a parenthesized argument list.
-	 * Handles nested parentheses. Returns 0 for empty args {@code "()"}.
-	 *
-	 * @param argsWithParens The argument string starting with '(' (e.g.,
-	 *        "(x, y)" or "()")
-	 * @return The argument count, or -1 if the string is malformed.
-	 */
-	static int countArguments(String argsWithParens) {
-		if (argsWithParens == null || argsWithParens.length() < 2) {
-			return -1;
-		}
-		// Strip outer parens
-		String inner = argsWithParens.substring(1, argsWithParens.length() - 1).trim();
-		if (inner.isEmpty()) {
-			return 0;
-		}
-		int count = 1;
-		int depth = 0;
-		for (int i = 0; i < inner.length(); i++) {
-			char c = inner.charAt(i);
-			if (c == '(') {
-				depth++;
-			}
-			else if (c == ')') {
-				depth--;
-			}
-			else if (c == ',' && depth == 0) {
-				count++;
-			}
-		}
-		return count;
-	}
-
-
-	/**
 	 * Finds the type of a field in the given ClassFile.
 	 * Walks the superclass chain to find inherited fields.
 	 */
@@ -1378,24 +1279,21 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 
 
 	/**
-	 * Resolves a local variable name to its ClassFile type.
+	 * Finds the local variable with the given name that is in scope at the
+	 * given offset.
 	 */
-	private ClassFile resolveLocalVarType(CompilationUnit cu, CodeBlock block,
-			String varName, int offs) {
+	private static LocalVariable findLocalVar(CodeBlock block, String varName,
+			int offs) {
 		for (int i = 0; i < block.getLocalVarCount(); i++) {
 			LocalVariable var = block.getLocalVar(i);
 			if (var.getNameEndOffset() <= offs && varName.equals(var.getName())) {
-				Type type = var.getType();
-				if (!type.isBasicType() && !type.isArray()) {
-					return getClassFileFor(cu, type.getName(true, false));
-				}
-				return null;
+				return var;
 			}
 		}
 		for (int i = 0; i < block.getChildBlockCount(); i++) {
 			CodeBlock child = block.getChildBlock(i);
 			if (child.containsOffset(offs)) {
-				ClassFile result = resolveLocalVarType(cu, child, varName, offs);
+				LocalVariable result = findLocalVar(child, varName, offs);
 				if (result != null) {
 					return result;
 				}
