@@ -49,6 +49,21 @@ class LocalVariableCompletion extends AbstractJavaSourceCompletion {
 	}
 
 
+	/**
+	 * Returns a summary naming the variable and its type, so the description
+	 * window is never empty for a local variable.
+	 *
+	 * @return The summary.
+	 */
+	@Override
+	public String getSummary() {
+		String type = String.valueOf(localVar.getType()).
+				replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
+		return "<html><body><b>" + localVar.getName() + "</b> : " + type +
+				"<br><font color=\"#808080\">Local variable</font></body></html>";
+	}
+
+
 	@Override
 	public String getToolTipText() {
 		return localVar.getType() + " " + localVar.getName();

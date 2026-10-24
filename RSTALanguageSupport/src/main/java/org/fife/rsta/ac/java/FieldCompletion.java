@@ -156,14 +156,11 @@ class FieldCompletion extends AbstractJavaSourceCompletion
 	@Override
 	public String getSummary() {
 
-		String summary = data.getSummary(); // Could be just the method name
+		// Could be the Javadoc, just the field name, or null.
+		String summary = data.getSummary();
 
-		// If it's the Javadoc for the method...
-		if (summary!=null && summary.startsWith("/**")) {
-			summary = org.fife.rsta.ac.java.Util.docCommentToHtml(summary);
-		}
-
-		return summary;
+		// Signature and declaring class, then the Javadoc if any - never empty.
+		return org.fife.rsta.ac.java.Util.getMemberSummaryHtml(this, summary);
 
 	}
 

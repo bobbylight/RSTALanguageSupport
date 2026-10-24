@@ -388,6 +388,87 @@ public final class Util {
 	}
 
 	/**
+	 * Returns the description-window HTML for a field or method: its
+	 * signature, type and declaring class, followed by its Javadoc when there
+	 * is any.  The result is never empty, so the description window always
+	 * says something about the selected member.
+	 *
+	 * @param mc The member.
+	 * @param rawSummary The member's raw summary: a Javadoc comment (starting
+	 *        with <code>/**</code>), HTML, or <code>null</code> or a plain
+	 *        name or signature when no Javadoc is available.
+	 * @return The HTML summary.
+	 */
+	static String getMemberSummaryHtml(MemberCompletion mc, String rawSummary) {
+
+		StringBuilder header = new StringBuilder("<b>");
+		header.append(escapeHtml(mc.getSignature())).append("</b>");
+		String type = mc.getType();
+		if (type!=null && !type.isEmpty()) {
+			header.append(" : ").append(escapeHtml(type));
+		}
+		header.append("<br><font color=\"#808080\">");
+		if (mc.isDeprecated()) {
+			header.append("<b>Deprecated.</b> ");
+		}
+		String declaringClass = mc.getEnclosingClassName(true);
+		if (declaringClass!=null && !declaringClass.isEmpty()) {
+			header.append("Declared in ").append(escapeHtml(declaringClass));
+		}
+		header.append("</font>");
+
+		String html = null;
+		if (rawSummary!=null && rawSummary.startsWith("/**")) {
+			html = docCommentToHtml(rawSummary);
+		}
+		else if (rawSummary!=null && rawSummary.startsWith("<html>")) {
+			html = rawSummary;
+		}
+
+		if (html!=null) {
+			int body = html.indexOf("<body>");
+			if (body>-1) {
+				int insert = body + "<body>".length();
+				return html.substring(0, insert) + header + "<br><br>" +
+						html.substring(insert);
+			}
+		}
+		header.insert(0, "<html><body>");
+		header.append("<br><br><i>No documentation.</i></body></html>");
+		return header.toString();
+
+	}
+
+
+	/**
+	 * Escapes the characters of plain text that are special in HTML.
+	 *
+	 * @param text The text.
+	 * @return The escaped text.
+	 */
+	private static String escapeHtml(String text) {
+		StringBuilder sb = new StringBuilder(text.length());
+		for (int i=0; i<text.length(); i++) {
+			char ch = text.charAt(i);
+			switch (ch) {
+				case '<':
+					sb.append("&lt;");
+					break;
+				case '>':
+					sb.append("&gt;");
+					break;
+				case '&':
+					sb.append("&amp;");
+					break;
+				default:
+					sb.append(ch);
+			}
+		}
+		return sb.toString();
+	}
+
+
+	/**
 	 * Converts a Java documentation comment to HTML.
 	 * <pre>
 	 * This is a
