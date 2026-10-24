@@ -8,6 +8,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.fife.rsta.ac.java.buildpath.ClasspathLibraryInfo;
 import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
 import org.fife.rsta.ac.java.rjc.lexer.Scanner;
 import org.fife.rsta.ac.java.rjc.parser.ASTFactory;
@@ -31,9 +32,11 @@ class CompletionRankingTest {
 	private static JarManager jarManager;
 
 	@BeforeAll
-	static void loadJre() throws Exception {
+	static void loadLibraries() throws Exception {
 		jarManager = new JarManager();
 		jarManager.addCurrentJreClassFileSource();
+		jarManager.addClassFileSource(new ClasspathLibraryInfo(
+			List.of(CompletionRankingFixture.class.getName())));
 	}
 
 	@AfterEach
@@ -47,11 +50,12 @@ class CompletionRankingTest {
 	 */
 	private static List<Completion> completeAtEndOf(String body) {
 		String src = "import java.util.ArrayList;\n"
+				+ "import org.fife.rsta.ac.java.CompletionRankingFixture;\n"
 				+ "public class Probe {\n"
 				+ "    private int _secret;\n"
 				+ "    public int visible;\n"
 				+ "    private ArrayList<String> items;\n"
-				+ "    private Thread thread;\n"
+				+ "    private CompletionRankingFixture fixture;\n"
 				+ "    void m() {\n"
 				+ "        " + body;
 		String full = src + "\n    }\n}\n";
@@ -141,11 +145,12 @@ class CompletionRankingTest {
 
 	@Test
 	void deprecatedMembersSinkToTheBottom() {
-		List<Completion> completions = completeAtEndOf("thread.");
+		List<Completion> completions = completeAtEndOf("fixture.");
 		List<String> names = names(completions);
-		// Positive control: Thread.stop() is deprecated and still offered.
-		int stop = indexOf(names, "stop");
-		assertTrue(((MemberCompletion)completions.get(stop)).isDeprecated());
+		// Use our own fixture so this test does not depend on deprecated
+		// JRE methods remaining available in future Java versions.
+		int deprecatedIndex = indexOf(names, "alphaDeprecated");
+		assertTrue(((MemberCompletion)completions.get(deprecatedIndex)).isDeprecated());
 		boolean seenDeprecated = false;
 		for (Completion c : completions) {
 			boolean deprecated = c instanceof MemberCompletion &&
@@ -156,7 +161,7 @@ class CompletionRankingTest {
 			}
 			seenDeprecated |= deprecated;
 		}
-		assertTrue(stop>indexOf(names, "start"), names.toString());
+		assertTrue(deprecatedIndex>indexOf(names, "zetaCurrent"), names.toString());
 	}
 
 	@Test
