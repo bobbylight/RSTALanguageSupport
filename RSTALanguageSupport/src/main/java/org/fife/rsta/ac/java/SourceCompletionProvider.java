@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.Element;
 import javax.swing.text.JTextComponent;
 
 import org.fife.rsta.ac.ShorthandCompletionCache;
@@ -685,11 +687,11 @@ public SourceLocation getSourceLocForClass(String className) {
 	public String getAlreadyEnteredText(JTextComponent comp) {
 
 		try {
-			javax.swing.text.Document doc = comp.getDocument();
+			Document doc = comp.getDocument();
 			int caret = comp.getCaretPosition();
-			javax.swing.text.Element root = doc.getDefaultRootElement();
+			Element root = doc.getDefaultRootElement();
 			int lineIdx = root.getElementIndex(caret);
-			javax.swing.text.Element line = root.getElement(lineIdx);
+			Element line = root.getElement(lineIdx);
 			int lineStart = line.getStartOffset();
 			int len = caret - lineStart;
 			String lineText = doc.getText(lineStart, len);
@@ -705,10 +707,12 @@ public SourceLocation getSourceLocForClass(String className) {
 				if (Character.isJavaIdentifierPart(c)) {
 					lastWasDot = false;
 					i--;
-				} else if (c == '.') {
+				}
+				else if (c == '.') {
 					lastWasDot = true;
 					i--;
-				} else if (c == ')') {
+				}
+				else if (c == ')') {
 					// In a method chain like foo.bar().baz, ')' follows
 					// '.' when scanning backward (baz -> . -> )). In a cast
 					// like (Type)var., ')' follows identifier chars
@@ -732,7 +736,8 @@ public SourceLocation getSourceLocForClass(String className) {
 					lastWasDot = false;
 					// After balanced parens, continue scanning (the method
 					// name before '(' will be picked up in the next iteration)
-				} else {
+				}
+				else {
 					break;
 				}
 			}
@@ -956,9 +961,7 @@ public SourceLocation getSourceLocForClass(String className) {
 		}
 
 		if (segments.isEmpty()) {
-
 			return null;
-
 		}
 
 		String pkg = cu.getPackageName();
@@ -977,7 +980,7 @@ public SourceLocation getSourceLocForClass(String className) {
 		for (Iterator<Member> j = td.getMemberIterator(); j.hasNext();) {
 			Member m = j.next();
 			if (m instanceof Field) {
-				Field field = (Field) m;
+				Field field = (Field)m;
 				if (field.getName().equals(firstName) && !firstIsMethodCall) {
 					Type type = field.getType();
 					if (!type.isBasicType() && !type.isArray()) {
@@ -1057,7 +1060,8 @@ public SourceLocation getSourceLocForClass(String className) {
 				}
 				currentType = getClassFileFor(cu, returnType);
 				isStatic = false; // after first call, subsequent accesses are instance
-			} else {
+			}
+			else {
 				// Field access - find field and get type
 				String fieldType = findFieldType(currentType, memberName, isStatic, pkg);
 				if (fieldType == null) {
@@ -1248,7 +1252,8 @@ public SourceLocation getSourceLocForClass(String className) {
 			ClassFile resolvedType = resolveChainType(cu, td, currentMethod, prefix, offs);
 			if (resolvedType != null) {
 				addCompletionsForExtendedClass(retVal, cu, resolvedType, pkg, null);
-			} else {
+			}
+			else {
 				log("[DEBUG]: Chain resolution failed for: " + prefix);
 			}
 			return;

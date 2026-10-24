@@ -4,21 +4,20 @@
  */
 package org.fife.rsta.ac.java;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.io.StringReader;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-
 import org.fife.rsta.ac.java.rjc.ast.CompilationUnit;
 import org.fife.rsta.ac.java.rjc.lexer.Scanner;
 import org.fife.rsta.ac.java.rjc.parser.ASTFactory;
 import org.fife.ui.autocomplete.Completion;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * "field." completion for a field the edited class inherits from its
