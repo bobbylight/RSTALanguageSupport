@@ -21,6 +21,7 @@ import javax.swing.text.BadLocationException;
 import org.fife.rsta.ac.js.IconFactory;
 import org.fife.rsta.ac.js.util.RhinoUtil;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.mozilla.javascript.Node;
 import org.mozilla.javascript.Token;
 import org.mozilla.javascript.ast.*;
 
@@ -209,6 +210,7 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 		//    * "Foo.prototype.xyz = ..."
 		//    * "Foo.prototype = { ...  };"
 		//    * "Foo.prototype = Object.create(...);"
+		//    * "Foo.prototype = (function() { return { ... }; })();"
 
 		AstNode expr = exprStmt.getExpression();
 
@@ -249,7 +251,7 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 					curScopeTreeNode.add(tn);
 
 					String clazz = RhinoUtil.getPrototypeClazz(chainedPropertyGetNodes, count-1);
-					AstNode rhs = assignment.getRight();
+					AstNode rhs = getIifeReturnValue(assignment.getRight());
 
 					// "Foo.prototype = { ... };"
 					if (rhs instanceof ObjectLiteral) {
@@ -286,6 +288,10 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 
 						}
 
+						else {
+							tn.setText(clazz + "(???)");
+						}
+
 					}
 
 					else {
@@ -302,7 +308,7 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 					//curScopeTreeNode.add(tn); // Don't add until we know how to handle it
 
 					String clazz = RhinoUtil.getPrototypeClazz(chainedPropertyGetNodes, count);
-					AstNode rhs = assignment.getRight();
+					AstNode rhs = getIifeReturnValue(assignment.getRight());
 
 					// "Foo.bar.bas = { ... };"
 					if (rhs instanceof ObjectLiteral) {
@@ -485,6 +491,63 @@ class JavaScriptOutlineTreeGenerator implements NodeVisitor {
 			}
 		}
 
+	}
+
+
+	/**
+	 * If an expression is an immediately-invoked function expression, such as
+	 * <code>(function() { return { ... }; })()</code>, returns the value the
+	 * function returns.
+	 *
+	 * @param expr The expression.
+	 * @return The value returned by the function, or <code>expr</code> itself
+	 *         if it isn't an IIFE or its return value can't be determined.
+	 *         A returned variable initialized to an object literal is
+	 *         resolved to that literal.
+	 */
+	private static AstNode getIifeReturnValue(AstNode expr) {
+
+		// "(function() { ... }())"
+		AstNode call = stripParentheses(expr);
+		if (!(call instanceof FunctionCall)) {
+			return expr;
+		}
+
+		// "(function() { ... })()"
+		AstNode target = stripParentheses(((FunctionCall)call).getTarget());
+		if (!(target instanceof FunctionNode)) {
+			return expr;
+		}
+
+		// Only consider top-level returns, not those in nested functions or
+		// blocks.  Arrow functions with expression bodies are represented as
+		// a block containing a single return statement.
+		for (Node statement : ((FunctionNode)target).getBody()) {
+			if (statement instanceof ReturnStatement) {
+				AstNode value = stripParentheses(
+					((ReturnStatement)statement).getReturnValue());
+				if (value instanceof Name) {
+					value = getObjectLiteralInitializer((Name)value);
+				}
+				return value != null ? value : expr;
+			}
+		}
+
+		return expr;
+	}
+
+
+	/**
+	 * Returns the expression wrapped by any parentheses around a node.
+	 *
+	 * @param node The node, which may be <code>null</code>.
+	 * @return The unwrapped expression.
+	 */
+	private static AstNode stripParentheses(AstNode node) {
+		while (node instanceof ParenthesizedExpression) {
+			node = ((ParenthesizedExpression)node).getExpression();
+		}
+		return node;
 	}
 
 

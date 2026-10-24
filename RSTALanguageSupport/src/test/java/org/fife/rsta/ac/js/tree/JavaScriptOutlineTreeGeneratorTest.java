@@ -232,4 +232,97 @@ class JavaScriptOutlineTreeGeneratorTest {
         JavaScriptTreeNode foo = getChild(generate(code), "ns.Foo()");
         assertEquals(List.of("inherited(x)", "bar(a, b)"), getChildTexts(foo));
     }
+
+    @Test
+    void testPrototypeIife_returnsObjectLiteral() {
+        String code = "function Conversation() {}\n" +
+            "Conversation.prototype = (function() {\n" +
+            "    return {\n" +
+            "        foo: function() { return true; },\n" +
+            "        bar: 5\n" +
+            "    };\n" +
+            "})();\n";
+        JavaScriptTreeNode conv = getChild(generate(code), "Conversation()");
+        assertEquals(List.of("foo()", "bar"), getChildTexts(conv));
+    }
+
+    @Test
+    void testPrototypeIife_invocationInsideParentheses() {
+        String code = "function Foo() {}\n" +
+            "Foo.prototype = (function() {\n" +
+            "    return { bar: function(a) {} };\n" +
+            "}());\n";
+        JavaScriptTreeNode foo = getChild(generate(code), "Foo()");
+        assertEquals(List.of("bar(a)"), getChildTexts(foo));
+    }
+
+    @Test
+    void testPrototypeIife_arrowFunctionWithBlockBody() {
+        String code = "function Foo() {}\n" +
+            "Foo.prototype = (() => {\n" +
+            "    return { bar: function(a) {} };\n" +
+            "})();\n";
+        JavaScriptTreeNode foo = getChild(generate(code), "Foo()");
+        assertEquals(List.of("bar(a)"), getChildTexts(foo));
+    }
+
+    @Test
+    void testPrototypeIife_arrowFunctionWithExpressionBody() {
+        String code = "function Foo() {}\n" +
+            "Foo.prototype = (() => ({ bar: function(a) {} }))();\n";
+        JavaScriptTreeNode foo = getChild(generate(code), "Foo()");
+        assertEquals(List.of("bar(a)"), getChildTexts(foo));
+    }
+
+    @Test
+    void testPrototypeIife_returnsVariable() {
+        String code = "function Foo() {}\n" +
+            "Foo.prototype = (function() {\n" +
+            "    var api = { bar: function(a) {}, baz: 1 };\n" +
+            "    return api;\n" +
+            "})();\n";
+        JavaScriptTreeNode foo = getChild(generate(code), "Foo()");
+        assertEquals(List.of("bar(a)", "baz"), getChildTexts(foo));
+    }
+
+    @Test
+    void testPrototypeIife_returnsSpreadObjectLiteral() {
+        String code = "function Foo() {}\n" +
+            "Foo.prototype = (function() {\n" +
+            "    const base = { inherited: 1 };\n" +
+            "    return { ...base, bar: 2 };\n" +
+            "})();\n";
+        JavaScriptTreeNode foo = getChild(generate(code), "Foo()");
+        assertEquals(List.of("inherited", "bar"), getChildTexts(foo));
+    }
+
+    @Test
+    void testPrototypeIife_ignoresNestedReturns() {
+        String code = "function Foo() {}\n" +
+            "Foo.prototype = (function() {\n" +
+            "    function helper() { return { notMember: 1 }; }\n" +
+            "    return { bar: 2 };\n" +
+            "})();\n";
+        JavaScriptTreeNode foo = getChild(generate(code), "Foo()");
+        assertEquals(List.of("bar"), getChildTexts(foo));
+    }
+
+    @Test
+    void testPrototypeIife_noObjectLiteralReturned() {
+        String code = "function Foo() {}\n" +
+            "Foo.prototype = (function() {\n" +
+            "    return makePrototype();\n" +
+            "})();\n";
+        getChild(generate(code), "Foo(???)");
+    }
+
+    @Test
+    void testNamespaceIife_returnsObjectLiteral() {
+        String code = "var ns = {};\n" +
+            "ns.Foo = (function() {\n" +
+            "    return { bar: function(a, b) {} };\n" +
+            "})();\n";
+        JavaScriptTreeNode foo = getChild(generate(code), "ns.Foo()");
+        assertEquals(List.of("bar(a, b)"), getChildTexts(foo));
+    }
 }
