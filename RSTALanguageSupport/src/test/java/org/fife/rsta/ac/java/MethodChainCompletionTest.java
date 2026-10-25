@@ -34,9 +34,11 @@ class MethodChainCompletionTest {
 	}
 
 	private static Set<String> completionsAtEndOf(String params, String body) {
-		String src = "public class Probe {\n"
+		String src = "import javax.swing.AbstractAction;\n"
+				+ "public class Probe {\n"
 				+ "    private String foo;\n"
 				+ "    private StringBuilder sb;\n"
+				+ "    private javax.swing.text.StyledDocument doc;\n"
 				+ "    void m(" + params + ") {\n"
 				+ "        " + body;
 		String full = src + "\n    }\n}\n";
@@ -100,6 +102,20 @@ class MethodChainCompletionTest {
 	@Test
 	void dotInStringArgument() {
 		Set<String> names = completionsAtEndOf("", "sb.append(\"a.b\").toString().");
+		assertTrue(names.contains("length"), "got " + names);
+	}
+
+	@Test
+	void methodDeclaredOnSuperinterface() {
+		// StyledDocument inherits getDefaultRootElement() from Document.
+		Set<String> names = completionsAtEndOf("", "doc.getDefaultRootElement().");
+		assertTrue(names.contains("getElementCount"), "got " + names);
+	}
+
+	@Test
+	void fieldDeclaredOnImplementedInterface() {
+		// AbstractAction inherits the NAME constant from Action.
+		Set<String> names = completionsAtEndOf("", "AbstractAction.NAME.");
 		assertTrue(names.contains("length"), "got " + names);
 	}
 }
