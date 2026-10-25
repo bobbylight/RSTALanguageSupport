@@ -34,11 +34,23 @@ class MethodChainCompletionTest {
 	}
 
 	private static Set<String> completionsAtEndOf(String params, String body) {
+		Set<String> names = new TreeSet<>();
+		for (Completion c : completionsListAtEndOf(params, body)) {
+			names.add(c.getReplacementText());
+		}
+		return names;
+	}
+
+	private static List<Completion> completionsListAtEndOf(String params, String body) {
 		String src = "import javax.swing.AbstractAction;\n"
 				+ "public class Probe {\n"
 				+ "    private String foo;\n"
 				+ "    private StringBuilder sb;\n"
 				+ "    private javax.swing.text.StyledDocument doc;\n"
+				+ "    private java.util.List<String> list;\n"
+				+ "    private java.util.Map<String, Integer> map;\n"
+				+ "    private java.util.List<? extends Number> numbers;\n"
+				+ "    private java.util.List raw;\n"
 				+ "    void m(" + params + ") {\n"
 				+ "        " + body;
 		String full = src + "\n    }\n}\n";
@@ -51,12 +63,7 @@ class MethodChainCompletionTest {
 
 		RSyntaxTextArea textArea = new RSyntaxTextArea(full);
 		textArea.setCaretPosition(src.length());
-		List<Completion> completions = provider.getCompletions(textArea);
-		Set<String> names = new TreeSet<>();
-		for (Completion c : completions) {
-			names.add(c.getReplacementText());
-		}
-		return names;
+		return provider.getCompletions(textArea);
 	}
 
 	@Test
@@ -117,5 +124,85 @@ class MethodChainCompletionTest {
 		// AbstractAction inherits the NAME constant from Action.
 		Set<String> names = completionsAtEndOf("", "AbstractAction.NAME.");
 		assertTrue(names.contains("length"), "got " + names);
+	}
+
+	@Test
+	void typeVariableReturnType() {
+		Set<String> names = completionsAtEndOf("", "list.get(0).");
+		assertTrue(names.contains("length"), "got " + names);
+	}
+
+	@Test
+	void genericReturnType() {
+		Set<String> names = completionsAtEndOf("", "map.keySet().");
+		assertTrue(names.contains("iterator"), "got " + names);
+	}
+
+	@Test
+	void typeArgumentsCarriedThroughChain() {
+		Set<String> names = completionsAtEndOf("", "map.keySet().iterator().next().");
+		assertTrue(names.contains("length"), "got " + names);
+	}
+
+	@Test
+	void secondTypeParameter() {
+		Set<String> names = completionsAtEndOf("", "map.get(\"a\").");
+		assertTrue(names.contains("intValue"), "got " + names);
+	}
+
+	@Test
+	void genericMethodDeclaredOnSuperinterface() {
+		// stream() is declared on Collection, whose type parameter is also E.
+		Set<String> names = completionsAtEndOf("", "list.stream().");
+		assertTrue(names.contains("filter"), "got " + names);
+	}
+
+	@Test
+	void superinterfaceWithDifferentTypeParameters() {
+		// parallel() is declared on BaseStream<T, S extends BaseStream<T, S>>
+		// and returns S, which Stream<T> sets to Stream<T>.
+		Set<String> names = completionsAtEndOf("", "list.stream().parallel().findFirst().get().");
+		assertTrue(names.contains("length"), "got " + names);
+	}
+
+	@Test
+	void nestedTypeInReturnType() {
+		Set<String> names = completionsAtEndOf("",
+				"map.entrySet().iterator().next().getValue().");
+		assertTrue(names.contains("intValue"), "got " + names);
+	}
+
+	@Test
+	void wildcardTypeArgument() {
+		Set<String> names = completionsAtEndOf("", "numbers.get(0).");
+		assertTrue(names.contains("intValue"), "got " + names);
+	}
+
+	@Test
+	void genericLocalVariable() {
+		Set<String> names = completionsAtEndOf("",
+				"java.util.List<StringBuilder> sbs = null;\n        sbs.get(0).");
+		assertTrue(names.contains("reverse"), "got " + names);
+	}
+
+	@Test
+	void rawTypeGivesObjectMembers() {
+		Set<String> names = completionsAtEndOf("", "raw.get(0).");
+		assertTrue(names.contains("hashCode"), "got " + names);
+		assertFalse(names.contains("length"), "got " + names);
+	}
+
+	@Test
+	void finalCompletionsUseTypeArguments() {
+		// The completions for Set<String> should know its element type, so
+		// "iterator().next()." keeps working after completing "iterator".
+		List<Completion> completions = completionsListAtEndOf("", "map.keySet().");
+		boolean found = false;
+		for (Completion c : completions) {
+			if (c instanceof MethodCompletion && "iterator".equals(c.getReplacementText())) {
+				found = ((MethodCompletion)c).getType().contains("String");
+			}
+		}
+		assertTrue(found, "iterator() should return Iterator<String>");
 	}
 }
