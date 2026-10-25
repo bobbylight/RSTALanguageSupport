@@ -915,10 +915,12 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 				NormalClassDeclaration ncd = (NormalClassDeclaration)td;
 				Type extended = ncd.getExtendedType();
 				if (extended!=null) { // e.g., not java.lang.Object
-					String superClassName = extended.toString();
+					// Look up the class without its type arguments
+					String superClassName = extended.getName(true, false);
 					ClassFile cf = typeResolver.getClassFileFor(cu, superClassName);
 					if (cf!=null) {
-						addCompletionsForExtendedClass(retVal, cu, cf, pkg, null);
+						addCompletionsForExtendedClass(retVal, cu, cf, pkg,
+								GenericTypes.createTypeParamMap(extended, cf));
 					}
 					else {
 						log("[DEBUG]: Couldn't find ClassFile for: " + superClassName);
