@@ -1059,16 +1059,16 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 
 	/**
 	 * Resolves a dotted prefix like "AudioEngine.sharedEngine()" into the
-	 * ClassFile representing the final type in the chain.
+	 * final type in the chain.
 	 *
 	 * @param cu The compilation unit.
 	 * @param td The enclosing type declaration.
 	 * @param currentMethod The method the caret is in (for local var lookup).
 	 * @param prefix The dotted expression prefix (everything before final dot).
 	 * @param offs The caret offset (for local variable scope checking).
-	 * @return The resolved ClassFile, or null if resolution fails.
+	 * @return The resolved type, or null if resolution fails.
 	 */
-	private ClassFile resolveChainType(CompilationUnit cu, TypeDeclaration td,
+	private ResolvedType resolveChainType(CompilationUnit cu, TypeDeclaration td,
 			Method currentMethod, String prefix, int offs) {
 
 		List<String> segments = ChainExpressions.splitSegments(prefix);
@@ -1084,6 +1084,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 			firstSeg.substring(0, firstSeg.length() - 2) : firstSeg;
 
 		ClassFile currentType = null;
+		Map<String, String> typeArgs = null;
 		boolean isStatic = false;
 
 		// Resolve first segment: could be local var, parameter, field, or class
@@ -1128,6 +1129,9 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 
 		if (firstType != null && !firstType.isBasicType() && !firstType.isArray()) {
 			currentType = getClassFileFor(cu, firstType.getName(true, false));
+			if (currentType != null) {
+				typeArgs = createTypeParamMap(firstType, currentType);
+			}
 		}
 
 		// 3b. Check fields inherited from the superclass chain (e.g. a
@@ -1152,12 +1156,6 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 			return null;
 		}
 
-		// If first segment resolved to a class (static access) and there's
-		// only one segment, return the class for static member completion
-		if (segments.size() == 1 && !firstIsMethodCall) {
-			return currentType;
-		}
-
 		// Walk remaining segments
 		for (int idx = 1; idx < segments.size(); idx++) {
 			String seg = segments.get(idx);
@@ -1169,13 +1167,16 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 			if (hasParens) {
 				// Method call - find method and get return type
 				int argCount = ChainExpressions.countArguments(seg.substring(parenIdx));
-				String returnType = findMethodReturnType(currentType, memberName, argCount, isStatic, pkg);
+				String returnType = findMethodReturnType(currentType, typeArgs, memberName, argCount,
+						isStatic, pkg);
 				if (returnType == null || "void".equals(returnType)) {
 					log("[DEBUG]: Could not resolve method return type: " + memberName + " on " +
 							currentType.getClassName(false));
 					return null;
 				}
-				currentType = getClassFileFor(cu, returnType);
+				currentType = getClassFileFor(cu, GenericTypes.getRawType(returnType));
+				typeArgs = GenericTypes.createTypeParamMap(currentType,
+						GenericTypes.getTypeArguments(returnType));
 				isStatic = false; // after first call, subsequent accesses are instance
 			}
 			else {
@@ -1187,6 +1188,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 					return null;
 				}
 				currentType = getClassFileFor(cu, fieldType);
+				typeArgs = null;
 				isStatic = false;
 			}
 
@@ -1196,7 +1198,7 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 			}
 		}
 
-		return currentType;
+		return new ResolvedType(currentType, typeArgs);
 	}
 
 
@@ -1206,22 +1208,31 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	 * and interfaces.
 	 *
 	 * @param cf The class to search.
+	 * @param typeArgs The type arguments of <code>cf</code>, used to fill in
+	 *        the return type's type variables, or <code>null</code> for a raw
+	 *        type.
 	 * @param methodName The method name.
 	 * @param argCount The number of arguments at the call site, or -1 to
 	 *        match any overload.
 	 * @param mustBeStatic Whether the method must be static.
 	 * @param pkg The package for accessibility checking.
-	 * @return The fully-qualified return type, or null.
+	 * @return The fully-qualified return type, including any type arguments,
+	 *         or null.
 	 */
-	private String findMethodReturnType(ClassFile cf, String methodName,
-			int argCount, boolean mustBeStatic, String pkg) {
-		for (ClassFile type : jarManager.getTypeHierarchy(cf)) {
+	private String findMethodReturnType(ClassFile cf, Map<String, String> typeArgs,
+			String methodName, int argCount, boolean mustBeStatic, String pkg) {
+		Map<ClassFile, Map<String, String>> hierarchy = GenericTypes.getHierarchyTypeArgs(
+				jarManager.getTypeHierarchy(cf), typeArgs);
+		for (Map.Entry<ClassFile, Map<String, String>> entry : hierarchy.entrySet()) {
+			ClassFile type = entry.getKey();
 			for (int i = 0; i < type.getMethodCount(); i++) {
 				MethodInfo mi = type.getMethodInfo(i);
 				if (mi.getName().equals(methodName) &&
 						(!mustBeStatic || mi.isStatic()) &&
 						(argCount < 0 || mi.getParameterCount() == argCount) &&
 						isAccessible(mi, pkg)) {
+					// The return type's type variables are filled in from these
+					type.setTypeParamsToTypeArgs(entry.getValue());
 					return mi.getReturnTypeString(true);
 				}
 			}
@@ -1328,9 +1339,9 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 		// Check if prefix contains dots or parens (chain expression)
 		if (prefix.indexOf('.') > -1 || prefix.indexOf('(') > -1) {
 			// Chain expression: resolve the full chain to a final type
-			ClassFile resolvedType = resolveChainType(cu, td, currentMethod, prefix, offs);
-			if (resolvedType != null) {
-				addCompletionsForExtendedClass(retVal, cu, resolvedType, pkg, null);
+			ResolvedType resolved = resolveChainType(cu, td, currentMethod, prefix, offs);
+			if (resolved != null) {
+				addCompletionsForExtendedClass(retVal, cu, resolved.classFile, pkg, resolved.typeArgs);
 			}
 			else {
 				log("[DEBUG]: Chain resolution failed for: " + prefix);
