@@ -306,4 +306,23 @@ class MethodChainCompletionTest {
 		Set<String> names = completionsAtEndOf("", "this.own().");
 		assertTrue(names.contains("reverse"), "got " + names);
 	}
+
+	@Test
+	void unqualifiedMethodOfGenericSuperclass() {
+		// Not a chain, but resolved against the same superclass. The type
+		// arguments in "extends" broke the superclass lookup.
+		List<Completion> completions = completionsInSource("import java.util.ArrayList;\n"
+				+ "public class Probe extends ArrayList<String> {\n"
+				+ "    public String test() {\n"
+				+ "        return get<caret>\n"
+				+ "    }\n"
+				+ "}\n");
+		String getType = null;
+		for (Completion c : completions) {
+			if (c instanceof MethodCompletion && "get".equals(c.getReplacementText())) {
+				getType = ((MethodCompletion)c).getType();
+			}
+		}
+		assertEquals("String", getType, "got " + completions);
+	}
 }
