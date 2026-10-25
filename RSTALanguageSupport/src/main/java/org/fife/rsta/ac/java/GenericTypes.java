@@ -13,6 +13,8 @@ import java.util.Map;
 import org.fife.rsta.ac.java.classreader.ClassFile;
 import org.fife.rsta.ac.java.classreader.attributes.AttributeInfo;
 import org.fife.rsta.ac.java.classreader.attributes.Signature;
+import org.fife.rsta.ac.java.rjc.lang.Type;
+import org.fife.rsta.ac.java.rjc.lang.TypeArgument;
 
 
 /**
@@ -33,6 +35,36 @@ final class GenericTypes {
 	 */
 	private GenericTypes() {
 		// Do nothing (comment for Sonar)
+	}
+
+
+	/**
+	 * Creates and returns a mapping of type parameters to type arguments.
+	 *
+	 * @param type The type of a variable/field/etc. whose fields/methods/etc.
+	 *        are being code completed, as declared in the source.  This
+	 *        includes type arguments.
+	 * @param cf The <code>ClassFile</code> representing the actual type of
+	 *        the variable/field/etc. being code completed
+	 * @return A mapping of type parameter names to type arguments (both
+	 *         Strings).
+	 */
+	static Map<String, String> createTypeParamMap(Type type, ClassFile cf) {
+		Map<String, String> typeParamMap = null;
+		List<TypeArgument> typeArgs = type.getTypeArguments(type.getIdentifierCount()-1);
+		if (typeArgs!=null) {
+			typeParamMap = new HashMap<>();
+			List<String> paramTypes = cf.getParamTypes();
+			// Should be the same size!  Otherwise, the source code has
+			// too many/too few type arguments listed for this type.
+			int min = Math.min(paramTypes==null ? 0 : paramTypes.size(),
+									typeArgs.size());
+			for (int i=0; i<min; i++) {
+				TypeArgument typeArg = typeArgs.get(i);
+				typeParamMap.put(paramTypes.get(i), typeArg.toString());
+			}
+		}
+		return typeParamMap;
 	}
 
 
