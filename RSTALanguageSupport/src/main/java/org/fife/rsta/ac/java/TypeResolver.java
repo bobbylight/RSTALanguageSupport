@@ -5,6 +5,7 @@
 package org.fife.rsta.ac.java;
 
 import java.lang.System.Logger;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,7 @@ import org.fife.rsta.ac.java.rjc.ast.LocalVariable;
 import org.fife.rsta.ac.java.rjc.ast.Member;
 import org.fife.rsta.ac.java.rjc.ast.Method;
 import org.fife.rsta.ac.java.rjc.ast.NormalClassDeclaration;
+import org.fife.rsta.ac.java.rjc.ast.NormalInterfaceDeclaration;
 import org.fife.rsta.ac.java.rjc.ast.TypeDeclaration;
 import org.fife.rsta.ac.java.rjc.lang.Type;
 
@@ -38,6 +40,8 @@ final class TypeResolver {
 
 	private static final Logger LOG =
 		System.getLogger(TypeResolver.class.getName());
+
+	private static final String THIS = "this";
 
 	/**
 	 * Used to get information about what classes match imports.
@@ -172,24 +176,31 @@ final class TypeResolver {
 			return null;
 		}
 
+		// "this.x" is a member of the class, never a local var or parameter
+		boolean qualifiedByThis = segments.size() > 1 && THIS.equals(segments.get(0));
+		if (qualifiedByThis) {
+			segments = segments.subList(1, segments.size());
+		}
+
 		String pkg = cu.getPackageName();
 		String firstSeg = segments.get(0);
-		// Strip trailing parens for method call detection
-		boolean firstIsMethodCall = firstSeg.endsWith("()");
+		int firstParen = firstSeg.indexOf('(');
+		boolean firstIsMethodCall = firstParen > -1;
 		String firstName = firstIsMethodCall ?
-			firstSeg.substring(0, firstSeg.length() - 2) : firstSeg;
+			firstSeg.substring(0, firstParen) : firstSeg;
 
 		ClassFile currentType = null;
 		Map<String, String> typeArgs = null;
 		boolean isStatic = false;
 
 		// Resolve first segment: could be local var, parameter, field, or class
-		// name, checked in that order since each one hides the ones after it
+		// name, checked in that order since each one hides the ones after it,
+		// or a method call
 		Type firstType = null;
 		boolean found = false;
 
 		// 1. Check local variables
-		if (currentMethod != null && !firstIsMethodCall) {
+		if (currentMethod != null && !firstIsMethodCall && !qualifiedByThis) {
 			CodeBlock body = currentMethod.getBody();
 			LocalVariable var = body != null ?
 				findLocalVar(body, firstName, offs) : null;
@@ -200,7 +211,7 @@ final class TypeResolver {
 		}
 
 		// 2. Check method parameters
-		if (!found && currentMethod != null && !firstIsMethodCall) {
+		if (!found && currentMethod != null && !firstIsMethodCall && !qualifiedByThis) {
 			for (int i = 0; i < currentMethod.getParameterCount(); i++) {
 				FormalParameter param = currentMethod.getParameter(i);
 				if (firstName.equals(param.getName())) {
@@ -244,6 +255,16 @@ final class TypeResolver {
 			if (matches != null && !matches.isEmpty()) {
 				currentType = matches.get(0);
 				isStatic = true;
+			}
+		}
+
+		// 5. A call to a method of this class, a superclass, or an enclosing class
+		if (firstIsMethodCall) {
+			int argCount = ChainExpressions.countArguments(firstSeg.substring(firstParen));
+			ResolvedType resolved = resolveOwnMethodCall(cu, td, firstName, argCount);
+			if (resolved != null) {
+				currentType = resolved.classFile;
+				typeArgs = resolved.typeArgs;
 			}
 		}
 
@@ -295,6 +316,78 @@ final class TypeResolver {
 		}
 
 		return new ResolvedType(currentType, typeArgs);
+	}
+
+
+	/**
+	 * Resolves the return type of a call to a method that's in scope without
+	 * a qualifier: one declared in or inherited by the type being edited, or
+	 * one of the types enclosing it.  Each type is searched before the types
+	 * enclosing it, as in Java.
+	 *
+	 * @param cu The compilation unit.
+	 * @param td The type the call is in.
+	 * @param methodName The method name.
+	 * @param argCount The number of arguments at the call site.
+	 * @return The return type, or <code>null</code> if it can't be resolved
+	 *         or is a primitive, array or <code>void</code>.
+	 */
+	private ResolvedType resolveOwnMethodCall(CompilationUnit cu,
+			TypeDeclaration td, String methodName, int argCount) {
+
+		for (TypeDeclaration type = td; type != null; type = type.getParentType()) {
+
+			for (Method method : type.getMethodsByName(methodName)) {
+				if (!method.isConstructor() && method.getParameterCount() == argCount) {
+					return resolveSourceType(cu, method.getType());
+				}
+			}
+
+			List<Type> supertypes = new ArrayList<>();
+			if (type instanceof NormalClassDeclaration) {
+				NormalClassDeclaration ncd = (NormalClassDeclaration)type;
+				supertypes.add(ncd.getExtendedType());
+				ncd.getImplementedIterator().forEachRemaining(supertypes::add);
+			}
+			else if (type instanceof NormalInterfaceDeclaration) {
+				((NormalInterfaceDeclaration)type).getExtendedIterator().forEachRemaining(supertypes::add);
+			}
+
+			for (Type supertype : supertypes) {
+				// A class with no "extends" clause extends Object
+				ResolvedType resolved = supertype != null ? resolveSourceType(cu, supertype) :
+					new ResolvedType(getClassFileFor(cu, "java.lang.Object"), null);
+				if (resolved == null || resolved.classFile == null) {
+					continue;
+				}
+				String returnType = findMethodReturnType(resolved.classFile, resolved.typeArgs,
+						methodName, argCount, false, cu.getPackageName());
+				if (returnType != null) {
+					ClassFile cf = getClassFileFor(cu, GenericTypes.getRawType(returnType));
+					return cf == null ? null : new ResolvedType(cf, GenericTypes.createTypeParamMap(cf,
+							GenericTypes.getTypeArguments(returnType)));
+				}
+			}
+
+		}
+
+		return null;
+	}
+
+
+	/**
+	 * Resolves a type as written in the source being edited, such as a
+	 * method's return type.
+	 *
+	 * @return The type, or <code>null</code> if it can't be resolved or is a
+	 *         primitive, array or <code>void</code>.
+	 */
+	private ResolvedType resolveSourceType(CompilationUnit cu, Type type) {
+		if (type == null || type.isBasicType() || type.isArray()) {
+			return null;
+		}
+		ClassFile cf = getClassFileFor(cu, type.getName(true, false));
+		return cf == null ? null : new ResolvedType(cf, GenericTypes.createTypeParamMap(type, cf));
 	}
 
 

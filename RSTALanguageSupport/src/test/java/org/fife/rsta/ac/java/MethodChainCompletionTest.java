@@ -51,9 +51,20 @@ class MethodChainCompletionTest {
 				+ "    private java.util.Map<String, Integer> map;\n"
 				+ "    private java.util.List<? extends Number> numbers;\n"
 				+ "    private java.util.List raw;\n"
+				+ "    private StringBuilder own() { return sb; }\n"
+				+ "    private String own(int i) { return foo; }\n"
+				+ "    private java.util.List<String> names(int a, String b) { return list; }\n"
 				+ "    void m(" + params + ") {\n"
 				+ "        " + body;
-		String full = src + "\n    }\n}\n";
+		return completionsInSource(src + "<caret>\n    }\n}\n");
+	}
+
+	/**
+	 * Returns the completions at {@code <caret>} in a source file.
+	 */
+	private static List<Completion> completionsInSource(String srcWithCaret) {
+		int caret = srcWithCaret.indexOf("<caret>");
+		String full = srcWithCaret.replace("<caret>", "");
 		CompilationUnit cu = new ASTFactory().getCompilationUnit("Probe.java",
 				new Scanner(new StringReader(full)));
 		JavaCompletionProvider javaProvider = new JavaCompletionProvider(jarManager);
@@ -62,7 +73,7 @@ class MethodChainCompletionTest {
 		provider.setJavaProvider(javaProvider);
 
 		RSyntaxTextArea textArea = new RSyntaxTextArea(full);
-		textArea.setCaretPosition(src.length());
+		textArea.setCaretPosition(caret);
 		return provider.getCompletions(textArea);
 	}
 
@@ -204,5 +215,95 @@ class MethodChainCompletionTest {
 			}
 		}
 		assertTrue(found, "iterator() should return Iterator<String>");
+	}
+
+	private static Set<String> namesInSource(String srcWithCaret) {
+		Set<String> names = new TreeSet<>();
+		for (Completion c : completionsInSource(srcWithCaret)) {
+			names.add(c.getReplacementText());
+		}
+		return names;
+	}
+
+	@Test
+	void ownMethodCall() {
+		Set<String> names = completionsAtEndOf("", "own().");
+		assertTrue(names.contains("reverse"), "got " + names);
+	}
+
+	@Test
+	void ownMethodCallMatchedByArgumentCount() {
+		// own(int) returns a String, not a StringBuilder like own().
+		Set<String> names = completionsAtEndOf("", "own(1).");
+		assertTrue(names.contains("length"), "got " + names);
+		assertFalse(names.contains("reverse"), "got " + names);
+	}
+
+	@Test
+	void ownMethodCallWithGenericReturnType() {
+		Set<String> names = completionsAtEndOf("", "names(1, \"a,b\").get(0).");
+		assertTrue(names.contains("length"), "got " + names);
+	}
+
+	@Test
+	void inheritedMethodCall() {
+		// getClass() is inherited from Object.
+		Set<String> names = completionsAtEndOf("", "getClass().getSimpleName().");
+		assertTrue(names.contains("length"), "got " + names);
+	}
+
+	@Test
+	void inheritedMethodCallWithTypeArguments() {
+		Set<String> names = namesInSource("public class Probe extends java.util.ArrayList<String> {\n"
+				+ "    void m() {\n"
+				+ "        get(0).<caret>\n"
+				+ "    }\n"
+				+ "}\n");
+		assertTrue(names.contains("length"), "got " + names);
+	}
+
+	@Test
+	void enclosingClassMethodCall() {
+		Set<String> names = namesInSource("public class Probe {\n"
+				+ "    StringBuilder outer() { return null; }\n"
+				+ "    class Inner {\n"
+				+ "        void m() {\n"
+				+ "            outer().<caret>\n"
+				+ "        }\n"
+				+ "    }\n"
+				+ "}\n");
+		assertTrue(names.contains("reverse"), "got " + names);
+	}
+
+	@Test
+	void voidOwnMethodGivesNothing() {
+		Set<String> names = namesInSource("public class Probe {\n"
+				+ "    void nothing() {}\n"
+				+ "    void m() {\n"
+				+ "        nothing().<caret>\n"
+				+ "    }\n"
+				+ "}\n");
+		assertTrue(names.isEmpty(), "got " + names);
+	}
+
+	@Test
+	void thisField() {
+		Set<String> names = completionsAtEndOf("", "this.sb.append(1).");
+		assertTrue(names.contains("reverse"), "got " + names);
+	}
+
+	@Test
+	void thisFieldIgnoresLocalVariable() {
+		// "this.foo" is the String field, not the local variable.
+		Set<String> names = completionsAtEndOf("",
+				"StringBuilder foo = null;\n        this.foo.");
+		assertTrue(names.contains("length"), "got " + names);
+		assertFalse(names.contains("reverse"), "got " + names);
+	}
+
+	@Test
+	void thisMethodCall() {
+		Set<String> names = completionsAtEndOf("", "this.own().");
+		assertTrue(names.contains("reverse"), "got " + names);
 	}
 }
