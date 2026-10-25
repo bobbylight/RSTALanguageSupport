@@ -208,6 +208,27 @@ public class ASTFactory implements TokenTypes {
 	private CodeBlock getBlock(CompilationUnit cu, CodeBlock parent,
                                Method m, Scanner s,
                                boolean isStatic, int depth) throws IOException {
+		return getBlock(cu, parent, m, s, isStatic, depth, null);
+	}
+
+
+	/**
+	 * Parses a block of code.
+	 *
+	 * @param parent The parent code block, or <code>null</code> if none (i.e.
+	 *        this is the body of a method, a static initializer block, etc.).
+	 * @param m The method containing this block, or <code>null</code> if this
+	 *        block is not part of a method.
+	 * @param s The scanner.
+	 * @param isStatic Whether this is a static code block.
+	 * @param depth The nested depth of this code block.
+	 * @param initialLocalVars Local variables declared just before the block
+	 *        but scoped to it, such as try-with-resources variables.  This
+	 *        may be <code>null</code>.
+	 */
+	private CodeBlock getBlock(CompilationUnit cu, CodeBlock parent,
+                               Method m, Scanner s, boolean isStatic, int depth,
+                               List<LocalVariable> initialLocalVars) throws IOException {
 
 		log("Entering getBlock() (" + depth + ")");
 
@@ -216,6 +237,9 @@ public class ASTFactory implements TokenTypes {
 		Token t = s.yylexNonNull(SEPARATOR_LBRACE, "'{' expected");
 		CodeBlock block = new CodeBlock(isStatic, s.createOffset(t.getOffset()));
 		block.setParent(parent);
+		if (initialLocalVars!=null) {
+			initialLocalVars.forEach(block::addLocalVariable);
+		}
 		boolean atStatementStart =true;
 
 OUTER:
@@ -248,12 +272,12 @@ OUTER:
 
 				case KEYWORD_TRY:
 					t = s.yyPeekNonNull(SEPARATOR_LBRACE, SEPARATOR_LPAREN, "'{' or '(' expected");
-					if (t.getType()==SEPARATOR_LPAREN) { // Auto-closeable stuff
-						// TODO: Get block-scoped var(s)
-						s.eatParenPairs();
+					List<LocalVariable> resources = null;
+					if (t.getType()==SEPARATOR_LPAREN) { // try-with-resources
+						resources = getTryResources(cu, s, block, m);
 					}
 					s.yyPeekNonNull(SEPARATOR_LBRACE, "'{' expected");
-					CodeBlock tryBlock = getBlock(cu, block, m, s, isStatic, depth+1);
+					CodeBlock tryBlock = getBlock(cu, block, m, s, isStatic, depth+1, resources);
 					block.add(tryBlock);
 					while (s.yyPeekCheckType()==KEYWORD_CATCH &&
 							s.yyPeekCheckType(2)==SEPARATOR_LPAREN) {
@@ -1305,6 +1329,113 @@ OUTER:
 		}
 
 		return list;
+
+	}
+
+
+	/**
+	 * Parses a single resource of a try-with-resources statement that
+	 * declares a variable, e.g. {@code final InputStream in}.
+	 *
+	 * @param cu The compilation unit.
+	 * @param s The scanner, used to create the variable's offsets.
+	 * @param tokenList The resource's tokens before its '=' sign.
+	 * @param block The code block containing the try statement.
+	 * @param m The method containing the try statement, or <code>null</code>.
+	 * @param resources Variables declared by earlier resources of the same
+	 *        try statement.
+	 * @return The variable.
+	 * @throws IOException If the tokens aren't a valid declaration.
+	 */
+	private LocalVariable getTryResource(CompilationUnit cu, Scanner s,
+			List<Token> tokenList, CodeBlock block, Method m,
+			List<LocalVariable> resources) throws IOException {
+
+		Scanner tempScanner = new Scanner(tokenList);
+		Modifiers modList = getModifierList(cu, tempScanner);
+		boolean isFinal = modList!=null && modList.isFinal();
+		Type type = getType(cu, tempScanner);
+		Token name = tempScanner.yylexNonNull(IDENTIFIER, "Variable name expected");
+		if (tempScanner.yylex()!=null) {
+			throw new IOException("'=' expected");
+		}
+
+		checkForDuplicateLocalVarNames(cu, name, block, m);
+		for (LocalVariable resource : resources) {
+			if (name.getLexeme().equals(resource.getName())) {
+				cu.addParserNotice(name, "Duplicate local variable: " + name.getLexeme());
+				break;
+			}
+		}
+
+		return new LocalVariable(s, isFinal, type, name.getOffset(), name.getLexeme());
+
+	}
+
+
+	/**
+	 * Parses the resource specification of a try-with-resources statement,
+	 * e.g. {@code (InputStream in = open(); Reader r = wrap(in))}.  Resources
+	 * that reference an existing variable rather than declaring one, such as
+	 * {@code (in)}, are skipped.
+	 *
+	 * @param cu The compilation unit.
+	 * @param s The scanner, positioned at the opening '('.
+	 * @param block The code block containing the try statement.
+	 * @param m The method containing the try statement, or <code>null</code>.
+	 * @return The variables declared by the resources.
+	 * @throws IOException If an IO error occurs.
+	 */
+	private List<LocalVariable> getTryResources(CompilationUnit cu, Scanner s,
+			CodeBlock block, Method m) throws IOException {
+
+		s.yylexNonNull(SEPARATOR_LPAREN, "'(' expected");
+
+		List<LocalVariable> resources = new ArrayList<>(1);
+		List<Token> tokenList = new ArrayList<>();
+		boolean inInitializer = false;
+		int depth = 0;
+
+		while (true) {
+
+			Token t = s.yylexNonNull("')' expected");
+
+			// End of a resource, or of the entire resource specification
+			if (depth==0 && (t.isType(SEPARATOR_SEMICOLON) || t.isType(SEPARATOR_RPAREN))) {
+				if (inInitializer) {
+					try {
+						resources.add(getTryResource(cu, s, tokenList, block, m, resources));
+					} catch (IOException ioe) {
+						cu.addParserNotice(tokenList.isEmpty() ? t : tokenList.get(0),
+							ioe.getMessage());
+					}
+				}
+				if (t.isType(SEPARATOR_RPAREN)) {
+					break;
+				}
+				tokenList.clear();
+				inInitializer = false;
+				continue;
+			}
+
+			if (t.isType(SEPARATOR_LPAREN) || t.isType(SEPARATOR_LBRACE)) {
+				depth++;
+			}
+			else if (t.isType(SEPARATOR_RPAREN) || t.isType(SEPARATOR_RBRACE)) {
+				depth--;
+			}
+
+			// Only the tokens before the '=' are needed; skip the initializer
+			if (depth==0 && t.isType(OPERATOR_EQUALS)) {
+				inInitializer = true;
+			}
+			else if (!inInitializer) {
+				tokenList.add(t);
+			}
+
+		}
+
+		return resources;
 
 	}
 
