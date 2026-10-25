@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.System.Logger;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -246,6 +247,44 @@ public class JarManager {
 
 		return null;
 
+	}
+
+
+	/**
+	 * Returns a class and all of its supertypes: first its superclass
+	 * chain, then every interface any of them implements.  This is the
+	 * order in which inherited members should be looked up.
+	 *
+	 * @param cf The class.
+	 * @return The class and its supertypes that could be found.
+	 */
+	List<ClassFile> getTypeHierarchy(ClassFile cf) {
+
+		List<ClassFile> hierarchy = new ArrayList<>();
+		Set<String> seen = new HashSet<>();
+
+		// Names read from class files are always fully qualified, so look
+		// them up directly rather than relative to the source being edited
+		while (cf != null && seen.add(cf.getClassName(true))) {
+			hierarchy.add(cf);
+			String superName = cf.getSuperClassName(true);
+			cf = superName == null ? null : getClassEntry(superName);
+		}
+
+		for (int i = 0; i < hierarchy.size(); i++) {
+			ClassFile type = hierarchy.get(i);
+			for (int j = 0; j < type.getImplementedInterfaceCount(); j++) {
+				String name = type.getImplementedInterfaceName(j, true);
+				if (seen.add(name)) {
+					ClassFile iface = getClassEntry(name);
+					if (iface != null) {
+						hierarchy.add(iface);
+					}
+				}
+			}
+		}
+
+		return hierarchy;
 	}
 
 

@@ -1202,7 +1202,8 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 
 	/**
 	 * Finds the return type of a method in the given ClassFile.
-	 * Matches by name and parameter count, walking the superclass chain.
+	 * Matches by name and parameter count, searching the class's superclasses
+	 * and interfaces.
 	 *
 	 * @param cf The class to search.
 	 * @param methodName The method name.
@@ -1214,9 +1215,9 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 	 */
 	private String findMethodReturnType(ClassFile cf, String methodName,
 			int argCount, boolean mustBeStatic, String pkg) {
-		while (cf != null) {
-			for (int i = 0; i < cf.getMethodCount(); i++) {
-				MethodInfo mi = cf.getMethodInfo(i);
+		for (ClassFile type : jarManager.getTypeHierarchy(cf)) {
+			for (int i = 0; i < type.getMethodCount(); i++) {
+				MethodInfo mi = type.getMethodInfo(i);
 				if (mi.getName().equals(methodName) &&
 						(!mustBeStatic || mi.isStatic()) &&
 						(argCount < 0 || mi.getParameterCount() == argCount) &&
@@ -1224,7 +1225,6 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 					return mi.getReturnTypeString(true);
 				}
 			}
-			cf = getClassFileFor(null, cf.getSuperClassName(true));
 		}
 		return null;
 	}
@@ -1232,20 +1232,20 @@ class SourceCompletionProvider extends DefaultCompletionProvider {
 
 	/**
 	 * Finds the type of a field in the given ClassFile.
-	 * Walks the superclass chain to find inherited fields.
+	 * Searches the class's superclasses and interfaces to find inherited
+	 * fields.
 	 */
 	private String findFieldType(ClassFile cf, String fieldName,
 			boolean mustBeStatic, String pkg) {
-		while (cf != null) {
-			for (int i = 0; i < cf.getFieldCount(); i++) {
-				FieldInfo fi = cf.getFieldInfo(i);
+		for (ClassFile type : jarManager.getTypeHierarchy(cf)) {
+			for (int i = 0; i < type.getFieldCount(); i++) {
+				FieldInfo fi = type.getFieldInfo(i);
 				if (fi.getName().equals(fieldName) &&
 						(!mustBeStatic || fi.isStatic()) &&
 						isAccessible(fi, pkg)) {
 					return fi.getTypeString(true);
 				}
 			}
-			cf = getClassFileFor(null, cf.getSuperClassName(true));
 		}
 		return null;
 	}
