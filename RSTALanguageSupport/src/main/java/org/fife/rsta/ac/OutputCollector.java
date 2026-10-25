@@ -1,10 +1,4 @@
 /*
- * 04/25/2010
- *
- * Copyright (C) 2010 Robert Futrell
- * robert_futrell at users.sourceforge.net
- * http://fifesoft.com/rsyntaxtextarea
- *
  * This library is distributed under a modified BSD license.  See the included
  * LICENSE.md file for details.
  */

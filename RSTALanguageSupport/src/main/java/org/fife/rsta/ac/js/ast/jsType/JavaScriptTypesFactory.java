@@ -1,12 +1,6 @@
 /*
- * 02/25/2012
- *
- * Copyright (C) 2012 Robert Futrell
- * robert_futrell at users.sourceforge.net
- * http://fifesoft.com/rsyntaxtextarea
- *
- * This code is licensed under the LGPL.  See the "license.txt" file included
- * with this project.
+ * This library is distributed under a modified BSD license.  See the included
+ * LICENSE.md file for details.
  */
 package org.fife.rsta.ac.js.ast.jsType;
 
