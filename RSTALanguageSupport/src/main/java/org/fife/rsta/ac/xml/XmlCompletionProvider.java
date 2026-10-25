@@ -1,11 +1,6 @@
 /*
- * 10/02/2014
- *
- * XmlCompletionProvider.java - Returns XML tag names or attributes that are
- * seen elsewhere in the document.
- *
  * This library is distributed under a modified BSD license.  See the included
- * RSyntaxTextArea.License.txt file for details.
+ * LICENSE.md file for details.
  */
 package org.fife.rsta.ac.xml;
 
